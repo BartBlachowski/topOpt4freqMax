@@ -10,7 +10,10 @@ Translated from Matlab to Python.
 
 import numpy as np
 from scipy.sparse import diags as spdiags
-from subsolv import subsolv
+try:
+    from .subsolv import subsolv
+except ImportError:
+    from subsolv import subsolv
 
 
 def mmasub(m, n, iter_, xval, xmin, xmax, xold1, xold2,

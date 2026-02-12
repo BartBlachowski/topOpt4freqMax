@@ -1,63 +1,69 @@
 """
-Olhoff & Du (2014) - Simply-Simply beam (SS)
+Olhoff & Du (2014) - Simply-Simply beam (SS).
 Natural frequency maximization with SIMP + MMA.
 """
 
-import os
+from __future__ import annotations
+
 import sys
-import matplotlib.pyplot as plt
+from pathlib import Path
 
-sys.path.insert(0, os.path.dirname(__file__))
-from topFreqOptimization_MMA import topFreqOptimization_MMA
+# Use non-interactive matplotlib backend for better performance
+import matplotlib
+matplotlib.use('Agg')
+
+REPO_ROOT = Path(__file__).resolve().parents[2]
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
+from OlhoffApproach.Python.solver import OlhoffConfig, run_optimization
 
 
-def main():
-    cfg = dict(
-        L=8,
-        H=1,
-        nelx=240,
-        nely=30,
-        E0=1e7,
-        rho0=1.0,
-        rho_min=1e-6,
-        nu=0.3,
-        t=1.0,
-        volfrac=0.5,
-        penal=3.0,
-        maxiter=300,
-        J=3,
-        supportType="SS",
-        beta_schedule=[1, 2, 4, 8, 16, 32, 64],
-        beta_interval=40,
+def main() -> None:
+    import matplotlib.pyplot as plt
+
+    cfg = OlhoffConfig()
+    cfg.nelx = 240
+    cfg.nely = 30
+    cfg.support_type = "SS"
+    cfg.maxiter = 300
+    cfg.rmin = 2 * cfg.L / cfg.nelx
+    cfg.beta_schedule = (1, 2, 4, 8, 16, 32, 64)
+    cfg.beta_interval = 40
+    cfg.eigs_strategy = "shift-invert"
+    cfg.finalize()
+
+    paper_init = 68.7
+    paper_opt = 174.7
+
+    res = run_optimization(
+        cfg,
+        verbose=True,
+        do_diagnostic=True,
+        diag_modes=5,
+        plot_iterations=False,  # Disabled for better performance
     )
-    cfg["Emin"] = max(1e-6 * cfg["E0"], 1e-3)
-    cfg["rmin"] = 2 * cfg["L"] / cfg["nelx"]
-
-    opts = dict(doDiagnostic=True, diagnosticOnly=False, diagModes=5)
-    paper = dict(init=68.7, opt=174.7)
-
-    omega_best, xPhys_best, diag_out = topFreqOptimization_MMA(cfg, opts)
 
     print(
         "SS case: omega1 initial={:.1f} (paper {:.1f}) | optimized={:.1f} (paper {:.1f})".format(
-            diag_out["initial"]["omega"][0], paper["init"], omega_best, paper["opt"]
+            float(res.diagnostics["initial"]["omega"][0]),
+            paper_init,
+            res.omega_best,
+            paper_opt,
         )
     )
 
-    fig, ax = plt.subplots(figsize=(10, 2))
-    fig.canvas.manager.set_window_title("Olhoff SS topology")
-    ax.imshow(
-        1 - xPhys_best.reshape(cfg["nely"], cfg["nelx"]),
-        cmap="gray",
-        aspect="equal",
-        vmin=0,
-        vmax=1,
-        interpolation="nearest",
-    )
-    ax.axis("off")
-    ax.set_title(f"SS: omega1={omega_best:.1f} (paper: {paper['opt']:.1f})")
+    fig, ax = plt.subplots(figsize=(10, 2.4))
+    ax.imshow(1 - res.xPhys_best.reshape((cfg.nely, cfg.nelx), order="F"), cmap="gray", vmin=0, vmax=1, origin="lower", interpolation="nearest")
+    ax.set_axis_off()
+    ax.set_title(f"SS: omega1={res.omega_best:.1f} (paper: {paper_opt:.1f})")
     fig.tight_layout()
-    plt.show()
+    # Save to file instead of showing (Agg backend doesn't support interactive display)
+    output_file = Path(__file__).parent / "output" / "SS_final_topology.png"
+    output_file.parent.mkdir(parents=True, exist_ok=True)
+    fig.savefig(output_file, dpi=150, bbox_inches='tight')
+    print(f"Final topology saved to: {output_file}")
+    plt.close(fig)
 
 
 if __name__ == "__main__":
