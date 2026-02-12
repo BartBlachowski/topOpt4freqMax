@@ -1,0 +1,403 @@
+% A TOPOLOGY OPTIMIZATION CODE FOR FREQUENCY MAXIMIZATION
+% Rewritten from the Python version (Aage & Johansen, 2013, modified)
+%
+% (1) Compute (omega1, Phi1) once on the DESIGN DOMAIN (free DOFs)
+% (2) Use harmonic-type load: F(x) = omega1^2 * M(x) * Phi1
+% (3) During TO, update F only through M(x) (SIMP mass); Phi1, omega1 stay fixed
+
+function topopt_freq(nelx, nely, volfrac, penal, rmin, ft, L, H)
+    if nargin < 8
+        nelx = 240; nely = 30; volfrac = 0.4; penal = 3.0;
+        rmin = 0.05; ft = 0; L = 8.0; H = 1.0;
+    end
+
+    fprintf('Compliance with harmonic-type inertial load (fixed mode)\n');
+    fprintf('mesh: %d x %d\n', nelx, nely);
+    fprintf('domain: L x H = %g x %g\n', L, H);
+    fprintf('volfrac: %g, rmin(phys): %g, penal: %g\n', volfrac, rmin, penal);
+    ftnames = {'Sensitivity based', 'Density based'};
+    fprintf('Filter method: %s\n', ftnames{ft+1});
+
+    if L <= 0 || H <= 0
+        error('L and H must be positive.');
+    end
+    hx = L / nelx;
+    hy = H / nely;
+    fprintf('element size: hx=%g, hy=%g\n', hx, hy);
+
+    % --- Material / SIMP ---
+    Emin  = 1e-2;
+    Emax  = 1e7;
+    rho_min = 1e-6;
+    rho0    = 1.0;
+    pmass   = 1.0;
+
+    ndof = 2*(nelx+1)*(nely+1);
+
+    % Allocate design variables
+    x     = volfrac * ones(nelx*nely, 1);
+    xold  = x;
+    xPhys = x;
+    g     = 0;
+
+    % FE: element stiffness & mass matrices
+    KE = lk(hx, hy);
+    ME = lm(hx, hy);
+
+    % Build edofMat (0-based DOF numbering converted to 1-based)
+    edofMat = zeros(nelx*nely, 8);
+    for elx = 0:nelx-1
+        for ely = 0:nely-1
+            el  = ely + elx*nely + 1;  % 1-based element index
+            n1  = (nely+1)*elx + ely;  % 0-based node
+            n2  = (nely+1)*(elx+1) + ely;
+            edofMat(el,:) = [2*n1+2, 2*n1+3, 2*n2+2, 2*n2+3, ...
+                             2*n2,   2*n2+1, 2*n1,   2*n1+1] + 1; % +1 for 1-based
+        end
+    end
+
+    % Index vectors for sparse assembly
+    iK = reshape(kron(edofMat, ones(1,8))', [], 1);
+    jK = reshape(kron(edofMat, ones(8,1))', [], 1);
+
+    % Filter: build sparse filter matrix
+    rminx = max(1, ceil(rmin/hx));
+    rminy = max(1, ceil(rmin/hy));
+    nfilter = nelx*nely*(2*(rminx-1)+1)*(2*(rminy-1)+1);
+    iH = zeros(nfilter, 1);
+    jH = zeros(nfilter, 1);
+    sH = zeros(nfilter, 1);
+    cc = 0;
+    for i = 0:nelx-1
+        for j = 0:nely-1
+            row = i*nely + j + 1;  % 1-based
+            kk1 = max(i-(rminx-1), 0);
+            kk2 = min(i+rminx, nelx) - 1;
+            ll1 = max(j-(rminy-1), 0);
+            ll2 = min(j+rminy, nely) - 1;
+            for k = kk1:kk2
+                for l = ll1:ll2
+                    cc = cc + 1;
+                    col = k*nely + l + 1;  % 1-based
+                    dx = (i-k)*hx;
+                    dy = (j-l)*hy;
+                    fac = rmin - sqrt(dx*dx + dy*dy);
+                    iH(cc) = row;
+                    jH(cc) = col;
+                    sH(cc) = max(0.0, fac);
+                end
+            end
+        end
+    end
+    Hf = sparse(iH(1:cc), jH(1:cc), sH(1:cc), nelx*nely, nelx*nely);
+    Hs = sum(Hf, 2);
+
+    % BC's: hinge-hinge (pin-pin) at mid-height
+    j_mid = floor(nely/2);          % 0-based node row at mid-height
+    nL = j_mid;                     % 0-based node at (x=0, y=mid)
+    nR = nelx*(nely+1) + j_mid;    % 0-based node at (x=L, y=mid)
+
+    % Convert to 1-based DOFs
+    fixed = [2*nL+1, 2*nL+2, 2*nR+1, 2*nR+2];
+    alldofs = 1:ndof;
+    free = setdiff(alldofs, fixed);
+
+    f = zeros(ndof, 1);
+    u = zeros(ndof, 1);
+
+    % ------------------------------------------------------------------
+    % (1) EIGENANALYSIS on design domain (free DOFs) once, using initial xPhys
+    % ------------------------------------------------------------------
+    sK0 = reshape(KE(:) * (Emin + xPhys'.^penal * (Emax - Emin)), [], 1);
+    K0  = sparse(iK, jK, sK0, ndof, ndof);
+    K0  = (K0 + K0') / 2;
+
+    rhoPhys0 = rho_min + xPhys.^pmass * (rho0 - rho_min);
+    sM0 = reshape(ME(:) * rhoPhys0', [], 1);
+    M0  = sparse(iK, jK, sM0, ndof, ndof);
+    M0  = (M0 + M0') / 2;
+
+    K0f = K0(free, free);
+    M0f = M0(free, free);
+
+    % Smallest eigenpair: K phi = lambda M phi (shift-invert near 0)
+    [Phi_free, Lam] = eigs(K0f, M0f, 2, 'smallestabs');
+    lam_vals = diag(Lam);
+    [lam1, idx] = min(lam_vals);
+    omega1 = sqrt(max(lam1, 0));
+
+    phi1_free = Phi_free(:, idx);
+    mn = phi1_free' * (M0f * phi1_free);
+    if mn > 0
+        phi1_free = phi1_free / sqrt(mn);
+    end
+
+    Phi1 = zeros(ndof, 1);
+    Phi1(free) = phi1_free;
+
+    fprintf('[Eigen] lambda1=%.6e, omega1=%.6e rad/s (computed once, fixed)\n', lam1, omega1);
+
+    % ------------------------------------------------------------------
+    % Initialize interactive visualization
+    % ------------------------------------------------------------------
+    fig = figure('Position', [100, 100, 1200, 600]);
+
+    % Topology subplot (left, spanning both rows)
+    ax_img = subplot(2, 2, [1, 3]);
+    img_data = reshape(xPhys, nely, nelx);
+    im = imagesc(img_data);
+    set(gca, 'YDir', 'normal');
+    colormap(ax_img, flipud(gray));
+    caxis([0, 1]);
+    cb = colorbar; cb.Label.String = 'Density';
+    title('Topology (density)');
+    xlabel('Element x'); ylabel('Element y');
+    axis equal tight;
+
+    % Objective history (top-right)
+    ax_obj = subplot(2, 2, 2);
+    line_obj = plot(NaN, NaN, 'b-', 'LineWidth', 1.6);
+    title('Objective history');
+    xlabel('Iteration'); ylabel('C = f^T u');
+    grid on; set(gca, 'GridAlpha', 0.25);
+
+    % Convergence history (bottom-right)
+    ax_conv = subplot(2, 2, 4);
+    line_vol = plot(NaN, NaN, 'g-', 'LineWidth', 1.6); hold on;
+    line_change = plot(NaN, NaN, 'r-', 'LineWidth', 1.6);
+    title('Convergence history');
+    xlabel('Iteration'); ylabel('Value');
+    grid on; set(gca, 'GridAlpha', 0.25);
+    legend('Volume', 'Change', 'Location', 'best');
+    hold off;
+
+    obj_hist = [];
+    vol_hist = [];
+    ch_hist  = [];
+    it_hist  = [];
+
+    drawnow;
+
+    % ------------------------------------------------------------------
+    % Optimization loop
+    % ------------------------------------------------------------------
+    loop   = 0;
+    change = 1;
+    dv = ones(nelx*nely, 1);
+    dc = ones(nelx*nely, 1);
+    ce = ones(nelx*nely, 1);
+
+    while change > 0.01 && loop < 2000
+        loop = loop + 1;
+
+        % (2,3) Update load using CURRENT M(x):  F = omega1^2 * M(x) * Phi1
+        rhoPhys = rho_min + xPhys.^pmass * (rho0 - rho_min);
+        sM = reshape(ME(:) * rhoPhys', [], 1);
+        M  = sparse(iK, jK, sM, ndof, ndof);
+        M  = (M + M') / 2;
+
+        f = (omega1^2) * (M * Phi1);
+
+        % Setup and solve FE problem
+        sK = reshape(KE(:) * (Emin + xPhys'.^penal * (Emax - Emin)), [], 1);
+        K  = sparse(iK, jK, sK, ndof, ndof);
+        K  = (K + K') / 2;
+
+        Kf = K(free, free);
+
+        u(:) = 0;
+        u(free) = Kf \ f(free);
+
+        % Objective (compliance): C = f' * u
+        obj = f' * u;
+
+        % Element strain energy for stiffness sensitivity
+        ue = u(edofMat);  % nelx*nely x 8
+        ce = sum((ue * KE) .* ue, 2);
+
+        % Sensitivities: dC/dx = -u^T (dK/dx) u + (df/dx)^T u
+        dc_stiff = (-penal * xPhys.^(penal-1) * (Emax - Emin)) .* ce;
+
+        % Load sensitivity term (currently commented out as in Python)
+        % phi_e = Phi1(edofMat);
+        % uMephi = sum((ue * ME) .* phi_e, 2);
+        % dMdx_scale = pmass * (xPhys.^(pmass-1)) * (rho0 - rho_min);
+        % dc_load = (omega1^2) * dMdx_scale .* uMephi;
+
+        dc = dc_stiff; % + dc_load;
+        dv = ones(nelx*nely, 1);
+
+        % Sensitivity filtering
+        if ft == 0
+            dc = (Hf * (x .* dc)) ./ Hs ./ max(0.001, x);
+        elseif ft == 1
+            dc = Hf * (dc ./ Hs);
+            dv = Hf * (dv ./ Hs);
+        end
+
+        % Optimality criteria
+        xold = x;
+        [x, g] = oc(nelx, nely, x, volfrac, dc, dv, g);
+
+        % Filter design variables
+        if ft == 0
+            xPhys = x;
+        elseif ft == 1
+            xPhys = (Hf * x) ./ Hs;
+        end
+
+        % Current volume and change
+        vol    = (g + volfrac*nelx*nely) / (nelx*nely);
+        change = max(abs(x - xold));
+
+        % Update visualization
+        it_hist(end+1)  = loop;     %#ok<AGROW>
+        obj_hist(end+1) = obj;      %#ok<AGROW>
+        vol_hist(end+1) = vol;      %#ok<AGROW>
+        ch_hist(end+1)  = change;   %#ok<AGROW>
+
+        % Update topology image
+        set(im, 'CData', reshape(xPhys, nely, nelx));
+        title(ax_img, sprintf('Topology (density) | it=%d  obj=%.3e  vol=%.3f  ch=%.3f', ...
+              loop, obj, vol, change));
+
+        % Update objective plot
+        set(line_obj, 'XData', it_hist, 'YData', obj_hist);
+        set(ax_obj, 'XLim', [1, max(2, loop)]);
+        if ~isempty(obj_hist)
+            obj_min = min(obj_hist); obj_max = max(obj_hist);
+            obj_pad = max(1e-12, 0.05*max(abs(obj_min), abs(obj_max)));
+            set(ax_obj, 'YLim', [obj_min - obj_pad, obj_max + obj_pad]);
+        end
+
+        % Update convergence plot
+        set(line_vol, 'XData', it_hist, 'YData', vol_hist);
+        set(line_change, 'XData', it_hist, 'YData', ch_hist);
+        set(ax_conv, 'XLim', [1, max(2, loop)]);
+        if ~isempty(vol_hist)
+            conv_min = min([vol_hist, ch_hist]);
+            conv_max = max([vol_hist, ch_hist]);
+            conv_pad = max(1e-6, 0.05*max(abs(conv_min), abs(conv_max)));
+            set(ax_conv, 'YLim', [conv_min - conv_pad, conv_max + conv_pad]);
+        end
+
+        drawnow;
+
+        fprintf('it.: %4d , obj(C=f^T u): %.3f Vol.: %.3f, ch.: %.3f\n', ...
+                loop, obj, vol, change);
+    end
+
+    % ------------------------------------------------------------------
+    % Post-analysis: first circular frequency for final topology
+    % ------------------------------------------------------------------
+    sK_final = reshape(KE(:) * (Emin + xPhys'.^penal * (Emax - Emin)), [], 1);
+    K_final  = sparse(iK, jK, sK_final, ndof, ndof);
+    K_final  = (K_final + K_final') / 2;
+
+    rhoPhys_final = rho_min + xPhys.^pmass * (rho0 - rho_min);
+    sM_final = reshape(ME(:) * rhoPhys_final', [], 1);
+    M_final  = sparse(iK, jK, sM_final, ndof, ndof);
+    M_final  = (M_final + M_final') / 2;
+
+    Kf_final = K_final(free, free);
+    Mf_final = M_final(free, free);
+    [~, Lam_final] = eigs(Kf_final, Mf_final, 1, 'smallestabs');
+    lam1_final   = Lam_final(1,1);
+    omega1_final = sqrt(max(lam1_final, 0));
+    f1_final     = omega1_final / (2*pi);
+    fprintf('[Final Eigen] lambda1=%.6e, omega1=%.6e rad/s, f1=%.6e Hz\n', ...
+            lam1_final, omega1_final, f1_final);
+end
+
+
+% ======================================================================
+% Element stiffness matrix (Q4, plane stress) for rectangular element hx x hy
+% ======================================================================
+function KE = lk(hx, hy)
+    E  = 1.0;
+    nu = 0.3;
+    D  = (E / (1 - nu^2)) * [1, nu, 0; nu, 1, 0; 0, 0, 0.5*(1-nu)];
+
+    invJ = [2/hx, 0; 0, 2/hy];
+    detJ = 0.25 * hx * hy;
+    gp   = 1 / sqrt(3);
+    gauss_pts = [-gp, gp];
+
+    KE_ccw = zeros(8, 8);
+    for xi = gauss_pts
+        for eta = gauss_pts
+            dN_dxi  = 0.25 * [-(1-eta),  (1-eta),  (1+eta), -(1+eta)];
+            dN_deta = 0.25 * [-(1-xi),  -(1+xi),   (1+xi),   (1-xi)];
+            dN_xy = invJ * [dN_dxi; dN_deta];
+            dN_dx = dN_xy(1, :);
+            dN_dy = dN_xy(2, :);
+
+            B = zeros(3, 8);
+            B(1, 1:2:end) = dN_dx;
+            B(2, 2:2:end) = dN_dy;
+            B(3, 1:2:end) = dN_dy;
+            B(3, 2:2:end) = dN_dx;
+
+            KE_ccw = KE_ccw + (B' * D * B) * detJ;
+        end
+    end
+
+    % topopt edof order: [UL, UR, LR, LL]
+    perm = [7, 8, 5, 6, 3, 4, 1, 2];  % 1-based
+    KE = KE_ccw(perm, perm);
+end
+
+
+% ======================================================================
+% Element consistent mass matrix (Q4, 2 dof/node) for rectangular hx x hy
+% ======================================================================
+function ME = lm(hx, hy)
+    area = hx * hy;
+    Ms_ccw = (area / 36) * [4, 2, 1, 2;
+                             2, 4, 2, 1;
+                             1, 2, 4, 2;
+                             2, 1, 2, 4];
+    ME_ccw = kron(Ms_ccw, eye(2));
+
+    perm = [7, 8, 5, 6, 3, 4, 1, 2];  % 1-based
+    ME = ME_ccw(perm, perm);
+end
+
+
+% ======================================================================
+% Optimality criteria update
+% ======================================================================
+function [xnew, gt] = oc(nelx, nely, x, volfrac, dc, dv, g)
+    l1   = 0;
+    l2   = 1e9;
+    move = 0.2;
+    xnew = zeros(nelx*nely, 1);
+    eps_val = 1e-30;
+
+    % Enforce OC assumptions: dv > 0 and dc <= 0
+    dv_safe = max(dv, 1e-12);
+    dc_safe = min(dc, -1e-12);
+
+    for iter = 1:200
+        lmid = 0.5 * (l1 + l2);
+        denom = max(lmid, 1e-30);
+
+        B = -dc_safe ./ dv_safe / denom;
+        B = max(B, 1e-30);
+
+        x_candidate = x .* sqrt(B);
+        xnew = max(0, max(x - move, min(1, min(x + move, x_candidate))));
+
+        gt = g + sum(dv_safe .* (xnew - x));
+
+        if gt > 0
+            l1 = lmid;
+        else
+            l2 = lmid;
+        end
+
+        if (l2 - l1) / max(l1 + l2, eps_val) < 1e-3
+            break;
+        end
+    end
+end
