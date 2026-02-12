@@ -30,7 +30,7 @@ dynMaxIt = 200;
     nelx, nely, volfrac, penal, rmin, ft, ftBC, eta, beta, move, maxit, stage1_maxit, bcType, 3);
 
 figure('Name','Yuksel Figure 9 benchmark','Color','w');
-tiledlayout(1,2,'TileSpacing','compact','Padding','compact');
+tiledlayout(2,1,'TileSpacing','compact','Padding','compact');
 
 nexttile;
 imagesc(1 - reshape(info.stage1.xFinal, nely, nelx));
