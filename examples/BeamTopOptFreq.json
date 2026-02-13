@@ -1,0 +1,74 @@
+{
+  "meta": {
+    "name": "Beam topology — natural frequency maximization",
+    "notes": "Passive flanges counted in volume fraction.",
+    "units": {
+      "length": "m",
+      "force": "N",
+      "density": "kg/m3",
+      "elastic_modulus": "Pa"
+    }
+  },
+
+  "domain": {
+    "shape": "rectangular",
+    "size": {
+      "length": 10.0,
+      "height": 1.0
+    },
+    "thickness": 1.0,
+    "mesh": {
+      "nelx": 500,
+      "nely": 50
+    },
+    "passive_regions": {
+      "flanges": {
+        "top": { "relative_height": 0.05, "is_solid": true },
+        "bottom": { "relative_height": 0.05, "is_solid": true }
+      }
+    }
+  },
+
+  "material": {
+    "model": "plane_stress_isotropic",
+    "E": 1.0E7,
+    "nu": 0.3,
+    "rho": 1.0
+  },
+  
+  "void_material": {
+      "E_min_ratio": 1e-2,
+      "rho_min": 1e-6
+    },
+
+
+  "bc": {
+    "supports": [
+		{ "type": "hinge", "location": "left_mid_height", "dofs": ["ux", "uy"] },
+		{ "type": "hinge", "location": "right_mid_height", "dofs": ["ux", "uy"] }
+	  ]
+  },
+
+
+  "optimisation": {
+    "approach": "Yuksel",
+    "objective": "max_min_frequency",
+    "interpolation": "SIMP",
+    "volume_fraction": 0.4,
+    "penalization": 3.0,
+
+    "filter": {
+      "type": "density",
+      "radius": 0.04,
+      "radius_units": "physical",
+      "boundary_condition": "symmetric"
+    },
+
+    "move_limit": 0.2,
+    "max_iters": 2000,
+    "convergence_tol": 1e-3,
+    "seed": null,
+    "visualise_live" : "yes",
+    "save_snapshot_image" : "no"
+  }
+}

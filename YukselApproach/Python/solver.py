@@ -237,8 +237,8 @@ def _fixed_pinned_load_from_solid_mode(
         M = M + M.T - sparse.diags(M.diagonal())
 
         free = np.setdiff1d(np.arange(n_dof, dtype=np.int64), fixed)
-        Kff = K[np.ix_(free, free)]
-        Mff = M[np.ix_(free, free)]
+        Kff = K[free][:, free]
+        Mff = M[free][:, free]
         vals, vecs = _solve_smallest_modes(Kff, Mff, 1)
         _ = vals
 
@@ -294,8 +294,8 @@ def _first_n_omegas(
             M[d, d] += tip_mass_val
         M = M.tocsr()
 
-    Kff = K[np.ix_(free, free)]
-    Mff = M[np.ix_(free, free)]
+    Kff = K[free][:, free]
+    Mff = M[free][:, free]
 
     vals, _ = _solve_smallest_modes(Kff, Mff, n_modes)
     vals = vals[vals > 0]
@@ -546,7 +546,7 @@ def top99neo_inertial_freq(
         K = K + K.T - sparse.diags(K.diagonal())
 
         U[:] = 0.0
-        U[free] = spla.spsolve(K[np.ix_(free, free)], F_point[free])
+        U[free] = spla.spsolve(K[free][:, free], F_point[free])
 
         dc = dsK * np.sum((U[c_mat] @ Ke0) * U[c_mat], axis=1)
 
@@ -677,7 +677,7 @@ def top99neo_inertial_freq(
         F[fixed] = 0.0
 
         U2[:] = 0.0
-        U2[free] = spla.spsolve(K[np.ix_(free, free)], F[free])
+        U2[free] = spla.spsolve(K[free][:, free], F[free])
 
         uhat_new = U2.copy()
         nrm_new = np.linalg.norm(uhat_new[free])
@@ -950,8 +950,8 @@ def top99neo_dynamic_freq(
                 M[d, d] += tip_mass_val
             M = M.tocsr()
 
-        Kff = K[np.ix_(free, free)]
-        Mff = M[np.ix_(free, free)]
+        Kff = K[free][:, free]
+        Mff = M[free][:, free]
 
         lam, V = _solve_smallest_modes(Kff, Mff, 3)
         lam = np.maximum(lam, np.finfo(float).eps)

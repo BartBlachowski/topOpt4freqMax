@@ -172,6 +172,9 @@ if opts.doDiagnostic
         omega_best = omega0(1);
         xPhys_best = xPhys0;
         diagnostics.final = diagnostics.initial;
+        diagnostics.iterations = 0;
+        diagnostics.loop_time = 0;
+        diagnostics.t_iter = NaN;
         fprintf('Diagnostic-only mode, skipping optimization.\n');
         fprintf('Best omega = %.4f rad/s (%.4f Hz)\n', omega_best, omega_best/(2*pi));
         return;
@@ -179,7 +182,10 @@ if opts.doDiagnostic
 end
 
 %% =================== OPT LOOP ================================
+iter_executed = 0;
+loop_tic = tic;
 for it = 1:maxiter
+    iter_executed = it;
 
     % --- MMA shape hardening (CRITICAL)
     xval=xval(:); xold1=xold1(:); xold2=xold2(:);
@@ -432,12 +438,12 @@ for it = 1:maxiter
     % termination check
     if beta_idx == numel(beta_list)
         polish_left = max(0, Npolish - (it - beta_interval*(numel(beta_list)-1)));
-        if rel_change_obj < 1e-3 && change_x < 1e-3 && grayness < 0.05 && polish_left <= 0
+        if rel_change_obj < cfg.conv_tol && change_x < cfg.conv_tol && grayness < 0.05 && polish_left <= 0
             fprintf('Converged: rel dOmega=%.2e, dx=%.2e, gray=%.3f (polish satisfied)\n',rel_change_obj,change_x,grayness);
             break;
         end
     else
-        if rel_change_obj < 1e-3 && change_x < 1e-3 && grayness < 0.05
+        if rel_change_obj < cfg.conv_tol && change_x < cfg.conv_tol && grayness < 0.05
             fprintf('Converged early: rel dOmega=%.2e, dx=%.2e, gray=%.3f\n',rel_change_obj,change_x,grayness);
             break;
         end
@@ -455,17 +461,23 @@ for it = 1:maxiter
     fprintf('It:%3d  beta:%2d  omega:%.3f  vol:%.3f  gray:%.3f  fracGray:%.3f  bins[0-0.05|mid|0.95-1]=[%.3f %.3f %.3f]  g_up:%+.2e  g_low:%+.2e  maxg:%+.2e  maxg_eig:%+.2e\n',...
         it,beta,omega_cur,mean(xPhys),grayness,frac_gray,bins_low,bins_mid,bins_high,g_up,g_low,max(fval),max_g_eig)
 
-    % visualization: option to plot binary for clarity, nearest-neighbor
-    img = reshape(xPhys,nely,nelx);
-    if opts.plotBinary
-        img = img > 0.5;
+    if opts.visualise_live
+        % visualization: option to plot binary for clarity, nearest-neighbor
+        img = reshape(xPhys,nely,nelx);
+        if opts.plotBinary
+            img = img > 0.5;
+        end
+        imagesc(1-img,'Interpolation','nearest');  % invert so solid = dark
+        axis equal off;
+        colormap(gray(256));
+        caxis([0 1]);
+        drawnow
     end
-    imagesc(1-img,'Interpolation','nearest');  % invert so solid = dark
-    axis equal off;
-    colormap(gray(256));
-    caxis([0 1]);
-    drawnow
 end
+loop_time = toc(loop_tic);
+diagnostics.iterations = iter_executed;
+diagnostics.loop_time = loop_time;
+diagnostics.t_iter = loop_time / max(iter_executed, 1);
 
 % --- final diagnostics on best design (use true smallest modes)
 [lam_best,omega_vec_best,freq_vec_best] = evalModes(xPhys_best,opts.diagModes);
@@ -533,6 +545,9 @@ function cfg = applyDefaults(cfg)
     if isempty(cfg.beta_schedule)
         cfg.beta_schedule = [1 2 4 8 16 32 64];
     end
+    if ~isfield(cfg, 'conv_tol') || isempty(cfg.conv_tol)
+        cfg.conv_tol = 1e-3;
+    end
     cfg.supportType = string(cfg.supportType);
 end
 
@@ -541,7 +556,8 @@ function opts = applyDefaultOpts(opts, cfg)
         'doDiagnostic', true, ...
         'diagnosticOnly', false, ...
         'diagModes', max(3, cfg.J), ...
-        'plotBinary', false);
+        'plotBinary', false, ...
+        'visualise_live', true);
     opts = mergeStructs(defaults, opts);
 end
 

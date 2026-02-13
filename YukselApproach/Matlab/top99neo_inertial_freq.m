@@ -1,4 +1,4 @@
-function [xPhys_stage2,U_stage2,info] = top99neo_inertial_freq(nelx,nely,volfrac,penal,rmin,ft,ftBC,eta,beta,move,maxit,stage1_maxit,bcType,nHistModes)
+function [xPhys_stage2,U_stage2,info] = top99neo_inertial_freq(nelx,nely,volfrac,penal,rmin,ft,ftBC,eta,beta,move,maxit,stage1_maxit,bcType,nHistModes,runCfg)
 %TOP99NEO_INERTIAL_FREQ  Fast surrogate frequency maximization via design-dependent inertial loads.
 %
 % Implements the two-stage method from Yuksel & Yilmaz (2025):
@@ -43,30 +43,43 @@ if nargin < 11 || isempty(maxit),        maxit = 100;   end
 if nargin < 12 || isempty(stage1_maxit), stage1_maxit = maxit; end
 if nargin < 13 || isempty(bcType),       bcType = "simply"; end
 if nargin < 14 || isempty(nHistModes),   nHistModes = 0; end
+if nargin < 15 || isempty(runCfg),       runCfg = struct(); end
+if ~isstruct(runCfg)
+    error('runCfg must be a struct when provided.');
+end
 bcType = string(bcType);
 nHistModes = max(0, floor(double(nHistModes)));
+stage1Tol = 1e-2;
 stage2Tol = 1e-2;
-if strcmpi(char(bcType), 'fixedpinned')
-    % Fixed-pinned case benefits from tighter stage-2 convergence.
-    stage2Tol = 1e-3;
+if strcmpi(char(bcType), 'fixedpinned'), stage2Tol = 1e-3; end
+if isfield(runCfg, 'conv_tol') && ~isempty(runCfg.conv_tol)
+    stage1Tol = runCfg.conv_tol;
+    stage2Tol = runCfg.conv_tol;
+end
+if isfield(runCfg, 'stage1_tol') && ~isempty(runCfg.stage1_tol), stage1Tol = runCfg.stage1_tol; end
+if isfield(runCfg, 'stage2_tol') && ~isempty(runCfg.stage2_tol), stage2Tol = runCfg.stage2_tol; end
+if isfield(runCfg, 'visualise_live') && ~isempty(runCfg.visualise_live)
+    doPlot = logical(runCfg.visualise_live);
+else
+    doPlot = true;
 end
 
 %% ---------------------------- PRE. 1) MATERIAL AND CONTINUATION PARAMETERS
-E0   = 1e7;        % Figure 4 material value in Yuksel & Yilmaz (2025)
-Emin = 1e-9 * E0; % Paper convention: Emin = 1e-9 * E0
-nu   = 0.3;
+E0 = localOpt(runCfg, 'E0', 1e7);
+Emin = localOpt(runCfg, 'Emin', 1e-9 * E0);
+nu = localOpt(runCfg, 'nu', 0.3);
 
-rho0    = 1;          % density of solid
-rho_min = 1e-9 * rho0; % Paper convention: rho_min = 1e-9 * rho0
-dMass   = 6;          % mass penalization exponent for low densities (paper uses d=6)
-xMassCut = 0.1;       % threshold (paper uses 0.1)
+rho0 = localOpt(runCfg, 'rho0', 1.0);
+rho_min = localOpt(runCfg, 'rho_min', 1e-9 * rho0);
+dMass = localOpt(runCfg, 'dMass', 6.0);
+xMassCut = localOpt(runCfg, 'xMassCut', 0.1);
 
 penalCnt = { 1,  1, 25, 0.25 };
 betaCnt  = { 1,  1, 25,    2 };
 if strcmpi(char(ftBC), 'N'), bcF = 'symmetric'; else, bcF = 0; end
 
 %% ----------------------------------------- PRE. 2) DISCRETIZATION FEATURES
-[beamL, beamH, tipMassFrac] = localPhysicalSetup(bcType);
+[beamL, beamH, tipMassFrac] = localPhysicalSetup(bcType, runCfg);
 nEl = nelx * nely;
 nodeNrs = int32( reshape( 1 : (1 + nelx) * (1 + nely), 1+nely, 1+nelx ) );
 cVec = reshape( 2 * nodeNrs( 1 : end - 1, 1 : end - 1 ) + 1, nEl, 1 );
@@ -153,7 +166,7 @@ info.stage1.loadDof = lcDof;
     x, xPhys, U, F_point, fixed, free, act, ...
     nelx, nely, nEl, nDof, cMat, Iar, Ke, Ke0, ...
     E0, Emin, penal, rmin, h, Hs, bcF, ft, eta, beta, move, stage1_maxit, ...
-    penalCnt, betaCnt, dsK, dV, info.stage1, true, nHistModes);
+    penalCnt, betaCnt, dsK, dV, info.stage1, doPlot, nHistModes, stage1Tol);
 info.stage1.xFinal = xPhys;
 info.stage1.UFinal = U;
 info.stage1.omega1 = localFirstOmega( ...
@@ -174,7 +187,7 @@ U_est = U;
     E0, Emin, rho0, rho_min, dMass, xMassCut, ...
     tipMassDofs, tipMassVal, ...
     penal, rmin, h, Hs, bcF, ft, eta, beta, move, maxit, ...
-    penalCnt, betaCnt, dsK, dV, info.stage2, stage2Tol, nHistModes);
+    penalCnt, betaCnt, dsK, dV, info.stage2, doPlot, stage2Tol, nHistModes);
 info.stage2.xFinal = xPhys_stage2;
 info.stage2.UFinal = U_stage2;
 info.stage2.omega1 = localFirstOmega( ...
@@ -191,14 +204,25 @@ end
 
 if isfinite(info.stage2.omega1)
     fprintf('\nFinal design: omega1 = %.4f rad/s\n', info.stage2.omega1);
-    title(sprintf('\\omega_1 = %.1f rad/s', info.stage2.omega1), 'Interpreter', 'tex');
-    drawnow;
+    if doPlot
+        title(sprintf('\\omega_1 = %.1f rad/s', info.stage2.omega1), 'Interpreter', 'tex');
+        drawnow;
+    end
 end
+
+info.timing = struct();
+info.timing.stage1_loop_time = localOpt(info.stage1, 'loop_time', NaN);
+info.timing.stage2_loop_time = localOpt(info.stage2, 'loop_time', NaN);
+info.timing.stage1_iterations = localOpt(info.stage1, 'iterations', NaN);
+info.timing.stage2_iterations = localOpt(info.stage2, 'iterations', NaN);
+info.timing.total_loop_time = info.timing.stage1_loop_time + info.timing.stage2_loop_time;
+info.timing.total_iterations = info.timing.stage1_iterations + info.timing.stage2_iterations;
+info.timing.t_iter = info.timing.total_loop_time / max(info.timing.total_iterations, 1);
 
 end
 
 %% =======================================================================
-function [beamL, beamH, tipMassFrac] = localPhysicalSetup(bcType)
+function [beamL, beamH, tipMassFrac] = localPhysicalSetup(bcType, runCfg)
 % Physical dimensions and concentrated-mass setup used in paper benchmarks.
 switch lower(bcType)
     case "cantilever"
@@ -212,6 +236,9 @@ switch lower(bcType)
     otherwise
         error('Unsupported bcType: %s', bcType);
 end
+if isfield(runCfg, 'beamL') && ~isempty(runCfg.beamL), beamL = runCfg.beamL; end
+if isfield(runCfg, 'beamH') && ~isempty(runCfg.beamH), beamH = runCfg.beamH; end
+if isfield(runCfg, 'tipMassFrac') && ~isempty(runCfg.tipMassFrac), tipMassFrac = runCfg.tipMassFrac; end
 end
 
 %% =======================================================================
@@ -321,7 +348,7 @@ function [xPhys,U,eta,penal,beta,stageInfo] = localComplianceLoop( ...
     x, xPhys, U, F, fixed, free, act, ...
     nelx, nely, nEl, nDof, cMat, Iar, Ke, Ke0, ...
     E0, Emin, penal, rmin, h, Hs, bcF, ft, eta, beta, move, maxit, ...
-    penalCnt, betaCnt, dsK, dV, stageInfo, doPlot, nHistModes)
+    penalCnt, betaCnt, dsK, dV, stageInfo, doPlot, nHistModes, tolX)
 
 % ---- implicit functions (redefined here: local functions cannot access parent workspace)
 prj  = @(v,eta_,beta_) (tanh(beta_*eta_)+tanh(beta_*(v(:)-eta_)))./(tanh(beta_*eta_)+tanh(beta_*(1-eta_)));
@@ -331,7 +358,7 @@ dprj = @(v,eta_,beta_) beta_*(1-tanh(beta_*(v-eta_)).^2)./(tanh(beta_*eta_)+tanh
 cnt  = @(v,vCnt,l) v+(l>=vCnt{1})*(v<vCnt{2})*(mod(l,vCnt{3})==0)*vCnt{4};
 
 loop = 0;
-tolX = 1e-2; % Paper setting: stop when maximum density change < 0.01
+loop_tic = tic;
 while loop < maxit
     loop = loop + 1;
     % ---- physical density
@@ -407,6 +434,9 @@ while loop < maxit
     end
     if loop > 1 && ch < tolX, break; end
 end
+stageInfo.iterations = loop;
+stageInfo.loop_time = toc(loop_tic);
+stageInfo.t_iter = stageInfo.loop_time / max(loop, 1);
 
 end
 
@@ -417,7 +447,7 @@ function [xPhys,U,eta,penal,beta,stageInfo] = localInertialLoop( ...
     E0, Emin, rho0, rho_min, dMass, xMassCut, ...
     tipMassDofs, tipMassVal, ...
     penal, rmin, h, Hs, bcF, ft, eta, beta, move, maxit, ...
-    penalCnt, betaCnt, dsK, dV, stageInfo, stage2Tol, nHistModes)
+    penalCnt, betaCnt, dsK, dV, stageInfo, doPlot, stage2Tol, nHistModes)
 
 % ---- implicit functions (redefined here: local functions cannot access parent workspace)
 prj  = @(v,eta_,beta_) (tanh(beta_*eta_)+tanh(beta_*(v(:)-eta_)))./(tanh(beta_*eta_)+tanh(beta_*(1-eta_)));
@@ -428,6 +458,7 @@ cnt  = @(v,vCnt,l) v+(l>=vCnt{1})*(v<vCnt{2})*(mod(l,vCnt{3})==0)*vCnt{4};
 
 tolX = stage2Tol;
 loop = 0; U = U_est;
+loop_tic = tic;
 
 while loop < maxit
     loop = loop + 1;
@@ -531,11 +562,16 @@ while loop < maxit
         stageInfo.xHist(:,end+1) = xPhys;
     end
 
-    fprintf('S2 It.:%5i C:%10.4e V:%7.3f ch:%0.2e du:%0.2e |F|:%9.2e penal:%5.2f beta:%5.1f eta:%6.3f\n', ...
-        loop, cVal, mean(xPhys), ch, du, norm(F(free)), penal, beta, eta);
-    colormap(gray); imagesc(1-reshape(xPhys,nely,nelx)); caxis([0 1]); axis equal off; drawnow;
+    if doPlot
+        fprintf('S2 It.:%5i C:%10.4e V:%7.3f ch:%0.2e du:%0.2e |F|:%9.2e penal:%5.2f beta:%5.1f eta:%6.3f\n', ...
+            loop, cVal, mean(xPhys), ch, du, norm(F(free)), penal, beta, eta);
+        colormap(gray); imagesc(1-reshape(xPhys,nely,nelx)); caxis([0 1]); axis equal off; drawnow;
+    end
     if loop > 1 && ch < tolX, break; end
 end
+stageInfo.iterations = loop;
+stageInfo.loop_time = toc(loop_tic);
+stageInfo.t_iter = stageInfo.loop_time / max(loop, 1);
 
 end
 
@@ -619,5 +655,13 @@ try
     end
 catch
     omegas(:) = NaN;
+end
+end
+
+function v = localOpt(s, name, defaultVal)
+if isstruct(s) && isfield(s, name) && ~isempty(s.(name))
+    v = s.(name);
+else
+    v = defaultVal;
 end
 end

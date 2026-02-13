@@ -55,3 +55,8 @@ codegen/
 *.tiff
 *.svg
 *.eps
+
+*.csv
+*.npz
+*.txt
+.DS_Store
