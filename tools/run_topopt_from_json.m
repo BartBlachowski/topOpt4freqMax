@@ -12,6 +12,8 @@ function [x, omega, tIter, nIter] = run_topopt_from_json(jsonInput)
 %   tIter  : average time per optimization iteration [s]
 %   nIter  : number of optimization iterations executed
 
+    ensureCompatHelpersOnPath();
+
     if nargin < 1 || isempty(jsonInput)
         error('run_topopt_from_json:MissingInput', 'Input is required (JSON filename or decoded struct).');
     end
@@ -395,6 +397,17 @@ function saveTopologySnapshot(x, nelx, nely, jsonSource)
     colormap(gray(256));
     exportgraphics(gca, outPng, 'Resolution', 160);
     close(fig);
+end
+
+function ensureCompatHelpersOnPath()
+    if exist('matlab.internal.math.checkInputName', 'file') == 2
+        return;
+    end
+    thisDir = fileparts(mfilename('fullpath'));
+    compatDir = fullfile(thisDir, 'compat');
+    if exist(compatDir, 'dir') == 7
+        addpath(compatDir);
+    end
 end
 
 function v = reqNum(s, path, label)
