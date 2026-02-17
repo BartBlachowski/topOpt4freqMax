@@ -34,7 +34,7 @@ if nargin < 2  || isempty(nely),         nely = 100;   end
 if nargin < 3  || isempty(volfrac),      volfrac = 0.5; end
 if nargin < 4  || isempty(penal),        penal = 3.0;   end
 if nargin < 5  || isempty(rmin),         rmin = 8.75;   end
-if nargin < 6  || isempty(ft),           ft = 3;        end
+if nargin < 6  || isempty(ft),           ft = 1;        end
 if nargin < 7  || isempty(ftBC),         ftBC = 'N';    end
 if nargin < 8  || isempty(eta),          eta = 0.5;     end
 if nargin < 9  || isempty(beta),         beta = 1.0;    end
@@ -51,13 +51,13 @@ bcType = string(bcType);
 nHistModes = max(0, floor(double(nHistModes)));
 stage1Tol = 1e-2;
 stage2Tol = 1e-2;
-if strcmpi(char(bcType), 'fixedpinned'), stage2Tol = 1e-3; end
+if strcmpi(char(bcType), 'fixedpinned'), stage2Tol = 1e-2; end
 if isfield(runCfg, 'conv_tol') && ~isempty(runCfg.conv_tol)
-    stage1Tol = runCfg.conv_tol;
     stage2Tol = runCfg.conv_tol;
 end
 if isfield(runCfg, 'stage1_tol') && ~isempty(runCfg.stage1_tol), stage1Tol = runCfg.stage1_tol; end
 if isfield(runCfg, 'stage2_tol') && ~isempty(runCfg.stage2_tol), stage2Tol = runCfg.stage2_tol; end
+finalModes = max(1, floor(double(localOpt(runCfg, 'final_modes', 3))));
 if isfield(runCfg, 'visualise_live') && ~isempty(runCfg.visualise_live)
     doPlot = logical(runCfg.visualise_live);
 else
@@ -156,8 +156,8 @@ x( act ) = ( volfrac*( nEl - length(pasV) ) - length(pasS) )/length( act );
 x( pasS ) = 1;
 
 info = struct();
-info.stage1 = struct('c',[],'v',[],'ch',[],'xHist',[],'omegaHist',[]);
-info.stage2 = struct('c',[],'v',[],'ch',[],'xHist',[],'omegaHist',[]);
+info.stage1 = struct('c',[],'v',[],'ch',[],'xHist',[],'omegaHist',[],'omegaFinal',[]);
+info.stage2 = struct('c',[],'v',[],'ch',[],'xHist',[],'omegaHist',[],'omegaFinal',[]);
 info.stage1.loadDof = lcDof;
 
 %% ================================ STAGE 1: standard compliance minimization
@@ -190,9 +190,10 @@ U_est = U;
     penalCnt, betaCnt, dsK, dV, info.stage2, doPlot, stage2Tol, nHistModes);
 info.stage2.xFinal = xPhys_stage2;
 info.stage2.UFinal = U_stage2;
-info.stage2.omega1 = localFirstOmega( ...
+info.stage2.omegaFinal = localFirstNOmegas( ...
     xPhys_stage2, free, nEl, nDof, Iar, Ke, Me0, E0, Emin, penal, ...
-    rho0, rho_min, dMass, xMassCut, tipMassDofs, tipMassVal);
+    rho0, rho_min, dMass, xMassCut, tipMassDofs, tipMassVal, finalModes);
+info.stage2.omega1 = info.stage2.omegaFinal(1);
 if nHistModes > 0
     info.stage1.omegaHist = localModeHistory( ...
         info.stage1.xHist, free, nEl, nDof, Iar, Ke, Me0, E0, Emin, penal, ...

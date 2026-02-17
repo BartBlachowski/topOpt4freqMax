@@ -1,16 +1,17 @@
-function [x, omega, tIter, nIter] = run_topopt_from_json(jsonInput)
+function [x, omega, tIter, nIter, mem_usage] = run_topopt_from_json(jsonInput)
 %RUN_TOPOPT_FROM_JSON Run selected topology-optimization approach from JSON task file.
 %
-%   [x, omega, tIter, nIter] = run_topopt_from_json(jsonInput)
+%   [x, omega, tIter, nIter, mem_usage] = run_topopt_from_json(jsonInput)
 %
 % Inputs:
 %   jsonInput : either path to JSON task file, or a decoded JSON struct.
 %
 % Outputs:
-%   x      : final density vector (nelx*nely, 1)
-%   omega  : first three circular frequencies in rad/s (3,1)
-%   tIter  : average time per optimization iteration [s]
-%   nIter  : number of optimization iterations executed
+%   x         : final density vector (nelx*nely, 1)
+%   omega     : first three circular frequencies in rad/s (3,1)
+%   tIter     : average time per optimization iteration [s]
+%   nIter     : number of optimization iterations executed
+%   mem_usage : peak additional memory used during this call [MB]
 
     ensureCompatHelpersOnPath();
 
@@ -129,7 +130,19 @@ function [x, omega, tIter, nIter] = run_topopt_from_json(jsonInput)
     omega = NaN(3,1);
     tIter = NaN;
     nIter = NaN;
+    mem_usage = 0;
     Emin = E0 * EminRatio;
+
+    % --- Memory sampling setup (only when 5th output requested) ---
+    if nargout >= 5
+        baselineRSS = getCurrentRSS_KB();
+        peakRSS_container = {baselineRSS};  % mutable via closure
+        samplerTimer = timer('ExecutionMode', 'fixedRate', ...
+                             'Period', 2, ...
+                             'TimerFcn', @(~,~) sampleRSS(peakRSS_container));
+        cleanupObj = onCleanup(@() stopAndDeleteTimer(samplerTimer));
+        start(samplerTimer);
+    end
 
     switch lower(strtrim(approach))
         case 'olhoff'
@@ -197,15 +210,56 @@ function [x, omega, tIter, nIter] = run_topopt_from_json(jsonInput)
 
             eta = 0.5;
             beta = 1.0;
-            stage1MaxIter = maxiter;
-            nHistModes = 3;
+            stage1MaxIter = min(maxiter, 200);
+            if hasFieldPath(cfg, {'optimisation','yuksel','stage1_max_iters'})
+                stage1MaxIter = reqInt(cfg, {'optimisation','yuksel','stage1_max_iters'}, ...
+                    'optimisation.yuksel.stage1_max_iters');
+            end
+            if stage1MaxIter < 1
+                error('run_topopt_from_json:InvalidYukselStage1MaxIters', ...
+                    'optimisation.yuksel.stage1_max_iters must be >= 1.');
+            end
+            stage1MaxIter = min(stage1MaxIter, maxiter);
+
+            nHistModes = 0;
+            if hasFieldPath(cfg, {'optimisation','yuksel','mode_history_modes'})
+                nHistModes = reqInt(cfg, {'optimisation','yuksel','mode_history_modes'}, ...
+                    'optimisation.yuksel.mode_history_modes');
+            end
+            if nHistModes < 0
+                error('run_topopt_from_json:InvalidYukselModeHistoryModes', ...
+                    'optimisation.yuksel.mode_history_modes must be >= 0.');
+            end
+
+            finalModeCount = 3;
+            if hasFieldPath(cfg, {'optimisation','yuksel','final_mode_count'})
+                finalModeCount = reqInt(cfg, {'optimisation','yuksel','final_mode_count'}, ...
+                    'optimisation.yuksel.final_mode_count');
+            end
+            if finalModeCount < 1
+                error('run_topopt_from_json:InvalidYukselFinalModeCount', ...
+                    'optimisation.yuksel.final_mode_count must be >= 1.');
+            end
+            runCfg.final_modes = finalModeCount;
+            if hasFieldPath(cfg, {'optimisation','yuksel','stage1_tol'})
+                runCfg.stage1_tol = reqNum(cfg, {'optimisation','yuksel','stage1_tol'}, ...
+                    'optimisation.yuksel.stage1_tol');
+                assertPositive(runCfg.stage1_tol, 'optimisation.yuksel.stage1_tol');
+            end
+            if hasFieldPath(cfg, {'optimisation','yuksel','stage2_tol'})
+                runCfg.stage2_tol = reqNum(cfg, {'optimisation','yuksel','stage2_tol'}, ...
+                    'optimisation.yuksel.stage2_tol');
+                assertPositive(runCfg.stage2_tol, 'optimisation.yuksel.stage2_tol');
+            end
 
             [xPhysStage2, ~, info] = top99neo_inertial_freq( ...
                 nelx, nely, volfrac, penal, rmin_elem, ft, ftBC, eta, beta, move, ...
                 maxiter, stage1MaxIter, bcType, nHistModes, runCfg);
 
             x = xPhysStage2(:);
-            if isfield(info, 'stage2') && isfield(info.stage2, 'omegaHist') && ~isempty(info.stage2.omegaHist)
+            if isfield(info, 'stage2') && isfield(info.stage2, 'omegaFinal') && ~isempty(info.stage2.omegaFinal)
+                omega = toVec3(info.stage2.omegaFinal(:));
+            elseif isfield(info, 'stage2') && isfield(info.stage2, 'omegaHist') && ~isempty(info.stage2.omegaHist)
                 w = info.stage2.omegaHist(end, :);
                 omega = toVec3(w(:));
             elseif isfield(info, 'stage2') && isfield(info.stage2, 'omega1')
@@ -245,6 +299,13 @@ function [x, omega, tIter, nIter] = run_topopt_from_json(jsonInput)
         otherwise
             error('run_topopt_from_json:UnknownApproach', ...
                 'Unknown optimisation.approach "%s". Use "Olhoff", "Yuksel", or "ourApproach".', approach);
+    end
+
+    % --- Finalize memory measurement ---
+    if nargout >= 5
+        sampleRSS(peakRSS_container);   % one last sample
+        stopAndDeleteTimer(samplerTimer);
+        mem_usage = max(0, peakRSS_container{1} - baselineRSS) / 1024;  % KB -> MB
     end
 
     if isempty(x)
@@ -504,4 +565,45 @@ function v = getFieldPath(s, path)
         cur = cur.(key);
     end
     v = cur;
+end
+
+function rssKB = getCurrentRSS_KB()
+%GETCURRENTRSS_KB  Resident set size of current MATLAB process in KB.
+    if ismac || isunix
+        pid = feature('getpid');
+        [status, result] = system(sprintf('ps -o rss= -p %d', pid));
+        if status == 0
+            rssKB = str2double(strtrim(result));
+            if isnan(rssKB), rssKB = 0; end
+        else
+            rssKB = 0;
+        end
+    else
+        % Windows: use memory() if available
+        try
+            m = memory;
+            rssKB = m.MemUsedMATLAB / 1024;  % bytes -> KB
+        catch
+            rssKB = 0;
+        end
+    end
+end
+
+function sampleRSS(peakContainer)
+%SAMPLERSS  Update peak RSS container if current RSS exceeds stored peak.
+    currentRSS = getCurrentRSS_KB();
+    if currentRSS > peakContainer{1}
+        peakContainer{1} = currentRSS;
+    end
+end
+
+function stopAndDeleteTimer(t)
+    try
+        stop(t);
+    catch
+    end
+    try
+        delete(t);
+    catch
+    end
 end

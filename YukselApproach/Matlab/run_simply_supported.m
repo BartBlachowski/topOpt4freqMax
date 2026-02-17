@@ -8,8 +8,8 @@ thisDir = fileparts(mfilename('fullpath'));
 addpath(thisDir);
 
 % Figure 4 geometry/mesh (L = 8, H = 1 -> nelx:nely = 320:40)
-nelx = 320;
-nely = 40;
+nelx = 400;
+nely = 50;
 
 % Optimization setup (paper-consistent)
 volfrac = 0.5;
@@ -20,8 +20,8 @@ ftBC = 'N';       % symmetric filter boundary
 eta = 0.5;        % not used when ft = 1
 beta = 1;         % not used when ft = 1
 move = 0.2;
-maxit = 200;      % upper bound; solver also stops at change < 0.01
-stage1_maxit = 200;
+maxit = 1000;      % upper bound; solver also stops at change < 0.01
+stage1_maxit = 1000;
 bcType = "simply";
 
 [xPhysStage2, ~, info] = top99neo_inertial_freq( ...

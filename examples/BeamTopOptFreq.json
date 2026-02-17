@@ -37,7 +37,7 @@
   },
   
   "void_material": {
-      "E_min_ratio": 1e-2,
+      "E_min_ratio": 1e-6,
       "rho_min": 1e-6
     },
 
@@ -65,7 +65,7 @@
     },
 
     "move_limit": 0.2,
-    "max_iters": 2000,
+    "max_iters": 200,
     "convergence_tol": 1e-3,
     "seed": null,
     "visualise_live" : "yes",
