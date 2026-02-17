@@ -403,19 +403,8 @@ while loop < maxit
         dV0 = imfilter( reshape( dV, nely, nelx ) ./ dHs, h, bcF );
     end
 
-    % ---- OC update
-    xT = x( act );
-    [ xU, xL ] = deal( xT + move, xT - move );
-    ocArg = -dc( act ) ./ dV0( act );
-    ocArg = max( ocArg, 1e-30 );
-    ocP = xT .* sqrt( ocArg );
-    l = [ 0, mean( ocP ) / mean(x) ];
-    while ( l( 2 ) - l( 1 ) ) / ( l( 2 ) + l( 1 ) ) > 1e-4
-        lmid = 0.5 * ( l( 1 ) + l( 2 ) );
-        x( act ) = max( max( min( min( ocP / lmid, xU ), 1 ), xL ), 0 );
-        if mean( x ) > mean(xPhys), l( 1 ) = lmid; else, l( 2 ) = lmid; end
-    end
-    ch = max( abs( x( act ) - xT ) );
+    % ---- OC update (robust bisection bracket + finite guards)
+    [x, ch] = localOcUpdate(x, act, dc, dV0, move, mean(xPhys));
 
     [penal,beta] = deal(cnt(penal,penalCnt,loop), cnt(beta,betaCnt,loop));
 
@@ -538,19 +527,8 @@ while loop < maxit
         dV0 = imfilter( reshape( dV, nely, nelx ) ./ dHs, h, bcF );
     end
 
-    % ---- OC update
-    xT = x( act );
-    [ xU, xL ] = deal( xT + move, xT - move );
-    ocArg = -dc( act ) ./ dV0( act );
-    ocArg = max( ocArg, 1e-30 );
-    ocP = xT .* sqrt( ocArg );
-    l = [ 0, mean( ocP ) / mean(x) ];
-    while ( l( 2 ) - l( 1 ) ) / ( l( 2 ) + l( 1 ) ) > 1e-4
-        lmid = 0.5 * ( l( 1 ) + l( 2 ) );
-        x( act ) = max( max( min( min( ocP / lmid, xU ), 1 ), xL ), 0 );
-        if mean( x ) > mean(xPhys), l( 1 ) = lmid; else, l( 2 ) = lmid; end
-    end
-    ch = max( abs( x( act ) - xT ) );
+    % ---- OC update (robust bisection bracket + finite guards)
+    [x, ch] = localOcUpdate(x, act, dc, dV0, move, mean(xPhys));
 
     [penal,beta] = deal(cnt(penal,penalCnt,loop), cnt(beta,betaCnt,loop));
 
@@ -583,6 +561,59 @@ if exist('fsparse','file') == 2 || exist('fsparse','builtin') == 5
 else
     A = sparse(double(i), double(j), s, sz(1), sz(2));
 end
+end
+
+%% =======================================================================
+function [x, ch] = localOcUpdate(x, act, dc, dV0, move, targetMean)
+if isempty(act)
+    ch = 0;
+    return;
+end
+
+xT = x(act);
+xU = min(1, xT + move);
+xL = max(0, xT - move);
+
+denom = max(dV0(act), 1e-30);
+ocArg = -dc(act) ./ denom;
+ocArg(~isfinite(ocArg)) = 1e-30;
+ocArg = max(ocArg, 1e-30);
+ocP = xT .* sqrt(ocArg);
+
+l1 = 0;
+l2 = max(mean(ocP) / max(mean(x), eps), 1);
+
+% Expand upper bracket until the volume target is met.
+for k = 1:60
+    x(act) = max(max(min(min(ocP / l2, xU), 1), xL), 0);
+    if mean(x) <= targetMean + 1e-12
+        break;
+    end
+    l2 = 2 * l2;
+    if ~isfinite(l2)
+        l2 = realmax('double');
+        break;
+    end
+end
+
+% Bisection with an explicit iteration cap to avoid non-terminating loops.
+for k = 1:120
+    if (l2 - l1) / max(l2 + l1, eps) <= 1e-4
+        break;
+    end
+    lmid = 0.5 * (l1 + l2);
+    if ~isfinite(lmid) || lmid <= 0
+        break;
+    end
+    x(act) = max(max(min(min(ocP / lmid, xU), 1), xL), 0);
+    if mean(x) > targetMean
+        l1 = lmid;
+    else
+        l2 = lmid;
+    end
+end
+
+ch = max(abs(x(act) - xT));
 end
 
 %% =======================================================================

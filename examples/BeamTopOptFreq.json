@@ -13,12 +13,12 @@
   "domain": {
     "shape": "rectangular",
     "size": {
-      "length": 10.0,
+      "length": 8.0,
       "height": 1.0
     },
     "thickness": 1.0,
     "mesh": {
-      "nelx": 500,
+      "nelx": 400,
       "nely": 50
     },
     "passive_regions": {
@@ -54,7 +54,7 @@
     "approach": "Yuksel",
     "objective": "max_min_frequency",
     "interpolation": "SIMP",
-    "volume_fraction": 0.4,
+    "volume_fraction": 0.5,
     "penalization": 3.0,
 
     "filter": {
