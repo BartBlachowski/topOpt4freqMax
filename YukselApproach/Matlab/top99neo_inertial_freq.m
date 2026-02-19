@@ -47,6 +47,7 @@ if nargin < 15 || isempty(runCfg),       runCfg = struct(); end
 if ~isstruct(runCfg)
     error('runCfg must be a struct when provided.');
 end
+localEnsurePlotHelpersOnPath();
 bcType = string(bcType);
 nHistModes = max(0, floor(double(nHistModes)));
 stage1Tol = 1e-2;
@@ -59,10 +60,11 @@ if isfield(runCfg, 'stage1_tol') && ~isempty(runCfg.stage1_tol), stage1Tol = run
 if isfield(runCfg, 'stage2_tol') && ~isempty(runCfg.stage2_tol), stage2Tol = runCfg.stage2_tol; end
 finalModes = max(1, floor(double(localOpt(runCfg, 'final_modes', 3))));
 if isfield(runCfg, 'visualise_live') && ~isempty(runCfg.visualise_live)
-    doPlot = logical(runCfg.visualise_live);
+    doPlot = localParseVisualiseLive(runCfg.visualise_live, true);
 else
     doPlot = true;
 end
+approachName = localApproachName(runCfg, 'Yuksel');
 
 %% ---------------------------- PRE. 1) MATERIAL AND CONTINUATION PARAMETERS
 E0 = localOpt(runCfg, 'E0', 1e7);
@@ -166,7 +168,8 @@ info.stage1.loadDof = lcDof;
     x, xPhys, U, F_point, fixed, free, act, ...
     nelx, nely, nEl, nDof, cMat, Iar, Ke, Ke0, ...
     E0, Emin, penal, rmin, h, Hs, bcF, ft, eta, beta, move, stage1_maxit, ...
-    penalCnt, betaCnt, dsK, dV, info.stage1, doPlot, nHistModes, stage1Tol);
+    penalCnt, betaCnt, dsK, dV, info.stage1, doPlot, nHistModes, stage1Tol, ...
+    approachName, volfrac);
 info.stage1.xFinal = xPhys;
 info.stage1.UFinal = U;
 info.stage1.omega1 = localFirstOmega( ...
@@ -187,7 +190,8 @@ U_est = U;
     E0, Emin, rho0, rho_min, dMass, xMassCut, ...
     tipMassDofs, tipMassVal, ...
     penal, rmin, h, Hs, bcF, ft, eta, beta, move, maxit, ...
-    penalCnt, betaCnt, dsK, dV, info.stage2, doPlot, stage2Tol, nHistModes);
+    penalCnt, betaCnt, dsK, dV, info.stage2, doPlot, stage2Tol, nHistModes, ...
+    approachName, volfrac);
 info.stage2.xFinal = xPhys_stage2;
 info.stage2.UFinal = U_stage2;
 info.stage2.omegaFinal = localFirstNOmegas( ...
@@ -205,11 +209,11 @@ end
 
 if isfinite(info.stage2.omega1)
     fprintf('\nFinal design: omega1 = %.4f rad/s\n', info.stage2.omega1);
-    if doPlot
-        title(sprintf('\\omega_1 = %.1f rad/s', info.stage2.omega1), 'Interpreter', 'tex');
-        drawnow;
-    end
 end
+plotTopology( ...
+    xPhys_stage2, nelx, nely, ...
+    formatTopologyTitle(approachName, volfrac, info.stage2.omega1), ...
+    doPlot);
 
 info.timing = struct();
 info.timing.stage1_loop_time = localOpt(info.stage1, 'loop_time', NaN);
@@ -349,7 +353,8 @@ function [xPhys,U,eta,penal,beta,stageInfo] = localComplianceLoop( ...
     x, xPhys, U, F, fixed, free, act, ...
     nelx, nely, nEl, nDof, cMat, Iar, Ke, Ke0, ...
     E0, Emin, penal, rmin, h, Hs, bcF, ft, eta, beta, move, maxit, ...
-    penalCnt, betaCnt, dsK, dV, stageInfo, doPlot, nHistModes, tolX)
+    penalCnt, betaCnt, dsK, dV, stageInfo, doPlot, nHistModes, tolX, ...
+    approachName, volfrac)
 
 % ---- implicit functions (redefined here: local functions cannot access parent workspace)
 prj  = @(v,eta_,beta_) (tanh(beta_*eta_)+tanh(beta_*(v(:)-eta_)))./(tanh(beta_*eta_)+tanh(beta_*(1-eta_)));
@@ -420,7 +425,10 @@ while loop < maxit
     if doPlot
         fprintf('S1 It.:%5i C:%10.4e V:%7.3f ch:%0.2e penal:%5.2f beta:%5.1f eta:%6.3f\n', ...
             loop, cVal, mean(xPhys), ch, penal, beta, eta);
-        colormap(gray); imagesc(1-reshape(xPhys,nely,nelx)); caxis([0 1]); axis equal off; drawnow;
+        plotTopology( ...
+            xPhys, nelx, nely, ...
+            formatTopologyTitle(approachName, volfrac, NaN), ...
+            true);
     end
     if loop > 1 && ch < tolX, break; end
 end
@@ -437,7 +445,8 @@ function [xPhys,U,eta,penal,beta,stageInfo] = localInertialLoop( ...
     E0, Emin, rho0, rho_min, dMass, xMassCut, ...
     tipMassDofs, tipMassVal, ...
     penal, rmin, h, Hs, bcF, ft, eta, beta, move, maxit, ...
-    penalCnt, betaCnt, dsK, dV, stageInfo, doPlot, stage2Tol, nHistModes)
+    penalCnt, betaCnt, dsK, dV, stageInfo, doPlot, stage2Tol, nHistModes, ...
+    approachName, volfrac)
 
 % ---- implicit functions (redefined here: local functions cannot access parent workspace)
 prj  = @(v,eta_,beta_) (tanh(beta_*eta_)+tanh(beta_*(v(:)-eta_)))./(tanh(beta_*eta_)+tanh(beta_*(1-eta_)));
@@ -544,7 +553,10 @@ while loop < maxit
     if doPlot
         fprintf('S2 It.:%5i C:%10.4e V:%7.3f ch:%0.2e du:%0.2e |F|:%9.2e penal:%5.2f beta:%5.1f eta:%6.3f\n', ...
             loop, cVal, mean(xPhys), ch, du, norm(F(free)), penal, beta, eta);
-        colormap(gray); imagesc(1-reshape(xPhys,nely,nelx)); caxis([0 1]); axis equal off; drawnow;
+        plotTopology( ...
+            xPhys, nelx, nely, ...
+            formatTopologyTitle(approachName, volfrac, NaN), ...
+            true);
     end
     if loop > 1 && ch < tolX, break; end
 end
@@ -695,5 +707,59 @@ if isstruct(s) && isfield(s, name) && ~isempty(s.(name))
     v = s.(name);
 else
     v = defaultVal;
+end
+end
+
+function localEnsurePlotHelpersOnPath()
+if exist('plotTopology', 'file') == 2 && exist('formatTopologyTitle', 'file') == 2
+    return;
+end
+thisDir = fileparts(mfilename('fullpath'));
+repoRoot = fileparts(fileparts(thisDir));
+toolsDir = fullfile(repoRoot, 'tools');
+if exist(toolsDir, 'dir') == 7
+    addpath(toolsDir);
+end
+end
+
+function tf = localParseVisualiseLive(value, defaultValue)
+if nargin < 2
+    defaultValue = true;
+end
+if isempty(value)
+    tf = defaultValue;
+    return;
+end
+if islogical(value) && isscalar(value)
+    tf = value;
+    return;
+end
+if isnumeric(value) && isscalar(value)
+    tf = value ~= 0;
+    return;
+end
+if isstring(value) && isscalar(value)
+    value = char(value);
+end
+if ischar(value)
+    key = lower(strtrim(value));
+    if any(strcmp(key, {'yes','y','true','1','on'}))
+        tf = true;
+        return;
+    end
+    if any(strcmp(key, {'no','n','false','0','off'}))
+        tf = false;
+        return;
+    end
+end
+error('top99neo_inertial_freq:InvalidVisualiseLive', ...
+    'visualise_live must be yes/no (case-insensitive) or boolean-like.');
+end
+
+function name = localApproachName(runCfg, defaultName)
+if isstruct(runCfg) && isfield(runCfg, 'approach_name') && ~isempty(runCfg.approach_name)
+    name = char(string(runCfg.approach_name));
+else
+    name = defaultName;
 end
 end

@@ -23,6 +23,7 @@ function [xOut, fHz, tIter, nIter] = topopt_freq(nelx, nely, volfrac, penal, rmi
     else
         runCfg = struct();
     end
+    localEnsurePlotHelpersOnPath();
 
     fprintf('Compliance with harmonic-type inertial load (fixed mode)\n');
     fprintf('mesh: %d x %d\n', nelx, nely);
@@ -49,8 +50,9 @@ function [xOut, fHz, tIter, nIter] = topopt_freq(nelx, nely, volfrac, penal, rmi
     convTol = localOpt(runCfg, 'conv_tol', 0.01);
     maxIters = localOpt(runCfg, 'max_iters', 2000);
     supportType = upper(string(localOpt(runCfg, 'supportType', "SS")));
+    approachName = localApproachName(runCfg, 'ourApproach');
     if isfield(runCfg, 'visualise_live') && ~isempty(runCfg.visualise_live)
-        visualiseLive = logical(runCfg.visualise_live);
+        visualiseLive = localParseVisualiseLive(runCfg.visualise_live, true);
     else
         visualiseLive = true;
     end
@@ -156,51 +158,6 @@ function [xOut, fHz, tIter, nIter] = topopt_freq(nelx, nely, volfrac, penal, rmi
     fprintf('[Eigen] lambda1=%.6e, omega1=%.6e rad/s (computed once, fixed)\n', lam1, omega1);
 
     % ------------------------------------------------------------------
-    % Initialize interactive visualization
-    % ------------------------------------------------------------------
-    if visualiseLive
-        fig = figure('Position', [100, 100, 1200, 600]);
-
-        % Topology subplot (left, spanning both rows)
-        ax_img = subplot(2, 2, [1, 3]);
-        img_data = reshape(xPhys, nely, nelx);
-        im = imagesc(img_data);
-        set(gca, 'YDir', 'normal');
-        colormap(ax_img, flipud(gray));
-        caxis([0, 1]);
-        cb = colorbar; cb.Label.String = 'Density';
-        title('Topology (density)');
-        xlabel('Element x'); ylabel('Element y');
-        axis equal tight;
-
-        % Objective history (top-right)
-        ax_obj = subplot(2, 2, 2);
-        line_obj = plot(NaN, NaN, 'b-', 'LineWidth', 1.6);
-        title('Objective history');
-        xlabel('Iteration'); ylabel('C = f^T u');
-        grid on; set(gca, 'GridAlpha', 0.25);
-
-        % Convergence history (bottom-right)
-        ax_conv = subplot(2, 2, 4);
-        line_vol = plot(NaN, NaN, 'g-', 'LineWidth', 1.6); hold on;
-        line_change = plot(NaN, NaN, 'r-', 'LineWidth', 1.6);
-        title('Convergence history');
-        xlabel('Iteration'); ylabel('Value');
-        grid on; set(gca, 'GridAlpha', 0.25);
-        legend('Volume', 'Change', 'Location', 'best');
-        hold off;
-    end
-
-    obj_hist = [];
-    vol_hist = [];
-    ch_hist  = [];
-    it_hist  = [];
-
-    if visualiseLive
-        drawnow;
-    end
-
-    % ------------------------------------------------------------------
     % Optimization loop
     % ------------------------------------------------------------------
     loop   = 0;
@@ -273,39 +230,11 @@ function [xOut, fHz, tIter, nIter] = topopt_freq(nelx, nely, volfrac, penal, rmi
         vol    = (g + volfrac*nelx*nely) / (nelx*nely);
         change = max(abs(x - xold));
 
-        % Update visualization
-        it_hist(end+1)  = loop;     %#ok<AGROW>
-        obj_hist(end+1) = obj;      %#ok<AGROW>
-        vol_hist(end+1) = vol;      %#ok<AGROW>
-        ch_hist(end+1)  = change;   %#ok<AGROW>
-
         if visualiseLive
-            % Update topology image
-            set(im, 'CData', reshape(xPhys, nely, nelx));
-            title(ax_img, sprintf('Topology (density) | it=%d  obj=%.3e  vol=%.3f  ch=%.3f', ...
-                  loop, obj, vol, change));
-
-            % Update objective plot
-            set(line_obj, 'XData', it_hist, 'YData', obj_hist);
-            set(ax_obj, 'XLim', [1, max(2, loop)]);
-            if ~isempty(obj_hist)
-                obj_min = min(obj_hist); obj_max = max(obj_hist);
-                obj_pad = max(1e-12, 0.05*max(abs(obj_min), abs(obj_max)));
-                set(ax_obj, 'YLim', [obj_min - obj_pad, obj_max + obj_pad]);
-            end
-
-            % Update convergence plot
-            set(line_vol, 'XData', it_hist, 'YData', vol_hist);
-            set(line_change, 'XData', it_hist, 'YData', ch_hist);
-            set(ax_conv, 'XLim', [1, max(2, loop)]);
-            if ~isempty(vol_hist)
-                conv_min = min([vol_hist, ch_hist]);
-                conv_max = max([vol_hist, ch_hist]);
-                conv_pad = max(1e-6, 0.05*max(abs(conv_min), abs(conv_max)));
-                set(ax_conv, 'YLim', [conv_min - conv_pad, conv_max + conv_pad]);
-            end
-
-            drawnow;
+            plotTopology( ...
+                xPhys, nelx, nely, ...
+                formatTopologyTitle(approachName, volfrac, omega1), ...
+                true);
         end
 
         fprintf('it.: %4d , obj(C=f^T u): %.3f Vol.: %.3f, ch.: %.3f\n', ...
@@ -348,6 +277,10 @@ function [xOut, fHz, tIter, nIter] = topopt_freq(nelx, nely, volfrac, penal, rmi
     end
     fprintf('[Final Eigen] lambda1=%.6e, omega1=%.6e rad/s, f1=%.6e Hz\n', ...
             lam1_final, omega1_final, f1_final);
+    plotTopology( ...
+        xPhys, nelx, nely, ...
+        formatTopologyTitle(approachName, volfrac, omega1_final), ...
+        visualiseLive);
 
     xOut = xPhys(:);
 end
@@ -470,5 +403,59 @@ if isstruct(s) && isfield(s, name) && ~isempty(s.(name))
     v = s.(name);
 else
     v = defaultVal;
+end
+end
+
+function localEnsurePlotHelpersOnPath()
+if exist('plotTopology', 'file') == 2 && exist('formatTopologyTitle', 'file') == 2
+    return;
+end
+thisDir = fileparts(mfilename('fullpath'));
+repoRoot = fileparts(fileparts(thisDir));
+toolsDir = fullfile(repoRoot, 'tools');
+if exist(toolsDir, 'dir') == 7
+    addpath(toolsDir);
+end
+end
+
+function tf = localParseVisualiseLive(value, defaultValue)
+if nargin < 2
+    defaultValue = true;
+end
+if isempty(value)
+    tf = defaultValue;
+    return;
+end
+if islogical(value) && isscalar(value)
+    tf = value;
+    return;
+end
+if isnumeric(value) && isscalar(value)
+    tf = value ~= 0;
+    return;
+end
+if isstring(value) && isscalar(value)
+    value = char(value);
+end
+if ischar(value)
+    key = lower(strtrim(value));
+    if any(strcmp(key, {'yes','y','true','1','on'}))
+        tf = true;
+        return;
+    end
+    if any(strcmp(key, {'no','n','false','0','off'}))
+        tf = false;
+        return;
+    end
+end
+error('topopt_freq:InvalidVisualiseLive', ...
+    'visualise_live must be yes/no (case-insensitive) or boolean-like.');
+end
+
+function name = localApproachName(runCfg, defaultName)
+if isstruct(runCfg) && isfield(runCfg, 'approach_name') && ~isempty(runCfg.approach_name)
+    name = char(string(runCfg.approach_name));
+else
+    name = defaultName;
 end
 end

@@ -37,6 +37,9 @@ opts = mergeStructs(opts, legacyOpts);  % legacy opts win if provided
 cfg  = applyDefaults(cfg);
 opts = applyDefaultOpts(opts, cfg);
 diagnostics = struct();
+localEnsurePlotHelpersOnPath();
+plotLive = localParseVisualiseLive(opts.visualise_live, true);
+approachName = localApproachName(opts, 'Olhoff');
 
 % Shorthand locals (keeps the algorithm body intact)
 L          = cfg.L;
@@ -461,17 +464,9 @@ for it = 1:maxiter
     fprintf('It:%3d  beta:%2d  omega:%.3f  vol:%.3f  gray:%.3f  fracGray:%.3f  bins[0-0.05|mid|0.95-1]=[%.3f %.3f %.3f]  g_up:%+.2e  g_low:%+.2e  maxg:%+.2e  maxg_eig:%+.2e\n',...
         it,beta,omega_cur,mean(xPhys),grayness,frac_gray,bins_low,bins_mid,bins_high,g_up,g_low,max(fval),max_g_eig)
 
-    if opts.visualise_live
-        % visualization: option to plot binary for clarity, nearest-neighbor
-        img = reshape(xPhys,nely,nelx);
-        if opts.plotBinary
-            img = img > 0.5;
-        end
-        imagesc(1-img,'Interpolation','nearest');  % invert so solid = dark
-        axis equal off;
-        colormap(gray(256));
-        caxis([0 1]);
-        drawnow
+    if plotLive
+        titleStr = formatTopologyTitle(approachName, volfrac, omega_cur);
+        plotTopology(xPhys, nelx, nely, titleStr, true);
     end
 end
 loop_time = toc(loop_tic);
@@ -483,6 +478,10 @@ diagnostics.t_iter = loop_time / max(iter_executed, 1);
 [lam_best,omega_vec_best,freq_vec_best] = evalModes(xPhys_best,opts.diagModes);
 omega_best = omega_vec_best(1);
 diagnostics.final = struct('lam',lam_best,'omega',omega_vec_best,'freq',freq_vec_best);
+plotTopology( ...
+    xPhys_best, nelx, nely, ...
+    formatTopologyTitle(approachName, volfrac, omega_best), ...
+    plotLive);
 
 fprintf('\nBest design: omega1 = %.4f rad/s (%.4f Hz)\n',omega_best,omega_best/(2*pi))
 fprintf('Best design eigenfreqs omega [rad/s]: %s\n', sprintf('%8.3f ', omega_vec_best(1:min(3,end))))
@@ -589,6 +588,60 @@ function [cfg, legacyOpts] = legacyArgsToCfg(L,H,nelx,nely,volfrac,penal,rmin,ma
                 legacyOpts = struct();
             end
         end
+    end
+end
+
+function localEnsurePlotHelpersOnPath()
+    if exist('plotTopology', 'file') == 2 && exist('formatTopologyTitle', 'file') == 2
+        return;
+    end
+    thisDir = fileparts(mfilename('fullpath'));
+    repoRoot = fileparts(fileparts(thisDir));
+    toolsDir = fullfile(repoRoot, 'tools');
+    if exist(toolsDir, 'dir') == 7
+        addpath(toolsDir);
+    end
+end
+
+function tf = localParseVisualiseLive(value, defaultValue)
+    if nargin < 2
+        defaultValue = true;
+    end
+    if isempty(value)
+        tf = defaultValue;
+        return;
+    end
+    if islogical(value) && isscalar(value)
+        tf = value;
+        return;
+    end
+    if isnumeric(value) && isscalar(value)
+        tf = value ~= 0;
+        return;
+    end
+    if isstring(value) && isscalar(value)
+        value = char(value);
+    end
+    if ischar(value)
+        key = lower(strtrim(value));
+        if any(strcmp(key, {'yes','y','true','1','on'}))
+            tf = true;
+            return;
+        end
+        if any(strcmp(key, {'no','n','false','0','off'}))
+            tf = false;
+            return;
+        end
+    end
+    error('topFreqOptimization_MMA:InvalidVisualiseLive', ...
+        'visualise_live must be yes/no (case-insensitive) or boolean-like.');
+end
+
+function name = localApproachName(opts, defaultName)
+    if isstruct(opts) && isfield(opts, 'approach_name') && ~isempty(opts.approach_name)
+        name = char(string(opts.approach_name));
+    else
+        name = defaultName;
     end
 end
 

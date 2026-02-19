@@ -76,11 +76,17 @@ function [x, omega, tIter, nIter, mem_usage] = run_topopt_from_json(jsonInput)
     else
         visualiseLive = [];
     end
-    hasSnapshot = hasFieldPath(cfg, {'optimisation','save_snapshot_image'});
-    if hasSnapshot
-        saveSnapshot = parseBool(getFieldPath(cfg, {'optimisation','save_snapshot_image'}), 'optimisation.save_snapshot_image');
+    hasSaveFinalImage = hasFieldPath(cfg, {'optimisation','save_final_image'});
+    if hasSaveFinalImage
+        saveFinalImage = parseBool(getFieldPath(cfg, {'optimisation','save_final_image'}), 'optimisation.save_final_image');
     else
-        saveSnapshot = false;
+        % Backward compatibility with older field name.
+        hasSnapshot = hasFieldPath(cfg, {'optimisation','save_snapshot_image'});
+        if hasSnapshot
+            saveFinalImage = parseBool(getFieldPath(cfg, {'optimisation','save_snapshot_image'}), 'optimisation.save_snapshot_image');
+        else
+            saveFinalImage = false;
+        end
     end
 
     % Radius conversion requested by task description.
@@ -144,6 +150,10 @@ function [x, omega, tIter, nIter, mem_usage] = run_topopt_from_json(jsonInput)
         start(samplerTimer);
     end
 
+    % Start each run with a fresh plotting session so repeated
+    % run_topopt_from_json calls open separate figure windows.
+    resetTopologyPlotSession();
+
     switch lower(strtrim(approach))
         case 'olhoff'
             addpath(fullfile(repoRoot, 'OlhoffApproach', 'Matlab'));
@@ -168,6 +178,7 @@ function [x, omega, tIter, nIter, mem_usage] = run_topopt_from_json(jsonInput)
             cfgO.move = move;
 
             optsO = struct('doDiagnostic', true, 'diagnosticOnly', false, 'diagModes', 5);
+            optsO.approach_name = approach;
             if hasVisualise
                 optsO.visualise_live = visualiseLive;
             end
@@ -201,6 +212,7 @@ function [x, omega, tIter, nIter, mem_usage] = run_topopt_from_json(jsonInput)
             runCfg.beamL = L;
             runCfg.beamH = H;
             runCfg.conv_tol = convTol;
+            runCfg.approach_name = approach;
             if ~isempty(tipMassFrac)
                 runCfg.tipMassFrac = tipMassFrac;
             end
@@ -286,6 +298,7 @@ function [x, omega, tIter, nIter, mem_usage] = run_topopt_from_json(jsonInput)
             runCfg.conv_tol = convTol;
             runCfg.max_iters = maxiter;
             runCfg.supportType = supportCode;
+            runCfg.approach_name = approach;
             if hasVisualise
                 runCfg.visualise_live = visualiseLive;
             end
@@ -314,8 +327,8 @@ function [x, omega, tIter, nIter, mem_usage] = run_topopt_from_json(jsonInput)
     x = x(:);
     omega = toVec3(omega(:));
 
-    if saveSnapshot
-        saveTopologySnapshot(x, nelx, nely, jsonSource);
+    if saveFinalImage
+        saveTopologySnapshot(x, nelx, nely, approach, jsonSource);
     end
 end
 
@@ -444,14 +457,18 @@ function tipMassFrac = parseTipMassFraction(cfg, volfrac, L, H, rho0)
     end
 end
 
-function saveTopologySnapshot(x, nelx, nely, jsonSource)
-    if nargin < 4 || isempty(jsonSource)
+function saveTopologySnapshot(x, nelx, nely, approachName, jsonSource)
+    if nargin < 5 || isempty(jsonSource)
         folder = pwd;
-        base = 'topopt_from_json';
     else
-        [folder, base, ~] = fileparts(jsonSource);
+        [folder, ~, ~] = fileparts(jsonSource);
     end
-    outPng = fullfile(folder, sprintf('%s_snapshot.png', base));
+    if nargin < 4 || isempty(approachName)
+        approachName = 'topopt';
+    end
+    nameRaw = char(string(approachName));
+    nameSafe = regexprep(nameRaw, '[^\w\-]', '_');
+    outPng = fullfile(folder, sprintf('%s_%dx%d.png', nameSafe, nelx, nely));
     fig = figure('Visible', 'off');
     imagesc(1 - reshape(x, nely, nelx));
     axis equal tight off;
@@ -606,4 +623,11 @@ function stopAndDeleteTimer(t)
         delete(t);
     catch
     end
+end
+
+function resetTopologyPlotSession()
+% Clear persistent figure handles used by shared topology plot helper.
+if exist('plotTopology', 'file') == 2
+    clear('plotTopology');
+end
 end

@@ -55,6 +55,7 @@ codegen/
 *.tiff
 *.svg
 *.eps
+*.pdf
 
 *.csv
 *.npz

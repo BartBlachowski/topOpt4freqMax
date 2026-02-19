@@ -18,7 +18,7 @@ subsolv(m,n,epsimin,low,upp,alfa,beta,p0,q0,P,Q,a0,a,b,c,d)
 %            alfaj <=  xj <=  betaj,  yi >= 0,  z >= 0.
 %        
 % Input:  m, n, low, upp, alfa, beta, p0, q0, P, Q, a0, a, b, c, d.
-% Output: xmma,ymma,zmma, slack variables and Lagrange multiplers.
+% Output: xmma,ymma,zmma, slack variablesfvbd and Lagrange multiplers.
 %
 een = ones(n,1);
 eem = ones(m,1);
@@ -192,10 +192,6 @@ while epsi > epsimin
   residunorm=resinew;
   residumax = max(abs(residu));
   steg = 2*steg;
-  end
-  if ittt > 198
-    epsi
-    ittt
   end
 epsi = 0.1*epsi;
 end

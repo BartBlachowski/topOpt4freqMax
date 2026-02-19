@@ -18,8 +18,8 @@
     },
     "thickness": 1.0,
     "mesh": {
-      "nelx": 240,
-      "nely": 30
+      "nelx": 400,
+      "nely": 50
     },
     "passive_regions": {
       "flanges": {
@@ -58,18 +58,17 @@
     "penalization": 3.0,
 
     "filter": {
-      "type": "sensitivity",
+      "type": "density",
       "radius": 0.04,
       "radius_units": "physical",
       "boundary_condition": "symmetric"
     },
 
     "move_limit": 0.2,
-    "max_iters": 500,
+    "max_iters": 200,
     "convergence_tol": 1e-3,
     "seed": null,
     "visualise_live" : "yes",
-    "save_snapshot_image" : "no",
-    "save_final_image" : "yes"
+    "save_snapshot_image" : "no"
   }
 }
