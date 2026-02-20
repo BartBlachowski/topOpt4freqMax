@@ -1,0 +1,102 @@
+% Algorithmic analysis of the implemented Olhoff approach relative to the original
+% formulation of Olhoff and Du (2014).  This fragment is intended for \input{} into
+% a journal manuscript; it contains no \documentclass or \begin{document}.
+%
+% References assumed available in the parent document:
+%   \cite{OlhoffDu2014}  -- Olhoff & Du, CISM 2014 (978-3-7091-1643-2_11)
+%   \cite{YukselYilmaz2025} -- Yuksel & Yilmaz, Eng.\ Comput.\ 2025
+%   \cite{Svanberg1987}  -- Svanberg, IJNME 1987
+
+\subsection*{Algorithmic Differences Between the Implemented and Original Olhoff Formulations}
+
+The original formulation of Olhoff and Du~\cite{OlhoffDu2014} casts the
+fundamental-eigenfrequency maximisation problem as a max-min bound problem in
+which a scalar variable $\beta \leq \omega_j^2$, $j = n, n{+}1, \ldots, J$, plays
+simultaneously the role of objective and lower bound for the $J$ candidate
+eigenfrequencies.  The computational procedure (Fig.~1 of that reference) consists
+of a \emph{main outer loop} and an explicit \emph{inner loop}: at each outer
+iteration the generalised eigenvalue problem is solved, sensitivity vectors are
+assembled, and the inner loop then iteratively solves the bound sub-optimisation
+problem~(19) for the \emph{increments} $\Delta\rho_e$ using MMA~\cite{Svanberg1987}
+or linear programming until those increments converge, after which the design
+variables are updated as $\rho_e \mathrel{:=} \rho_e + \Delta\rho_e$.  No density
+filter or projection is present in the original formulation.
+
+The present implementation retains the bound variable (scaled as
+$E_b = \lambda_1 / \lambda_\mathrm{ref}$) and MMA, but departs from the original
+in three consequential respects.  First, a Heaviside projection
+$H(\tilde{x},\beta,\eta)$ with a seven-level continuation schedule
+$\beta \in \{1,2,4,8,16,32,64\}$ advancing every 40 outer iterations is
+superimposed on the density field, and a grayness penalty
+$\gamma(\beta/\beta_{\max}) \cdot N_\mathrm{el}^{-1} \sum_e 4\tilde{\rho}_e(1 -
+\tilde{\rho}_e)$ is added to the MMA objective.  This introduces one forward and one
+adjoint convolution pass per iteration for the density filter, together with one
+additional adjoint pass through the Heaviside Jacobian for the penalty gradient.
+Second, the inner convergence loop for increments is collapsed to a single MMA call
+per outer iteration on the absolute design variables; the dual Newton solver solves
+the separable convex approximation to optimality in one shot but without the explicit
+increment-convergence check of the original inner loop.  Third---and most
+consequentially for runtime---a \emph{trial eigensolve} is performed immediately
+after every MMA update: the trial physical field is assembled into new $\mathbf{K}$
+and $\mathbf{M}$ matrices, and $\min(J,3)$ modes are recomputed to reject MMA steps
+that decrease $\omega_1$ by more than $1\,\%$.  This effectively doubles the number
+of eigensolves per outer iteration relative to the original scheme.
+
+Both the original and the present implementation employ the implicitly restarted
+Arnoldi method (\textsc{arpack} via \texttt{eigs(\ldots,\,\textquotesingle SM\textquotesingle)})
+with shift-and-invert to extract the $J = 3$ lowest eigenpairs.  Shift-and-invert
+requires a sparse Cholesky factorisation of $\mathbf{K}$ at each \texttt{eigs}
+invocation; because $\mathbf{K}$ changes at every iteration, this factorisation is
+performed \emph{twice} per outer iteration in the present code.  For the
+quasi-banded beam-like meshes considered here, factorisation cost scales as
+$O(N_\mathrm{dof}^{\,1.5})$ and dominates the per-iteration budget.
+
+Regarding sensitivity analysis, the original formulation handles repeated
+eigenvalues through an $N\times N$ sub-eigenvalue problem~(Eq.~12 of the reference),
+whose solution yields the directional derivatives of the degenerate cluster via
+generalised gradient vectors $\mathbf{f}_{sk}$.  The present implementation instead
+applies the standard unimodal formula
+$(\lambda_j)'_{\rho_e} = \boldsymbol{\varphi}_j^{\mathrm{T}}
+ (\mathbf{K}'_{\rho_e} - \lambda_j \mathbf{M}'_{\rho_e})\boldsymbol{\varphi}_j$
+independently to each of the $J$ modes, omitting off-diagonal terms; each elemental
+sensitivity is then propagated through the Heaviside Jacobian and the adjoint filter,
+requiring $J$ further convolution passes.
+
+These deviations collectively determine the observed performance ratios.  The Yuksel
+dynamic code~\cite{YukselYilmaz2025} employs an OC bisection update
+($O(N_\mathrm{el})$ per bisection step, $\approx\!15$ steps per iteration) and
+performs a single eigensolve per outer iteration, with no projection chain and no
+penalty-gradient filter pass.  The MMA dual Newton solver in the Olhoff
+implementation costs $O(m \cdot N_\mathrm{el})$ with $m = J + 2 = 5$ constraints,
+and the trial eigensolve doubles the sparse-factorisation overhead.  Taken together,
+these contributions yield a per-iteration cost approximately $7$--$8\times$ higher
+for the Olhoff approach, as observed in Table~1 (e.g.\ $0.38$ vs.\ $0.05$~s/iter at
+$320{\times}40$).  Because the Olhoff implementation terminates in $\approx\!300$
+outer iterations against $\approx\!700$ for the Yuksel dynamic code, the net total
+runtime ratio is $300/700 \times 7.5 \approx 3.2$--$3.5$, consistent with the
+measured factor of $3.5$ across all four mesh sizes.  Both methods exhibit an
+empirical per-iteration scaling of roughly $O(N_\mathrm{el}^{\,1.3})$
+($0.08 \to 0.58$~s/iter and $0.01 \to 0.08$~s/iter across the mesh range), confirming
+that sparse Cholesky factorisation dominates over the $O(N_\mathrm{el})$ filter and
+sensitivity-assembly costs.
+
+Memory consumption follows directly from the MMA storage requirements: the
+implementation retains the two MMA history iterates $\mathbf{x}^{(k-1)}$,
+$\mathbf{x}^{(k-2)}$, the asymptote vectors $\ell_i$, $u_i$, and the gradient
+matrix $\mathbf{dfdx}$ of size $m \times (N_\mathrm{el}{+}1)$; moreover, the trial
+eigensolve requires that $\mathbf{K}_f$ and $\mathbf{M}_f$ remain allocated
+simultaneously for both the current and trial fields.  At $400{\times}50$
+($N_\mathrm{el} = 20{,}000$) this explains the observed $384$~MB peak against
+$123$~MB for the Yuksel approach.
+
+The factor of $80$--$825\times$ reported in Table~1 of \cite{YukselYilmaz2025}
+between their proposed static method and their standard dynamic code is not directly
+comparable to the $3.5\times$ ratio observed here, for two reasons.  Algorithmically,
+their proposed static approach avoids eigenvalue computation \emph{entirely} during
+the iteration by substituting compliance minimisation under a design-dependent
+inertial load for the eigensolve, whereas both approaches compared in our study
+retain a full eigensolve (Olhoff: twice, Yuksel dynamic: once) per iteration.
+Practically, their reference machine operates at $2.29$~GHz with a 64-core
+Xeon configuration, while the present results were obtained on an ARM64 platform
+with Apple Accelerate sparse solvers, leading to substantially different absolute
+factorisation throughputs that preclude direct comparison of absolute timings.

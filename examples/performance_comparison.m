@@ -35,6 +35,8 @@ approaches   = {'Olhoff',         'Yuksel',         'OurApproach'       };
 methodLabels = {'OlhoffApproach', 'YukselApproach', 'ProposedApproach'  };
 nMethods     = numel(approaches);
 
+nSamples = 5;
+
 % Storage: rows = resolutions, columns = methods
 omega_all  = NaN(nRes, nMethods);
 tIter_all  = NaN(nRes, nMethods);
@@ -42,7 +44,7 @@ nIter_all  = NaN(nRes, nMethods);
 mem_all    = NaN(nRes, nMethods);
 
 % -------------------------------------------------------------------------
-% Run all (resolution × method) combinations
+% Run all (resolution × method) combinations, averaged over nSamples runs
 % -------------------------------------------------------------------------
 for r = 1:nRes
     data.domain.mesh.nelx = resolutions(r, 1);
@@ -50,15 +52,28 @@ for r = 1:nRes
 
     for m = 1:nMethods
         data.optimisation.approach = approaches{m};
-        fprintf('Running %-18s  mesh %4dx%-3d ...\n', ...
-            methodLabels{m}, resolutions(r,1), resolutions(r,2));
 
-        [~, omega, tIter, nIter, mem] = run_topopt_from_json(data);
+        omega_s = NaN(1, nSamples);
+        tIter_s = NaN(1, nSamples);
+        nIter_s = NaN(1, nSamples);
+        mem_s   = NaN(1, nSamples);
 
-        omega_all(r, m) = omega(1);          % first natural frequency [rad/s]
-        tIter_all(r, m) = tIter;             % avg time per iteration [s/iter]
-        nIter_all(r, m) = nIter;             % number of iterations
-        mem_all(r, m)   = mem;               % peak RAM [MB]
+        for s = 1:nSamples
+            fprintf('Running %-18s  mesh %4dx%-3d  sample %d/%d ...\n', ...
+                methodLabels{m}, resolutions(r,1), resolutions(r,2), s, nSamples);
+
+            [~, omega, tIter, nIter, mem] = run_topopt_from_json(data);
+
+            omega_s(s) = omega(1);
+            tIter_s(s) = tIter;
+            nIter_s(s) = nIter;
+            mem_s(s)   = mem;
+        end
+
+        omega_all(r, m) = mean(omega_s);
+        tIter_all(r, m) = mean(tIter_s);
+        nIter_all(r, m) = round(mean(nIter_s));
+        mem_all(r, m)   = mean(mem_s);
     end
 end
 
@@ -68,15 +83,16 @@ tTotal_all = tIter_all .* nIter_all;
 % -------------------------------------------------------------------------
 % Print performance table (mirrors Table 1 from Yuksel et al.)
 % -------------------------------------------------------------------------
-sepWidth = 92;
+sepWidth = 107;
 sep = repmat('-', 1, sepWidth);
 
 fprintf('\n');
 fprintf('Table 1. Run time comparison between methods for maximizing the first\n');
 fprintf('natural frequency of a simply supported beam (8 m x 1 m, vf = 0.5).\n');
+fprintf('Results averaged over %d runs.\n', nSamples);
 fprintf('\n');
-fprintf('%-20s  %-9s  %16s  %20s  %18s\n', ...
-    'Method', 'Mesh size', 'Run time (s)', 'Run time/iter (s/iter)', 'Max RAM (MB)');
+fprintf('%-20s  %-9s  %12s  %16s  %20s  %18s\n', ...
+    'Method', 'Mesh size', 'Iterations', 'Run time (s)', 'Run time/iter (s/iter)', 'Max RAM (MB)');
 fprintf('%s\n', sep);
 
 for r = 1:nRes
@@ -84,16 +100,18 @@ for r = 1:nRes
 
     for m = 1:nMethods
         if isnan(tTotal_all(r,m))
+            nIterStr  = 'N/A';
             timeStr   = 'N/A';
             iterStr   = 'N/A';
             ramStr    = 'N/A';
         else
-            timeStr = sprintf('%.1f', tTotal_all(r,m));
-            iterStr = sprintf('%.2f', tIter_all(r,m));
-            ramStr  = sprintf('%.0f', mem_all(r,m));
+            nIterStr = sprintf('%d',   nIter_all(r,m));
+            timeStr  = sprintf('%.1f', tTotal_all(r,m));
+            iterStr  = sprintf('%.2f', tIter_all(r,m));
+            ramStr   = sprintf('%.0f', mem_all(r,m));
         end
-        fprintf('%-20s  %-9s  %16s  %20s  %18s\n', ...
-            methodLabels{m}, meshStr, timeStr, iterStr, ramStr);
+        fprintf('%-20s  %-9s  %12s  %16s  %20s  %18s\n', ...
+            methodLabels{m}, meshStr, nIterStr, timeStr, iterStr, ramStr);
     end
 
     if r < nRes
