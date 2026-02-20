@@ -142,10 +142,10 @@ function [x, omega, tIter, nIter, mem_usage] = run_topopt_from_json(jsonInput)
     % --- Memory sampling setup (only when 5th output requested) ---
     if nargout >= 5
         baselineRSS = getCurrentRSS_KB();
-        peakRSS_container = {baselineRSS};  % mutable via closure
+        setappdata(0, 'topopt_peakRSS_KB', baselineRSS);  % shared mutable store
         samplerTimer = timer('ExecutionMode', 'fixedRate', ...
-                             'Period', 2, ...
-                             'TimerFcn', @(~,~) sampleRSS(peakRSS_container));
+                             'Period', 0.1, ...
+                             'TimerFcn', @(~,~) sampleRSS());
         cleanupObj = onCleanup(@() stopAndDeleteTimer(samplerTimer));
         start(samplerTimer);
     end
@@ -316,9 +316,10 @@ function [x, omega, tIter, nIter, mem_usage] = run_topopt_from_json(jsonInput)
 
     % --- Finalize memory measurement ---
     if nargout >= 5
-        sampleRSS(peakRSS_container);   % one last sample
+        sampleRSS();   % one last sample
         stopAndDeleteTimer(samplerTimer);
-        mem_usage = max(0, peakRSS_container{1} - baselineRSS) / 1024;  % KB -> MB
+        peakRSS = getappdata(0, 'topopt_peakRSS_KB');
+        mem_usage = max(0, peakRSS - baselineRSS) / 1024;  % KB -> MB
     end
 
     if isempty(x)
@@ -468,12 +469,13 @@ function saveTopologySnapshot(x, nelx, nely, approachName, jsonSource)
     end
     nameRaw = char(string(approachName));
     nameSafe = regexprep(nameRaw, '[^\w\-]', '_');
-    outPng = fullfile(folder, sprintf('%s_%dx%d.png', nameSafe, nelx, nely));
+    baseName = fullfile(folder, sprintf('%s_%dx%d', nameSafe, nelx, nely));
     fig = figure('Visible', 'off');
     imagesc(1 - reshape(x, nely, nelx));
     axis equal tight off;
     colormap(gray(256));
-    exportgraphics(gca, outPng, 'Resolution', 160);
+    exportgraphics(gca, [baseName '.png'], 'Resolution', 160);
+    savefig(fig, [baseName '.fig']);
     close(fig);
 end
 
@@ -606,11 +608,12 @@ function rssKB = getCurrentRSS_KB()
     end
 end
 
-function sampleRSS(peakContainer)
-%SAMPLERSS  Update peak RSS container if current RSS exceeds stored peak.
+function sampleRSS()
+%SAMPLERSS  Update peak RSS in appdata if current RSS exceeds stored peak.
     currentRSS = getCurrentRSS_KB();
-    if currentRSS > peakContainer{1}
-        peakContainer{1} = currentRSS;
+    peak = getappdata(0, 'topopt_peakRSS_KB');
+    if currentRSS > peak
+        setappdata(0, 'topopt_peakRSS_KB', currentRSS);
     end
 end
 

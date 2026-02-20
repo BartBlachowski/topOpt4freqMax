@@ -116,6 +116,7 @@ function [xOut, fHz, tIter, nIter] = topopt_freq(nelx, nely, volfrac, penal, rmi
     end
     Hf = sparse(iH(1:cc), jH(1:cc), sH(1:cc), nelx*nely, nelx*nely);
     Hs = sum(Hf, 2);
+    clear iH jH sH;
 
     % Convert support type to constrained DOFs (1-based indexing).
     fixed = localBuildFixedDofs(supportType, nelx, nely);
@@ -139,6 +140,7 @@ function [xOut, fHz, tIter, nIter] = topopt_freq(nelx, nely, volfrac, penal, rmi
 
     K0f = K0(free, free);
     M0f = M0(free, free);
+    clear K0 sK0 M0 sM0 rhoPhys0;
 
     % Smallest eigenpair: K phi = lambda M phi (shift-invert near 0)
     [Phi_free, Lam] = eigs(K0f, M0f, 2, 'smallestabs');
@@ -154,6 +156,7 @@ function [xOut, fHz, tIter, nIter] = topopt_freq(nelx, nely, volfrac, penal, rmi
 
     Phi1 = zeros(ndof, 1);
     Phi1(free) = phi1_free;
+    clear Phi_free Lam phi1_free K0f M0f;
 
     fprintf('[Eigen] lambda1=%.6e, omega1=%.6e rad/s (computed once, fixed)\n', lam1, omega1);
 
@@ -177,6 +180,7 @@ function [xOut, fHz, tIter, nIter] = topopt_freq(nelx, nely, volfrac, penal, rmi
         M  = (M + M') / 2;
 
         f = (omega1^2) * (M * Phi1);
+        clear sM M;
 
         % Setup and solve FE problem
         sK = reshape(KE(:) * (Emin + xPhys'.^penal * (Emax - Emin)), [], 1);
@@ -184,9 +188,11 @@ function [xOut, fHz, tIter, nIter] = topopt_freq(nelx, nely, volfrac, penal, rmi
         K  = (K + K') / 2;
 
         Kf = K(free, free);
+        clear sK K;
 
         u(:) = 0;
         u(free) = Kf \ f(free);
+        clear Kf;
 
         % Objective (compliance): C = f' * u
         obj = f' * u;
@@ -258,6 +264,7 @@ function [xOut, fHz, tIter, nIter] = topopt_freq(nelx, nely, volfrac, penal, rmi
 
     Kf_final = K_final(free, free);
     Mf_final = M_final(free, free);
+    clear K_final sK_final M_final sM_final rhoPhys_final;
     nReq = min(3, max(1, size(Kf_final, 1) - 1));
     [~, Lam_final] = eigs(Kf_final, Mf_final, nReq, 'smallestabs');
     lam_vals = sort(real(diag(Lam_final)), 'ascend');

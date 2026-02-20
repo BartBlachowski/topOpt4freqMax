@@ -11,6 +11,7 @@ end
 
 omegaHz = omega1 / (2*pi);
 omegaChar = char(969);
-titleStr = sprintf('%s | vol=%.1f%% | %s1=%.3f rad/s (%.3f Hz)', ...
-    name, volPercent, omegaChar, omega1, omegaHz);
+subOne    = char(8321);   % Unicode U+2081 SUBSCRIPT ONE
+titleStr = sprintf('%s | vol=%.1f%% | %s%s=%.3f rad/s (%.3f Hz)', ...
+    name, volPercent, omegaChar, subOne, omega1, omegaHz);
 end
