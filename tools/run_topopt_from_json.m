@@ -329,7 +329,7 @@ function [x, omega, tIter, nIter, mem_usage] = run_topopt_from_json(jsonInput)
     omega = toVec3(omega(:));
 
     if saveFinalImage
-        saveTopologySnapshot(x, nelx, nely, approach, jsonSource);
+        saveTopologySnapshot(x, nelx, nely, approach, jsonSource, omega(1));
     end
 end
 
@@ -458,25 +458,53 @@ function tipMassFrac = parseTipMassFraction(cfg, volfrac, L, H, rho0)
     end
 end
 
-function saveTopologySnapshot(x, nelx, nely, approachName, jsonSource)
+function saveTopologySnapshot(x, nelx, nely, approachName, jsonSource, omega1)
     if nargin < 5 || isempty(jsonSource)
         folder = pwd;
     else
         [folder, ~, ~] = fileparts(jsonSource);
+        if isempty(folder)
+            folder = pwd;
+        end
     end
     if nargin < 4 || isempty(approachName)
         approachName = 'topopt';
     end
-    nameRaw = char(string(approachName));
+    if nargin < 6 || isempty(omega1) || ~isfinite(omega1)
+        omega1 = NaN;
+    end
+
+    nameRaw  = char(string(approachName));
     nameSafe = regexprep(nameRaw, '[^\w\-]', '_');
     baseName = fullfile(folder, sprintf('%s_%dx%d', nameSafe, nelx, nely));
-    fig = figure('Visible', 'off');
-    imagesc(1 - reshape(x, nely, nelx));
-    axis equal tight off;
-    colormap(gray(256));
-    exportgraphics(gca, [baseName '.png'], 'Resolution', 160);
+
+    % Build a visible figure so the renderer is fully active before saving.
+    fig = figure('Color', 'white', 'Visible', 'on');
+    ax  = axes('Parent', fig);
+    imagesc(ax, 1 - reshape(x, nely, nelx));
+    axis(ax, 'equal'); axis(ax, 'tight');
+    set(ax, 'XColor', 'none', 'YColor', 'none');  % hide ticks/lines; keep title visible
+    colormap(ax, gray(256));
+    caxis(ax, [0 1]);
+
+    if isfinite(omega1)
+        titleStr = sprintf('%s  |  %dx%d  |  \\omega_1 = %.2f rad/s  (%.3f Hz)', ...
+            nameRaw, nelx, nely, omega1, omega1 / (2*pi));
+    else
+        titleStr = sprintf('%s  |  %dx%d', nameRaw, nelx, nely);
+    end
+    title(ax, titleStr, 'Interpreter', 'tex', 'FontSize', 10);
+
+    drawnow;   % flush renderer so both PNG and FIG capture the full content
+
+    % PNG: export full figure (title included).
+    exportgraphics(fig, [baseName '.png'], 'Resolution', 160, 'BackgroundColor', 'white');
+
+    % FIG: save while the figure is visible so the file is self-contained.
     savefig(fig, [baseName '.fig']);
+
     close(fig);
+    fprintf('Saved topology image: %s  (.png / .fig)\n', baseName);
 end
 
 function ensureCompatHelpersOnPath()

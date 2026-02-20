@@ -35,7 +35,7 @@ approaches   = {'Olhoff',         'Yuksel',         'OurApproach'       };
 methodLabels = {'OlhoffApproach', 'YukselApproach', 'ProposedApproach'  };
 nMethods     = numel(approaches);
 
-nSamples = 5;
+nSamples = 1;
 
 % Storage: rows = resolutions, columns = methods
 omega_all  = NaN(nRes, nMethods);
