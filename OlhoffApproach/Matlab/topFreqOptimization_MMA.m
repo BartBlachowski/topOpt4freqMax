@@ -39,6 +39,7 @@ opts = applyDefaultOpts(opts, cfg);
 diagnostics = struct();
 localEnsurePlotHelpersOnPath();
 plotLive = localParseVisualiseLive(opts.visualise_live, true);
+visualizationQuality = localParseVisualizationQuality(opts.visualization_quality);
 approachName = localApproachName(opts, 'Olhoff');
 saveFrqIterations = localParseVisualiseLive(opts.save_frq_iterations, false);
 
@@ -499,7 +500,7 @@ for it = 1:maxiter
 
     if plotLive
         titleStr = formatTopologyTitle(approachName, volfrac, omega_cur);
-        plotTopology(xPhys, nelx, nely, titleStr, true);
+        plotTopology(xPhys, nelx, nely, titleStr, true, 'regular', false);
     end
 end
 loop_time = toc(loop_tic);
@@ -517,7 +518,7 @@ diagnostics.final = struct('lam',lam_best,'omega',omega_vec_best,'freq',freq_vec
 plotTopology( ...
     xPhys_best, nelx, nely, ...
     formatTopologyTitle(approachName, volfrac, omega_best), ...
-    plotLive);
+    plotLive, visualizationQuality, true);
 
 fprintf('\nBest design: omega1 = %.4f rad/s (%.4f Hz)\n',omega_best,omega_best/(2*pi))
 fprintf('Best design eigenfreqs omega [rad/s]: %s\n', sprintf('%8.3f ', omega_vec_best(1:min(3,end))))
@@ -593,7 +594,11 @@ function opts = applyDefaultOpts(opts, cfg)
         'diagModes', max(3, cfg.J), ...
         'plotBinary', false, ...
         'visualise_live', true, ...
+        'visualization_quality', 'regular', ...
         'save_frq_iterations', false);
+    if isfield(cfg, 'visualization_quality') && ~isempty(cfg.visualization_quality)
+        defaults.visualization_quality = cfg.visualization_quality;
+    end
     opts = mergeStructs(defaults, opts);
 end
 
@@ -670,8 +675,27 @@ function tf = localParseVisualiseLive(value, defaultValue)
             return;
         end
     end
-    error('topFreqOptimization_MMA:InvalidVisualiseLive', ...
-        'visualise_live must be yes/no (case-insensitive) or boolean-like.');
+error('topFreqOptimization_MMA:InvalidVisualiseLive', ...
+    'visualise_live must be yes/no (case-insensitive) or boolean-like.');
+end
+
+function quality = localParseVisualizationQuality(value)
+if isstring(value) && isscalar(value)
+    value = char(value);
+end
+if ischar(value)
+    key = lower(strtrim(value));
+    if isempty(key)
+        quality = 'regular';
+        return;
+    end
+    if any(strcmp(key, {'regular', 'smooth'}))
+        quality = key;
+        return;
+    end
+end
+error('topFreqOptimization_MMA:InvalidVisualizationQuality', ...
+    'visualization_quality must be "regular" or "smooth".');
 end
 
 function name = localApproachName(opts, defaultName)

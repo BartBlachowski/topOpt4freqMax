@@ -22,6 +22,7 @@ move = 0.2;
 maxit = 400;      % tighter stage-2 tolerance is used for fixed-pinned; allow more iterations
 stage1_maxit = 200;
 bcType = "fixedPinned";
+visualizationQuality = 'regular'; % set 'smooth' for high-quality final display
 plotDynamicHistory = false; % set true to also run/plot Section-3 dynamic-code history
 dynMove = 0.01;             % dynamic-code move limit (paper dynamic setting)
 dynMaxIt = 200;
@@ -33,14 +34,18 @@ figure('Name','Yuksel Figure 8 benchmark','Color','w');
 tiledlayout(2,1,'TileSpacing','compact','Padding','compact');
 
 nexttile;
-imagesc(1 - reshape(info.stage1.xFinal, nely, nelx));
+imgStage1 = buildTopologyDisplayImage(info.stage1.xFinal, nelx, nely, visualizationQuality, true);
+imagesc(1 - imgStage1);
+set(gca, 'YDir', 'normal');
 axis equal off;
 caxis([0 1]);
 colormap(gray);
 title(sprintf('Figure 8(b): \\omega_1 = %.1f rad/s', info.stage1.omega1), 'Interpreter', 'tex');
 
 nexttile;
-imagesc(1 - reshape(xPhysStage2, nely, nelx));
+imgStage2 = buildTopologyDisplayImage(xPhysStage2, nelx, nely, visualizationQuality, true);
+imagesc(1 - imgStage2);
+set(gca, 'YDir', 'normal');
 axis equal off;
 caxis([0 1]);
 colormap(gray);
@@ -52,4 +57,3 @@ fprintf('  Emin = 1e-9*E0, rho_min = 1e-9*rho0, d = 6, x_cut = 0.1\n');
 fprintf('  Stage 1 load DOF (auto-selected from full-solid mode 1): %d\n', info.stage1.loadDof);
 fprintf('  Stage 1 frequency: omega1 = %.4f rad/s (paper: 224.6)\n', info.stage1.omega1);
 fprintf('  Stage 2 frequency: omega1 = %.4f rad/s (paper: 255.6)\n', info.stage2.omega1);
-

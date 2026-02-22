@@ -63,6 +63,8 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
     else
         visualiseLive = true;
     end
+    visualizationQuality = localParseVisualizationQuality( ...
+        localOpt(runCfg, 'visualization_quality', 'regular'));
     saveFrqIterations = localParseVisualiseLive(localOpt(runCfg, 'save_frq_iterations', false), false);
     harmonicNormalize = localParseVisualiseLive(localOpt(runCfg, 'harmonic_normalize', true), true);
     debugReturnDc = localParseVisualiseLive(localOpt(runCfg, 'debug_return_dc', false), false);
@@ -467,7 +469,7 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
             plotTopology( ...
                 xPhys, nelx, nely, ...
                 formatTopologyTitle(approachName, volfrac, omegaTitle), ...
-                true);
+                true, 'regular', false);
         end
 
         if strcmp(optimizerType, 'MMA')
@@ -536,7 +538,7 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
     plotTopology( ...
         xPhys, nelx, nely, ...
         formatTopologyTitle(approachName, volfrac, omega1_final), ...
-        visualiseLive);
+        visualiseLive, visualizationQuality, true);
 
     xOut = xPhys(:);
 end
@@ -1051,6 +1053,25 @@ if ischar(value)
 end
 error('topopt_freq:InvalidVisualiseLive', ...
     'visualise_live must be yes/no (case-insensitive) or boolean-like.');
+end
+
+function quality = localParseVisualizationQuality(value)
+if isstring(value) && isscalar(value)
+    value = char(value);
+end
+if ischar(value)
+    key = lower(strtrim(value));
+    if isempty(key)
+        quality = 'regular';
+        return;
+    end
+    if any(strcmp(key, {'regular', 'smooth'}))
+        quality = key;
+        return;
+    end
+end
+error('topopt_freq:InvalidVisualizationQuality', ...
+    'visualization_quality must be "regular" or "smooth".');
 end
 
 function name = localApproachName(runCfg, defaultName)

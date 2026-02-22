@@ -13,23 +13,26 @@
   "domain": {
     "shape": "rectangular",
     "size": {
-      "length": 8.0,
-      "height": 1.0
+      "length": 5.0,
+      "height": 15.0
     },
     "thickness": 1.0,
     "mesh": {
-      "nelx": 600,
-      "nely": 75
+      "nelx": 100,
+      "nely": 300
     },
     "passive_regions": {
-      "flanges": {
-        "top": { "relative_height": 0.05, "is_solid": true },
-        "bottom": { "relative_height": 0.05, "is_solid": true }
-      }
+      "rect": [
+            { "x0": [0.0, 0.0], "size":  [0.1, 15.0], "is_solid": true },
+            { "x0": [4.9, 0.0], "size":  [0.1, 15.0], "is_solid": true },
+            { "x0": [0.0, 4.9], "size":  [5.0,  0.1], "is_solid": true },
+            { "x0": [0.0, 9.9], "size":  [5.0,  0.1], "is_solid": true },
+            { "x0": [0.0, 14.9], "size": [5.0,  0.1], "is_solid": true }
+        ]
     },
 
     "load_cases": [
-      {
+        {
         "name": "case1",
         "factor": 0.25,
         "loads": [
@@ -62,8 +65,7 @@
 
   "bc": {
     "supports": [
-		{ "type": "vertical_line", "x": 0.0, "dofs": ["ux", "uy"], "tol": 1E-6 },
-        { "type": "vertical_line", "x": 8.0, "dofs": ["ux", "uy"], "tol": 1E-6 }
+		{ "type": "horizontal_line", "y": 0.0, "dofs": ["ux", "uy"], "tol": 1E-6 }
 	  ]
   },
 
@@ -72,19 +74,19 @@
     "optimizer": "MMA",
     "objective": "max_min_frequency",
     "interpolation": "SIMP",
-    "volume_fraction": 0.5,
+    "volume_fraction": 0.3,
     "penalization": 3.0,
 
     "filter": {
       "type": "sensitivity",
-      "radius": 0.08,
-      "radius_units": "physical",
+      "radius": 3.0,
+      "radius_units": "element",
       "boundary_condition": "symmetric"
     },
 
     "move_limit": 0.2,
-    "max_iters": 200,
-    "convergence_tol": 5e-3,
+    "max_iters": 300,
+    "convergence_tol": 3e-3,
     "seed": null,
     "visualise_live" : "yes",
     "visualise_quality" : "smooth",

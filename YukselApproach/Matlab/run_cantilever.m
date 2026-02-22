@@ -22,6 +22,7 @@ move = 0.2;
 maxit = 200;      % upper bound; solver also stops at change < 0.01
 stage1_maxit = 200;
 bcType = "cantilever";
+visualizationQuality = 'regular'; % set 'smooth' for high-quality final display
 plotDynamicHistory = false; % set true to also run/plot Section-3 dynamic-code history
 dynMove = 0.01;             % dynamic-code move limit (paper dynamic setting)
 dynMaxIt = 200;
@@ -33,14 +34,18 @@ figure('Name','Yuksel Figure 9 benchmark','Color','w');
 tiledlayout(2,1,'TileSpacing','compact','Padding','compact');
 
 nexttile;
-imagesc(1 - reshape(info.stage1.xFinal, nely, nelx));
+imgStage1 = buildTopologyDisplayImage(info.stage1.xFinal, nelx, nely, visualizationQuality, true);
+imagesc(1 - imgStage1);
+set(gca, 'YDir', 'normal');
 axis equal off;
 caxis([0 1]);
 colormap(gray);
 title(sprintf('Figure 9(b): \\omega_1 = %.1f rad/s', info.stage1.omega1), 'Interpreter', 'tex');
 
 nexttile;
-imagesc(1 - reshape(xPhysStage2, nely, nelx));
+imgStage2 = buildTopologyDisplayImage(xPhysStage2, nelx, nely, visualizationQuality, true);
+imagesc(1 - imgStage2);
+set(gca, 'YDir', 'normal');
 axis equal off;
 caxis([0 1]);
 colormap(gray);
@@ -53,4 +58,3 @@ fprintf('  Emin = 1e-9*E0, rho_min = 1e-9*rho0, d = 6, x_cut = 0.1\n');
 fprintf('  Concentrated mass (internal): 20%% of permitted material mass at right mid-edge\n');
 fprintf('  Stage 1 frequency: omega1 = %.4f rad/s (paper: 94.1)\n', info.stage1.omega1);
 fprintf('  Stage 2 frequency: omega1 = %.4f rad/s (paper: 101.5)\n', info.stage2.omega1);
-

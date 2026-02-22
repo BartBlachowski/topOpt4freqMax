@@ -23,6 +23,7 @@ move = 0.2;
 maxit = 1000;      % upper bound; solver also stops at change < 0.01
 stage1_maxit = 1000;
 bcType = "simply";
+visualizationQuality = 'regular'; % set 'smooth' for high-quality final display
 
 [xPhysStage2, ~, info] = top99neo_inertial_freq( ...
     nelx, nely, volfrac, penal, rmin, ft, ftBC, eta, beta, move, maxit, stage1_maxit, bcType);
@@ -31,14 +32,18 @@ figure('Name','Yuksel Figure 4 benchmark','Color','w');
 tiledlayout(2,1,'TileSpacing','compact','Padding','compact');
 
 nexttile;
-imagesc(1 - reshape(info.stage1.xFinal, nely, nelx));
+imgStage1 = buildTopologyDisplayImage(info.stage1.xFinal, nelx, nely, visualizationQuality, true);
+imagesc(1 - imgStage1);
+set(gca, 'YDir', 'normal');
 axis equal off;
 caxis([0 1]);
 colormap(gray);
 title(sprintf('Figure 4(b): \\omega_1 = %.1f rad/s', info.stage1.omega1), 'Interpreter', 'tex');
 
 nexttile;
-imagesc(1 - reshape(xPhysStage2, nely, nelx));
+imgStage2 = buildTopologyDisplayImage(xPhysStage2, nelx, nely, visualizationQuality, true);
+imagesc(1 - imgStage2);
+set(gca, 'YDir', 'normal');
 axis equal off;
 caxis([0 1]);
 colormap(gray);

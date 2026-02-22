@@ -1,0 +1,91 @@
+{
+  "meta": {
+    "name": "Beam topology — natural frequency maximization",
+    "notes": "Passive flanges counted in volume fraction.",
+    "units": {
+      "length": "m",
+      "force": "N",
+      "density": "kg/m3",
+      "elastic_modulus": "Pa"
+    }
+  },
+
+  "domain": {
+    "shape": "rectangular",
+    "size": {
+      "length": 5.0,
+      "height": 15.0
+    },
+    "thickness": 1.0,
+    "mesh": {
+      "nelx": 150,
+      "nely": 450
+    },
+    "passive_regions": {
+      "rect": [
+            { "x0": [0.0, 0.0], "size":  [0.1, 15.0], "is_solid": true },
+            { "x0": [4.9, 0.0], "size":  [0.1, 15.0], "is_solid": true },
+            { "x0": [0.0, 4.9], "size":  [5.0,  0.1], "is_solid": true },
+            { "x0": [0.0, 9.9], "size":  [5.0,  0.1], "is_solid": true },
+            { "x0": [0.0, 14.9], "size": [5.0,  0.1], "is_solid": true }
+        ]
+    },
+
+    "load_cases": [
+        {
+        "name": "case3",
+        "factor": 1.0,
+        "loads": [
+          { "type": "self_weight", "factor": 200.0  }
+        ]
+      }
+    ]
+  },
+
+
+  "material": {
+    "model": "plane_stress_isotropic",
+    "E": 1.0E7,
+    "nu": 0.3,
+    "rho": 1.0
+  },
+  
+  "void_material": {
+      "E_min_ratio": 1e-6,
+      "rho_min": 1e-6
+    },
+
+
+  "bc": {
+    "supports": [
+		{ "type": "horizontal_line", "y": 0.0, "dofs": ["ux", "uy"], "tol": 1E-6 }
+	  ]
+  },
+
+  "optimisation": {
+    "approach": "ourApproach",
+    "optimizer": "MMA",
+    "objective": "max_min_frequency",
+    "interpolation": "SIMP",
+    "volume_fraction": 0.3,
+    "penalization": 3.0,
+
+    "filter": {
+      "type": "sensitivity",
+      "radius": 0.08,
+      "radius_units": "physical",
+      "boundary_condition": "symmetric"
+    },
+
+    "move_limit": 0.2,
+    "max_iters": 200,
+    "convergence_tol": 3e-3,
+    "seed": null,
+    "visualise_live" : "yes",
+    "visualise_quality" : "smooth",
+    "save_snapshot_image" : "no",
+    "save_final_image" : "yes",
+    "save_frq_iterations" : "yes",
+    "harmonic_normalize": true
+  }
+}

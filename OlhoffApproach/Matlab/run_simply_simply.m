@@ -32,7 +32,11 @@ cfg.supportType = "SS";
 cfg.beta_schedule = [1 2 4 8 16 32 64];
 cfg.beta_interval = 40;
 
-opts = struct('doDiagnostic', true, 'diagnosticOnly', false, 'diagModes', 5);
+opts = struct('doDiagnostic', true, 'diagnosticOnly', false, 'diagModes', 5, ...
+    'visualization_quality', 'regular');
+if isfield(cfg, 'visualization_quality') && ~isempty(cfg.visualization_quality)
+    opts.visualization_quality = cfg.visualization_quality;
+end
 paper = struct('init', 68.7, 'opt', 174.7);
 
 [omega_best, xPhys_best, diag_out] = topFreqOptimization_MMA(cfg, opts);
@@ -41,6 +45,8 @@ fprintf('SS case: omega1 initial=%.1f (paper %.1f) | optimized=%.1f (paper %.1f)
     diag_out.initial.omega(1), paper.init, omega_best, paper.opt);
 
 figure('Name', 'Olhoff SS topology'); hold on;
-imagesc(1 - reshape(xPhys_best, cfg.nely, cfg.nelx));
+imgDisp = buildTopologyDisplayImage(xPhys_best, cfg.nelx, cfg.nely, opts.visualization_quality, true);
+imagesc(1 - imgDisp);
+set(gca, 'YDir', 'normal');
 axis equal tight off; colormap(gray(256));
 title(sprintf('SS: omega1=%.1f (paper: %.1f)', omega_best, paper.opt));

@@ -115,6 +115,12 @@ function [x, omega, tIter, nIter, mem_usage] = run_topopt_from_json(jsonInput)
         saveFrqIterations = parseBool(getFieldPath(cfg, {'save_frq_iterations'}), ...
             'save_frq_iterations');
     end
+    visualizationQuality = 'regular';
+    if hasFieldPath(cfg, {'optimisation','visualization_quality'})
+        visualizationQuality = parseVisualizationQuality( ...
+            getFieldPath(cfg, {'optimisation','visualization_quality'}), ...
+            'optimisation.visualization_quality');
+    end
 
     % Radius conversion requested by task description.
     dx = L / nelx;
@@ -211,6 +217,7 @@ function [x, omega, tIter, nIter, mem_usage] = run_topopt_from_json(jsonInput)
             optsO = struct('doDiagnostic', true, 'diagnosticOnly', false, 'diagModes', 5);
             optsO.approach_name = approach;
             optsO.save_frq_iterations = saveFrqIterations;
+            optsO.visualization_quality = visualizationQuality;
             if hasVisualise
                 optsO.visualise_live = visualiseLive;
             end
@@ -249,6 +256,7 @@ function [x, omega, tIter, nIter, mem_usage] = run_topopt_from_json(jsonInput)
             runCfg.conv_tol = convTol;
             runCfg.approach_name = approach;
             runCfg.save_frq_iterations = saveFrqIterations;
+            runCfg.visualization_quality = visualizationQuality;
             if ~isempty(tipMassFrac)
                 runCfg.tipMassFrac = tipMassFrac;
             end
@@ -342,6 +350,7 @@ function [x, omega, tIter, nIter, mem_usage] = run_topopt_from_json(jsonInput)
             runCfg.supportType = supportCode;
             runCfg.approach_name = approach;
             runCfg.save_frq_iterations = saveFrqIterations;
+            runCfg.visualization_quality = visualizationQuality;
             if hasVisualise
                 runCfg.visualise_live = visualiseLive;
             end
@@ -402,7 +411,7 @@ function [x, omega, tIter, nIter, mem_usage] = run_topopt_from_json(jsonInput)
     end
 
     if saveFinalImage
-        saveTopologySnapshot(x, nelx, nely, approach, jsonSource, omega(1));
+        saveTopologySnapshot(x, nelx, nely, approach, jsonSource, omega(1), visualizationQuality);
     end
 end
 
@@ -455,7 +464,12 @@ function saveFrequencyIterationPlot(freqIterOmega, approachName, nelx, nely, rep
     title(ax, sprintf('%s frequency history', nameRaw), 'Interpreter', 'none');
     grid(ax, 'on');
     box(ax, 'on');
-    xlim(ax, [1, max(1, nIter)]);
+    % MATLAB requires strictly increasing limits; handle single-iteration runs.
+    if nIter == 1
+        xlim(ax, [0.5, 1.5]);
+    else
+        xlim(ax, [1, nIter]);
+    end
     legend(ax, 'Location', 'best');
 
     exportgraphics(fig, outPath, 'Resolution', 180, 'BackgroundColor', 'white');
@@ -603,7 +617,7 @@ function tipMassFrac = parseTipMassFraction(cfg, volfrac, L, H, rho0)
     end
 end
 
-function saveTopologySnapshot(x, nelx, nely, approachName, jsonSource, omega1)
+function saveTopologySnapshot(x, nelx, nely, approachName, jsonSource, omega1, visualizationQuality)
     if nargin < 5 || isempty(jsonSource)
         folder = pwd;
     else
@@ -618,6 +632,9 @@ function saveTopologySnapshot(x, nelx, nely, approachName, jsonSource, omega1)
     if nargin < 6 || isempty(omega1) || ~isfinite(omega1)
         omega1 = NaN;
     end
+    if nargin < 7
+        visualizationQuality = 'regular';
+    end
 
     nameRaw  = char(string(approachName));
     nameSafe = regexprep(nameRaw, '[^\w\-]', '_');
@@ -626,8 +643,10 @@ function saveTopologySnapshot(x, nelx, nely, approachName, jsonSource, omega1)
     % Build a visible figure so the renderer is fully active before saving.
     fig = figure('Color', 'white', 'Visible', 'on');
     ax  = axes('Parent', fig);
-    imagesc(ax, 1 - reshape(x, nely, nelx));
+    img = buildTopologyDisplayImage(x, nelx, nely, visualizationQuality, true);
+    imagesc(ax, 1 - img, 'Interpolation', 'nearest');
     axis(ax, 'equal'); axis(ax, 'tight');
+    set(ax, 'YDir', 'normal');
     set(ax, 'XColor', 'none', 'YColor', 'none');  % hide ticks/lines; keep title visible
     colormap(ax, gray(256));
     caxis(ax, [0 1]);
@@ -753,6 +772,25 @@ function b = parseBool(v, label)
         end
     end
     error('run_topopt_from_json:InvalidBoolean', 'Field "%s" must be boolean-like.', label);
+end
+
+function quality = parseVisualizationQuality(v, label)
+    if isstring(v) && isscalar(v)
+        v = char(v);
+    end
+    if ischar(v)
+        key = lower(strtrim(v));
+        if isempty(key)
+            quality = 'regular';
+            return;
+        end
+        if any(strcmp(key, {'regular', 'smooth'}))
+            quality = key;
+            return;
+        end
+    end
+    error('run_topopt_from_json:InvalidVisualizationQuality', ...
+        'Field "%s" must be "regular" or "smooth".', label);
 end
 
 function out = toVec3(v)

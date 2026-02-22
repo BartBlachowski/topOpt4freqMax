@@ -28,7 +28,11 @@ baseCfg.rho_min = 1e-6;
 baseCfg.nu      = 0.3;
 baseCfg.t       = 1.0;
 
-opts = struct('doDiagnostic', true, 'diagnosticOnly', false, 'diagModes', 5);
+opts = struct('doDiagnostic', true, 'diagnosticOnly', false, 'diagModes', 5, ...
+    'visualization_quality', 'regular');
+if isfield(baseCfg, 'visualization_quality') && ~isempty(baseCfg.visualization_quality)
+    opts.visualization_quality = baseCfg.visualization_quality;
+end
 
 % Paper reference values
 paper = struct();
@@ -68,7 +72,9 @@ for k = 1:numel(cases)
 
     % Plot topology
     figure('Position', [100+300*(k-1), 100, 400, 100]);
-    imagesc(1 - reshape(xPhys_best, cfg.nely, cfg.nelx));
+    imgDisp = buildTopologyDisplayImage(xPhys_best, cfg.nelx, cfg.nely, opts.visualization_quality, true);
+    imagesc(1 - imgDisp);
+    set(gca, 'YDir', 'normal');
     axis equal tight off; colormap(gray(256));
     title(sprintf('%s: omega1=%.1f (paper: %.1f)', c.code, omega_best, paper.(c.code).opt));
 end

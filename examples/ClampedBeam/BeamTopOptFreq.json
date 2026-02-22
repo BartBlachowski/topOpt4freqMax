@@ -1,0 +1,96 @@
+{
+  "meta": {
+    "name": "Beam topology — natural frequency maximization",
+    "notes": "Passive flanges counted in volume fraction.",
+    "units": {
+      "length": "m",
+      "force": "N",
+      "density": "kg/m3",
+      "elastic_modulus": "Pa"
+    }
+  },
+
+  "domain": {
+    "shape": "rectangular",
+    "size": {
+      "length": 8.0,
+      "height": 1.0
+    },
+    "thickness": 1.0,
+    "mesh": {
+      "nelx": 240,
+      "nely": 30
+    },
+    "passive_regions": {
+      "flanges": {
+        "top": { "relative_height": 0.05, "is_solid": false },
+        "bottom": { "relative_height": 0.05, "is_solid": false }
+      }
+    },
+
+    "load_cases": [
+      {
+        "name": "case1",
+        "factor": 0.0,
+        "loads": [
+          { "type": "harmonic", "mode": 1, "update_after": 0  }
+        ]
+      }, 
+        {
+        "name": "case2",
+        "factor": 1.0,
+        "loads": [
+          { "type": "harmonic", "mode": 2, "update_after": 0  }
+        ]
+      }
+    ]
+  },
+
+
+  "material": {
+    "model": "plane_stress_isotropic",
+    "E": 1.0E7,
+    "nu": 0.3,
+    "rho": 1.0
+  },
+  
+  "void_material": {
+      "E_min_ratio": 1e-6,
+      "rho_min": 1e-6
+    },
+
+
+  "bc": {
+    "supports": [
+		{ "type": "vertical_line", "x": 0.0, "dofs": ["ux", "uy"], "tol": 1E-6 },
+        { "type": "vertical_line", "x": 8.0, "dofs": ["ux", "uy"], "tol": 1E-6 }
+	  ]
+  },
+
+  "optimisation": {
+    "approach": "ourApproach",
+    "optimizer": "MMA",
+    "objective": "max_min_frequency",
+    "interpolation": "SIMP",
+    "volume_fraction": 0.3,
+    "penalization": 3.0,
+
+    "filter": {
+      "type": "sensitivity",
+      "radius": 3.0,
+      "radius_units": "element",
+      "boundary_condition": "symmetric"
+    },
+
+    "move_limit": 0.2,
+    "max_iters": 300,
+    "convergence_tol": 5e-3,
+    "seed": null,
+    "visualise_live" : "yes",
+    "visualise_quality" : "smooth",
+    "save_snapshot_image" : "no",
+    "save_final_image" : "yes",
+    "save_frq_iterations" : "yes",
+    "harmonic_normalize": true
+  }
+}

@@ -64,6 +64,8 @@ if isfield(runCfg, 'visualise_live') && ~isempty(runCfg.visualise_live)
 else
     doPlot = true;
 end
+visualizationQuality = localParseVisualizationQuality( ...
+    localOpt(runCfg, 'visualization_quality', 'regular'));
 saveFrqIterations = localParseVisualiseLive(localOpt(runCfg, 'save_frq_iterations', false), false);
 if saveFrqIterations
     fprintf(['Warning: save_frq_iterations=yes forces per-iteration eigenvalue solves for plotting; ', ...
@@ -235,7 +237,7 @@ end
 plotTopology( ...
     xPhys_stage2, nelx, nely, ...
     formatTopologyTitle(approachName, volfrac, info.stage2.omega1), ...
-    doPlot);
+    doPlot, visualizationQuality, true);
 
 info.timing = struct();
 info.timing.stage1_loop_time = localOpt(info.stage1, 'loop_time', NaN);
@@ -475,7 +477,7 @@ while loop < maxit
         plotTopology( ...
             xPhys, nelx, nely, ...
             formatTopologyTitle(approachName, volfrac, NaN), ...
-            true);
+            true, 'regular', false);
     end
     if loop > 1 && ch < tolX, break; end
 end
@@ -615,7 +617,7 @@ while loop < maxit
         plotTopology( ...
             xPhys, nelx, nely, ...
             formatTopologyTitle(approachName, volfrac, NaN), ...
-            true);
+            true, 'regular', false);
     end
     if loop > 1 && ch < tolX, break; end
 end
@@ -816,6 +818,25 @@ if ischar(value)
 end
 error('top99neo_inertial_freq:InvalidVisualiseLive', ...
     'visualise_live must be yes/no (case-insensitive) or boolean-like.');
+end
+
+function quality = localParseVisualizationQuality(value)
+if isstring(value) && isscalar(value)
+    value = char(value);
+end
+if ischar(value)
+    key = lower(strtrim(value));
+    if isempty(key)
+        quality = 'regular';
+        return;
+    end
+    if any(strcmp(key, {'regular', 'smooth'}))
+        quality = key;
+        return;
+    end
+end
+error('top99neo_inertial_freq:InvalidVisualizationQuality', ...
+    'visualization_quality must be "regular" or "smooth".');
 end
 
 function name = localApproachName(runCfg, defaultName)
