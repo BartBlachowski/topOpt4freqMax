@@ -64,6 +64,11 @@ if isfield(runCfg, 'visualise_live') && ~isempty(runCfg.visualise_live)
 else
     doPlot = true;
 end
+saveFrqIterations = localParseVisualiseLive(localOpt(runCfg, 'save_frq_iterations', false), false);
+if saveFrqIterations
+    fprintf(['Warning: save_frq_iterations=yes forces per-iteration eigenvalue solves for plotting; ', ...
+        'runtime will increase and comparisons are not fair.\n']);
+end
 approachName = localApproachName(runCfg, 'Yuksel');
 
 %% ---------------------------- PRE. 1) MATERIAL AND CONTINUATION PARAMETERS
@@ -116,9 +121,14 @@ Me0 = kron(MeS, eye(2));
 
 %% ----------------------------- PRE. 3) LOADS, SUPPORTS AND PASSIVE DOMAINS
 [pasS, pasV] = deal([],[]);
+if isfield(runCfg, 'pasS') && ~isempty(runCfg.pasS), pasS = runCfg.pasS(:); end
+if isfield(runCfg, 'pasV') && ~isempty(runCfg.pasV), pasV = runCfg.pasV(:); end
 
 % Boundary conditions + stage-1 point load
 [fixed, lcDof, tipMassNode] = localBCAndLoad(nodeNrs,nely,nelx,nDof,bcType);
+if isfield(runCfg, 'extraFixedDofs') && ~isempty(runCfg.extraFixedDofs)
+    fixed = unique([fixed(:); double(runCfg.extraFixedDofs(:))]);
+end
 if strcmpi(char(bcType), 'fixedpinned')
     % Figure 8 setup: locate load node from first mode of fully-solid fixed-pinned beam.
     lcDof = localFixedPinnedLoadFromSolidMode( ...
@@ -158,8 +168,14 @@ x( act ) = ( volfrac*( nEl - length(pasV) ) - length(pasS) )/length( act );
 x( pasS ) = 1;
 
 info = struct();
-info.stage1 = struct('c',[],'v',[],'ch',[],'xHist',[],'omegaHist',[],'omegaFinal',[]);
-info.stage2 = struct('c',[],'v',[],'ch',[],'xHist',[],'omegaHist',[],'omegaFinal',[]);
+info.stage1 = struct('c',[],'v',[],'ch',[],'xHist',[],'omegaHist',[],'omegaFinal',[], ...
+    'freq_iter_omega', []);
+info.stage2 = struct('c',[],'v',[],'ch',[],'xHist',[],'omegaHist',[],'omegaFinal',[], ...
+    'freq_iter_omega', []);
+if saveFrqIterations
+    info.stage1.freq_iter_omega = NaN(stage1_maxit, 3);
+    info.stage2.freq_iter_omega = NaN(maxit, 3);
+end
 info.stage1.loadDof = lcDof;
 
 %% ================================ STAGE 1: standard compliance minimization
@@ -169,7 +185,8 @@ info.stage1.loadDof = lcDof;
     nelx, nely, nEl, nDof, cMat, Iar, Ke, Ke0, ...
     E0, Emin, penal, rmin, h, Hs, bcF, ft, eta, beta, move, stage1_maxit, ...
     penalCnt, betaCnt, dsK, dV, info.stage1, doPlot, nHistModes, stage1Tol, ...
-    approachName, volfrac);
+    approachName, volfrac, saveFrqIterations, Me0, rho0, rho_min, dMass, ...
+    xMassCut, tipMassDofs, tipMassVal, pasS, pasV);
 info.stage1.xFinal = xPhys;
 info.stage1.UFinal = U;
 info.stage1.omega1 = localFirstOmega( ...
@@ -191,7 +208,7 @@ U_est = U;
     tipMassDofs, tipMassVal, ...
     penal, rmin, h, Hs, bcF, ft, eta, beta, move, maxit, ...
     penalCnt, betaCnt, dsK, dV, info.stage2, doPlot, stage2Tol, nHistModes, ...
-    approachName, volfrac);
+    approachName, volfrac, saveFrqIterations, pasS, pasV);
 info.stage2.xFinal = xPhys_stage2;
 info.stage2.UFinal = U_stage2;
 info.stage2.omegaFinal = localFirstNOmegas( ...
@@ -205,6 +222,11 @@ if nHistModes > 0
     info.stage2.omegaHist = localModeHistory( ...
         info.stage2.xHist, free, nEl, nDof, Iar, Ke, Me0, E0, Emin, penal, ...
         rho0, rho_min, dMass, xMassCut, tipMassDofs, tipMassVal, nHistModes);
+end
+if saveFrqIterations
+    h1 = info.stage1.freq_iter_omega;
+    h2 = info.stage2.freq_iter_omega;
+    info.freq_iter_omega = [h1; h2];
 end
 
 if isfinite(info.stage2.omega1)
@@ -237,6 +259,11 @@ switch lower(bcType)
     case {"simply","fixedpinned"}
         beamL = 8;
         beamH = 1;
+        tipMassFrac = 0;
+    case "none"
+        % All BCs come from extraFixedDofs; dimensions must be set via runCfg.
+        beamL = 0;
+        beamH = 0;
         tipMassFrac = 0;
     otherwise
         error('Unsupported bcType: %s', bcType);
@@ -283,6 +310,16 @@ switch lower(bcType)
         rightMid = nodeNrs(midRow, end);
         fixed = union(fixed, [2*rightMid-1, 2*rightMid]);
         % Temporary: choose mid of beam for load; caller may override via eigenmode search.
+        midCol = round((nelx+1)/2);
+        lcNode = nodeNrs(midRow, midCol);
+        lcDof = 2*lcNode;
+
+    case "none"
+        % No standard hinge/clamp — all fixed DOFs come from extraFixedDofs.
+        fixed = [];
+        tipMassNode = [];
+        % Stage-1 load: vertical DOF at beam centre (sensible fallback).
+        midRow = round(nely/2) + 1;
         midCol = round((nelx+1)/2);
         lcNode = nodeNrs(midRow, midCol);
         lcDof = 2*lcNode;
@@ -354,7 +391,8 @@ function [xPhys,U,eta,penal,beta,stageInfo] = localComplianceLoop( ...
     nelx, nely, nEl, nDof, cMat, Iar, Ke, Ke0, ...
     E0, Emin, penal, rmin, h, Hs, bcF, ft, eta, beta, move, maxit, ...
     penalCnt, betaCnt, dsK, dV, stageInfo, doPlot, nHistModes, tolX, ...
-    approachName, volfrac)
+    approachName, volfrac, saveFrqIterations, Me0, rho0, rho_min, dMass, ...
+    xMassCut, tipMassDofs, tipMassVal, pasS, pasV)
 
 % ---- implicit functions (redefined here: local functions cannot access parent workspace)
 prj  = @(v,eta_,beta_) (tanh(beta_*eta_)+tanh(beta_*(v(:)-eta_)))./(tanh(beta_*eta_)+tanh(beta_*(1-eta_)));
@@ -388,6 +426,9 @@ while loop < maxit
         dHs = Hs ./ reshape( dprj( xTilde, eta, beta ), nely, nelx );
         xPhys = prj( xPhys, eta, beta );
     end
+    % ---- Enforce passive element densities
+    if ~isempty(pasS), xPhys(pasS) = 1; end
+    if ~isempty(pasV), xPhys(pasV) = 0; end
     % ---- FE solve
     sK = ( Emin + xPhys.^penal * ( E0 - Emin ) );
     dsK( act ) = -penal * ( E0 - Emin ) * xPhys( act ) .^ ( penal - 1 );
@@ -412,12 +453,18 @@ while loop < maxit
     % ---- OC update (robust bisection bracket + finite guards)
     [x, ch] = localOcUpdate(x, act, dc, dV0, move, mean(xPhys));
 
+    penalLog = penal;
     [penal,beta] = deal(cnt(penal,penalCnt,loop), cnt(beta,betaCnt,loop));
 
     cVal = full(F' * U);
     stageInfo.c(end+1,1)  = cVal;
     stageInfo.v(end+1,1)  = mean(xPhys);
     stageInfo.ch(end+1,1) = ch;
+    if saveFrqIterations
+        stageInfo.freq_iter_omega(loop,:) = localFirstNOmegas( ...
+            xPhys, free, nEl, nDof, Iar, Ke, Me0, E0, Emin, penalLog, ...
+            rho0, rho_min, dMass, xMassCut, tipMassDofs, tipMassVal, 3);
+    end
     if nHistModes > 0
         stageInfo.xHist(:,end+1) = xPhys;
     end
@@ -435,6 +482,9 @@ end
 stageInfo.iterations = loop;
 stageInfo.loop_time = toc(loop_tic);
 stageInfo.t_iter = stageInfo.loop_time / max(loop, 1);
+if saveFrqIterations && isfield(stageInfo, 'freq_iter_omega') && ~isempty(stageInfo.freq_iter_omega)
+    stageInfo.freq_iter_omega = stageInfo.freq_iter_omega(1:loop,:);
+end
 
 end
 
@@ -446,7 +496,7 @@ function [xPhys,U,eta,penal,beta,stageInfo] = localInertialLoop( ...
     tipMassDofs, tipMassVal, ...
     penal, rmin, h, Hs, bcF, ft, eta, beta, move, maxit, ...
     penalCnt, betaCnt, dsK, dV, stageInfo, doPlot, stage2Tol, nHistModes, ...
-    approachName, volfrac)
+    approachName, volfrac, saveFrqIterations, pasS, pasV)
 
 % ---- implicit functions (redefined here: local functions cannot access parent workspace)
 prj  = @(v,eta_,beta_) (tanh(beta_*eta_)+tanh(beta_*(v(:)-eta_)))./(tanh(beta_*eta_)+tanh(beta_*(1-eta_)));
@@ -483,6 +533,9 @@ while loop < maxit
         dHs = Hs ./ reshape( dprj( xTilde, eta, beta ), nely, nelx );
         xPhys = prj( xPhys, eta, beta );
     end
+    % ---- Enforce passive element densities
+    if ~isempty(pasS), xPhys(pasS) = 1; end
+    if ~isempty(pasV), xPhys(pasV) = 0; end
 
     % ---- assemble stiffness
     sK = ( Emin + xPhys.^penal * ( E0 - Emin ) );
@@ -540,12 +593,18 @@ while loop < maxit
     % ---- OC update (robust bisection bracket + finite guards)
     [x, ch] = localOcUpdate(x, act, dc, dV0, move, mean(xPhys));
 
+    penalLog = penal;
     [penal,beta] = deal(cnt(penal,penalCnt,loop), cnt(beta,betaCnt,loop));
 
     cVal = full(F' * U);
     stageInfo.c(end+1,1)  = cVal;
     stageInfo.v(end+1,1)  = mean(xPhys);
     stageInfo.ch(end+1,1) = ch;
+    if saveFrqIterations
+        stageInfo.freq_iter_omega(loop,:) = localFirstNOmegas( ...
+            xPhys, free, nEl, nDof, Iar, Ke, Me0, E0, Emin, penalLog, ...
+            rho0, rho_min, dMass, xMassCut, tipMassDofs, tipMassVal, 3);
+    end
     if nHistModes > 0
         stageInfo.xHist(:,end+1) = xPhys;
     end
@@ -563,6 +622,9 @@ end
 stageInfo.iterations = loop;
 stageInfo.loop_time = toc(loop_tic);
 stageInfo.t_iter = stageInfo.loop_time / max(loop, 1);
+if saveFrqIterations && isfield(stageInfo, 'freq_iter_omega') && ~isempty(stageInfo.freq_iter_omega)
+    stageInfo.freq_iter_omega = stageInfo.freq_iter_omega(1:loop,:);
+end
 
 end
 

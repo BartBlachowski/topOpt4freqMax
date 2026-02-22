@@ -1,15 +1,16 @@
 % A TOPOLOGY OPTIMIZATION CODE FOR FREQUENCY MAXIMIZATION
 % Rewritten from the Python version (Aage & Johansen, 2013, modified)
 %
-% (1) Compute (omega1, Phi1) once on the DESIGN DOMAIN (free DOFs)
-% (2) Use harmonic-type load: F(x) = omega1^2 * M(x) * Phi1
-% (3) During TO, update F only through M(x) (SIMP mass); Phi1, omega1 stay fixed
+% Supports aggregated compliance over multiple load cases in runCfg.load_cases.
+% Legacy fallback remains the original fixed harmonic load behavior when
+% runCfg.load_cases is not provided.
 
-function [xOut, fHz, tIter, nIter] = topopt_freq(nelx, nely, volfrac, penal, rmin, ft, L, H, varargin)
+function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, penal, rmin, ft, L, H, varargin)
     xOut = [];
     fHz = NaN(3, 1);
     tIter = NaN;
     nIter = NaN;
+    info = struct();
 
     if nargin < 8
         nelx = 240; nely = 30; volfrac = 0.4; penal = 3.0;
@@ -25,7 +26,7 @@ function [xOut, fHz, tIter, nIter] = topopt_freq(nelx, nely, volfrac, penal, rmi
     end
     localEnsurePlotHelpersOnPath();
 
-    fprintf('Compliance with harmonic-type inertial load (fixed mode)\n');
+    fprintf('Compliance objective with load-case aggregation\n');
     fprintf('mesh: %d x %d\n', nelx, nely);
     fprintf('domain: L x H = %g x %g\n', L, H);
     fprintf('volfrac: %g, rmin(phys): %g, penal: %g\n', volfrac, rmin, penal);
@@ -51,33 +52,96 @@ function [xOut, fHz, tIter, nIter] = topopt_freq(nelx, nely, volfrac, penal, rmi
     maxIters = localOpt(runCfg, 'max_iters', 2000);
     supportType = upper(string(localOpt(runCfg, 'supportType', "SS")));
     approachName = localApproachName(runCfg, 'ourApproach');
+    optimizerType = upper(strtrim(string(localOpt(runCfg, 'optimizer', 'OC'))));
+    if ~any(strcmp(optimizerType, {'OC','MMA'}))
+        error('topopt_freq:InvalidOptimizer', ...
+            'runCfg.optimizer must be "OC" or "MMA" (got "%s").', optimizerType);
+    end
+    fprintf('Optimizer: %s\n', optimizerType);
     if isfield(runCfg, 'visualise_live') && ~isempty(runCfg.visualise_live)
         visualiseLive = localParseVisualiseLive(runCfg.visualise_live, true);
     else
         visualiseLive = true;
     end
+    saveFrqIterations = localParseVisualiseLive(localOpt(runCfg, 'save_frq_iterations', false), false);
+    harmonicNormalize = localParseVisualiseLive(localOpt(runCfg, 'harmonic_normalize', true), true);
+    debugReturnDc = localParseVisualiseLive(localOpt(runCfg, 'debug_return_dc', false), false);
+
+    % Passive element sets (forced density = 1 or 0, excluded from OC update).
+    nEl = nelx * nely;
+    pasS = []; pasV = [];
+    if isfield(runCfg, 'pasS') && ~isempty(runCfg.pasS), pasS = runCfg.pasS(:); end
+    if isfield(runCfg, 'pasV') && ~isempty(runCfg.pasV), pasV = runCfg.pasV(:); end
+    act = setdiff((1:nEl)', union(pasS, pasV));
+    if saveFrqIterations
+        fprintf(['Warning: save_frq_iterations=yes forces per-iteration eigenvalue solves for plotting; ', ...
+            'runtime will increase and comparisons are not fair.\n']);
+        info.freq_iter_omega = NaN(maxIters, 3);
+    end
 
     ndof = 2*(nelx+1)*(nely+1);
+    nNodes = (nelx+1) * (nely+1);
+    nodeIds = (1:nNodes)';
+    nodeIdx0 = nodeIds - 1;
+    nodeX = floor(nodeIdx0 / (nely + 1)) * hx;
+    nodeY = mod(nodeIdx0, (nely + 1)) * hy;
+    yDown = zeros(ndof, 1);
+    yDown(2:2:end) = -1;
 
-    % Allocate design variables
-    x     = volfrac * ones(nelx*nely, 1);
+    [loadCases, usingConfiguredLoadCases, maxHarmonicMode, modeUpdateAfter] = ...
+        localResolveLoadCases(runCfg, nodeX, nodeY, nodeIds);
+    nCases = numel(loadCases);
+    fprintf('Load cases: %d\n', nCases);
+    for ci = 1:nCases
+        fprintf('  case[%d] \"%s\": factor=%g, nLoads=%d\n', ...
+            ci, loadCases(ci).name, loadCases(ci).factor, numel(loadCases(ci).loads));
+    end
+
+    % Allocate design variables (passive elements pinned; active adjusted for volfrac).
+    x = volfrac * ones(nEl, 1);
+    x(pasS) = 1;
+    x(pasV) = 0;
+    if ~isempty(pasS) || ~isempty(pasV)
+        nact = numel(act);
+        if nact > 0
+            act_target = (volfrac * nEl - numel(pasS)) / nact;
+            x(act) = min(1, max(0, act_target));
+        end
+    end
     xold  = x;
     xPhys = x;
     g     = 0;
+
+    % MMA persistent state (only used when optimizerType='MMA').
+    % Sized to active elements only: passive elements (pasS/pasV) are excluded
+    % because they have xmin==xmax, which makes mmasub's xl1/ux1==0 → division
+    % by zero → RCOND=NaN.  Active set 'act' is fixed for the whole run.
+    if strcmp(optimizerType, 'MMA')
+        n_act     = numel(act);
+        mma_low   = zeros(n_act, 1);
+        mma_upp   = ones(n_act, 1);
+        mma_xold1 = x(act);
+        mma_xold2 = x(act);
+    end
 
     % FE: element stiffness & mass matrices
     KE = lk(hx, hy, nu);
     ME = lm(hx, hy);
 
-    % Build edofMat (0-based DOF numbering converted to 1-based)
+    % Build edofMat using standard Q4 connectivity (LL, LR, UR, UL).
+    % Previous mapping mixed ordering/offsets and caused inconsistent assembly.
     edofMat = zeros(nelx*nely, 8);
     for elx = 0:nelx-1
         for ely = 0:nely-1
             el  = ely + elx*nely + 1;  % 1-based element index
-            n1  = (nely+1)*elx + ely;  % 0-based node
-            n2  = (nely+1)*(elx+1) + ely;
-            edofMat(el,:) = [2*n1+2, 2*n1+3, 2*n2+2, 2*n2+3, ...
-                             2*n2,   2*n2+1, 2*n1,   2*n1+1] + 1; % +1 for 1-based
+            n1  = (nely+1)*elx + ely;      % LL (0-based)
+            n2  = (nely+1)*(elx+1) + ely;  % LR
+            n3  = n2 + 1;                  % UR
+            n4  = n1 + 1;                  % UL
+            edofMat(el,:) = [2*n1+1, 2*n1+2, ...
+                             2*n2+1, 2*n2+2, ...
+                             2*n3+1, 2*n3+2, ...
+                             2*n4+1, 2*n4+2];
         end
     end
 
@@ -120,45 +184,72 @@ function [xOut, fHz, tIter, nIter] = topopt_freq(nelx, nely, volfrac, penal, rmi
 
     % Convert support type to constrained DOFs (1-based indexing).
     fixed = localBuildFixedDofs(supportType, nelx, nely);
+    if isfield(runCfg, 'extraFixedDofs') && ~isempty(runCfg.extraFixedDofs)
+        fixed = unique([fixed(:); runCfg.extraFixedDofs(:)]);
+    end
     alldofs = 1:ndof;
     free = setdiff(alldofs, fixed);
 
-    f = zeros(ndof, 1);
-    u = zeros(ndof, 1);
+    F = zeros(ndof, nCases);
+    U = zeros(ndof, nCases);
+    obj = NaN;
+    objCases = NaN(nCases, 1);
 
-    % ------------------------------------------------------------------
-    % (1) EIGENANALYSIS on design domain (free DOFs) once, using initial xPhys
-    % ------------------------------------------------------------------
-    sK0 = reshape(KE(:) * (Emin + xPhys'.^penal * (Emax - Emin)), [], 1);
-    K0  = sparse(iK, jK, sK0, ndof, ndof);
-    K0  = (K0 + K0') / 2;
+    omegaLegacy = NaN;
+    PhiLegacy = zeros(ndof, 1);
+    if ~usingConfiguredLoadCases
+        % Legacy fallback (no runCfg.load_cases): preserve previous behavior.
+        sK0 = reshape(KE(:) * (Emin + xPhys'.^penal * (Emax - Emin)), [], 1);
+        K0  = sparse(iK, jK, sK0, ndof, ndof);
+        K0  = (K0 + K0') / 2;
 
-    rhoPhys0 = rho_min + xPhys.^pmass * (rho0 - rho_min);
-    sM0 = reshape(ME(:) * rhoPhys0', [], 1);
-    M0  = sparse(iK, jK, sM0, ndof, ndof);
-    M0  = (M0 + M0') / 2;
+        rhoPhys0 = rho_min + xPhys.^pmass * (rho0 - rho_min);
+        sM0 = reshape(ME(:) * rhoPhys0', [], 1);
+        M0  = sparse(iK, jK, sM0, ndof, ndof);
+        M0  = (M0 + M0') / 2;
 
-    K0f = K0(free, free);
-    M0f = M0(free, free);
-    clear K0 sK0 M0 sM0 rhoPhys0;
+        K0f = K0(free, free);
+        M0f = M0(free, free);
+        clear K0 sK0 M0 sM0 rhoPhys0;
 
-    % Smallest eigenpair: K phi = lambda M phi (shift-invert near 0)
-    [Phi_free, Lam] = eigs(K0f, M0f, 2, 'smallestabs');
-    lam_vals = diag(Lam);
-    [lam1, idx] = min(lam_vals);
-    omega1 = sqrt(max(lam1, 0));
+        [Phi_free, Lam] = eigs(K0f, M0f, 2, 'smallestabs');
+        lam_vals = diag(Lam);
+        [lam1, idx] = min(lam_vals);
+        omegaLegacy = sqrt(max(lam1, 0));
 
-    phi1_free = Phi_free(:, idx);
-    mn = phi1_free' * (M0f * phi1_free);
-    if mn > 0
-        phi1_free = phi1_free / sqrt(mn);
+        phi1_free = Phi_free(:, idx);
+        mn = phi1_free' * (M0f * phi1_free);
+        if mn > 0
+            phi1_free = phi1_free / sqrt(mn);
+        end
+
+        PhiLegacy(free) = phi1_free;
+        clear Phi_free Lam phi1_free K0f M0f;
+        fprintf('[Eigen] lambda1=%.6e, omega1=%.6e rad/s (computed once, fixed)\n', lam1, omegaLegacy);
+    elseif maxHarmonicMode > 0
+        schedParts = cell(maxHarmonicMode, 1);
+        for k = 1:maxHarmonicMode
+            ua = modeUpdateAfter(k);
+            if ua == 0
+                schedParts{k} = sprintf('mode%d(frozen,ua=0)', k);
+            else
+                schedParts{k} = sprintf('mode%d(every %d it,ua=%d)', k, ua, ua);
+            end
+        end
+        fprintf('[Load cases] Harmonic update schedule: %s\n', strjoin(schedParts, ', '));
+        fprintf('[Load cases] Frozen-eigenpair sensitivity: d(omega)/drho and d(Phi)/drho ignored.\n');
     end
 
-    Phi1 = zeros(ndof, 1);
-    Phi1(free) = phi1_free;
-    clear Phi_free Lam phi1_free K0f M0f;
-
-    fprintf('[Eigen] lambda1=%.6e, omega1=%.6e rad/s (computed once, fixed)\n', lam1, omega1);
+    % ------------------------------------------------------------------
+    % Eigenpair cache for harmonic loads (persists across iterations).
+    % Updated only when modes are due per modeUpdateAfter schedule.
+    % ------------------------------------------------------------------
+    harmonicOmegasCache = NaN(max(maxHarmonicMode, 0), 1);
+    harmonicPhiCache    = zeros(ndof, max(maxHarmonicMode, 0));
+    harmonicNormRefCache = NaN(max(maxHarmonicMode, 0), 1);
+    if usingConfiguredLoadCases && maxHarmonicMode > 0 && harmonicNormalize
+        fprintf('[Load cases] Harmonic RHS norm normalization: ON (per mode, anchored at first evaluation)\n');
+    end
 
     % ------------------------------------------------------------------
     % Optimization loop
@@ -167,51 +258,127 @@ function [xOut, fHz, tIter, nIter] = topopt_freq(nelx, nely, volfrac, penal, rmi
     change = 1;
     dv = ones(nelx*nely, 1);
     dc = ones(nelx*nely, 1);
-    ce = ones(nelx*nely, 1);
     loop_tic = tic;
 
     while change > convTol && loop < maxIters
         loop = loop + 1;
+        mmaConstraintPre = NaN;
+        mmaConstraintPost = NaN;
+        mmaProjected = false;
 
-        % (2,3) Update load using CURRENT M(x):  F = omega1^2 * M(x) * Phi1
+        % Assemble M(x); needed for rho-dependent loads and (optional) mode solves.
         rhoPhys = rho_min + xPhys.^pmass * (rho0 - rho_min);
         sM = reshape(ME(:) * rhoPhys', [], 1);
         M  = sparse(iK, jK, sM, ndof, ndof);
         M  = (M + M') / 2;
+        clear sM;
 
-        f = (omega1^2) * (M * Phi1);
-        clear sM M;
-
-        % Setup and solve FE problem
+        % Assemble K(x) and solve FE for all load cases at once.
         sK = reshape(KE(:) * (Emin + xPhys'.^penal * (Emax - Emin)), [], 1);
         K  = sparse(iK, jK, sK, ndof, ndof);
         K  = (K + K') / 2;
+        clear sK;
 
         Kf = K(free, free);
-        clear sK K;
 
-        u(:) = 0;
-        u(free) = Kf \ f(free);
-        clear Kf;
+        % Determine which harmonic modes are due for eigenpair update this iteration.
+        if usingConfiguredLoadCases && maxHarmonicMode > 0
+            dueFlags = false(maxHarmonicMode, 1);
+            for k = 1:maxHarmonicMode
+                ua = modeUpdateAfter(k);
+                if ua == 0
+                    dueFlags(k) = (loop == 1);   % frozen: compute once at it=1
+                else
+                    dueFlags(k) = (mod(loop - 1, ua) == 0);  % periodic
+                end
+            end
+            dueModes = find(dueFlags);
+        else
+            dueModes = [];
+        end
 
-        % Objective (compliance): C = f' * u
-        obj = f' * u;
+        needMf = saveFrqIterations || ~isempty(dueModes);
+        if needMf
+            Mf = M(free, free);
+        else
+            Mf = [];
+        end
 
-        % Element strain energy for stiffness sensitivity
-        ue = u(edofMat);  % nelx*nely x 8
-        ce = sum((ue * KE) .* ue, 2);
+        % Update eigenpair cache for all due modes (single eigs call up to max needed).
+        if ~isempty(dueModes)
+            maxModeNeeded = max(dueModes);
+            [newOmegas, newPhi] = localCurrentModesFromSubmatrices( ...
+                Kf, Mf, free, ndof, maxModeNeeded);
+            for k = 1:maxModeNeeded
+                if isfinite(newOmegas(k))
+                    harmonicOmegasCache(k) = newOmegas(k);
+                    harmonicPhiCache(:, k)  = newPhi(:, k);
+                end
+            end
+            % Diagnostic: separate frozen (ua=0) from periodic (ua>0) modes.
+            frozenDue   = dueModes(modeUpdateAfter(dueModes) == 0);
+            periodicDue = dueModes(modeUpdateAfter(dueModes) >  0);
+            if ~isempty(frozenDue)
+                fprintf('[Harmonic update] it=%d mode<=%d computed once (update_after=0)\n', ...
+                    loop, max(frozenDue));
+            end
+            if ~isempty(periodicDue)
+                uaVals = unique(modeUpdateAfter(periodicDue));
+                for uaVal = uaVals(:)'
+                    modesThisUa = periodicDue(modeUpdateAfter(periodicDue) == uaVal);
+                    fprintf('[Harmonic update] it=%d mode<=%d recomputed (update_after=%d)\n', ...
+                        loop, max(modesThisUa), uaVal);
+                end
+            end
+        end
 
-        % Sensitivities: dC/dx = -u^T (dK/dx) u + (df/dx)^T u
-        dc_stiff = (-penal * xPhys.^(penal-1) * (Emax - Emin)) .* ce;
+        % Expose cache as local variables for load assembly and sensitivity.
+        harmonicOmegas = harmonicOmegasCache;
+        harmonicPhi    = harmonicPhiCache;
 
-        % Load sensitivity term (currently commented out as in Python)
-        % phi_e = Phi1(edofMat);
-        % uMephi = sum((ue * ME) .* phi_e, 2);
-        % dMdx_scale = pmass * (xPhys.^(pmass-1)) * (rho0 - rho_min);
-        % dc_load = (omega1^2) * dMdx_scale .* uMephi;
+        [F, caseDiag, harmonicNormRefCache] = localBuildLoadMatrix( ...
+            loadCases, ndof, M, yDown, harmonicPhi, harmonicOmegas, PhiLegacy, omegaLegacy, ...
+            harmonicNormRefCache, harmonicNormalize);
 
-        dc = dc_stiff; % + dc_load;
-        dv = ones(nelx*nely, 1);
+        U(:) = 0;
+        U(free,:) = Kf \ F(free,:);
+        if saveFrqIterations
+            if isempty(Mf)
+                Mf = M(free, free);
+            end
+            info.freq_iter_omega(loop,:) = localFirstNOmegasFromSubmatrices(Kf, Mf, 3);
+        end
+        clear Kf Mf;
+
+        % Objective and sensitivities: sum contributions over load cases.
+        obj = 0.0;
+        objCases(:) = 0.0;
+        dc(:) = 0.0;
+        stiffScale = -penal * xPhys.^(penal-1) * (Emax - Emin);
+        dMdxScale = pmass * (xPhys.^(pmass-1)) * (rho0 - rho_min);
+
+        for icase = 1:nCases
+            Ui = U(:, icase);
+            objCase = Ui' * (K * Ui);
+            objCases(icase) = objCase;
+            obj = obj + objCase;
+
+            ue = Ui(edofMat);  % nelx*nely x 8
+            ce = sum((ue * KE) .* ue, 2);
+            dc = dc + stiffScale .* ce;
+
+            if usingConfiguredLoadCases
+                dc = dc + localLoadSensitivityForCase( ...
+                    ue, loadCases(icase), dMdxScale, ME, yDown, ...
+                    harmonicPhi, harmonicOmegas, PhiLegacy, omegaLegacy, edofMat);
+            end
+        end
+        clear K M;
+
+        dv = ones(nEl, 1);
+        % Passive elements are excluded from the volume constraint and OC update.
+        dv(pasS) = 0;  dv(pasV) = 0;
+        dc(pasS) = 0;  dc(pasV) = 0;
 
         % Sensitivity filtering
         if ft == 0
@@ -220,35 +387,117 @@ function [xOut, fHz, tIter, nIter] = topopt_freq(nelx, nely, volfrac, penal, rmi
             dc = Hf * (dc ./ Hs);
             dv = Hf * (dv ./ Hs);
         end
+        % Re-zero passive indices after filtering (filter spreads values to neighbours).
+        dc(pasS) = 0;  dc(pasV) = 0;
+        dv(pasS) = 0;  dv(pasV) = 0;
 
-        % Optimality criteria
+        % Design update: OC or MMA (selected by runCfg.optimizer).
         xold = x;
-        [x, g] = oc(nelx, nely, x, volfrac, dc, dv, g, move);
+        if strcmp(optimizerType, 'OC')
+            [x, g] = oc(nelx, nely, x, volfrac, dc, dv, g, move);
+            % Restore passive densities (OC may have perturbed them slightly).
+            x(pasS) = 1;  x(pasV) = 0;
+        else  % MMA
+            % Only active elements are passed to mmasub.  Passive elements are
+            % excluded: they have x fixed at 0 or 1, so xmin==xmax==x would make
+            % mmasub's xl1 = xval-low = 0 → 1/0 → NaN in subsolv.
+            % Global [0,1] bounds are used so mmasub's asyinit=0.01 initialises
+            % asymptotes at ±0.01 of the full range — the standard working scale.
+            n_act_cur = numel(act);
+            xmin_act  = zeros(n_act_cur, 1);
+            xmax_act  = ones(n_act_cur, 1);
+            % Volume constraint: f_1 = sum(xPhys)/nEl - volfrac <= 0.
+            % Gradient w.r.t. active x only; dv already chain-rule-filtered.
+            fval_mma = sum(xPhys) / nEl - volfrac;
+            mmaConstraintPre = fval_mma;
+            dfdx_act = dv(act)' / nEl;   % 1 x n_act_cur
+            [xnew_act, ~, ~, ~, ~, ~, ~, ~, ~, mma_low, mma_upp] = ...
+                mmasub(1, n_act_cur, loop, x(act), xmin_act, xmax_act, ...
+                       mma_xold1, mma_xold2, ...
+                       obj, dc(act), fval_mma, dfdx_act, ...
+                       mma_low, mma_upp, ...
+                       1, zeros(1,1), 1e3*ones(1,1), ones(1,1));
+            % Enforce user-specified move limit.  mmasub uses asymptotes that can
+            % widen to 0.2*(xmax-xmin)=0.2; without this clip the actual per-element
+            % step can far exceed the requested move_limit (e.g. 0.18 >> 0.05).
+            xnew_act = max(max(zeros(n_act_cur,1), x(act) - move), ...
+                           min(min(ones(n_act_cur,1), x(act) + move), xnew_act));
+            mma_xold2 = mma_xold1;
+            mma_xold1 = x(act);
+            x(act) = xnew_act;
+            x(pasS) = 1;  x(pasV) = 0;
+        end
 
         % Filter design variables
-        if ft == 0
-            xPhys = x;
-        elseif ft == 1
-            xPhys = (Hf * x) ./ Hs;
+        xPhys = localPhysicalFieldFromDesign(x, ft, Hf, Hs, pasS, pasV);
+
+        if strcmp(optimizerType, 'MMA')
+            mmaConstraintPost = mean(xPhys) - volfrac;
+            if mmaConstraintPost > 1e-10
+                [x, xPhys, mmaConstraintPost, mmaProjected] = localProjectMmaToVolume( ...
+                    x, xold, act, move, ft, Hf, Hs, pasS, pasV, volfrac);
+            end
         end
 
         % Current volume and change
-        vol    = (g + volfrac*nelx*nely) / (nelx*nely);
+        vol    = mean(xPhys);
         change = max(abs(x - xold));
 
+        for icase = 1:nCases
+            msg = sprintf('  load_case[%d] \"%s\": ||F||=%.3e', ...
+                icase, loadCases(icase).name, caseDiag(icase).normF);
+            if ~isempty(caseDiag(icase).closestNodeIds)
+                msg = sprintf('%s, closest_node ids=%s', msg, mat2str(caseDiag(icase).closestNodeIds));
+            end
+            if ~isempty(caseDiag(icase).harmonicModes)
+                msg = sprintf('%s, harmonic=%s', msg, ...
+                    localFormatHarmonicDiag(caseDiag(icase).harmonicModes, caseDiag(icase).harmonicOmegas));
+            end
+            fprintf('%s\n', msg);
+        end
+
         if visualiseLive
+            if usingConfiguredLoadCases && ~isempty(harmonicOmegas) && isfinite(harmonicOmegas(1))
+                omegaTitle = harmonicOmegas(1);
+            elseif ~usingConfiguredLoadCases
+                omegaTitle = omegaLegacy;
+            else
+                omegaTitle = NaN;
+            end
             plotTopology( ...
                 xPhys, nelx, nely, ...
-                formatTopologyTitle(approachName, volfrac, omega1), ...
+                formatTopologyTitle(approachName, volfrac, omegaTitle), ...
                 true);
         end
 
-        fprintf('it.: %4d , obj(C=f^T u): %.3f Vol.: %.3f, ch.: %.3f\n', ...
-                loop, obj, vol, change);
+        if strcmp(optimizerType, 'MMA')
+            if mmaProjected
+                fprintf('  [MMA volume projection] applied, residual=%.3e\n', mmaConstraintPost);
+            end
+            fprintf(['it.: %4d , obj(sum_i u_i^T K u_i): %.3f Vol.: %.3f, ' ...
+                     'mma_pre: %.3e, mma_post: %.3e, ch.: %.3f\n'], ...
+                    loop, obj, vol, mmaConstraintPre, mmaConstraintPost, change);
+        else
+            fprintf('it.: %4d , obj(sum_i u_i^T K u_i): %.3f Vol.: %.3f, ch.: %.3f\n', ...
+                    loop, obj, vol, change);
+        end
     end
     loop_time = toc(loop_tic);
     tIter = loop_time / max(loop, 1);
     nIter = loop;
+    if saveFrqIterations
+        info.freq_iter_omega = info.freq_iter_omega(1:loop,:);
+    end
+    info.last_F = F;
+    info.last_U = U;
+    info.last_obj = obj;
+    info.last_obj_cases = objCases;
+    info.load_case_names = {loadCases.name};
+    info.last_vol = mean(xPhys);
+    if debugReturnDc
+        info.last_dc = dc;
+        info.last_dv = dv;
+    end
 
     % ------------------------------------------------------------------
     % Post-analysis: first circular frequency for final topology
@@ -292,6 +541,276 @@ function [xOut, fHz, tIter, nIter] = topopt_freq(nelx, nely, volfrac, penal, rmi
     xOut = xPhys(:);
 end
 
+function [loadCases, usingConfiguredLoadCases, maxHarmonicMode, modeUpdateAfter] = localResolveLoadCases(runCfg, nodeX, nodeY, nodeIds)
+usingConfiguredLoadCases = false;
+if isstruct(runCfg) && isfield(runCfg, 'load_cases')
+    if isempty(runCfg.load_cases)
+        error('topopt_freq:EmptyLoadCases', ...
+            'runCfg.load_cases is present but empty. Provide at least one case or omit the field.');
+    end
+    if exist('validateLoadCases', 'file') == 2
+        loadCases = validateLoadCases(runCfg.load_cases, 'domain.load_cases');
+    else
+        error('topopt_freq:MissingLoadCaseValidator', ...
+            'validateLoadCases.m is required to parse runCfg.load_cases.');
+    end
+    usingConfiguredLoadCases = true;
+else
+    legacyLoad = struct('type', 'harmonic', 'factor', [], ...
+        'location', [], 'force', [], 'mode', 1);
+    loadCases = struct('name', 'legacy_harmonic_fixed_mode', ...
+        'factor', 1.0, 'loads', legacyLoad);
+end
+
+loadCases = loadCases(:);
+maxHarmonicMode = 0;
+modeUpdateAfterRaw = [];  % grows dynamically; Inf sentinel, replaced by min(ua) per mode
+for icase = 1:numel(loadCases)
+    for j = 1:numel(loadCases(icase).loads)
+        ld = loadCases(icase).loads(j);
+        switch ld.type
+            case 'closest_node'
+                loc = ld.location(:)';
+                dist2 = (nodeX - loc(1)).^2 + (nodeY - loc(2)).^2;
+                minD2 = min(dist2);
+                % Deterministic tie-break: smallest node id.
+                nodeId = min(nodeIds(dist2 == minD2));
+                loadCases(icase).loads(j).node_id = nodeId;
+            case 'harmonic'
+                modeK = ld.mode;
+                maxHarmonicMode = max(maxHarmonicMode, modeK);
+                ua = 1;  % default: recompute every iteration
+                if isfield(ld, 'update_after') && ~isempty(ld.update_after)
+                    ua = ld.update_after;
+                end
+                % Grow sentinel array (Inf) if needed, then take minimum across
+                % all references to the same mode (most-frequent update wins).
+                if numel(modeUpdateAfterRaw) < modeK
+                    modeUpdateAfterRaw(end+1:modeK) = Inf;
+                end
+                modeUpdateAfterRaw(modeK) = min(modeUpdateAfterRaw(modeK), ua);
+        end
+    end
+end
+if maxHarmonicMode > 0
+    modeUpdateAfter = reshape(modeUpdateAfterRaw(1:maxHarmonicMode), [], 1);
+else
+    modeUpdateAfter = zeros(0, 1);
+end
+end
+
+function [harmonicOmegas, harmonicPhi] = localCurrentModesFromSubmatrices(Kf, Mf, free, ndof, maxMode)
+harmonicOmegas = NaN(maxMode, 1);
+harmonicPhi = zeros(ndof, maxMode);
+if maxMode < 1 || isempty(Kf) || isempty(Mf)
+    return;
+end
+
+nFree = size(Kf, 1);
+if nFree < 2
+    return;
+end
+nReq = min(maxMode, nFree - 1);
+if nReq < 1
+    return;
+end
+
+try
+    eigOpts = struct('disp', 0, 'maxit', 800, 'tol', 1e-8);
+    [V, D] = eigs(Kf, Mf, nReq, 'smallestabs', eigOpts);
+catch
+    [V, D] = eigs(Kf, Mf, nReq, 'smallestabs');
+end
+
+lamVals = real(diag(D));
+[lamVals, order] = sort(lamVals, 'ascend');
+V = V(:, order);
+valid = isfinite(lamVals) & lamVals > 0;
+lamVals = lamVals(valid);
+V = V(:, valid);
+
+nOk = min(maxMode, numel(lamVals));
+for k = 1:nOk
+    phi = V(:, k);
+    mn = real(phi' * (Mf * phi));
+    if mn > 0
+        phi = phi / sqrt(mn);
+    end
+    harmonicOmegas(k) = sqrt(lamVals(k));
+    phiGlobal = zeros(ndof, 1);
+    phiGlobal(free) = phi;
+    harmonicPhi(:, k) = phiGlobal;
+end
+end
+
+function [F, caseDiag, harmonicNormRef] = localBuildLoadMatrix( ...
+    loadCases, ndof, M, yDown, harmonicPhi, harmonicOmegas, PhiLegacy, omegaLegacy, ...
+    harmonicNormRef, harmonicNormalize)
+nCases = numel(loadCases);
+F = zeros(ndof, nCases);
+caseDiag = repmat(struct( ...
+    'normF', 0.0, ...
+    'closestNodeIds', [], ...
+    'harmonicModes', [], ...
+    'harmonicOmegas', []), nCases, 1);
+
+for icase = 1:nCases
+    Fi = zeros(ndof, 1);
+    closestNodeIds = [];
+    harmonicModes = [];
+    harmonicUsed = [];
+
+    loads = loadCases(icase).loads;
+    for j = 1:numel(loads)
+        ld = loads(j);
+        ldFactor = localLoadFactor(ld);
+        switch ld.type
+            case 'self_weight'
+                Fi = Fi + ldFactor * (M * yDown);
+
+            case 'closest_node'
+                nodeId = ld.node_id;
+                Fi(2*nodeId - 1) = Fi(2*nodeId - 1) + ldFactor * ld.force(1);
+                Fi(2*nodeId) = Fi(2*nodeId) + ldFactor * ld.force(2);
+                closestNodeIds(end+1) = nodeId; %#ok<AGROW>
+
+            case 'harmonic'
+                modeK = ld.mode;
+                if modeK <= numel(harmonicOmegas) && isfinite(harmonicOmegas(modeK))
+                    omegaK = harmonicOmegas(modeK);
+                    phiK = harmonicPhi(:, modeK);
+                elseif isfinite(omegaLegacy)
+                    omegaK = omegaLegacy;
+                    phiK = PhiLegacy;
+                else
+                    error('topopt_freq:HarmonicModeUnavailable', ...
+                        'Unable to evaluate harmonic mode %d for load_cases case \"%s\".', ...
+                        modeK, loadCases(icase).name);
+                end
+                fH = (omegaK^2) * (M * phiK);
+                if harmonicNormalize && modeK <= numel(harmonicNormRef)
+                    nRaw = norm(fH);
+                    if (~isfinite(harmonicNormRef(modeK)) || harmonicNormRef(modeK) <= 0) && nRaw > 0
+                        harmonicNormRef(modeK) = nRaw;
+                    end
+                    nRef = harmonicNormRef(modeK);
+                    if isfinite(nRef) && nRef > 0 && nRaw > 0
+                        fH = fH * (nRef / nRaw);
+                    end
+                end
+                Fi = Fi + ldFactor * fH;
+                harmonicModes(end+1) = modeK; %#ok<AGROW>
+                harmonicUsed(end+1) = omegaK; %#ok<AGROW>
+        end
+    end
+
+    Fi = loadCases(icase).factor * Fi;
+    F(:, icase) = Fi;
+
+    caseDiag(icase).normF = norm(Fi);
+    caseDiag(icase).closestNodeIds = unique(closestNodeIds, 'stable');
+    caseDiag(icase).harmonicModes = harmonicModes;
+    caseDiag(icase).harmonicOmegas = harmonicUsed;
+end
+end
+
+function dcLoad = localLoadSensitivityForCase( ...
+    ue, loadCase, dMdxScale, ME, yDown, harmonicPhi, harmonicOmegas, PhiLegacy, omegaLegacy, edofMat)
+% Load-dependent sensitivity contributions (dF/drho_e term in dJ/drho_e).
+%
+% Option B for harmonic loads:
+%   dF_h/dx ≈ ld.factor * omega_k^2 * (dM/dx * Phi_k)
+% while d(omega_k)/dx and d(Phi_k)/dx are intentionally ignored.
+dcLoad = zeros(size(dMdxScale));
+loads = loadCase.loads;
+
+for j = 1:numel(loads)
+    ld = loads(j);
+    ldFactor = localLoadFactor(ld);
+    coeff = 0;
+    vec = [];
+    switch ld.type
+        case 'self_weight'
+            coeff = loadCase.factor * ldFactor;
+            vec = yDown;
+        case 'harmonic'
+            modeK = ld.mode;
+            if modeK <= numel(harmonicOmegas) && isfinite(harmonicOmegas(modeK))
+                omegaK = harmonicOmegas(modeK);
+                phiK = harmonicPhi(:, modeK);
+            elseif isfinite(omegaLegacy)
+                omegaK = omegaLegacy;
+                phiK = PhiLegacy;
+            else
+                error('topopt_freq:HarmonicModeUnavailable', ...
+                    'Unable to evaluate harmonic mode %d for load_cases case \"%s\".', ...
+                    modeK, loadCase.name);
+            end
+            coeff = loadCase.factor * ldFactor;
+            vec = (omegaK^2) * phiK;
+        otherwise
+            % closest_node has no rho dependence.
+    end
+
+    if coeff == 0 || isempty(vec)
+        continue;
+    end
+    vec_e = vec(edofMat);
+    uMeVec = sum((ue * ME) .* vec_e, 2);
+    dcLoad = dcLoad + 2 * coeff * dMdxScale .* uMeVec;
+end
+end
+
+function fac = localLoadFactor(ld)
+fac = 1.0;
+if isstruct(ld) && isfield(ld, 'factor') && ~isempty(ld.factor)
+    if ~isnumeric(ld.factor) || ~isscalar(ld.factor) || ~isfinite(ld.factor)
+        error('topopt_freq:InvalidLoadFactor', ...
+            'Load factor must be a finite numeric scalar when provided.');
+    end
+    fac = double(ld.factor);
+end
+end
+
+function msg = localFormatHarmonicDiag(modes, omegas)
+if isempty(modes)
+    msg = '[]';
+    return;
+end
+parts = cell(numel(modes), 1);
+for i = 1:numel(modes)
+    if i <= numel(omegas) && isfinite(omegas(i))
+        parts{i} = sprintf('mode%d(omega=%.3e)', modes(i), omegas(i));
+    else
+        parts{i} = sprintf('mode%d(omega=NaN)', modes(i));
+    end
+end
+msg = ['[' strjoin(parts, ', ') ']'];
+end
+
+function omegas = localFirstNOmegasFromSubmatrices(Kf, Mf, nModes)
+    omegas = NaN(1, nModes);
+    if nModes < 1 || isempty(Kf) || isempty(Mf)
+        return;
+    end
+    nReq = min(nModes, max(1, size(Kf, 1) - 1));
+    if nReq < 1
+        return;
+    end
+    try
+        eigOpts = struct('disp', 0, 'maxit', 800, 'tol', 1e-8);
+        Lam = eigs(Kf, Mf, nReq, 'smallestabs', eigOpts);
+        lamVals = sort(real(diag(Lam)), 'ascend');
+        lamVals = lamVals(lamVals > 0);
+        nOk = min(nModes, numel(lamVals));
+        if nOk > 0
+            omegas(1:nOk) = sqrt(lamVals(1:nOk));
+        end
+    catch
+        omegas(:) = NaN;
+    end
+end
+
 
 % ======================================================================
 % Element stiffness matrix (Q4, plane stress) for rectangular element hx x hy
@@ -324,9 +843,8 @@ function KE = lk(hx, hy, nu)
         end
     end
 
-    % topopt edof order: [UL, UR, LR, LL]
-    perm = [7, 8, 5, 6, 3, 4, 1, 2];  % 1-based
-    KE = KE_ccw(perm, perm);
+    % Standard Q4 node order (LL, LR, UR, UL), matching edofMat above.
+    KE = KE_ccw;
 end
 
 
@@ -341,8 +859,8 @@ function ME = lm(hx, hy)
                              2, 1, 2, 4];
     ME_ccw = kron(Ms_ccw, eye(2));
 
-    perm = [7, 8, 5, 6, 3, 4, 1, 2];  % 1-based
-    ME = ME_ccw(perm, perm);
+    % Standard Q4 node order (LL, LR, UR, UL), matching edofMat above.
+    ME = ME_ccw;
 end
 
 
@@ -383,6 +901,79 @@ function [xnew, gt] = oc(nelx, nely, x, volfrac, dc, dv, g, move)
     end
 end
 
+function xPhys = localPhysicalFieldFromDesign(x, ft, Hf, Hs, pasS, pasV)
+if ft == 0
+    xPhys = x;
+elseif ft == 1
+    xPhys = (Hf * x) ./ Hs;
+else
+    error('topopt_freq:UnsupportedFilterType', 'Unsupported filter type ft=%d.', ft);
+end
+if ~isempty(pasS), xPhys(pasS) = 1; end
+if ~isempty(pasV), xPhys(pasV) = 0; end
+end
+
+function [xProj, xPhysProj, residual, projected] = localProjectMmaToVolume( ...
+    x, xold, act, move, ft, Hf, Hs, pasS, pasV, volfrac)
+% Enforce physical volume feasibility after MMA update via monotone bisection.
+% Keeps active variables within [xold-move, xold+move] and [0,1].
+xProj = x;
+xPhysProj = localPhysicalFieldFromDesign(xProj, ft, Hf, Hs, pasS, pasV);
+residual = mean(xPhysProj) - volfrac;
+projected = false;
+if residual <= 0 || isempty(act)
+    return;
+end
+
+lb = max(0, xold(act) - move);
+ub = min(1, xold(act) + move);
+xActBase = min(ub, max(lb, xProj(act)));
+
+% If even maximal downward move is infeasible, return best feasible-by-move point.
+xLow = xProj;
+xLow(act) = lb;
+xLow(pasS) = 1;
+xLow(pasV) = 0;
+xPhysLow = localPhysicalFieldFromDesign(xLow, ft, Hf, Hs, pasS, pasV);
+resLow = mean(xPhysLow) - volfrac;
+if resLow > 0
+    xProj = xLow;
+    xPhysProj = xPhysLow;
+    residual = resLow;
+    projected = true;
+    return;
+end
+
+tauLo = 0;
+tauHi = max(max(xActBase - lb), 1e-12);
+xBest = xLow;
+xPhysBest = xPhysLow;
+resBest = resLow;
+for it = 1:40
+    tau = 0.5 * (tauLo + tauHi);
+    xTryAct = min(ub, max(lb, xActBase - tau));
+    xTry = xProj;
+    xTry(act) = xTryAct;
+    xTry(pasS) = 1;
+    xTry(pasV) = 0;
+    xPhysTry = localPhysicalFieldFromDesign(xTry, ft, Hf, Hs, pasS, pasV);
+    resTry = mean(xPhysTry) - volfrac;
+    if resTry > 0
+        tauLo = tau;
+    else
+        tauHi = tau;
+        xBest = xTry;
+        xPhysBest = xPhysTry;
+        resBest = resTry;
+    end
+end
+
+xProj = xBest;
+xPhysProj = xPhysBest;
+residual = resBest;
+projected = true;
+end
+
 function fixed = localBuildFixedDofs(supportType, nelx, nely)
 j_mid = floor(nely/2);
 nL = j_mid;
@@ -399,6 +990,9 @@ switch upper(string(supportType))
         fixed = [2*leftNodes+1; 2*leftNodes+2; 2*rightNodes+1; 2*rightNodes+2];
     case {"CF","CANTILEVER"}
         fixed = [2*leftNodes+1; 2*leftNodes+2];
+    case "NONE"
+        % No standard hinge/clamp — all fixed DOFs come from extraFixedDofs.
+        fixed = [];
     otherwise
         error('Unsupported supportType "%s" for ourApproach.', string(supportType));
 end

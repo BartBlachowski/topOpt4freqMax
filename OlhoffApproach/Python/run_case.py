@@ -19,6 +19,45 @@ except ImportError:  # direct script execution fallback
 matplotlib.use("Agg")
 
 
+def _save_freq_iteration_plot(freq_iter_omega: np.ndarray, case: str, nelx: int, nely: int, out_dir: Path) -> None:
+    import pickle
+    import matplotlib.pyplot as plt
+
+    n_iter = freq_iter_omega.shape[0]
+    if n_iter < 1:
+        return
+
+    colors = [
+        (0.0000, 0.4470, 0.7410),
+        (0.8500, 0.3250, 0.0980),
+        (0.4660, 0.6740, 0.1880),
+    ]
+    x_iter = np.arange(1, n_iter + 1)
+
+    fig, ax = plt.subplots(figsize=(9, 5), facecolor="white")
+    for j in range(3):
+        ax.plot(x_iter, freq_iter_omega[:, j], "-", linewidth=1.6,
+                color=colors[j], label=f"$\\omega_{j + 1}$")
+    ax.set_xlabel("Outer iteration")
+    ax.set_ylabel("Frequency (rad/s)")
+    ax.set_title(f"Olhoff {case} frequency history", pad=8)
+    ax.grid(True)
+    ax.set_xlim(1, max(1, n_iter))
+    ax.legend(loc="best")
+    fig.tight_layout()
+
+    stem = f"Olhoff_{case}_{nelx}x{nely}_freq_iterations"
+    png_path = out_dir / f"{stem}.png"
+    pkl_path = out_dir / f"{stem}.pkl"
+
+    fig.savefig(png_path, dpi=180, bbox_inches="tight")
+    with open(pkl_path, "wb") as fh:
+        pickle.dump(fig, fh)
+    plt.close(fig)
+    print(f"Saved frequency iteration plot: {png_path}")
+    print(f"Saved frequency iteration figure (Python pickle): {pkl_path}")
+
+
 def _plot_topology(x_phys: np.ndarray, nely: int, nelx: int, omega: float, out_png: Path, title: str) -> None:
     import matplotlib.pyplot as plt
 
@@ -63,6 +102,7 @@ def run_case(
         )
 
         _plot_topology(res.xPhys_best, cfg.nely, cfg.nelx, res.omega_best, case_out / "final_plot.png", f"Olhoff {c}")
+        _save_freq_iteration_plot(res.freq_iter_omega, c, cfg.nelx, cfg.nely, case_out)
         np.savez(
             case_out / "final_design_field.npz",
             xPhys_best=res.xPhys_best,

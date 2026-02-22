@@ -40,6 +40,7 @@ diagnostics = struct();
 localEnsurePlotHelpersOnPath();
 plotLive = localParseVisualiseLive(opts.visualise_live, true);
 approachName = localApproachName(opts, 'Olhoff');
+saveFrqIterations = localParseVisualiseLive(opts.save_frq_iterations, false);
 
 % Shorthand locals (keeps the algorithm body intact)
 L          = cfg.L;
@@ -69,7 +70,15 @@ nodeNrs = reshape(1:(nelx+1)*(nely+1), nely+1, nelx+1);
 nDof    = 2*(nelx+1)*(nely+1);
 
 fixed = buildSupports(supportType,nodeNrs);
+if isfield(cfg, 'extraFixedDofs') && ~isempty(cfg.extraFixedDofs)
+    fixed = unique([fixed(:); cfg.extraFixedDofs(:)]);
+end
 free  = setdiff(1:nDof,fixed);
+
+% Passive element sets (forced density = 1 or 0).
+pasS = []; pasV = [];
+if isfield(cfg, 'pasS') && ~isempty(cfg.pasS), pasS = cfg.pasS(:); end
+if isfield(cfg, 'pasV') && ~isempty(cfg.pasV), pasV = cfg.pasV(:); end
 
 %% --- element matrices ----------------------------------------
 [Ke0, M0] = q4_rect_KeM_planeStress(E0,nu,rho0,t,dx,dy);
@@ -141,6 +150,9 @@ xmin = [1e-3*ones(nEl,1); cfg.Eb_min];
 xmax = [ones(nEl,1);  cfg.Eb_max];     % Eb upper bound raised for target ω ≈ 456 rad/s
 
 xval  = [volfrac*ones(nEl,1); cfg.Eb0];
+% Pin passive element design variables at their forced densities.
+xmin(pasS) = 1;  xmax(pasS) = 1;  xval(pasS) = 1;
+xmin(pasV) = 0;  xmax(pasV) = 0;  xval(pasV) = 0;
 xold1 = xval;
 xold2 = xval;
 low   = xmin;
@@ -157,6 +169,9 @@ move = cfg.move;
 move_hist_len = cfg.move_hist_len;  % for convergence checks
 omega_hist = [];
 dx_hist = [];
+if saveFrqIterations
+    freqIterOmega = NaN(maxiter, 3);
+end
 
 %% --- diagnostic: uniform design --------------------------------
 if opts.doDiagnostic
@@ -164,6 +179,9 @@ if opts.doDiagnostic
     x0 = volfrac*ones(nEl,1);
     xT0 = fwd(reshape(x0,nely,nelx));
     [xPhys0,~] = heavisideProjection(xT0,beta0,eta);
+    xPhys0 = xPhys0(:);
+    if ~isempty(pasS), xPhys0(pasS) = 1; end
+    if ~isempty(pasV), xPhys0(pasV) = 0; end
     [lam0,omega0,freq0] = evalModes(xPhys0,opts.diagModes);
     diagnostics.initial = struct('lam',lam0,'omega',omega0,'freq',freq0);
     fprintf('--- Diagnostic: uniform design, support=%s, vol=%.2f ---\n', upper(string(supportType)), volfrac);
@@ -206,6 +224,9 @@ for it = 1:maxiter
     xT = fwd(reshape(x,nely,nelx));
     [xPhysMat,dH] = heavisideProjection(xT,beta,eta);
     xPhys = xPhysMat(:);
+    % Enforce passive element densities (overrides projection).
+    if ~isempty(pasS), xPhys(pasS) = 1; end
+    if ~isempty(pasV), xPhys(pasV) = 0; end
 
     % --- assemble K,M
     % Standard SIMP for stiffness, linear for mass (physically correct)
@@ -264,6 +285,10 @@ for it = 1:maxiter
     prev_V_low = V_low;
 
     omega_cur = sqrt(lam_sorted(1));
+    if saveFrqIterations
+        nLog = min(3, numel(lam_sorted));
+        freqIterOmega(it,1:nLog) = sqrt(max(lam_sorted(1:nLog), 0));
+    end
 
     % --- handle beta change: re-feasibilize Eb and reset MMA history
     if beta ~= beta_prev
@@ -340,6 +365,14 @@ for it = 1:maxiter
     g_low = volfrac-mean(xPhys);
     fval(J+2) = g_low;
     dfdx(J+2,1:nEl) = -bgv(:);
+
+    % Zero gradients for passive elements so MMA does not try to move them
+    % (MMA bounds already enforce this, but zeroing avoids numerical drift).
+    if ~isempty(pasS) || ~isempty(pasV)
+        allPas = union(pasS(:), pasV(:));
+        df0(allPas)      = 0;
+        dfdx(:, allPas)  = 0;
+    end
 
     % --- MMA step
     % Ensure all arrays have exactly size n (mmasub can return different sizes)
@@ -473,6 +506,9 @@ loop_time = toc(loop_tic);
 diagnostics.iterations = iter_executed;
 diagnostics.loop_time = loop_time;
 diagnostics.t_iter = loop_time / max(iter_executed, 1);
+if saveFrqIterations
+    diagnostics.freq_iter_omega = freqIterOmega(1:iter_executed,:);
+end
 
 % --- final diagnostics on best design (use true smallest modes)
 [lam_best,omega_vec_best,freq_vec_best] = evalModes(xPhys_best,opts.diagModes);
@@ -556,7 +592,8 @@ function opts = applyDefaultOpts(opts, cfg)
         'diagnosticOnly', false, ...
         'diagModes', max(3, cfg.J), ...
         'plotBinary', false, ...
-        'visualise_live', true);
+        'visualise_live', true, ...
+        'save_frq_iterations', false);
     opts = mergeStructs(defaults, opts);
 end
 
@@ -702,8 +739,12 @@ function fixedDOFs = buildSupports(supportType, nodeNrs)
             % Alternative: corner supports (for comparison)
             fixedDOFs = [u(leftBot); v(leftBot); v(rightBot)];
 
+        case "NONE"
+            % No standard hinge/clamp — all fixed DOFs come from extraFixedDofs.
+            fixedDOFs = [];
+
         otherwise
-            error("Unknown supportType '%s'. Use CC, CS, SS, CF.", s);
+            error("Unknown supportType '%s'. Use CC, CS, SS, CF, or NONE.", s);
     end
     fixedDOFs = unique(fixedDOFs(:));
 end

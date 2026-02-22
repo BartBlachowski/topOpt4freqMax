@@ -65,9 +65,28 @@ function [x, omega, tIter, nIter, mem_usage] = run_topopt_from_json(jsonInput)
     radiusUnits = lower(reqStr(cfg, {'optimisation','filter','radius_units'}, 'optimisation.filter.radius_units'));
     filterBC = reqStr(cfg, {'optimisation','filter','boundary_condition'}, 'optimisation.filter.boundary_condition');
 
+    optimizerType = 'OC';
+    if hasFieldPath(cfg, {'optimisation','optimizer'})
+        optimizerType = upper(strtrim(reqStr(cfg, {'optimisation','optimizer'}, 'optimisation.optimizer')));
+        if ~any(strcmp(optimizerType, {'OC','MMA'}))
+            error('run_topopt_from_json:InvalidOptimizer', ...
+                'optimisation.optimizer must be "OC" or "MMA" (got "%s").', optimizerType);
+        end
+    end
+
     supports = reqStructArray(cfg, {'bc','supports'}, 'bc.supports');
+    validateSupportEntries(supports);
     [supportCode, ~, ~] = mapSupportsToCode(supports);
+    [extraFixedDofs, ~] = supportsToFixedDofs(supports, nelx, nely, L, H);
+    [pasS, pasV] = parsePassiveRegions(cfg, nelx, nely, L, H);
     tipMassFrac = parseTipMassFraction(cfg, volfrac, L, H, rho0);
+    loadCasesOur = [];
+    if hasFieldPath(cfg, {'domain','load_cases'})
+        loadCasesOur = validateLoadCases(getFieldPath(cfg, {'domain','load_cases'}), 'domain.load_cases');
+    elseif isfield(cfg, 'loads') && ~isempty(cfg.loads)
+        legacySingleCase = struct('name', 'legacy', 'factor', 1.0, 'loads', cfg.loads);
+        loadCasesOur = validateLoadCases(legacySingleCase, 'loads');
+    end
 
     % Optional visualization flags (default = keep legacy behavior).
     hasVisualise = hasFieldPath(cfg, {'optimisation','visualise_live'});
@@ -87,6 +106,14 @@ function [x, omega, tIter, nIter, mem_usage] = run_topopt_from_json(jsonInput)
         else
             saveFinalImage = false;
         end
+    end
+    saveFrqIterations = false;
+    if hasFieldPath(cfg, {'optimisation','save_frq_iterations'})
+        saveFrqIterations = parseBool(getFieldPath(cfg, {'optimisation','save_frq_iterations'}), ...
+            'optimisation.save_frq_iterations');
+    elseif hasFieldPath(cfg, {'save_frq_iterations'})
+        saveFrqIterations = parseBool(getFieldPath(cfg, {'save_frq_iterations'}), ...
+            'save_frq_iterations');
     end
 
     % Radius conversion requested by task description.
@@ -138,6 +165,7 @@ function [x, omega, tIter, nIter, mem_usage] = run_topopt_from_json(jsonInput)
     nIter = NaN;
     mem_usage = 0;
     Emin = E0 * EminRatio;
+    freqIterOmega = [];
 
     % --- Memory sampling setup (only when 5th output requested) ---
     if nargout >= 5
@@ -176,9 +204,13 @@ function [x, omega, tIter, nIter, mem_usage] = run_topopt_from_json(jsonInput)
             cfgO.rho_min = rho_min;
             cfgO.nu = nu;
             cfgO.move = move;
+            cfgO.extraFixedDofs = extraFixedDofs;
+            cfgO.pasS = pasS;
+            cfgO.pasV = pasV;
 
             optsO = struct('doDiagnostic', true, 'diagnosticOnly', false, 'diagModes', 5);
             optsO.approach_name = approach;
+            optsO.save_frq_iterations = saveFrqIterations;
             if hasVisualise
                 optsO.visualise_live = visualiseLive;
             end
@@ -195,6 +227,9 @@ function [x, omega, tIter, nIter, mem_usage] = run_topopt_from_json(jsonInput)
             end
             if isfield(diagnostics, 'iterations')
                 nIter = diagnostics.iterations;
+            end
+            if saveFrqIterations && isfield(diagnostics, 'freq_iter_omega')
+                freqIterOmega = diagnostics.freq_iter_omega;
             end
 
         case 'yuksel'
@@ -213,12 +248,16 @@ function [x, omega, tIter, nIter, mem_usage] = run_topopt_from_json(jsonInput)
             runCfg.beamH = H;
             runCfg.conv_tol = convTol;
             runCfg.approach_name = approach;
+            runCfg.save_frq_iterations = saveFrqIterations;
             if ~isempty(tipMassFrac)
                 runCfg.tipMassFrac = tipMassFrac;
             end
             if hasVisualise
                 runCfg.visualise_live = visualiseLive;
             end
+            runCfg.extraFixedDofs = extraFixedDofs;
+            runCfg.pasS = pasS;
+            runCfg.pasV = pasV;
 
             eta = 0.5;
             beta = 1.0;
@@ -283,6 +322,9 @@ function [x, omega, tIter, nIter, mem_usage] = run_topopt_from_json(jsonInput)
             if isfield(info, 'timing') && isfield(info.timing, 'total_iterations')
                 nIter = info.timing.total_iterations;
             end
+            if saveFrqIterations && isfield(info, 'freq_iter_omega')
+                freqIterOmega = info.freq_iter_omega;
+            end
 
         case 'ourapproach'
             addpath(fullfile(repoRoot, 'ourApproach', 'Matlab'));
@@ -299,11 +341,33 @@ function [x, omega, tIter, nIter, mem_usage] = run_topopt_from_json(jsonInput)
             runCfg.max_iters = maxiter;
             runCfg.supportType = supportCode;
             runCfg.approach_name = approach;
+            runCfg.save_frq_iterations = saveFrqIterations;
             if hasVisualise
                 runCfg.visualise_live = visualiseLive;
             end
+            runCfg.extraFixedDofs = extraFixedDofs;
+            runCfg.pasS = pasS;
+            runCfg.pasV = pasV;
+            if hasFieldPath(cfg, {'optimisation','harmonic_normalize'})
+                runCfg.harmonic_normalize = parseBool( ...
+                    getFieldPath(cfg, {'optimisation','harmonic_normalize'}), ...
+                    'optimisation.harmonic_normalize');
+            end
+            if ~isempty(loadCasesOur)
+                runCfg.load_cases = loadCasesOur;
+            end
+            runCfg.optimizer = optimizerType;
 
-            [xOut, fOut, tOut, itOut] = topopt_freq(nelx, nely, volfrac, penal, rmin_phys, ft, L, H, runCfg);
+            if saveFrqIterations
+                [xOut, fOut, tOut, itOut, infoOur] = topopt_freq( ...
+                    nelx, nely, volfrac, penal, rmin_phys, ft, L, H, runCfg);
+                if isstruct(infoOur) && isfield(infoOur, 'freq_iter_omega')
+                    freqIterOmega = infoOur.freq_iter_omega;
+                end
+            else
+                [xOut, fOut, tOut, itOut] = topopt_freq( ...
+                    nelx, nely, volfrac, penal, rmin_phys, ft, L, H, runCfg);
+            end
             x = xOut(:);
             omega = toVec3(2*pi*fOut(:)); % ourApproach runner reports Hz.
             tIter = tOut;
@@ -328,9 +392,78 @@ function [x, omega, tIter, nIter, mem_usage] = run_topopt_from_json(jsonInput)
     x = x(:);
     omega = toVec3(omega(:));
 
+    if saveFrqIterations
+        if ~isempty(freqIterOmega)
+            saveFrequencyIterationPlot(freqIterOmega, approach, nelx, nely, repoRoot);
+        else
+            warning('run_topopt_from_json:MissingFrequencyHistory', ...
+                'save_frq_iterations requested, but no iteration history was returned by "%s".', approach);
+        end
+    end
+
     if saveFinalImage
         saveTopologySnapshot(x, nelx, nely, approach, jsonSource, omega(1));
     end
+end
+
+function saveFrequencyIterationPlot(freqIterOmega, approachName, nelx, nely, repoRoot)
+    if isempty(freqIterOmega)
+        return;
+    end
+    if ~isnumeric(freqIterOmega)
+        warning('run_topopt_from_json:InvalidFrequencyHistoryType', ...
+            'Frequency history must be numeric to save iteration plot.');
+        return;
+    end
+
+    freqIterOmega = double(freqIterOmega);
+    nIter = size(freqIterOmega, 1);
+    if nIter < 1
+        return;
+    end
+    if size(freqIterOmega, 2) < 3
+        tmp = NaN(nIter, 3);
+        tmp(:,1:size(freqIterOmega,2)) = freqIterOmega;
+        freqIterOmega = tmp;
+    else
+        freqIterOmega = freqIterOmega(:,1:3);
+    end
+
+    resultsDir = fullfile(repoRoot, 'results');
+    if exist(resultsDir, 'dir') ~= 7
+        mkdir(resultsDir);
+    end
+
+    nameRaw = char(string(approachName));
+    nameSafe = regexprep(nameRaw, '[^\w\-]', '_');
+    outPath = fullfile(resultsDir, sprintf('%s_%dx%d_freq_iterations.png', nameSafe, nelx, nely));
+
+    fig = figure('Color', 'white', 'Visible', 'off');
+    ax = axes('Parent', fig);
+    hold(ax, 'on');
+    colors = [0.0000, 0.4470, 0.7410; ...
+              0.8500, 0.3250, 0.0980; ...
+              0.4660, 0.6740, 0.1880];
+    xIter = (1:nIter)';
+    for j = 1:3
+        plot(ax, xIter, freqIterOmega(:,j), '-', 'LineWidth', 1.6, ...
+            'Color', colors(j,:), 'DisplayName', sprintf('\\omega_%d', j));
+    end
+
+    xlabel(ax, 'Outer iteration');
+    ylabel(ax, 'Frequency (rad/s)');
+    title(ax, sprintf('%s frequency history', nameRaw), 'Interpreter', 'none');
+    grid(ax, 'on');
+    box(ax, 'on');
+    xlim(ax, [1, max(1, nIter)]);
+    legend(ax, 'Location', 'best');
+
+    exportgraphics(fig, outPath, 'Resolution', 180, 'BackgroundColor', 'white');
+    figPath = fullfile(resultsDir, sprintf('%s_%dx%d_freq_iterations.fig', nameSafe, nelx, nely));
+    savefig(fig, figPath);
+    close(fig);
+    fprintf('Saved frequency iteration plot: %s\n', outPath);
+    fprintf('Saved frequency iteration figure: %s\n', figPath);
 end
 
 function [supportCode, leftType, rightType] = mapSupportsToCode(supports)
@@ -338,11 +471,18 @@ function [supportCode, leftType, rightType] = mapSupportsToCode(supports)
     rightType = '';
     for k = 1:numel(supports)
         s = supports(k);
-        if ~isfield(s, 'type') || ~isfield(s, 'location')
-            error('run_topopt_from_json:InvalidSupportEntry', ...
-                'Each bc.supports entry must include "type" and "location".');
+        if ~isfield(s, 'type') || isempty(s.type)
+            continue;
         end
         t = lower(strtrim(char(s.type)));
+        % Only hinge/clamp with a string left/right location map to supportCode.
+        if ~any(strcmp(t, {'hinge', 'clamp'}))
+            continue;
+        end
+        if ~isfield(s, 'location') || isempty(s.location) || ...
+                (~ischar(s.location) && ~isstring(s.location))
+            continue;
+        end
         loc = lower(strtrim(char(s.location)));
         if contains(loc, 'left')
             leftType = t;
@@ -359,10 +499,13 @@ function [supportCode, leftType, rightType] = mapSupportsToCode(supports)
         supportCode = 'SS';
     elseif strcmp(leftType, 'clamp') && isempty(rightType)
         supportCode = 'CF';
+    elseif isempty(leftType) && isempty(rightType)
+        % No hinge/clamp entries — all BCs come from extraFixedDofs.
+        supportCode = 'NONE';
     else
         error('run_topopt_from_json:UnsupportedSupportCombo', ...
             ['Unsupported support combination from bc.supports. ', ...
-             'Expected clamp+clamp, clamp+hinge, hinge+hinge, or left clamp only.']);
+             'Expected clamp+clamp, clamp+hinge, hinge+hinge, left clamp only, or purely new-style entries.']);
     end
 end
 
@@ -374,9 +517,11 @@ function bcType = mapSupportCodeToYuksel(code)
             bcType = 'fixedPinned';
         case 'CF'
             bcType = 'cantilever';
+        case 'NONE'
+            bcType = 'none';  % no standard hinge/clamp — extraFixedDofs carries all BCs
         otherwise
             error('run_topopt_from_json:UnsupportedYukselBC', ...
-                'Yuksel approach supports SS/CS/CF mappings only (not "%s").', code);
+                'Yuksel approach supports SS/CS/CF/NONE mappings only (not "%s").', code);
     end
 end
 
@@ -543,12 +688,47 @@ end
 
 function a = reqStructArray(s, path, label)
     a = getFieldPath(s, path);
+    % jsondecode returns a cell array when JSON objects have different field sets.
+    % Normalize to a uniform struct array by padding missing fields with [].
+    if iscell(a)
+        a = normalizeCellOfStructs(a, label);
+    end
     if ~isstruct(a)
         error('run_topopt_from_json:MissingOrInvalidField', 'Required object-array field "%s" is missing/invalid.', label);
     end
     a = a(:);
     if isempty(a)
         error('run_topopt_from_json:MissingOrInvalidField', 'Field "%s" must contain at least one entry.', label);
+    end
+end
+
+function a = normalizeCellOfStructs(c, label)
+% Convert a cell array of structs (jsondecode output for mixed-field objects)
+% into a uniform struct array by collecting all field names and padding
+% missing fields with [].
+    if isempty(c)
+        error('run_topopt_from_json:MissingOrInvalidField', ...
+            'Field "%s" must contain at least one entry.', label);
+    end
+    allFields = {};
+    for k = 1:numel(c)
+        if ~isstruct(c{k})
+            error('run_topopt_from_json:MissingOrInvalidField', ...
+                'Each entry in "%s" must be a JSON object.', label);
+        end
+        allFields = union(allFields, fieldnames(c{k}), 'stable');
+    end
+    % Build the uniform struct array one element at a time.
+    a(numel(c), 1) = struct();
+    for k = 1:numel(c)
+        for fi = 1:numel(allFields)
+            fn = allFields{fi};
+            if isfield(c{k}, fn)
+                a(k).(fn) = c{k}.(fn);
+            else
+                a(k).(fn) = [];
+            end
+        end
     end
 end
 
@@ -662,3 +842,68 @@ if exist('plotTopology', 'file') == 2
     clear('plotTopology');
 end
 end
+
+function validateSupportEntries(supports)
+% VALIDATESUPPORTENTRIES  Type-specific validation of bc.supports entries.
+for k = 1:numel(supports)
+    s = supports(k);
+    prefix = sprintf('bc.supports[%d]', k);
+    if ~isfield(s, 'type') || isempty(s.type)
+        error('run_topopt_from_json:InvalidSupportEntry', ...
+            '%s: missing required field "type".', prefix);
+    end
+    t = lower(strtrim(char(s.type)));
+    switch t
+        case {'hinge', 'clamp'}
+            if ~isfield(s, 'location') || isempty(s.location)
+                error('run_topopt_from_json:InvalidSupportEntry', ...
+                    '%s (type=%s): missing required string field "location".', prefix, t);
+            end
+        case 'vertical_line'
+            if ~isfield(s, 'x') || isempty(s.x) || ~isnumeric(s.x) || ~isscalar(s.x)
+                error('run_topopt_from_json:InvalidSupportEntry', ...
+                    '%s (type=vertical_line): "x" must be a numeric scalar.', prefix);
+            end
+            if ~isfield(s, 'dofs') || isempty(s.dofs)
+                error('run_topopt_from_json:InvalidSupportEntry', ...
+                    '%s (type=vertical_line): missing required field "dofs".', prefix);
+            end
+            if isfield(s, 'tol') && ~isempty(s.tol)
+                if ~isnumeric(s.tol) || ~isscalar(s.tol) || s.tol <= 0
+                    error('run_topopt_from_json:InvalidSupportEntry', ...
+                        '%s (type=vertical_line): "tol" must be a positive numeric scalar.', prefix);
+                end
+            end
+        case 'horizontal_line'
+            if ~isfield(s, 'y') || isempty(s.y) || ~isnumeric(s.y) || ~isscalar(s.y)
+                error('run_topopt_from_json:InvalidSupportEntry', ...
+                    '%s (type=horizontal_line): "y" must be a numeric scalar.', prefix);
+            end
+            if ~isfield(s, 'dofs') || isempty(s.dofs)
+                error('run_topopt_from_json:InvalidSupportEntry', ...
+                    '%s (type=horizontal_line): missing required field "dofs".', prefix);
+            end
+            if isfield(s, 'tol') && ~isempty(s.tol)
+                if ~isnumeric(s.tol) || ~isscalar(s.tol) || s.tol <= 0
+                    error('run_topopt_from_json:InvalidSupportEntry', ...
+                        '%s (type=horizontal_line): "tol" must be a positive numeric scalar.', prefix);
+                end
+            end
+        case 'closest_point'
+            if ~isfield(s, 'location') || isempty(s.location) || ...
+                    ~isnumeric(s.location) || numel(s.location) ~= 2
+                error('run_topopt_from_json:InvalidSupportEntry', ...
+                    '%s (type=closest_point): "location" must be a numeric [x,y] pair.', prefix);
+            end
+            if ~isfield(s, 'dofs') || isempty(s.dofs)
+                error('run_topopt_from_json:InvalidSupportEntry', ...
+                    '%s (type=closest_point): missing required field "dofs".', prefix);
+            end
+        otherwise
+            warning('run_topopt_from_json:UnknownSupportType', ...
+                '%s: unknown support type "%s" — entry will be ignored.', prefix, t);
+    end
+end
+end
+
+% supportsToFixedDofs lives in tools/supportsToFixedDofs.m (public standalone file).

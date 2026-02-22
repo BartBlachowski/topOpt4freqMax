@@ -69,6 +69,7 @@ class OlhoffResult:
     objective_history: np.ndarray
     volume_history: np.ndarray
     grayness_history: np.ndarray
+    freq_iter_omega: np.ndarray  # shape (n_iters, 3): ω₁, ω₂, ω₃ at each iteration
     diagnostics: dict
     config: OlhoffConfig
 
@@ -319,6 +320,7 @@ def run_optimization(
     objective_hist: list[float] = []
     volume_hist: list[float] = []
     gray_hist: list[float] = []
+    omega_iter_hist: list[np.ndarray] = []  # ω₁..ω₃ per iteration
     iteration_log: list[list[float]] = []
 
     diagnostics: dict = {}
@@ -420,6 +422,10 @@ def run_optimization(
 
         prev_V_low = V_low.copy()
         omega_cur = float(np.sqrt(max(lam_sorted[0], 0.0)))
+        row3 = np.full(3, np.nan)
+        for _j in range(min(3, lam_sorted.size)):
+            row3[_j] = np.sqrt(max(lam_sorted[_j], 0.0))
+        omega_iter_hist.append(row3)
 
         if beta != beta_prev:
             Eb_feas = float(np.min(lam_sorted[: cfg.J])) / cfg.lambda_ref
@@ -671,6 +677,7 @@ def run_optimization(
         objective_history=np.asarray(objective_hist, dtype=np.float64),
         volume_history=np.asarray(volume_hist, dtype=np.float64),
         grayness_history=np.asarray(gray_hist, dtype=np.float64),
+        freq_iter_omega=np.asarray(omega_iter_hist, dtype=np.float64) if omega_iter_hist else np.empty((0, 3)),
         diagnostics=diagnostics,
         config=cfg,
     )

@@ -18,16 +18,34 @@
     },
     "thickness": 1.0,
     "mesh": {
-      "nelx": 240,
-      "nely": 30
+      "nelx": 600,
+      "nely": 75
     },
     "passive_regions": {
       "flanges": {
         "top": { "relative_height": 0.05, "is_solid": true },
         "bottom": { "relative_height": 0.05, "is_solid": true }
       }
-    }
+    },
+
+    "load_cases": [
+      {
+        "name": "case1",
+        "factor": 0.25,
+        "loads": [
+          { "type": "harmonic", "mode": 1, "update_after": 0  }
+        ]
+      }, 
+        {
+        "name": "case2",
+        "factor": 0.75,
+        "loads": [
+          { "type": "harmonic", "mode": 2, "update_after": 0  }
+        ]
+      }
+    ]
   },
+
 
   "material": {
     "model": "plane_stress_isotropic",
@@ -44,17 +62,14 @@
 
   "bc": {
     "supports": [
-		{ "type": "hinge", "location": "left_mid_height", "dofs": ["ux", "uy"] },
-		{ "type": "hinge", "location": "right_mid_height", "dofs": ["ux", "uy"] },
-    { "type": "line_horizontal", "location": "y" : 0.0, "tolerance": 1.0E-5, "dofs": ["ux", "uy"] },
-    { "type": "line_vertical",  "location": "x" : 0.0, "tolerance": 1.0E-5, "dofs": ["ux", "uy"] },
-    { "type": "line_vertical",  "location": "x" : 0.0, "tolerance": 1.0E-5, "dofs": ["ux", "uy"] }
+		{ "type": "vertical_line", "x": 0.0, "dofs": ["ux", "uy"], "tol": 1E-6 },
+        { "type": "vertical_line", "x": 8.0, "dofs": ["ux", "uy"], "tol": 1E-6 }
 	  ]
   },
 
-
   "optimisation": {
-    "approach": "Yuksel",
+    "approach": "ourApproach",
+    "optimizer": "MMA",
     "objective": "max_min_frequency",
     "interpolation": "SIMP",
     "volume_fraction": 0.5,
@@ -62,17 +77,20 @@
 
     "filter": {
       "type": "sensitivity",
-      "radius": 0.04,
+      "radius": 0.08,
       "radius_units": "physical",
       "boundary_condition": "symmetric"
     },
 
     "move_limit": 0.2,
-    "max_iters": 500,
-    "convergence_tol": 1e-3,
+    "max_iters": 200,
+    "convergence_tol": 5e-3,
     "seed": null,
     "visualise_live" : "yes",
+    "visualise_quality" : "smooth",
     "save_snapshot_image" : "no",
-    "save_final_image" : "yes"
+    "save_final_image" : "yes",
+    "save_frq_iterations" : "yes",
+    "harmonic_normalize": true
   }
 }
