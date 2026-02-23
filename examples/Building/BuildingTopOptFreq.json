@@ -34,14 +34,14 @@
     "load_cases": [
         {
         "name": "case1",
-        "factor": 0.25,
+        "factor": 1.0,
         "loads": [
           { "type": "harmonic", "mode": 1, "update_after": 0  }
         ]
       }, 
         {
         "name": "case2",
-        "factor": 0.75,
+        "factor": 0.0,
         "loads": [
           { "type": "harmonic", "mode": 2, "update_after": 0  }
         ]
@@ -79,14 +79,14 @@
 
     "filter": {
       "type": "sensitivity",
-      "radius": 3.0,
+      "radius": 2.0,
       "radius_units": "element",
       "boundary_condition": "symmetric"
     },
 
     "move_limit": 0.2,
-    "max_iters": 300,
-    "convergence_tol": 3e-3,
+    "max_iters": 500,
+    "convergence_tol": 4e-3,
     "seed": null,
     "visualise_live" : "yes",
     "visualise_quality" : "smooth",

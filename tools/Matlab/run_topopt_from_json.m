@@ -121,6 +121,23 @@ function [x, omega, tIter, nIter, mem_usage] = run_topopt_from_json(jsonInput)
             getFieldPath(cfg, {'optimisation','visualization_quality'}), ...
             'optimisation.visualization_quality');
     end
+    hasDebugSemiHarmonic = hasFieldPath(cfg, {'optimisation','debug_semi_harmonic'});
+    debugSemiHarmonic = false;
+    if hasDebugSemiHarmonic
+        debugSemiHarmonic = parseBool( ...
+            getFieldPath(cfg, {'optimisation','debug_semi_harmonic'}), ...
+            'optimisation.debug_semi_harmonic');
+    end
+    hasSemiHarmonicBaseline = hasFieldPath(cfg, {'optimisation','semi_harmonic_baseline'});
+    semiHarmonicBaseline = '';
+    if hasSemiHarmonicBaseline
+        semiHarmonicBaseline = char(string(getFieldPath(cfg, {'optimisation','semi_harmonic_baseline'})));
+    end
+    hasSemiHarmonicRhoSource = hasFieldPath(cfg, {'optimisation','semi_harmonic_rho_source'});
+    semiHarmonicRhoSource = '';
+    if hasSemiHarmonicRhoSource
+        semiHarmonicRhoSource = char(string(getFieldPath(cfg, {'optimisation','semi_harmonic_rho_source'})));
+    end
 
     % Radius conversion requested by task description.
     dx = L / nelx;
@@ -163,7 +180,8 @@ function [x, omega, tIter, nIter, mem_usage] = run_topopt_from_json(jsonInput)
     assertPositive(maxiter, 'optimisation.max_iters');
     assertPositive(convTol, 'optimisation.convergence_tol');
 
-    repoRoot = fileparts(fileparts(mfilename('fullpath')));
+    % This file lives in tools/Matlab/, so repo root is three levels up.
+    repoRoot = fileparts(fileparts(fileparts(mfilename('fullpath'))));
 
     x = [];
     omega = NaN(3,1);
@@ -361,6 +379,15 @@ function [x, omega, tIter, nIter, mem_usage] = run_topopt_from_json(jsonInput)
                 runCfg.harmonic_normalize = parseBool( ...
                     getFieldPath(cfg, {'optimisation','harmonic_normalize'}), ...
                     'optimisation.harmonic_normalize');
+            end
+            if hasDebugSemiHarmonic
+                runCfg.debug_semi_harmonic = debugSemiHarmonic;
+            end
+            if hasSemiHarmonicBaseline
+                runCfg.semi_harmonic_baseline = semiHarmonicBaseline;
+            end
+            if hasSemiHarmonicRhoSource
+                runCfg.semi_harmonic_rho_source = semiHarmonicRhoSource;
             end
             if ~isempty(loadCasesOur)
                 runCfg.load_cases = loadCasesOur;

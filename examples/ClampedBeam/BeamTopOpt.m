@@ -3,7 +3,7 @@ close all;
 
 jsonPath = 'BeamTopOptFreq.json';
 data = jsondecode(fileread(jsonPath));
-res_str="600x75";
+res_str="240x30";
 forms_str = "_forms_12_";
 
 % data.optimisation.approach = 'Olhoff';

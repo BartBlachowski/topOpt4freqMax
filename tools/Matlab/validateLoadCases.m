@@ -8,11 +8,11 @@ function loadCases = validateLoadCases(loadCasesRaw, basePath)
 %   loadCases(i).name   : char
 %   loadCases(i).factor : double scalar >= 0 (default 1.0)
 %   loadCases(i).loads  : struct array with fields:
-%       .type     : 'self_weight' | 'closest_node' | 'harmonic'
+%       .type     : 'self_weight' | 'closest_node' | 'harmonic' | 'semi_harmonic'
 %       .factor   : scalar (required for self_weight, optional otherwise; default 1)
 %       .location : 1x2 double (closest_node only)
 %       .force    : 1x2 double (closest_node only)
-%       .mode     : integer >= 1 (harmonic only)
+%       .mode     : integer >= 1 (harmonic/semi_harmonic only)
 
 if nargin < 2 || isempty(basePath)
     basePath = 'domain.load_cases';
@@ -169,10 +169,30 @@ for i = 1:nCases
                 loadsNorm(j).update_after = updateAfter;
                 loadsNorm(j).factor = loadFactor;
 
+            case 'semi_harmonic'
+                loadFactor = 1.0;
+                if isfield(ld, 'factor') && ~isempty(ld.factor)
+                    if ~isnumeric(ld.factor) || ~isscalar(ld.factor) || ~isfinite(ld.factor)
+                        error('validateLoadCases:InvalidSemiHarmonicFactor', ...
+                            '%s.factor must be a numeric scalar when provided.', loadPath);
+                    end
+                    loadFactor = double(ld.factor);
+                end
+                if ~isfield(ld, 'mode') || isempty(ld.mode)
+                    error('validateLoadCases:MissingSemiHarmonicMode', ...
+                        '%s.mode is required for semi_harmonic.', loadPath);
+                end
+                if ~isnumeric(ld.mode) || ~isscalar(ld.mode) || ~isfinite(ld.mode) || ld.mode < 1 || ld.mode ~= round(ld.mode)
+                    error('validateLoadCases:InvalidSemiHarmonicMode', ...
+                        '%s.mode must be an integer >= 1.', loadPath);
+                end
+                loadsNorm(j).mode = round(double(ld.mode));
+                loadsNorm(j).factor = loadFactor;
+
             otherwise
                 error('validateLoadCases:UnsupportedLoadType', ...
                     ['%s.type="%s" is not supported. ', ...
-                     'Supported types: self_weight, closest_node, harmonic.'], ...
+                     'Supported types: self_weight, closest_node, harmonic, semi_harmonic.'], ...
                     loadPath, loadType);
         end
     end
