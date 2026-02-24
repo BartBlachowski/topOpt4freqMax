@@ -36,14 +36,14 @@
         "name": "case1",
         "factor": 1.0,
         "loads": [
-          { "type": "harmonic", "mode": 1, "update_after": 0  }
+          { "type": "semi_harmonic", "mode": 1, "factor": 1.0   }
         ]
       }, 
         {
         "name": "case2",
         "factor": 0.0,
         "loads": [
-          { "type": "harmonic", "mode": 2, "update_after": 0  }
+          { "type": "semi_harmonic", "mode": 2, "factor": 1.0   }
         ]
       }
     ]
@@ -85,11 +85,12 @@
     },
 
     "move_limit": 0.2,
-    "max_iters": 500,
-    "convergence_tol": 4e-3,
+    "max_iters": 2000,
+    "convergence_tol": 2e-3,
     "seed": null,
     "visualise_live" : "yes",
     "visualise_quality" : "smooth",
+    "visualise_modes" : 5,
     "save_snapshot_image" : "no",
     "save_final_image" : "yes",
     "save_frq_iterations" : "yes",

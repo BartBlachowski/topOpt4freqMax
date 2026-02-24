@@ -69,7 +69,7 @@ data.optimisation.approach = 'OurApproach';
 
 
 
-data.domain.load_cases(2).loads.mode=3;
+data.domain.load_cases(2).loads.mode=4;
 forms_str = "forms_13_";
 
 

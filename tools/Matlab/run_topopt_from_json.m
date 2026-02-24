@@ -121,6 +121,15 @@ function [x, omega, tIter, nIter, mem_usage] = run_topopt_from_json(jsonInput)
             getFieldPath(cfg, {'optimisation','visualization_quality'}), ...
             'optimisation.visualization_quality');
     end
+    visualiseModes = 0;
+    if hasFieldPath(cfg, {'optimisation','visualise_modes'})
+        visualiseModes = reqInt(cfg, {'optimisation','visualise_modes'}, ...
+            'optimisation.visualise_modes');
+        if visualiseModes < 0
+            error('run_topopt_from_json:InvalidVisualiseModes', ...
+                'optimisation.visualise_modes must be >= 0.');
+        end
+    end
     hasDebugSemiHarmonic = hasFieldPath(cfg, {'optimisation','debug_semi_harmonic'});
     debugSemiHarmonic = false;
     if hasDebugSemiHarmonic
@@ -190,6 +199,21 @@ function [x, omega, tIter, nIter, mem_usage] = run_topopt_from_json(jsonInput)
     mem_usage = 0;
     Emin = E0 * EminRatio;
     freqIterOmega = [];
+
+    % Optional: visualise initial reference modes before optimization starts.
+    % Done here (before memory/performance instrumentation) to keep metrics unchanged.
+    if visualiseModes > 0
+        try
+            saveReferenceModeVisualizations( ...
+                jsonSource, visualiseModes, ...
+                L, H, nelx, nely, thickness, ...
+                E0, Emin, nu, rho0, rho_min, volfrac, penal, ...
+                supportCode, extraFixedDofs);
+        catch modeErr
+            warning('run_topopt_from_json:ModeVisualisationFailed', ...
+                'Initial mode visualization failed: %s', modeErr.message);
+        end
+    end
 
     % --- Memory sampling setup (only when 5th output requested) ---
     if nargout >= 5
@@ -696,6 +720,312 @@ function saveTopologySnapshot(x, nelx, nely, approachName, jsonSource, omega1, v
 
     close(fig);
     fprintf('Saved topology image: %s  (.png / .fig)\n', baseName);
+end
+
+function saveReferenceModeVisualizations( ...
+    jsonSource, nModes, ...
+    L, H, nelx, nely, thickness, ...
+    E0, Emin, nu, rho0, rho_min, volfrac, penal, ...
+    supportCode, extraFixedDofs)
+% Save lowest reference-domain eigenmodes before topology optimization.
+% Reference design is uniform x = volfrac for consistency across approaches.
+    if nModes <= 0
+        return;
+    end
+
+    [outFolder, jsonBaseName] = localResolveModeOutputTarget(jsonSource);
+    [omegaVals, modeShapes, free, ndof] = localSolveReferenceModes( ...
+        nModes, L, H, nelx, nely, thickness, ...
+        E0, Emin, nu, rho0, rho_min, volfrac, penal, ...
+        supportCode, extraFixedDofs);
+
+    nAvail = min(nModes, numel(omegaVals));
+    if nAvail < nModes
+        warning('run_topopt_from_json:ModeVisualisationTruncated', ...
+            'Requested %d modes, but only %d could be computed.', nModes, nAvail);
+    end
+    for i = 1:nAvail
+        modeFull = zeros(ndof, 1);
+        modeFull(free) = modeShapes(:, i);
+        localSaveSingleModePlot( ...
+            modeFull, L, H, nelx, nely, ...
+            omegaVals(i), i, outFolder, jsonBaseName);
+    end
+end
+
+function [outFolder, jsonBaseName] = localResolveModeOutputTarget(jsonSource)
+    if nargin < 1 || isempty(jsonSource)
+        outFolder = pwd;
+        jsonBaseName = 'topopt_config';
+        return;
+    end
+
+    [outFolder, jsonBaseName, ~] = fileparts(char(jsonSource));
+    if isempty(outFolder)
+        outFolder = pwd;
+    end
+    if isempty(jsonBaseName)
+        jsonBaseName = 'topopt_config';
+    end
+end
+
+function [omegaVals, modeShapes, free, ndof] = localSolveReferenceModes( ...
+    nModes, L, H, nelx, nely, thickness, ...
+    E0, Emin, nu, rho0, rho_min, volfrac, penal, ...
+    supportCode, extraFixedDofs)
+    nEl = nelx * nely;
+    nNode = (nelx + 1) * (nely + 1);
+    ndof = 2 * nNode;
+
+    [KE, ME] = localQ4ElementMatrices(L / nelx, H / nely, nu, thickness);
+    [iK, jK] = localBuildQ4AssemblyIndices(nelx, nely);
+
+    % Uniform reference field across all methods (no topology pattern).
+    xRef = max(0, min(1, volfrac));
+    Ee = Emin + xRef^penal * (E0 - Emin);
+    rhoRef = rho_min + xRef * (rho0 - rho_min);
+
+    sK = reshape(KE(:) * (Ee * ones(1, nEl)), [], 1);
+    sM = reshape(ME(:) * (rhoRef * ones(1, nEl)), [], 1);
+    K = sparse(iK, jK, sK, ndof, ndof);
+    M = sparse(iK, jK, sM, ndof, ndof);
+    K = (K + K') / 2;
+    M = (M + M') / 2;
+
+    fixed = localBuildFixedDofsFromSupportCode(supportCode, nelx, nely);
+    if ~isempty(extraFixedDofs)
+        fixed = unique([fixed(:); double(extraFixedDofs(:))]);
+    end
+    fixed = unique(fixed(:));
+    fixed = fixed(fixed >= 1 & fixed <= ndof);
+
+    free = setdiff((1:ndof)', fixed);
+    if isempty(free)
+        error('run_topopt_from_json:NoFreeDofsForModes', ...
+            'No free DOFs available for initial mode visualization.');
+    end
+
+    nReq = min(max(1, round(double(nModes))), numel(free));
+    if numel(free) > 1
+        % eigs requires k < n, and dense full eig is too expensive for large meshes.
+        nReq = min(nReq, numel(free) - 1);
+    end
+    [omegaVals, modeShapes] = localSolveLowestModes(K(free, free), M(free, free), nReq);
+end
+
+function [iK, jK] = localBuildQ4AssemblyIndices(nelx, nely)
+    nEl = nelx * nely;
+    edofMat = zeros(nEl, 8);
+    for elx = 0:nelx-1
+        for ely = 0:nely-1
+            el = ely + elx * nely + 1;
+            n1 = (nely + 1) * elx + ely;      % LL (0-based)
+            n2 = (nely + 1) * (elx + 1) + ely;  % LR
+            n3 = n2 + 1;                        % UR
+            n4 = n1 + 1;                        % UL
+            edofMat(el, :) = [2*n1+1, 2*n1+2, ...
+                              2*n2+1, 2*n2+2, ...
+                              2*n3+1, 2*n3+2, ...
+                              2*n4+1, 2*n4+2];
+        end
+    end
+    iK = reshape(kron(edofMat, ones(1, 8))', [], 1);
+    jK = reshape(kron(edofMat, ones(8, 1))', [], 1);
+end
+
+function [KE, ME] = localQ4ElementMatrices(hx, hy, nu, thickness)
+    if nargin < 4 || isempty(thickness)
+        thickness = 1.0;
+    end
+
+    D = (1 / (1 - nu^2)) * [1, nu, 0; nu, 1, 0; 0, 0, 0.5 * (1 - nu)];
+    invJ = [2 / hx, 0; 0, 2 / hy];
+    detJ = 0.25 * hx * hy;
+    gp = 1 / sqrt(3);
+    gaussPts = [-gp, gp];
+
+    KE = zeros(8, 8);
+    for xi = gaussPts
+        for eta = gaussPts
+            dN_dxi = 0.25 * [-(1-eta), (1-eta), (1+eta), -(1+eta)];
+            dN_deta = 0.25 * [-(1-xi), -(1+xi), (1+xi), (1-xi)];
+            dN_xy = invJ * [dN_dxi; dN_deta];
+            dN_dx = dN_xy(1, :);
+            dN_dy = dN_xy(2, :);
+
+            B = zeros(3, 8);
+            B(1, 1:2:end) = dN_dx;
+            B(2, 2:2:end) = dN_dy;
+            B(3, 1:2:end) = dN_dy;
+            B(3, 2:2:end) = dN_dx;
+            KE = KE + (B' * D * B) * detJ;
+        end
+    end
+    KE = thickness * KE;
+
+    area = hx * hy;
+    Ms = (area / 36) * [4, 2, 1, 2; ...
+                        2, 4, 2, 1; ...
+                        1, 2, 4, 2; ...
+                        2, 1, 2, 4];
+    ME = thickness * kron(Ms, eye(2));
+end
+
+function fixed = localBuildFixedDofsFromSupportCode(supportCode, nelx, nely)
+    jMid = round(nely / 2);  % 0-based mid-height node index
+    nL = jMid;
+    nR = nelx * (nely + 1) + jMid;
+    leftNodes = (0:nely)';
+    rightNodes = nelx * (nely + 1) + (0:nely)';
+
+    switch upper(string(supportCode))
+        case "SS"
+            fixed = [2*nL+1; 2*nL+2; 2*nR+1; 2*nR+2];
+        case "CS"
+            fixed = [2*leftNodes+1; 2*leftNodes+2; 2*nR+1; 2*nR+2];
+        case "CC"
+            fixed = [2*leftNodes+1; 2*leftNodes+2; ...
+                     2*rightNodes+1; 2*rightNodes+2];
+        case {"CF", "CANTILEVER"}
+            fixed = [2*leftNodes+1; 2*leftNodes+2];
+        case "NONE"
+            fixed = zeros(0, 1);
+        otherwise
+            error('run_topopt_from_json:UnsupportedSupportCombo', ...
+                'Unsupported support code "%s" for mode visualization.', string(supportCode));
+    end
+    fixed = unique(double(fixed(:)));
+end
+
+function [omegaVals, modeShapes] = localSolveLowestModes(Kff, Mff, nReq)
+    nFree = size(Kff, 1);
+    nReq = min(nReq, nFree);
+    if nReq < 1
+        error('run_topopt_from_json:NoRequestedModes', ...
+            'Requested mode count must be >= 1.');
+    end
+
+    if nReq >= nFree
+        [modeShapes, dVec] = eig(full(Kff), full(Mff), 'vector');
+    else
+        eigOpts = localReferenceModeEigOptions();
+        try
+            [modeShapes, D] = eigs(Kff, Mff, nReq, 'smallestabs', eigOpts);
+        catch
+            try
+                [modeShapes, D] = eigs(Kff, Mff, nReq, 'sm', eigOpts);
+            catch
+                [modeShapes, D] = eigs(Kff, Mff, nReq, 'SM', eigOpts);
+            end
+        end
+        dVec = diag(D);
+    end
+
+    lam = real(dVec(:));
+    if isempty(lam) || ~any(isfinite(lam))
+        error('run_topopt_from_json:ModeSolveFailed', ...
+            'Unable to compute finite eigenvalues for mode visualization.');
+    end
+    [lamSorted, ord] = sort(lam, 'ascend');
+    finiteMask = isfinite(lamSorted);
+    ord = ord(finiteMask);
+    lamSorted = lamSorted(finiteMask);
+    keep = min(nReq, numel(ord));
+    ord = ord(1:keep);
+    lam = lamSorted(1:keep);
+    modeShapes = real(modeShapes(:, ord));
+    lam = max(lam, 0);
+    omegaVals = sqrt(lam);
+
+    % Keep deterministic sign orientation for plotting.
+    for k = 1:size(modeShapes, 2)
+        phi = modeShapes(:, k);
+        [~, idx] = max(abs(phi));
+        if ~isempty(idx) && phi(idx) < 0
+            modeShapes(:, k) = -phi;
+        end
+    end
+end
+
+function opts = localReferenceModeEigOptions()
+    % For matrix inputs, eigs ignores function-handle-only flags like issym/isreal.
+    opts = struct('tol', 1e-8, 'maxit', 800, 'disp', 0);
+end
+
+function localSaveSingleModePlot( ...
+    modeFull, L, H, nelx, nely, omegaVal, modeIdx, outFolder, jsonBaseName)
+    nNodes = (nelx + 1) * (nely + 1);
+    if numel(modeFull) ~= 2 * nNodes
+        error('run_topopt_from_json:InvalidModeVector', ...
+            'Mode vector length does not match mesh DOF count.');
+    end
+
+    xGrid = repmat((0:nelx) * (L / nelx), nely + 1, 1);
+    yGrid = repmat((0:nely)' * (H / nely), 1, nelx + 1);
+    ux = reshape(modeFull(1:2:end), nely + 1, nelx + 1);
+    uy = reshape(modeFull(2:2:end), nely + 1, nelx + 1);
+
+    maxDisp = max(hypot(ux(:), uy(:)));
+    targetDisp = 0.075 * max(L, H);  % target: 7.5% of domain size
+    if isfinite(maxDisp) && maxDisp > 0
+        scale = targetDisp / maxDisp;
+    else
+        scale = 1.0;
+    end
+
+    xDef = xGrid + scale * ux;
+    yDef = yGrid + scale * uy;
+
+    fig = figure('Color', 'white', 'Visible', 'off');
+    ax = axes('Parent', fig);
+    hold(ax, 'on');
+
+    % Undeformed domain outline in very light gray.
+    plot(ax, [0, L, L, 0, 0], [0, 0, H, H, 0], '-', ...
+        'Color', [0.92, 0.92, 0.92], 'LineWidth', 1.5);
+
+    [rowIdx, colIdx] = localModePlotLineIndices(nely, nelx);
+    for r = rowIdx
+        plot(ax, xDef(r, :), yDef(r, :), '-', ...
+            'Color', [0.05, 0.32, 0.68], 'LineWidth', 0.7);
+    end
+    for c = colIdx
+        plot(ax, xDef(:, c), yDef(:, c), '-', ...
+            'Color', [0.05, 0.32, 0.68], 'LineWidth', 0.7);
+    end
+
+    axis(ax, 'equal');
+    xMin = min([0; xDef(:)]);
+    xMax = max([L; xDef(:)]);
+    yMin = min([0; yDef(:)]);
+    yMax = max([H; yDef(:)]);
+    pad = 0.03 * max([L, H, eps]);
+    xlim(ax, [xMin - pad, xMax + pad]);
+    ylim(ax, [yMin - pad, yMax + pad]);
+    set(ax, 'YDir', 'normal', 'XTick', [], 'YTick', []);
+    box(ax, 'on');
+
+    title(ax, sprintf('%s | Mode %d | \\omega = %.3f rad/s | f = %.3f Hz', ...
+        jsonBaseName, modeIdx, omegaVal, omegaVal / (2*pi)), ...
+        'Interpreter', 'tex', 'FontSize', 10);
+
+    outPath = fullfile(outFolder, sprintf('%s_mode_%d.png', jsonBaseName, modeIdx));
+    exportgraphics(fig, outPath, 'Resolution', 180, 'BackgroundColor', 'white');
+    close(fig);
+    fprintf('Saved mode shape image: %s\n', outPath);
+end
+
+function [rowIdx, colIdx] = localModePlotLineIndices(nely, nelx)
+    maxLinesPerDirection = 120;
+    rowStride = max(1, ceil((nely + 1) / maxLinesPerDirection));
+    colStride = max(1, ceil((nelx + 1) / maxLinesPerDirection));
+    % Keep one common stride so visible cells preserve mesh aspect ratio.
+    % For square elements (e.g. 8x1 with 400x50), this avoids stretched cells.
+    commonStride = max(rowStride, colStride);
+    rowStride = commonStride;
+    colStride = commonStride;
+    rowIdx = unique([1:rowStride:(nely + 1), nely + 1]);
+    colIdx = unique([1:colStride:(nelx + 1), nelx + 1]);
 end
 
 function ensureCompatHelpersOnPath()

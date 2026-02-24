@@ -18,8 +18,8 @@
     },
     "thickness": 1.0,
     "mesh": {
-      "nelx": 240,
-      "nely": 30
+      "nelx": 400,
+      "nely": 50
     },
     
 
@@ -57,8 +57,8 @@
 
   "bc": {
     "supports": [
-		{ "type": "closest_point", "location": [0.0, 0.5], "dofs": ["ux", "uy"] },
-        { "type": "closest_point", "location": [8.0, 0.5], "dofs": ["ux", "uy"] }
+		{ "type": "vertical_line", "x": 0.0, "dofs": ["ux", "uy"], "tol": 1E-6 },
+        { "type": "vertical_line", "x": 8.0, "dofs": ["ux", "uy"], "tol": 1E-6 }
     ]
   },
 
@@ -82,11 +82,12 @@
     },
 
     "move_limit": 0.2,
-    "max_iters": 500,
-    "convergence_tol": 4e-3,
+    "max_iters": 2000,
+    "convergence_tol": 1e-3,
     "seed": null,
     "visualise_live" : "yes",
     "visualise_quality" : "smooth",
+    "visualise_modes" : 5,
     "save_snapshot_image" : "no",
     "save_final_image" : "yes",
     "save_frq_iterations" : "yes",
