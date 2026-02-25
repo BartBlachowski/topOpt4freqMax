@@ -13,37 +13,29 @@
   "domain": {
     "shape": "rectangular",
     "size": {
-      "length": 5.0,
-      "height": 15.0
+      "length": 8.0,
+      "height": 1.0
     },
     "thickness": 1.0,
     "mesh": {
-      "nelx": 80,
-      "nely": 240
+      "nelx": 400,
+      "nely": 50
     },
-    "passive_regions": {
-      "rect": [
-            { "x0": [0.0, 0.0], "size":  [0.1, 15.0], "is_solid": true },
-            { "x0": [4.9, 0.0], "size":  [0.1, 15.0], "is_solid": true },
-            { "x0": [0.0, 4.9], "size":  [5.0,  0.1], "is_solid": true },
-            { "x0": [0.0, 9.9], "size":  [5.0,  0.1], "is_solid": true },
-            { "x0": [0.0, 14.9], "size": [5.0,  0.1], "is_solid": true }
-        ]
-    },
+    
 
     "load_cases": [
-        {
+      {
         "name": "case1",
         "factor": 1.0,
         "loads": [
-          { "type": "semi_harmonic", "mode": 1, "factor": 1.0   }
+          { "type": "semi_harmonic", "mode": 1, "factor": 1.0 }
         ]
       }, 
         {
         "name": "case2",
         "factor": 0.0,
         "loads": [
-          { "type": "semi_harmonic", "mode": 2, "factor": 1.0   }
+          { "type": "semi_harmonic", "mode": 2, "factor": 1.0 }
         ]
       }
     ]
@@ -65,17 +57,22 @@
 
   "bc": {
     "supports": [
-		{ "type": "horizontal_line", "y": 0.0, "dofs": ["ux", "uy"], "tol": 1E-6 }
-	  ]
+		{ "type": "vertical_line", "x": 0.0, "dofs": ["ux", "uy"], "tol": 1E-6 },
+        { "type": "closest_point", "location": [8.0, 0.5], "dofs": ["ux", "uy"] }
+    ]
   },
 
   "optimisation": {
     "approach": "ourApproach",
     "optimizer": "MMA",
-    "objective": "max_min_frequency",
+    "objective": "compliance",
     "interpolation": "SIMP",
-    "volume_fraction": 0.3,
+    "volume_fraction": 0.5,
     "penalization": 3.0,
+
+     "debug_semi_harmonic": true,
+     "semi_harmonic_baseline": "solid",
+     "semi_harmonic_rho_source": "x",
 
     "filter": {
       "type": "sensitivity",
@@ -86,7 +83,7 @@
 
     "move_limit": 0.2,
     "max_iters": 2000,
-    "convergence_tol": 2e-3,
+    "convergence_tol": 1e-3,
     "seed": null,
     "visualise_live" : "yes",
     "visualise_quality" : "smooth",

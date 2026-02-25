@@ -62,3 +62,10 @@ codegen/
 *.npz
 *.txt
 .DS_Store
+*.bbl
+*.aux
+*.blg
+*.log
+*.dvi
+*.spl
+*.bbl

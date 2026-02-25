@@ -499,7 +499,9 @@ for it = 1:maxiter
         it,beta,omega_cur,mean(xPhys),grayness,frac_gray,bins_low,bins_mid,bins_high,g_up,g_low,max(fval),max_g_eig)
 
     if plotLive
-        titleStr = formatTopologyTitle(approachName, volfrac, omega_cur);
+        omega2_cur = NaN;
+        if numel(lam_sorted) >= 2, omega2_cur = sqrt(max(lam_sorted(2), 0)); end
+        titleStr = formatTopologyTitle(approachName, volfrac, omega_cur, omega2_cur);
         plotTopology(xPhys, nelx, nely, titleStr, true, 'regular', false);
     end
 end
@@ -515,9 +517,11 @@ end
 [lam_best,omega_vec_best,freq_vec_best] = evalModes(xPhys_best,opts.diagModes);
 omega_best = omega_vec_best(1);
 diagnostics.final = struct('lam',lam_best,'omega',omega_vec_best,'freq',freq_vec_best);
+omega2_best = NaN;
+if numel(omega_vec_best) >= 2, omega2_best = omega_vec_best(2); end
 plotTopology( ...
     xPhys_best, nelx, nely, ...
-    formatTopologyTitle(approachName, volfrac, omega_best), ...
+    formatTopologyTitle(approachName, volfrac, omega_best, omega2_best), ...
     plotLive, visualizationQuality, true);
 
 fprintf('\nBest design: omega1 = %.4f rad/s (%.4f Hz)\n',omega_best,omega_best/(2*pi))

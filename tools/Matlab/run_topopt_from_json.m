@@ -462,7 +462,9 @@ function [x, omega, tIter, nIter, mem_usage] = run_topopt_from_json(jsonInput)
     end
 
     if saveFinalImage
-        saveTopologySnapshot(x, nelx, nely, approach, jsonSource, omega(1), visualizationQuality);
+        omega2snap = NaN;
+        if numel(omega) >= 2, omega2snap = omega(2); end
+        saveTopologySnapshot(x, nelx, nely, approach, jsonSource, omega(1), visualizationQuality, omega2snap);
     end
 end
 
@@ -668,7 +670,7 @@ function tipMassFrac = parseTipMassFraction(cfg, volfrac, L, H, rho0)
     end
 end
 
-function saveTopologySnapshot(x, nelx, nely, approachName, jsonSource, omega1, visualizationQuality)
+function saveTopologySnapshot(x, nelx, nely, approachName, jsonSource, omega1, visualizationQuality, omega2)
     if nargin < 5 || isempty(jsonSource)
         folder = pwd;
     else
@@ -685,6 +687,9 @@ function saveTopologySnapshot(x, nelx, nely, approachName, jsonSource, omega1, v
     end
     if nargin < 7
         visualizationQuality = 'regular';
+    end
+    if nargin < 8 || isempty(omega2) || ~isscalar(omega2) || ~isfinite(omega2)
+        omega2 = NaN;
     end
 
     nameRaw  = char(string(approachName));
@@ -705,6 +710,10 @@ function saveTopologySnapshot(x, nelx, nely, approachName, jsonSource, omega1, v
     if isfinite(omega1)
         titleStr = sprintf('%s  |  %dx%d  |  \\omega_1 = %.2f rad/s  (%.3f Hz)', ...
             nameRaw, nelx, nely, omega1, omega1 / (2*pi));
+        if isfinite(omega2)
+            titleStr = sprintf('%s  |  \\omega_2 = %.2f rad/s  (%.3f Hz)', ...
+                titleStr, omega2, omega2 / (2*pi));
+        end
     else
         titleStr = sprintf('%s  |  %dx%d', nameRaw, nelx, nely);
     end
