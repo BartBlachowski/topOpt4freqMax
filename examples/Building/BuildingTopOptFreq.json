@@ -18,8 +18,8 @@
     },
     "thickness": 1.0,
     "mesh": {
-      "nelx": 50,
-      "nely": 150
+      "nelx": 100,
+      "nely": 300
     },
     "passive_regions": {
       "rect": [
