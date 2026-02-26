@@ -18,8 +18,8 @@
     },
     "thickness": 1.0,
     "mesh": {
-      "nelx": 400,
-      "nely": 50
+      "nelx": 240,
+      "nely": 30
     },
     
 
@@ -28,14 +28,7 @@
         "name": "case1",
         "factor": 1.0,
         "loads": [
-          { "type": "semi_harmonic", "mode": 1, "factor": 1.0 }
-        ]
-      }, 
-        {
-        "name": "case2",
-        "factor": 0.0,
-        "loads": [
-          { "type": "semi_harmonic", "mode": 2, "factor": 1.0 }
+          { "type": "semi_harmonic", "mode": 2, "factor": -1.0 }
         ]
       }
     ]

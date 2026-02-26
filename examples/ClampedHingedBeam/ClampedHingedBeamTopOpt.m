@@ -1,9 +1,9 @@
 clear; clc;
 close all;
 
-jsonPath = 'BeamTopOptFreq.json';
+jsonPath = 'ClampedHingedBeamTopOptFreq.json';
 data = jsondecode(fileread(jsonPath));
-res_str="400x50";
+res_str="240x30";
 forms_str = "_forms_12_";
 
 % data.optimisation.approach = 'Olhoff';
@@ -13,7 +13,7 @@ forms_str = "_forms_12_";
 % [x2, omega2, tIter2, nIter2, mem2] = run_topopt_from_json(data);
 
 data.domain.load_cases(1).factor=1.0;
-data.domain.load_cases(2).factor=0.0;
+%data.domain.load_cases(2).factor=0.0;
 
 data.optimisation.approach = 'OurApproach';
 [x3, omega3, tIter3, nIter3, mem3] = run_topopt_from_json(data);
