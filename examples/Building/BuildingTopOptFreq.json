@@ -18,8 +18,8 @@
     },
     "thickness": 1.0,
     "mesh": {
-      "nelx": 80,
-      "nely": 240
+      "nelx": 50,
+      "nely": 150
     },
     "passive_regions": {
       "rect": [
@@ -86,11 +86,12 @@
 
     "move_limit": 0.2,
     "max_iters": 2000,
-    "convergence_tol": 2e-3,
+    "convergence_tol": 3e-3,
     "seed": null,
     "visualise_live" : "yes",
     "visualise_quality" : "smooth",
     "visualise_modes" : 5,
+    "visualise_topology_modes" : 5,
     "save_snapshot_image" : "no",
     "save_final_image" : "yes",
     "save_frq_iterations" : "yes",

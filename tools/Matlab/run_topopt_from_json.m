@@ -130,6 +130,15 @@ function [x, omega, tIter, nIter, mem_usage] = run_topopt_from_json(jsonInput)
                 'optimisation.visualise_modes must be >= 0.');
         end
     end
+    visualiseTopologyModes = 0;
+    if hasFieldPath(cfg, {'optimisation','visualise_topology_modes'})
+        visualiseTopologyModes = reqInt(cfg, {'optimisation','visualise_topology_modes'}, ...
+            'optimisation.visualise_topology_modes');
+        if visualiseTopologyModes < 0
+            error('run_topopt_from_json:InvalidVisualiseTopologyModes', ...
+                'optimisation.visualise_topology_modes must be >= 0.');
+        end
+    end
     hasDebugSemiHarmonic = hasFieldPath(cfg, {'optimisation','debug_semi_harmonic'});
     debugSemiHarmonic = false;
     if hasDebugSemiHarmonic
@@ -466,6 +475,19 @@ function [x, omega, tIter, nIter, mem_usage] = run_topopt_from_json(jsonInput)
         if numel(omega) >= 2, omega2snap = omega(2); end
         saveTopologySnapshot(x, nelx, nely, approach, jsonSource, omega(1), visualizationQuality, omega2snap);
     end
+
+    if visualiseTopologyModes > 0
+        try
+            saveTopologyModeVisualizations( ...
+                jsonSource, x, visualiseTopologyModes, ...
+                L, H, nelx, nely, thickness, ...
+                E0, Emin, nu, rho0, rho_min, penal, ...
+                supportCode, extraFixedDofs);
+        catch modeErr
+            warning('run_topopt_from_json:TopologyModeVisualisationFailed', ...
+                'Topology mode visualization failed: %s', modeErr.message);
+        end
+    end
 end
 
 function saveFrequencyIterationPlot(freqIterOmega, approachName, nelx, nely, repoRoot)
@@ -760,6 +782,189 @@ function saveReferenceModeVisualizations( ...
             modeFull, L, H, nelx, nely, ...
             omegaVals(i), i, outFolder, jsonBaseName);
     end
+end
+
+function saveTopologyModeVisualizations( ...
+    jsonSource, xDens, nModes, ...
+    L, H, nelx, nely, thickness, ...
+    E0, Emin, nu, rho0, rho_min, penal, ...
+    supportCode, extraFixedDofs)
+% Save lowest eigenmodes of the final optimised topology.
+% Uses element-wise SIMP interpolation with the actual density field xDens.
+    if nModes <= 0
+        return;
+    end
+
+    [outFolder, jsonBaseName] = localResolveModeOutputTarget(jsonSource);
+    [omegaVals, modeShapes, free, ndof] = localSolveTopologyModes( ...
+        xDens, nModes, L, H, nelx, nely, thickness, ...
+        E0, Emin, nu, rho0, rho_min, penal, ...
+        supportCode, extraFixedDofs);
+
+    nAvail = min(nModes, numel(omegaVals));
+    if nAvail < nModes
+        warning('run_topopt_from_json:TopologyModeVisualisationTruncated', ...
+            'Requested %d topology modes, but only %d could be computed.', nModes, nAvail);
+    end
+    for i = 1:nAvail
+        modeFull = zeros(ndof, 1);
+        modeFull(free) = modeShapes(:, i);
+        localSaveTopologyModePlot( ...
+            xDens, modeFull, L, H, nelx, nely, ...
+            omegaVals, i, outFolder, jsonBaseName);  % full omega vector for title
+    end
+end
+
+function [omegaVals, modeShapes, free, ndof] = localSolveTopologyModes( ...
+    xDens, nModes, L, H, nelx, nely, thickness, ...
+    E0, Emin, nu, rho0, rho_min, penal, ...
+    supportCode, extraFixedDofs)
+% Solve generalised eigenvalue problem K*phi = lambda*M*phi for optimised topology.
+    nEl = nelx * nely;
+    nNode = (nelx + 1) * (nely + 1);
+    ndof = 2 * nNode;
+
+    [KE, ME] = localQ4ElementMatrices(L / nelx, H / nely, nu, thickness);
+    [iK, jK] = localBuildQ4AssemblyIndices(nelx, nely);
+
+    xEl = max(0, min(1, xDens(:)));  % ensure [0,1]
+    Ee = Emin + (xEl .^ penal) * (E0 - Emin);
+    rhoEl = rho_min + xEl * (rho0 - rho_min);
+
+    sK = reshape(KE(:) * Ee', [], 1);
+    sM = reshape(ME(:) * rhoEl', [], 1);
+    K = sparse(iK, jK, sK, ndof, ndof);
+    M = sparse(iK, jK, sM, ndof, ndof);
+    K = (K + K') / 2;
+    M = (M + M') / 2;
+
+    fixed = localBuildFixedDofsFromSupportCode(supportCode, nelx, nely);
+    if ~isempty(extraFixedDofs)
+        fixed = unique([fixed(:); double(extraFixedDofs(:))]);
+    end
+    fixed = unique(fixed(:));
+    fixed = fixed(fixed >= 1 & fixed <= ndof);
+
+    free = setdiff((1:ndof)', fixed);
+    if isempty(free)
+        error('run_topopt_from_json:NoFreeDofsForTopologyModes', ...
+            'No free DOFs available for topology mode visualization.');
+    end
+
+    nReq = min(max(1, round(double(nModes))), numel(free));
+    if numel(free) > 1
+        nReq = min(nReq, numel(free) - 1);
+    end
+    [omegaVals, modeShapes] = localSolveLowestModes(K(free, free), M(free, free), nReq);
+end
+
+function localSaveTopologyModePlot( ...
+    xDens, modeFull, L, H, nelx, nely, omegaAll, modeIdx, outFolder, jsonBaseName)
+% Plot optimized topology (light gray, undeformed) overlaid with the
+% deformed eigenmode in transparent light blue — solid elements only.
+% omegaAll: full vector of computed omega values; title shows omega1 & omega2.
+    nNodes = (nelx + 1) * (nely + 1);
+    if numel(modeFull) ~= 2 * nNodes
+        error('run_topopt_from_json:InvalidTopologyModeVector', ...
+            'Mode vector length does not match mesh DOF count.');
+    end
+
+    dx = L / nelx;
+    dy = H / nely;
+
+    % --- Topology background (undeformed, light gray via direct RGB) ---
+    densEl  = reshape(xDens(:), nely, nelx);      % (nely x nelx), row1=bottom
+    grayVal = 1.0 - densEl * 0.45;                % void→1.0 white, solid→0.55 gray
+    rgbImg  = repmat(grayVal, [1, 1, 3]);          % (nely x nelx x 3)
+    xCenters = ((0:nelx-1) + 0.5) * dx;
+    yCenters = ((0:nely-1) + 0.5) * dy;
+
+    % --- Full Q4 element connectivity (matches xDens column-major order) ---
+    % Element el (1-based): ely = mod(el-1,nely), elx = floor((el-1)/nely)
+    [ELX_g, ELY_g] = meshgrid(0:nelx-1, 0:nely-1);  % (nely x nelx), ely varies first
+    ELX = ELX_g(:);  ELY = ELY_g(:);
+    n1 = ELY + ELX    *(nely+1) + 1;   % LL
+    n2 = ELY + (ELX+1)*(nely+1) + 1;   % LR
+    n3 = n2 + 1;                         % UR
+    n4 = n1 + 1;                         % UL
+    allFaces = [n1, n2, n3, n4];         % nEl x 4
+
+    % --- Solid element mask (threshold 0.5) ---
+    rho_plot_thresh = 0.5;
+    solidElem  = (xDens(:) >= rho_plot_thresh);
+    solidFaces = allFaces(solidElem, :);    % nSolid x 4
+    solidNodes = unique(solidFaces(:));     % node indices touching solid elements
+
+    % --- Undeformed nodal coordinates (flat vectors) ---
+    xGrid = repmat((0:nelx) * dx, nely+1, 1);
+    yGrid = repmat((0:nely)' * dy, 1, nelx+1);
+    X = xGrid(:);
+    Y = yGrid(:);
+
+    % --- Eigenmode: normalise using solid nodes only ---
+    ux = reshape(modeFull(1:2:end), nely+1, nelx+1);
+    uy = reshape(modeFull(2:2:end), nely+1, nelx+1);
+    ux = ux(:);  uy = uy(:);
+    umax = max(hypot(ux(solidNodes), uy(solidNodes)));
+    if isfinite(umax) && umax > 0
+        uxN = ux / umax;
+        uyN = uy / umax;
+    else
+        uxN = ux;
+        uyN = uy;
+    end
+
+    % --- Scale from solid-region spatial extent ---
+    Lsolid = max(X(solidNodes)) - min(X(solidNodes));
+    Hsolid = max(Y(solidNodes)) - min(Y(solidNodes));
+    scale  = 0.05 * max(max(Lsolid, Hsolid), eps);
+
+    % --- Deformed vertices (only solid nodes displaced) ---
+    V0 = [X, Y];
+    Vd = V0;
+    Vd(solidNodes, 1) = X(solidNodes) + scale * uxN(solidNodes);
+    Vd(solidNodes, 2) = Y(solidNodes) + scale * uyN(solidNodes);
+
+    % --- Plot ---
+    fig = figure('Color', 'white', 'Visible', 'on');
+    ax  = axes('Parent', fig);
+    hold(ax, 'on');
+
+    % Topology background: direct RGB, no colormap.
+    image(ax, xCenters, yCenters, rgbImg);
+    set(ax, 'YDir', 'normal');
+
+    % Deformed solid-element overlay: transparent light blue.
+    patch(ax, 'Vertices', Vd, 'Faces', solidFaces, ...
+        'FaceColor', [0.45, 0.70, 1.00], 'FaceAlpha', 0.28, ...
+        'EdgeColor', [0.10, 0.40, 0.80], 'EdgeAlpha', 0.65, 'LineWidth', 0.5);
+
+    axis(ax, 'equal');
+    set(ax, 'YDir', 'normal', 'XTick', [], 'YTick', []);
+    box(ax, 'off');
+
+    % Axis limits: full domain + 5 % padding.
+    pad = 0.05 * max(L, H);
+    xlim(ax, [min([0; Vd(solidNodes,1)]) - pad,  max([L; Vd(solidNodes,1)]) + pad]);
+    ylim(ax, [min([0; Vd(solidNodes,2)]) - pad,  max([H; Vd(solidNodes,2)]) + pad]);
+
+    % --- Title: omega1 and omega2 in rad/s ---
+    omega1str = sprintf('\\omega_1 = %.3f rad/s', omegaAll(1));
+    if numel(omegaAll) >= 2
+        titleStr = sprintf('%s | Topology Mode %d | %s | \\omega_2 = %.3f rad/s', ...
+            jsonBaseName, modeIdx, omega1str, omegaAll(2));
+    else
+        titleStr = sprintf('%s | Topology Mode %d | %s', ...
+            jsonBaseName, modeIdx, omega1str);
+    end
+    title(ax, titleStr, 'Interpreter', 'tex', 'FontSize', 10);
+
+    drawnow;
+    outPath = fullfile(outFolder, ...
+        sprintf('%s_topology_mode_%d.png', jsonBaseName, modeIdx));
+    exportgraphics(fig, outPath, 'Resolution', 180, 'BackgroundColor', 'white');
+    close(fig);
+    fprintf('Saved topology mode image: %s\n', outPath);
 end
 
 function [outFolder, jsonBaseName] = localResolveModeOutputTarget(jsonSource)
