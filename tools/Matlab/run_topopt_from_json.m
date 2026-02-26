@@ -948,14 +948,12 @@ function localSaveTopologyModePlot( ...
     xlim(ax, [min([0; Vd(solidNodes,1)]) - pad,  max([L; Vd(solidNodes,1)]) + pad]);
     ylim(ax, [min([0; Vd(solidNodes,2)]) - pad,  max([H; Vd(solidNodes,2)]) + pad]);
 
-    % --- Title: omega1 and omega2 in rad/s ---
-    omega1str = sprintf('\\omega_1 = %.3f rad/s', omegaAll(1));
-    if numel(omegaAll) >= 2
-        titleStr = sprintf('%s | Topology Mode %d | %s | \\omega_2 = %.3f rad/s', ...
-            jsonBaseName, modeIdx, omega1str, omegaAll(2));
+    % --- Title: omega for the displayed mode only ---
+    if modeIdx <= numel(omegaAll) && isfinite(omegaAll(modeIdx))
+        omegaModeStr = sprintf('\\omega_%d = %.3f rad/s', modeIdx, omegaAll(modeIdx));
+        titleStr = sprintf('%s | Topology Mode %d | %s', jsonBaseName, modeIdx, omegaModeStr);
     else
-        titleStr = sprintf('%s | Topology Mode %d | %s', ...
-            jsonBaseName, modeIdx, omega1str);
+        titleStr = sprintf('%s | Topology Mode %d', jsonBaseName, modeIdx);
     end
     title(ax, titleStr, 'Interpreter', 'tex', 'FontSize', 10);
 
