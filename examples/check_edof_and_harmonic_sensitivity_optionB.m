@@ -21,7 +21,7 @@ L = 3.0; H = 1.0;
 ndof = 2 * (nelx + 1) * (nely + 1);
 
 base = struct();
-base.visualise_live = false;
+base.visualize_live = false;
 base.save_frq_iterations = false;
 base.max_iters = 1;
 base.conv_tol = 1e-12;

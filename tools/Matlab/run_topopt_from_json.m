@@ -53,24 +53,24 @@ function [x, omega, tIter, nIter, mem_usage] = run_topopt_from_json(jsonInput)
     EminRatio = reqNum(cfg, {'void_material','E_min_ratio'}, 'void_material.E_min_ratio');
     rho_min = reqNum(cfg, {'void_material','rho_min'}, 'void_material.rho_min');
 
-    approach = reqStr(cfg, {'optimisation','approach'}, 'optimisation.approach');
-    volfrac = reqNum(cfg, {'optimisation','volume_fraction'}, 'optimisation.volume_fraction');
-    penal = reqNum(cfg, {'optimisation','penalization'}, 'optimisation.penalization');
-    move = reqNum(cfg, {'optimisation','move_limit'}, 'optimisation.move_limit');
-    maxiter = reqInt(cfg, {'optimisation','max_iters'}, 'optimisation.max_iters');
-    convTol = reqNum(cfg, {'optimisation','convergence_tol'}, 'optimisation.convergence_tol');
+    approach = reqStr(cfg, {'optimization','approach'}, 'optimization.approach');
+    volfrac = reqNum(cfg, {'optimization','volume_fraction'}, 'optimization.volume_fraction');
+    penal = reqNum(cfg, {'optimization','penalization'}, 'optimization.penalization');
+    move = reqNum(cfg, {'optimization','move_limit'}, 'optimization.move_limit');
+    maxiter = reqInt(cfg, {'optimization','max_iters'}, 'optimization.max_iters');
+    convTol = reqNum(cfg, {'optimization','convergence_tol'}, 'optimization.convergence_tol');
 
-    filterType = reqStr(cfg, {'optimisation','filter','type'}, 'optimisation.filter.type');
-    filterRadius = reqNum(cfg, {'optimisation','filter','radius'}, 'optimisation.filter.radius');
-    radiusUnits = lower(reqStr(cfg, {'optimisation','filter','radius_units'}, 'optimisation.filter.radius_units'));
-    filterBC = reqStr(cfg, {'optimisation','filter','boundary_condition'}, 'optimisation.filter.boundary_condition');
+    filterType = reqStr(cfg, {'optimization','filter','type'}, 'optimization.filter.type');
+    filterRadius = reqNum(cfg, {'optimization','filter','radius'}, 'optimization.filter.radius');
+    radiusUnits = lower(reqStr(cfg, {'optimization','filter','radius_units'}, 'optimization.filter.radius_units'));
+    filterBC = reqStr(cfg, {'optimization','filter','boundary_condition'}, 'optimization.filter.boundary_condition');
 
     optimizerType = 'OC';
-    if hasFieldPath(cfg, {'optimisation','optimizer'})
-        optimizerType = upper(strtrim(reqStr(cfg, {'optimisation','optimizer'}, 'optimisation.optimizer')));
+    if hasFieldPath(cfg, {'optimization','optimizer'})
+        optimizerType = upper(strtrim(reqStr(cfg, {'optimization','optimizer'}, 'optimization.optimizer')));
         if ~any(strcmp(optimizerType, {'OC','MMA'}))
             error('run_topopt_from_json:InvalidOptimizer', ...
-                'optimisation.optimizer must be "OC" or "MMA" (got "%s").', optimizerType);
+                'optimization.optimizer must be "OC" or "MMA" (got "%s").', optimizerType);
         end
     end
 
@@ -88,73 +88,25 @@ function [x, omega, tIter, nIter, mem_usage] = run_topopt_from_json(jsonInput)
         loadCasesOur = validateLoadCases(legacySingleCase, 'loads');
     end
 
-    % Optional visualization flags (default = keep legacy behavior).
-    hasVisualise = hasFieldPath(cfg, {'optimisation','visualise_live'});
-    if hasVisualise
-        visualiseLive = parseBool(getFieldPath(cfg, {'optimisation','visualise_live'}), 'optimisation.visualise_live');
-    else
-        visualiseLive = [];
-    end
-    hasSaveFinalImage = hasFieldPath(cfg, {'optimisation','save_final_image'});
-    if hasSaveFinalImage
-        saveFinalImage = parseBool(getFieldPath(cfg, {'optimisation','save_final_image'}), 'optimisation.save_final_image');
-    else
-        % Backward compatibility with older field name.
-        hasSnapshot = hasFieldPath(cfg, {'optimisation','save_snapshot_image'});
-        if hasSnapshot
-            saveFinalImage = parseBool(getFieldPath(cfg, {'optimisation','save_snapshot_image'}), 'optimisation.save_snapshot_image');
-        else
-            saveFinalImage = false;
-        end
-    end
-    saveFrqIterations = false;
-    if hasFieldPath(cfg, {'optimisation','save_frq_iterations'})
-        saveFrqIterations = parseBool(getFieldPath(cfg, {'optimisation','save_frq_iterations'}), ...
-            'optimisation.save_frq_iterations');
-    elseif hasFieldPath(cfg, {'save_frq_iterations'})
-        saveFrqIterations = parseBool(getFieldPath(cfg, {'save_frq_iterations'}), ...
-            'save_frq_iterations');
-    end
-    visualizationQuality = 'regular';
-    if hasFieldPath(cfg, {'optimisation','visualization_quality'})
-        visualizationQuality = parseVisualizationQuality( ...
-            getFieldPath(cfg, {'optimisation','visualization_quality'}), ...
-            'optimisation.visualization_quality');
-    end
-    visualiseModes = 0;
-    if hasFieldPath(cfg, {'optimisation','visualise_modes'})
-        visualiseModes = reqInt(cfg, {'optimisation','visualise_modes'}, ...
-            'optimisation.visualise_modes');
-        if visualiseModes < 0
-            error('run_topopt_from_json:InvalidVisualiseModes', ...
-                'optimisation.visualise_modes must be >= 0.');
-        end
-    end
-    visualiseTopologyModes = 0;
-    if hasFieldPath(cfg, {'optimisation','visualise_topology_modes'})
-        visualiseTopologyModes = reqInt(cfg, {'optimisation','visualise_topology_modes'}, ...
-            'optimisation.visualise_topology_modes');
-        if visualiseTopologyModes < 0
-            error('run_topopt_from_json:InvalidVisualiseTopologyModes', ...
-                'optimisation.visualise_topology_modes must be >= 0.');
-        end
-    end
-    hasDebugSemiHarmonic = hasFieldPath(cfg, {'optimisation','debug_semi_harmonic'});
+    % --- Reject deprecated keys and parse postprocessing block ---
+    rejectDeprecatedKeys(cfg);
+    postproc = parsePostprocessingBlock(cfg);
+    hasDebugSemiHarmonic = hasFieldPath(cfg, {'optimization','debug_semi_harmonic'});
     debugSemiHarmonic = false;
     if hasDebugSemiHarmonic
         debugSemiHarmonic = parseBool( ...
-            getFieldPath(cfg, {'optimisation','debug_semi_harmonic'}), ...
-            'optimisation.debug_semi_harmonic');
+            getFieldPath(cfg, {'optimization','debug_semi_harmonic'}), ...
+            'optimization.debug_semi_harmonic');
     end
-    hasSemiHarmonicBaseline = hasFieldPath(cfg, {'optimisation','semi_harmonic_baseline'});
+    hasSemiHarmonicBaseline = hasFieldPath(cfg, {'optimization','semi_harmonic_baseline'});
     semiHarmonicBaseline = '';
     if hasSemiHarmonicBaseline
-        semiHarmonicBaseline = char(string(getFieldPath(cfg, {'optimisation','semi_harmonic_baseline'})));
+        semiHarmonicBaseline = char(string(getFieldPath(cfg, {'optimization','semi_harmonic_baseline'})));
     end
-    hasSemiHarmonicRhoSource = hasFieldPath(cfg, {'optimisation','semi_harmonic_rho_source'});
+    hasSemiHarmonicRhoSource = hasFieldPath(cfg, {'optimization','semi_harmonic_rho_source'});
     semiHarmonicRhoSource = '';
     if hasSemiHarmonicRhoSource
-        semiHarmonicRhoSource = char(string(getFieldPath(cfg, {'optimisation','semi_harmonic_rho_source'})));
+        semiHarmonicRhoSource = char(string(getFieldPath(cfg, {'optimization','semi_harmonic_rho_source'})));
     end
 
     % Radius conversion requested by task description.
@@ -168,7 +120,7 @@ function [x, omega, tIter, nIter, mem_usage] = run_topopt_from_json(jsonInput)
             rmin_phys = filterRadius;
         otherwise
             error('run_topopt_from_json:InvalidFilterUnits', ...
-                'optimisation.filter.radius_units must be "element" or "physical".');
+                'optimization.filter.radius_units must be "element" or "physical".');
     end
     if rmin_elem <= 0 || rmin_phys <= 0
         error('run_topopt_from_json:InvalidFilterRadius', 'Filter radius must be positive.');
@@ -188,15 +140,15 @@ function [x, omega, tIter, nIter, mem_usage] = run_topopt_from_json(jsonInput)
     end
     assertPositive(rho_min, 'void_material.rho_min');
     if ~(volfrac > 0 && volfrac <= 1)
-        error('run_topopt_from_json:InvalidVolumeFraction', 'optimisation.volume_fraction must be in (0, 1].');
+        error('run_topopt_from_json:InvalidVolumeFraction', 'optimization.volume_fraction must be in (0, 1].');
     end
-    assertPositive(penal, 'optimisation.penalization');
-    assertPositive(move, 'optimisation.move_limit');
+    assertPositive(penal, 'optimization.penalization');
+    assertPositive(move, 'optimization.move_limit');
     if move > 1
-        error('run_topopt_from_json:InvalidMove', 'optimisation.move_limit must be <= 1.');
+        error('run_topopt_from_json:InvalidMove', 'optimization.move_limit must be <= 1.');
     end
-    assertPositive(maxiter, 'optimisation.max_iters');
-    assertPositive(convTol, 'optimisation.convergence_tol');
+    assertPositive(maxiter, 'optimization.max_iters');
+    assertPositive(convTol, 'optimization.convergence_tol');
 
     % This file lives in tools/Matlab/, so repo root is three levels up.
     repoRoot = fileparts(fileparts(fileparts(mfilename('fullpath'))));
@@ -208,21 +160,6 @@ function [x, omega, tIter, nIter, mem_usage] = run_topopt_from_json(jsonInput)
     mem_usage = 0;
     Emin = E0 * EminRatio;
     freqIterOmega = [];
-
-    % Optional: visualise initial reference modes before optimization starts.
-    % Done here (before memory/performance instrumentation) to keep metrics unchanged.
-    if visualiseModes > 0
-        try
-            saveReferenceModeVisualizations( ...
-                jsonSource, visualiseModes, ...
-                L, H, nelx, nely, thickness, ...
-                E0, Emin, nu, rho0, rho_min, volfrac, penal, ...
-                supportCode, extraFixedDofs);
-        catch modeErr
-            warning('run_topopt_from_json:ModeVisualisationFailed', ...
-                'Initial mode visualization failed: %s', modeErr.message);
-        end
-    end
 
     % --- Memory sampling setup (only when 5th output requested) ---
     if nargout >= 5
@@ -267,10 +204,10 @@ function [x, omega, tIter, nIter, mem_usage] = run_topopt_from_json(jsonInput)
 
             optsO = struct('doDiagnostic', true, 'diagnosticOnly', false, 'diagModes', 5);
             optsO.approach_name = approach;
-            optsO.save_frq_iterations = saveFrqIterations;
-            optsO.visualization_quality = visualizationQuality;
-            if hasVisualise
-                optsO.visualise_live = visualiseLive;
+            optsO.save_frq_iterations = postproc.saveFrequencyIterations;
+            optsO.visualization_quality = postproc.visualizeQuality;
+            if ~isempty(postproc.visualizeLive)
+                optsO.visualize_live = postproc.visualizeLive;
             end
 
             [~, xPhys, diagnostics] = topFreqOptimization_MMA(cfgO, optsO);
@@ -286,7 +223,7 @@ function [x, omega, tIter, nIter, mem_usage] = run_topopt_from_json(jsonInput)
             if isfield(diagnostics, 'iterations')
                 nIter = diagnostics.iterations;
             end
-            if saveFrqIterations && isfield(diagnostics, 'freq_iter_omega')
+            if postproc.saveFrequencyIterations && isfield(diagnostics, 'freq_iter_omega')
                 freqIterOmega = diagnostics.freq_iter_omega;
             end
 
@@ -306,13 +243,13 @@ function [x, omega, tIter, nIter, mem_usage] = run_topopt_from_json(jsonInput)
             runCfg.beamH = H;
             runCfg.conv_tol = convTol;
             runCfg.approach_name = approach;
-            runCfg.save_frq_iterations = saveFrqIterations;
-            runCfg.visualization_quality = visualizationQuality;
+            runCfg.save_frq_iterations = postproc.saveFrequencyIterations;
+            runCfg.visualization_quality = postproc.visualizeQuality;
             if ~isempty(tipMassFrac)
                 runCfg.tipMassFrac = tipMassFrac;
             end
-            if hasVisualise
-                runCfg.visualise_live = visualiseLive;
+            if ~isempty(postproc.visualizeLive)
+                runCfg.visualize_live = postproc.visualizeLive;
             end
             runCfg.extraFixedDofs = extraFixedDofs;
             runCfg.pasS = pasS;
@@ -321,45 +258,45 @@ function [x, omega, tIter, nIter, mem_usage] = run_topopt_from_json(jsonInput)
             eta = 0.5;
             beta = 1.0;
             stage1MaxIter = min(maxiter, 200);
-            if hasFieldPath(cfg, {'optimisation','yuksel','stage1_max_iters'})
-                stage1MaxIter = reqInt(cfg, {'optimisation','yuksel','stage1_max_iters'}, ...
-                    'optimisation.yuksel.stage1_max_iters');
+            if hasFieldPath(cfg, {'optimization','yuksel','stage1_max_iters'})
+                stage1MaxIter = reqInt(cfg, {'optimization','yuksel','stage1_max_iters'}, ...
+                    'optimization.yuksel.stage1_max_iters');
             end
             if stage1MaxIter < 1
                 error('run_topopt_from_json:InvalidYukselStage1MaxIters', ...
-                    'optimisation.yuksel.stage1_max_iters must be >= 1.');
+                    'optimization.yuksel.stage1_max_iters must be >= 1.');
             end
             stage1MaxIter = min(stage1MaxIter, maxiter);
 
             nHistModes = 0;
-            if hasFieldPath(cfg, {'optimisation','yuksel','mode_history_modes'})
-                nHistModes = reqInt(cfg, {'optimisation','yuksel','mode_history_modes'}, ...
-                    'optimisation.yuksel.mode_history_modes');
+            if hasFieldPath(cfg, {'optimization','yuksel','mode_history_modes'})
+                nHistModes = reqInt(cfg, {'optimization','yuksel','mode_history_modes'}, ...
+                    'optimization.yuksel.mode_history_modes');
             end
             if nHistModes < 0
                 error('run_topopt_from_json:InvalidYukselModeHistoryModes', ...
-                    'optimisation.yuksel.mode_history_modes must be >= 0.');
+                    'optimization.yuksel.mode_history_modes must be >= 0.');
             end
 
             finalModeCount = 3;
-            if hasFieldPath(cfg, {'optimisation','yuksel','final_mode_count'})
-                finalModeCount = reqInt(cfg, {'optimisation','yuksel','final_mode_count'}, ...
-                    'optimisation.yuksel.final_mode_count');
+            if hasFieldPath(cfg, {'optimization','yuksel','final_mode_count'})
+                finalModeCount = reqInt(cfg, {'optimization','yuksel','final_mode_count'}, ...
+                    'optimization.yuksel.final_mode_count');
             end
             if finalModeCount < 1
                 error('run_topopt_from_json:InvalidYukselFinalModeCount', ...
-                    'optimisation.yuksel.final_mode_count must be >= 1.');
+                    'optimization.yuksel.final_mode_count must be >= 1.');
             end
             runCfg.final_modes = finalModeCount;
-            if hasFieldPath(cfg, {'optimisation','yuksel','stage1_tol'})
-                runCfg.stage1_tol = reqNum(cfg, {'optimisation','yuksel','stage1_tol'}, ...
-                    'optimisation.yuksel.stage1_tol');
-                assertPositive(runCfg.stage1_tol, 'optimisation.yuksel.stage1_tol');
+            if hasFieldPath(cfg, {'optimization','yuksel','stage1_tol'})
+                runCfg.stage1_tol = reqNum(cfg, {'optimization','yuksel','stage1_tol'}, ...
+                    'optimization.yuksel.stage1_tol');
+                assertPositive(runCfg.stage1_tol, 'optimization.yuksel.stage1_tol');
             end
-            if hasFieldPath(cfg, {'optimisation','yuksel','stage2_tol'})
-                runCfg.stage2_tol = reqNum(cfg, {'optimisation','yuksel','stage2_tol'}, ...
-                    'optimisation.yuksel.stage2_tol');
-                assertPositive(runCfg.stage2_tol, 'optimisation.yuksel.stage2_tol');
+            if hasFieldPath(cfg, {'optimization','yuksel','stage2_tol'})
+                runCfg.stage2_tol = reqNum(cfg, {'optimization','yuksel','stage2_tol'}, ...
+                    'optimization.yuksel.stage2_tol');
+                assertPositive(runCfg.stage2_tol, 'optimization.yuksel.stage2_tol');
             end
 
             [xPhysStage2, ~, info] = top99neo_inertial_freq( ...
@@ -381,7 +318,7 @@ function [x, omega, tIter, nIter, mem_usage] = run_topopt_from_json(jsonInput)
             if isfield(info, 'timing') && isfield(info.timing, 'total_iterations')
                 nIter = info.timing.total_iterations;
             end
-            if saveFrqIterations && isfield(info, 'freq_iter_omega')
+            if postproc.saveFrequencyIterations && isfield(info, 'freq_iter_omega')
                 freqIterOmega = info.freq_iter_omega;
             end
 
@@ -400,18 +337,18 @@ function [x, omega, tIter, nIter, mem_usage] = run_topopt_from_json(jsonInput)
             runCfg.max_iters = maxiter;
             runCfg.supportType = supportCode;
             runCfg.approach_name = approach;
-            runCfg.save_frq_iterations = saveFrqIterations;
-            runCfg.visualization_quality = visualizationQuality;
-            if hasVisualise
-                runCfg.visualise_live = visualiseLive;
+            runCfg.save_frq_iterations = postproc.saveFrequencyIterations;
+            runCfg.visualization_quality = postproc.visualizeQuality;
+            if ~isempty(postproc.visualizeLive)
+                runCfg.visualize_live = postproc.visualizeLive;
             end
             runCfg.extraFixedDofs = extraFixedDofs;
             runCfg.pasS = pasS;
             runCfg.pasV = pasV;
-            if hasFieldPath(cfg, {'optimisation','harmonic_normalize'})
+            if hasFieldPath(cfg, {'optimization','harmonic_normalize'})
                 runCfg.harmonic_normalize = parseBool( ...
-                    getFieldPath(cfg, {'optimisation','harmonic_normalize'}), ...
-                    'optimisation.harmonic_normalize');
+                    getFieldPath(cfg, {'optimization','harmonic_normalize'}), ...
+                    'optimization.harmonic_normalize');
             end
             if hasDebugSemiHarmonic
                 runCfg.debug_semi_harmonic = debugSemiHarmonic;
@@ -427,7 +364,7 @@ function [x, omega, tIter, nIter, mem_usage] = run_topopt_from_json(jsonInput)
             end
             runCfg.optimizer = optimizerType;
 
-            if saveFrqIterations
+            if postproc.saveFrequencyIterations
                 [xOut, fOut, tOut, itOut, infoOur] = topopt_freq( ...
                     nelx, nely, volfrac, penal, rmin_phys, ft, L, H, runCfg);
                 if isstruct(infoOur) && isfield(infoOur, 'freq_iter_omega')
@@ -444,7 +381,7 @@ function [x, omega, tIter, nIter, mem_usage] = run_topopt_from_json(jsonInput)
 
         otherwise
             error('run_topopt_from_json:UnknownApproach', ...
-                'Unknown optimisation.approach "%s". Use "Olhoff", "Yuksel", or "ourApproach".', approach);
+                'Unknown optimization.approach "%s". Use "Olhoff", "Yuksel", or "ourApproach".', approach);
     end
 
     % --- Finalize memory measurement ---
@@ -461,31 +398,124 @@ function [x, omega, tIter, nIter, mem_usage] = run_topopt_from_json(jsonInput)
     x = x(:);
     omega = toVec3(omega(:));
 
-    if saveFrqIterations
+    % === POSTPROCESSING — all after timing and memory measurement ===
+
+    if postproc.saveFrequencyIterations
         if ~isempty(freqIterOmega)
             saveFrequencyIterationPlot(freqIterOmega, approach, nelx, nely, repoRoot);
         else
             warning('run_topopt_from_json:MissingFrequencyHistory', ...
-                'save_frq_iterations requested, but no iteration history was returned by "%s".', approach);
+                'save_frequency_iterations requested, but no iteration history was returned by "%s".', approach);
         end
     end
 
-    if saveFinalImage
-        omega2snap = NaN;
-        if numel(omega) >= 2, omega2snap = omega(2); end
-        saveTopologySnapshot(x, nelx, nely, approach, jsonSource, omega(1), visualizationQuality, omega2snap);
+    % --- Compute required mode counts for both domains ---
+    nTopo    = computeRequiredTopologyModes(postproc);
+    nInitial = computeRequiredInitialModes(postproc);
+
+    % --- Topology-domain eigensolve (ONE cached call for all consumers) ---
+    modesT = struct('omega', [], 'phi', [], 'free', [], 'ndof', [], 'Mff', [], 'Mfull', []);
+    if nTopo > 0
+        fprintf('[Eigensolve] Computing topology domain modes (n=%d)...\n', nTopo);
+        try
+            [modesT.omega, modesT.phi, modesT.free, modesT.ndof, modesT.Mff, modesT.Mfull] = ...
+                localSolveTopologyModes(x, nTopo, L, H, nelx, nely, thickness, ...
+                    E0, Emin, nu, rho0, rho_min, penal, supportCode, extraFixedDofs);
+            fprintf('[Eigensolve] Topology modes done: omega_1 = %.4f rad/s.\n', modesT.omega(1));
+        catch eigenErr
+            warning('run_topopt_from_json:TopologyEigenSolveFailed', ...
+                'Topology eigensolve failed: %s', eigenErr.message);
+        end
     end
 
-    if visualiseTopologyModes > 0
+    % --- Initial-domain eigensolve (ONE cached call for all consumers) ---
+    modesI = struct('omega', [], 'phi', [], 'free', [], 'ndof', []);
+    if nInitial > 0
+        fprintf('[Eigensolve] Computing initial domain modes (n=%d)...\n', nInitial);
         try
-            saveTopologyModeVisualizations( ...
-                jsonSource, x, visualiseTopologyModes, ...
-                L, H, nelx, nely, thickness, ...
-                E0, Emin, nu, rho0, rho_min, penal, ...
-                supportCode, extraFixedDofs);
+            [modesI.omega, modesI.phi, modesI.free, modesI.ndof] = ...
+                localSolveReferenceModes(nInitial, L, H, nelx, nely, thickness, ...
+                    E0, Emin, nu, rho0, rho_min, volfrac, penal, ...
+                    supportCode, extraFixedDofs);
+            fprintf('[Eigensolve] Initial modes done: omega_1 = %.4f rad/s.\n', modesI.omega(1));
+        catch eigenErr
+            warning('run_topopt_from_json:InitialEigenSolveFailed', ...
+                'Initial domain eigensolve failed: %s', eigenErr.message);
+        end
+    end
+
+    % --- Correlation matrix (no eigensolve — uses cached eigenpairs only) ---
+    corrMat = [];
+    if postproc.correlation.enabled
+        if ~isempty(modesI.phi) && ~isempty(modesT.phi) && ~isempty(modesT.Mfull)
+            fprintf('[Correlation] Using full-DOF mass matrix (metric: %s).\n', ...
+                postproc.correlation.metric);
+            assert(modesT.ndof == modesI.ndof, 'run_topopt_from_json:NdofMismatch', ...
+                'Initial and topology ndof mismatch (%d vs %d).', modesI.ndof, modesT.ndof);
+            PhiFull = zeros(modesI.ndof, size(modesI.phi, 2));
+            PhiFull(modesI.free, :) = modesI.phi;
+            PsiFull = zeros(modesT.ndof, size(modesT.phi, 2));
+            PsiFull(modesT.free, :) = modesT.phi;
+            corrMat = computeCorrelationMatrixFullDOF( ...
+                PhiFull, PsiFull, modesT.Mfull, postproc.correlation.metric);
+            if postproc.correlation.writeBestMatches
+                logCorrelationBestMatches(corrMat, modesI.omega, modesT.omega, ...
+                    postproc.correlation.bestK);
+            end
+            if postproc.correlation.writeCsv
+                [corrFolder, corrBase] = localResolveModeOutputTarget(jsonSource);
+                csvName = postproc.correlation.csvFilename;
+                if isempty(csvName)
+                    csvName = [corrBase '_correlation.csv'];
+                end
+                writeCorrelationCSV(corrMat, modesI.omega, modesT.omega, ...
+                    fullfile(corrFolder, csvName));
+            end
+            if postproc.correlation.writeHeatmap
+                [heatFolder, heatBase] = localResolveModeOutputTarget(jsonSource);
+                writeCorrelationHeatmap(corrMat, modesI.omega, modesT.omega, ...
+                    fullfile(heatFolder, [heatBase '_correlation_heatmap.png']));
+            end
+        else
+            warning('run_topopt_from_json:CorrelationMissingModes', ...
+                'Correlation enabled but mode data unavailable for one or both domains.');
+        end
+    end
+
+    % --- Topology snapshot (uses cached topology modes for omega labels) ---
+    if postproc.saveFinalImage
+        omega1snap = NaN;
+        omega2snap = NaN;
+        if numel(modesT.omega) >= 1, omega1snap = modesT.omega(1); end
+        if numel(modesT.omega) >= 2, omega2snap = modesT.omega(2); end
+        saveTopologySnapshot(x, nelx, nely, approach, jsonSource, omega1snap, ...
+            postproc.visualizeQuality, omega2snap);
+    end
+
+    % --- Topology mode visualizations (optional correlation labels) ---
+    if postproc.visualizeTopologyModes.enabled && ~isempty(modesT.omega)
+        try
+            saveTopologyModeVisualizationsFromCache( ...
+                jsonSource, x, postproc.visualizeTopologyModes.count, ...
+                L, H, nelx, nely, ...
+                modesT.omega, modesT.phi, modesT.free, modesT.ndof, ...
+                corrMat, postproc.correlation.useForTopologyModeLabels);
         catch modeErr
-            warning('run_topopt_from_json:TopologyModeVisualisationFailed', ...
+            warning('run_topopt_from_json:TopologyModeVisualizationFailed', ...
                 'Topology mode visualization failed: %s', modeErr.message);
+        end
+    end
+
+    % --- Initial-domain mode visualizations (from cache — no eigensolve) ---
+    if postproc.visualizeModes.enabled && ~isempty(modesI.omega)
+        try
+            saveReferenceModeVisualizationsFromCache( ...
+                jsonSource, postproc.visualizeModes.count, ...
+                L, H, nelx, nely, ...
+                modesI.omega, modesI.phi, modesI.free, modesI.ndof);
+        catch modeErr
+            warning('run_topopt_from_json:ModeVisualizationFailed', ...
+                'Reference mode visualization failed: %s', modeErr.message);
         end
     end
 end
@@ -625,7 +655,7 @@ function [ft, ftBC] = mapFilterToYuksel(filterType, filterBC)
             ft = 3;
         otherwise
             error('run_topopt_from_json:UnsupportedYukselFilter', ...
-                'Unsupported optimisation.filter.type "%s" for Yuksel approach.', filterType);
+                'Unsupported optimization.filter.type "%s" for Yuksel approach.', filterType);
     end
 
     bc = lower(strtrim(filterBC));
@@ -646,7 +676,7 @@ function ft = mapFilterToOurApproach(filterType)
             ft = 1;
         otherwise
             error('run_topopt_from_json:UnsupportedOurFilter', ...
-                'Unsupported optimisation.filter.type "%s" for ourApproach.', filterType);
+                'Unsupported optimization.filter.type "%s" for ourApproach.', filterType);
     end
 end
 
@@ -727,14 +757,14 @@ function saveTopologySnapshot(x, nelx, nely, approachName, jsonSource, omega1, v
     set(ax, 'YDir', 'normal');
     set(ax, 'XColor', 'none', 'YColor', 'none');  % hide ticks/lines; keep title visible
     colormap(ax, gray(256));
-    caxis(ax, [0 1]);
+    clim(ax, [0 1]);
 
     if isfinite(omega1)
-        titleStr = sprintf('%s  |  %dx%d  |  \\omega_1 = %.2f rad/s  (%.3f Hz)', ...
-            nameRaw, nelx, nely, omega1, omega1 / (2*pi));
+        titleStr = sprintf('%s  |  %dx%d  |  \\omega_1 = %.2f rad/s', ...
+            nameRaw, nelx, nely, omega1);
         if isfinite(omega2)
-            titleStr = sprintf('%s  |  \\omega_2 = %.2f rad/s  (%.3f Hz)', ...
-                titleStr, omega2, omega2 / (2*pi));
+            titleStr = sprintf('%s  |  \\omega_2 = %.2f rad/s', ...
+                titleStr, omega2);
         end
     else
         titleStr = sprintf('%s  |  %dx%d', nameRaw, nelx, nely);
@@ -753,27 +783,21 @@ function saveTopologySnapshot(x, nelx, nely, approachName, jsonSource, omega1, v
     fprintf('Saved topology image: %s  (.png / .fig)\n', baseName);
 end
 
-function saveReferenceModeVisualizations( ...
+function saveReferenceModeVisualizationsFromCache( ...
     jsonSource, nModes, ...
-    L, H, nelx, nely, thickness, ...
-    E0, Emin, nu, rho0, rho_min, volfrac, penal, ...
-    supportCode, extraFixedDofs)
-% Save lowest reference-domain eigenmodes before topology optimization.
-% Reference design is uniform x = volfrac for consistency across approaches.
-    if nModes <= 0
+    L, H, nelx, nely, ...
+    omegaVals, modeShapes, free, ndof)
+% Save initial-domain eigenmodes from precomputed eigenpairs (no eigensolve).
+    if nModes <= 0 || isempty(omegaVals)
         return;
     end
 
     [outFolder, jsonBaseName] = localResolveModeOutputTarget(jsonSource);
-    [omegaVals, modeShapes, free, ndof] = localSolveReferenceModes( ...
-        nModes, L, H, nelx, nely, thickness, ...
-        E0, Emin, nu, rho0, rho_min, volfrac, penal, ...
-        supportCode, extraFixedDofs);
 
     nAvail = min(nModes, numel(omegaVals));
     if nAvail < nModes
-        warning('run_topopt_from_json:ModeVisualisationTruncated', ...
-            'Requested %d modes, but only %d could be computed.', nModes, nAvail);
+        warning('run_topopt_from_json:ModeVisualizationTruncated', ...
+            'Requested %d initial modes, but only %d were computed.', nModes, nAvail);
     end
     for i = 1:nAvail
         modeFull = zeros(ndof, 1);
@@ -784,43 +808,47 @@ function saveReferenceModeVisualizations( ...
     end
 end
 
-function saveTopologyModeVisualizations( ...
+function saveTopologyModeVisualizationsFromCache( ...
     jsonSource, xDens, nModes, ...
-    L, H, nelx, nely, thickness, ...
-    E0, Emin, nu, rho0, rho_min, penal, ...
-    supportCode, extraFixedDofs)
-% Save lowest eigenmodes of the final optimised topology.
-% Uses element-wise SIMP interpolation with the actual density field xDens.
-    if nModes <= 0
+    L, H, nelx, nely, ...
+    omegaVals, modeShapes, free, ndof, ...
+    corrMat, useCorrelationLabels)
+% Save final-topology eigenmodes using precomputed eigenpairs (no eigensolve).
+% corrMat (optional, nI x nT): correlation matrix; empty [] disables labels.
+% useCorrelationLabels (optional bool): embed best-match initial mode in plot title.
+    if nargin < 12, corrMat = []; end
+    if nargin < 13, useCorrelationLabels = false; end
+    if nModes <= 0 || isempty(omegaVals)
         return;
     end
 
     [outFolder, jsonBaseName] = localResolveModeOutputTarget(jsonSource);
-    [omegaVals, modeShapes, free, ndof] = localSolveTopologyModes( ...
-        xDens, nModes, L, H, nelx, nely, thickness, ...
-        E0, Emin, nu, rho0, rho_min, penal, ...
-        supportCode, extraFixedDofs);
 
     nAvail = min(nModes, numel(omegaVals));
     if nAvail < nModes
-        warning('run_topopt_from_json:TopologyModeVisualisationTruncated', ...
+        warning('run_topopt_from_json:TopologyModeVisualizationTruncated', ...
             'Requested %d topology modes, but only %d could be computed.', nModes, nAvail);
     end
     for i = 1:nAvail
+        corrLabel = '';
+        if useCorrelationLabels && ~isempty(corrMat) && i <= size(corrMat, 2)
+            [bestVal, bestInitIdx] = max(corrMat(:, i));
+            corrLabel = sprintf('best init. mode = %d (corr=%.3f)', bestInitIdx, bestVal);
+        end
         modeFull = zeros(ndof, 1);
         modeFull(free) = modeShapes(:, i);
         localSaveTopologyModePlot( ...
             xDens, modeFull, L, H, nelx, nely, ...
-            omegaVals, i, outFolder, jsonBaseName);  % full omega vector for title
+            omegaVals, i, outFolder, jsonBaseName, corrLabel);
     end
 end
 
-function [omegaVals, modeShapes, free, ndof] = localSolveTopologyModes( ...
+function [omegaVals, modeShapes, free, ndof, Mff, Mfull] = localSolveTopologyModes( ...
     xDens, nModes, L, H, nelx, nely, thickness, ...
     E0, Emin, nu, rho0, rho_min, penal, ...
     supportCode, extraFixedDofs)
 % Solve generalised eigenvalue problem K*phi = lambda*M*phi for optimised topology.
-    nEl = nelx * nely;
+% Returns both Mff (restricted to free DOFs) and Mfull (all DOFs).
     nNode = (nelx + 1) * (nely + 1);
     ndof = 2 * nNode;
 
@@ -851,18 +879,22 @@ function [omegaVals, modeShapes, free, ndof] = localSolveTopologyModes( ...
             'No free DOFs available for topology mode visualization.');
     end
 
+    Mfull = M;
+    Mff = Mfull(free, free);
     nReq = min(max(1, round(double(nModes))), numel(free));
     if numel(free) > 1
         nReq = min(nReq, numel(free) - 1);
     end
-    [omegaVals, modeShapes] = localSolveLowestModes(K(free, free), M(free, free), nReq);
+    [omegaVals, modeShapes] = localSolveLowestModes(K(free, free), Mff, nReq);
 end
 
 function localSaveTopologyModePlot( ...
-    xDens, modeFull, L, H, nelx, nely, omegaAll, modeIdx, outFolder, jsonBaseName)
+    xDens, modeFull, L, H, nelx, nely, omegaAll, modeIdx, outFolder, jsonBaseName, corrLabel)
 % Plot optimized topology (light gray, undeformed) overlaid with the
 % deformed eigenmode in transparent light blue — solid elements only.
-% omegaAll: full vector of computed omega values; title shows omega1 & omega2.
+% omegaAll: full vector of computed omega values; title shows the mode's omega.
+% corrLabel (optional): extra string appended to title, e.g. 'best init. mode = 2 (corr=0.91)'.
+    if nargin < 11, corrLabel = ''; end
     nNodes = (nelx + 1) * (nely + 1);
     if numel(modeFull) ~= 2 * nNodes
         error('run_topopt_from_json:InvalidTopologyModeVector', ...
@@ -948,12 +980,15 @@ function localSaveTopologyModePlot( ...
     xlim(ax, [min([0; Vd(solidNodes,1)]) - pad,  max([L; Vd(solidNodes,1)]) + pad]);
     ylim(ax, [min([0; Vd(solidNodes,2)]) - pad,  max([H; Vd(solidNodes,2)]) + pad]);
 
-    % --- Title: omega for the displayed mode only ---
+    % --- Title: omega for the displayed mode, plus optional correlation label ---
     if modeIdx <= numel(omegaAll) && isfinite(omegaAll(modeIdx))
         omegaModeStr = sprintf('\\omega_%d = %.3f rad/s', modeIdx, omegaAll(modeIdx));
         titleStr = sprintf('%s | Topology Mode %d | %s', jsonBaseName, modeIdx, omegaModeStr);
     else
         titleStr = sprintf('%s | Topology Mode %d', jsonBaseName, modeIdx);
+    end
+    if ~isempty(corrLabel)
+        titleStr = [titleStr ' | ' corrLabel];
     end
     title(ax, titleStr, 'Interpreter', 'tex', 'FontSize', 10);
 
@@ -985,9 +1020,9 @@ function [omegaVals, modeShapes, free, ndof] = localSolveReferenceModes( ...
     nModes, L, H, nelx, nely, thickness, ...
     E0, Emin, nu, rho0, rho_min, volfrac, penal, ...
     supportCode, extraFixedDofs)
-    nEl = nelx * nely;
     nNode = (nelx + 1) * (nely + 1);
     ndof = 2 * nNode;
+    nEl = nelx * nely;
 
     [KE, ME] = localQ4ElementMatrices(L / nelx, H / nely, nu, thickness);
     [iK, jK] = localBuildQ4AssemblyIndices(nelx, nely);
@@ -1217,8 +1252,8 @@ function localSaveSingleModePlot( ...
     set(ax, 'YDir', 'normal', 'XTick', [], 'YTick', []);
     box(ax, 'on');
 
-    title(ax, sprintf('%s | Mode %d | \\omega = %.3f rad/s | f = %.3f Hz', ...
-        jsonBaseName, modeIdx, omegaVal, omegaVal / (2*pi)), ...
+    title(ax, sprintf('%s | Mode %d | \\omega = %.3f rad/s', ...
+        jsonBaseName, modeIdx, omegaVal), ...
         'Interpreter', 'tex', 'FontSize', 10);
 
     outPath = fullfile(outFolder, sprintf('%s_mode_%d.png', jsonBaseName, modeIdx));
@@ -1325,22 +1360,12 @@ function b = parseBool(v, label)
         b = v;
         return;
     end
-    if isnumeric(v) && isscalar(v)
-        b = v ~= 0;
+    if isnumeric(v) && isscalar(v) && isfinite(v) && (v == 0 || v == 1)
+        b = logical(v);
         return;
     end
-    if isstring(v) && isscalar(v), v = char(v); end
-    if ischar(v)
-        t = lower(strtrim(v));
-        if any(strcmp(t, {'true','yes','y','1','on'}))
-            b = true;
-            return;
-        elseif any(strcmp(t, {'false','no','n','0','off'}))
-            b = false;
-            return;
-        end
-    end
-    error('run_topopt_from_json:InvalidBoolean', 'Field "%s" must be boolean-like.', label);
+    error('run_topopt_from_json:InvalidBoolean', ...
+        'Field "%s" must be a JSON boolean true/false.', label);
 end
 
 function quality = parseVisualizationQuality(v, label)
@@ -1514,3 +1539,388 @@ end
 end
 
 % supportsToFixedDofs lives in tools/supportsToFixedDofs.m (public standalone file).
+
+function rejectDeprecatedKeys(cfg)
+% Throw a clear error when deprecated optimization-block visualization keys are present.
+    if hasFieldPath(cfg, {'optimization'})
+        optCfg = getFieldPath(cfg, {'optimization'});
+        if isstruct(optCfg)
+            optFields = fieldnames(optCfg);
+            for i = 1:numel(optFields)
+                key = optFields{i};
+                if startsWith(lower(key), 'visualise_')
+                    replacement = ['visualize_' key(numel('visualise_') + 1:end)];
+                    error('run_topopt_from_json:DeprecatedKey', ...
+                        'Deprecated key "optimization.%s" found. Use "postprocessing.%s" (use visualize_* spelling).', ...
+                        key, replacement);
+                end
+            end
+        end
+    end
+    deprecated = { ...
+        {'optimization','visualization_quality'},    'postprocessing.visualize_quality'; ...
+        {'optimization','save_snapshot_image'},      'postprocessing.save_snapshot_image'; ...
+        {'optimization','save_final_image'},         'postprocessing.save_final_image'; ...
+        {'optimization','save_frq_iterations'},      'postprocessing.save_frequency_iterations'; ...
+        {'save_frq_iterations'},                     'postprocessing.save_frequency_iterations'; ...
+    };
+    for i = 1:size(deprecated, 1)
+        if hasFieldPath(cfg, deprecated{i,1})
+            error('run_topopt_from_json:DeprecatedKey', ...
+                'Deprecated key "%s" found. Use "%s" instead.', ...
+                strjoin(deprecated{i,1}, '.'), deprecated{i,2});
+        end
+    end
+end
+
+function postproc = parsePostprocessingBlock(cfg)
+% Parse the top-level "postprocessing" block and return a postproc struct.
+    postproc = struct();
+
+    if hasFieldPath(cfg, {'postprocessing','compute_modes'})
+        postproc.computeModes = reqInt(cfg, {'postprocessing','compute_modes'}, 'postprocessing.compute_modes');
+        if postproc.computeModes < 1
+            error('run_topopt_from_json:InvalidComputeModes', 'postprocessing.compute_modes must be >= 1.');
+        end
+    else
+        postproc.computeModes = 3;
+    end
+
+    if hasFieldPath(cfg, {'postprocessing','compute_modes_initial'})
+        v = reqInt(cfg, {'postprocessing','compute_modes_initial'}, 'postprocessing.compute_modes_initial');
+        if v < 0
+            error('run_topopt_from_json:InvalidComputeModesInitial', ...
+                'postprocessing.compute_modes_initial must be >= 0.');
+        end
+        postproc.computeModesInitial = v;
+    else
+        postproc.computeModesInitial = 0;  % derived by computeRequiredInitialModes()
+    end
+
+    if hasFieldPath(cfg, {'postprocessing','visualize_live'})
+        postproc.visualizeLive = parseBool(getFieldPath(cfg, {'postprocessing','visualize_live'}), ...
+            'postprocessing.visualize_live');
+    else
+        postproc.visualizeLive = [];  % empty: solver uses its own default
+    end
+
+    if hasFieldPath(cfg, {'postprocessing','visualize_quality'})
+        postproc.visualizeQuality = parseVisualizationQuality( ...
+            getFieldPath(cfg, {'postprocessing','visualize_quality'}), ...
+            'postprocessing.visualize_quality');
+    else
+        postproc.visualizeQuality = 'regular';
+    end
+
+    if hasFieldPath(cfg, {'postprocessing','visualize_modes'})
+        vm = getFieldPath(cfg, {'postprocessing','visualize_modes'});
+        if ~isstruct(vm) || ~isfield(vm,'enabled') || ~isfield(vm,'count')
+            error('run_topopt_from_json:InvalidVisualizeModes', ...
+                'postprocessing.visualize_modes must be {"enabled": bool, "count": int}.');
+        end
+        postproc.visualizeModes.enabled = parseBool(vm.enabled, 'postprocessing.visualize_modes.enabled');
+        postproc.visualizeModes.count   = max(0, round(double(vm.count)));
+    else
+        postproc.visualizeModes = struct('enabled', false, 'count', 0);
+    end
+
+    if hasFieldPath(cfg, {'postprocessing','visualize_topology_modes'})
+        vtm = getFieldPath(cfg, {'postprocessing','visualize_topology_modes'});
+        if ~isstruct(vtm) || ~isfield(vtm,'enabled') || ~isfield(vtm,'count')
+            error('run_topopt_from_json:InvalidVisualizeTopologyModes', ...
+                'postprocessing.visualize_topology_modes must be {"enabled": bool, "count": int}.');
+        end
+        postproc.visualizeTopologyModes.enabled = parseBool(vtm.enabled, 'postprocessing.visualize_topology_modes.enabled');
+        postproc.visualizeTopologyModes.count   = max(0, round(double(vtm.count)));
+    else
+        postproc.visualizeTopologyModes = struct('enabled', false, 'count', 0);
+    end
+
+    if hasFieldPath(cfg, {'postprocessing','write_correlation_table'})
+        postproc.writeCorrelationTable = parseBool( ...
+            getFieldPath(cfg, {'postprocessing','write_correlation_table'}), ...
+            'postprocessing.write_correlation_table');
+    else
+        postproc.writeCorrelationTable = false;
+    end
+
+    if hasFieldPath(cfg, {'postprocessing','save_final_image'})
+        postproc.saveFinalImage = parseBool( ...
+            getFieldPath(cfg, {'postprocessing','save_final_image'}), ...
+            'postprocessing.save_final_image');
+    else
+        postproc.saveFinalImage = false;
+    end
+
+    if hasFieldPath(cfg, {'postprocessing','save_frequency_iterations'})
+        postproc.saveFrequencyIterations = parseBool( ...
+            getFieldPath(cfg, {'postprocessing','save_frequency_iterations'}), ...
+            'postprocessing.save_frequency_iterations');
+    else
+        postproc.saveFrequencyIterations = false;
+    end
+
+    % ---- Correlation block ----
+    % Activated either by write_correlation_table:true (legacy shorthand) or by an
+    % explicit "correlation": { "enabled": true, ... } block.
+    corrDef = struct( ...
+        'enabled',                  false, ...
+        'initialCount',             0, ...
+        'topologyCount',            0, ...
+        'metric',                   'mass_inner_product', ...
+        'writeCsv',                 true, ...
+        'csvFilename',              '', ...
+        'writeBestMatches',         true, ...
+        'bestK',                    3, ...
+        'useForTopologyModeLabels', false, ...
+        'writeHeatmap',             false);
+
+    if hasFieldPath(cfg, {'postprocessing','correlation'})
+        corrCfg = getFieldPath(cfg, {'postprocessing','correlation'});
+        if ~isstruct(corrCfg)
+            error('run_topopt_from_json:InvalidCorrelation', ...
+                'postprocessing.correlation must be a JSON object.');
+        end
+        if ~isfield(corrCfg, 'enabled')
+            error('run_topopt_from_json:InvalidCorrelation', ...
+                'postprocessing.correlation.enabled is required.');
+        end
+        corrDef.enabled = parseBool(corrCfg.enabled, 'postprocessing.correlation.enabled');
+        if isfield(corrCfg, 'initial_count')
+            corrDef.initialCount = max(0, round(double(corrCfg.initial_count)));
+        end
+        if isfield(corrCfg, 'topology_count')
+            corrDef.topologyCount = max(0, round(double(corrCfg.topology_count)));
+        end
+        if isfield(corrCfg, 'metric')
+            corrDef.metric = lower(strtrim(char(string(corrCfg.metric))));
+        end
+        if isfield(corrCfg, 'write_csv')
+            corrDef.writeCsv = parseBool(corrCfg.write_csv, 'postprocessing.correlation.write_csv');
+        end
+        if isfield(corrCfg, 'csv_filename') && ~isempty(corrCfg.csv_filename)
+            corrDef.csvFilename = strtrim(char(string(corrCfg.csv_filename)));
+        end
+        if isfield(corrCfg, 'write_best_matches')
+            corrDef.writeBestMatches = parseBool(corrCfg.write_best_matches, ...
+                'postprocessing.correlation.write_best_matches');
+        end
+        if isfield(corrCfg, 'best_k')
+            corrDef.bestK = max(1, round(double(corrCfg.best_k)));
+        end
+        if isfield(corrCfg, 'use_for_topology_mode_labels')
+            corrDef.useForTopologyModeLabels = parseBool(corrCfg.use_for_topology_mode_labels, ...
+                'postprocessing.correlation.use_for_topology_mode_labels');
+        end
+        if isfield(corrCfg, 'write_heatmap')
+            corrDef.writeHeatmap = parseBool(corrCfg.write_heatmap, ...
+                'postprocessing.correlation.write_heatmap');
+        end
+    elseif postproc.writeCorrelationTable
+        % write_correlation_table: true is a legacy shorthand for the correlation block.
+        corrDef.enabled          = true;
+        corrDef.writeCsv         = true;
+        corrDef.writeBestMatches = true;
+    end
+    postproc.correlation = corrDef;
+end
+
+function n = computeRequiredTopologyModes(postproc)
+% Compute the number of topology-domain modes needed for all postprocessing consumers.
+% Enforces n >= 2 when save_final_image is requested (title shows omega_1 and omega_2).
+% Also accounts for correlation.topology_count when correlation is enabled.
+    n = postproc.computeModes;
+    if postproc.visualizeTopologyModes.enabled
+        n = max(n, postproc.visualizeTopologyModes.count);
+    end
+    if postproc.saveFinalImage
+        n = max(n, 2);  % topology snapshot title always shows omega_1 and omega_2
+    end
+    if postproc.correlation.enabled
+        cTopo = postproc.correlation.topologyCount;
+        if cTopo == 0, cTopo = postproc.computeModes; end
+        n = max(n, cTopo);
+    end
+    if n > postproc.computeModes
+        fprintf('[Postprocessing] Topology compute_modes: %d -> %d to satisfy requested outputs.\n', ...
+            postproc.computeModes, n);
+    end
+end
+
+function n = computeRequiredInitialModes(postproc)
+% Compute the number of initial-domain (reference) modes needed for all consumers.
+% Accounts for visualize_modes.count and correlation.initial_count.
+    n = postproc.computeModesInitial;
+    if postproc.visualizeModes.enabled
+        n = max(n, postproc.visualizeModes.count);
+    end
+    if postproc.correlation.enabled
+        cInit = postproc.correlation.initialCount;
+        if cInit == 0
+            cInit = postproc.computeModesInitial;
+            if cInit == 0, cInit = postproc.computeModes; end
+        end
+        n = max(n, cInit);
+    end
+    % Legacy flag without new correlation block: fall back to topology count.
+    if postproc.writeCorrelationTable && ~postproc.correlation.enabled && n == 0
+        n = postproc.computeModes;
+        fprintf('[Postprocessing] Initial domain modes set to %d for correlation table.\n', n);
+    end
+end
+
+% =========================================================================
+%  Correlation utilities
+% =========================================================================
+
+function C = computeCorrelationMatrixFullDOF(PhiFull, PsiFull, Mfull, metric)
+%COMPUTECORRELATIONMATRIXFULLDOF  Full-DOF mass-inner-product correlation.
+%
+%   PhiFull : (ndof x nI) initial-domain eigenvectors embedded in full DOFs
+%   PsiFull : (ndof x nT) topology-domain eigenvectors embedded in full DOFs
+%   Mfull   : (ndof x ndof) topology mass matrix on full DOFs
+%   metric  : "mass_inner_product" or "mac"
+    PhiFull = double(PhiFull);
+    PsiFull = double(PsiFull);
+
+    MPhi = Mfull * PhiFull;
+    MPsi = Mfull * PsiFull;
+    crossVals = PhiFull' * MPsi;
+
+    normPhi = sqrt(max(0, sum(PhiFull .* MPhi, 1)));
+    normPsi = sqrt(max(0, sum(PsiFull .* MPsi, 1)));
+    denom = normPhi' * normPsi;
+
+    C0 = abs(crossVals) ./ max(denom, eps);
+    C0 = min(max(C0, 0), 1);
+    C0(~isfinite(C0)) = 0;
+
+    metricKey = lower(strtrim(char(string(metric))));
+    if strcmp(metricKey, 'mass_inner_product')
+        C = C0;
+    elseif strcmp(metricKey, 'mac')
+        C = C0 .^ 2;
+    else
+        error('run_topopt_from_json:InvalidCorrelationMetric', ...
+            'Unsupported postprocessing.correlation.metric "%s". Supported values: "mass_inner_product", "mac".', ...
+            metricKey);
+    end
+end
+
+function logCorrelationBestMatches(C, omegaInit, omegaTopo, bestK)
+%LOGCORRELATIONBESTMATCHES  Print best-match report to the command window.
+    [nI, nT] = size(C);
+    bestK = min(bestK, nT);
+    fprintf('[Correlation] Best matches per initial mode (top %d of %d topology modes):\n', bestK, nT);
+    for i = 1:nI
+        row = C(i, :);
+        [sortedVals, sortedIdx] = sort(row, 'descend');
+        parts = cell(1, bestK);
+        for k = 1:bestK
+            j = sortedIdx(k);
+            if j <= numel(omegaTopo)
+                parts{k} = sprintf('topo_%d/%.1f rad\\s (corr=%.3f)', j, omegaTopo(j), sortedVals(k));
+            else
+                parts{k} = sprintf('topo_%d (corr=%.3f)', j, sortedVals(k));
+            end
+        end
+        fprintf('[Correlation] init_mode_%d (omega=%.3f rad/s): %s\n', ...
+            i, omegaInit(i), strjoin(parts, ', '));
+    end
+    % Compact one-liner: best single match per initial mode.
+    parts = cell(1, nI);
+    for i = 1:nI
+        [bestVal, bestJ] = max(C(i, :));
+        parts{i} = sprintf('init_%d->topo_%d(%.3f)', i, bestJ, bestVal);
+    end
+    fprintf('[Correlation] Compact: %s\n', strjoin(parts, '  '));
+end
+
+function writeCorrelationCSV(C, omegaInit, omegaTopo, csvPath)
+%WRITECORRELATIONCSV  Write correlation matrix to a CSV file.
+%   Header row: column per topology mode with its frequency label.
+%   First column: initial mode row labels with frequencies.
+    [nI, nT] = size(C);
+    fid = fopen(csvPath, 'w');
+    if fid < 0
+        warning('run_topopt_from_json:CorrelationCSVWriteFailed', ...
+            'Cannot open for writing: %s', csvPath);
+        return;
+    end
+    % Header: first cell blank, then topology mode + frequency labels.
+    fprintf(fid, 'initial_mode');
+    for j = 1:nT
+        if j <= numel(omegaTopo)
+            fprintf(fid, ',topology_mode_%d(%.4f_rad_per_s)', j, omegaTopo(j));
+        else
+            fprintf(fid, ',topology_mode_%d', j);
+        end
+    end
+    fprintf(fid, '\n');
+    % Data rows: initial mode + frequency label, then correlation values.
+    for i = 1:nI
+        if i <= numel(omegaInit)
+            fprintf(fid, 'initial_mode_%d(%.4f_rad_per_s)', i, omegaInit(i));
+        else
+            fprintf(fid, 'initial_mode_%d', i);
+        end
+        for j = 1:nT
+            fprintf(fid, ',%.6f', C(i, j));
+        end
+        fprintf(fid, '\n');
+    end
+    fclose(fid);
+    fprintf('[Postprocessing] Saved correlation CSV: %s\n', csvPath);
+end
+
+function writeCorrelationHeatmap(C, omegaInit, omegaTopo, outPath)
+%WRITECORRELATIONHEATMAP  Save a correlation matrix heatmap as PNG (no extra toolboxes).
+    [nI, nT] = size(C);
+    fig = figure('Color', 'white', 'Visible', 'off');
+    ax  = axes('Parent', fig);
+    imagesc(ax, C);
+    colormap(ax, parula(256));
+    clim(ax, [0, 1]);
+    colorbar(ax);
+
+    % Axis labels: show mode index and frequency where available.
+    xLabels = cell(1, nT);
+    for j = 1:nT
+        if j <= numel(omegaTopo)
+            xLabels{j} = sprintf('%d\n(%.1f)', j, omegaTopo(j));
+        else
+            xLabels{j} = num2str(j);
+        end
+    end
+    yLabels = cell(1, nI);
+    for i = 1:nI
+        if i <= numel(omegaInit)
+            yLabels{i} = sprintf('%d (%.1f)', i, omegaInit(i));
+        else
+            yLabels{i} = num2str(i);
+        end
+    end
+
+    set(ax, 'XTick', 1:nT, 'XTickLabel', xLabels, ...
+            'YTick', 1:nI, 'YTickLabel', yLabels);
+    set(ax, 'YDir', 'normal');
+    xlabel(ax, 'Topology mode  (index / omega [rad/s])');
+    ylabel(ax, 'Initial mode  (index / omega [rad/s])');
+    title(ax, sprintf('Mode correlation matrix (%d initial × %d topology)', nI, nT), ...
+        'Interpreter', 'none');
+    axis(ax, 'tight');
+
+    % Annotate cells with values when the matrix is small enough.
+    if nI * nT <= 100
+        for i = 1:nI
+            for j = 1:nT
+                text(ax, j, i, sprintf('%.2f', C(i,j)), ...
+                    'HorizontalAlignment', 'center', 'FontSize', 7, 'Color', 'k');
+            end
+        end
+    end
+    drawnow;
+    exportgraphics(fig, outPath, 'Resolution', 150, 'BackgroundColor', 'white');
+    close(fig);
+    fprintf('[Postprocessing] Saved correlation heatmap: %s\n', outPath);
+end

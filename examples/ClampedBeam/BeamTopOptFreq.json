@@ -21,7 +21,6 @@
       "nelx": 400,
       "nely": 50
     },
-    
 
     "load_cases": [
       {
@@ -30,8 +29,8 @@
         "loads": [
           { "type": "semi_harmonic", "mode": 1, "factor": 1.0 }
         ]
-      }, 
-        {
+      },
+      {
         "name": "case2",
         "factor": 0.0,
         "loads": [
@@ -41,24 +40,22 @@
     ]
   },
 
-
   "material": {
     "model": "plane_stress_isotropic",
     "E": 1.0E7,
     "nu": 0.3,
     "rho": 1.0
   },
-  
-  "void_material": {
-      "E_min_ratio": 1e-6,
-      "rho_min": 1e-6
-    },
 
+  "void_material": {
+    "E_min_ratio": 1e-6,
+    "rho_min": 1e-6
+  },
 
   "bc": {
     "supports": [
-		{ "type": "vertical_line", "x": 0.0, "dofs": ["ux", "uy"], "tol": 1E-6 },
-        { "type": "vertical_line", "x": 8.0, "dofs": ["ux", "uy"], "tol": 1E-6 }
+      { "type": "vertical_line", "x": 0.0, "dofs": ["ux", "uy"], "tol": 1E-6 },
+      { "type": "vertical_line", "x": 8.0, "dofs": ["ux", "uy"], "tol": 1E-6 }
     ]
   },
 
@@ -70,9 +67,9 @@
     "volume_fraction": 0.5,
     "penalization": 3.0,
 
-     "debug_semi_harmonic": true,
-     "semi_harmonic_baseline": "solid",
-     "semi_harmonic_rho_source": "x",
+    "debug_semi_harmonic": true,
+    "semi_harmonic_baseline": "solid",
+    "semi_harmonic_rho_source": "x",
 
     "filter": {
       "type": "sensitivity",
@@ -85,12 +82,21 @@
     "max_iters": 2000,
     "convergence_tol": 1e-3,
     "seed": null,
-    "visualise_live" : "yes",
-    "visualise_quality" : "smooth",
-    "visualise_modes" : 5,
-    "save_snapshot_image" : "no",
-    "save_final_image" : "yes",
-    "save_frq_iterations" : "yes",
     "harmonic_normalize": true
+  },
+
+  "postprocessing": {
+    "compute_modes": 5,
+
+    "visualize_live": true,
+    "visualize_quality": "smooth",
+
+    "visualize_modes":          { "enabled": true,  "count": 5 },
+    "visualize_topology_modes": { "enabled": false,  "count": 5 },
+
+    "write_correlation_table":   false,
+    "save_snapshot_image":       false,
+    "save_final_image":          true,
+    "save_frequency_iterations": true
   }
 }

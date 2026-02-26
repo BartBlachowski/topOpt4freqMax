@@ -6,9 +6,9 @@ jsonPath = fullfile(fileparts(mfilename('fullpath')), 'BeamTopOptFreq.json');
 data = jsondecode(fileread(jsonPath));
 
 % Disable visualization and image saving for clean performance measurement
-data.optimisation.visualise_live   = 'no';
-data.optimisation.save_final_image = 'yes';
-data.optimisation.save_snapshot_image = 'no';
+data.postprocessing.visualize_live    = false;
+data.postprocessing.save_final_image  = false;
+data.postprocessing.save_snapshot_image = false;
 
 % Fix filter radius to 2 finite elements regardless of resolution.
 % The base JSON uses physical units (0.04 m), which gives < 1 element at

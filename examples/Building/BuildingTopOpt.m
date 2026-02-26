@@ -4,7 +4,7 @@ close all;
 jsonPath = 'BuildingTopOptFreq.json';
 data = jsondecode(fileread(jsonPath));
 
-res_str="80x240n";
+res_str="80x240";
 forms_str = "_forms_12_";
 
 % data.optimisation.approach = 'Olhoff';

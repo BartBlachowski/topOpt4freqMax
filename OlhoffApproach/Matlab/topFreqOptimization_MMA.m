@@ -38,10 +38,10 @@ cfg  = applyDefaults(cfg);
 opts = applyDefaultOpts(opts, cfg);
 diagnostics = struct();
 localEnsurePlotHelpersOnPath();
-plotLive = localParseVisualiseLive(opts.visualise_live, true);
+plotLive = localParseVisualizeLive(opts.visualize_live, true);
 visualizationQuality = localParseVisualizationQuality(opts.visualization_quality);
 approachName = localApproachName(opts, 'Olhoff');
-saveFrqIterations = localParseVisualiseLive(opts.save_frq_iterations, false);
+saveFrqIterations = localParseVisualizeLive(opts.save_frq_iterations, false);
 
 % Shorthand locals (keeps the algorithm body intact)
 L          = cfg.L;
@@ -597,7 +597,7 @@ function opts = applyDefaultOpts(opts, cfg)
         'diagnosticOnly', false, ...
         'diagModes', max(3, cfg.J), ...
         'plotBinary', false, ...
-        'visualise_live', true, ...
+        'visualize_live', true, ...
         'visualization_quality', 'regular', ...
         'save_frq_iterations', false);
     if isfield(cfg, 'visualization_quality') && ~isempty(cfg.visualization_quality)
@@ -649,7 +649,7 @@ function localEnsurePlotHelpersOnPath()
     end
 end
 
-function tf = localParseVisualiseLive(value, defaultValue)
+function tf = localParseVisualizeLive(value, defaultValue)
     if nargin < 2
         defaultValue = true;
     end
@@ -679,8 +679,8 @@ function tf = localParseVisualiseLive(value, defaultValue)
             return;
         end
     end
-error('topFreqOptimization_MMA:InvalidVisualiseLive', ...
-    'visualise_live must be yes/no (case-insensitive) or boolean-like.');
+error('topFreqOptimization_MMA:InvalidVisualizeLive', ...
+    'visualize_live must be yes/no (case-insensitive) or boolean-like.');
 end
 
 function quality = localParseVisualizationQuality(value)

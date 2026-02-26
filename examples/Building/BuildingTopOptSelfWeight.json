@@ -49,7 +49,7 @@
     "nu": 0.3,
     "rho": 1.0
   },
-  
+
   "void_material": {
       "E_min_ratio": 1e-6,
       "rho_min": 1e-6
@@ -81,13 +81,21 @@
     "max_iters": 200,
     "convergence_tol": 2e-3,
     "seed": null,
-    "visualise_live" : "yes",
-    "visualise_quality" : "smooth",
-    "visualise_modes" : 5
-    "visualise_topology_modes" : 5
-    "save_snapshot_image" : "no",
-    "save_final_image" : "yes",
-    "save_frq_iterations" : "yes",
     "harmonic_normalize": true
+  },
+
+  "postprocessing": {
+    "compute_modes": 5,
+
+    "visualize_live": true,
+    "visualize_quality": "smooth",
+
+    "visualize_modes":          { "enabled": true,  "count": 5 },
+    "visualize_topology_modes": { "enabled": true,  "count": 5 },
+
+    "write_correlation_table":   false,
+    "save_snapshot_image":       false,
+    "save_final_image":          true,
+    "save_frequency_iterations": true
   }
 }

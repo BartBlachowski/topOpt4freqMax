@@ -69,7 +69,7 @@
 	  ]
   },
 
-  "optimisation": {
+  "optimization": {
     "approach": "ourApproach",
     "optimizer": "MMA",
     "objective": "max_min_frequency",
@@ -88,13 +88,21 @@
     "max_iters": 2000,
     "convergence_tol": 2e-3,
     "seed": null,
-    "visualise_live" : "yes",
-    "visualise_quality" : "smooth",
-    "visualise_modes" : 5,
-    "visualise_topology_modes" : 30,
-    "save_snapshot_image" : "no",
-    "save_final_image" : "yes",
-    "save_frq_iterations" : "yes",
     "harmonic_normalize": true
+  },
+
+  "postprocessing": {
+    "compute_modes": 50,
+
+    "visualize_live": true,
+    "visualize_quality": "smooth",
+
+    "visualize_modes":          { "enabled": true,  "count": 5 },
+    "visualize_topology_modes": { "enabled": true,  "count": 30 },
+
+    "write_correlation_table":   true,
+    "save_snapshot_image":       false,
+    "save_final_image":          true,
+    "save_frequency_iterations": true
   }
 }

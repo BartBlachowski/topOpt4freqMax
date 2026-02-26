@@ -59,17 +59,18 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
             'runCfg.optimizer must be "OC" or "MMA" (got "%s").', optimizerType);
     end
     fprintf('Optimizer: %s\n', optimizerType);
-    if isfield(runCfg, 'visualise_live') && ~isempty(runCfg.visualise_live)
-        visualiseLive = localParseVisualiseLive(runCfg.visualise_live, true);
+    if isfield(runCfg, 'visualize_live') && ~isempty(runCfg.visualize_live)
+        visualizeLive = localParseVisualizeLive(runCfg.visualize_live, true);
     else
-        visualiseLive = true;
+        visualizeLive = true;
     end
     visualizationQuality = localParseVisualizationQuality( ...
         localOpt(runCfg, 'visualization_quality', 'regular'));
-    saveFrqIterations = localParseVisualiseLive(localOpt(runCfg, 'save_frq_iterations', false), false);
-    harmonicNormalize = localParseVisualiseLive(localOpt(runCfg, 'harmonic_normalize', true), true);
-    debugReturnDc = localParseVisualiseLive(localOpt(runCfg, 'debug_return_dc', false), false);
-    debugSemiHarmonic = localParseVisualiseLive(localOpt(runCfg, 'debug_semi_harmonic', false), false);
+    saveFrqIterations = localParseVisualizeLive(localOpt(runCfg, 'save_frq_iterations', false), false);
+    harmonicNormalize = localParseVisualizeLive(localOpt(runCfg, 'harmonic_normalize', true), true);
+    debugReturnDc = localParseVisualizeLive(localOpt(runCfg, 'debug_return_dc', false), false);
+    debugSemiHarmonic = localParseVisualizeLive(localOpt(runCfg, 'debug_semi_harmonic', false), false);
+    debugLoadCases = localParseDebugLoadCases(localOpt(runCfg, 'debug_load_cases', 'off'));
     semiHarmonicBaseline = localParseSemiHarmonicBaseline( ...
         localOpt(runCfg, 'semi_harmonic_baseline', 'solid'));
     semiHarmonicRhoSource = localParseSemiHarmonicRhoSource( ...
@@ -481,7 +482,7 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
             dc = Hf * (dc ./ Hs);
             dv = Hf * (dv ./ Hs);
         end
-        % Re-zero passive indices after filtering (filter spreads values to neighbours).
+        % Re-zero passive indices after filtering (filter spreads values to neighbors).
         dc(pasS) = 0;  dc(pasV) = 0;
         dv(pasS) = 0;  dv(pasV) = 0;
 
@@ -495,7 +496,7 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
             % Only active elements are passed to mmasub.  Passive elements are
             % excluded: they have x fixed at 0 or 1, so xmin==xmax==x would make
             % mmasub's xl1 = xval-low = 0 → 1/0 → NaN in subsolv.
-            % Global [0,1] bounds are used so mmasub's asyinit=0.01 initialises
+            % Global [0,1] bounds are used so mmasub's asyinit=0.01 initializes
             % asymptotes at ±0.01 of the full range — the standard working scale.
             n_act_cur = numel(act);
             xmin_act  = zeros(n_act_cur, 1);
@@ -537,24 +538,9 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
         vol    = mean(xPhys);
         change = max(abs(x - xold));
 
-        for icase = 1:nCases
-            msg = sprintf('  load_case[%d] \"%s\": ||F||=%.3e', ...
-                icase, loadCases(icase).name, caseDiag(icase).normF);
-            if ~isempty(caseDiag(icase).closestNodeIds)
-                msg = sprintf('%s, closest_node ids=%s', msg, mat2str(caseDiag(icase).closestNodeIds));
-            end
-            if ~isempty(caseDiag(icase).harmonicModes)
-                msg = sprintf('%s, harmonic=%s', msg, ...
-                    localFormatHarmonicDiag(caseDiag(icase).harmonicModes, caseDiag(icase).harmonicOmegas));
-            end
-            if ~isempty(caseDiag(icase).semiHarmonicModes)
-                msg = sprintf('%s, semi_harmonic=%s', msg, ...
-                    localFormatHarmonicDiag(caseDiag(icase).semiHarmonicModes, caseDiag(icase).semiHarmonicOmegas));
-            end
-            fprintf('%s\n', msg);
-        end
+        localLogLoadCaseDiagnostics(debugLoadCases, loop, loadCases, caseDiag);
 
-        if visualiseLive
+        if visualizeLive
             if usingConfiguredLoadCases && ~isempty(harmonicOmegas) && isfinite(harmonicOmegas(1))
                 omegaTitle = harmonicOmegas(1);
             elseif ~usingConfiguredLoadCases
@@ -638,7 +624,7 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
     plotTopology( ...
         xPhys, nelx, nely, ...
         formatTopologyTitle(approachName, volfrac, omega1_final, omega2_final), ...
-        visualiseLive, visualizationQuality, true);
+        visualizeLive, visualizationQuality, true);
 
     xOut = xPhys(:);
 end
@@ -952,6 +938,69 @@ for i = 1:numel(modes)
     end
 end
 msg = ['[' strjoin(parts, ', ') ']'];
+end
+
+function localLogLoadCaseDiagnostics(level, loop, loadCases, caseDiag)
+if isstring(level) && isscalar(level)
+    level = char(level);
+end
+levelKey = lower(strtrim(char(level)));
+if isempty(levelKey)
+    levelKey = 'off';
+end
+
+switch levelKey
+    case 'off'
+        return;
+
+    case 'full'
+        nCases = numel(loadCases);
+        for icase = 1:nCases
+            msg = sprintf('  load_case[%d] \"%s\": ||F||=%.3e', ...
+                icase, loadCases(icase).name, caseDiag(icase).normF);
+            if ~isempty(caseDiag(icase).closestNodeIds)
+                msg = sprintf('%s, closest_node ids=%s', msg, mat2str(caseDiag(icase).closestNodeIds));
+            end
+            if ~isempty(caseDiag(icase).harmonicModes)
+                msg = sprintf('%s, harmonic=%s', msg, ...
+                    localFormatHarmonicDiag(caseDiag(icase).harmonicModes, caseDiag(icase).harmonicOmegas));
+            end
+            if ~isempty(caseDiag(icase).semiHarmonicModes)
+                msg = sprintf('%s, semi_harmonic=%s', msg, ...
+                    localFormatHarmonicDiag(caseDiag(icase).semiHarmonicModes, caseDiag(icase).semiHarmonicOmegas));
+            end
+            fprintf('%s\n', msg);
+        end
+
+    case 'summary'
+        nCases = numel(loadCases);
+        if nCases < 1
+            fprintf('[load_cases] it=%d: nonzero=0/0, max||F||=0.000e+00\n', loop);
+            return;
+        end
+
+        norms = zeros(nCases, 1);
+        for icase = 1:nCases
+            norms(icase) = caseDiag(icase).normF;
+        end
+        nonzeroCount = sum(norms > 0);
+        [maxNorm, maxIdx] = max(norms);
+        msg = sprintf('[load_cases] it=%d: nonzero=%d/%d, max||F||=%.3e (%s)', ...
+            loop, nonzeroCount, nCases, maxNorm, loadCases(maxIdx).name);
+        if ~isempty(caseDiag(maxIdx).harmonicModes)
+            msg = sprintf('%s, harmonic=%s', msg, ...
+                localFormatHarmonicDiag(caseDiag(maxIdx).harmonicModes, caseDiag(maxIdx).harmonicOmegas));
+        end
+        if ~isempty(caseDiag(maxIdx).semiHarmonicModes)
+            msg = sprintf('%s, semi_harmonic=%s', msg, ...
+                localFormatHarmonicDiag(caseDiag(maxIdx).semiHarmonicModes, caseDiag(maxIdx).semiHarmonicOmegas));
+        end
+        fprintf('%s\n', msg);
+
+    otherwise
+        error('topopt_freq:InvalidDebugLoadCasesLevel', ...
+            'Unknown debug_load_cases level "%s".', levelKey);
+end
 end
 
 function omegas = localFirstNOmegasFromSubmatrices(Kf, Mf, nModes)
@@ -1434,7 +1483,7 @@ if exist(toolsDir, 'dir') == 7
 end
 end
 
-function tf = localParseVisualiseLive(value, defaultValue)
+function tf = localParseVisualizeLive(value, defaultValue)
 if nargin < 2
     defaultValue = true;
 end
@@ -1464,8 +1513,51 @@ if ischar(value)
         return;
     end
 end
-error('topopt_freq:InvalidVisualiseLive', ...
-    'visualise_live must be yes/no (case-insensitive) or boolean-like.');
+error('topopt_freq:InvalidVisualizeLive', ...
+    'visualize_live must be yes/no (case-insensitive) or boolean-like.');
+end
+
+function level = localParseDebugLoadCases(value)
+if isempty(value)
+    level = 'off';
+    return;
+end
+if isstring(value) && isscalar(value)
+    value = char(value);
+end
+if ischar(value)
+    key = lower(strtrim(value));
+    if isempty(key)
+        level = 'off';
+        return;
+    end
+    if any(strcmp(key, {'off', 'summary', 'full'}))
+        level = key;
+        return;
+    end
+    error('topopt_freq:InvalidDebugLoadCases', ...
+        ['debug_load_cases must be "off", "summary", or "full" ', ...
+         '(or boolean/numeric scalar mapping to off/summary).']);
+end
+if islogical(value) && isscalar(value)
+    if value
+        level = 'summary';
+    else
+        level = 'off';
+    end
+    return;
+end
+if isnumeric(value) && isscalar(value)
+    if value == 0
+        level = 'off';
+    else
+        level = 'summary';
+    end
+    return;
+end
+error('topopt_freq:InvalidDebugLoadCases', ...
+    ['debug_load_cases must be "off", "summary", or "full" ', ...
+     '(or boolean/numeric scalar mapping to off/summary).']);
 end
 
 function quality = localParseVisualizationQuality(value)

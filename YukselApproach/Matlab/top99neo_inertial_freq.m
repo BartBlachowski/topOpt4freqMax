@@ -59,14 +59,14 @@ end
 if isfield(runCfg, 'stage1_tol') && ~isempty(runCfg.stage1_tol), stage1Tol = runCfg.stage1_tol; end
 if isfield(runCfg, 'stage2_tol') && ~isempty(runCfg.stage2_tol), stage2Tol = runCfg.stage2_tol; end
 finalModes = max(1, floor(double(localOpt(runCfg, 'final_modes', 3))));
-if isfield(runCfg, 'visualise_live') && ~isempty(runCfg.visualise_live)
-    doPlot = localParseVisualiseLive(runCfg.visualise_live, true);
+if isfield(runCfg, 'visualize_live') && ~isempty(runCfg.visualize_live)
+    doPlot = localParseVisualizeLive(runCfg.visualize_live, true);
 else
     doPlot = true;
 end
 visualizationQuality = localParseVisualizationQuality( ...
     localOpt(runCfg, 'visualization_quality', 'regular'));
-saveFrqIterations = localParseVisualiseLive(localOpt(runCfg, 'save_frq_iterations', false), false);
+saveFrqIterations = localParseVisualizeLive(localOpt(runCfg, 'save_frq_iterations', false), false);
 if saveFrqIterations
     fprintf(['Warning: save_frq_iterations=yes forces per-iteration eigenvalue solves for plotting; ', ...
         'runtime will increase and comparisons are not fair.\n']);
@@ -322,7 +322,7 @@ switch lower(bcType)
         % No standard hinge/clamp — all fixed DOFs come from extraFixedDofs.
         fixed = [];
         tipMassNode = [];
-        % Stage-1 load: vertical DOF at beam centre (sensible fallback).
+        % Stage-1 load: vertical DOF at beam center (sensible fallback).
         midRow = round(nely/2) + 1;
         midCol = round((nelx+1)/2);
         lcNode = nodeNrs(midRow, midCol);
@@ -788,7 +788,7 @@ if exist(toolsDir, 'dir') == 7
 end
 end
 
-function tf = localParseVisualiseLive(value, defaultValue)
+function tf = localParseVisualizeLive(value, defaultValue)
 if nargin < 2
     defaultValue = true;
 end
@@ -818,8 +818,8 @@ if ischar(value)
         return;
     end
 end
-error('top99neo_inertial_freq:InvalidVisualiseLive', ...
-    'visualise_live must be yes/no (case-insensitive) or boolean-like.');
+error('top99neo_inertial_freq:InvalidVisualizeLive', ...
+    'visualize_live must be yes/no (case-insensitive) or boolean-like.');
 end
 
 function quality = localParseVisualizationQuality(value)

@@ -20,7 +20,7 @@ H = 1.0;
 
 % Common runtime config.
 runCfgBase = struct();
-runCfgBase.visualise_live = false;
+runCfgBase.visualize_live = false;
 runCfgBase.save_frq_iterations = false;
 runCfgBase.max_iters = 1;
 runCfgBase.conv_tol = 1e-9;
