@@ -1,7 +1,7 @@
 function titleStr = formatTopologyTitle(approachName, volfrac, omega1, omega2)
 %FORMATTOPOLOGYTITLE Build a standardized topology plot title.
 
-name = char(string(approachName));
+name = strrep(char(string(approachName)), '_', ' ');
 volPercent = 100 * volfrac;
 
 if nargin < 3 || isempty(omega1) || ~isfinite(omega1)

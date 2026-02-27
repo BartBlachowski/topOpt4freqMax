@@ -58,6 +58,10 @@ x = repmat(volfrac,nely,nelx);
 xPhys = x;
 loop = 0;
 change = 1;
+if ploton
+  figure('Color', 'white');
+  theme("light");
+end
 %% START ITERATION
 while change > 0.01 && loop < maxiter
   loop = loop + 1;

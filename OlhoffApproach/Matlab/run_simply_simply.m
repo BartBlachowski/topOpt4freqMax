@@ -44,7 +44,9 @@ paper = struct('init', 68.7, 'opt', 174.7);
 fprintf('SS case: omega1 initial=%.1f (paper %.1f) | optimized=%.1f (paper %.1f)\n', ...
     diag_out.initial.omega(1), paper.init, omega_best, paper.opt);
 
-figure('Name', 'Olhoff SS topology'); hold on;
+figure('Name', 'Olhoff SS topology');
+theme("light");
+hold on;
 imgDisp = buildTopologyDisplayImage(xPhys_best, cfg.nelx, cfg.nely, opts.visualization_quality, true);
 imagesc(1 - imgDisp);
 set(gca, 'YDir', 'normal');

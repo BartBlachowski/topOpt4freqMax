@@ -549,10 +549,12 @@ function saveFrequencyIterationPlot(freqIterOmega, approachName, nelx, nely, rep
     end
 
     nameRaw = char(string(approachName));
+    nameDisplay = strrep(nameRaw, '_', ' ');
     nameSafe = regexprep(nameRaw, '[^\w\-]', '_');
     outPath = fullfile(resultsDir, sprintf('%s_%dx%d_freq_iterations.png', nameSafe, nelx, nely));
 
     fig = figure('Color', 'white', 'Visible', 'off');
+    theme("light");
     ax = axes('Parent', fig);
     hold(ax, 'on');
     colors = [0.0000, 0.4470, 0.7410; ...
@@ -561,12 +563,12 @@ function saveFrequencyIterationPlot(freqIterOmega, approachName, nelx, nely, rep
     xIter = (1:nIter)';
     for j = 1:3
         plot(ax, xIter, freqIterOmega(:,j), '-', 'LineWidth', 1.6, ...
-            'Color', colors(j,:), 'DisplayName', sprintf('\\omega_%d', j));
+            'Color', colors(j,:), 'DisplayName', sprintf('\\omega_{%d}', j));
     end
 
     xlabel(ax, 'Outer iteration');
     ylabel(ax, 'Frequency (rad/s)');
-    title(ax, sprintf('%s frequency history', nameRaw), 'Interpreter', 'none');
+    title(ax, sprintf('%s frequency history', nameDisplay), 'Interpreter', 'none');
     grid(ax, 'on');
     box(ax, 'on');
     % MATLAB requires strictly increasing limits; handle single-iteration runs.
@@ -745,11 +747,13 @@ function saveTopologySnapshot(x, nelx, nely, approachName, jsonSource, omega1, v
     end
 
     nameRaw  = char(string(approachName));
+    nameDisplay = strrep(nameRaw, '_', ' ');
     nameSafe = regexprep(nameRaw, '[^\w\-]', '_');
     baseName = fullfile(folder, sprintf('%s_%dx%d', nameSafe, nelx, nely));
 
     % Build a visible figure so the renderer is fully active before saving.
     fig = figure('Color', 'white', 'Visible', 'on');
+    theme("light");
     ax  = axes('Parent', fig);
     img = buildTopologyDisplayImage(x, nelx, nely, visualizationQuality, true);
     imagesc(ax, 1 - img, 'Interpolation', 'nearest');
@@ -760,14 +764,14 @@ function saveTopologySnapshot(x, nelx, nely, approachName, jsonSource, omega1, v
     clim(ax, [0 1]);
 
     if isfinite(omega1)
-        titleStr = sprintf('%s  |  %dx%d  |  \\omega_1 = %.2f rad/s', ...
-            nameRaw, nelx, nely, omega1);
+        titleStr = sprintf('%s  |  %dx%d  |  \\omega_{1} = %.2f rad/s', ...
+            nameDisplay, nelx, nely, omega1);
         if isfinite(omega2)
-            titleStr = sprintf('%s  |  \\omega_2 = %.2f rad/s', ...
+            titleStr = sprintf('%s  |  \\omega_{2} = %.2f rad/s', ...
                 titleStr, omega2);
         end
     else
-        titleStr = sprintf('%s  |  %dx%d', nameRaw, nelx, nely);
+        titleStr = sprintf('%s  |  %dx%d', nameDisplay, nelx, nely);
     end
     title(ax, titleStr, 'Interpreter', 'tex', 'FontSize', 10);
 
@@ -959,6 +963,7 @@ function localSaveTopologyModePlot( ...
 
     % --- Plot ---
     fig = figure('Color', 'white', 'Visible', 'on');
+    theme("light");
     ax  = axes('Parent', fig);
     hold(ax, 'on');
 
@@ -981,11 +986,12 @@ function localSaveTopologyModePlot( ...
     ylim(ax, [min([0; Vd(solidNodes,2)]) - pad,  max([H; Vd(solidNodes,2)]) + pad]);
 
     % --- Title: omega for the displayed mode, plus optional correlation label ---
+    titleBase = strrep(jsonBaseName, '_', ' ');
     if modeIdx <= numel(omegaAll) && isfinite(omegaAll(modeIdx))
-        omegaModeStr = sprintf('\\omega_%d = %.3f rad/s', modeIdx, omegaAll(modeIdx));
-        titleStr = sprintf('%s | Topology Mode %d | %s', jsonBaseName, modeIdx, omegaModeStr);
+        omegaModeStr = sprintf('\\omega_{%d} = %.3f rad/s', modeIdx, omegaAll(modeIdx));
+        titleStr = sprintf('%s | Topology Mode %d | %s', titleBase, modeIdx, omegaModeStr);
     else
-        titleStr = sprintf('%s | Topology Mode %d', jsonBaseName, modeIdx);
+        titleStr = sprintf('%s | Topology Mode %d', titleBase, modeIdx);
     end
     if ~isempty(corrLabel)
         titleStr = [titleStr ' | ' corrLabel];
@@ -1224,6 +1230,7 @@ function localSaveSingleModePlot( ...
     yDef = yGrid + scale * uy;
 
     fig = figure('Color', 'white', 'Visible', 'off');
+    theme("light");
     ax = axes('Parent', fig);
     hold(ax, 'on');
 
@@ -1252,8 +1259,9 @@ function localSaveSingleModePlot( ...
     set(ax, 'YDir', 'normal', 'XTick', [], 'YTick', []);
     box(ax, 'on');
 
+    titleBase = strrep(jsonBaseName, '_', ' ');
     title(ax, sprintf('%s | Mode %d | \\omega = %.3f rad/s', ...
-        jsonBaseName, modeIdx, omegaVal), ...
+        titleBase, modeIdx, omegaVal), ...
         'Interpreter', 'tex', 'FontSize', 10);
 
     outPath = fullfile(outFolder, sprintf('%s_mode_%d.png', jsonBaseName, modeIdx));
@@ -1838,8 +1846,9 @@ end
 
 function writeCorrelationCSV(C, omegaInit, omegaTopo, csvPath)
 %WRITECORRELATIONCSV  Write correlation matrix to a CSV file.
-%   Header row: column per topology mode with its frequency label.
+%   Header row: "initial_mode,max_correlation_mode,<topology columns>".
 %   First column: initial mode row labels with frequencies.
+%   Second column: topology mode index with maximum correlation in each row.
     [nI, nT] = size(C);
     fid = fopen(csvPath, 'w');
     if fid < 0
@@ -1847,8 +1856,8 @@ function writeCorrelationCSV(C, omegaInit, omegaTopo, csvPath)
             'Cannot open for writing: %s', csvPath);
         return;
     end
-    % Header: first cell blank, then topology mode + frequency labels.
-    fprintf(fid, 'initial_mode');
+    % Header: row label + best-match mode index, then topology mode labels.
+    fprintf(fid, 'initial_mode,max_correlation_mode');
     for j = 1:nT
         if j <= numel(omegaTopo)
             fprintf(fid, ',topology_mode_%d(%.4f_rad_per_s)', j, omegaTopo(j));
@@ -1857,13 +1866,19 @@ function writeCorrelationCSV(C, omegaInit, omegaTopo, csvPath)
         end
     end
     fprintf(fid, '\n');
-    % Data rows: initial mode + frequency label, then correlation values.
+    % Data rows: initial mode label + best-match mode index, then correlation values.
     for i = 1:nI
         if i <= numel(omegaInit)
             fprintf(fid, 'initial_mode_%d(%.4f_rad_per_s)', i, omegaInit(i));
         else
             fprintf(fid, 'initial_mode_%d', i);
         end
+        if nT > 0
+            [~, bestMode] = max(C(i, :));
+        else
+            bestMode = 0;
+        end
+        fprintf(fid, ',%d', bestMode);
         for j = 1:nT
             fprintf(fid, ',%.6f', C(i, j));
         end
@@ -1877,6 +1892,7 @@ function writeCorrelationHeatmap(C, omegaInit, omegaTopo, outPath)
 %WRITECORRELATIONHEATMAP  Save a correlation matrix heatmap as PNG (no extra toolboxes).
     [nI, nT] = size(C);
     fig = figure('Color', 'white', 'Visible', 'off');
+    theme("light");
     ax  = axes('Parent', fig);
     imagesc(ax, C);
     colormap(ax, parula(256));

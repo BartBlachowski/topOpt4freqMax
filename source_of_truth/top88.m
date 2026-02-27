@@ -47,6 +47,8 @@ x = repmat(volfrac,nely,nelx);
 xPhys = x;
 loop = 0;
 change = 1;
+figure('Color', 'white');
+theme("light");
 %% START ITERATION
 while change > 0.01
   loop = loop + 1;

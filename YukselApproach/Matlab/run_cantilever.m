@@ -31,6 +31,7 @@ dynMaxIt = 200;
     nelx, nely, volfrac, penal, rmin, ft, ftBC, eta, beta, move, maxit, stage1_maxit, bcType, 3);
 
 figure('Name','Yuksel Figure 9 benchmark','Color','w');
+theme("light");
 tiledlayout(2,1,'TileSpacing','compact','Padding','compact');
 
 nexttile;

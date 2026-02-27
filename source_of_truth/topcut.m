@@ -153,6 +153,7 @@ while iter < opt.max_iter && (change_xt > 0.01 || fval > 0.0 )
     %% PLOT DESIGNS USED FOR EVALUATION
     if ploton
         figure(21);clf
+        theme("light");
         set(gcf,'color','white');
         subplot(2,1,1);
         hold on
@@ -206,6 +207,7 @@ while iter < opt.max_iter && (change_xt > 0.01 || fval > 0.0 )
         val=sedensn(idx);
         if ploton
             figure(20);clf;
+            theme("light");
             
             subplot(2,1,1);
             patch('Faces',mesh.IX,'Vertices', mesh.XY,'FaceVertexCData',log(abs(sedens)'),'FaceColor','flat','edgecolor','none');
@@ -273,6 +275,5 @@ while iter < opt.max_iter && (change_xt > 0.01 || fval > 0.0 )
         ' cut.elem2: ' sprintf('%4i',numel(mesh2.cut_ele))]);
     
 end
-
 
 

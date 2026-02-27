@@ -29,6 +29,7 @@ visualizationQuality = 'regular'; % set 'smooth' for high-quality final display
     nelx, nely, volfrac, penal, rmin, ft, ftBC, eta, beta, move, maxit, stage1_maxit, bcType);
 
 figure('Name','Yuksel Figure 4 benchmark','Color','w');
+theme("light");
 tiledlayout(2,1,'TileSpacing','compact','Padding','compact');
 
 nexttile;

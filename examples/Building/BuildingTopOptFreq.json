@@ -92,13 +92,13 @@
   },
 
   "postprocessing": {
-    "compute_modes": 50,
+    "compute_modes": 100,
 
     "visualize_live": true,
     "visualize_quality": "smooth",
 
-    "visualize_modes":          { "enabled": true,  "count": 5 },
-    "visualize_topology_modes": { "enabled": true,  "count": 30 },
+    "visualize_modes":          { "enabled": true,  "count": 100 },
+    "visualize_topology_modes": { "enabled": true,  "count": 100 },
 
     "write_correlation_table":   true,
     "save_snapshot_image":       false,

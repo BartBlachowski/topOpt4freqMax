@@ -72,6 +72,7 @@ for k = 1:numel(cases)
 
     % Plot topology
     figure('Position', [100+300*(k-1), 100, 400, 100]);
+    theme("light");
     imgDisp = buildTopologyDisplayImage(xPhys_best, cfg.nelx, cfg.nely, opts.visualization_quality, true);
     imagesc(1 - imgDisp);
     set(gca, 'YDir', 'normal');

@@ -59,12 +59,12 @@
     ]
   },
 
-  "optimisation": {
+  "optimization": {
     "approach": "ourApproach",
     "optimizer": "MMA",
     "objective": "compliance",
     "interpolation": "SIMP",
-    "volume_fraction": 0.3,
+    "volume_fraction": 0.5,
     "penalization": 3.0,
 
     "debug_semi_harmonic": true,
@@ -86,15 +86,15 @@
   },
 
   "postprocessing": {
-    "compute_modes": 5,
+    "compute_modes": 100,
 
     "visualize_live": true,
     "visualize_quality": "smooth",
 
-    "visualize_modes":          { "enabled": true,  "count": 5 },
-    "visualize_topology_modes": { "enabled": false,  "count": 5 },
+    "visualize_modes":          { "enabled": true,  "count": 100 },
+    "visualize_topology_modes": { "enabled": true,  "count": 100 },
 
-    "write_correlation_table":   false,
+    "write_correlation_table":   true,
     "save_snapshot_image":       false,
     "save_final_image":          true,
     "save_frequency_iterations": true

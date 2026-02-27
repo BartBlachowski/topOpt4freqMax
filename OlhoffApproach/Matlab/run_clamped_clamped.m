@@ -44,7 +44,9 @@ paper = struct('init', 146.1, 'opt', 456.4);
 fprintf('CC case: omega1 initial=%.1f (paper %.1f) | optimized=%.1f (paper %.1f)\n', ...
     diag_out.initial.omega(1), paper.init, omega_best, paper.opt);
 
-figure('Name', 'Olhoff CC topology'); hold on;
+figure('Name', 'Olhoff CC topology');
+theme("light");
+hold on;
 imgDisp = buildTopologyDisplayImage(xPhys_best, cfg.nelx, cfg.nely, opts.visualization_quality, true);
 imagesc(1 - imgDisp);
 set(gca, 'YDir', 'normal');

@@ -68,6 +68,7 @@ plotCallCount = plotCallCount + 1;
 
 if isempty(figHandle) || ~isgraphics(figHandle, 'figure')
     figHandle = figure('Name', 'Topology', 'NumberTitle', 'off');
+    theme("light");
     if isprop(figHandle, 'GraphicsSmoothing')
         set(figHandle, 'GraphicsSmoothing', 'off');
     end
