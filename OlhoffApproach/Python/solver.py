@@ -52,6 +52,14 @@ class OlhoffConfig:
 
     move: float = 0.2
     move_hist_len: int = 10
+    conv_tol: float = 1e-3
+
+    # Passive elements: 0-based element indices (into the flattened n_el array).
+    # pas_s → density forced to 1 (solid); pas_v → density forced to 0 (void).
+    pas_s: Optional[np.ndarray] = None
+    pas_v: Optional[np.ndarray] = None
+    # Extra DOF indices (0-based) to add to the fixed set from build_supports.
+    extra_fixed_dofs: Optional[np.ndarray] = None
 
     seed: Optional[int] = None
 
@@ -142,6 +150,8 @@ def build_supports(support_type: str, node_nrs: np.ndarray) -> np.ndarray:
         fixed = np.array([ux(np.array([left_mid]))[0], uy(np.array([left_mid]))[0], ux(np.array([right_mid]))[0], uy(np.array([right_mid]))[0]])
     elif s == "SS_CORNER":
         fixed = np.array([ux(np.array([left_bot]))[0], uy(np.array([left_bot]))[0], uy(np.array([right_bot]))[0]])
+    elif s == "NONE":
+        fixed = np.array([], dtype=np.int64)
     else:
         raise ValueError(f"Unknown support_type '{support_type}'")
 
@@ -244,6 +254,8 @@ def run_optimization(
     n_dof = 2 * (nelx + 1) * (nely + 1)
 
     fixed = build_supports(cfg.support_type, node_nrs)
+    if cfg.extra_fixed_dofs is not None and len(cfg.extra_fixed_dofs) > 0:
+        fixed = np.unique(np.concatenate((fixed, np.asarray(cfg.extra_fixed_dofs, dtype=np.int64))))
     free = np.setdiff1d(np.arange(n_dof, dtype=np.int64), fixed)
 
     Ke0, M0 = q4_rect_ke_m_plane_stress(cfg.E0, cfg.nu, cfg.rho0, cfg.thickness, dx, dy)
@@ -304,6 +316,14 @@ def run_optimization(
     xmax = np.concatenate((np.ones((n_el,)), np.array([cfg.Eb_max], dtype=np.float64)))
 
     xval = np.concatenate((cfg.volfrac * np.ones((n_el,)), np.array([cfg.Eb0], dtype=np.float64)))
+
+    pas_s = np.asarray(cfg.pas_s, dtype=np.int64).ravel() if cfg.pas_s is not None else np.array([], dtype=np.int64)
+    pas_v = np.asarray(cfg.pas_v, dtype=np.int64).ravel() if cfg.pas_v is not None else np.array([], dtype=np.int64)
+    if pas_s.size:
+        xmin[pas_s] = 1.0;  xmax[pas_s] = 1.0;  xval[pas_s] = 1.0
+    if pas_v.size:
+        xmin[pas_v] = 0.0;  xmax[pas_v] = 0.0;  xval[pas_v] = 0.0
+
     xold1 = xval.copy()
     xold2 = xval.copy()
     low = xmin.copy()
@@ -365,6 +385,10 @@ def run_optimization(
         xT = fwd(x.reshape((nely, nelx), order="F"))
         xPhysMat, dH = heaviside_projection(xT, beta, cfg.eta)
         xPhys = xPhysMat.reshape(-1, order="F")
+        if pas_s.size:
+            xPhys[pas_s] = 1.0
+        if pas_v.size:
+            xPhys[pas_v] = 0.0
 
         Ee = cfg.Emin + (xPhys**cfg.penal) * (cfg.E0 - cfg.Emin)
         re = cfg.rho_min + xPhys * (cfg.rho0 - cfg.rho_min)
@@ -492,6 +516,11 @@ def run_optimization(
         fval[cfg.J + 1] = g_low
         dfdx[cfg.J + 1, :n_el] = -bgv
 
+        all_pas = np.union1d(pas_s, pas_v)
+        if all_pas.size:
+            df0[all_pas] = 0.0
+            dfdx[:, all_pas] = 0.0
+
         xnew, _, _, _, _, _, _, _, _, low_new, upp_new = mmasub(
             m,
             n,
@@ -590,12 +619,12 @@ def run_optimization(
 
         if beta_idx == beta_list.size:
             polish_left = max(0, cfg.n_polish - (it - cfg.beta_interval * (beta_list.size - 1)))
-            if rel_change_obj < 1e-3 and change_x < 1e-3 and grayness < 0.05 and polish_left <= 0:
+            if rel_change_obj < cfg.conv_tol and change_x < cfg.conv_tol and grayness < 0.05 and polish_left <= 0:
                 if verbose:
                     print("Converged in max-beta polish regime")
                 break
         else:
-            if rel_change_obj < 1e-3 and change_x < 1e-3 and grayness < 0.05:
+            if rel_change_obj < cfg.conv_tol and change_x < cfg.conv_tol and grayness < 0.05:
                 if verbose:
                     print("Converged before max-beta stage")
                 break

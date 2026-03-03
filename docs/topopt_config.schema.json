@@ -1,0 +1,533 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "topopt_config.schema.json",
+  "title": "TopOpt configuration",
+  "description": "Input file schema for the topOpt4freqMax topology-optimisation solver (Matlab + Python).",
+  "type": "object",
+  "required": ["meta", "domain", "material", "void_material", "bc", "optimization"],
+  "additionalProperties": false,
+
+  "properties": {
+
+    "meta": {
+      "type": "object",
+      "description": "Human-readable metadata; not used by the solver.",
+      "required": ["name"],
+      "additionalProperties": false,
+      "properties": {
+        "name":  { "type": "string" },
+        "notes": { "type": "string" },
+        "units": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "length":         { "type": "string" },
+            "force":          { "type": "string" },
+            "density":        { "type": "string" },
+            "elastic_modulus":{ "type": "string" }
+          }
+        }
+      }
+    },
+
+    "domain": {
+      "type": "object",
+      "required": ["shape", "size", "thickness", "mesh"],
+      "additionalProperties": false,
+      "properties": {
+
+        "shape": {
+          "type": "string",
+          "enum": ["rectangular"]
+        },
+
+        "size": {
+          "type": "object",
+          "required": ["length", "height"],
+          "additionalProperties": false,
+          "properties": {
+            "length": { "type": "number", "exclusiveMinimum": 0 },
+            "height": { "type": "number", "exclusiveMinimum": 0 }
+          }
+        },
+
+        "thickness": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "description": "Out-of-plane thickness (1.0 for plane-stress unit-thickness models)."
+        },
+
+        "mesh": {
+          "type": "object",
+          "required": ["nelx", "nely"],
+          "additionalProperties": false,
+          "properties": {
+            "nelx": { "type": "integer", "minimum": 1, "description": "Elements in x-direction." },
+            "nely": { "type": "integer", "minimum": 1, "description": "Elements in y-direction." }
+          }
+        },
+
+        "passive_regions": {
+          "type": "object",
+          "description": "Regions whose density is fixed and excluded from the optimiser.",
+          "additionalProperties": false,
+          "properties": {
+            "rect": {
+              "type": "array",
+              "description": "Axis-aligned rectangular passive regions in physical coordinates.",
+              "items": {
+                "type": "object",
+                "required": ["x0", "size"],
+                "additionalProperties": false,
+                "properties": {
+                  "x0": {
+                    "type": "array",
+                    "items": { "type": "number" },
+                    "minItems": 2, "maxItems": 2,
+                    "description": "Bottom-left corner [x, y] in physical coordinates."
+                  },
+                  "size": {
+                    "type": "array",
+                    "items": { "type": "number", "exclusiveMinimum": 0 },
+                    "minItems": 2, "maxItems": 2,
+                    "description": "[width, height] of the region."
+                  },
+                  "is_solid": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "true → density fixed to 1; false → density fixed to x_min."
+                  }
+                }
+              }
+            },
+            "flanges": {
+              "type": "object",
+              "description": "Horizontal flange passive regions defined by relative height.",
+              "additionalProperties": false,
+              "properties": {
+                "bottom": {
+                  "type": "object",
+                  "required": ["relative_height"],
+                  "additionalProperties": false,
+                  "properties": {
+                    "relative_height": { "type": "number", "exclusiveMinimum": 0, "exclusiveMaximum": 1 },
+                    "is_solid": { "type": "boolean", "default": true }
+                  }
+                },
+                "top": {
+                  "type": "object",
+                  "required": ["relative_height"],
+                  "additionalProperties": false,
+                  "properties": {
+                    "relative_height": { "type": "number", "exclusiveMinimum": 0, "exclusiveMaximum": 1 },
+                    "is_solid": { "type": "boolean", "default": true }
+                  }
+                }
+              }
+            }
+          }
+        },
+
+        "load_cases": {
+          "type": "array",
+          "description": "Load cases combined as a weighted sum to form the quasi-static inertial load.",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["loads"],
+            "additionalProperties": false,
+            "properties": {
+              "name":   { "type": "string" },
+              "factor": {
+                "type": "number",
+                "minimum": 0,
+                "description": "Scalar weight α applied to this load case in the combined load."
+              },
+              "loads": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "object",
+                  "required": ["type"],
+                  "additionalProperties": false,
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": ["semi_harmonic", "harmonic", "self_weight", "closest_node"],
+                      "description": "semi_harmonic: ω²Mφ inertial load (fixed mode shape); harmonic: updated each iteration; self_weight: body force; closest_node: point force."
+                    },
+                    "mode": {
+                      "type": "integer",
+                      "minimum": 1,
+                      "description": "Mode number (1-based). Required for semi_harmonic and harmonic."
+                    },
+                    "factor": {
+                      "type": "number",
+                      "description": "Amplitude scaling. Required for self_weight; optional otherwise."
+                    },
+                    "update_after": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "description": "Iteration after which the harmonic load is re-evaluated. harmonic only."
+                    },
+                    "location": {
+                      "type": "array",
+                      "items": { "type": "number" },
+                      "minItems": 2, "maxItems": 2,
+                      "description": "[x, y] of the target node. Required for closest_node."
+                    },
+                    "force": {
+                      "type": "array",
+                      "items": { "type": "number" },
+                      "minItems": 2, "maxItems": 2,
+                      "description": "[Fx, Fy] force vector. Required for closest_node."
+                    }
+                  },
+                  "allOf": [
+                    {
+                      "if":   { "properties": { "type": { "enum": ["semi_harmonic", "harmonic"] } }, "required": ["type"] },
+                      "then": { "required": ["mode"] }
+                    },
+                    {
+                      "if":   { "properties": { "type": { "const": "self_weight" } }, "required": ["type"] },
+                      "then": { "required": ["factor"] }
+                    },
+                    {
+                      "if":   { "properties": { "type": { "const": "closest_node" } }, "required": ["type"] },
+                      "then": { "required": ["location", "force"] }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "material": {
+      "type": "object",
+      "description": "Solid-material properties.",
+      "required": ["model", "E", "nu", "rho"],
+      "additionalProperties": false,
+      "properties": {
+        "model": {
+          "type": "string",
+          "enum": ["plane_stress_isotropic"]
+        },
+        "E":   { "type": "number", "exclusiveMinimum": 0, "description": "Young's modulus [Pa]." },
+        "nu":  { "type": "number", "minimum": 0, "exclusiveMaximum": 0.5, "description": "Poisson's ratio [-]." },
+        "rho": { "type": "number", "exclusiveMinimum": 0, "description": "Mass density [kg/m³]." }
+      }
+    },
+
+    "void_material": {
+      "type": "object",
+      "description": "Pseudo-material used for void elements to prevent numerical singularity.",
+      "required": ["E_min_ratio", "rho_min"],
+      "additionalProperties": false,
+      "properties": {
+        "E_min_ratio": {
+          "type": "number", "exclusiveMinimum": 0, "exclusiveMaximum": 1,
+          "description": "Stiffness ratio E_min / E_0 for void elements."
+        },
+        "rho_min": {
+          "type": "number", "exclusiveMinimum": 0,
+          "description": "Minimum element density for void elements."
+        }
+      }
+    },
+
+    "bc": {
+      "type": "object",
+      "description": "Boundary conditions.",
+      "required": ["supports"],
+      "additionalProperties": false,
+      "properties": {
+
+        "supports": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["type"],
+            "additionalProperties": false,
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": ["vertical_line", "horizontal_line", "closest_point", "hinge", "clamp"]
+              },
+              "x": {
+                "type": "number",
+                "description": "x-coordinate of the line. Required for vertical_line."
+              },
+              "y": {
+                "type": "number",
+                "description": "y-coordinate of the line. Required for horizontal_line."
+              },
+              "location": {
+                "oneOf": [
+                  {
+                    "type": "array",
+                    "items": { "type": "number" },
+                    "minItems": 2, "maxItems": 2,
+                    "description": "[x, y] target point for closest_point."
+                  },
+                  {
+                    "type": "string",
+                    "enum": ["left", "right"],
+                    "description": "Edge location for hinge / clamp."
+                  }
+                ]
+              },
+              "tol": {
+                "type": "number", "exclusiveMinimum": 0,
+                "description": "Tolerance [m] for identifying nodes on the line."
+              },
+              "dofs": {
+                "type": "array",
+                "items": { "type": "string", "enum": ["ux", "uy"] },
+                "minItems": 1,
+                "uniqueItems": true,
+                "description": "Degrees of freedom to constrain. Required for vertical_line, horizontal_line, closest_point."
+              }
+            },
+            "allOf": [
+              {
+                "if":   { "properties": { "type": { "const": "vertical_line" } }, "required": ["type"] },
+                "then": { "required": ["x", "dofs"] }
+              },
+              {
+                "if":   { "properties": { "type": { "const": "horizontal_line" } }, "required": ["type"] },
+                "then": { "required": ["y", "dofs"] }
+              },
+              {
+                "if":   { "properties": { "type": { "const": "closest_point" } }, "required": ["type"] },
+                "then": { "required": ["location", "dofs"] }
+              },
+              {
+                "if":   { "properties": { "type": { "enum": ["hinge", "clamp"] } }, "required": ["type"] },
+                "then": { "required": ["location"] }
+              }
+            ]
+          }
+        },
+
+        "concentrated_masses": {
+          "type": "array",
+          "description": "Non-structural concentrated masses attached to nodes.",
+          "items": {
+            "type": "object",
+            "required": ["enabled", "value_type", "value"],
+            "additionalProperties": false,
+            "properties": {
+              "enabled":    { "type": "boolean" },
+              "value_type": {
+                "type": "string",
+                "enum": ["fraction_of_permitted_mass", "absolute"],
+                "description": "fraction_of_permitted_mass: value is a fraction of the total allowed material mass; absolute: value is in kg."
+              },
+              "value": { "type": "number", "exclusiveMinimum": 0 }
+            }
+          }
+        }
+      }
+    },
+
+    "optimization": {
+      "type": "object",
+      "description": "Optimisation algorithm settings. Note: the British spelling 'optimisation' is deprecated.",
+      "required": ["approach", "volume_fraction", "penalization",
+                   "filter", "move_limit", "max_iters", "convergence_tol"],
+      "additionalProperties": false,
+      "properties": {
+
+        "approach": {
+          "type": "string",
+          "enum": ["ourApproach", "olhoff", "yuksel"],
+          "description": "Solver implementation to use."
+        },
+        "optimizer": {
+          "type": "string",
+          "enum": ["MMA", "OC"],
+          "default": "OC",
+          "description": "Mathematical programming method. Default: OC."
+        },
+        "objective": {
+          "type": "string",
+          "enum": ["compliance", "max_min_frequency"],
+          "description": "Objective function. compliance: minimise static compliance under the quasi-static load."
+        },
+        "interpolation": {
+          "type": "string",
+          "enum": ["SIMP"]
+        },
+        "volume_fraction": {
+          "type": "number", "exclusiveMinimum": 0, "maximum": 1,
+          "description": "Target volume fraction V* / V₀."
+        },
+        "penalization": {
+          "type": "number", "minimum": 1,
+          "description": "SIMP penalisation exponent p."
+        },
+
+        "filter": {
+          "type": "object",
+          "required": ["type", "radius", "radius_units", "boundary_condition"],
+          "additionalProperties": false,
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": ["sensitivity", "density", "density_projection"]
+            },
+            "radius": {
+              "type": "number", "exclusiveMinimum": 0
+            },
+            "radius_units": {
+              "type": "string",
+              "enum": ["element", "physical"],
+              "description": "element: radius in number of elements; physical: radius in model length units."
+            },
+            "boundary_condition": {
+              "type": "string",
+              "enum": ["symmetric", "reflect"],
+              "description": "How the filter kernel is handled at domain boundaries."
+            }
+          }
+        },
+
+        "move_limit": {
+          "type": "number", "exclusiveMinimum": 0, "maximum": 1,
+          "description": "Maximum design-variable change per iteration."
+        },
+        "max_iters": {
+          "type": "integer", "minimum": 1
+        },
+        "convergence_tol": {
+          "type": "number", "exclusiveMinimum": 0,
+          "description": "Convergence declared when max |Δxₑ| < convergence_tol."
+        },
+        "seed": {
+          "type": ["integer", "null"],
+          "description": "Random seed for reproducibility. null → no fixed seed."
+        },
+
+        "harmonic_normalize": {
+          "type": "boolean",
+          "description": "Normalise each inertial load case to unit energy. ourApproach only."
+        },
+        "debug_semi_harmonic": {
+          "type": "boolean",
+          "description": "Write extra diagnostic output for the semi-harmonic load assembly."
+        },
+        "semi_harmonic_baseline": {
+          "type": "string",
+          "enum": ["solid", "current"],
+          "description": "Design used to compute the reference eigenpairs for the semi-harmonic load."
+        },
+        "semi_harmonic_rho_source": {
+          "type": "string",
+          "enum": ["x", "x_filtered"],
+          "description": "Density field used when assembling the inertial load vector."
+        },
+
+        "yuksel": {
+          "type": "object",
+          "description": "Yuksel-approach specific settings.",
+          "additionalProperties": false,
+          "properties": {
+            "stage1_max_iters":    { "type": "integer", "minimum": 1 },
+            "stage1_tol":          { "type": "number",  "exclusiveMinimum": 0 },
+            "stage2_tol":          { "type": "number",  "exclusiveMinimum": 0 },
+            "mode_history_modes":  { "type": "integer", "minimum": 1 },
+            "final_mode_count":    { "type": "integer", "minimum": 1 }
+          }
+        }
+      }
+    },
+
+    "postprocessing": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+
+        "compute_modes": {
+          "type": "integer", "minimum": 1, "default": 3,
+          "description": "Number of eigenpairs computed in the final modal analysis."
+        },
+        "compute_modes_initial": {
+          "type": "integer", "minimum": 0, "default": 0,
+          "description": "Number of eigenpairs computed for the initial (solid) domain. 0 → same as compute_modes."
+        },
+
+        "visualize_live": {
+          "type": "boolean",
+          "description": "Show a live topology plot during optimisation."
+        },
+        "visualize_quality": {
+          "type": "string",
+          "enum": ["regular", "smooth"],
+          "description": "Rendering quality for topology images."
+        },
+        "visualize_modes": {
+          "type": "object",
+          "required": ["enabled", "count"],
+          "additionalProperties": false,
+          "properties": {
+            "enabled": { "type": "boolean" },
+            "count":   { "type": "integer", "minimum": 0 }
+          }
+        },
+        "visualize_topology_modes": {
+          "type": "object",
+          "required": ["enabled", "count"],
+          "additionalProperties": false,
+          "properties": {
+            "enabled": { "type": "boolean" },
+            "count":   { "type": "integer", "minimum": 0 }
+          }
+        },
+
+        "write_correlation_table": {
+          "type": "boolean",
+          "description": "Shorthand: write a MAC correlation CSV with default settings. Superseded by the correlation object."
+        },
+        "correlation": {
+          "type": "object",
+          "description": "Detailed control over MAC / inner-product correlation output.",
+          "required": ["enabled"],
+          "additionalProperties": false,
+          "properties": {
+            "enabled":                     { "type": "boolean" },
+            "initial_count":               { "type": "integer", "minimum": 0, "default": 0 },
+            "topology_count":              { "type": "integer", "minimum": 0, "default": 0 },
+            "metric": {
+              "type": "string",
+              "enum": ["mass_inner_product", "mac"],
+              "default": "mass_inner_product"
+            },
+            "write_csv":                   { "type": "boolean", "default": true },
+            "csv_filename":                { "type": "string" },
+            "write_best_matches":          { "type": "boolean", "default": true },
+            "best_k":                      { "type": "integer", "minimum": 1, "default": 3 },
+            "use_for_topology_mode_labels":{ "type": "boolean", "default": false },
+            "write_heatmap":               { "type": "boolean", "default": false }
+          }
+        },
+
+        "save_snapshot_image": {
+          "type": "boolean",
+          "description": "Save a topology image at every iteration."
+        },
+        "save_final_image": {
+          "type": "boolean",
+          "description": "Save a topology image at convergence."
+        },
+        "save_frequency_iterations": {
+          "type": "boolean",
+          "description": "Save a CSV with the tracked frequency at every iteration."
+        }
+      }
+    }
+  }
+}

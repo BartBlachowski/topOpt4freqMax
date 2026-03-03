@@ -56,13 +56,29 @@ def _solve_smallest_modes(Kff: sparse.spmatrix, Mff: sparse.spmatrix, k: int) ->
     return np.real(vals[ord_idx]), np.real(vecs[:, ord_idx])
 
 
-def _physical_setup(bc_type: str) -> tuple[float, float, float]:
+def _physical_setup(
+    bc_type: str,
+    beam_l: Optional[float] = None,
+    beam_h: Optional[float] = None,
+    tip_mass_frac: Optional[float] = None,
+) -> tuple[float, float, float]:
     b = bc_type.lower()
     if b == "cantilever":
-        return 15.0, 10.0, 0.20
-    if b in {"simply", "fixedpinned"}:
-        return 8.0, 1.0, 0.0
-    raise ValueError(f"Unsupported bcType '{bc_type}'")
+        out_l, out_h, out_frac = 15.0, 10.0, 0.20
+    elif b in {"simply", "fixedpinned"}:
+        out_l, out_h, out_frac = 8.0, 1.0, 0.0
+    elif b == "none":
+        # All BCs come from extra_fixed_dofs; dimensions must be set via beam_l/beam_h.
+        out_l, out_h, out_frac = 0.0, 0.0, 0.0
+    else:
+        raise ValueError(f"Unsupported bcType '{bc_type}'")
+    if beam_l is not None:
+        out_l = beam_l
+    if beam_h is not None:
+        out_h = beam_h
+    if tip_mass_frac is not None:
+        out_frac = tip_mass_frac
+    return out_l, out_h, out_frac
 
 
 def _build_ke_ke0(nu: float) -> tuple[np.ndarray, np.ndarray]:
@@ -197,6 +213,13 @@ def _bc_and_load(node_nrs_1: np.ndarray, nely: int, nelx: int, bc_type: str) -> 
         right_mid = int(node_nrs_1[mid_row - 1, -1])
         fixed = np.unique(np.concatenate((fixed, np.array([ux(right_mid), uy(right_mid)], dtype=np.int64))))
 
+        mid_col = _matlab_round((nelx + 1) / 2.0)
+        lc_node = int(node_nrs_1[mid_row - 1, mid_col - 1])
+        lc_dof = uy(lc_node)
+    elif b == "none":
+        # No standard hinge/clamp — all fixed DOFs come from extra_fixed_dofs.
+        fixed = np.array([], dtype=np.int64)
+        mid_row = _matlab_round(nely / 2.0) + 1
         mid_col = _matlab_round((nelx + 1) / 2.0)
         lc_node = int(node_nrs_1[mid_row - 1, mid_col - 1])
         lc_dof = uy(lc_node)
@@ -396,29 +419,36 @@ def top99neo_inertial_freq(
     snapshot_every: int = 0,
     verbose: bool = True,
     plot_iterations: bool = False,
+    pas_s: Optional[np.ndarray] = None,
+    pas_v: Optional[np.ndarray] = None,
+    extra_fixed_dofs: Optional[np.ndarray] = None,
+    stage1_tol: float = 1e-2,
+    stage2_tol: float = 1e-2,
+    E0: float = 1e7,
+    Emin: Optional[float] = None,
+    nu: float = 0.3,
+    rho0: float = 1.0,
+    rho_min: Optional[float] = None,
+    dMass: float = 6.0,
+    xMassCut: float = 0.1,
+    beam_l: Optional[float] = None,
+    beam_h: Optional[float] = None,
+    tip_mass_frac: Optional[float] = None,
 ) -> YukselResult:
     if stage1_maxit is None:
         stage1_maxit = maxit
 
     nHistModes = max(0, int(nHistModes))
-    stage2_tol = 1e-2
-    if bcType.lower() == "fixedpinned":
-        stage2_tol = 1e-3
-
-    E0 = 1e7
-    Emin = 1e-9 * E0
-    nu = 0.3
-
-    rho0 = 1.0
-    rho_min = 1e-9 * rho0
-    dMass = 6.0
-    xMassCut = 0.1
+    if Emin is None:
+        Emin = 1e-9 * E0
+    if rho_min is None:
+        rho_min = 1e-9 * rho0
 
     penalCnt = (1, 1, 25, 0.25)
     betaCnt = (1, 1, 25, 2)
     mode_bc = "reflect" if str(ftBC).upper() == "N" else "constant"
 
-    beamL, beamH, tipMassFrac = _physical_setup(bcType)
+    beamL, beamH, tipMassFrac = _physical_setup(bcType, beam_l=beam_l, beam_h=beam_h, tip_mass_frac=tip_mass_frac)
 
     n_el = nelx * nely
     node_nrs_1 = np.arange(1, (nelx + 1) * (nely + 1) + 1, dtype=np.int64).reshape((nely + 1, nelx + 1), order="F")
@@ -463,6 +493,9 @@ def top99neo_inertial_freq(
             xMassCut,
         )
 
+    if extra_fixed_dofs is not None and len(extra_fixed_dofs) > 0:
+        fixed = np.unique(np.concatenate((fixed, np.asarray(extra_fixed_dofs, dtype=np.int64).ravel())))
+
     F_point = np.zeros((n_dof,), dtype=np.float64)
     F_point[lc_dof] = -1.0
 
@@ -473,8 +506,11 @@ def top99neo_inertial_freq(
         tip_mass_val = tipMassFrac * permitted_mass
         tip_mass_dofs = np.array([2 * tip_mass_node - 2, 2 * tip_mass_node - 1], dtype=np.int64)
 
+    pas_s_arr = np.asarray(pas_s, dtype=np.int64).ravel() if pas_s is not None else np.array([], dtype=np.int64)
+    pas_v_arr = np.asarray(pas_v, dtype=np.int64).ravel() if pas_v is not None else np.array([], dtype=np.int64)
+
     free = np.setdiff1d(np.arange(n_dof, dtype=np.int64), fixed)
-    act = np.arange(n_el, dtype=np.int64)
+    act = np.setdiff1d(np.arange(n_el, dtype=np.int64), np.union1d(pas_s_arr, pas_v_arr))
 
     prj = lambda v, eta_, beta_: (np.tanh(beta_ * eta_) + np.tanh(beta_ * (v - eta_))) / (
         np.tanh(beta_ * eta_) + np.tanh(beta_ * (1 - eta_))
@@ -501,7 +537,11 @@ def top99neo_inertial_freq(
     x = np.zeros((n_el,), dtype=np.float64)
     dV = np.zeros((n_el,), dtype=np.float64)
     dV[act] = 1.0 / (n_el * volfrac)
-    x[act] = volfrac
+    if pas_s_arr.size or pas_v_arr.size:
+        x[act] = (volfrac * (n_el - pas_v_arr.size) - pas_s_arr.size) / max(len(act), 1)
+        x[pas_s_arr] = 1.0
+    else:
+        x[act] = volfrac
 
     info = {
         "stage1": {"c": [], "v": [], "ch": [], "xHist": [], "omegaHist": [], "loadDof": int(lc_dof)},
@@ -519,7 +559,6 @@ def top99neo_inertial_freq(
     xPhys = x.copy()
     U = np.zeros((n_dof,), dtype=np.float64)
 
-    tolX1 = 1e-2
     for loop in range(1, stage1_maxit + 1):
         if ft == 1:
             xPhys[act] = x[act]
@@ -537,6 +576,11 @@ def top99neo_inertial_freq(
                     f_eta = np.mean(prj(xPhys, eta, beta)) - np.mean(xPhys)
             dHs = Hs / dprj(xTilde, eta, beta)
             xPhys = prj(xPhys, eta, beta)
+
+        if pas_s_arr.size:
+            xPhys[pas_s_arr] = 1.0
+        if pas_v_arr.size:
+            xPhys[pas_v_arr] = 0.0
 
         Ee = Emin + (xPhys**penal) * (E0 - Emin)
         dsK = np.zeros((n_el,), dtype=np.float64)
@@ -601,7 +645,7 @@ def top99neo_inertial_freq(
             except Exception:
                 pass
 
-        if loop > 1 and ch < tolX1:
+        if loop > 1 and ch < stage1_tol:
             break
 
     info["stage1"]["xFinal"] = xPhys.copy()
@@ -649,6 +693,11 @@ def top99neo_inertial_freq(
                     f_eta = np.mean(prj(xPhys2, eta, beta)) - np.mean(xPhys2)
             dHs = Hs / dprj(xTilde, eta, beta)
             xPhys2 = prj(xPhys2, eta, beta)
+
+        if pas_s_arr.size:
+            xPhys2[pas_s_arr] = 1.0
+        if pas_v_arr.size:
+            xPhys2[pas_v_arr] = 0.0
 
         Ee = Emin + (xPhys2**penal) * (E0 - Emin)
         dsK = np.zeros((n_el,), dtype=np.float64)
