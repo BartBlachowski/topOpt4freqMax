@@ -1,7 +1,12 @@
 clear; clc;
 close all;
 
-jsonPath = 'ClampedHingedBeamTopOptFreq.json';
+scriptDir = fileparts(mfilename('fullpath'));
+prevDir = pwd;
+cleanupObj = onCleanup(@() cd(prevDir)); %#ok<NASGU>
+cd(scriptDir);
+
+jsonPath = fullfile(scriptDir, 'ClampedHingedBeamTopOptFreq.json');
 data = jsondecode(fileread(jsonPath));
 res_str="400x50";
 forms_str = "_forms_12_";

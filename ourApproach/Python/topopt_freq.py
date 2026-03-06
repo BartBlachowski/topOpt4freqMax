@@ -151,6 +151,12 @@ def topopt_freq(
     harmonic_normalize = bool(run_cfg.get("harmonic_normalize", True))
     semi_baseline = str(run_cfg.get("semi_harmonic_baseline", "solid")).lower().strip()
     semi_rho_src = str(run_cfg.get("semi_harmonic_rho_source", "x")).lower().strip()
+    use_heaviside = bool(run_cfg.get("use_heaviside", False))
+    beta_h_schedule = [float(b) for b in run_cfg.get("heaviside_beta_schedule", [1, 2, 4, 8, 16, 32, 64])]
+    beta_h_interval = int(run_cfg.get("heaviside_beta_interval", 40))
+    eta_h = float(run_cfg.get("heaviside_eta", 0.5))
+    beta_h_idx = 1
+    beta_h = beta_h_schedule[0]
 
     print(f"Compliance objective with load-case aggregation")
     print(f"mesh: {nelx} x {nely}")
@@ -243,7 +249,13 @@ def topopt_freq(
             act_target = (volfrac * n_el - pas_s.size) / n_act
             x[act] = np.clip(act_target, 0.0, 1.0)
 
-    xPhys = x.copy()
+    if use_heaviside:
+        _xt0 = np.asarray(Hf @ x) / Hs if ft == 1 else x
+        xPhys, _ = _heaviside_projection(_xt0, beta_h, eta_h)
+        if pas_s.size: xPhys[pas_s] = 1.0
+        if pas_v.size: xPhys[pas_v] = 0.0
+    else:
+        xPhys = x.copy()
     g = 0.0  # OC Lagrange accumulator
 
     # --- Node coordinates (for load assembly) ---
@@ -533,6 +545,15 @@ def topopt_freq(
         dv[pas_s] = 0.0; dv[pas_v] = 0.0
         dc[pas_s] = 0.0; dc[pas_v] = 0.0
 
+        # --- Heaviside chain rule (applied before filter) ---
+        if use_heaviside:
+            _x_tilde = np.asarray(Hf @ x) / Hs if ft == 1 else x
+            _, dH_vals = _heaviside_projection(_x_tilde, beta_h, eta_h)
+            dc = dc * dH_vals
+            dv = dv * dH_vals
+            dc[pas_s] = 0.0; dc[pas_v] = 0.0
+            dv[pas_s] = 0.0; dv[pas_v] = 0.0
+
         # --- Filter ---
         if ft == 0:
             dc = np.asarray(Hf @ (x * dc)) / Hs / np.maximum(0.001, x)
@@ -575,10 +596,16 @@ def topopt_freq(
             x[pas_s] = 1.0; x[pas_v] = 0.0
 
         # --- Physical field ---
-        xPhys = _physical_field(x, ft, Hf, Hs, pas_s, pas_v)
+        if use_heaviside:
+            _x_tilde = np.asarray(Hf @ x) / Hs if ft == 1 else x
+            xPhys, _ = _heaviside_projection(_x_tilde, beta_h, eta_h)
+            if pas_s.size: xPhys[pas_s] = 1.0
+            if pas_v.size: xPhys[pas_v] = 0.0
+        else:
+            xPhys = _physical_field(x, ft, Hf, Hs, pas_s, pas_v)
 
-        # MMA volume projection (if needed)
-        if optimizer_type == "MMA":
+        # MMA volume projection (if needed, skip when heaviside active)
+        if optimizer_type == "MMA" and not use_heaviside:
             vol_residual = np.mean(xPhys) - volfrac
             if vol_residual > 1e-10:
                 x, xPhys, _ = _mma_volume_project(x, xold, act, move, ft, Hf, Hs, pas_s, pas_v, volfrac)
@@ -590,6 +617,14 @@ def topopt_freq(
         obj_hist.append(obj)
         vol_hist.append(vol)
         ch_hist.append(change)
+
+        # --- Heaviside beta advancement ---
+        if use_heaviside:
+            target_h_idx = min(len(beta_h_schedule), int(np.floor(loop / beta_h_interval)) + 1)
+            if target_h_idx > beta_h_idx:
+                beta_h_idx = target_h_idx
+                beta_h = float(beta_h_schedule[beta_h_idx - 1])
+                print(f"  Heaviside beta -> {beta_h} (iteration {loop})")
 
         # Print iteration
         if optimizer_type == "MMA":
@@ -856,6 +891,13 @@ def _physical_field(
     if pas_s.size: xPhys[pas_s] = 1.0
     if pas_v.size: xPhys[pas_v] = 0.0
     return xPhys
+
+
+def _heaviside_projection(x_tilde: np.ndarray, beta: float, eta: float) -> tuple[np.ndarray, np.ndarray]:
+    denom = np.tanh(beta * eta) + np.tanh(beta * (1.0 - eta))
+    x_phys = (np.tanh(beta * eta) + np.tanh(beta * (x_tilde - eta))) / denom
+    dH = (beta * (1.0 - np.tanh(beta * (x_tilde - eta)) ** 2)) / denom
+    return x_phys, dH
 
 
 def _oc_update(

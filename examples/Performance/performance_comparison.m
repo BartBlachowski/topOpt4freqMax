@@ -2,8 +2,17 @@ clear; clc;
 close all;
 
 % Load base beam configuration (simply supported beam, 8x1 m)
-jsonPath = fullfile(fileparts(mfilename('fullpath')), 'BeamTopOptFreq.json');
+jsonPath = fullfile(fileparts(mfilename('fullpath')), 'performance_comparison.json');
 data = jsondecode(fileread(jsonPath));
+
+% Normalize spelling to avoid silent "optimisation" vs "optimization" bugs.
+if isfield(data, 'optimisation') && ~isfield(data, 'optimization')
+    data.optimization = data.optimisation;
+end
+if ~isfield(data, 'optimization')
+    error('performance_comparison:MissingOptimizationField', ...
+        'Missing "optimization" section in %s', jsonPath);
+end
 
 % Disable visualization and image saving for clean performance measurement
 data.postprocessing.visualize_live    = false;
@@ -14,19 +23,23 @@ data.postprocessing.save_snapshot_image = false;
 % The base JSON uses physical units (0.04 m), which gives < 1 element at
 % coarser meshes and causes checkerboard patterns.  Switching to 'element'
 % units with radius = 2 keeps the filter consistent across all resolutions.
-data.optimisation.filter.radius       = 2;
-data.optimisation.filter.radius_units = 'element';
+data.optimization.filter.radius       = 2;
+data.optimization.filter.radius_units = 'element';
 
 % -------------------------------------------------------------------------
 % Resolutions: those from Table 1 in the paper (160x20, 240x30, 320x40)
 % plus two additional ones (240x30 already in paper; 400x50 is new)
 % -------------------------------------------------------------------------
+% resolutions = [
+%     160,  20;
+%     240,  30;
+%     320,  40;
+%     400,  50;
+%     600,  75;
+% ];
 resolutions = [
-    160,  20;
-    240,  30;
     320,  40;
     400,  50;
-    600,  75;
 ];
 nRes = size(resolutions, 1);
 
@@ -51,7 +64,7 @@ for r = 1:nRes
     data.domain.mesh.nely = resolutions(r, 2);
 
     for m = 1:nMethods
-        data.optimisation.approach = approaches{m};
+        data.optimization.approach = approaches{m};
 
         omega_s = NaN(1, nSamples);
         tIter_s = NaN(1, nSamples);

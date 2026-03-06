@@ -125,6 +125,7 @@ Npolish = cfg.Npolish;               % minimum iterations at max beta
 % gray_penalty_weight increases with beta to push toward discrete values
 % Higher penalty helps drive discreteness for frequency optimization
 gray_penalty_base = cfg.gray_penalty_base;  % base penalty weight (scaled by beta/betaMax)
+use_heaviside = cfg.use_heaviside;
 
 %% --- assembly indices ----------------------------------------
 cVec = 2*nodeNrs(1:nely,1:nelx)+1;
@@ -179,7 +180,11 @@ if opts.doDiagnostic
     beta0 = 1; % initial projection slope
     x0 = volfrac*ones(nEl,1);
     xT0 = fwd(reshape(x0,nely,nelx));
-    [xPhys0,~] = heavisideProjection(xT0,beta0,eta);
+    if use_heaviside
+        [xPhys0,~] = heavisideProjection(xT0,beta0,eta);
+    else
+        xPhys0 = xT0;
+    end
     xPhys0 = xPhys0(:);
     if ~isempty(pasS), xPhys0(pasS) = 1; end
     if ~isempty(pasV), xPhys0(pasV) = 0; end
@@ -215,15 +220,24 @@ for it = 1:maxiter
     low=low(:); upp=upp(:);
 
     % --- adaptive beta schedule with grayness check ---
-    beta_target = beta_list(min(beta_idx, numel(beta_list)));
-    beta = min(betaMax, beta_target);
+    if use_heaviside
+        beta_target = beta_list(min(beta_idx, numel(beta_list)));
+        beta = min(betaMax, beta_target);
+    else
+        beta = 1;
+    end
 
     x = xval(1:nEl);
     Eb = xval(end);
 
     % --- filter + projection
     xT = fwd(reshape(x,nely,nelx));
-    [xPhysMat,dH] = heavisideProjection(xT,beta,eta);
+    if use_heaviside
+        [xPhysMat,dH] = heavisideProjection(xT,beta,eta);
+    else
+        xPhysMat = xT;
+        dH = ones(size(xT));
+    end
     xPhys = xPhysMat(:);
     % Enforce passive element densities (overrides projection).
     if ~isempty(pasS), xPhys(pasS) = 1; end
@@ -417,7 +431,11 @@ for it = 1:maxiter
     % guard against objective drop: evaluate trial omega
     x_trial = xnew(1:nEl);
     xT_trial = fwd(reshape(x_trial,nely,nelx));
-    [xPhys_trial,~] = heavisideProjection(xT_trial,beta,eta);
+    if use_heaviside
+        [xPhys_trial,~] = heavisideProjection(xT_trial,beta,eta);
+    else
+        xPhys_trial = xT_trial;
+    end
     lam_trial = evalModes(xPhys_trial,min(3,J));
     omega_trial = sqrt(lam_trial(1));
     if omega_trial < omega_cur*(1-0.01)
@@ -449,27 +467,29 @@ for it = 1:maxiter
         dx_hist(1) = [];
     end
 
-    % TIME-BASED beta continuation: advance every beta_interval iterations
-    % but keep at least Npolish iterations at max beta
-    target_beta_idx = min(numel(beta_list), floor(it / beta_interval) + 1);
-    if target_beta_idx > beta_idx
-        beta_idx = target_beta_idx;
-        safe_counter = Nsafe;  % enter safe mode after beta jump
-        move = min(move, move_safe);
-        fprintf('  -> Advancing beta to %d (iteration %d)\n', beta_list(beta_idx), it);
-    end
+    if use_heaviside
+        % TIME-BASED beta continuation: advance every beta_interval iterations
+        % but keep at least Npolish iterations at max beta
+        target_beta_idx = min(numel(beta_list), floor(it / beta_interval) + 1);
+        if target_beta_idx > beta_idx
+            beta_idx = target_beta_idx;
+            safe_counter = Nsafe;  % enter safe mode after beta jump
+            move = min(move, move_safe);
+            fprintf('  -> Advancing beta to %d (iteration %d)\n', beta_list(beta_idx), it);
+        end
 
-    % Also advance if design is already discrete
-    if grayness < gray_tol && beta_idx < numel(beta_list)
-        beta_idx = beta_idx + 1;
-        safe_counter = Nsafe;
-        move = min(move, move_safe);
-        fprintf('  -> Advancing beta to %d (grayness=%.3f < %.3f)\n', ...
-            beta_list(beta_idx), grayness, gray_tol);
-    end
+        % Also advance if design is already discrete
+        if grayness < gray_tol && beta_idx < numel(beta_list)
+            beta_idx = beta_idx + 1;
+            safe_counter = Nsafe;
+            move = min(move, move_safe);
+            fprintf('  -> Advancing beta to %d (grayness=%.3f < %.3f)\n', ...
+                beta_list(beta_idx), grayness, gray_tol);
+        end
 
-    if beta >= 16 && grayness > 0.15
-        warning('projection continuation not driving discreteness — check sensitivity chain rule (gray=%.3f)',grayness);
+        if beta >= 16 && grayness > 0.15
+            warning('projection continuation not driving discreteness — check sensitivity chain rule (gray=%.3f)',grayness);
+        end
     end
 
     % termination check
@@ -567,6 +587,7 @@ function cfg = applyDefaults(cfg)
         'move_reduce', 0.02, ...
         'Npolish', 40, ...
         'gray_penalty_base', 0.5, ...
+        'use_heaviside', true, ...
         'lambda_ref', 2e4, ...
         'Eb0', 1, ...
         'Eb_min', 0, ...

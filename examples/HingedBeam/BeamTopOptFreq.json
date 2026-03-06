@@ -73,6 +73,7 @@
 
     "filter": {
       "type": "sensitivity",
+      "heaviside": true,
       "radius": 2.0,
       "radius_units": "element",
       "boundary_condition": "symmetric"

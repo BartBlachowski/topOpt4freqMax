@@ -34,6 +34,7 @@ class OlhoffConfig:
     thickness: float = 1.0
 
     eta: float = 0.5
+    use_heaviside: bool = True
     beta_max: float = 64.0
     beta_schedule: tuple[float, ...] = (1, 2, 4, 8, 16, 32, 64)
     beta_interval: int = 40
@@ -348,7 +349,10 @@ def run_optimization(
     if do_diagnostic:
         x0 = cfg.volfrac * np.ones((n_el,), dtype=np.float64)
         xT0 = fwd(x0.reshape((nely, nelx), order="F"))
-        xPhys0, _ = heaviside_projection(xT0, 1.0, cfg.eta)
+        if cfg.use_heaviside:
+            xPhys0, _ = heaviside_projection(xT0, 1.0, cfg.eta)
+        else:
+            xPhys0 = xT0
         lam0, omega0, freq0 = _eval_modes(
             xPhys0.reshape(-1, order="F"),
             diag_modes,
@@ -376,14 +380,21 @@ def run_optimization(
     omega_prev: Optional[float] = None
 
     for it in range(1, cfg.maxiter + 1):
-        beta_target = beta_list[min(beta_idx - 1, beta_list.size - 1)]
-        beta = min(cfg.beta_max, beta_target)
+        if cfg.use_heaviside:
+            beta_target = beta_list[min(beta_idx - 1, beta_list.size - 1)]
+            beta = min(cfg.beta_max, beta_target)
+        else:
+            beta = 1.0
 
         x = xval[:n_el]
         Eb = xval[-1]
 
         xT = fwd(x.reshape((nely, nelx), order="F"))
-        xPhysMat, dH = heaviside_projection(xT, beta, cfg.eta)
+        if cfg.use_heaviside:
+            xPhysMat, dH = heaviside_projection(xT, beta, cfg.eta)
+        else:
+            xPhysMat = xT
+            dH = np.ones_like(xT)
         xPhys = xPhysMat.reshape(-1, order="F")
         if pas_s.size:
             xPhys[pas_s] = 1.0
@@ -567,7 +578,10 @@ def run_optimization(
 
         x_trial = xnew[:n_el]
         xT_trial = fwd(x_trial.reshape((nely, nelx), order="F"))
-        xPhys_trial, _ = heaviside_projection(xT_trial, beta, cfg.eta)
+        if cfg.use_heaviside:
+            xPhys_trial, _ = heaviside_projection(xT_trial, beta, cfg.eta)
+        else:
+            xPhys_trial = xT_trial
         lam_trial, _, _ = _eval_modes(
             xPhys_trial.reshape(-1, order="F"),
             min(3, cfg.J),
@@ -606,16 +620,17 @@ def run_optimization(
         volume_hist.append(float(np.mean(xPhys)))
         gray_hist.append(grayness)
 
-        target_beta_idx = min(beta_list.size, int(np.floor(it / cfg.beta_interval) + 1))
-        if target_beta_idx > beta_idx:
-            beta_idx = target_beta_idx
-            safe_counter = cfg.beta_safe_iters
-            move = min(move, cfg.move_safe)
+        if cfg.use_heaviside:
+            target_beta_idx = min(beta_list.size, int(np.floor(it / cfg.beta_interval) + 1))
+            if target_beta_idx > beta_idx:
+                beta_idx = target_beta_idx
+                safe_counter = cfg.beta_safe_iters
+                move = min(move, cfg.move_safe)
 
-        if grayness < cfg.gray_tol and beta_idx < beta_list.size:
-            beta_idx += 1
-            safe_counter = cfg.beta_safe_iters
-            move = min(move, cfg.move_safe)
+            if grayness < cfg.gray_tol and beta_idx < beta_list.size:
+                beta_idx += 1
+                safe_counter = cfg.beta_safe_iters
+                move = min(move, cfg.move_safe)
 
         if beta_idx == beta_list.size:
             polish_left = max(0, cfg.n_polish - (it - cfg.beta_interval * (beta_list.size - 1)))

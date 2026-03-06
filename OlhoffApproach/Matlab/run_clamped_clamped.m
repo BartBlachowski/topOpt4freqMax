@@ -28,7 +28,8 @@ cfg.maxiter  = 300;
 cfg.J        = 3;
 cfg.supportType = "CC";
 
-% Projection / continuation (optional tweaks)
+% Projection / continuation
+cfg.use_heaviside = false;
 cfg.beta_schedule = [1 2 4 8 16 32 64];
 cfg.beta_interval = 40;
 

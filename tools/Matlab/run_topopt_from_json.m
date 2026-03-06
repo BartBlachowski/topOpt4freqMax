@@ -64,6 +64,10 @@ function [x, omega, tIter, nIter, mem_usage] = run_topopt_from_json(jsonInput)
     filterRadius = reqNum(cfg, {'optimization','filter','radius'}, 'optimization.filter.radius');
     radiusUnits = lower(reqStr(cfg, {'optimization','filter','radius_units'}, 'optimization.filter.radius_units'));
     filterBC = reqStr(cfg, {'optimization','filter','boundary_condition'}, 'optimization.filter.boundary_condition');
+    useHeaviside = false;
+    if hasFieldPath(cfg, {'optimization','filter','heaviside'})
+        useHeaviside = parseBool(getFieldPath(cfg, {'optimization','filter','heaviside'}), 'optimization.filter.heaviside');
+    end
 
     optimizerType = 'OC';
     if hasFieldPath(cfg, {'optimization','optimizer'})
@@ -201,6 +205,7 @@ function [x, omega, tIter, nIter, mem_usage] = run_topopt_from_json(jsonInput)
             cfgO.extraFixedDofs = extraFixedDofs;
             cfgO.pasS = pasS;
             cfgO.pasV = pasV;
+            cfgO.use_heaviside = useHeaviside;
 
             optsO = struct('doDiagnostic', true, 'diagnosticOnly', false, 'diagModes', 5);
             optsO.approach_name = approach;
@@ -554,7 +559,13 @@ function saveFrequencyIterationPlot(freqIterOmega, approachName, nelx, nely, rep
     outPath = fullfile(resultsDir, sprintf('%s_%dx%d_freq_iterations.png', nameSafe, nelx, nely));
 
     fig = figure('Color', 'white', 'Visible', 'off');
-    theme("light");
+    if exist('theme', 'file') == 2 || exist('theme', 'builtin') == 5
+        try
+            theme("light");
+        catch
+            % Some MATLAB releases/toolboxes may not expose theme in scripts.
+        end
+    end
     ax = axes('Parent', fig);
     hold(ax, 'on');
     colors = [0.0000, 0.4470, 0.7410; ...
@@ -579,12 +590,37 @@ function saveFrequencyIterationPlot(freqIterOmega, approachName, nelx, nely, rep
     end
     legend(ax, 'Location', 'best');
 
-    exportgraphics(fig, outPath, 'Resolution', 180, 'BackgroundColor', 'white');
+    didWritePng = false;
+    try
+        exportgraphics(fig, outPath, 'Resolution', 180, 'BackgroundColor', 'white');
+        didWritePng = true;
+    catch pngErr
+        warning('run_topopt_from_json:ExportGraphicsFailed', ...
+            'exportgraphics failed (%s); falling back to print().', pngErr.message);
+        try
+            print(fig, outPath, '-dpng', '-r180');
+            didWritePng = true;
+        catch pngErr2
+            warning('run_topopt_from_json:PrintFailed', ...
+                'Failed to save frequency iteration PNG (%s).', pngErr2.message);
+        end
+    end
     figPath = fullfile(resultsDir, sprintf('%s_%dx%d_freq_iterations.fig', nameSafe, nelx, nely));
-    savefig(fig, figPath);
+    didWriteFig = false;
+    try
+        savefig(fig, figPath);
+        didWriteFig = true;
+    catch figErr
+        warning('run_topopt_from_json:SaveFigFailed', ...
+            'Failed to save MATLAB figure file (%s).', figErr.message);
+    end
     close(fig);
-    fprintf('Saved frequency iteration plot: %s\n', outPath);
-    fprintf('Saved frequency iteration figure: %s\n', figPath);
+    if didWritePng
+        fprintf('Saved frequency iteration plot: %s\n', outPath);
+    end
+    if didWriteFig
+        fprintf('Saved frequency iteration figure: %s\n', figPath);
+    end
 end
 
 function [supportCode, leftType, rightType] = mapSupportsToCode(supports)

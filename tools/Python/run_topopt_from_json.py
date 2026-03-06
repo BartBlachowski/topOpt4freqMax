@@ -16,6 +16,8 @@ From command line:
 from __future__ import annotations
 import sys
 import os
+import re
+from pathlib import Path
 import numpy as np
 
 # Ensure repository root is on the path so sibling packages are importable.
@@ -30,6 +32,65 @@ from tools.Python.config_loader import (
 from tools.Python.bc_processor import supports_to_fixed_dofs
 from tools.Python.passive_regions import parse_passive_regions
 from tools.Python.load_cases import validate_load_cases
+
+
+def _save_frequency_iteration_plot(
+    freq_iter_omega: np.ndarray,
+    approach_name: str,
+    nelx: int,
+    nely: int,
+    repo_root: str,
+) -> None:
+    """Save Figure-6-style frequency history plot to <repo>/results."""
+    arr = np.asarray(freq_iter_omega, dtype=float)
+    if arr.ndim != 2 or arr.shape[0] < 1:
+        return
+
+    n_iter = arr.shape[0]
+    if arr.shape[1] < 3:
+        padded = np.full((n_iter, 3), np.nan, dtype=float)
+        padded[:, : arr.shape[1]] = arr
+        arr = padded
+    else:
+        arr = arr[:, :3]
+
+    out_dir = Path(repo_root) / "results"
+    out_dir.mkdir(parents=True, exist_ok=True)
+
+    name_safe = re.sub(r"[^\w\-]", "_", str(approach_name))
+    png_path = out_dir / f"{name_safe}_{nelx}x{nely}_freq_iterations.png"
+
+    try:
+        import matplotlib
+        # Prefer a non-interactive backend in headless/script usage, but do not
+        # fail if a backend has already been selected earlier in the process.
+        try:
+            matplotlib.use("Agg", force=True)
+        except Exception:
+            pass
+        import matplotlib.pyplot as plt
+
+        fig, ax = plt.subplots(figsize=(9, 5), facecolor="white")
+        x_iter = np.arange(1, n_iter + 1, dtype=int)
+        colors = ["#0072BD", "#D95319", "#77AC30"]
+        for j in range(3):
+            ax.plot(x_iter, arr[:, j], "-", linewidth=1.6, color=colors[j], label=rf"$\omega_{{{j+1}}}$")
+
+        ax.set_xlabel("Outer iteration")
+        ax.set_ylabel("Frequency (rad/s)")
+        ax.set_title(f"{approach_name} frequency history")
+        ax.grid(True)
+        ax.legend(loc="best")
+        if n_iter == 1:
+            ax.set_xlim(0.5, 1.5)
+        else:
+            ax.set_xlim(1, n_iter)
+        fig.tight_layout()
+        fig.savefig(png_path, dpi=180, bbox_inches="tight")
+        plt.close(fig)
+        print(f"Saved frequency iteration plot: {png_path}")
+    except Exception as exc:
+        print(f"Warning: failed to save frequency iteration plot ({exc}).")
 
 
 def run_topopt_from_json(json_input: str | dict) -> tuple[np.ndarray, np.ndarray, float, int]:
@@ -66,10 +127,11 @@ def run_topopt_from_json(json_input: str | dict) -> tuple[np.ndarray, np.ndarray
     rho_min = req_num(cfg, ["void_material", "rho_min"], "void_material.rho_min")
     Emin = E0 * E_min_ratio
 
-    approach = req_str(cfg, ["optimization", "approach"], "optimization.approach").lower().strip()
+    approach_raw = req_str(cfg, ["optimization", "approach"], "optimization.approach").strip()
+    approach = approach_raw.lower()
     if approach != "ourapproach":
         raise ValueError(
-            f'run_topopt_from_json.py only supports "ourApproach" (got "{approach}").'
+            f'run_topopt_from_json.py only supports "ourApproach" (got "{approach_raw}").'
         )
 
     volfrac = req_num(cfg, ["optimization", "volume_fraction"], "optimization.volume_fraction")
@@ -123,6 +185,13 @@ def run_topopt_from_json(json_input: str | dict) -> tuple[np.ndarray, np.ndarray
             f'optimization.filter.type must be "sensitivity" or "density" (got "{filter_type}").'
         )
 
+    use_heaviside = False
+    if has_field_path(cfg, ["optimization", "filter", "heaviside"]):
+        use_heaviside = parse_bool(
+            get_field_path(cfg, ["optimization", "filter", "heaviside"]),
+            "optimization.filter.heaviside",
+        )
+
     # ---- Optional flags ----
     harmonic_normalize = True
     if has_field_path(cfg, ["optimization", "harmonic_normalize"]):
@@ -172,6 +241,7 @@ def run_topopt_from_json(json_input: str | dict) -> tuple[np.ndarray, np.ndarray
         "semi_harmonic_rho_source": semi_rho_src,
         "visualize_live": visualize_live,
         "save_frq_iterations": save_frq_iter,
+        "use_heaviside": use_heaviside,
     }
     if load_cases is not None:
         run_cfg["load_cases"] = load_cases
@@ -182,9 +252,19 @@ def run_topopt_from_json(json_input: str | dict) -> tuple[np.ndarray, np.ndarray
         sys.path.insert(0, solver_dir)
     from topopt_freq import topopt_freq
 
-    x_out, f_hz, t_iter, n_iter, _ = topopt_freq(
+    x_out, f_hz, t_iter, n_iter, info = topopt_freq(
         nelx, nely, volfrac, penal, rmin_phys, ft, L, H, run_cfg
     )
+
+    if save_frq_iter:
+        freq_hist = info.get("freq_iter_omega") if isinstance(info, dict) else None
+        if freq_hist is None:
+            print(
+                "Warning: postprocessing.save_frequency_iterations=true, "
+                f'but no iteration history was returned by "{approach_raw}".'
+            )
+        else:
+            _save_frequency_iteration_plot(freq_hist, approach_raw, nelx, nely, _REPO_ROOT)
 
     omega = np.full(3, np.nan, dtype=float)
     valid = np.isfinite(f_hz)

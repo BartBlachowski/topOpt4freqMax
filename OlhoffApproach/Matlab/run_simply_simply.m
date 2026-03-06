@@ -28,7 +28,8 @@ cfg.maxiter  = 300;
 cfg.J        = 3;
 cfg.supportType = "SS";
 
-% Projection / continuation (optional tweaks)
+% Projection / continuation
+cfg.use_heaviside = false;
 cfg.beta_schedule = [1 2 4 8 16 32 64];
 cfg.beta_interval = 40;
 
@@ -37,6 +38,7 @@ opts = struct('doDiagnostic', true, 'diagnosticOnly', false, 'diagModes', 5, ...
 if isfield(cfg, 'visualization_quality') && ~isempty(cfg.visualization_quality)
     opts.visualization_quality = cfg.visualization_quality;
 end
+opts.save_frequency_iterations=true;
 paper = struct('init', 68.7, 'opt', 174.7);
 
 [omega_best, xPhys_best, diag_out] = topFreqOptimization_MMA(cfg, opts);

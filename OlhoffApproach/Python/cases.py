@@ -17,6 +17,7 @@ def case_config(case: str, quick: bool = False, seed: int | None = None) -> Olho
 
     cfg = OlhoffConfig()
     cfg.support_type = case
+    cfg.use_heaviside = False
     cfg.seed = seed
 
     if quick:
