@@ -144,6 +144,14 @@ evalModes = @(xPhys,numModes) evalEigen(xPhys,numModes,penal,E0,Emin,rho0,rho_mi
                                        Ke_l,Me_l,iK,jK,nDof,free);
 
 %% --- MMA setup -----------------------------------------------
+beta_continuous = cfg.beta_continuous;
+beta_ramp_T = cfg.beta_ramp_T;
+if beta_continuous && isempty(beta_ramp_T)
+    % Reach betaMax at 70% of maxiter, but cap at 300 so a large maxiter
+    % (e.g. 10 000 from a JSON convergence budget) doesn't stall discretization.
+    beta_ramp_T = min(300, max(1, floor(cfg.maxiter * 0.7)));
+end
+
 lambda_ref = cfg.lambda_ref;         % scaling reference
 n = nEl + 1;
 m = J + 2;                % J eig constraints + two-sided volume constraint
@@ -221,8 +229,13 @@ for it = 1:maxiter
 
     % --- adaptive beta schedule with grayness check ---
     if use_heaviside
-        beta_target = beta_list(min(beta_idx, numel(beta_list)));
-        beta = min(betaMax, beta_target);
+        if beta_continuous
+            % Smooth exponential ramp: beta = betaMax^(it/T), clamped to [1, betaMax]
+            beta = min(betaMax, max(1, betaMax^(it / beta_ramp_T)));
+        else
+            beta_target = beta_list(min(beta_idx, numel(beta_list)));
+            beta = min(betaMax, beta_target);
+        end
     else
         beta = 1;
     end
@@ -293,6 +306,7 @@ for it = 1:maxiter
             fprintf('WARN eigs failed (flag=%d, res=%.2e); skipping update, reducing move for 5 iters\n',...
                 flag_eigs,resmax);
             prev_V_low = [];
+            prevV_track = [];  % reset mode tracking so stale shapes don't corrupt next MAC
             beta_prev = beta; % don't trigger beta change next loop
             continue; % skip MMA update this iteration
         end
@@ -301,12 +315,18 @@ for it = 1:maxiter
 
     omega_cur = sqrt(lam_sorted(1));
     if saveFrqIterations
+        % Record sorted eigenfrequencies directly (no MAC mode-tracking).
+        % Sorted values are always monotonically ordered so "teeth" from
+        % near-degenerate eigenvector rotation cannot occur, matching the
+        % Olhoff paper's Fig. 4 style.
         nLog = min(3, numel(lam_sorted));
-        freqIterOmega(it,1:nLog) = sqrt(max(lam_sorted(1:nLog), 0));
+        freqIterOmega(it, 1:nLog) = sqrt(max(lam_sorted(1:nLog), 0));
     end
 
     % --- handle beta change: re-feasibilize Eb and reset MMA history
-    if beta ~= beta_prev
+    % For continuous ramp, beta changes every iteration by a tiny amount — skip the
+    % disruptive MMA reset; only apply it for discrete schedule jumps.
+    if beta ~= beta_prev && ~beta_continuous
         Eb_feas = min(lam_sorted(1:J))/lambda_ref;
         Eb = min(Eb, Eb_feas - 1e-8);
         Eb = min(xmax(end), max(xmin(end), Eb));
@@ -467,7 +487,7 @@ for it = 1:maxiter
         dx_hist(1) = [];
     end
 
-    if use_heaviside
+    if use_heaviside && ~beta_continuous
         % TIME-BASED beta continuation: advance every beta_interval iterations
         % but keep at least Npolish iterations at max beta
         target_beta_idx = min(numel(beta_list), floor(it / beta_interval) + 1);
@@ -588,6 +608,8 @@ function cfg = applyDefaults(cfg)
         'Npolish', 40, ...
         'gray_penalty_base', 0.5, ...
         'use_heaviside', true, ...
+        'beta_continuous', false, ...  % true = smooth exponential ramp instead of discrete jumps
+        'beta_ramp_T', [], ...         % iterations to reach betaMax (empty = 0.7 * maxiter)
         'lambda_ref', 2e4, ...
         'Eb0', 1, ...
         'Eb_min', 0, ...

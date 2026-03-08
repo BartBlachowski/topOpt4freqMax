@@ -19,6 +19,7 @@ baseCfg.penal   = 3.0;
 baseCfg.rmin    = 2 * baseCfg.L / baseCfg.nelx;
 baseCfg.maxiter = 300;   % enough for beta continuation to reach 32
 baseCfg.J       = 3;
+baseCfg.beta_continuous = true;   % smooth beta ramp → no discrete jumps in freq history
 
 % Material (same for all three cases)
 baseCfg.E0      = 1e7;

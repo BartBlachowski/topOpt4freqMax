@@ -30,17 +30,16 @@ data.optimization.filter.radius_units = 'element';
 % Resolutions: those from Table 1 in the paper (160x20, 240x30, 320x40)
 % plus two additional ones (240x30 already in paper; 400x50 is new)
 % -------------------------------------------------------------------------
-% resolutions = [
-%     160,  20;
-%     240,  30;
-%     320,  40;
-%     400,  50;
-%     600,  75;
-% ];
 resolutions = [
+    160,  20;
+    240,  30;
     320,  40;
     400,  50;
 ];
+% resolutions = [
+%     320,  40;
+%     400,  50;
+% ];
 nRes = size(resolutions, 1);
 
 % Methods to compare
@@ -48,7 +47,7 @@ approaches   = {'Olhoff',         'Yuksel',         'OurApproach'       };
 methodLabels = {'OlhoffApproach', 'YukselApproach', 'ProposedApproach'  };
 nMethods     = numel(approaches);
 
-nSamples = 1;
+nSamples = 10;
 
 % Storage: rows = resolutions, columns = methods
 omega_all  = NaN(nRes, nMethods);

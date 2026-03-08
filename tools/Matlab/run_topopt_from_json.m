@@ -206,6 +206,7 @@ function [x, omega, tIter, nIter, mem_usage] = run_topopt_from_json(jsonInput)
             cfgO.pasS = pasS;
             cfgO.pasV = pasV;
             cfgO.use_heaviside = useHeaviside;
+            cfgO.beta_continuous = useHeaviside;  % smooth beta ramp when Heaviside is on
 
             optsO = struct('doDiagnostic', true, 'diagnosticOnly', false, 'diagModes', 5);
             optsO.approach_name = approach;
@@ -567,19 +568,20 @@ function saveFrequencyIterationPlot(freqIterOmega, approachName, nelx, nely, rep
         end
     end
     ax = axes('Parent', fig);
+    set(ax, 'FontSize', 22);
     hold(ax, 'on');
     colors = [0.0000, 0.4470, 0.7410; ...
               0.8500, 0.3250, 0.0980; ...
               0.4660, 0.6740, 0.1880];
     xIter = (1:nIter)';
     for j = 1:3
-        plot(ax, xIter, freqIterOmega(:,j), '-', 'LineWidth', 1.6, ...
+        plot(ax, xIter, freqIterOmega(:,j), '-', 'LineWidth', 3.2, ...
             'Color', colors(j,:), 'DisplayName', sprintf('\\omega_{%d}', j));
     end
 
-    xlabel(ax, 'Outer iteration');
-    ylabel(ax, 'Frequency (rad/s)');
-    title(ax, sprintf('%s frequency history', nameDisplay), 'Interpreter', 'none');
+    xlabel(ax, 'Outer iteration', 'FontSize', 22);
+    ylabel(ax, 'Frequency (rad/s)', 'FontSize', 22);
+    title(ax, sprintf('%s frequency history', nameDisplay), 'Interpreter', 'none', 'FontSize', 22);
     grid(ax, 'on');
     box(ax, 'on');
     % MATLAB requires strictly increasing limits; handle single-iteration runs.
@@ -588,7 +590,7 @@ function saveFrequencyIterationPlot(freqIterOmega, approachName, nelx, nely, rep
     else
         xlim(ax, [1, nIter]);
     end
-    legend(ax, 'Location', 'best');
+    legend(ax, 'Location', 'best', 'FontSize', 22);
 
     didWritePng = false;
     try
@@ -608,6 +610,7 @@ function saveFrequencyIterationPlot(freqIterOmega, approachName, nelx, nely, rep
     figPath = fullfile(resultsDir, sprintf('%s_%dx%d_freq_iterations.fig', nameSafe, nelx, nely));
     didWriteFig = false;
     try
+        set(fig, 'Visible', 'on');   % savefig records visibility; keep it 'on' so the file opens correctly
         savefig(fig, figPath);
         didWriteFig = true;
     catch figErr
