@@ -22,7 +22,7 @@ try:
 except ImportError:
     mmasub = None
 
-_sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', 'tools', 'Python'))
+_sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', '..', 'tools', 'Python'))
 try:
     from nodal_projection import (
         build_nodal_projection_cache,

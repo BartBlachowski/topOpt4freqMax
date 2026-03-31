@@ -6,7 +6,7 @@ fprintf('=== test_multi_load_cases_ourApproach ===\n');
 thisDir = fileparts(mfilename('fullpath'));
 repoRoot = fileparts(thisDir);
 addpath(fullfile(repoRoot, 'tools'));
-addpath(fullfile(repoRoot, 'ourApproach', 'Matlab'));
+addpath(fullfile(repoRoot, 'analysis', 'ourApproach', 'Matlab'));
 
 % Small mesh for fast regression check.
 nelx = 24;

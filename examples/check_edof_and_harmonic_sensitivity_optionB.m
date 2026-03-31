@@ -9,7 +9,7 @@ fprintf('=== check_edof_and_harmonic_sensitivity_optionB ===\n');
 
 repoRoot = fileparts(fileparts(mfilename('fullpath')));
 addpath(fullfile(repoRoot, 'tools'));
-addpath(fullfile(repoRoot, 'ourApproach', 'Matlab'));
+addpath(fullfile(repoRoot, 'analysis', 'ourApproach', 'Matlab'));
 
 % Tiny fast setup.
 nelx = 6; nely = 2;

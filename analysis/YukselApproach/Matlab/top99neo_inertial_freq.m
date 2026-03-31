@@ -781,7 +781,7 @@ if exist('plotTopology', 'file') == 2 && exist('formatTopologyTitle', 'file') ==
     return;
 end
 thisDir = fileparts(mfilename('fullpath'));
-repoRoot = fileparts(fileparts(thisDir));
+repoRoot = fileparts(fileparts(fileparts(thisDir)));
 toolsDir = fullfile(repoRoot, 'tools');
 if exist(toolsDir, 'dir') == 7
     addpath(toolsDir);

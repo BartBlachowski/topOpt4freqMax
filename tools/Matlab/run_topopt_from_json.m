@@ -176,13 +176,18 @@ function [x, omega, tIter, nIter, mem_usage] = run_topopt_from_json(jsonInput)
         start(samplerTimer);
     end
 
+    % ---- elastic2D: reject dynamic-only keys before dispatch ----
+    if any(strcmpi(strtrim(approach), {'elastic2d', 'elastc2d'}))
+        rejectElastic2DDynamicKeys(cfg);
+    end
+
     % Start each run with a fresh plotting session so repeated
     % run_topopt_from_json calls open separate figure windows.
     resetTopologyPlotSession();
 
     switch lower(strtrim(approach))
         case 'olhoff'
-            addpath(fullfile(repoRoot, 'OlhoffApproach', 'Matlab'));
+            addpath(fullfile(repoRoot, 'analysis', 'OlhoffApproach', 'Matlab'));
 
             cfgO = struct();
             cfgO.L = L;
@@ -233,7 +238,7 @@ function [x, omega, tIter, nIter, mem_usage] = run_topopt_from_json(jsonInput)
             end
 
         case 'yuksel'
-            addpath(fullfile(repoRoot, 'YukselApproach', 'Matlab'));
+            addpath(fullfile(repoRoot, 'analysis', 'YukselApproach', 'Matlab'));
 
             bcType = mapSupportCodeToYuksel(supportCode);
             [ft, ftBC] = mapFilterToYuksel(filterType, filterBC);
@@ -328,7 +333,7 @@ function [x, omega, tIter, nIter, mem_usage] = run_topopt_from_json(jsonInput)
             end
 
         case 'ourapproach'
-            addpath(fullfile(repoRoot, 'ourApproach', 'Matlab'));
+            addpath(fullfile(repoRoot, 'analysis', 'ourApproach', 'Matlab'));
 
             ft = mapFilterToOurApproach(filterType);
             runCfg = struct();
@@ -384,9 +389,22 @@ function [x, omega, tIter, nIter, mem_usage] = run_topopt_from_json(jsonInput)
             tIter = tOut;
             nIter = itOut;
 
+        case {'elastic2d', 'elastc2d'}
+            addpath(fullfile(repoRoot, 'analysis', 'elastic2D', 'Matlab'));
+            [xOut, cOut, tOut, itOut] = runElastic2D(cfg, repoRoot, ...
+                nelx, nely, volfrac, penal, rmin_phys, ...
+                filterType, L, H, E0, nu, rho0, EminRatio, ...
+                optimizerType, move, maxiter, convTol, supportCode, ...
+                extraFixedDofs, pasS, pasV, postproc);
+            x = xOut(:);
+            omega = [cOut; NaN; NaN];   % return compliance in first slot, NaN for frequencies
+            tIter = tOut;
+            nIter = itOut;
+
         otherwise
             error('run_topopt_from_json:UnknownApproach', ...
-                'Unknown optimization.approach "%s". Use "Olhoff", "Yuksel", or "ourApproach".', approach);
+                ['Unknown optimization.approach "%s". Use "Olhoff", "Yuksel", ' ...
+                 '"ourApproach", "elastic2D", or "elastc2D".'], approach);
     end
 
     % --- Finalize memory measurement ---
@@ -1975,4 +1993,203 @@ function writeCorrelationHeatmap(C, omegaInit, omegaTopo, outPath)
     exportgraphics(fig, outPath, 'Resolution', 150, 'BackgroundColor', 'white');
     close(fig);
     fprintf('[Postprocessing] Saved correlation heatmap: %s\n', outPath);
+end
+
+
+% ===========================================================================
+% elastic2D helpers
+% ===========================================================================
+
+function rejectElastic2DDynamicKeys(cfg)
+%REJECTELASTIC2DDYNAMICKEYS  Error on optimization / postprocessing keys that
+%   are only meaningful for dynamic (frequency) analyses.
+    dynamicOptKeys = {'harmonic_normalize','debug_semi_harmonic', ...
+                      'semi_harmonic_baseline','semi_harmonic_rho_source','yuksel'};
+    optBlock = struct();
+    if isfield(cfg, 'optimization'), optBlock = cfg.optimization; end
+    for k = 1:numel(dynamicOptKeys)
+        key = dynamicOptKeys{k};
+        if isfield(optBlock, key)
+            error('run_topopt_from_json:elastic2DDynamicKey', ...
+                'optimization.%s is not applicable to elastic2D (dynamic-only key). Remove it.', key);
+        end
+    end
+
+    if isfield(optBlock, 'objective')
+        obj = lower(strtrim(char(string(optBlock.objective))));
+        if ~strcmp(obj, 'compliance')
+            error('run_topopt_from_json:elastic2DObjective', ...
+                'optimization.objective="%s" is not supported by elastic2D. Only "compliance" is valid.', obj);
+        end
+    end
+
+    dynamicPostKeys = {'compute_modes','compute_modes_initial','visualize_modes', ...
+                       'visualize_topology_modes','write_correlation_table', ...
+                       'correlation','save_frequency_iterations'};
+    postBlock = struct();
+    if isfield(cfg, 'postprocessing'), postBlock = cfg.postprocessing; end
+    for k = 1:numel(dynamicPostKeys)
+        key = dynamicPostKeys{k};
+        if isfield(postBlock, key)
+            error('run_topopt_from_json:elastic2DDynamicKey', ...
+                'postprocessing.%s is not applicable to elastic2D (dynamic-only key). Remove it.', key);
+        end
+    end
+
+    if isfield(cfg, 'bc') && isfield(cfg.bc, 'concentrated_masses')
+        error('run_topopt_from_json:elastic2DDynamicKey', ...
+            'bc.concentrated_masses is not applicable to elastic2D. Remove it.');
+    end
+
+    % Check load types.
+    dynamicLoadTypes = {'semi_harmonic','harmonic'};
+    if isfield(cfg, 'domain') && isfield(cfg.domain, 'load_cases')
+        lcs = cfg.domain.load_cases;
+        if ~iscell(lcs), lcs = {lcs}; end
+        for ci = 1:numel(lcs)
+            lc = lcs{ci};
+            loads = lc.loads;
+            if ~iscell(loads), loads = {loads}; end
+            for li = 1:numel(loads)
+                lt = lower(strtrim(char(string(loads{li}.type))));
+                if any(strcmp(lt, dynamicLoadTypes))
+                    error('run_topopt_from_json:elastic2DDynamicLoad', ...
+                        'Load type "%s" is not supported by elastic2D. Allowed: closest_node, self_weight.', lt);
+                end
+            end
+        end
+    end
+end
+
+
+function [xOut, cOut, tOut, itOut] = runElastic2D(cfg, repoRoot, ...
+        nelx, nely, volfrac, penal, rmin_phys, ...
+        filterType, L, H, E0, nu, rho0, EminRatio, ...
+        optimizerType, move, maxiter, convTol, supportCode, ...
+        extraFixedDofs, pasS, pasV, postproc)
+%RUNELASTIC2D  Build runCfg and call topopt_elastic2D.
+
+    ft = mapFilterToElastic2D(filterType);
+    Emin = E0 * EminRatio;
+
+    % Load cases
+    loadCasesCell = {};
+    if isfield(cfg, 'domain') && isfield(cfg.domain, 'load_cases')
+        raw = cfg.domain.load_cases;
+        if ~iscell(raw), raw = {raw}; end
+        loadCasesCell = normaliseLoadCasesForElastic2D(raw);
+    end
+    if isempty(loadCasesCell)
+        error('run_topopt_from_json:elastic2DNoLoads', ...
+            'No load cases defined. Specify domain.load_cases in the JSON config.');
+    end
+
+    visualizeLive = false;
+    if isfield(cfg, 'postprocessing') && isfield(cfg.postprocessing, 'visualize_live')
+        visualizeLive = logical(cfg.postprocessing.visualize_live);
+    end
+
+    runCfg.E0             = E0;
+    runCfg.Emin           = Emin;
+    runCfg.nu             = nu;
+    runCfg.rho0           = rho0;
+    runCfg.move           = move;
+    runCfg.convTol        = convTol;
+    runCfg.maxIter        = maxiter;
+    runCfg.optimizer      = optimizerType;
+    supportFixedDofs = localBuildFixedDofsFromSupportCode(supportCode, nelx, nely) - 1;
+    runCfg.extraFixedDofs = unique([double(extraFixedDofs(:)); double(supportFixedDofs(:))]);  % 0-based
+    runCfg.pasS           = double(pasS(:)) - 1;        % convert 1-based → 0-based
+    runCfg.pasV           = double(pasV(:)) - 1;
+    runCfg.loadCases      = loadCasesCell;
+    runCfg.visualizeLive  = visualizeLive;
+
+    [xOut, cOut, tOut, itOut] = topopt_elastic2D( ...
+        nelx, nely, volfrac, penal, rmin_phys, ft, L, H, runCfg);
+
+    % Optional: save final topology image.
+    if postproc.saveFinalImage
+        saveElastic2DTopologyImage(xOut, nelx, nely, cfg, repoRoot);
+    end
+end
+
+
+function ft = mapFilterToElastic2D(filterType)
+    switch lower(strtrim(filterType))
+        case 'sensitivity'
+            ft = 0;
+        case 'density'
+            ft = 1;
+        otherwise
+            error('run_topopt_from_json:elastic2DFilter', ...
+                'optimization.filter.type must be "sensitivity" or "density" for elastic2D (got "%s").', filterType);
+    end
+end
+
+
+function normCases = normaliseLoadCasesForElastic2D(raw)
+%NORMALISELOADCASESFORELASTIC2D  Convert JSON struct array to cell array of
+%   normalised load-case structs expected by topopt_elastic2D.
+    normCases = cell(numel(raw), 1);
+    for ci = 1:numel(raw)
+        lc = raw{ci};
+        ncase.factor = 1.0;
+        if isfield(lc, 'factor') && ~isempty(lc.factor)
+            ncase.factor = double(lc.factor);
+        end
+        loads = lc.loads;
+        if ~iscell(loads), loads = {loads}; end
+        normLoads = cell(numel(loads), 1);
+        for li = 1:numel(loads)
+            ld = loads{li};
+            nl.type = lower(strtrim(char(string(ld.type))));
+            switch nl.type
+                case 'closest_node'
+                    nl.factor   = getFieldDbl(ld, 'factor', 1.0);
+                    nl.location = double(ld.location(:))';
+                    nl.force    = double(ld.force(:))';
+                case 'self_weight'
+                    nl.factor   = getFieldDbl(ld, 'factor', 1.0);
+                otherwise
+                    error('run_topopt_from_json:elastic2DLoadType', ...
+                        'Load type "%s" not supported by elastic2D.', nl.type);
+            end
+            normLoads{li} = nl;
+        end
+        ncase.loads = normLoads;
+        normCases{ci} = ncase;
+    end
+end
+
+
+function v = getFieldDbl(s, name, default)
+    if isfield(s, name) && ~isempty(s.(name))
+        v = double(s.(name));
+    else
+        v = default;
+    end
+end
+
+
+function saveElastic2DTopologyImage(x, nelx, nely, cfg, repoRoot)
+%SAVEELASTIC2DTOPOLOGYIMAGE  Save a grayscale topology PNG to results/.
+    resultsDir = fullfile(repoRoot, 'results');
+    if exist(resultsDir, 'dir') ~= 7, mkdir(resultsDir); end
+    name = 'elastic2D';
+    if isfield(cfg, 'meta') && isfield(cfg.meta, 'name')
+        name = char(string(cfg.meta.name));
+    end
+    nameSafe = regexprep(name, '[^\w\-]', '_');
+    outPath = fullfile(resultsDir, sprintf('%s_%dx%d.png', nameSafe, nelx, nely));
+    fig = figure('Color','white','Visible','off');
+    imagesc(1 - reshape(x(:), nely, nelx));
+    colormap(gray); axis equal off; caxis([0 1]);
+    set(gca,'YDir','normal');
+    try
+        exportgraphics(fig, outPath, 'Resolution', 180, 'BackgroundColor', 'white');
+    catch
+        print(fig, outPath, '-dpng', '-r180');
+    end
+    close(fig);
+    fprintf('Saved topology image: %s\n', outPath);
 end

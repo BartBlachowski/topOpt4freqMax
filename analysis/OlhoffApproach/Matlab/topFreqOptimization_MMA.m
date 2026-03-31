@@ -663,7 +663,7 @@ function localEnsurePlotHelpersOnPath()
         return;
     end
     thisDir = fileparts(mfilename('fullpath'));
-    repoRoot = fileparts(fileparts(thisDir));
+    repoRoot = fileparts(fileparts(fileparts(thisDir)));
     toolsDir = fullfile(repoRoot, 'tools');
     if exist(toolsDir, 'dir') == 7
         addpath(toolsDir);
