@@ -1,0 +1,1 @@
+sn-article-template/sn-jnl.cls
