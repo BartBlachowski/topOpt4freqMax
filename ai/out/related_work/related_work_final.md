@@ -1,0 +1,13 @@
+## Related Work
+
+Density-based methods using SIMP interpolation dominate the literature. The bound formulation of Du and Olhoff provides rigorous treatment of eigenvalue constraints through $\alpha \lambda_i \geq \beta$ bounds on tracked modes, establishing benchmark results and theoretical foundations. Modified SIMP with minimum density thresholds ($x_\mathrm{min} = 0.001$) prevents artificial localized resonance modes (ALRM) that arise from low-stiffness elements with insufficient mass-to-stiffness ratios. Extensions include Deng's SAIP method, which suppresses spurious resonance modes from low-stiffness elements using the Betti reciprocal theorem, Su's couple-stress formulation for enhanced continuum modeling, and Huang's MMC framework with MAC-based mode tracking to resolve modal identities when repeated eigenvalues occur, thus addressing mode-switching instabilities. These approaches prioritize solution quality but require full eigensolution per iteration.
+
+Discrete optimization via BESO offers an alternative, producing crisp 0/1 topologies through evolutionary element removal. Huang and Xie's soft-kill variant achieves competitive frequencies while avoiding numerical instabilities, though convergence requires more iterations than gradient-based methods.
+
+Efficiency-focused approaches include Li's GWC method with iterative mass control and Heaviside projection, converging in 21 iterations versus BESO's 67 for the standard benchmark while maintaining manufacturable designs. Xia's level set method provides smooth boundaries through implicit evolution via reaction-diffusion PDEs, offering an alternative to density filtering for crisp geometries but retaining eigensolver dependencies.
+
+Yuksel's quasi-static reformulation represents the most direct efficiency advance, converting eigenvalue problems to static compliance minimization under inertial loads. This approach achieves approximately 7× computational speedup compared to the bound formulation but accepts an approximately 8% frequency loss (ω₁ = 160.5 rad/s versus 174.7 rad/s), trading optimality for practical engineering efficiency.
+
+Specialized extensions address extended domains: Marzok's XFEM for 3D extruded beams reduces degrees of freedom while capturing cross-section distortion modes, while Ni's PLMP method handles skeletal structures with exact frequency analysis.
+
+The proposed method extends these foundations to multi-mode frequency control under multiple load cases within efficient quasi-static frameworks, addressing the challenge of simultaneously optimizing coupled modal responses without reverting to expensive eigensolution per iteration.

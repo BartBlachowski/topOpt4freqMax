@@ -1,0 +1,29 @@
+{
+  "last_updated": "2026-04-15",
+  "sections": {
+    "abstract": {
+      "status": "NOT_READY",
+      "score": 52,
+      "confidence": "HIGH",
+      "workflow": "ai/run/run_abstract_score.md",
+      "source": "paper/main.tex",
+      "artifacts": {
+        "score": "ai/out/abstract/abstract_score.md",
+        "meta": "ai/out/abstract/abstract.meta.json"
+      }
+    },
+    "related_work": {
+      "status": "READY",
+      "authoritative": "ai/out/related_work/related_work_final.md",
+      "workflow": "ai/run/run_related_work_pipeline.md",
+      "artifacts": {
+        "draft": "ai/out/related_work/related_work_draft.md",
+        "revised": "ai/out/related_work/related_work_revised.md",
+        "final": "ai/out/related_work/related_work_final.md",
+        "audit": "ai/out/related_work/related_work_audit.md",
+        "filter": "ai/out/related_work/related_work_filter.md",
+        "meta": "ai/out/related_work/related_work.meta.json"
+      }
+    }
+  }
+}

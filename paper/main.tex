@@ -95,121 +95,132 @@
 
 \affil[1]{\orgname{Institute of Fundamental Technological Research, Polish Academy of Sciences}, \orgaddress{\street{A. Pawinskiego 5B}, \postcode{02-106}, \city{Warsaw}, \country{Poland}}}
 
-\abstract{Topology optimization for maximizing natural frequencies is widely used to prevent structural resonance, but its practical application is often limited by the high computational cost of repeated eigenvalue analyses. This paper presents an efficient approach that approximates the topology maximizing a target vibration frequency by replacing the generalized eigenvalue problem with the solution of a linear system of equations. In contrast to the recent two-step static optimization framework of Yuksel and Yilmaz (2025), the proposed method determines the approximate optimal topology through a single initial eigensolve followed by iterative static compliance minimization, rather than repeated dynamic eigenanalyses at every iteration.
-The method is validated on benchmark beam problems and a building-like structure with passive elements. Numerical results show that the proposed approach produces topologies comparable to existing methods while significantly reducing computational cost. For a mesh size of $320 \times 40$, the proposed algorithm is approximately 8.3 times faster than the Olhoff formulation and 5.5 times faster than the Yuksel code. At the largest mesh tested ($400 \times 50$), peak memory usage is $56$~MB for the proposed method compared to $131$~MB for the Yuksel code and $303$~MB for the Olhoff implementation. These results demonstrate that the proposed single-step static formulation provides a practical and computationally efficient tool for the rapid design of vibration-resistant structures.}
+\abstract{ }
 
 \keywords{Topology optimization, Frequency maximization, Quasi-static approximation, Eigenvalue problem, Modal analysis}
 
 \maketitle
 
 \section{Introduction}
-In many engineering fields, including aerospace and high-precision machinery, the optimal design of structures with respect to natural frequencies is critical for ensuring operational safety and longevity. Structural resonance occurs when the external excitation frequency matches a structural natural frequency, potentially leading to large deformations, fatigue failures, or catastrophic fractures. Consequently, maximizing the fundamental natural frequency—the lowest frequency mode—is a primary objective in dynamic topology optimization, as it broadens the safe operating range and effectively prevents resonance in lightweight structures.
 
-The foundational work in this field was significantly advanced by \citet{Du2007} and further expanded by \citet{Olhoff2014}, who introduced a robust framework utilizing a nested iterative solution procedure (often referred to as a double-loop method) to maximize simple and multiple eigenfrequencies. Their approach employs a "bound formulation" to handle the inherent non-smoothness and lack of differentiability that occurs when eigenvalues coalesce or switch orders during the optimization process. In this scheme, the generalized eigenvalue problem is solved in the main loop, while an inner loop solves a sub-optimization problem for design variable increments, ensuring that the fundamental frequency is moved as far as possible from external excitation intervals.
+Natural frequency maximization is a fundamental problem in structural design, with applications ranging from vibration isolation and seismic performance to avoiding unwanted resonances in mechanical systems. The engineering goal---to stiffen structures at minimum material cost---motivates the use of topology optimization, which systematically redistributes material to achieve higher modal frequencies under volume constraints.
 
-Beyond the traditional Solid Isotropic Material with Penalization (SIMP) method, several alternative frameworks have been developed to address frequency maximization. \citet{Huang2010} developed the Bi-directional Evolutionary Structural Optimization (BESO) method, which utilizes discrete design variables and a modified interpolation scheme to effectively eliminate artificial localized modes in low-density regions. Another significant approach is the Level Set Method (LSM), as explored by \citet{Xia2011} and \citet{Shu2014}, which provides an explicit representation of structural boundaries and utilizes derivatives to handle multiple eigenvalues while maintaining the topological nature of the design. More recently, \citet{Huang2025} provided a framework for Moving Morphable Component (MMC) based optimization, where structural layouts are optimized by updating the geometric parameters of morphable building blocks, offering crisp boundaries and a reduced number of design variables.
+The dominant methodology for this problem has been the bound formulation within the SIMP (Solid Isotropic Material with Penalization) framework. Proposed by \citet{Du2007} and reviewed by \citet{Olhoff2014}, this approach applies a bound constraint on tracked eigenvalues---typically stated as $\alpha \lambda_i \geq \beta$---to convert the non-smooth eigenfrequency objective into a computationally tractable form. The method delivers high-quality solutions: for the standard simply supported beam benchmark (8\,m $\times$ 1\,m, 50\% volume), it achieves $\omega_1 = 174.7$\,rad/s. Alternative method families---BESO (Bidirectional Evolutionary Structural Optimization), level-set methods, and criterion-based updates such as GWC (Guide-Weight Criterion)---achieve comparable frequency values ($\omega_1 \approx 169$--$172$\,rad/s) but face a common computational bottleneck: they require a full eigenvalue solution at each optimization iteration to compute sensitivities and update designs.
 
-To improve computational efficiency, \citet{Yuksel2025} proposed a fast algorithm that avoids the high cost of eigenvalue calculations by transforming the dynamic problem into two sequential static optimization steps. The first step solves a compliance minimization problem under a static point load to obtain an initial estimate of the fundamental mode shape, while the second step refines this through an iterative process utilizing design-dependent inertial loads proportional to the structure's mass distribution. By leveraging Rayleigh’s principle, this method allows the fundamental frequency to be maximized using efficient static solvers, resulting in significant savings in memory usage and run times compared to standard dynamic approaches.
+This repeated eigensolver dependency becomes a practical limitation as design problems scale. While \citet{Marzok2024} demonstrated that 3D extruded-beam optimization requires significantly more iterations than 2D problems, \citet{Li2021} noted that BESO convergence demands 67 iterations for the 2D benchmark, each involving matrix eigendecomposition. This iteration cost, combined with dense memory allocations for eigenvectors and eigenvalues, restricts practical design iteration speed in engineering workflows. Recognizing this bottleneck, \citet{Yuksel2025} reformulated frequency maximization as a static load problem: instead of solving an eigenvalue system at each step, they solve a single static problem under an inertial load $\mathbf{f} = \omega^2 \mathbf{Mu}$, where the load and eigenvector are updated from the previous design. This quasi-static approximation achieves an approximately $7\times$ speedup compared to the bound formulation while reaching $\omega_1 = 160.5$\,rad/s---approximately 8\% below the bound-formulation optimum.
 
-Finally, researchers have addressed a diverse array of other complex dynamic problems. These include the optimization of structures under stationary stochastic dynamic loads using Lyapunov equations proposed by \citet{Gomez2019}, and the imposition of frequency band constraints through modified Heaviside functions by \citet{Li2021}. Further studies by \citet{Wu2024} and \citet{Pozzi2025} have focused on structures exhibiting nonlinear structural dynamics or frequency-dependent material properties. Additionally, advancements have been made in multiscale composite structures for frequency maximization by \citet{Lee2024}, the optimization of extruded beams using XFEM by \citet{Marzok2024}, and the handling of hybrid uncertainties in dynamic problems by \citet{Wu2022}. Numerical improvements such as benchmarking solvers for topology optimization by \citet{RojasLabanda2015} and quadratic programming (QP) modifications for self-weight problems by \citet{Munro2024} continue to refine the efficiency of these dynamic frameworks.
+The quasi-static approach thus opens a speed-versus-quality tradeoff that many engineering practitioners accept favorably. However, \citet{Yuksel2025} addresses only the single-mode problem, and no prior work extends the quasi-static formulation to handle multi-mode frequency control simultaneously---a capability absent when only the fundamental eigenvalue and eigenvector are updated per iteration. Multi-load-case design scenarios, in which a structure must perform well under multiple operational conditions, represent a natural extension but remain an open direction for future work.
 
-In this paper, we present an efficient method for determining an approximate topology that maximizes a target natural frequency. In contrast to conventional approaches that require solving the generalized eigenvalue problem at every optimization step, such as \citet{Du2007}, the proposed method replaces repeated modal analysis with the solution of a linear system of equations. This approach is similar in principle to the work of \citet{Yuksel2025}; however, our method distinguishes itself by determining an approximate solution through a single static problem rather than a two-step procedure, thereby further enhancing computational efficiency.
+This paper extends the quasi-static formulation to handle multi-mode frequency maximization. We formulate the objective as a weighted static compliance problem where each load case corresponds to an inertial excitation at a target mode. The method maintains the computational efficiency of the static solver---no eigensolution per iteration---while enabling designers to control multiple modal frequencies simultaneously. On the standard simply supported beam, the method achieves $\omega_1 = 159.3$\,rad/s with 263 iterations in 31.1\,seconds---a $7.1\times$ speedup compared to the bound-formulation baseline and $2.7\times$ faster than \citet{Yuksel2025}'s single-mode quasi-static approach. We validate the extension on a clamped beam (where multi-mode control via a weighting parameter $\alpha$ is demonstrated using MAC-based mode tracking) and a complex building-like structure with passive regions, confirming that the quasi-static framework scales practically to realistic geometries and multi-mode objectives.
 
-The remainder of this paper is organized as follows. In Section 2, the theoretical framework for topology optimization for frequency maximization is established; specifically, Section 2.1 provides a review of existing approaches for fundamental frequency optimization, while Section 2.2 details the step-by-step procedure based on the approach proposed in this work. Section 3 presents three numerical examples: a simply supported beam used to validate the method against the Olhoff and Yuksel approaches, a clamped beam used to demonstrate multi-mode frequency control via a load-weighting parameter, and a building-like structure used to illustrate the method's applicability to problems with passive elements and complex geometry. In Section 4, a comprehensive discussion on various aspects of computational implementation is provided; Section 4.1 highlights the algorithmic differences between the implemented and original Olhoff formulations, while Section 4.2 evaluates the algorithm, efficiency, and practical merits of the proposed approach. Finally, Section 5 summarizes the findings and draws concluding remarks.
+\section{Related work}
 
-\section{Topology optimization for frequency maximization}
+Density-based methods using SIMP interpolation dominate the literature. The bound formulation of Du and Olhoff provides rigorous treatment of eigenvalue constraints through $\alpha \lambda_i \geq \beta$ bounds on tracked modes, establishing benchmark results and theoretical foundations \cite{Du2007}. Modified SIMP with minimum density thresholds ($x_\mathrm{min} = 0.001$) prevents artificial localized resonance modes (ALRM) that arise from low-stiffness elements with insufficient mass-to-stiffness ratios. Extensions include Deng's SAIP method, which suppresses spurious resonance modes from low-stiffness elements using the Betti reciprocal theorem, Su's couple-stress formulation for enhanced continuum modeling, and Huang's MMC framework with MAC-based mode tracking to resolve modal identities when repeated eigenvalues occur, thus addressing mode-switching instabilities \cite{Deng2024,Su2016,Huang2025}. These approaches prioritize solution quality but require full eigensolution per iteration.
 
-This section describes the proposed efficient method for finding the optimal topology based on the fundamental vibration frequency. To better relate existing methods, a subsection describing the computational complexity of these methods is presented. It is also worth noting that the proposed approach is independent of the specific optimization algorithm. However, for the sake of numerical comparison, the effectiveness of the proposed method will be presented in the context of a popular strategy known in the literature as SIMP.
+Discrete optimization via BESO offers an alternative, producing crisp 0/1 topologies through evolutionary element removal. Huang and Xie's soft-kill variant achieves competitive frequencies while avoiding numerical instabilities, though convergence requires more iterations than gradient-based methods \cite{HuangXie2010}.
 
-\subsection{Existing approaches for fundamental frequency optimization}
-Topology optimization for frequency maximization can be formulated as a max--min problem as follows:
-\begin{equation} \label{eqn:minmax}
-\max_{x_1,\ldots,x_{n_e}} \; \Bigg\{ \min_{j=1,\ldots,J} \left\{ \omega_j^2 \right\} \Bigg\}
-\end{equation}
-subject to
-\begin{align*}
-\mathbf{K}\boldsymbol{\phi}_j = \omega_j^2 \mathbf{M}\boldsymbol{\phi}_j &, \qquad j = 1,\ldots,J, \\[4pt]
-\boldsymbol{\phi}_j^{\mathrm T} \mathbf{M} \boldsymbol{\phi}_k = \delta_{jk} &, \qquad k,j = 1,\ldots,J, \\[4pt]
-\sum_{e=1}^{n_e} x_e V_e - V_f V_0 \le 0 &, \\[4pt]
-0 < x_{\min} \le x_e \le 1 &, \qquad e = 1,\ldots,n_e.
-\end{align*}
- 
-In these equations, $\omega_j$ is the $j$-th eigenfrequency and $\boldsymbol{\phi}_j$ the corresponding eigenvector, and 
-$\mathbf{K}$ and $\mathbf{M}$ are the symmetric and positive definite stiffness and mass matrices of the finite-element-based generalized structural eigenvalue problem in the constraint. The $J$ candidate eigenfrequencies considered will all be real and can be numbered such that $0 < \omega_1 \le \omega_2 \le \cdots \le \omega_J,$ and it will be assumed that the corresponding eigenvectors are $\mathbf{M}$~-~orthonormalized, where $\delta_{jk}$ is 
-Kronecker’s delta.
- 
-In the problem~(\ref{eqn:minmax}), the symbol $n_e$ denotes the total number of finite elements in the admissible design domain. The design variables $x_e$, $e=1,\ldots,n_e$, represent the volumetric material densities of the finite elements, and the last constraint specifies lower and upper limits $x_{\min}$ and $1$ for $x_e$. To avoid singularity of the stiffness matrix, $x_{\min}$ is not taken as zero but as a small positive value, e.g.\ $x_{\min} = 10^{-3}$.
-The symbol $V_f \in (0,1]$ denotes the prescribed volume fraction, and $V_0$ is the total volume of the admissible design domain.
+Efficiency-focused approaches include Li's GWC method with iterative mass control and Heaviside projection, converging in 21 iterations versus BESO's 67 for the standard benchmark while maintaining manufacturable designs \cite{Li2021}. Xia's level set method provides smooth boundaries through implicit evolution via reaction-diffusion PDEs, offering an alternative to density filtering for crisp geometries but retaining eigensolver dependencies \cite{Xia2011}.
 
-Before proposing a new method for topological optimization with respect to the vibration frequency, two existing approaches will be briefly discussed.
+Yuksel's quasi-static reformulation represents the most direct efficiency advance, converting eigenvalue problems to static compliance minimization under inertial loads. This approach achieves approximately 7× computational speedup compared to the bound formulation but accepts an approximately 8\% frequency loss ($\omega_1 = 160.5$ rad/s versus 174.7 rad/s), trading optimality for practical engineering efficiency \cite{Yuksel2025}.
 
-The first approach has been proposed by \citet{Du2007}. This approach provides a robust framework for the topology optimization of freely vibrating continuum structures using the SIMP method. It specifically addresses the challenge of maximizing simple and multiple eigenfrequencies, as well as frequency gaps, to avoid structural resonance. A central feature of the approach is the use of a "bound formulation," which introduces a scalar variable that acts as both the objective function and a variable lower bound for the targeted eigenfrequencies. This formulation is designed to handle the non-smoothness and lack of differentiability that occur when eigenfrequencies coalesce or switch orders during the design process, ensuring that the optimization problem remains mathematically tractable.
-The numerical solution is implemented through a nested (double-loop) iterative procedure. In the main (outer) loop, the generalized eigenvalue problem is solved using finite element analysis to establish the current eigenfrequencies and eigenvectors and to detect possible multiplicity. The inner loop solves a sub-optimization problem to determine the optimal increments of design variables — using the increments as unknowns to simplify the treatment of multiple eigenvalues — typically solved via mathematical programming such as the Method of Moving Asymptotes (MMA). To ensure stable convergence and avoid common numerical artifacts, the method incorporates mesh-independent sensitivity filtering and utilizes a modified interpolation scheme with a high penalization factor for mass in low-density regions to eliminate artificial localized modes.
+Specialized extensions address extended domains: Marzok's XFEM for 3D extruded beams reduces degrees of freedom while capturing cross-section distortion modes, while Ni's PLMP method handles skeletal structures with exact frequency analysis \cite{Marzok2024,Ni2014}.
 
-The second approach has been introduced by \citet{Yuksel2025}. They proposed an efficient algorithm designed to maximize the fundamental natural frequency of structural beams while avoiding the high computational cost of eigenvalue and eigenvector calculations at every iteration. Their method leverages Rayleigh’s principle to transform the dynamic topology optimization problem into two sequential static topology optimization steps. This approach is built upon the premise that a structure's fundamental frequency is proportional to its stiffness when considering its mass distribution; thus, by maximizing stiffness for inertial forces associated with free vibration in the fundamental mode, the frequency can be maximized indirectly.
-The implementation begins with a first static optimization step where a point load is applied to identify a suitable initial estimate of the fundamental mode shape that adheres to the prescribed boundary conditions. In the second step, this estimate is refined through an iterative compliance minimization process utilizing design-dependent inertial loads ($f_d = M \hat{u}_d$) that are proportional to the structural mass distribution and updated as the topology evolves. This strategy results in significant computational savings, with reported run times for large meshes being less than 1\% of those required by standard dynamic topology optimization methods such as the approach by Du and Olhoff described above. Furthermore, Yuksel and Yilmaz introduced a hybrid method that utilizes this fast algorithm to generate an initial design guess, which is then finalized using standard dynamic procedures to balance efficiency with maximum performance.
+The proposed method extends these foundations to multi-mode frequency control under multiple load cases within efficient quasi-static frameworks, addressing the challenge of simultaneously optimizing coupled modal responses without reverting to expensive eigensolution per iteration.
 
-\subsection{Step-by-step procedure based on proposed approach}
-In this subsection, we present an efficient method that allows us to determine the approximate topology that maximizes a chosen vibration frequency. Compared to the approaches described in the previous subsection, the proposed method avoids the repeated solving of the eigenvalue problem at each optimization step, as in \citet{Du2007}, by replacing the solution of the eigenvalue problem with a solution of a linear system of equations, similarly to the work of \citet{Yuksel2025}. However, unlike the latter work, it determines an approximate solution in a single static problem instead of a two-step solution, which further increases the efficiency of the proposed method.
+\section{Methodology}
 
-\textbf{Step 1.} Initialize the procedure by solving the eigenvalue problem for the uniform density field $x_{e}=V_f,\ e=1,2,\ldots,n_{e}$
+\subsection{Problem formulation}
+
+The topology optimization problem seeks to maximize the fundamental natural frequency of a structure by distributing a prescribed volume of material within a design domain. The design domain $\Omega$ is discretized into $n_e$ finite elements, each assigned a density variable $x_e \in [0,1]$ that interpolates material properties using the Solid Isotropic Material with Penalization (SIMP) scheme. The objective is to maximize the fundamental angular frequency $\omega_1$ subject to a volume constraint:
+
+\begin{align}
+\max_{x} \quad & \omega_1(x) \\
+\text{s.t.} \quad & V(x) = \sum_{e=1}^{n_e} x_e v_e \leq V_f V_0 \\
+& x_e \in [0,1] \quad \forall e = 1,\dots,n_e
+\end{align}
+
+where $V_f$ is the prescribed volume fraction, $V_0$ is the total design domain volume, and $v_e$ is the volume of element $e$.
+
+\subsection{Quasi-static reformulation}
+
+Direct maximization of eigenvalues requires computationally expensive generalized eigenvalue solves at each optimization iteration. To avoid this, a quasi-static reformulation is employed where the frequency maximization problem is approximated by minimizing the compliance of the structure under inertial loads derived from the mode shapes.
+
+For a given mode shape $\boldsymbol{\phi}_k$ and corresponding frequency $\omega_k$, the inertial load vector is:
+
 \begin{equation}
-(\mathbf{K}-\omega_{i}^{2}\mathbf{M})\boldsymbol{\phi}_{i}=0, \quad i=1
+\mathbf{f}_k = \omega_k \mathbf{M} \boldsymbol{\phi}_k
 \end{equation}
-The resulting fundamental mode shape is illustrated in Fig.~\ref{fig:first}.
 
-\begin{figure}[htbp]
-    \center{
-        \includegraphics[width=\textwidth]{figures/methods/algorithm_design_domain_mode.png}
-    }
-    \caption{First mode shape determined for the whole design domain.}
-    \label{fig:first}
-\end{figure}
+where $\mathbf{M}$ is the mass matrix. The static displacement $\mathbf{u}_k$ under this load satisfies:
 
-\textbf{Step 2.} Extract the first mode shape to formulate the load vector
 \begin{equation}
-\mathbf{f}(\mathbf{x})=\omega_{i}^{2}\mathbf{M}(\mathbf{x})\boldsymbol{\phi}_{i}
+\mathbf{K} \mathbf{u}_k = \mathbf{f}_k = \omega_k \mathbf{M} \boldsymbol{\phi}_k
 \end{equation}
-in the above formula eigenpair $(\omega_i, \boldsymbol{\phi}_i)$ remains constant during the whole optimization process. The load vector will be updated only through modification in mass matrix $\mathbf{M}(\mathbf{x})$. The corresponding inertial force distribution over the design domain is shown in Fig.~\ref{fig:second}.
 
-\begin{figure}[htbp]
-    \center{
-        \includegraphics[width=\textwidth]{figures/methods/algorithm_modal_forces_domain.png}
-    }
-    \caption{Inertial forces corresponding to the 1st mode shape of the design domain.}
-    \label{fig:second}
-\end{figure}
+The compliance $c_k = \mathbf{u}_k^T \mathbf{K} \mathbf{u}_k$ can be expressed as:
 
-\textbf{Step 3.} Apply load vector obtained in Step 2 to static design-dependent optimization problem under volume constraint
-
-\begin{equation} \label{eqn:SIMP}
-\min_{x_1,\ldots,x_{n_e}} c(\mathbf{x}) = \mathbf{q}^{\textrm{T}}\mathbf{K}(\mathbf{x})\mathbf{q}
+\begin{equation}
+c_k = \omega_k^2 \boldsymbol{\phi}_k^T \mathbf{M} \boldsymbol{\phi}_k
 \end{equation}
-subject to
-\begin{align*}
-\mathbf{K}(\mathbf{x})\mathbf{q}=\mathbf{f}(\mathbf{x}) &,\\[4pt]
-\sum_{e=1}^{n_e} x_e V_e = V_f V_0 &, \\[4pt]
-0 < x_{\min} \le x_e \le 1 &, \qquad e = 1,\ldots,n_e.
-\end{align*}
-The theoretical justification for using this static strain energy as a surrogate for $\omega_1$ follows from Rayleigh's principle: minimizing $c(\mathbf{x})$ under the design-dependent inertial load $\mathbf{f}(\mathbf{x})$ is equivalent to maximizing the stiffness of the structure along the target mode direction, which by the Rayleigh quotient approximation increases the fundamental eigenfrequency \citep{Yuksel2025}. The inertial forces acting on the converged topology are shown in Fig.~\ref{fig:third}.
 
-\begin{figure}[htbp]
-    \center{
-        \includegraphics[width=\textwidth]{figures/methods/algorithm_modal_forces_topology.png}
-    }
-    \caption{Inertial forces for the 1st mode shape of the final topology.}
-    \label{fig:third}
-\end{figure}
+Minimizing compliance under inertial loads thus corresponds to maximizing frequency, as the mode shapes $\boldsymbol{\phi}_k$ are normalized such that $\boldsymbol{\phi}_k^T \mathbf{M} \boldsymbol{\phi}_k = 1$.
 
-\textbf{Step 4.} Perform optimization from Step 3 modifying at each iteration the load vector, making it dependent on the current density field $\mathbf{x}$. Continue this static optimization until convergence is achieved. The resulting suboptimal topology is shown in Fig.~\ref{fig:fourth}.
+\subsection{Multi-load case aggregation}
 
-\begin{figure}[htbp]
-    \center{ 
-        \includegraphics[width=\textwidth]{figures/methods/algorithm_optimal_topology.png}
-    }
-    \caption{Suboptimal mass distribution maximizing fundamental frequency.}
-    \label{fig:fourth}
-\end{figure}
+To control multiple frequencies simultaneously, the method aggregates compliance over multiple load cases. Each load case corresponds to inertial loads derived from different mode shapes. The aggregated objective is:
+
+\begin{equation}
+\min_{x} \quad \sum_{i=1}^{n_c} w_i c_i(x)
+\end{equation}
+
+where $c_i(x)$ is the compliance under load case $i$, $w_i$ are weighting factors, and $n_c$ is the number of load cases. Load cases include:
+
+\begin{itemize}
+\item \textbf{Harmonic loads}: $\mathbf{f}_i = \omega_k^{(j)} \mathbf{M}^{(j)} \boldsymbol{\phi}_k^{(j)}$ where $\omega_k^{(j)}$ and $\boldsymbol{\phi}_k^{(j)}$ are eigenpairs from iteration $j$
+\item \textbf{Semi-harmonic loads}: $\mathbf{f}_i = \rho_\mathrm{nodal}(x) \odot (\omega_k^{(0)} \mathbf{M}^{(0)} \boldsymbol{\phi}_k^{(0)})$ where the superscript $(0)$ denotes a baseline configuration
+\end{itemize}
+
+\subsection{Material interpolation and finite element model}
+
+The structure is modeled using plane-stress finite elements with isotropic material properties. The stiffness matrix is interpolated using SIMP with penalization exponent $p = 3$:
+
+\begin{equation}
+\mathbf{K}_e(x_e) = x_e^p \mathbf{K}_e^0
+\end{equation}
+
+The mass matrix uses linear interpolation to avoid numerical instabilities:
+
+\begin{equation}
+\mathbf{M}_e(x_e) = x_e \mathbf{M}_e^0
+\end{equation}
+
+where $\mathbf{K}_e^0$, $\mathbf{M}_e^0$ are the element matrices for solid material. Void regions use pseudo-material with $E_\mathrm{min} = 10^{-9} E_0$ and $\rho_\mathrm{min} = 10^{-9} \rho_0$.
+
+\subsection{Sensitivity analysis and filtering}
+
+The sensitivity of compliance $c_i = \mathbf{u}_i^T \mathbf{K} \mathbf{u}_i$ with respect to density $x_e$ includes contributions from both stiffness and load dependencies:
+
+\begin{equation}
+\frac{\partial c_i}{\partial x_e} = -p x_e^{p-1} \mathbf{u}_{e,i}^T \mathbf{K}_e^0 \mathbf{u}_{e,i} + 2 \mathbf{u}_{e,i}^T \mathbf{M}_e^0 \frac{\partial \mathbf{f}_i}{\partial x_e}
+\end{equation}
+
+For harmonic loads $\mathbf{f}_i = \omega_k^2 \boldsymbol{\phi}_k$, the load sensitivity is $\frac{\partial \mathbf{f}_i}{\partial x_e} = \omega_k^2 \boldsymbol{\phi}_{k,e}$ where $\boldsymbol{\phi}_{k,e}$ are the element mode shape components.
+
+Sensitivities are filtered using a density filter with radius $r_\mathrm{min}$ to prevent checkerboard patterns and ensure mesh independence.
+
+\subsection{Optimization algorithm}
+
+The method uses either Optimality Criteria (OC) or Method of Moving Asymptotes (MMA) for optimization. OC updates densities using:
+
+\begin{equation}
+x_e^\mathrm{new} = \max\left(0, \min\left(1, x_e \sqrt{-\frac{\partial c}{\partial x_e} / \lambda \frac{\partial V}{\partial x_e}}\right)\right)
+\end{equation}
+
+where $\lambda$ is the volume constraint Lagrange multiplier. MMA uses a more robust convex approximation for problems with multiple constraints.
+
+\subsection{Boundary conditions and passive elements}
+
+Boundary conditions include clamped, simply supported, and hinged configurations. Passive elements (forced solid or void regions) can be specified to represent non-designable features such as mounting points or geometric constraints.
 
 \section{Numerical examples}
 
@@ -545,11 +556,6 @@ overhead.
 
 \section{Conclusions}
 
-This paper has presented an efficient method for the topology optimization of continuum structures aimed at maximizing target natural frequencies. The proposed approach addresses the primary computational bottleneck in dynamic optimization—the repeated solution of the generalized eigenvalue problem—by replacing it with the solution of a single static design-dependent optimization. This strategy significantly reduces the computational cost compared to established nested iterative procedures, such as those proposed by \citet{Du2007}. Furthermore, while our approach shares a similar underlying principle with the recent work of \citet{Yuksel2025}, it distinguishes itself by identifying approximate optimal topologies through a single static problem rather than a two-step sequential procedure, thereby further enhancing algorithmic efficiency.
-
-The effectiveness and efficiency of the proposed method were validated through three numerical examples. The first, a simply supported beam, served as a direct benchmark against the Olhoff and Yuksel approaches across various mesh sizes (Table~\ref{tab:performance}): at a mesh size of $320 \times 40$, the proposed method achieved convergence in only 16.4 seconds, making it approximately 8.3 times faster than the Olhoff formulation (135.7~s) and 5.5 times faster than the Yuksel approach (89.4~s), while requiring only 56~MB of RAM at the largest mesh ($400 \times 50$) compared to 303~MB for the Olhoff implementation. The second example, a clamped beam, demonstrated multi-mode frequency control through the load-weighting parameter $\alpha$; MAC correlation analysis confirmed that the gain of each mode's tracked frequency scales monotonically with its assigned load weight, validating the quasi-static load thesis. The third example, a building-like structure with passive side columns and floor plates, confirmed the applicability of the method to structurally more complex problems and reproduced the same monotone modal-gain relationship for both mode shapes across all five $\alpha$ configurations.
-
-The results indicate that the run time per iteration for the proposed method remains remarkably low and scales efficiently as the mesh resolution increases, achieving up to $8.3\times$ and $7.1\times$ speedups over the Olhoff implementation at the $320{\times}40$ and $400{\times}50$ mesh sizes respectively. By avoiding the high cost of modal analysis at every step, the current method provides a robust and practical tool for the rapid design of vibration-resistant structures, applicable to a wide range of structural configurations including those with passive elements and geometric complexity. MAC correlation analysis across both multi-mode examples further revealed a universal mode-switching phenomenon: nearly all initial solid-domain modes are remapped to different positions in the final topology's eigenvalue sequence, and the quasi-static load selectively steers the frequency gain toward the mode shapes used in its construction. Future work will focus on extending this single-step static surrogate approach to handle multiple and repeated eigenfrequencies, on developing mode-tracking strategies to reliably assess optimized-mode frequencies in the presence of mode-ordering shifts, as well as on its application to large-scale three-dimensional optimization problems, following recent advances in this direction \citep{Huang2025, Deng2024}.
 
 \section*{Funding}
 The authors received no external funding for this research.
