@@ -50,8 +50,9 @@ ai/out/methodology/
   methodology.meta.json
 6. Results / positioning / final
 ai/out/results/
-  results_validator.md
-  results.meta.json
+  results_discovery.md
+  results_discovery.meta.json
+  results_manifest_suggested.json
 
 ai/out/positioning/
   novelty_positioning.md
