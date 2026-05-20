@@ -1,0 +1,36 @@
+\contentsline {section}{\numberline {1}Overview and Prioritisation}{3}{section.1}%
+\contentsline {section}{\numberline {2}Urgent Revisions (A-group)}{5}{section.2}%
+\contentsline {subsection}{\numberline {2.1}A0 — Align the manuscript with the implemented frozen-load definition}{5}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}A1 — Reframe novelty relative to Yuksel--Yilmaz}{5}{subsection.2.2}%
+\contentsline {subsection}{\numberline {2.3}A2 — Runtime breakdown in Table\nobreakspace {}1}{6}{subsection.2.3}%
+\contentsline {subsection}{\numberline {2.4}A3 — Yuksel iteration-count discrepancy}{7}{subsection.2.4}%
+\contentsline {subsection}{\numberline {2.5}A4 — Approximation error analysis and eigenpair refresh study}{7}{subsection.2.5}%
+\contentsline {subsection}{\numberline {2.6}A5 — Mode clustering, coalescence, and a\nobreakspace {}posteriori mode check}{8}{subsection.2.6}%
+\contentsline {subsection}{\numberline {2.7}A6 — Reframe the efficiency claim}{9}{subsection.2.7}%
+\contentsline {section}{\numberline {3}Planned Revisions (B-group)}{10}{section.3}%
+\contentsline {subsection}{\numberline {3.1}B1 — Two new low-frequency modes at $\alpha =1$ (clamped beam)}{10}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}B2 --- High-index mode tracking for $\bm {\Phi }_2$}{10}{subsection.3.2}%
+\contentsline {subsection}{\numberline {3.3}B3 — Same issues in building example (Section\nobreakspace {}3.3)}{10}{subsection.3.3}%
+\contentsline {subsection}{\numberline {3.4}B4 — RAMP interpolation for spurious-mode suppression}{11}{subsection.3.4}%
+\contentsline {subsection}{\numberline {3.5}B5 — Grey regions in Figs.\nobreakspace {}9 and\nobreakspace {}10}{11}{subsection.3.5}%
+\contentsline {subsection}{\numberline {3.6}B6 — Why the frozen-load approach avoids spurious localized modes}{11}{subsection.3.6}%
+\contentsline {section}{\numberline {4}Minor Revisions (C-group)}{13}{section.4}%
+\contentsline {subsection}{\numberline {4.1}C1 — Application references in Introduction}{13}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}C2 — SIMP, BESO, LSM, MMC references at first mention}{13}{subsection.4.2}%
+\contentsline {subsection}{\numberline {4.3}C3 — Rayleigh's principle reference and introductory note}{13}{subsection.4.3}%
+\contentsline {subsection}{\numberline {4.4}C4 — MMA reference in Section\nobreakspace {}2.1}{13}{subsection.4.4}%
+\contentsline {subsection}{\numberline {4.5}C5 — Hardware and platform details}{13}{subsection.4.5}%
+\contentsline {subsection}{\numberline {4.6}C6 — Sensitivity filter equation in Section\nobreakspace {}2.1}{14}{subsection.4.6}%
+\contentsline {subsection}{\numberline {4.7}C7 — Explicit sensitivity for optimization problem (4)}{14}{subsection.4.7}%
+\contentsline {subsection}{\numberline {4.8}C8 — Supplementary material clarification}{14}{subsection.4.8}%
+\contentsline {subsection}{\numberline {4.9}C9 — Load-sensitivity treatment (Reviewer\nobreakspace {}4, comment\nobreakspace {}\#1)}{14}{subsection.4.9}%
+\contentsline {subsection}{\numberline {4.10}C10 — Numerical difficulties from design-dependent load (Reviewer\nobreakspace {}4, comment\nobreakspace {}\#2)}{15}{subsection.4.10}%
+\contentsline {subsection}{\numberline {4.11}C11 — Applicability to symmetric vs.\ asymmetric domains (Reviewer\nobreakspace {}4, comment\nobreakspace {}\#4)}{15}{subsection.4.11}%
+\contentsline {section}{\numberline {5}Action Plan and Timeline}{16}{section.5}%
+\contentsline {section}{\numberline {6}Code Changes Required}{16}{section.6}%
+\contentsline {section}{\numberline {7}New Experiments Required}{16}{section.7}%
+\contentsline {section}{\numberline {8}Algorithm Pseudocodes and Complexity Analysis}{19}{section.8}%
+\contentsline {subsection}{\numberline {8.1}Algorithm 1: Olhoff--Du Bound Formulation}{19}{subsection.8.1}%
+\contentsline {subsection}{\numberline {8.2}Algorithm 2: Yuksel--Yilmaz Two-Stage Static Method}{20}{subsection.8.2}%
+\contentsline {subsection}{\numberline {8.3}Algorithm 3: Proposed Quasi-Static Approximation}{21}{subsection.8.3}%
+\contentsline {subsection}{\numberline {8.4}Complexity Analysis and Comparison}{22}{subsection.8.4}%
