@@ -309,11 +309,12 @@ Convergence is declared when the maximum element-wise density change satisfies $
 
 \subsection{Mode-shape tracking via MAC}
 
-To monitor which mode of the optimized topology corresponds to the initial solid-domain shape $\boldsymbol{\Phi}_j$, the Modal Assurance Criterion is evaluated between each eigenvector $\boldsymbol{\varphi}_i$ of the final topology and the reference vector $\boldsymbol{\Phi}_j$:
+To monitor which mode of the optimized topology corresponds to the initial solid-domain shape $\boldsymbol{\Phi}_j$, the mass-weighted Modal Assurance Criterion is evaluated between each eigenvector $\boldsymbol{\varphi}_i$ of the final topology and the reference vector $\boldsymbol{\Phi}_j$:
 \begin{equation}\label{eqn:mac}
   \mathrm{MAC}(\boldsymbol{\varphi}_i, \boldsymbol{\Phi}_j)
-    = \frac{(\boldsymbol{\varphi}_i^\top \boldsymbol{\Phi}_j)^2}
-           {(\boldsymbol{\varphi}_i^\top \boldsymbol{\varphi}_i)(\boldsymbol{\Phi}_j^\top \boldsymbol{\Phi}_j)}.
+    = \frac{(\boldsymbol{\varphi}_i^\top \mathbf{M}\boldsymbol{\Phi}_j)^2}
+           {(\boldsymbol{\varphi}_i^\top \mathbf{M}\boldsymbol{\varphi}_i)
+            (\boldsymbol{\Phi}_j^\top \mathbf{M}\boldsymbol{\Phi}_j)}.
 \end{equation}
 The mode with the highest MAC value is identified as the tracked mode; its eigenfrequency $\tilde{\omega}_j$ and the frequency gain $\tilde{\omega}_j/\omega_j^{(0)}$ relative to the solid-domain eigenfrequency are reported.
 A MAC value approaching unity indicates that the optimized topology preserves the shape of the initial mode; values substantially below unity indicate mode-order shifts or modal mixing.

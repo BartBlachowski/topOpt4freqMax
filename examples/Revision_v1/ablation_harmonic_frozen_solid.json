@@ -1,0 +1,67 @@
+{
+  "meta": {
+    "name": "Ablation Variant B: harmonic, solid baseline, frozen (Eq.7 exact), 160x20",
+    "notes": "Exact paper Eq.7: load = omega0_solid^2 * M(x) * Phi_solid. Eigenpair from solid domain (harmonic_baseline=solid), frozen (update_after=0). Partial load sensitivity included (dF/dx = omega0^2 * dM/dx * Phi0). MMA to handle potentially non-monotone sensitivities. Compares with Variant A to isolate effect of load sensitivity inclusion."
+  },
+  "domain": {
+    "shape": "rectangular",
+    "size": { "length": 8.0, "height": 1.0 },
+    "thickness": 1.0,
+    "mesh": { "nelx": 160, "nely": 20 },
+    "load_cases": [
+      {
+        "name": "mode1_harmonic_frozen_solid",
+        "factor": 1.0,
+        "loads": [
+          { "type": "harmonic", "mode": 1, "factor": 1.0, "update_after": 0 }
+        ]
+      }
+    ]
+  },
+  "material": {
+    "model": "plane_stress_isotropic",
+    "E": 1.0e7,
+    "nu": 0.3,
+    "rho": 1.0
+  },
+  "void_material": {
+    "E_min_ratio": 1e-9,
+    "rho_min": 1e-9
+  },
+  "bc": {
+    "supports": [
+      { "type": "closest_point", "location": [0.0, 0.5], "dofs": ["ux", "uy"] },
+      { "type": "closest_point", "location": [8.0, 0.5], "dofs": ["ux", "uy"] }
+    ]
+  },
+  "optimization": {
+    "approach": "ourApproach",
+    "optimizer": "MMA",
+    "objective": "compliance",
+    "interpolation": "SIMP",
+    "volume_fraction": 0.5,
+    "penalization": 3.0,
+    "harmonic_baseline": "solid",
+    "harmonic_normalize": false,
+    "filter": {
+      "type": "sensitivity",
+      "heaviside": false,
+      "radius": 2.0,
+      "radius_units": "element",
+      "boundary_condition": "symmetric"
+    },
+    "move_limit": 0.2,
+    "max_iters": 400,
+    "convergence_tol": 1e-3
+  },
+  "postprocessing": {
+    "visualize_live": false,
+    "visualize_quality": "regular",
+    "visualize_modes":          { "enabled": false, "count": 1 },
+    "visualize_topology_modes": { "enabled": false, "count": 1 },
+    "write_correlation_table":  false,
+    "save_snapshot_image":      false,
+    "save_final_image":         false,
+    "save_frequency_iterations": false
+  }
+}

@@ -75,6 +75,12 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
         localOpt(runCfg, 'semi_harmonic_baseline', 'solid'));
     semiHarmonicRhoSource = localParseSemiHarmonicRhoSource( ...
         localOpt(runCfg, 'semi_harmonic_rho_source', 'x'));
+    harmonicBaseline = localParseHarmonicBaseline( ...
+        localOpt(runCfg, 'harmonic_baseline', 'initial'));
+    % When true, include dF/dx sensitivity for semi_harmonic loads (Eq.6 ablation).
+    % Default false reproduces the paper's stiffness-only sensitivity (Eq.6).
+    semiHarmonicLoadSens = localParseVisualizeLive( ...
+        localOpt(runCfg, 'semi_harmonic_load_sensitivity', false), false);
 
     % Passive element sets (forced density = 1 or 0, excluded from OC update).
     nEl = nelx * nely;
@@ -324,6 +330,45 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
     end
 
     % ------------------------------------------------------------------
+    % harmonic_baseline = 'solid': pre-compute eigenpairs from solid domain
+    % (x=1 everywhere except forced voids) and populate cache before loop.
+    % This implements Eq.7 of the paper with solid-domain reference eigenpairs
+    % rather than initial-uniform-density eigenpairs.
+    % ------------------------------------------------------------------
+    info.t_harmonic_baseline_init = 0;
+    if strcmp(harmonicBaseline, 'solid') && usingConfiguredLoadCases && maxHarmonicMode > 0
+        tBaselineInit = tic;
+        fprintf('[Harmonic baseline=solid] Assembling solid-domain K and M for eigenpair init...\n');
+        xSolid = ones(nEl, 1);
+        if ~isempty(pasV), xSolid(pasV) = 0; end
+
+        sKsol = reshape(KE(:) * (Emin + xSolid'.^penal * (Emax - Emin)), [], 1);
+        Ksol  = sparse(iK, jK, sKsol, ndof, ndof);
+        Ksol  = (Ksol + Ksol') / 2;
+
+        rhoSol = rho_min + xSolid.^pmass * (rho0 - rho_min);
+        sMsol  = reshape(ME(:) * rhoSol', [], 1);
+        Msol   = sparse(iK, jK, sMsol, ndof, ndof);
+        Msol   = (Msol + Msol') / 2;
+
+        [solidOmegas, solidPhi] = localCurrentModesFromSubmatrices( ...
+            Ksol(free,free), Msol(free,free), free, ndof, maxHarmonicMode);
+        for k = 1:maxHarmonicMode
+            if isfinite(solidOmegas(k))
+                harmonicOmegasCache(k)  = solidOmegas(k);
+                harmonicPhiCache(:, k)  = solidPhi(:, k);
+                harmonicNormRefCache(k) = NaN;  % norm ref anchored at first use
+            end
+        end
+        clear Ksol sKsol Msol sMsol rhoSol xSolid solidPhi;
+        info.t_harmonic_baseline_init = toc(tBaselineInit);
+        fprintf('[Harmonic baseline=solid] Done: omega1=%.4f rad/s, omega2=%.4f rad/s (%.3fs)\n', ...
+            harmonicOmegasCache(1), ...
+            harmonicOmegasCache(min(2,end)), ...
+            info.t_harmonic_baseline_init);
+    end
+
+    % ------------------------------------------------------------------
     % Optimization loop
     % ------------------------------------------------------------------
     loop   = 0;
@@ -359,9 +404,17 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
             for k = 1:maxHarmonicMode
                 ua = modeUpdateAfter(k);
                 if ua == 0
-                    dueFlags(k) = (loop == 1);   % frozen: compute once at it=1
+                    % frozen: compute once at it=1 UNLESS already pre-loaded
+                    % from solid baseline (harmonicBaseline='solid').
+                    dueFlags(k) = (loop == 1) && ~strcmp(harmonicBaseline, 'solid');
                 else
-                    dueFlags(k) = (mod(loop - 1, ua) == 0);  % periodic
+                    % periodic: for solid baseline, skip the it=1 update so the
+                    % solid-domain eigenpairs are not immediately overwritten.
+                    if strcmp(harmonicBaseline, 'solid')
+                        dueFlags(k) = (loop > 1) && (mod(loop - 1, ua) == 0);
+                    else
+                        dueFlags(k) = (mod(loop - 1, ua) == 0);
+                    end
                 end
             end
             dueModes = find(dueFlags);
@@ -465,7 +518,7 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
                 dc = dc + localLoadSensitivityForCase( ...
                     Ui, ue, loadCases(icase), dMdxScale, ME, yDown, ...
                     harmonicPhi, harmonicOmegas, PhiLegacy, omegaLegacy, edofMat, ...
-                    nodalProjectionCache, semiHarmonicBaseVec);
+                    nodalProjectionCache, semiHarmonicBaseVec, semiHarmonicLoadSens);
             end
         end
         clear K M;
@@ -856,8 +909,12 @@ end
 
 function dcLoad = localLoadSensitivityForCase( ...
     Ui, ue, loadCase, dMdxScale, ME, yDown, harmonicPhi, harmonicOmegas, ...
-    PhiLegacy, omegaLegacy, edofMat, nodalProjectionCache, semiHarmonicBaseVec)
+    PhiLegacy, omegaLegacy, edofMat, nodalProjectionCache, semiHarmonicBaseVec, ...
+    includeSemiHarmonicLoadSens)
 % Load-dependent sensitivity contributions (dF/drho_e term in dJ/drho_e).
+%
+% includeSemiHarmonicLoadSens: when true, include dF/dx for semi_harmonic loads
+%   (enables the full Eq.6 ablation comparison; default false = paper method).
 %
 % Option B for harmonic loads:
 %   dF_h/dx ≈ ld.factor * omega_k^2 * (dM/dx * Phi_k)
@@ -890,15 +947,23 @@ for j = 1:numel(loads)
             coeff = loadCase.factor * ldFactor;
             vec = (omegaK^2) * phiK;
         case 'semi_harmonic'
-            % Frozen-load approximation: treat the semi_harmonic inertial
-            % load direction as fixed w.r.t. x.  Differentiating through
-            % rhoNodal(x) adds a positive term (+2 U^T dF/dx > 0) that
-            % counteracts the stiffness sensitivity and drives the optimizer
-            % to remove material from high-mode-amplitude regions — the
-            % opposite of the frequency-maximization objective.
-            % The semi_harmonic method is a frozen-load heuristic; load
-            % sensitivity is intentionally zeroed here, analogous to the
-            % frozen-eigenpair approximation used for harmonic loads.
+            % Paper method (Eq.6): omit load sensitivity entirely.
+            % When includeSemiHarmonicLoadSens=true (ablation variant B),
+            % include dF/dx = d(rho_nodal(x))/dx_e * base_vec_k.
+            if nargin < 14 || ~includeSemiHarmonicLoadSens
+                continue;  % paper default: stiffness-only sensitivity
+            end
+            % Full load sensitivity for semi_harmonic: uses nodal projection.
+            modeK = ld.mode;
+            if isempty(nodalProjectionCache) || modeK > size(semiHarmonicBaseVec, 2)
+                continue;
+            end
+            coeffSH = loadCase.factor * ldFactor;
+            if coeffSH == 0, continue; end
+            baseVec = semiHarmonicBaseVec(:, modeK);
+            % d(rho_nodal * base_vec)/dx_e: rho_nodal_j = Pavg(j,e) for element e
+            nodeTerm = Ui(1:2:end) .* baseVec(1:2:end) + Ui(2:2:end) .* baseVec(2:2:end);
+            dcLoad = dcLoad + 2 * coeffSH * (nodalProjectionCache.Pavg' * nodeTerm);
             continue;
         otherwise
             % closest_node has no rho dependence.
@@ -1577,6 +1642,25 @@ if ischar(value)
 end
 error('topopt_freq:InvalidVisualizationQuality', ...
     'visualization_quality must be "regular" or "smooth".');
+end
+
+function baseline = localParseHarmonicBaseline(value)
+if isstring(value) && isscalar(value)
+    value = char(value);
+end
+if ischar(value)
+    key = lower(strtrim(value));
+    switch key
+        case 'initial'
+            baseline = 'initial';
+            return;
+        case 'solid'
+            baseline = 'solid';
+            return;
+    end
+end
+error('topopt_freq:InvalidHarmonicBaseline', ...
+    'harmonic_baseline must be "initial" or "solid".');
 end
 
 function baseline = localParseSemiHarmonicBaseline(value)

@@ -366,6 +366,15 @@ function [x, omega, tIter, nIter, mem_usage] = run_topopt_from_json(jsonInput)
             if hasSemiHarmonicBaseline
                 runCfg.semi_harmonic_baseline = semiHarmonicBaseline;
             end
+            if hasFieldPath(cfg, {'optimization','harmonic_baseline'})
+                runCfg.harmonic_baseline = char(string( ...
+                    getFieldPath(cfg, {'optimization','harmonic_baseline'})));
+            end
+            if hasFieldPath(cfg, {'optimization','semi_harmonic_load_sensitivity'})
+                runCfg.semi_harmonic_load_sensitivity = parseBool( ...
+                    getFieldPath(cfg, {'optimization','semi_harmonic_load_sensitivity'}), ...
+                    'optimization.semi_harmonic_load_sensitivity');
+            end
             if hasSemiHarmonicRhoSource
                 runCfg.semi_harmonic_rho_source = semiHarmonicRhoSource;
             end

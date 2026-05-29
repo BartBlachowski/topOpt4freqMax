@@ -1,0 +1,119 @@
+{
+  "meta": {
+    "name": "Clamped beam \u2014 harmonic Eq.7 implementation (200x25, mesh convergence)",
+    "notes": "Coarse mesh (200x25) version of clamped_beam_harmonic_eq7_400x50.json for mesh convergence study."
+  },
+  "domain": {
+    "shape": "rectangular",
+    "size": {
+      "length": 8.0,
+      "height": 1.0
+    },
+    "thickness": 1.0,
+    "mesh": {
+      "nelx": 200,
+      "nely": 25
+    },
+    "load_cases": [
+      {
+        "name": "mode1_harmonic",
+        "factor": 1.0,
+        "loads": [
+          {
+            "type": "harmonic",
+            "mode": 1,
+            "factor": 1.0,
+            "update_after": 0
+          }
+        ]
+      },
+      {
+        "name": "mode2_harmonic",
+        "factor": 0.0,
+        "loads": [
+          {
+            "type": "harmonic",
+            "mode": 2,
+            "factor": 1.0,
+            "update_after": 0
+          }
+        ]
+      }
+    ]
+  },
+  "material": {
+    "model": "plane_stress_isotropic",
+    "E": 10000000.0,
+    "nu": 0.3,
+    "rho": 1.0
+  },
+  "void_material": {
+    "E_min_ratio": 1e-06,
+    "rho_min": 1e-06
+  },
+  "bc": {
+    "supports": [
+      {
+        "type": "vertical_line",
+        "x": 0.0,
+        "dofs": [
+          "ux",
+          "uy"
+        ],
+        "tol": 1e-06
+      },
+      {
+        "type": "vertical_line",
+        "x": 8.0,
+        "dofs": [
+          "ux",
+          "uy"
+        ],
+        "tol": 1e-06
+      }
+    ]
+  },
+  "optimization": {
+    "approach": "ourApproach",
+    "optimizer": "MMA",
+    "objective": "compliance",
+    "interpolation": "SIMP",
+    "volume_fraction": 0.5,
+    "penalization": 3.0,
+    "harmonic_baseline": "solid",
+    "harmonic_normalize": false,
+    "filter": {
+      "type": "sensitivity",
+      "heaviside": false,
+      "radius": 2.0,
+      "radius_units": "element",
+      "boundary_condition": "symmetric"
+    },
+    "move_limit": 0.2,
+    "max_iters": 2000,
+    "convergence_tol": 0.001
+  },
+  "postprocessing": {
+    "compute_modes": 100,
+    "visualize_live": false,
+    "visualize_quality": "regular",
+    "visualize_modes": {
+      "enabled": false,
+      "count": 5
+    },
+    "visualize_topology_modes": {
+      "enabled": false,
+      "count": 5
+    },
+    "save_snapshot_image": false,
+    "save_final_image": false,
+    "save_frequency_iterations": false,
+    "correlation": {
+      "enabled": true,
+      "initial_count": 2,
+      "topology_count": 100,
+      "metric": "mac",
+      "write_csv": true
+    }
+  }
+}
