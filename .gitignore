@@ -69,3 +69,5 @@ codegen/
 *.dvi
 *.spl
 *.bbl
+*.bst
+*.out

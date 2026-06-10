@@ -344,8 +344,8 @@
 
         "approach": {
           "type": "string",
-          "enum": ["ourApproach", "olhoff", "yuksel"],
-          "description": "Solver implementation to use."
+          "enum": ["ourApproach", "olhoff", "yuksel", "elastic2D", "elastc2D"],
+          "description": "Solver implementation to use. elastic2D and elastc2D select the static minimum-compliance solver."
         },
         "optimizer": {
           "type": "string",

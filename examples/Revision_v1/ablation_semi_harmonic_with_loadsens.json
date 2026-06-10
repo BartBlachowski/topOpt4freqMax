@@ -1,0 +1,69 @@
+{
+  "meta": {
+    "name": "Ablation Variant B: semi_harmonic + OC + WITH load sensitivity (controlled Eq.6 ablation), 160x20",
+    "notes": "Controlled ablation against ablation_semi_harmonic.json (Variant A). ONLY difference: semi_harmonic_load_sensitivity=true. Same mesh, same optimizer, same load formulation, same filter. The load sensitivity term is dc_load(e) = 2*U^T * d(rho_nodal*base_vec)/dx_e = 2*sum_j(U_j*base_vec_j)*Pavg(j,e). This IS the full design-dependent-load derivative for the semi_harmonic formulation (Eq.6 omitted term). Comparing Variant A vs B isolates the effect of the load sensitivity term, directly addressing CR2."
+  },
+  "domain": {
+    "shape": "rectangular",
+    "size": { "length": 8.0, "height": 1.0 },
+    "thickness": 1.0,
+    "mesh": { "nelx": 160, "nely": 20 },
+    "load_cases": [
+      {
+        "name": "mode1_semi_harmonic",
+        "factor": 1.0,
+        "loads": [
+          { "type": "semi_harmonic", "mode": 1, "factor": 1.0 }
+        ]
+      }
+    ]
+  },
+  "material": {
+    "model": "plane_stress_isotropic",
+    "E": 1.0e7,
+    "nu": 0.3,
+    "rho": 1.0
+  },
+  "void_material": {
+    "E_min_ratio": 1e-9,
+    "rho_min": 1e-9
+  },
+  "bc": {
+    "supports": [
+      { "type": "closest_point", "location": [0.0, 0.5], "dofs": ["ux", "uy"] },
+      { "type": "closest_point", "location": [8.0, 0.5], "dofs": ["ux", "uy"] }
+    ]
+  },
+  "optimization": {
+    "approach": "ourApproach",
+    "optimizer": "OC",
+    "objective": "compliance",
+    "interpolation": "SIMP",
+    "volume_fraction": 0.5,
+    "penalization": 3.0,
+    "semi_harmonic_baseline": "solid",
+    "semi_harmonic_rho_source": "x",
+    "harmonic_normalize": false,
+    "semi_harmonic_load_sensitivity": true,
+    "filter": {
+      "type": "sensitivity",
+      "heaviside": false,
+      "radius": 2.0,
+      "radius_units": "element",
+      "boundary_condition": "symmetric"
+    },
+    "move_limit": 0.2,
+    "max_iters": 400,
+    "convergence_tol": 1e-3
+  },
+  "postprocessing": {
+    "visualize_live": false,
+    "visualize_quality": "regular",
+    "visualize_modes":          { "enabled": false, "count": 1 },
+    "visualize_topology_modes": { "enabled": false, "count": 1 },
+    "write_correlation_table":  false,
+    "save_snapshot_image":      false,
+    "save_final_image":         false,
+    "save_frequency_iterations": false
+  }
+}

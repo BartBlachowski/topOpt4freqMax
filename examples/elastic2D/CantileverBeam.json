@@ -1,0 +1,84 @@
+{
+  "meta": {
+    "name": "Cantilever beam — minimum compliance",
+    "notes": "Clamped at x=0 (full left edge). Tip point load at mid-height right edge.",
+    "units": {
+      "length": "m",
+      "force": "N",
+      "elastic_modulus": "Pa"
+    }
+  },
+
+  "domain": {
+    "shape": "rectangular",
+    "size": {
+      "length": 2.0,
+      "height": 1.0
+    },
+    "thickness": 1.0,
+    "mesh": {
+      "nelx": 100,
+      "nely": 50
+    },
+
+    "load_cases": [
+      {
+        "name": "tip_load",
+        "factor": 1.0,
+        "loads": [
+          {
+            "type": "closest_node",
+            "location": [2.0, 0.5],
+            "force": [0.0, -1.0]
+          }
+        ]
+      }
+    ]
+  },
+
+  "material": {
+    "model": "plane_stress_isotropic",
+    "E": 1.0,
+    "nu": 0.3,
+    "rho": 1.0
+  },
+
+  "void_material": {
+    "E_min_ratio": 1e-9,
+    "rho_min": 1e-9
+  },
+
+  "bc": {
+    "supports": [
+      {
+        "type": "vertical_line",
+        "x": 0.0,
+        "dofs": ["ux", "uy"]
+      }
+    ]
+  },
+
+  "optimization": {
+    "approach": "elastc2D",
+    "optimizer": "MMA",
+    "objective": "compliance",
+    "volume_fraction": 0.4,
+    "penalization": 3.0,
+
+    "filter": {
+      "type": "sensitivity",
+      "radius": 1.5,
+      "radius_units": "element",
+      "boundary_condition": "symmetric"
+    },
+
+    "move_limit": 0.2,
+    "max_iters": 200,
+    "convergence_tol": 0.001
+  },
+
+  "postprocessing": {
+    "visualize_live": true,
+    "save_final_image": true
+  }
+}

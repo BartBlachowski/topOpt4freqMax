@@ -1,0 +1,92 @@
+{
+  "meta": {
+    "name": "Beam topology — elastic compliance approach",
+    "notes": "Passive flanges counted in volume fraction.",
+    "units": {
+      "length": "m",
+      "force": "N",
+      "density": "kg/m3",
+      "elastic_modulus": "Pa"
+    }
+  },
+
+  "domain": {
+    "shape": "rectangular",
+    "size": {
+      "length": 8.0,
+      "height": 1.0
+    },
+    "thickness": 1.0,
+    "mesh": {
+      "nelx": 200,
+      "nely": 100
+    },
+
+    "load_cases": [
+      {
+        "name": "case1",
+        "factor": 1.0,
+        "loads": [
+          { "type": "static", "mode": 1, "factor": 1.0 }
+        ]
+      },
+      {
+        "name": "case2",
+        "factor": 0.0,
+        "loads": [
+          { "type": "static", "mode": 2, "factor": 1.0 }
+        ]
+      }
+    ]
+  },
+
+  "material": {
+    "model": "plane_stress_isotropic",
+    "E": 1.0E7,
+    "nu": 0.3,
+    "rho": 1.0
+  },
+
+  "void_material": {
+    "E_min_ratio": 1e-6,
+    "rho_min": 1e-6
+  },
+
+  "bc": {
+    "supports": [
+      { "type": "vertical_line", "x": 0.0, "dofs": ["ux", "uy"], "tol": 1E-6 },
+      { "type": "vertical_line", "x": 8.0, "dofs": ["ux", "uy"], "tol": 1E-6 }
+    ]
+  },
+
+  "optimization": {
+    "approach": "elastc2D",
+    "optimizer": "MMA",
+    "objective": "compliance",
+    "interpolation": "SIMP",
+    "volume_fraction": 0.5,
+    "penalization": 3.0,
+
+    "filter": {
+      "type": "sensitivity",
+      "heaviside": false,
+      "radius": 2.0,
+      "radius_units": "element",
+      "boundary_condition": "symmetric"
+    },
+
+    "move_limit": 0.2,
+    "max_iters": 2000,
+    "convergence_tol": 1e-3,
+    "seed": null
+  },
+
+  "postprocessing": {
+
+    "visualize_live": true,
+    "visualize_quality": "smooth",
+
+    "save_snapshot_image":       false,
+    "save_final_image":          true
+  }
+}

@@ -51,6 +51,7 @@ ok = isstruct(cache) && ...
     isfield(cache, 'elemNodeLinearIdx') && isfield(cache, 'nodeCounts') && ...
     isfield(cache, 'nodeCountsSafe') && isfield(cache, 'Pavg') && ...
     cache.nelx == nelx && cache.nely == nely && ...
+    cache.version >= 2 && ...
     cache.nEl == nEl && cache.nNodes == nNodes && ...
     isequal(size(cache.elemNodes), [nEl, 4]) && ...
     isequal(size(cache.nodeXY), [nNodes, 2]) && ...
@@ -73,7 +74,9 @@ n4 = nodeNrs(2:nely+1, 1:nelx);     % UL
 elemNodes = [n1(:), n2(:), n3(:), n4(:)];
 
 elemNodeLinearIdx = elemNodes(:);
-elemLinearIdx = repelem((1:nEl)', 4, 1);
+% elemNodes(:) is grouped by corner in MATLAB column-major order:
+% [all n1; all n2; all n3; all n4].  Match that ordering when building Pavg.
+elemLinearIdx = repmat((1:nEl)', 4, 1);
 nodeCounts = accumarray(elemNodeLinearIdx, 1, [nNodes, 1], @sum, 0);
 nodeCountsSafe = max(nodeCounts, 1);
 
@@ -86,7 +89,7 @@ Pavg = spdiags(1 ./ nodeCountsSafe, 0, nNodes, nNodes) * P;
 nodeXY = [xGrid(:), yGrid(:)];
 
 cache = struct();
-cache.version = localNextVersion(oldCache);
+cache.version = 2;
 cache.nelx = nelx;
 cache.nely = nely;
 cache.nEl = nEl;

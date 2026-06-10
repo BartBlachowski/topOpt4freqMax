@@ -27,14 +27,7 @@
         "name": "case1",
         "factor": 1.0,
         "loads": [
-          { "type": "semi_harmonic", "mode": 1, "factor": 1.0 }
-        ]
-      },
-      {
-        "name": "case2",
-        "factor": 0.0,
-        "loads": [
-          { "type": "semi_harmonic", "mode": 2, "factor": 1.0 }
+          { "type": "self_weight", "factor": 1.0 }
         ]
       }
     ]

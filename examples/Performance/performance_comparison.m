@@ -30,16 +30,18 @@ data.optimization.filter.radius_units = 'element';
 % Resolutions: those from Table 1 in the paper (160x20, 240x30, 320x40)
 % plus two additional ones (240x30 already in paper; 400x50 is new)
 % -------------------------------------------------------------------------
-resolutions = [
-    160,  20;
-    240,  30;
-    320,  40;
-    400,  50;
-];
 % resolutions = [
+%     160,  20;
+%     240,  30;
 %     320,  40;
 %     400,  50;
+%     600,  75;
+
 % ];
+resolutions = [
+    600,  75;
+    800,  100;
+];
 nRes = size(resolutions, 1);
 
 % Methods to compare
@@ -47,7 +49,7 @@ approaches   = {'Olhoff',         'Yuksel',         'OurApproach'       };
 methodLabels = {'OlhoffApproach', 'YukselApproach', 'ProposedApproach'  };
 nMethods     = numel(approaches);
 
-nSamples = 10;
+nSamples = 5;
 
 % Storage: rows = resolutions, columns = methods
 omega_all  = NaN(nRes, nMethods);
@@ -157,3 +159,25 @@ for r = 1:nRes
     end
 end
 fprintf('%s\n', sep);
+
+% -------------------------------------------------------------------------
+% Save Table 1 as CSV
+% -------------------------------------------------------------------------
+csvPath = fullfile(fileparts(mfilename('fullpath')), 'table1_performance.csv');
+displayNames = {'Olhoff', 'Yuksel', 'Proposed'};
+fid = fopen(csvPath, 'w');
+fprintf(fid, 'Method,Mesh,Iterations,RunTime_s,RunTimePerIter_s,MaxRAM_MB\n');
+for r = 1:nRes
+    meshStr = sprintf('%dx%d', resolutions(r,1), resolutions(r,2));
+    for m = 1:nMethods
+        if isnan(tTotal_all(r,m))
+            fprintf(fid, '%s,%s,,,\n', displayNames{m}, meshStr);
+        else
+            fprintf(fid, '%s,%s,%d,%.1f,%.2f,%.0f\n', ...
+                displayNames{m}, meshStr, nIter_all(r,m), tTotal_all(r,m), ...
+                tIter_all(r,m), mem_all(r,m));
+        end
+    end
+end
+fclose(fid);
+fprintf('Table 1 saved to: %s\n', csvPath);
