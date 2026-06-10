@@ -34,6 +34,8 @@ end
 data = jsondecode(fileread(jsonBase));
 data.postprocessing.visualize_live = false;
 data.postprocessing.compute_modes  = 100;
+data.postprocessing.visualize_modes = struct('enabled', false, 'count', 0);
+data.postprocessing.visualize_topology_modes = struct('enabled', false, 'count', 0);
 % Use explicit correlation block with true mass-weighted MAC.
 % Metric: 'mac' = (mass-weighted cosine C0)^2.
 % MANUSCRIPT NOTE: paper Eq.9 shows unweighted Euclidean MAC; revision should

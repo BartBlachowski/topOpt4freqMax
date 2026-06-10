@@ -288,7 +288,7 @@ try
 
     eigOpts = struct('disp',0,'maxit',800,'tol',1e-8);
     t0 = tic;
-    eigs(K(free,free), Mg(free,free), 1, 'smallestabs', eigOpts);
+    eigs(K(free,free), Mg(free,free), 1, 1e-6, eigOpts);
     tEig = toc(t0);
 catch
 end

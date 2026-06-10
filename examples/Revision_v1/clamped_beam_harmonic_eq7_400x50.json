@@ -81,7 +81,7 @@
     "volume_fraction": 0.5,
     "penalization": 3.0,
     "harmonic_baseline": "solid",
-    "harmonic_normalize": false,
+    "harmonic_normalize": true,
     "filter": {
       "type": "sensitivity",
       "heaviside": false,

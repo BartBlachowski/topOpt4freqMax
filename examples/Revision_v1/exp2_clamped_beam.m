@@ -321,7 +321,7 @@ fixed=unique([2*leftNodes+1;2*leftNodes+2;2*rightNodes+1;2*rightNodes+2]);
 free=setdiff(1:nDof,fixed);
 eigOpts=struct('disp',0,'maxit',1000,'tol',1e-10);
 nReq=min(5,numel(free)-1);
-[V,D]=eigs(K(free,free),M(free,free),nReq,'smallestabs',eigOpts);
+[V,D]=eigs(K(free,free),M(free,free),nReq,1e-6,eigOpts);
 lam=real(diag(D)); [lam,ord]=sort(lam,'ascend'); V=V(:,ord);
 nNodes=(nelx+1)*(nely+1);
 nodeX=floor((0:nNodes-1)/(nely+1))'*hx; nodeY=mod((0:nNodes-1)',nely+1)*hy;
@@ -362,7 +362,7 @@ fixed=unique([2*leftNodes+1;2*leftNodes+2;2*rightNodes+1;2*rightNodes+2]);
 free=setdiff(1:nDof,fixed);
 nReq=min(nModes,numel(free)-1);
 eigOpts=struct('disp',0,'maxit',800,'tol',1e-8);
-[V,D]=eigs(K(free,free),Mg(free,free),nReq,'smallestabs',eigOpts);
+[V,D]=eigs(K(free,free),Mg(free,free),nReq,1e-6,eigOpts);
 lam=real(diag(D)); [lam,ord]=sort(lam,'ascend'); V=V(:,ord);
 omegas=NaN(nModes,1); phis=zeros(nDof,nModes);
 for k=1:min(nModes,sum(lam>0))
