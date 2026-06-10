@@ -101,12 +101,17 @@ lambda_ref = lambda_bar;   % normalization reference (= cluster eigenvalue)
 %   Delta_rho: bounded by both absolute density limits and outer_move
 %              (outer trust region)
 % -----------------------------------------------------------------
-if nargin < 11 || isempty(outer_move), outer_move = Inf; end
+if nargin < 11 || isempty(outer_move), outer_move = 0.2; end
 
-% Generous upper bound: the mu_i subeigenvalues can grow well beyond
-% lambda_bar so we allow beta to be up to 20x lambda_bar.  The
-% J-mode and cluster constraints are the true upper limiters; the box
-% bound is just a safety backstop for MMA.
+% Upper bound on beta_hat = beta/lambda_ref.  The cluster constraint is
+% linear in drho (via fsk), so the J-mode and cluster constraints should
+% be the true limiters.  However, when the linearized fsk over-predicts
+% improvement (common with large move limits), the J-mode constraint
+% becomes slack and beta_hat grows to this cap, giving wildly optimistic
+% predictions that collapse on the next outer iteration.
+% Cap at 20 (safety backstop): the J-mode and cluster constraints should
+% limit beta in practice; the cap only fires when the linearization is
+% very optimistic (large move limits, low iteration count).
 beta_max_hat = 20.0;
 
 % Outer trust region: restrict total Delta_rho to [-outer_move, +outer_move]
@@ -126,11 +131,14 @@ xold2 = xval;
 low   = xmin;
 upp   = xmax;
 
-% Standard MMA penalty setup (no z variable needed for this subproblem).
+% MMA penalty setup.
+% d > 0 is required for numerical stability: with d=0 and active constraints,
+% diaglamyi -> epsi/lam^2 -> 0 inside subsolv, making Alam nearly singular.
+% With d=1, active-constraint diagy is bounded (~2), keeping Alam well-conditioned.
 a0 = 1;
 a  = zeros(m, 1);
 c  = 1e3 * ones(m, 1);
-d  = zeros(m, 1);
+d  = ones(m, 1);
 
 % -----------------------------------------------------------------
 % History.

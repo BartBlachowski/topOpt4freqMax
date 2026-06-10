@@ -238,6 +238,46 @@ function [x, omega, tIter, nIter, mem_usage] = run_topopt_from_json(jsonInput)
                 freqIterOmega = diagnostics.freq_iter_omega;
             end
 
+        case 'olhoffexact'
+            addpath(fullfile(repoRoot, 'analysis', 'OlhoffApproachExact', 'Matlab'));
+
+            cfgE = struct();
+            cfgE.L              = L;
+            cfgE.H              = H;
+            cfgE.nelx           = nelx;
+            cfgE.nely           = nely;
+            cfgE.t              = thickness;
+            cfgE.volfrac        = volfrac;
+            cfgE.penal          = penal;
+            cfgE.rmin_elem      = rmin_elem;
+            cfgE.outer_max_iter = maxiter;
+            cfgE.outer_tol      = convTol;
+            cfgE.E0             = E0;
+            cfgE.nu             = nu;
+            cfgE.rho0           = rho0;
+            cfgE.rho_min        = rho_min;
+            if any(strcmpi(supportCode, {'SS','CS','CC'}))
+                cfgE.support_type = supportCode;
+            elseif ~isempty(extraFixedDofs)
+                cfgE.fixed_dofs = extraFixedDofs;
+            else
+                error('run_topopt_from_json:OlhoffExactUnsupportedBC', ...
+                    ['OlhoffExact: could not determine boundary conditions. ' ...
+                     'Use SS/CS/CC support types or closest_point bc entries.']);
+            end
+
+            t0 = tic;
+            [xPhys, histE] = topopt_freq_exact(cfgE);
+            tTotal = toc(t0);
+
+            x     = xPhys(:);
+            ni    = histE.outer_iters;
+            nIter = ni;
+            if ni > 0
+                omega = toVec3(histE.omega(ni, :)');
+                tIter = tTotal / ni;
+            end
+
         case 'yuksel'
             addpath(fullfile(repoRoot, 'analysis', 'YukselApproach', 'Matlab'));
 
@@ -413,8 +453,8 @@ function [x, omega, tIter, nIter, mem_usage] = run_topopt_from_json(jsonInput)
 
         otherwise
             error('run_topopt_from_json:UnknownApproach', ...
-                ['Unknown optimization.approach "%s". Use "Olhoff", "Yuksel", ' ...
-                 '"ourApproach", "elastic2D", or "elastc2D".'], approach);
+                ['Unknown optimization.approach "%s". Use "Olhoff", "OlhoffExact", ' ...
+                 '"Yuksel", "ourApproach", "elastic2D", or "elastc2D".'], approach);
     end
 
     % --- Finalize memory measurement ---

@@ -1,48 +1,50 @@
 function [rho_final, hist] = topopt_freq_exact(cfg)
-% TOPOPT_FREQ_EXACT  Paper-faithful Du & Olhoff (2007) frequency maximization.
+% TOPOPT_FREQ_EXACT  Paper-faithful Olhoff & Du (2014) frequency maximization.
 %
 %   [rho_final, hist] = topopt_freq_exact(cfg)
 %
-%   Implements the nested increment formulation of Section 3.5:
+%   Implements the nested increment formulation of Section 2.5 (Fig. 1):
 %     Outer loop: assemble K,M; solve eigenproblem; detect multiplicity N;
-%                 compute and filter generalized gradients fsk; call inner loop.
+%                 compute generalized gradients fsk; call inner loop.
 %     Inner loop: MMA increment subproblem on [beta; Delta_rho] (inner_loop_mma).
-%     Update:     rho := rho + alpha * Delta_rho  (under-relaxed to damp 2-cycles)
+%     Update:     rho := rho + Delta_rho  (paper Fig. 1 step 4, direct update)
 %     Stop:       norm(Delta_rho)/sqrt(nEl) < outer_tol.
 %
 %   Returns the FINAL CONVERGED rho, not a best-seen tracking.
 %
-%   cfg struct fields (all optional; defaults match paper Section 4.1):
-%     .L, .H          geometry (default 8, 1)
-%     .nelx, .nely    mesh (default 40, 5)
-%     .E0             Young's modulus (default 1e7)
-%     .nu             Poisson ratio (default 0.3)
-%     .rho0           mass density (default 1)
-%     .t              thickness (default 1)
-%     .volfrac        volume fraction upper bound (default 0.5)
-%     .rho_min        minimum density (default 1e-3)
-%     .penal          SIMP stiffness power (default 3)
-%     .mass_mode      mass interpolation mode (default 'du2007_c1')
-%     .rmin_elem      filter radius in element units (default 2.5)
-%     .support_type   boundary conditions: 'SS','CS','CC' (default 'CC')
-%     .n_target       target mode index (default 1)
-%     .n_modes        modes to compute each outer iter (default n_target+3)
-%     .mult_tol       cluster detection tolerance (default 1e-3)
-%     .outer_max_iter outer loop limit (default 300)
-%     .outer_tol      convergence: norm(drho)/sqrt(nEl) < outer_tol (default 1e-3)
-%     .inner_max_iter inner MMA iteration limit (default 30)
-%     .inner_tol      inner convergence tolerance (default 1e-4)
-%     .move_lim       trust-region radius per inner MMA iteration (default 0.2)
-%     .outer_move     outer trust-region: max |Delta_rho_e| per outer iter (default 0.2)
-%     .alpha          under-relaxation for outer update: rho += alpha*drho (default 0.5)
-%     .verbose        print progress table (default true)
+%   cfg struct fields (all optional; defaults are paper-faithful):
+%     .L, .H               geometry (default 8, 1)
+%     .nelx, .nely         mesh (default 40, 5)
+%     .E0                  Young's modulus (default 1e7)
+%     .nu                  Poisson ratio (default 0.3)
+%     .rho0                mass density (default 1)
+%     .t                   thickness (default 1)
+%     .volfrac             volume fraction upper bound (default 0.5)
+%     .rho_min             minimum density (default 1e-3)
+%     .penal               SIMP penalization exponent (default 3)
+%     .mass_mode           mass interpolation (default 'linear', paper Eq. 5 q=1)
+%     .rmin_elem           filter radius in element units (default 2.5)
+%     .sensitivity_filter  apply sensitivity filter to fsk (default false = paper)
+%     .support_type        boundary conditions: 'SS','CS','CC' (default 'CC')
+%     .n_target            target mode index (default 1)
+%     .n_modes             modes to compute each outer iter (default n_target+3)
+%     .mult_tol            cluster detection tolerance (default 1e-3)
+%     .outer_max_iter      outer loop limit (default 300)
+%     .outer_tol           convergence: norm(drho)/sqrt(nEl) < outer_tol (default 1e-3)
+%     .inner_max_iter      inner MMA iteration limit (default 30)
+%     .inner_tol           inner convergence tolerance (default 1e-4)
+%     .move_lim            per-iter inner trust region (default 0.2; not in paper but needed)
+%     .outer_move          outer trust region on |Delta_rho_e| (default 0.2; not in paper but needed)
+%     .alpha               outer update: rho += alpha*drho (default 0.5; paper uses 1.0 but
+%                          our code resets MMA asymptotes each outer iter, requiring damping)
+%     .verbose             print progress table (default true)
 %
 %   Outputs:
 %     rho_final   nEl x 1   converged physical density
 %     hist        struct with fields omega, beta, volume, N, inner_iters,
 %                 drho_norm, outer_iters
 %
-%   Reference: Du & Olhoff (2007), Struct Multidisc Optim 34:91-110.
+%   Reference: Olhoff & Du (2014), CISM 549, pp. 275-294.
 
 if nargin < 1 || isempty(cfg), cfg = struct(); end
 cfg = set_defaults(cfg);
@@ -53,6 +55,7 @@ E0   = cfg.E0;  nu   = cfg.nu; rho0 = cfg.rho0; t = cfg.t;
 volfrac  = cfg.volfrac;   rho_min  = cfg.rho_min;
 penal    = cfg.penal;     mass_mode = cfg.mass_mode;
 rmin_elem = cfg.rmin_elem;
+sensitivity_filter = cfg.sensitivity_filter;
 support_type = cfg.support_type;
 n_target = cfg.n_target;  n_modes  = cfg.n_modes;
 mult_tol = cfg.mult_tol;
@@ -87,11 +90,17 @@ jK = reshape(cMat(:,Jl)', [], 1);
 Ke_phys_l = Ke_phys(sub2ind([8,8], Il, Jl));
 Me_phys_l = Me_phys(sub2ind([8,8], Il, Jl));
 
-fixed = build_supports_exact(support_type, nodeNrs);
+if isfield(cfg, 'fixed_dofs') && ~isempty(cfg.fixed_dofs)
+    fixed = unique(double(cfg.fixed_dofs(:)));
+else
+    fixed = build_supports_exact(support_type, nodeNrs);
+end
 free  = setdiff(1:nDof, fixed);
 nFree = numel(free);
 
-[h_filt, Hs_filt] = build_filter(nelx, nely, rmin_elem);
+if sensitivity_filter
+    [h_filt, Hs_filt] = build_filter(nelx, nely, rmin_elem);
+end
 
 %% ------------------------------------------------------------------
 %  Initialise density and history
@@ -159,17 +168,21 @@ for out_it = 1:outer_max_iter
     [N, J_idx, cluster_idx] = detect_multiplicity(omega, n_target, mult_tol);
     lambda_bar = mean(lam(cluster_idx));
 
-    %% --- Generalized gradients and sensitivity filter ---
+    %% --- Generalized gradients (paper Fig. 1 step 2, Eq. 13) ---
     Phi_cluster = Phi(:, cluster_idx);
     fsk_raw = compute_generalized_gradients(rho, lambda_bar, Phi_cluster, ...
                   cMat, Ke_phys, Me_phys, penal, mass_mode);
 
-    fsk_filt = zeros(size(fsk_raw));
-    for s = 1:N
-        for k = 1:N
-            fsk_filt(:,s,k) = apply_sensitivity_filter( ...
-                fsk_raw(:,s,k), rho, h_filt, Hs_filt, nely, nelx);
+    if sensitivity_filter
+        fsk_use = zeros(size(fsk_raw));
+        for s = 1:N
+            for k = 1:N
+                fsk_use(:,s,k) = apply_sensitivity_filter( ...
+                    fsk_raw(:,s,k), rho, h_filt, Hs_filt, nely, nelx);
+            end
         end
+    else
+        fsk_use = fsk_raw;
     end
 
     %% --- J-mode gradient ---
@@ -177,20 +190,22 @@ for out_it = 1:outer_max_iter
         lambda_J = lam(J_idx);
         dlam_J_raw = compute_elem_sensitivity(rho, lambda_J, Phi(:,J_idx), ...
             cMat, Ke_phys, Me_phys, free, nDof, penal, mass_mode);
-        dlam_J = apply_sensitivity_filter(dlam_J_raw, rho, h_filt, Hs_filt, nely, nelx);
+        if sensitivity_filter
+            dlam_J = apply_sensitivity_filter(dlam_J_raw, rho, h_filt, Hs_filt, nely, nelx);
+        else
+            dlam_J = dlam_J_raw;
+        end
     else
         lambda_J = Inf;
         dlam_J   = [];
     end
 
-    %% --- Inner loop (MMA increment subproblem) ---
-    [drho, beta_fin, i_hist] = inner_loop_mma(rho, lambda_bar, fsk_filt, ...
+    %% --- Inner loop (MMA increment subproblem, paper Eq. 19) ---
+    [drho, beta_fin, i_hist] = inner_loop_mma(rho, lambda_bar, fsk_use, ...
         lambda_J, dlam_J, volfrac, rho_min, inner_max_iter, inner_tol, ...
         move_lim, outer_move);
 
-    %% --- Update with under-relaxation ---
-    % alpha < 1 damps the 2-cycle oscillation common in nested increment
-    % methods without changing the fixed-point condition (drho=0 at optimum).
+    %% --- Update design variables (paper Fig. 1 step 4: rho := rho + Delta_rho) ---
     rho_new   = max(rho_min, min(1, rho + alpha * drho));
     drho_norm = norm(rho_new - rho) / sqrt(nEl);
 
@@ -241,30 +256,34 @@ function cfg = set_defaults(cfg)
     function cfg = def(cfg, f, v)
         if ~isfield(cfg, f) || isempty(cfg.(f)), cfg.(f) = v; end
     end
-    cfg = def(cfg, 'L',             8.0);
-    cfg = def(cfg, 'H',             1.0);
-    cfg = def(cfg, 'nelx',          40);
-    cfg = def(cfg, 'nely',          5);
-    cfg = def(cfg, 'E0',            1e7);
-    cfg = def(cfg, 'nu',            0.3);
-    cfg = def(cfg, 'rho0',          1.0);
-    cfg = def(cfg, 't',             1.0);
-    cfg = def(cfg, 'volfrac',       0.5);
-    cfg = def(cfg, 'rho_min',       1e-3);
-    cfg = def(cfg, 'penal',         3.0);
-    cfg = def(cfg, 'mass_mode',     'du2007_c1');
-    cfg = def(cfg, 'rmin_elem',     2.5);
-    cfg = def(cfg, 'support_type',  'CC');
-    cfg = def(cfg, 'n_target',      1);
+    cfg = def(cfg, 'L',                  8.0);
+    cfg = def(cfg, 'H',                  1.0);
+    cfg = def(cfg, 'nelx',               40);
+    cfg = def(cfg, 'nely',               5);
+    cfg = def(cfg, 'E0',                 1e7);
+    cfg = def(cfg, 'nu',                 0.3);
+    cfg = def(cfg, 'rho0',               1.0);
+    cfg = def(cfg, 't',                  1.0);
+    cfg = def(cfg, 'volfrac',            0.5);
+    cfg = def(cfg, 'rho_min',            1e-3);
+    cfg = def(cfg, 'penal',              3.0);
+    cfg = def(cfg, 'mass_mode',          'linear');   % paper Eq.5: q=1 power law
+    cfg = def(cfg, 'rmin_elem',          2.5);
+    cfg = def(cfg, 'sensitivity_filter', false);      % paper: no filtering
+    cfg = def(cfg, 'support_type',       'CC');
+    cfg = def(cfg, 'n_target',           1);
     n_t = cfg.n_target;
-    cfg = def(cfg, 'n_modes',       max(n_t + 3, 4));
-    cfg = def(cfg, 'mult_tol',      1e-3);
-    cfg = def(cfg, 'outer_max_iter', 300);
-    cfg = def(cfg, 'outer_tol',     1e-3);
-    cfg = def(cfg, 'inner_max_iter', 30);
-    cfg = def(cfg, 'inner_tol',     1e-4);
-    cfg = def(cfg, 'move_lim',      0.2);
-    cfg = def(cfg, 'outer_move',    0.2);
-    cfg = def(cfg, 'alpha',         0.5);
-    cfg = def(cfg, 'verbose',       true);
+    cfg = def(cfg, 'n_modes',            max(n_t + 3, 4));
+    cfg = def(cfg, 'mult_tol',           1e-3);
+    cfg = def(cfg, 'outer_max_iter',     300);
+    cfg = def(cfg, 'outer_tol',          1e-3);
+    cfg = def(cfg, 'inner_max_iter',     30);
+    cfg = def(cfg, 'inner_tol',          1e-4);
+    cfg = def(cfg, 'move_lim',           0.2);   % robustness: not in paper, needed for convergence
+    cfg = def(cfg, 'outer_move',         0.2);   % robustness: not in paper, needed for convergence
+    % Paper Eq. Fig.1 step 4 uses alpha=1 (direct update), but in practice the inner
+    % MMA asymptotes are reset every outer call, removing the adaptive step control
+    % that prevents 2-cycle oscillation.  alpha=0.5 provides the necessary damping.
+    cfg = def(cfg, 'alpha',              0.5);
+    cfg = def(cfg, 'verbose',            true);
 end
