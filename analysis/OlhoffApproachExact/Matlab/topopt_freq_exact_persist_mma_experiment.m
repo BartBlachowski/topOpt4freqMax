@@ -1,5 +1,5 @@
-function [rho_final, hist] = topopt_freq_exact(cfg)
-% TOPOPT_FREQ_EXACT  Du & Olhoff (2007) frequency maximization.
+function [rho_final, hist] = topopt_freq_exact_persist_mma_experiment(cfg)
+% TOPOPT_FREQ_EXACT_PERSIST_MMA_EXPERIMENT  Experiment-only MMA persistence test.
 %
 %   [rho_final, hist] = topopt_freq_exact(cfg)
 %
@@ -77,6 +77,7 @@ acceptance_check = cfg.acceptance_check;
 max_freq_drop    = cfg.max_freq_drop;
 min_alpha        = cfg.min_alpha;
 verbose        = cfg.verbose;
+asyinit        = cfg.asyinit;
 
 %% ------------------------------------------------------------------
 %  Mesh and FE setup
@@ -126,13 +127,22 @@ hist.inner_iters = nan(outer_max_iter, 1);
 hist.drho_norm   = nan(outer_max_iter, 1);
 hist.omega_trial = nan(outer_max_iter, n_modes);
 hist.step_alpha  = nan(outer_max_iter, 1);
+hist.max_abs_drho = nan(outer_max_iter, 1);
+hist.asym_width_min = nan(outer_max_iter, 1);
+hist.asym_width_mean = nan(outer_max_iter, 1);
+hist.asym_width_max = nan(outer_max_iter, 1);
+hist.asym_expand_count = nan(outer_max_iter, 1);
+hist.asym_contract_count = nan(outer_max_iter, 1);
+hist.asym_same_count = nan(outer_max_iter, 1);
 hist.outer_iters = 0;
+mma_state = struct();
 
 if verbose
     fprintf('\n');
-    fprintf(' %-4s  %-10s  %-10s  %-3s  %-6s  %-9s  %-10s  %-6s  %-5s\n', ...
-        'iter', 'omega_1', 'omega_2', ' N ', 'vol', 'drho/sqrt', 'beta(rad/s)', 'alpha', 'in');
-    fprintf(' %s\n', repmat('-', 1, 82));
+    fprintf(' %-4s  %-10s  %-10s  %-3s  %-6s  %-9s  %-10s  %-9s  %-8s  %-8s\n', ...
+        'iter', 'omega_1', 'omega_2', ' N ', 'vol', 'max|drho|', ...
+        'beta(rad/s)', 'asy_mean', 'expand', 'contract');
+    fprintf(' %s\n', repmat('-', 1, 98));
 end
 
 opts_eig.tol   = 1e-10;
@@ -213,14 +223,14 @@ for out_it = 1:outer_max_iter
         dlam_J   = [];
     end
 
-    %% --- Inner loop (MMA increment subproblem, paper Eq. 19) ---
-    [drho, beta_fin, i_hist] = inner_loop_mma(rho, lambda_bar, fsk_use, ...
-        lambda_J, dlam_J, volfrac, rho_min, inner_max_iter, inner_tol, ...
-        move_lim, outer_move);
+    %% --- Experiment-only one-step MMA with cross-outer asymptote persistence ---
+    [drho, beta_fin, i_hist, mma_state] = inner_loop_mma_persist_step_experiment( ...
+        rho, lambda_bar, fsk_use, lambda_J, dlam_J, volfrac, rho_min, ...
+        mma_state, asyinit);
 
     %% --- Update design variables (paper Fig. 1 step 4: rho := rho + Delta_rho) ---
-    step_alpha = alpha;
-    rho_new    = max(rho_min, min(1, rho + step_alpha * drho));
+    step_alpha = 1.0;
+    rho_new    = max(rho_min, min(1, rho + drho));
     omega_trial = nan(n_modes, 1);
 
     if acceptance_check
@@ -265,6 +275,13 @@ for out_it = 1:outer_max_iter
     hist.drho_norm(out_it)   = drho_norm;
     hist.omega_trial(out_it, :) = omega_trial(:)';
     hist.step_alpha(out_it)  = step_alpha;
+    hist.max_abs_drho(out_it) = max(abs(rho_new - rho));
+    hist.asym_width_min(out_it) = i_hist.asym_width_min;
+    hist.asym_width_mean(out_it) = i_hist.asym_width_mean;
+    hist.asym_width_max(out_it) = i_hist.asym_width_max;
+    hist.asym_expand_count(out_it) = i_hist.asym_expand_count;
+    hist.asym_contract_count(out_it) = i_hist.asym_contract_count;
+    hist.asym_same_count(out_it) = i_hist.asym_same_count;
     hist.outer_iters         = out_it;
 
     if verbose
@@ -273,9 +290,10 @@ for out_it = 1:outer_max_iter
         if ~isfinite(o1), o1 = omega(n_target); end
         if ~isfinite(o2), o2 = omega(min(n_target+1, n_modes)); end
         if isfinite(N_trial), N_disp = N_trial; else, N_disp = N; end
-        fprintf(' %-4d  %-10.4f  %-10.4f  %-3d  %-6.4f  %-9.4e  %-10.4f  %-6.3g  %-5d\n', ...
-            out_it, o1, o2, N_disp, mean(rho_new), drho_norm, sqrt(max(beta_fin,0)), ...
-            step_alpha, i_hist.n_iters);
+        fprintf(' %-4d  %-10.4f  %-10.4f  %-3d  %-6.4f  %-9.3g  %-10.4f  %-9.3g  %-8d  %-8d\n', ...
+            out_it, o1, o2, N_disp, mean(rho_new), hist.max_abs_drho(out_it), ...
+            sqrt(max(beta_fin,0)), i_hist.asym_width_mean, ...
+            i_hist.asym_expand_count, i_hist.asym_contract_count);
     end
 
     rho = rho_new;
@@ -358,6 +376,7 @@ function cfg = set_defaults(cfg)
     cfg = def(cfg, 'max_freq_drop',      0.01);  % inactive unless acceptance_check = true
     cfg = def(cfg, 'min_alpha',          1e-3);  % inactive unless acceptance_check = true
     cfg = def(cfg, 'verbose',            true);
+    cfg = def(cfg, 'asyinit',            0.02);
 end
 
 %% ------------------------------------------------------------------

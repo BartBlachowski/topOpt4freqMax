@@ -103,16 +103,13 @@ lambda_ref = lambda_bar;   % normalization reference (= cluster eigenvalue)
 % -----------------------------------------------------------------
 if nargin < 11 || isempty(outer_move), outer_move = 0.2; end
 
-% Upper bound on beta_hat = beta/lambda_ref.  The cluster constraint is
-% linear in drho (via fsk), so the J-mode and cluster constraints should
-% be the true limiters.  However, when the linearized fsk over-predicts
-% improvement (common with large move limits), the J-mode constraint
-% becomes slack and beta_hat grows to this cap, giving wildly optimistic
-% predictions that collapse on the next outer iteration.
-% Cap at 20 (safety backstop): the J-mode and cluster constraints should
-% limit beta in practice; the cap only fires when the linearization is
-% very optimistic (large move limits, low iteration count).
-beta_max_hat = 20.0;
+% PHASE A (paper-exact): no upper bound on the bound variable beta is imposed
+% in the paper formulation (25a) -- beta is limited solely by the cluster (25c)
+% and J-mode (25b) constraints.  We therefore set the cap to an inactive large
+% value so it never binds.  (A finite value is still required by mmasub; beta
+% enters the objective and all constraints linearly, so its asymptote-based
+% approximation is exact regardless of this bound's magnitude.)
+beta_max_hat = 1e6;
 
 % Outer trust region: restrict total Delta_rho to [-outer_move, +outer_move]
 % (intersected with the absolute bounds [rho_min-rho, 1-rho]).

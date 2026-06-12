@@ -32,7 +32,7 @@ function s_hat = apply_sensitivity_filter(s, rho, h, Hs, nely, nelx)
 rho_mat = reshape(rho, nely, nelx);
 s_mat   = reshape(s,   nely, nelx);
 
-num   = imfilter(rho_mat .* s_mat, h, 'symmetric');
+num   = conv2(rho_mat .* s_mat, h, 'same');
 denom = rho_mat .* Hs;
 
 s_hat = reshape(num ./ denom, [], 1);
