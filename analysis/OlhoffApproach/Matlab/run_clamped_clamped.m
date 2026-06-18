@@ -29,7 +29,7 @@ cfg.J        = 3;
 cfg.supportType = "CC";
 
 % Projection / continuation
-cfg.use_heaviside = false;
+cfg.use_heaviside = true;
 cfg.beta_schedule = [1 2 4 8 16 32 64];
 cfg.beta_interval = 40;
 

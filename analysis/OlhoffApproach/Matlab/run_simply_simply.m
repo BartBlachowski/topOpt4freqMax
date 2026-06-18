@@ -9,8 +9,8 @@ cfg = struct();
 % Geometry / mesh
 cfg.L    = 8;
 cfg.H    = 1;
-cfg.nelx = 240;
-cfg.nely = 30;
+cfg.nelx = 800; %240;
+cfg.nely = 100; %30;
 
 % Material
 cfg.E0      = 1e7;
@@ -24,12 +24,12 @@ cfg.t       = 1.0;
 cfg.volfrac  = 0.5;
 cfg.penal    = 3.0;
 cfg.rmin     = 2 * cfg.L / cfg.nelx;
-cfg.maxiter  = 300;
+cfg.maxiter  = 1500;
 cfg.J        = 3;
 cfg.supportType = "SS";
 
 % Projection / continuation
-cfg.use_heaviside = false;
+cfg.use_heaviside = true;
 cfg.beta_schedule = [1 2 4 8 16 32 64];
 cfg.beta_interval = 40;
 

@@ -1,4 +1,4 @@
-function [rho_final, hist] = topopt_freq_exact(cfg)
+function [rho_final, hist] = topopt_freq_exact_lpdiag(cfg)
 % TOPOPT_FREQ_EXACT  Du & Olhoff (2007) frequency maximization.
 %
 %   [rho_final, hist] = topopt_freq_exact(cfg)
@@ -36,6 +36,10 @@ function [rho_final, hist] = topopt_freq_exact(cfg)
 %     .inner_tol           inner convergence tolerance (default 1e-4)
 %     .move_lim            per-iter inner trust region (default Inf = disabled; not in paper)
 %     .outer_move          outer trust region on |Delta_rho_e| (default Inf = disabled; not in paper)
+%     .subproblem_formulation
+%                           'nonlinear' (default): Eq.18/25d subeigenvalue
+%                           embedding; 'lp_reduced': Eq.22/23 diagnostic
+%                           LP-reduced constraints.
 %     .alpha               outer update: rho += alpha*drho (default 1.0 = full update, paper Fig.1 step 4)
 %     .acceptance_check    backtrack updates that collapse omega_n (default false; not in paper)
 %     .max_freq_drop       max accepted relative omega_n drop per outer update (default 0.01; inactive)
@@ -77,6 +81,7 @@ inner_max_iter = cfg.inner_max_iter;
 inner_tol      = cfg.inner_tol;
 move_lim       = cfg.move_lim;
 outer_move     = cfg.outer_move;
+subproblem_formulation = cfg.subproblem_formulation;
 alpha          = cfg.alpha;
 acceptance_check = cfg.acceptance_check;
 max_freq_drop    = cfg.max_freq_drop;
@@ -140,9 +145,11 @@ hist.N_trial     = nan(outer_max_iter, 1);
 hist.inner_iters = nan(outer_max_iter, 1);
 hist.drho_norm   = nan(outer_max_iter, 1);
 hist.drho_max    = nan(outer_max_iter, 1);
+hist.inner_offdiag_max = nan(outer_max_iter, 1);
 hist.omega_trial = nan(outer_max_iter, n_modes);
 hist.step_alpha  = nan(outer_max_iter, 1);
 hist.outer_iters = 0;
+hist.subproblem_formulation = subproblem_formulation;
 if rho_snapshot_interval > 0
     nSnapMax = ceil(outer_max_iter / rho_snapshot_interval);
     hist.rho_snapshot_iters = nan(nSnapMax, 1);
@@ -236,9 +243,9 @@ for out_it = 1:outer_max_iter
     end
 
     %% --- Inner loop (MMA increment subproblem, paper Eq. 19) ---
-    [drho, beta_fin, i_hist] = inner_loop_mma(rho, lambda_bar, fsk_use, ...
+    [drho, beta_fin, i_hist] = inner_loop_mma_lpdiag(rho, lambda_bar, fsk_use, ...
         lambda_J, dlam_J, volfrac, rho_min, inner_max_iter, inner_tol, ...
-        move_lim, outer_move);
+        move_lim, outer_move, subproblem_formulation);
 
     %% --- Update design variables (paper Fig. 1 step 4: rho := rho + Delta_rho) ---
     step_alpha = alpha;
@@ -287,6 +294,9 @@ for out_it = 1:outer_max_iter
     hist.inner_iters(out_it) = i_hist.n_iters;
     hist.drho_norm(out_it)   = drho_norm;
     hist.drho_max(out_it)    = drho_max;
+    if isfield(i_hist, 'final_offdiag_max')
+        hist.inner_offdiag_max(out_it) = i_hist.final_offdiag_max;
+    end
     hist.omega_trial(out_it, :) = omega_trial(:)';
     hist.step_alpha(out_it)  = step_alpha;
     hist.outer_iters         = out_it;
@@ -382,6 +392,7 @@ function cfg = set_defaults(cfg)
     % box bounds implied by Eq. (25f): rho_min <= rho_e + Delta_rho_e <= 1.
     cfg = def(cfg, 'move_lim',           Inf);   % disabled: extra inner MMA move-limit (not in paper)
     cfg = def(cfg, 'outer_move',         Inf);   % disabled: extra outer Delta_rho trust region (not in paper)
+    cfg = def(cfg, 'subproblem_formulation', 'nonlinear');
     % Paper Fig.1 step 4 uses the full update rho := rho + Delta_rho (alpha = 1).
     cfg = def(cfg, 'alpha',              1.0);
     cfg = def(cfg, 'acceptance_check',   false); % disabled: backtracking/frequency-drop acceptance (not in paper)
