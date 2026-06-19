@@ -2,7 +2,7 @@
 # Rewritten from the Python version (Aage & Johansen, 2013, modified)
 #
 # Supports aggregated compliance over multiple load cases via run_cfg["load_cases"].
-# Includes semi_harmonic loads with a cached baseline (M0, Phi0, omega0).
+# Authoritative semi_harmonic load: F_j(x) = omega0_j^2 * M(x) * Phi0_j.
 # Passive elements (pas_s, pas_v) excluded from optimizer update.
 # Supports OC and MMA optimizers.
 
@@ -21,17 +21,6 @@ try:
     from mma import mmasub
 except ImportError:
     mmasub = None
-
-_sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', '..', 'tools', 'Python'))
-try:
-    from nodal_projection import (
-        build_nodal_projection_cache,
-        project_q4_element_density_to_nodes,
-    )
-except ImportError:
-    build_nodal_projection_cache = None
-    project_q4_element_density_to_nodes = None
-
 
 # =============================================================================
 # Element matrices (LL, LR, UR, UL node order — matches Matlab edofMat)
@@ -115,7 +104,7 @@ def topopt_freq(
             pas_s, pas_v       : 0-based int arrays (passive solid / void)
             load_cases         : normalized list from validate_load_cases()
             semi_harmonic_baseline : "solid" | "initial"
-            semi_harmonic_rho_source : "x" | "xphys"
+            load_sensitivity : "omitted" | "complete"
             harmonic_normalize : bool
             visualize_live     : bool
             save_frq_iterations: bool
@@ -150,7 +139,10 @@ def topopt_freq(
     save_frq_iter = bool(run_cfg.get("save_frq_iterations", False))
     harmonic_normalize = bool(run_cfg.get("harmonic_normalize", True))
     semi_baseline = str(run_cfg.get("semi_harmonic_baseline", "solid")).lower().strip()
-    semi_rho_src = str(run_cfg.get("semi_harmonic_rho_source", "x")).lower().strip()
+    load_sensitivity_mode = str(run_cfg.get("load_sensitivity", "omitted")).lower().strip()
+    if load_sensitivity_mode not in {"omitted", "complete"}:
+        raise ValueError('load_sensitivity must be "omitted" or "complete".')
+    gate_a0_diagnostics = bool(run_cfg.get("gate_a0_diagnostics", False))
     use_heaviside = bool(run_cfg.get("use_heaviside", False))
     beta_h_schedule = [float(b) for b in run_cfg.get("heaviside_beta_schedule", [1, 2, 4, 8, 16, 32, 64])]
     beta_h_interval = int(run_cfg.get("heaviside_beta_interval", 40))
@@ -280,19 +272,21 @@ def topopt_freq(
         print(f'  case[{ci}] "{lc["name"]}": factor={lc["factor"]}, nLoads={n_ld}')
 
     has_semi = using_lc and max_semi_mode > 0
+    if has_semi and semi_baseline != "solid":
+        raise ValueError('Authoritative semi_harmonic loads require semi_harmonic_baseline="solid".')
+    if has_semi and gate_a0_diagnostics and harmonic_normalize:
+        raise ValueError("Gate A0 requires optimization.harmonic_normalize=false.")
+    if has_semi and gate_a0_diagnostics and "semi_harmonic_rho_source" in run_cfg:
+        raise ValueError("Gate A0 forbids obsolete semi_harmonic_rho_source behavior.")
 
     # --- Semi-harmonic baseline setup ---
-    nodal_proj_cache = None
-    semi_base_vec = np.zeros((ndof, max(max_semi_mode, 0)), dtype=float)
     semi_omega0 = np.full(max(max_semi_mode, 0), np.nan, dtype=float)
+    semi_omega0_sq = np.full(max(max_semi_mode, 0), np.nan, dtype=float)
     semi_phi0 = np.zeros((ndof, max(max_semi_mode, 0)), dtype=float)
-    semi_M0 = None
+    semi_modal_mass = np.full(max(max_semi_mode, 0), np.nan, dtype=float)
 
     if has_semi:
-        if build_nodal_projection_cache is None:
-            raise ImportError("tools/Python/nodal_projection.py is required for semi_harmonic loads.")
-        nodal_proj_cache = build_nodal_projection_cache(nelx, nely)
-        print(f"[Load cases] semi_harmonic baseline={semi_baseline}, rho_source={semi_rho_src}")
+        print(f"[Load cases] authoritative semi_harmonic baseline=solid, load_sensitivity={load_sensitivity_mode}")
 
         x_base = _build_semi_baseline(semi_baseline, xPhys, pas_s, pas_v, n_el)
         sK0 = (KE.ravel()[:, np.newaxis] * (Emin + x_base ** penal * (E0 - Emin))).ravel(order="F")
@@ -311,8 +305,10 @@ def topopt_freq(
             if not np.isfinite(omegas0[k]):
                 raise RuntimeError(f"Unable to evaluate semi_harmonic mode {k+1} from baseline model.")
             semi_omega0[k] = omegas0[k]
+            semi_omega0_sq[k] = omegas0[k] ** 2
             semi_phi0[:, k] = phis0[:, k]
-            semi_base_vec[:, k] = omegas0[k] * (semi_M0 @ phis0[:, k])
+            phi_free = phis0[free, k]
+            semi_modal_mass[k] = float(phi_free @ (M0f @ phi_free))
         print(f"[Load cases] semi_harmonic baseline cached up to mode {max_semi_mode}.")
 
     # --- Legacy one-time eigensolve (no configured load cases) ---
@@ -442,15 +438,6 @@ def topopt_freq(
         else:
             Mf = None
 
-        # --- Nodal density projection for semi-harmonic loads ---
-        rho_nodal = None
-        rho_source_vec = None
-        if has_semi:
-            rho_source_vec = _semi_rho_source(semi_rho_src, x, xPhys)
-            rho_nodal, nodal_proj_cache = project_q4_element_density_to_nodes(
-                rho_source_vec, nelx, nely, nodal_proj_cache
-            )
-
         # --- Assemble load matrix ---
         F[:] = 0.0
         for ci, lc in enumerate(load_cases):
@@ -492,15 +479,13 @@ def topopt_freq(
 
                 elif lt == "semi_harmonic":
                     mode_k = ld["mode"] - 1   # 0-based
-                    if rho_nodal is None:
-                        raise RuntimeError("rho_nodal is None but semi_harmonic load is active.")
-                    if mode_k >= semi_base_vec.shape[1] or not np.isfinite(semi_omega0[mode_k]):
+                    if (mode_k >= semi_phi0.shape[1]
+                            or not np.isfinite(semi_omega0[mode_k])
+                            or not np.isfinite(semi_omega0_sq[mode_k])):
                         raise RuntimeError(
                             f'Unable to evaluate semi_harmonic mode {ld["mode"]} for case "{lc["name"]}".'
                         )
-                    # rho_dof: same nodal density at both DOFs of each node
-                    rho_dof = np.repeat(rho_nodal, 2)
-                    fSemi = rho_dof * semi_base_vec[:, mode_k]
+                    fSemi = semi_omega0_sq[mode_k] * (M @ semi_phi0[:, mode_k])
                     Fi += ldf * fSemi
 
             Fi *= lc["factor"]
@@ -519,7 +504,8 @@ def topopt_freq(
         # --- Objective and sensitivities ---
         obj = 0.0
         obj_cases[:] = 0.0
-        dc = np.zeros(n_el, dtype=float)
+        dc_omitted_raw = np.zeros(n_el, dtype=float)
+        dc_complete_raw = np.zeros(n_el, dtype=float)
         stiff_scale = -penal * xPhys ** (penal - 1) * (E0 - Emin)
         dM_dx_scale = pmass * xPhys ** (pmass - 1) * (rho0 - rho_min)
 
@@ -531,14 +517,39 @@ def topopt_freq(
 
             ue = Ui[edof_mat]   # (n_el, 8)
             ce = (ue @ KE * ue).sum(axis=1)
-            dc += stiff_scale * ce
+            dc_omitted_raw += stiff_scale * ce
+            dc_complete_raw += stiff_scale * ce
 
             if using_lc:
-                dc += _load_sensitivity(
+                dc_omitted_raw += _load_sensitivity(
                     Ui, ue, lc, dM_dx_scale, ME, y_down,
                     harmonic_phi, harmonic_omegas, phi_legacy, omega_legacy,
-                    edof_mat, nodal_proj_cache, semi_base_vec,
+                    edof_mat, semi_phi0, semi_omega0_sq, "omitted",
                 )
+                dc_complete_raw += _load_sensitivity(
+                    Ui, ue, lc, dM_dx_scale, ME, y_down,
+                    harmonic_phi, harmonic_omegas, phi_legacy, omega_legacy,
+                    edof_mat, semi_phi0, semi_omega0_sq, "complete",
+                )
+        dc = dc_complete_raw.copy() if load_sensitivity_mode == "complete" else dc_omitted_raw.copy()
+
+        if gate_a0_diagnostics:
+            info["gate_a0"] = {
+                "reference_omega": semi_omega0.copy(),
+                "reference_omega_sq": semi_omega0_sq.copy(),
+                "reference_modes": semi_phi0.copy(),
+                "reference_modal_mass": semi_modal_mass.copy(),
+                "current_x": xPhys.copy(),
+                "current_mass_matrix": M.copy(),
+                "load_vector": F.copy(),
+                "objective": float(obj),
+                "omitted_sensitivity": dc_omitted_raw.copy(),
+                "complete_sensitivity": dc_complete_raw.copy(),
+                "selected_sensitivity": dc.copy(),
+                "selected_load_sensitivity": load_sensitivity_mode,
+                "load_normalization_enabled": harmonic_normalize,
+                "obsolete_rho_source_used": False,
+            }
 
         # Passive elements excluded from volume constraint and update.
         dv = np.ones(n_el, dtype=float)
@@ -766,7 +777,7 @@ def _compute_modes(
         return omegas, phis
     try:
         lam_vals, V = eigsh(Kf, M=Mf, k=n_req, sigma=1e-6, which="LM",
-                            tol=1e-8, maxiter=800)
+                            tol=1e-12, maxiter=2000)
         lam_vals = np.real(lam_vals)
         order = np.argsort(lam_vals)
         lam_vals = lam_vals[order]
@@ -778,12 +789,16 @@ def _compute_modes(
         for k in range(n_ok):
             phi = V[:, k]
             mn = float(phi @ (Mf @ phi))
-            if mn > 0:
-                phi = phi / np.sqrt(mn)
+            if not np.isfinite(mn) or mn <= 0:
+                raise RuntimeError(f"Invalid modal mass for reference mode {k + 1}: {mn}")
+            phi = phi / np.sqrt(mn)
+            phase_idx = int(np.argmax(np.abs(phi)))
+            if phi[phase_idx] < 0:
+                phi = -phi
             omegas[k] = np.sqrt(lam_vals[k])
             phis[free, k] = phi
-    except Exception:
-        pass
+    except Exception as exc:
+        raise RuntimeError(f"Reference eigensolve failed: {exc}") from exc
     return omegas, phis
 
 
@@ -835,8 +850,9 @@ def _load_sensitivity(
     phi_legacy: np.ndarray,
     omega_legacy: float,
     edof_mat: np.ndarray,
-    nodal_proj_cache,
-    semi_base_vec: np.ndarray,
+    semi_phi0: np.ndarray,
+    semi_omega0_sq: np.ndarray,
+    load_sensitivity_mode: str,
 ) -> np.ndarray:
     """Load-dependent sensitivity d(F)/dx contribution for one load case."""
     n_el = dM_dx_scale.size
@@ -864,8 +880,14 @@ def _load_sensitivity(
                 continue
             vec = (omega_k ** 2) * phi_k
         elif lt == "semi_harmonic":
-            # Frozen-load approximation: semi_harmonic load sensitivity is zeroed.
-            continue
+            if load_sensitivity_mode == "omitted":
+                continue
+            mode_k = ld["mode"] - 1
+            if (mode_k >= semi_phi0.shape[1]
+                    or mode_k >= semi_omega0_sq.size
+                    or not np.isfinite(semi_omega0_sq[mode_k])):
+                raise RuntimeError(f"Unable to evaluate complete load sensitivity for mode {mode_k + 1}.")
+            vec = semi_omega0_sq[mode_k] * semi_phi0[:, mode_k]
         else:
             # closest_node has no rho dependence.
             continue

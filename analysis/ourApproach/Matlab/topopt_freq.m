@@ -2,7 +2,9 @@
 % Rewritten from the Python version (Aage & Johansen, 2013, modified)
 %
 % Supports aggregated compliance over multiple load cases in runCfg.load_cases.
-% Includes semi_harmonic loads with cached baseline (M0, Phi0, omega0).
+% Authoritative semi_harmonic load:
+%   F_j(x) = omega0_j^2 * M(x) * Phi0_j
+% where the solid-reference eigenpair is computed once and frozen.
 % Legacy fallback remains the original fixed harmonic load behavior when
 % runCfg.load_cases is not provided.
 
@@ -69,19 +71,15 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
     saveFrqIterations = localParseVisualizeLive(localOpt(runCfg, 'save_frq_iterations', false), false);
     harmonicNormalize = localParseVisualizeLive(localOpt(runCfg, 'harmonic_normalize', true), true);
     debugReturnDc = localParseVisualizeLive(localOpt(runCfg, 'debug_return_dc', false), false);
+    gateA0Diagnostics = localParseVisualizeLive(localOpt(runCfg, 'gate_a0_diagnostics', false), false);
     debugSemiHarmonic = localParseVisualizeLive(localOpt(runCfg, 'debug_semi_harmonic', false), false);
     debugLoadCases = localParseDebugLoadCases(localOpt(runCfg, 'debug_load_cases', 'off'));
     semiHarmonicBaseline = localParseSemiHarmonicBaseline( ...
         localOpt(runCfg, 'semi_harmonic_baseline', 'solid'));
-    semiHarmonicRhoSource = localParseSemiHarmonicRhoSource( ...
-        localOpt(runCfg, 'semi_harmonic_rho_source', 'x'));
+    loadSensitivityMode = localParseLoadSensitivityMode( ...
+        localOpt(runCfg, 'load_sensitivity', 'omitted'));
     harmonicBaseline = localParseHarmonicBaseline( ...
         localOpt(runCfg, 'harmonic_baseline', 'initial'));
-    % When true, include dF/dx sensitivity for semi_harmonic loads (Eq.6 ablation).
-    % Default false reproduces the paper's stiffness-only sensitivity (Eq.6).
-    semiHarmonicLoadSens = localParseVisualizeLive( ...
-        localOpt(runCfg, 'semi_harmonic_load_sensitivity', false), false);
-
     % Passive element sets (forced density = 1 or 0, excluded from OC update).
     nEl = nelx * nely;
     pasS = []; pasV = [];
@@ -114,8 +112,20 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
     hasSemiHarmonicLoads = usingConfiguredLoadCases && maxSemiHarmonicMode > 0;
     semiDebugIters = [1, 10];
     if hasSemiHarmonicLoads
-        fprintf('[Load cases] semi_harmonic baseline=%s, rho_source=%s\n', ...
-            semiHarmonicBaseline, semiHarmonicRhoSource);
+        if ~strcmp(semiHarmonicBaseline, 'solid')
+            error('topopt_freq:AuthoritativeBaselineRequired', ...
+                'Authoritative semi_harmonic loads require semi_harmonic_baseline="solid".');
+        end
+        if gateA0Diagnostics && harmonicNormalize
+            error('topopt_freq:GateA0LoadNormalizationEnabled', ...
+                'Gate A0 requires optimization.harmonic_normalize=false.');
+        end
+        if gateA0Diagnostics && isfield(runCfg, 'semi_harmonic_rho_source')
+            error('topopt_freq:GateA0ObsoleteRhoSource', ...
+                'Gate A0 forbids obsolete semi_harmonic_rho_source behavior.');
+        end
+        fprintf('[Load cases] authoritative semi_harmonic baseline=solid, load_sensitivity=%s\n', ...
+            loadSensitivityMode);
     end
 
     % Allocate design variables (passive elements pinned; active adjusted for volfrac).
@@ -218,25 +228,18 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
 
     omegaLegacy = NaN;
     PhiLegacy = zeros(ndof, 1);
-    nodalProjectionCache = [];
-    semiHarmonicM0 = sparse(ndof, ndof);
     semiHarmonicOmega0 = NaN(max(maxSemiHarmonicMode, 0), 1);
+    semiHarmonicOmega0Sq = NaN(max(maxSemiHarmonicMode, 0), 1);
     semiHarmonicPhi0 = zeros(ndof, max(maxSemiHarmonicMode, 0));
-    semiHarmonicBaseVec = zeros(ndof, max(maxSemiHarmonicMode, 0));
+    semiHarmonicModalMass = NaN(max(maxSemiHarmonicMode, 0), 1);
     semiHarmonicBaselineInfo = struct( ...
         'kind', '', ...
-        'rhoSource', '', ...
         'nEl', nEl, ...
         'xBaseMean', NaN, ...
         'xBaseMin', NaN, ...
         'xBaseMax', NaN, ...
         'passiveSolidCount', numel(pasS), ...
         'passiveVoidCount', numel(pasV));
-    if hasSemiHarmonicLoads
-        rhoSourceInit = localSemiHarmonicRhoSourceVector(semiHarmonicRhoSource, x, xPhys);
-        [~, nodalProjectionCache] = projectQ4ElementDensityToNodes(rhoSourceInit, nelx, nely);
-    end
-
     if ~usingConfiguredLoadCases
         % Legacy fallback (no runCfg.load_cases): preserve previous behavior.
         sK0 = reshape(KE(:) * (Emin + xPhys'.^penal * (Emax - Emin)), [], 1);
@@ -282,14 +285,11 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
         end
 
         if hasSemiHarmonicLoads
-            % semi_harmonic uses one fixed baseline model:
-            %   F_semi(x) = rho_nodal(x) .* (omega0_k * (M0 * Phi0_k))
-            % Fix: baseline is explicit/configurable (solid by default), not
-            % implicitly the initial xPhys (volfrac) field.
+            % Compute the solid-reference eigenpair once. The iterative load
+            % uses the current M(x), not this reference mass matrix.
             xBase = localBuildSemiHarmonicBaseline( ...
                 semiHarmonicBaseline, xPhys, pasS, pasV, nEl);
             semiHarmonicBaselineInfo.kind = semiHarmonicBaseline;
-            semiHarmonicBaselineInfo.rhoSource = semiHarmonicRhoSource;
             semiHarmonicBaselineInfo.xBaseMean = mean(xBase);
             semiHarmonicBaselineInfo.xBaseMin = min(xBase);
             semiHarmonicBaselineInfo.xBaseMax = max(xBase);
@@ -311,9 +311,11 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
                     error('topopt_freq:SemiHarmonicModeUnavailable', ...
                         'Unable to evaluate semi_harmonic mode %d from baseline model.', k);
                 end
-                semiHarmonicBaseVec(:, k) = semiHarmonicOmega0(k) * (semiHarmonicM0 * semiHarmonicPhi0(:, k));
+                semiHarmonicOmega0Sq(k) = semiHarmonicOmega0(k)^2;
+                phiFree = semiHarmonicPhi0(free, k);
+                semiHarmonicModalMass(k) = real(phiFree' * (semiHarmonicM0(free, free) * phiFree));
             end
-            clear K0 sK0 sM0 rhoPhys0;
+            clear K0 sK0 sM0 rhoPhys0 semiHarmonicM0;
             fprintf('[Load cases] semi_harmonic baseline cached up to mode %d.\n', maxSemiHarmonicMode);
         end
     end
@@ -461,22 +463,10 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
         harmonicOmegas = harmonicOmegasCache;
         harmonicPhi    = harmonicPhiCache;
 
-        if hasSemiHarmonicLoads
-            % rho_nodal source is explicit and shared with the same Pavg map
-            % used by semi_harmonic sensitivity.
-            rhoSourceVec = localSemiHarmonicRhoSourceVector(semiHarmonicRhoSource, x, xPhys);
-            [rhoNodal, nodalProjectionCache] = projectQ4ElementDensityToNodes( ...
-                rhoSourceVec, nelx, nely, nodalProjectionCache);
-        else
-            rhoSourceVec = [];
-            rhoNodal = [];
-        end
-
-        % Debug verification (opt-in): run only at iterations 1 and 10.
-        debugSemiThisIter = debugSemiHarmonic && hasSemiHarmonicLoads && any(loop == semiDebugIters);
+        debugSemiThisIter = false;
         [F, caseDiag, harmonicNormRefCache, semiDebugAssembly] = localBuildLoadMatrix( ...
             loadCases, ndof, M, yDown, harmonicPhi, harmonicOmegas, PhiLegacy, omegaLegacy, ...
-            harmonicNormRefCache, harmonicNormalize, rhoNodal, semiHarmonicBaseVec, semiHarmonicOmega0, ...
+            harmonicNormRefCache, harmonicNormalize, semiHarmonicPhi0, semiHarmonicOmega0, semiHarmonicOmega0Sq, ...
             debugSemiThisIter);
 
         U(:) = 0;
@@ -488,19 +478,13 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
             info.freq_iter_omega(loop,:) = localFirstNOmegasFromSubmatrices(Kf, Mf, 3);
         end
 
-        if debugSemiThisIter
-            localDebugSemiHarmonicIteration( ...
-                loop, loadCases, semiDebugAssembly, ndof, free, Kf, ...
-                rhoSourceVec, rhoNodal, nelx, nely, nodalProjectionCache, ...
-                semiHarmonicBaselineInfo, semiHarmonicM0, semiHarmonicPhi0, semiHarmonicOmega0, ...
-                semiHarmonicBaseVec, act);
-        end
         clear Kf Mf;
 
         % Objective and sensitivities: sum contributions over load cases.
         obj = 0.0;
         objCases(:) = 0.0;
-        dc(:) = 0.0;
+        dcOmittedRaw = zeros(nEl, 1);
+        dcCompleteRaw = zeros(nEl, 1);
         stiffScale = -penal * xPhys.^(penal-1) * (Emax - Emin);
         dMdxScale = pmass * (xPhys.^(pmass-1)) * (rho0 - rho_min);
 
@@ -512,14 +496,40 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
 
             ue = Ui(edofMat);  % nelx*nely x 8
             ce = sum((ue * KE) .* ue, 2);
-            dc = dc + stiffScale .* ce;
+            dcOmittedRaw = dcOmittedRaw + stiffScale .* ce;
+            dcCompleteRaw = dcCompleteRaw + stiffScale .* ce;
 
             if usingConfiguredLoadCases
-                dc = dc + localLoadSensitivityForCase( ...
+                dcOmittedRaw = dcOmittedRaw + localLoadSensitivityForCase( ...
                     Ui, ue, loadCases(icase), dMdxScale, ME, yDown, ...
                     harmonicPhi, harmonicOmegas, PhiLegacy, omegaLegacy, edofMat, ...
-                    nodalProjectionCache, semiHarmonicBaseVec, semiHarmonicLoadSens);
+                    semiHarmonicPhi0, semiHarmonicOmega0Sq, 'omitted');
+                dcCompleteRaw = dcCompleteRaw + localLoadSensitivityForCase( ...
+                    Ui, ue, loadCases(icase), dMdxScale, ME, yDown, ...
+                    harmonicPhi, harmonicOmegas, PhiLegacy, omegaLegacy, edofMat, ...
+                    semiHarmonicPhi0, semiHarmonicOmega0Sq, 'complete');
             end
+        end
+        if strcmp(loadSensitivityMode, 'complete')
+            dc = dcCompleteRaw;
+        else
+            dc = dcOmittedRaw;
+        end
+        if gateA0Diagnostics
+            info.gate_a0.reference_omega = semiHarmonicOmega0;
+            info.gate_a0.reference_omega_sq = semiHarmonicOmega0Sq;
+            info.gate_a0.reference_modes = semiHarmonicPhi0;
+            info.gate_a0.reference_modal_mass = semiHarmonicModalMass;
+            info.gate_a0.current_x = xPhys;
+            info.gate_a0.current_mass_matrix = M;
+            info.gate_a0.load_vector = F;
+            info.gate_a0.objective = obj;
+            info.gate_a0.omitted_sensitivity = dcOmittedRaw;
+            info.gate_a0.complete_sensitivity = dcCompleteRaw;
+            info.gate_a0.selected_sensitivity = dc;
+            info.gate_a0.selected_load_sensitivity = loadSensitivityMode;
+            info.gate_a0.load_normalization_enabled = harmonicNormalize;
+            info.gate_a0.obsolete_rho_source_used = false;
         end
         clear K M;
 
@@ -760,7 +770,7 @@ if nReq < 1
 end
 
 try
-    eigOpts = struct('disp', 0, 'maxit', 800, 'tol', 1e-8);
+    eigOpts = struct('disp', 0, 'maxit', 2000, 'tol', 1e-12);
     [V, D] = eigs(Kf, Mf, nReq, 'smallestabs', eigOpts);
 catch
     [V, D] = eigs(Kf, Mf, nReq, 'smallestabs');
@@ -780,6 +790,10 @@ for k = 1:nOk
     if mn > 0
         phi = phi / sqrt(mn);
     end
+    [~, phaseIdx] = max(abs(phi));
+    if ~isempty(phaseIdx) && phi(phaseIdx) < 0
+        phi = -phi;
+    end
     harmonicOmegas(k) = sqrt(lamVals(k));
     phiGlobal = zeros(ndof, 1);
     phiGlobal(free) = phi;
@@ -789,7 +803,7 @@ end
 
 function [F, caseDiag, harmonicNormRef, semiDebugAssembly] = localBuildLoadMatrix( ...
     loadCases, ndof, M, yDown, harmonicPhi, harmonicOmegas, PhiLegacy, omegaLegacy, ...
-    harmonicNormRef, harmonicNormalize, rhoNodal, semiHarmonicBaseVec, semiHarmonicOmega0, ...
+    harmonicNormRef, harmonicNormalize, semiHarmonicPhi0, semiHarmonicOmega0, semiHarmonicOmega0Sq, ...
     captureSemiDebug)
 if nargin < 14 || isempty(captureSemiDebug)
     captureSemiDebug = false;
@@ -805,15 +819,6 @@ caseDiag = repmat(struct( ...
     'harmonicOmegas', [], ...
     'semiHarmonicModes', [], ...
     'semiHarmonicOmegas', []), nCases, 1);
-
-if ~isempty(rhoNodal)
-    rhoNodal = reshape(rhoNodal, [], 1);
-    rhoDof = zeros(ndof, 1);
-    rhoDof(1:2:end) = rhoNodal;
-    rhoDof(2:2:end) = rhoNodal;
-else
-    rhoDof = [];
-end
 
 for icase = 1:nCases
     Fi = zeros(ndof, 1);
@@ -867,18 +872,16 @@ for icase = 1:nCases
 
             case 'semi_harmonic'
                 modeK = ld.mode;
-                if isempty(rhoDof)
-                    error('topopt_freq:MissingSemiHarmonicNodalDensity', ...
-                        'rho_nodal projection is required for semi_harmonic load assembly.');
-                end
-                if modeK > size(semiHarmonicBaseVec, 2) || ...
+                if modeK > size(semiHarmonicPhi0, 2) || ...
                         modeK > numel(semiHarmonicOmega0) || ...
-                        ~isfinite(semiHarmonicOmega0(modeK))
+                        modeK > numel(semiHarmonicOmega0Sq) || ...
+                        ~isfinite(semiHarmonicOmega0(modeK)) || ...
+                        ~isfinite(semiHarmonicOmega0Sq(modeK))
                     error('topopt_freq:SemiHarmonicModeUnavailable', ...
                         'Unable to evaluate semi_harmonic mode %d for load_cases case \"%s\".', ...
                         modeK, loadCases(icase).name);
                 end
-                fSemi = rhoDof .* semiHarmonicBaseVec(:, modeK);
+                fSemi = semiHarmonicOmega0Sq(modeK) * (M * semiHarmonicPhi0(:, modeK));
                 if captureSemiDebug
                     dbgIdx = numel(semiDebugAssembly) + 1;
                     semiDebugAssembly(dbgIdx).caseIdx = icase;
@@ -909,12 +912,9 @@ end
 
 function dcLoad = localLoadSensitivityForCase( ...
     Ui, ue, loadCase, dMdxScale, ME, yDown, harmonicPhi, harmonicOmegas, ...
-    PhiLegacy, omegaLegacy, edofMat, nodalProjectionCache, semiHarmonicBaseVec, ...
-    includeSemiHarmonicLoadSens)
+    PhiLegacy, omegaLegacy, edofMat, semiHarmonicPhi0, semiHarmonicOmega0Sq, ...
+    loadSensitivityMode)
 % Load-dependent sensitivity contributions (dF/drho_e term in dJ/drho_e).
-%
-% includeSemiHarmonicLoadSens: when true, include dF/dx for semi_harmonic loads
-%   (enables the full Eq.6 ablation comparison; default false = paper method).
 %
 % Option B for harmonic loads:
 %   dF_h/dx ≈ ld.factor * omega_k^2 * (dM/dx * Phi_k)
@@ -947,24 +947,18 @@ for j = 1:numel(loads)
             coeff = loadCase.factor * ldFactor;
             vec = (omegaK^2) * phiK;
         case 'semi_harmonic'
-            % Paper method (Eq.6): omit load sensitivity entirely.
-            % When includeSemiHarmonicLoadSens=true (ablation variant B),
-            % include dF/dx = d(rho_nodal(x))/dx_e * base_vec_k.
-            if nargin < 14 || ~includeSemiHarmonicLoadSens
-                continue;  % paper default: stiffness-only sensitivity
-            end
-            % Full load sensitivity for semi_harmonic: uses nodal projection.
-            modeK = ld.mode;
-            if isempty(nodalProjectionCache) || modeK > size(semiHarmonicBaseVec, 2)
+            if strcmp(loadSensitivityMode, 'omitted')
                 continue;
             end
-            coeffSH = loadCase.factor * ldFactor;
-            if coeffSH == 0, continue; end
-            baseVec = semiHarmonicBaseVec(:, modeK);
-            % d(rho_nodal * base_vec)/dx_e: rho_nodal_j = Pavg(j,e) for element e
-            nodeTerm = Ui(1:2:end) .* baseVec(1:2:end) + Ui(2:2:end) .* baseVec(2:2:end);
-            dcLoad = dcLoad + 2 * coeffSH * (nodalProjectionCache.Pavg' * nodeTerm);
-            continue;
+            modeK = ld.mode;
+            if modeK > size(semiHarmonicPhi0, 2) || ...
+                    modeK > numel(semiHarmonicOmega0Sq) || ...
+                    ~isfinite(semiHarmonicOmega0Sq(modeK))
+                error('topopt_freq:SemiHarmonicModeUnavailable', ...
+                    'Unable to evaluate complete load sensitivity for mode %d.', modeK);
+            end
+            coeff = loadCase.factor * ldFactor;
+            vec = semiHarmonicOmega0Sq(modeK) * semiHarmonicPhi0(:, modeK);
         otherwise
             % closest_node has no rho dependence.
     end
@@ -1699,6 +1693,14 @@ if ischar(value)
 end
 error('topopt_freq:InvalidSemiHarmonicRhoSource', ...
     'semi_harmonic_rho_source must be "x" or "xPhys".');
+end
+
+function mode = localParseLoadSensitivityMode(value)
+mode = lower(strtrim(char(string(value))));
+if ~any(strcmp(mode, {'omitted', 'complete'}))
+    error('topopt_freq:InvalidLoadSensitivityMode', ...
+        'load_sensitivity must be "omitted" or "complete".');
+end
 end
 
 function name = localApproachName(runCfg, defaultName)

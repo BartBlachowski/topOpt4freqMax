@@ -1,0 +1,449 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{geometry}
+\usepackage{hyperref}
+\usepackage{microtype}
+\geometry{margin=2.5cm}
+\setlength{\parskip}{6pt}
+\setlength{\parindent}{0pt}
+
+% ============================================================
+% DOMAIN AUDIT
+% ============================================================
+% DOMAIN PROFILE USED: topology_optimization_eigenfrequency v1.0
+%
+% DOMAIN-SPECIFIC CHECKS COMPLETED:
+%   spurious_low_density_modes, simp_mass_interpolation,
+%   grey_regions_in_topology, frozen_eigenvector_approximation,
+%   repeated_eigenvalues_mode_coalescence, mode_switching,
+%   design_dependent_load_sensitivity, benchmark_implementation_disclosure
+%
+% DOMAIN-SPECIFIC CHECKS NOT POSSIBLE:
+%   Visual inspection of topology figure grey-region extent (text-based
+%   analysis only; density arrays not available to reviewer).
+%   Verification of spurious low-density modes during iteration
+%   (source code and intermediate eigenspectrum not available).
+%
+% DOMAIN_UNVERIFIED WARNINGS:
+%   none (DOMAIN_UNVERIFIED = false, match_confidence = HIGH)
+% ============================================================
+
+\begin{document}
+
+% ============================================================
+% HEADER
+% ============================================================
+
+\begin{center}
+{\Large\bfseries Peer Review Report}\\[6pt]
+{\large Springer Nature -- Engineering with Computers}\\[4pt]
+{\normalsize Manuscript: \textit{Frequency maximization of planar structures
+using quasi-static approximation in topology optimization}}\\[4pt]
+{\normalsize Review produced by: Multimodel AI peer review pipeline
+(GPT\,+\,Claude, consensus synthesis)\\
+Date of review: 2026-05-28}
+\end{center}
+
+\bigskip
+\hrule
+\bigskip
+
+% ============================================================
+% RECOMMENDATION
+% ============================================================
+
+\section*{Recommendation}
+
+\textbf{MAJOR REVISION} \quad (Confidence: HIGH)
+
+Both independent review branches (GPT and Claude) reached this decision independently
+with high confidence and no contradictions on the core findings. The manuscript describes
+a practically useful computational method, but four critical-level issues and numerous
+major issues must be resolved before publication.
+
+% ============================================================
+% SUMMARY
+% ============================================================
+
+\section{Summary}
+
+This paper proposes a quasi-static approximation for natural-frequency maximization in
+SIMP topology optimization. The fundamental eigenpair is computed once on the initial
+uniform-density domain and then kept fixed throughout the optimization, so that each
+subsequent iteration reduces to a standard compliance minimization step. The load-
+sensitivity term arising from the density-dependent mass matrix is omitted. A scalar
+load-weighting parameter combines two modal inertial loads for simultaneous two-mode
+frequency design. The method is benchmarked on a simply supported beam (comparison
+against Olhoff and Yuksel implementations), a clamped beam (multi-mode demonstration),
+and a building-like structure with passive elements.
+
+The computational efficiency claim is verified: the reported speedups
+($7.1\times$ over the Olhoff implementation and $2.7\times$ over the Yuksel method at
+$400\times50$ mesh) are arithmetically consistent with Table~1, and the frequency gap of
+$8.6\%$ below the Olhoff optimum is correctly computed. The paper has a publishable core.
+However, the current version contains four critical methodological failures that prevent
+acceptance.
+
+% ============================================================
+% CRITICAL ISSUES
+% ============================================================
+
+\section{Critical Issues}
+
+\subsection*{C1.\; Unvalidated Load-Sensitivity Omission (Eq.~6)}
+
+The inertial load $f(\mathbf{x}) = \omega_1^{(0)2} \mathbf{M}(\mathbf{x})\boldsymbol{\Phi}_1$
+(Eq.~5) depends on element densities through the evolving mass matrix~$\mathbf{M}(\mathbf{x})$.
+The total derivative of compliance with respect to~$x_e$ therefore includes a load-sensitivity
+term
+\[
+  \frac{\partial \mathbf{f}}{\partial x_e}
+    = \bigl(\omega_1^{(0)}\bigr)^2 \frac{\partial \mathbf{M}}{\partial x_e}\boldsymbol{\Phi}_1
+    = \bigl(\omega_1^{(0)}\bigr)^2\, d\, x_e^{d-1}\, \mathbf{m}_e^0\, \boldsymbol{\Phi}_1.
+\]
+Eq.~(6) omits this term entirely, retaining only the stiffness-based sensitivity.
+The justification---citing Munro~(2024) by analogy to self-weight compliance---is
+heuristic and does not constitute an error bound or derivation specific to the
+eigenfrequency case. No finite-difference gradient check is provided.
+
+\textbf{Required revision:} Provide a finite-difference validation of Eq.~(6) against
+the full gradient for at least one example. Alternatively, derive an analytical bound
+showing that the omitted term is negligible relative to the retained stiffness sensitivity
+across the relevant density range~$x_e\in[x_{\min},1]$.
+
+\subsection*{C2.\; Inconsistent Frozen-Eigenpair Reference Design}
+
+Three different reference designs are specified for the frozen eigenpair:
+\begin{itemize}[nosep]
+  \item Section~3.2: ``eigenvalue problem on the initial uniform-density field $x_e = V_f$
+    for all~$e$''.
+  \item Section~3.3: ``the first two eigenpairs of the initial solid domain''.
+  \item Section~4.3: ``the first two eigenvectors of the fully solid design domain''.
+\end{itemize}
+For the building example with $V_f=0.3$, the uniform-density design
+($x_e = 0.3$ everywhere) and the fully solid domain ($x_e = 1$) produce substantially
+different stiffness and mass matrices and different eigenpairs. The reference
+eigenfrequencies $\omega_1^{(0)} = 19.84$~rad/s and $\omega_2^{(0)} = 90.93$~rad/s are
+stated for the building (Section~4.3) but the density at which they were computed is not
+specified. The method is underspecified.
+
+\textbf{Required revision:} Define the reference design precisely (density value and
+equation) and apply it consistently across all sections and all examples. Report the
+reference eigenfrequency explicitly for each example alongside the density used.
+
+\subsection*{C3.\; Algorithm--Implementation Inconsistency and Contribution~(i)}
+
+Algorithm~3.5 (step~e) specifies an ``Optimality Criteria (OC) bisection update.''
+Sections~4.2 and~4.3 explicitly state that MMA is used with move limit~0.2. OC bisection
+and MMA are different algorithms with different software dependencies and per-iteration
+cost structures.
+
+The abstract and contribution~(i) claim the method ``integrates directly into a standard
+compliance minimization code without requiring an additional optimizer.'' MMA is a
+non-trivial mathematical programming solver that is not part of a standard compliance
+code. This claim holds only for the simply supported beam (OC); it does not hold for the
+multi-mode examples.
+
+\textbf{Required revision:} Either correct Algorithm~3.5 to reflect the actual optimizer
+used per example (OC for the single-mode case, MMA for multi-mode cases), or restrict
+contribution~(i) to the single-mode OC formulation and explicitly acknowledge that the
+multi-mode examples require MMA.
+
+\subsection*{C4.\; Non-Monotone Data in Table~3 Contradicts Contribution~(iii)}
+
+Contribution~(iii) states: ``MAC-based demonstration that load-weighted modal gains scale
+monotonically with the assigned mode weight.'' Section~4.2 (lines~599--608) asserts that
+the $\widetilde{\omega}_2/\omega_2^{(0)}$ gain ``increases monotonically as $\alpha$
+decreases.''
+
+Table~3 reports the following $\Phi_2$-tracked gains as $\alpha$ decreases from~1.0
+to~0.0:
+\[
+  1.99\times,\quad 1.73\times,\quad 2.05\times,\quad 2.25\times,\quad 2.45\times.
+\]
+The step from $\alpha=1.0$ to $\alpha=0.75$ is a \textbf{13\% decrease}
+($1.99\to1.73$), not an increase. This is confirmed by arithmetic from the
+tabulated frequencies: $629.1/362.8 = 1.73\times$ and $722.0/362.8 = 1.99\times$
+(with $\omega_2^{(0)}\approx362.8$~rad/s implied by back-calculation from all five
+table rows). The individual values in Table~3 are internally consistent; the monotone
+claim is incorrect.
+
+In addition to this arithmetic failure, even in cases where the MAC-tracked gain is
+monotone, the target mode frequently appears at positions~33, 46, 71, 81, or~91 in the
+final spectrum while lower modes remain below it. This demonstrates mode-shape-specific
+stiffening, not simultaneous maximization of the fundamental frequency spectrum.
+
+The building example (Table~5) does exhibit monotone $\Phi_1$ and $\Phi_2$ gain
+sequences, and monotone $\Phi_1$ gain is verified for the clamped beam.
+
+\textbf{Required revision:} Either (a)~correct the Table~3 data if a computation error
+occurred, or (b)~restrict contribution~(iii) to the cases where monotonicity holds and
+provide a physical explanation for the non-monotone step at $\alpha=0.75$ in the
+clamped-beam $\Phi_2$ sequence. In either case, reframe the multimode contribution as
+``MAC-tracked modal-gain stiffening'' rather than ``simultaneous multi-mode frequency
+maximization,'' and report the full eigenspectrum below the tracked target mode for
+representative $\alpha$ values.
+
+% ============================================================
+% MAJOR ISSUES
+% ============================================================
+
+\section{Major Issues}
+
+\subsection*{M1.\; Speedup Comparison Against a Modified Olhoff Implementation}
+
+Section~5.1 discloses that the authors' Olhoff implementation departs from
+Olhoff and~Du~(2014) in three material respects:
+(i)~a seven-level Heaviside projection continuation schedule,
+(ii)~a grayness penalty term in the MMA objective, and
+(iii)~a trial eigensolve after every MMA update, which doubles sparse Cholesky
+factorizations per outer iteration.
+These additions substantially inflate per-iteration cost relative to the canonical bound
+formulation. The abstract and conclusions state ``$7.1\times$ faster than the bound
+formulation'' without qualification.
+
+\textbf{Required revision:} Label the speedup explicitly as being over the \emph{authors'
+modified} Olhoff implementation, not over the canonical algorithm of Olhoff and
+Du~(2014). Provide an estimate of the speedup that would be achieved over the original
+formulation (without the extra trial eigensolve and projection chain), for example by an
+ablation run or by analytical estimation of the removed overhead.
+
+\subsection*{M2.\; Frequency Convergence with Mesh Refinement Not Reported}
+
+Table~1 provides timing, iteration count, and RAM for four mesh resolutions but does not
+report the achieved fundamental frequency~$\omega_1$ for each mesh and each method.
+Without frequency-vs-mesh data it is not possible to assess whether the proposed method
+converges to a mesh-independent frequency optimum.
+
+\textbf{Required revision:} Add the achieved $\omega_1$ for each method and each mesh
+resolution to Table~1 and discuss the convergence trend.
+
+\subsection*{M3.\; No Reference Comparison for Multi-Mode Examples}
+
+The clamped-beam and building examples (Sections~4.2--4.3) present no comparison against
+the Olhoff or Yuksel method. Frequency gains are reported only relative to the initial
+(unoptimized) solid domain, which is a trivial baseline.
+
+\textbf{Required revision:} Provide at least one reference comparison (Olhoff or Yuksel)
+for the clamped-beam or building example at a representative~$\alpha$ value, or justify
+why such a comparison is not feasible.
+
+\subsection*{M4.\; Missing Hardware Specification and Timing Variance}
+
+Table~1 timing data are stated as averaged over 10~independent runs, but no standard
+deviations are reported. CPU model, clock speed, RAM, operating system, MATLAB~2025b
+build number, and BLAS/thread configuration are absent.
+
+\textbf{Required revision:} Report standard deviations (or min/max) for Table~1 timing
+entries. Add a hardware and software specification table.
+
+\subsection*{M5.\; Emerged Low-Frequency Modes Not Characterized}
+
+At $\alpha=1.0$ in the clamped-beam example, topo-modes~1 and~2
+($\omega_1=275.28$~rad/s, $\omega_2=365.78$~rad/s from Table~2) exhibit negligible MAC
+correlation with any solid-domain mode (maximum MAC$<0.04$). The paper notes this but
+provides no mode-shape plots for these modes. Without the mode shapes it cannot be
+determined whether they are physically meaningful structural modes or artifacts.
+
+\textbf{Required revision:} Provide mode-shape plots for topo-modes~1 and~2 at
+$\alpha=1.0$ for the clamped-beam example and discuss their physical interpretation.
+
+\subsection*{M6.\; Discreteness Metrics Absent}
+
+The Olhoff implementation enforces grayness${}<0.05$ as a convergence criterion, but the
+proposed method applies no Heaviside projection and no grayness criterion. No
+grey-element fraction or equivalent discreteness metric is reported for any
+proposed-method topology.
+
+\textbf{Required revision:} Report a discreteness metric
+(e.g.,~$g = n_e^{-1}\sum_e 4x_e(1-x_e)$) for all proposed-method topologies in the
+figure captions or a supplementary table.
+
+\subsection*{M7.\; Spurious Low-Density Modes Claim Unsubstantiated}
+
+Section~3.1 states that the proposed method uses $d=p=3$ ``without inducing localized
+modes in the examples reported here.'' The Olhoff implementation uses $d=6$ for
+$x_e\leq0.1$ specifically to suppress spurious low-frequency modes
+(Du and Olhoff~2007). The assertion that $d=3$ is safe is not supported by any
+eigenspectrum evidence.
+
+\textbf{Required revision:} Provide evidence that spurious low-density modes do not arise
+(e.g.,~eigenspectrum inspection of converged topologies or minimum-frequency monitoring
+during optimization).
+
+\subsection*{M8.\; Introduction Gap Claim Inadequately Bounded Against Huang et~al.~(2025)}
+
+The introduction (lines~101--103) states that the multi-mode extension ``has not been
+systematically demonstrated.'' However, Huang et~al.~(2025), cited in Section~2.3,
+presents a MAC-constrained multi-mode topology optimization approach with mode-tracking
+constraints during iteration.
+
+\textbf{Required revision:} Revise the gap claim to acknowledge Huang et~al.~(2025) and
+explain specifically how the proposed scalar-weighted inertial load differs from their
+MAC-constrained, within-iteration multi-mode framework.
+
+% ============================================================
+% EQUATION AND MATHEMATICAL REVIEW
+% ============================================================
+
+\section{Mathematical and Equation Review}
+
+\begin{enumerate}[label=\textbf{E\arabic*.},nosep]
+
+\item \textbf{Eq.~(6) gradient omission.} As stated under C1, the omitted term
+  $(\omega_1^{(0)})^2 d\, x_e^{d-1} \mathbf{m}_e^0 \boldsymbol{\Phi}_1$ is
+  $O((\omega_1^{(0)})^2 d\, x_e^{d-1})$, which need not be small relative to
+  the retained stiffness sensitivity at intermediate densities. No bound is given.
+
+\item \textbf{Eq.~(7) load-scale asymmetry.}
+  The combined load $f_\alpha = \alpha(\omega_1^{(0)})^2\mathbf{M}\boldsymbol{\Phi}_1
+  + (1-\alpha)(\omega_2^{(0)})^2\mathbf{M}\boldsymbol{\Phi}_2$ scales the two
+  contributions by $(\omega_j^{(0)})^2$. For the clamped beam, the ratio
+  $(\omega_2^{(0)}/\omega_1^{(0)})^2\approx6.2$, so $\alpha=0.5$ is not mechanically
+  symmetric between the two modes. This scaling choice is not discussed.
+
+\item \textbf{Eq.~(9) MAC formula.} The formula uses Euclidean inner products rather
+  than mass-weighted inner products. Comparing eigenvectors from different density
+  fields (initial solid vs.\ final topology) with Euclidean MAC is non-standard; the
+  mass-weighted version is more physically meaningful. The choice should be stated.
+
+\item \textbf{Algorithm~3.5, step~2.} The parameter $n_\text{modes}$ is not defined.
+  Specify $n_\text{modes}=1$ for the simply supported beam and $n_\text{modes}=2$ for
+  the multi-mode examples.
+
+\item \textbf{Dimensional consistency.} Eq.~(5) through Eq.~(7): units of
+  $f(\mathbf{x})$ are (rad/s)$^2 \times$ kg/m $\times$ (dimensionless) = N/m (2D
+  unit-thickness). Consistent with compliance $c = \mathbf{u}^\top\mathbf{K}\mathbf{u}$
+  having units N$\cdot$m. Verified~\checkmark.
+
+\end{enumerate}
+
+% ============================================================
+% REPRODUCIBILITY
+% ============================================================
+
+\section{Reproducibility Concerns}
+
+\begin{enumerate}[label=\textbf{R\arabic*.},nosep]
+
+\item \textbf{Hardware and software.} CPU model, clock speed, RAM, OS version,
+  MATLAB 2025b patch level, required toolboxes, and BLAS thread count are absent.
+
+\item \textbf{Timing variance.} Ten runs averaged in Table~1; no standard deviations
+  or source of variance stated. For OC bisection with fixed parameters the algorithm
+  is deterministic; the measurement methodology should be described.
+
+\item \textbf{Repository.} No release tag or commit hash cited. No license stated.
+  No per-table or per-figure script mapping. Required MATLAB toolboxes not listed.
+
+\item \textbf{Convergence tolerance inconsistency.} $\varepsilon_\mathrm{tol}=10^{-3}$
+  for simply supported beam (Algorithm~3.5); $\varepsilon_\mathrm{tol}=2\times10^{-3}$
+  for the building example (Section~4.3). Justify the difference or use a uniform
+  tolerance.
+
+\item \textbf{Void pseudo-material inconsistency.} $\rho_\mathrm{min}=10^{-9}\rho_0$
+  for the simply supported beam (Section~4.1); $\rho_\mathrm{min}=10^{-6}\rho_0$ for
+  the clamped beam and building (Sections~4.2--4.3). The $1000\times$ difference is
+  not discussed.
+
+\end{enumerate}
+
+% ============================================================
+% REQUIRED REVISIONS
+% ============================================================
+
+\section{Required Revisions Summary}
+
+\begin{enumerate}[label=\textbf{\arabic*.},nosep]
+  \item Provide finite-difference gradient validation for Eq.~(6) or an analytical
+    error bound on the omitted load-sensitivity term.
+  \item Unify the frozen-eigenpair reference design to one precisely stated density
+    and apply consistently across all sections and examples.
+  \item Reconcile Algorithm~3.5 and Sections~4.2--4.3 regarding the update rule
+    (OC vs.\ MMA) and revise contribution~(i) accordingly.
+  \item Correct the Table~3 $\Phi_2$-gain monotone claim or correct the data; provide
+    an explanation for the non-monotone step at $\alpha=0.75$.
+  \item Reframe contribution~(iii) and the multi-mode results as MAC-tracked
+    shape-stiffening; report the full eigenspectrum below the tracked target mode.
+  \item Label the speedup as being over the \emph{authors' modified} Olhoff
+    implementation; estimate or bound the speedup over the canonical algorithm.
+  \item Add the achieved $\omega_1$ for each mesh resolution to Table~1 (frequency
+    vs.\ mesh convergence).
+  \item Add at least one reference comparison for the clamped-beam or building example.
+  \item Add hardware specification and timing standard deviations.
+  \item Provide mode-shape plots for topo-modes~1 and~2 at $\alpha=1.0$
+    (clamped-beam example).
+  \item Report a discreteness metric for all proposed-method topologies.
+  \item Demonstrate absence of spurious low-density modes for $d=p=3$.
+  \item Revise the introduction gap claim regarding Huang et~al.~(2025).
+\end{enumerate}
+
+% ============================================================
+% MINOR COMMENTS
+% ============================================================
+
+\section{Minor Comments}
+
+\begin{enumerate}[label=\textbf{m\arabic*.},nosep]
+  \item Section~4.1 refers to ``Figs.~5--7'' for the simply supported beam topologies;
+    these are Figs.~1--3. Correct the reference.
+  \item SIMP interpolation (Eq.~1) lacks its canonical citation
+    (Bends{\o}e and Sigmund~1999 or equivalent). Add at first use.
+  \item The Heaviside projection filter used in the Olhoff implementation
+    (Section~5.1) lacks a citation (Wang et~al.~2011 or equivalent).
+  \item Rayleigh's principle is invoked as a theoretical foundation without a canonical
+    structural dynamics reference (e.g.,~Courant and Hilbert~1953).
+  \item Report the clamped-beam solid-domain reference eigenfrequencies
+    $\omega_1^{(0)}\approx145.4$~rad/s and $\omega_2^{(0)}\approx362.8$~rad/s directly
+    (currently back-calculable from Table~3 but not stated).
+  \item Define $n_\mathrm{modes}$ explicitly in Algorithm~3.5.
+  \item The Yuksel and Yilmaz~(2025) reference is published in
+    \textit{Engineering Computations}; confirm the citation details against the journal
+    record.
+  \item The Li et~al.~(2021) reference lacks a DOI; add for consistency.
+  \item Clarify the non-standard use of ``quasi-static'' (standardly: low-rate dynamic
+    limit; here: static compliance under frozen inertial load) to avoid
+    misinterpretation.
+\end{enumerate}
+
+% ============================================================
+% META-REVIEW NOTE
+% ============================================================
+
+\section*{Cross-Review Note}
+
+This report synthesizes independent reviews from two AI review pipelines (GPT and Claude).
+All critical and major findings are supported by direct evidence from the manuscript
+(equation numbers, section numbers, or table entries).
+The arithmetic in Sections~4.1, 4.3 (speedups, frequency gap, building gains) was
+independently verified and found correct. The non-monotone $\Phi_2$-gain sequence in
+Table~3 was confirmed arithmetically from the tabulated frequencies.
+No hallucinated claims were identified in either review branch.
+Discarded signals: absence of scale bars (not standard in topology optimization); RAMP
+citation (RAMP not used in this paper).
+
+% ============================================================
+% CONSENSUS GAPS
+% ============================================================
+
+\section*{Known Coverage Gaps}
+
+The following issues were identified as partially outside the scope of automated review
+and should receive domain-expert attention during revision assessment:
+
+\begin{enumerate}[label=\textbf{G\arabic*.},nosep]
+  \item \textbf{Initialization eigensolve timing.} The wall time of the single
+    initialization eigensolve (step~2 of Algorithm~3.5) is not reported separately
+    from the per-iteration compliance solve. For design scenarios with repeated
+    re-solves from the same initial domain, this cost should be disclosed.
+  \item \textbf{Frozen eigenvector accuracy near mode coalescence.} For the simply
+    supported beam benchmark the Olhoff optimum is bimodal ($\omega_1$ and~$\omega_2$
+    coalesce). The behavior of the frozen-eigenvector approximation as the two
+    frequencies approach each other during optimization is unanalyzed. This is
+    particularly relevant because the frozen mode from the initial uniform design may
+    become increasingly inaccurate as the topology approaches the bimodal state.
+\end{enumerate}
+
+\end{document}

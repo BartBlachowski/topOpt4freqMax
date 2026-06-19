@@ -1,7 +1,7 @@
-function [x, omega, tIter, nIter, mem_usage] = run_topopt_from_json(jsonInput)
+function [x, omega, tIter, nIter, mem_usage, diagnostics] = run_topopt_from_json(jsonInput)
 %RUN_TOPOPT_FROM_JSON Run selected topology-optimization approach from JSON task file.
 %
-%   [x, omega, tIter, nIter, mem_usage] = run_topopt_from_json(jsonInput)
+%   [x, omega, tIter, nIter, mem_usage, diagnostics] = run_topopt_from_json(jsonInput)
 %
 % Inputs:
 %   jsonInput : either path to JSON task file, or a decoded JSON struct.
@@ -12,6 +12,7 @@ function [x, omega, tIter, nIter, mem_usage] = run_topopt_from_json(jsonInput)
 %   tIter     : average time per optimization iteration [s]
 %   nIter     : number of optimization iterations executed
 %   mem_usage : peak additional memory used during this call [MB]
+%   diagnostics : solver diagnostics (optional; ourApproach only)
 
     ensureCompatHelpersOnPath();
 
@@ -112,6 +113,25 @@ function [x, omega, tIter, nIter, mem_usage] = run_topopt_from_json(jsonInput)
     if hasSemiHarmonicRhoSource
         semiHarmonicRhoSource = char(string(getFieldPath(cfg, {'optimization','semi_harmonic_rho_source'})));
     end
+    loadSensitivityMode = 'omitted';
+    if hasFieldPath(cfg, {'optimization','load_sensitivity'})
+        loadSensitivityMode = lower(strtrim(reqStr(cfg, ...
+            {'optimization','load_sensitivity'}, 'optimization.load_sensitivity')));
+        if ~any(strcmp(loadSensitivityMode, {'omitted', 'complete'}))
+            error('run_topopt_from_json:InvalidLoadSensitivity', ...
+                'optimization.load_sensitivity must be "omitted" or "complete".');
+        end
+    end
+    gateA0Diagnostics = false;
+    if hasFieldPath(cfg, {'optimization','gate_a0_diagnostics'})
+        gateA0Diagnostics = parseBool( ...
+            getFieldPath(cfg, {'optimization','gate_a0_diagnostics'}), ...
+            'optimization.gate_a0_diagnostics');
+    end
+    if gateA0Diagnostics && hasSemiHarmonicRhoSource
+        error('run_topopt_from_json:GateA0ObsoleteRhoSource', ...
+            'Gate A0 fixture must not define optimization.semi_harmonic_rho_source.');
+    end
 
     % Radius conversion requested by task description.
     dx = L / nelx;
@@ -162,6 +182,7 @@ function [x, omega, tIter, nIter, mem_usage] = run_topopt_from_json(jsonInput)
     tIter = NaN;
     nIter = NaN;
     mem_usage = 0;
+    diagnostics = struct();
     Emin = E0 * EminRatio;
     freqIterOmega = [];
 
@@ -396,6 +417,8 @@ function [x, omega, tIter, nIter, mem_usage] = run_topopt_from_json(jsonInput)
             runCfg.extraFixedDofs = extraFixedDofs;
             runCfg.pasS = pasS;
             runCfg.pasV = pasV;
+            runCfg.load_sensitivity = loadSensitivityMode;
+            runCfg.gate_a0_diagnostics = gateA0Diagnostics;
             if hasFieldPath(cfg, {'optimization','harmonic_normalize'})
                 runCfg.harmonic_normalize = parseBool( ...
                     getFieldPath(cfg, {'optimization','harmonic_normalize'}), ...
@@ -411,11 +434,6 @@ function [x, omega, tIter, nIter, mem_usage] = run_topopt_from_json(jsonInput)
                 runCfg.harmonic_baseline = char(string( ...
                     getFieldPath(cfg, {'optimization','harmonic_baseline'})));
             end
-            if hasFieldPath(cfg, {'optimization','semi_harmonic_load_sensitivity'})
-                runCfg.semi_harmonic_load_sensitivity = parseBool( ...
-                    getFieldPath(cfg, {'optimization','semi_harmonic_load_sensitivity'}), ...
-                    'optimization.semi_harmonic_load_sensitivity');
-            end
             if hasSemiHarmonicRhoSource
                 runCfg.semi_harmonic_rho_source = semiHarmonicRhoSource;
             end
@@ -424,9 +442,10 @@ function [x, omega, tIter, nIter, mem_usage] = run_topopt_from_json(jsonInput)
             end
             runCfg.optimizer = optimizerType;
 
-            if postproc.saveFrequencyIterations
+            if postproc.saveFrequencyIterations || nargout >= 6 || gateA0Diagnostics
                 [xOut, fOut, tOut, itOut, infoOur] = topopt_freq( ...
                     nelx, nely, volfrac, penal, rmin_phys, ft, L, H, runCfg);
+                diagnostics = infoOur;
                 if isstruct(infoOur) && isfield(infoOur, 'freq_iter_omega')
                     freqIterOmega = infoOur.freq_iter_omega;
                 end

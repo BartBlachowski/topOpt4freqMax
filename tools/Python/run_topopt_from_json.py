@@ -385,7 +385,11 @@ def _save_elastic2d_image(
         print(f"Warning: failed to save topology image ({exc}).")
 
 
-def run_topopt_from_json(json_input: str | dict) -> tuple[np.ndarray, np.ndarray, float, int]:
+def run_topopt_from_json(
+    json_input: str | dict,
+    *,
+    return_diagnostics: bool = False,
+) -> tuple[np.ndarray, np.ndarray, float, int] | tuple[np.ndarray, np.ndarray, float, int, dict]:
     """Run topology optimization from a JSON config.
 
     Dispatches to the appropriate solver based on ``optimization.approach``.
@@ -505,9 +509,20 @@ def run_topopt_from_json(json_input: str | dict) -> tuple[np.ndarray, np.ndarray
     if has_field_path(cfg, ["optimization", "semi_harmonic_baseline"]):
         semi_baseline = str(get_field_path(cfg, ["optimization", "semi_harmonic_baseline"])).lower()
 
-    semi_rho_src = "x"
-    if has_field_path(cfg, ["optimization", "semi_harmonic_rho_source"]):
-        semi_rho_src = str(get_field_path(cfg, ["optimization", "semi_harmonic_rho_source"])).lower()
+    load_sensitivity_mode = str(
+        cfg.get("optimization", {}).get("load_sensitivity", "omitted")
+    ).lower().strip()
+    if load_sensitivity_mode not in {"omitted", "complete"}:
+        raise ValueError('optimization.load_sensitivity must be "omitted" or "complete".')
+
+    gate_a0_diagnostics = False
+    if has_field_path(cfg, ["optimization", "gate_a0_diagnostics"]):
+        gate_a0_diagnostics = parse_bool(
+            get_field_path(cfg, ["optimization", "gate_a0_diagnostics"]),
+            "optimization.gate_a0_diagnostics",
+        )
+    if gate_a0_diagnostics and has_field_path(cfg, ["optimization", "semi_harmonic_rho_source"]):
+        raise ValueError("Gate A0 fixture must not define optimization.semi_harmonic_rho_source.")
 
     visualize_live = True
     if has_field_path(cfg, ["postprocessing", "visualize_live"]):
@@ -539,7 +554,8 @@ def run_topopt_from_json(json_input: str | dict) -> tuple[np.ndarray, np.ndarray
         "pas_v": pas_v,
         "harmonic_normalize": harmonic_normalize,
         "semi_harmonic_baseline": semi_baseline,
-        "semi_harmonic_rho_source": semi_rho_src,
+        "load_sensitivity": load_sensitivity_mode,
+        "gate_a0_diagnostics": gate_a0_diagnostics,
         "visualize_live": visualize_live,
         "save_frq_iterations": save_frq_iter,
         "use_heaviside": use_heaviside,
@@ -570,6 +586,8 @@ def run_topopt_from_json(json_input: str | dict) -> tuple[np.ndarray, np.ndarray
     omega = np.full(3, np.nan, dtype=float)
     valid = np.isfinite(f_hz)
     omega[valid] = 2.0 * np.pi * f_hz[valid]
+    if return_diagnostics:
+        return x_out, omega, t_iter, n_iter, info
     return x_out, omega, t_iter, n_iter
 
 

@@ -1,0 +1,756 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{geometry}
+\usepackage{hyperref}
+\usepackage{microtype}
+\usepackage{parskip}
+
+\geometry{margin=2.5cm}
+
+\title{\textbf{Peer Review Report}\\[0.4em]
+\large Frequency maximization of planar structures using quasi-static\\
+approximation in topology optimization}
+\author{Multi-model consensus review (GPT + Claude Sonnet)\\
+\small Generated: 2026-05-22}
+\date{}
+
+\begin{document}
+
+\maketitle
+\thispagestyle{empty}
+
+\hrule
+\vspace{0.5em}
+\noindent\textbf{Manuscript:} Frequency maximization of planar structures using
+quasi-static approximation in topology optimization\\
+\noindent\textbf{Authors:} P.\ Tauzowski, A.\ Szczepańczyk, B.\ Błachowski\\
+\noindent\textbf{Review type:} Multi-model consensus (GPT + Claude Sonnet, independent pipelines)\\
+\noindent\textbf{Review confidence:} HIGH (both models agree; no conflicting signals)
+\vspace{0.5em}
+\hrule
+
+%-----------------------------------------------------------------------
+\section*{Recommendation}
+%-----------------------------------------------------------------------
+
+\textbf{MAJOR REVISION}
+
+The manuscript presents a genuine and useful computational contribution ---
+a quasi-static approximation that reduces frequency-maximization topology
+optimization to a standard compliance code after a single initial
+eigensolve. The core algorithmic idea is coherent and the reported
+computational savings at large mesh sizes are real. However, several
+issues must be resolved before the paper is suitable for publication:
+a data inconsistency in Table~3 directly contradicts a stated principal
+contribution; the central approximation is not analytically or
+numerically validated; and the benchmark comparison involves a
+non-canonical comparator implementation that is not consistently
+disclosed.
+
+%-----------------------------------------------------------------------
+\section{Conceptual and Theoretical Issues}
+%-----------------------------------------------------------------------
+
+\begin{enumerate}[leftmargin=*, label=\textbf{C\arabic*.}]
+
+\item \textbf{Omitted load sensitivity --- central approximation unvalidated.}
+Equation~(5) defines the inertial load $f(\mathbf{x}) =
+\omega_1^{(0)2}\mathbf{M}(\mathbf{x})\boldsymbol{\Phi}_1$, which depends on
+element densities through the evolving mass matrix $\mathbf{M}(\mathbf{x})$.
+Equation~(6) drops the corresponding load-sensitivity term
+$\partial f / \partial x_e = \omega_1^{(0)2}(\partial \mathbf{M}/\partial x_e)
+\boldsymbol{\Phi}_1$ from the compliance gradient.
+This omission is the defining simplification of the method, but it is
+not quantitatively justified. The citation of Munro~(2024) in
+Section~3.2 concerns the self-weight OC update, not the frozen-mode
+sensitivity approximation, and does not establish the validity of this
+specific approximation for the problem class studied.
+A numerical ablation comparing Eq.~(6) against the full
+design-dependent-load derivative, or against a periodically
+updated-mode variant, is required on at least one benchmark.
+
+\item \textbf{Multi-mode sensitivity derivation has no theoretical support.}
+Section~3.3 combines two inertial loads via a scalar weight
+$\alpha \in [0,1]$ (Eq.~7) and uses the same stiffness-only
+sensitivity (Eq.~6) for the combined load, omitting load-sensitivity
+contributions from both eigenvectors simultaneously.
+No argument is provided for why omitting both terms jointly preserves a
+useful descent direction for either targeted eigenfrequency, or for what
+range of $\alpha$ the joint omission remains acceptable.
+
+\item \textbf{Monotone gain scaling --- stated as principal contribution,
+contradicted by Table~3.}
+The abstract, Section~4.2, and the conclusions state that
+``load-weighted modal gains scale monotonically with the assigned load
+weight'' (bidirectional). For the $\widetilde{\omega}_2/\omega_2^{(0)}$
+tracked-gain sequence in Table~3 (clamped beam), the values as
+$\alpha$ decreases from 1.0 to 0 are: $1.99\times$, $1.73\times$,
+$2.05\times$, $2.25\times$, $2.45\times$. The gain at $\alpha=0.75$
+$(1.73\times)$ is lower than at $\alpha=1.0$ $(1.99\times)$, which
+contradicts strict monotone decrease with decreasing $\alpha$.
+Note: the building-example $\Phi_2$ gain sequence in Table~5 is
+monotone. The failure is specific to the clamped-beam case at
+$\alpha=0.75$. The claim must be verified and corrected, or qualified.
+
+\item \textbf{Frozen-mode reliability not demonstrated.}
+The conclusions acknowledge an ``accuracy ceiling'' from the frozen
+initial mode shape, but the paper does not demonstrate conditions under
+which the approximation fails. A reliability diagnostic --- for example,
+a benchmark where the initial and optimized mode shapes differ
+substantially, a MAC-based threshold analysis, or a comparison against
+a periodically updated-mode variant --- is needed to bound the practical
+scope of the method.
+
+\end{enumerate}
+
+%-----------------------------------------------------------------------
+\section{Algorithmic and Numerical Methodology Concerns}
+%-----------------------------------------------------------------------
+
+\begin{enumerate}[leftmargin=*, label=\textbf{A\arabic*.}]
+
+\item \textbf{The Olhoff comparator is a non-canonical in-house implementation.}
+Section~5.1 identifies three modifications to the original Du--Olhoff
+(2007)/Olhoff--Du (2014) procedure: (a)~a Heaviside projection with
+seven-level continuation and a grayness penalty; (b)~the inner MMA
+convergence loop collapsed to a single call per outer iteration; and
+(c)~a trial eigensolve rejection step that ``effectively doubles the
+number of eigensolves per outer iteration.'' These deviations
+collectively increase the comparator's runtime relative to the
+canonical formulation. The 7.1$\times$ speedup and 8.6\% frequency gap
+must be presented as comparisons against this specific in-house variant.
+A compact table listing what each implementation (original Olhoff--Du,
+in-house comparator, Yuksel--Yilmaz, proposed method) includes or
+excludes would clarify the comparison.
+
+\item \textbf{Inconsistent optimizer within the proposed method.}
+Algorithm~3.5 and Section~3.4 describe an OC bisection update.
+Sections~4.2 and~4.3 state that the MMA optimizer with move limit~0.2
+is used. The proposed method therefore uses different optimizers across
+its own benchmark cases, without discussion of whether this affects
+iteration counts, convergence speed, or frequency results.
+
+\item \textbf{Number of initialization modes unspecified.}
+Step~2 of Algorithm~3.5 reads ``Solve eigenvalue problem
+$\mathbf{K}_0\boldsymbol{\Phi}_j = \lambda_j\mathbf{M}_0\boldsymbol{\Phi}_j$,
+$j=1,\ldots,n_\mathrm{modes}$'' but $n_\mathrm{modes}$ is never stated
+as a parameter. Its value must be specified for each benchmark.
+
+\item \textbf{Inconsistent void pseudo-material parameters.}
+Section~4.1 (simply supported beam) uses $E_\mathrm{min}=10^{-9}E_0$;
+Section~4.2 (clamped beam) uses $E_\mathrm{min}=10^{-6}E_0$. The
+basis for this difference is not explained.
+
+\end{enumerate}
+
+%-----------------------------------------------------------------------
+\section{Validation and Benchmarking Weaknesses}
+%-----------------------------------------------------------------------
+
+\begin{enumerate}[leftmargin=*, label=\textbf{V\arabic*.}]
+
+\item \textbf{Table~1 lacks statistical uncertainty.}
+Runtime and memory values are labeled ``averaged over 10 independent
+runs'' without standard deviations. At the $160\times20$ mesh, the
+proposed method (5.1~s) is marginally slower than the Yuksel code
+(4.7~s). Without variance information, this difference and others in
+Table~1 cannot be interpreted statistically. Standard deviations (or
+at minimum, ranges) must be reported; the source of run-to-run
+variability in a deterministic MATLAB code should be explained.
+
+\item \textbf{No eigenfrequency values across mesh resolutions.}
+Table~1 reports runtime and iterations at four mesh sizes but does not
+include the achieved $\omega_1$ for any method at any resolution.
+The 8.6\% frequency gap is stated only for the $400\times50$ case.
+A column for $\omega_1$ at each mesh size should be added so that the
+mesh-dependence of the frequency gap can be assessed.
+
+\item \textbf{No mesh independence for multi-mode benchmarks.}
+The clamped-beam ($400\times50$) and building ($80\times240$) examples
+are each tested at a single mesh. MAC-tracked gains, mode-ordering
+shifts, and the $\alpha$-behavior conclusions should be verified at
+at least one additional discretization.
+
+\item \textbf{Low MAC$_2$ values in Table~5 not acknowledged.}
+Table~5 reports $\mathrm{MAC}_2=0.520$ at $\alpha=0.25$ and
+$\mathrm{MAC}_2=0.635$ at $\alpha=0.5$ for the building example.
+These values indicate that the mode identified as best matching
+$\boldsymbol{\Phi}_2$ shares only about 27\% and 40\% of its modal
+energy with the reference, respectively. The frequency gains reported
+for these configurations (3.32$\times$ and 3.09$\times$) are based on
+poorly correlated modes. The authors should define a MAC validity
+threshold and qualify or exclude gain figures below it.
+
+\item \textbf{Initial clamped-beam eigenfrequencies not stated.}
+Section~4.3 explicitly states $\omega_1^{(0)}=19.84$~rad/s and
+$\omega_2^{(0)}=90.93$~rad/s for the building domain. The analogous
+values for the clamped-beam domain are absent from Section~4.2.
+Table~3 gain factors cannot be independently verified without them.
+
+\item \textbf{Headline claims must be scoped.}
+\begin{itemize}
+  \item ``within 8.6\% of the bound-formulation optimum'' should be
+    qualified to the simply supported beam benchmark at $400\times50$.
+  \item ``completing the optimization 7.1$\times$ faster'' is specific to
+    $400\times50$; at $160\times20$ the proposed method is marginally
+    slower than the Yuksel code.
+  \item ``reaching up to 4.61$\times$ over the initial solid-domain
+    frequency'' refers to the MAC-tracked $\Phi_1$-type gain, not the
+    conventional sorted first eigenfrequency. This distinction should
+    appear in the abstract.
+\end{itemize}
+
+\end{enumerate}
+
+%-----------------------------------------------------------------------
+\section{Mathematical Notation and Rigor}
+%-----------------------------------------------------------------------
+
+\begin{enumerate}[leftmargin=*, label=\textbf{M\arabic*.}]
+
+\item \textbf{Eigenvector notation inconsistency.}
+The manuscript uses uppercase $\boldsymbol{\Phi}$ (Eqs.~5, 7,
+Section~3.6) and lowercase $\boldsymbol{\phi}$ (Eqs.~2, 3, MAC
+definition Eq.~9) for eigenvectors without a stated convention.
+Equation~(9) uses both $\boldsymbol{\phi}_i$ and $\boldsymbol{\Phi}_j$
+in the same expression, suggesting an intentional distinction (current
+vs.\ reference eigenvector), but this is never defined. A convention
+should be stated at first use and applied consistently.
+
+\item \textbf{Sensitivity filter notation (Eq.~8).}
+The filtered sensitivity symbol is introduced without a formal
+definition. The denominator summation domain ($\sum H_{ei}$) should
+state explicitly that the sum runs over the neighborhood $N_e$ of
+element~$e$.
+
+\item \textbf{Cross-table discrepancy at $\alpha=1.0$ (clamped beam).}
+Table~2 gives $\omega_2=365.78$~rad/s; Table~3 gives the
+$\Phi_1$-tracked mode (MAC$=0.995$) at topo-mode~3 with
+$\widetilde{\omega}_1=368.2$~rad/s. The 2.4~rad/s difference
+($\approx0.7\%$) between these quantities should be explained
+(rounding, independent runs, or precision issue).
+
+\item \textbf{Scaling claim not supported by reported data.}
+Section~5.2 states ``both methods exhibit an empirical per-iteration
+scaling of roughly $\mathcal{O}(n_e^{1.3})$.'' The per-iteration times
+in Table~1 are consistent with exponents of approximately 1.06 (Olhoff)
+and 0.8 (Yuksel) over the four reported mesh sizes, substantially
+below~1.3. The claim should be supported with a log-log scaling figure
+or the specific exponent values should be corrected.
+
+\end{enumerate}
+
+%-----------------------------------------------------------------------
+\section{Reproducibility and Transparency}
+%-----------------------------------------------------------------------
+
+\begin{enumerate}[leftmargin=*, label=\textbf{R\arabic*.}]
+
+\item \textbf{No versioned code archive.}
+The GitHub URL is provided without a commit hash or archived release
+DOI. Repository contents may change after publication. An immutable
+archive (e.g., Zenodo DOI or GitHub release tag) should be provided.
+
+\item \textbf{Hardware and environment not specified.}
+CPU model, clock speed, RAM, operating system, MATLAB version, and
+thread count are absent. These are necessary to assess the reported
+timing figures.
+
+\item \textbf{No script-to-figure mapping.}
+The manuscript does not specify which script or configuration file
+reproduces each figure or table entry.
+
+\item \textbf{``No eigensolve machinery'' is inaccurate.}
+The abstract states the method requires ``only a single eigensolve at
+initialization.'' Algorithm~3.5 Step~5 performs an additional eigensolve
+at convergence. The correct description is ``no eigensolve \emph{inside}
+the optimization loop.''
+
+\end{enumerate}
+
+%-----------------------------------------------------------------------
+\section{Required Revisions}
+%-----------------------------------------------------------------------
+
+\subsection*{Critical (must be resolved before reconsideration)}
+
+\begin{enumerate}[leftmargin=*, label=\textbf{CR\arabic*.}]
+
+\item Verify and correct Table~3 $\Phi_2$-tracked gain data ($\alpha=0.75$
+  entry shows $1.73\times$, which is below the $\alpha=1.0$ entry of
+  $1.99\times$). Provide diagnostic output (iteration history, MAC
+  evolution) for the $\alpha=0.75$ clamped-beam case. Revise or qualify
+  all monotonicity claims in the abstract, contribution list,
+  Section~4.2, and conclusions to match the corrected or explained data.
+
+\item Add a quantitative validation of the omitted load sensitivity
+  (Eq.~6): compare the approximate gradient against the full
+  design-dependent-load derivative, or against a periodically
+  updated-mode variant, on at least one benchmark.
+
+\item Relabel the Olhoff comparator as an in-house Olhoff-inspired
+  implementation throughout the manuscript; provide a comparison table
+  showing what each method includes or excludes; state quantitatively
+  how the three deviations (Section~5.1) contribute to the reported
+  speedup and frequency gap.
+
+\end{enumerate}
+
+\subsection*{Major (must be addressed)}
+
+\begin{enumerate}[leftmargin=*, label=\textbf{MR\arabic*.}]
+
+\item Add standard deviations to all runtime and memory entries in
+  Table~1; explain the source of variability across the 10~runs; specify
+  CPU, RAM, OS, MATLAB version, and thread count.
+
+\item Add eigenfrequency ($\omega_1$) values for all three methods at all
+  four mesh resolutions in Table~1 or a supplementary table.
+
+\item State initial clamped-beam eigenfrequencies $\omega_1^{(0)}$ and
+  $\omega_2^{(0)}$ in Section~4.2.
+
+\item Define and apply a MAC validity threshold; qualify or exclude frequency
+  gains for configurations below the threshold (particularly
+  $\alpha=0.25$ and $\alpha=0.5$ in Table~5).
+
+\item Provide a mesh convergence study (minimum two mesh sizes) for the
+  clamped-beam or building multi-mode benchmarks.
+
+\item Provide a frozen-mode reliability diagnostic: at minimum, one
+  benchmark or analysis characterizing when the initial mode shape is
+  a poor proxy for the optimal mode shape, or demonstrating that the
+  three tested problem classes lie within the reliable regime.
+
+\item Scope all headline quantitative claims to the specific benchmark,
+  mesh, and metric to which they apply.
+
+\end{enumerate}
+
+\subsection*{Minor (should be corrected)}
+
+\begin{enumerate}[leftmargin=*, label=\textbf{mn\arabic*.}]
+
+\item Correct figure references in Section~4.1 (``Figs.~5--7'' should
+  be ``Figs.~1--3'').
+\item Define the eigenvector notation convention ($\boldsymbol{\Phi}$
+  vs.\ $\boldsymbol{\phi}$) at first use and apply consistently.
+\item Complete the Olhoff--Du (2014) reference (publisher location listed
+  as ``???'').
+\item Archive the code at a permanent DOI and report the commit hash.
+\item Specify hardware and MATLAB configuration in Section~5 or a
+  reproducibility statement.
+\item Provide a script-to-figure mapping in the repository README.
+\item Address the OC-vs-MMA optimizer switch: state which optimizer is
+  used for the proposed method in each benchmark and justify the choice.
+\item Correct or support the $\mathcal{O}(n_e^{1.3})$ scaling claim
+  (Section~5.2) with a log-log plot or revised exponent values.
+\item Justify or unify the void pseudo-material parameter differences
+  ($E_\mathrm{min}=10^{-9}E_0$ vs.\ $10^{-6}E_0$) across benchmarks.
+\item Correct the inaccurate ``no eigensolve machinery'' claim to
+  ``no eigensolve inside the optimization loop.''
+\item Clarify the 2.4~rad/s discrepancy between Tables~2 and~3 at
+  $\alpha=1.0$ (clamped beam, $\omega_2=365.78$ vs.\
+  $\widetilde{\omega}_1=368.2$~rad/s).
+
+\end{enumerate}
+
+%-----------------------------------------------------------------------
+\section*{Cross-Review Note}
+%-----------------------------------------------------------------------
+
+This report is based on an independent dual-model review (GPT and Claude
+Sonnet), with both models reaching MAJOR REVISION with HIGH confidence.
+The decision and trusted issue list are derived from the consensus of
+both models; issues raised by only one model are retained where they
+are supported by manuscript-visible evidence and are marked accordingly
+in the editorial record. No hallucinated or invalid reviewer comments
+were identified in either model's pipeline. The consensus weighted score
+is approximately 2.80 on a 1--5 scale; the MAJOR REVISION recommendation
+reflects an editorial override based on the correctable nature of the
+critical issues.
+
+\end{document}
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{geometry}
+\usepackage{hyperref}
+\usepackage{microtype}
+\usepackage{parskip}
+
+\geometry{margin=2.5cm}
+
+\title{\textbf{Peer Review Report}\\[0.4em]
+\large Frequency maximization of planar structures using quasi-static\\
+approximation in topology optimization}
+\author{Multi-model consensus review (GPT + Claude Sonnet)\\
+\small Generated: 2026-05-22}
+\date{}
+
+\begin{document}
+
+\maketitle
+\thispagestyle{empty}
+
+\hrule
+\vspace{0.5em}
+\noindent\textbf{Manuscript:} Frequency maximization of planar structures using
+quasi-static approximation in topology optimization\\
+\noindent\textbf{Authors:} P.\ Tauzowski, A.\ Szczepańczyk, B.\ Błachowski\\
+\noindent\textbf{Review type:} Multi-model consensus (GPT + Claude Sonnet, independent pipelines)\\
+\noindent\textbf{Review confidence:} HIGH (both models agree; no conflicting signals)
+\vspace{0.5em}
+\hrule
+
+%-----------------------------------------------------------------------
+\section*{Recommendation}
+%-----------------------------------------------------------------------
+
+\textbf{MAJOR REVISION}
+
+The manuscript presents a genuine and useful computational contribution ---
+a quasi-static approximation that reduces frequency-maximization topology
+optimization to a standard compliance code after a single initial
+eigensolve. The core algorithmic idea is coherent and the reported
+computational savings at large mesh sizes are real. However, several
+issues must be resolved before the paper is suitable for publication:
+a data inconsistency in Table~3 directly contradicts a stated principal
+contribution; the central approximation is not analytically or
+numerically validated; and the benchmark comparison involves a
+non-canonical comparator implementation that is not consistently
+disclosed.
+
+%-----------------------------------------------------------------------
+\section{Conceptual and Theoretical Issues}
+%-----------------------------------------------------------------------
+
+\begin{enumerate}[leftmargin=*, label=\textbf{C\arabic*.}]
+
+\item \textbf{Omitted load sensitivity --- central approximation unvalidated.}
+Equation~(5) defines the inertial load $f(\mathbf{x}) =
+\omega_1^{(0)2}\mathbf{M}(\mathbf{x})\boldsymbol{\Phi}_1$, which depends on
+element densities through the evolving mass matrix $\mathbf{M}(\mathbf{x})$.
+Equation~(6) drops the corresponding load-sensitivity term
+$\partial f / \partial x_e = \omega_1^{(0)2}(\partial \mathbf{M}/\partial x_e)
+\boldsymbol{\Phi}_1$ from the compliance gradient.
+This omission is the defining simplification of the method, but it is
+not quantitatively justified. The citation of Munro~(2024) in
+Section~3.2 concerns the self-weight OC update, not the frozen-mode
+sensitivity approximation, and does not establish the validity of this
+specific approximation for the problem class studied.
+A numerical ablation comparing Eq.~(6) against the full
+design-dependent-load derivative, or against a periodically
+updated-mode variant, is required on at least one benchmark.
+
+\item \textbf{Multi-mode sensitivity derivation has no theoretical support.}
+Section~3.3 combines two inertial loads via a scalar weight
+$\alpha \in [0,1]$ (Eq.~7) and uses the same stiffness-only
+sensitivity (Eq.~6) for the combined load, omitting load-sensitivity
+contributions from both eigenvectors simultaneously.
+No argument is provided for why omitting both terms jointly preserves a
+useful descent direction for either targeted eigenfrequency, or for what
+range of $\alpha$ the joint omission remains acceptable.
+
+\item \textbf{Monotone gain scaling --- stated as principal contribution,
+contradicted by Table~3.}
+The abstract, Section~4.2, and the conclusions state that
+``load-weighted modal gains scale monotonically with the assigned load
+weight'' (bidirectional). For the $\widetilde{\omega}_2/\omega_2^{(0)}$
+tracked-gain sequence in Table~3 (clamped beam), the values as
+$\alpha$ decreases from 1.0 to 0 are: $1.99\times$, $1.73\times$,
+$2.05\times$, $2.25\times$, $2.45\times$. The gain at $\alpha=0.75$
+$(1.73\times)$ is lower than at $\alpha=1.0$ $(1.99\times)$, which
+contradicts strict monotone decrease with decreasing $\alpha$.
+Note: the building-example $\Phi_2$ gain sequence in Table~5 is
+monotone. The failure is specific to the clamped-beam case at
+$\alpha=0.75$. The claim must be verified and corrected, or qualified.
+
+\item \textbf{Frozen-mode reliability not demonstrated.}
+The conclusions acknowledge an ``accuracy ceiling'' from the frozen
+initial mode shape, but the paper does not demonstrate conditions under
+which the approximation fails. A reliability diagnostic --- for example,
+a benchmark where the initial and optimized mode shapes differ
+substantially, a MAC-based threshold analysis, or a comparison against
+a periodically updated-mode variant --- is needed to bound the practical
+scope of the method.
+
+\end{enumerate}
+
+%-----------------------------------------------------------------------
+\section{Algorithmic and Numerical Methodology Concerns}
+%-----------------------------------------------------------------------
+
+\begin{enumerate}[leftmargin=*, label=\textbf{A\arabic*.}]
+
+\item \textbf{The Olhoff comparator is a non-canonical in-house implementation.}
+Section~5.1 identifies three modifications to the original Du--Olhoff
+(2007)/Olhoff--Du (2014) procedure: (a)~a Heaviside projection with
+seven-level continuation and a grayness penalty; (b)~the inner MMA
+convergence loop collapsed to a single call per outer iteration; and
+(c)~a trial eigensolve rejection step that ``effectively doubles the
+number of eigensolves per outer iteration.'' These deviations
+collectively increase the comparator's runtime relative to the
+canonical formulation. The 7.1$\times$ speedup and 8.6\% frequency gap
+must be presented as comparisons against this specific in-house variant.
+A compact table listing what each implementation (original Olhoff--Du,
+in-house comparator, Yuksel--Yilmaz, proposed method) includes or
+excludes would clarify the comparison.
+
+\item \textbf{Inconsistent optimizer within the proposed method.}
+Algorithm~3.5 and Section~3.4 describe an OC bisection update.
+Sections~4.2 and~4.3 state that the MMA optimizer with move limit~0.2
+is used. The proposed method therefore uses different optimizers across
+its own benchmark cases, without discussion of whether this affects
+iteration counts, convergence speed, or frequency results.
+
+\item \textbf{Number of initialization modes unspecified.}
+Step~2 of Algorithm~3.5 reads ``Solve eigenvalue problem
+$\mathbf{K}_0\boldsymbol{\Phi}_j = \lambda_j\mathbf{M}_0\boldsymbol{\Phi}_j$,
+$j=1,\ldots,n_\mathrm{modes}$'' but $n_\mathrm{modes}$ is never stated
+as a parameter. Its value must be specified for each benchmark.
+
+\item \textbf{Inconsistent void pseudo-material parameters.}
+Section~4.1 (simply supported beam) uses $E_\mathrm{min}=10^{-9}E_0$;
+Section~4.2 (clamped beam) uses $E_\mathrm{min}=10^{-6}E_0$. The
+basis for this difference is not explained.
+
+\end{enumerate}
+
+%-----------------------------------------------------------------------
+\section{Validation and Benchmarking Weaknesses}
+%-----------------------------------------------------------------------
+
+\begin{enumerate}[leftmargin=*, label=\textbf{V\arabic*.}]
+
+\item \textbf{Table~1 lacks statistical uncertainty.}
+Runtime and memory values are labeled ``averaged over 10 independent
+runs'' without standard deviations. At the $160\times20$ mesh, the
+proposed method (5.1~s) is marginally slower than the Yuksel code
+(4.7~s). Without variance information, this difference and others in
+Table~1 cannot be interpreted statistically. Standard deviations (or
+at minimum, ranges) must be reported; the source of run-to-run
+variability in a deterministic MATLAB code should be explained.
+
+\item \textbf{No eigenfrequency values across mesh resolutions.}
+Table~1 reports runtime and iterations at four mesh sizes but does not
+include the achieved $\omega_1$ for any method at any resolution.
+The 8.6\% frequency gap is stated only for the $400\times50$ case.
+A column for $\omega_1$ at each mesh size should be added so that the
+mesh-dependence of the frequency gap can be assessed.
+
+\item \textbf{No mesh independence for multi-mode benchmarks.}
+The clamped-beam ($400\times50$) and building ($80\times240$) examples
+are each tested at a single mesh. MAC-tracked gains, mode-ordering
+shifts, and the $\alpha$-behavior conclusions should be verified at
+at least one additional discretization.
+
+\item \textbf{Low MAC$_2$ values in Table~5 not acknowledged.}
+Table~5 reports $\mathrm{MAC}_2=0.520$ at $\alpha=0.25$ and
+$\mathrm{MAC}_2=0.635$ at $\alpha=0.5$ for the building example.
+These values indicate that the mode identified as best matching
+$\boldsymbol{\Phi}_2$ shares only about 27\% and 40\% of its modal
+energy with the reference, respectively. The frequency gains reported
+for these configurations (3.32$\times$ and 3.09$\times$) are based on
+poorly correlated modes. The authors should define a MAC validity
+threshold and qualify or exclude gain figures below it.
+
+\item \textbf{Initial clamped-beam eigenfrequencies not stated.}
+Section~4.3 explicitly states $\omega_1^{(0)}=19.84$~rad/s and
+$\omega_2^{(0)}=90.93$~rad/s for the building domain. The analogous
+values for the clamped-beam domain are absent from Section~4.2.
+Table~3 gain factors cannot be independently verified without them.
+
+\item \textbf{Headline claims must be scoped.}
+\begin{itemize}
+  \item ``within 8.6\% of the bound-formulation optimum'' should be
+    qualified to the simply supported beam benchmark at $400\times50$.
+  \item ``completing the optimization 7.1$\times$ faster'' is specific to
+    $400\times50$; at $160\times20$ the proposed method is marginally
+    slower than the Yuksel code.
+  \item ``reaching up to 4.61$\times$ over the initial solid-domain
+    frequency'' refers to the MAC-tracked $\Phi_1$-type gain, not the
+    conventional sorted first eigenfrequency. This distinction should
+    appear in the abstract.
+\end{itemize}
+
+\end{enumerate}
+
+%-----------------------------------------------------------------------
+\section{Mathematical Notation and Rigor}
+%-----------------------------------------------------------------------
+
+\begin{enumerate}[leftmargin=*, label=\textbf{M\arabic*.}]
+
+\item \textbf{Eigenvector notation inconsistency.}
+The manuscript uses uppercase $\boldsymbol{\Phi}$ (Eqs.~5, 7,
+Section~3.6) and lowercase $\boldsymbol{\phi}$ (Eqs.~2, 3, MAC
+definition Eq.~9) for eigenvectors without a stated convention.
+Equation~(9) uses both $\boldsymbol{\phi}_i$ and $\boldsymbol{\Phi}_j$
+in the same expression, suggesting an intentional distinction (current
+vs.\ reference eigenvector), but this is never defined. A convention
+should be stated at first use and applied consistently.
+
+\item \textbf{Sensitivity filter notation (Eq.~8).}
+The filtered sensitivity symbol is introduced without a formal
+definition. The denominator summation domain ($\sum H_{ei}$) should
+state explicitly that the sum runs over the neighborhood $N_e$ of
+element~$e$.
+
+\item \textbf{Cross-table discrepancy at $\alpha=1.0$ (clamped beam).}
+Table~2 gives $\omega_2=365.78$~rad/s; Table~3 gives the
+$\Phi_1$-tracked mode (MAC$=0.995$) at topo-mode~3 with
+$\widetilde{\omega}_1=368.2$~rad/s. The 2.4~rad/s difference
+($\approx0.7\%$) between these quantities should be explained
+(rounding, independent runs, or precision issue).
+
+\item \textbf{Scaling claim not supported by reported data.}
+Section~5.2 states ``both methods exhibit an empirical per-iteration
+scaling of roughly $\mathcal{O}(n_e^{1.3})$.'' The per-iteration times
+in Table~1 are consistent with exponents of approximately 1.06 (Olhoff)
+and 0.8 (Yuksel) over the four reported mesh sizes, substantially
+below~1.3. The claim should be supported with a log-log scaling figure
+or the specific exponent values should be corrected.
+
+\end{enumerate}
+
+%-----------------------------------------------------------------------
+\section{Reproducibility and Transparency}
+%-----------------------------------------------------------------------
+
+\begin{enumerate}[leftmargin=*, label=\textbf{R\arabic*.}]
+
+\item \textbf{No versioned code archive.}
+The GitHub URL is provided without a commit hash or archived release
+DOI. Repository contents may change after publication. An immutable
+archive (e.g., Zenodo DOI or GitHub release tag) should be provided.
+
+\item \textbf{Hardware and environment not specified.}
+CPU model, clock speed, RAM, operating system, MATLAB version, and
+thread count are absent. These are necessary to assess the reported
+timing figures.
+
+\item \textbf{No script-to-figure mapping.}
+The manuscript does not specify which script or configuration file
+reproduces each figure or table entry.
+
+\item \textbf{``No eigensolve machinery'' is inaccurate.}
+The abstract states the method requires ``only a single eigensolve at
+initialization.'' Algorithm~3.5 Step~5 performs an additional eigensolve
+at convergence. The correct description is ``no eigensolve \emph{inside}
+the optimization loop.''
+
+\end{enumerate}
+
+%-----------------------------------------------------------------------
+\section{Required Revisions}
+%-----------------------------------------------------------------------
+
+\subsection*{Critical (must be resolved before reconsideration)}
+
+\begin{enumerate}[leftmargin=*, label=\textbf{CR\arabic*.}]
+
+\item Verify and correct Table~3 $\Phi_2$-tracked gain data ($\alpha=0.75$
+  entry shows $1.73\times$, which is below the $\alpha=1.0$ entry of
+  $1.99\times$). Provide diagnostic output (iteration history, MAC
+  evolution) for the $\alpha=0.75$ clamped-beam case. Revise or qualify
+  all monotonicity claims in the abstract, contribution list,
+  Section~4.2, and conclusions to match the corrected or explained data.
+
+\item Add a quantitative validation of the omitted load sensitivity
+  (Eq.~6): compare the approximate gradient against the full
+  design-dependent-load derivative, or against a periodically
+  updated-mode variant, on at least one benchmark.
+
+\item Relabel the Olhoff comparator as an in-house Olhoff-inspired
+  implementation throughout the manuscript; provide a comparison table
+  showing what each method includes or excludes; state quantitatively
+  how the three deviations (Section~5.1) contribute to the reported
+  speedup and frequency gap.
+
+\end{enumerate}
+
+\subsection*{Major (must be addressed)}
+
+\begin{enumerate}[leftmargin=*, label=\textbf{MR\arabic*.}]
+
+\item Add standard deviations to all runtime and memory entries in
+  Table~1; explain the source of variability across the 10~runs; specify
+  CPU, RAM, OS, MATLAB version, and thread count.
+
+\item Add eigenfrequency ($\omega_1$) values for all three methods at all
+  four mesh resolutions in Table~1 or a supplementary table.
+
+\item State initial clamped-beam eigenfrequencies $\omega_1^{(0)}$ and
+  $\omega_2^{(0)}$ in Section~4.2.
+
+\item Define and apply a MAC validity threshold; qualify or exclude frequency
+  gains for configurations below the threshold (particularly
+  $\alpha=0.25$ and $\alpha=0.5$ in Table~5).
+
+\item Provide a mesh convergence study (minimum two mesh sizes) for the
+  clamped-beam or building multi-mode benchmarks.
+
+\item Provide a frozen-mode reliability diagnostic: at minimum, one
+  benchmark or analysis characterizing when the initial mode shape is
+  a poor proxy for the optimal mode shape, or demonstrating that the
+  three tested problem classes lie within the reliable regime.
+
+\item Scope all headline quantitative claims to the specific benchmark,
+  mesh, and metric to which they apply.
+
+\end{enumerate}
+
+\subsection*{Minor (should be corrected)}
+
+\begin{enumerate}[leftmargin=*, label=\textbf{mn\arabic*.}]
+
+\item Correct figure references in Section~4.1 (``Figs.~5--7'' should
+  be ``Figs.~1--3'').
+\item Define the eigenvector notation convention ($\boldsymbol{\Phi}$
+  vs.\ $\boldsymbol{\phi}$) at first use and apply consistently.
+\item Complete the Olhoff--Du (2014) reference (publisher location listed
+  as ``???'').
+\item Archive the code at a permanent DOI and report the commit hash.
+\item Specify hardware and MATLAB configuration in Section~5 or a
+  reproducibility statement.
+\item Provide a script-to-figure mapping in the repository README.
+\item Address the OC-vs-MMA optimizer switch: state which optimizer is
+  used for the proposed method in each benchmark and justify the choice.
+\item Correct or support the $\mathcal{O}(n_e^{1.3})$ scaling claim
+  (Section~5.2) with a log-log plot or revised exponent values.
+\item Justify or unify the void pseudo-material parameter differences
+  ($E_\mathrm{min}=10^{-9}E_0$ vs.\ $10^{-6}E_0$) across benchmarks.
+\item Correct the inaccurate ``no eigensolve machinery'' claim to
+  ``no eigensolve inside the optimization loop.''
+\item Clarify the 2.4~rad/s discrepancy between Tables~2 and~3 at
+  $\alpha=1.0$ (clamped beam, $\omega_2=365.78$ vs.\
+  $\widetilde{\omega}_1=368.2$~rad/s).
+
+\end{enumerate}
+
+%-----------------------------------------------------------------------
+\section*{Cross-Review Note}
+%-----------------------------------------------------------------------
+
+This report is based on an independent dual-model review (GPT and Claude
+Sonnet), with both models reaching MAJOR REVISION with HIGH confidence.
+The decision and trusted issue list are derived from the consensus of
+both models; issues raised by only one model are retained where they
+are supported by manuscript-visible evidence and are marked accordingly
+in the editorial record. No hallucinated or invalid reviewer comments
+were identified in either model's pipeline. The consensus weighted score
+is approximately 2.80 on a 1--5 scale; the MAJOR REVISION recommendation
+reflects an editorial override based on the correctable nature of the
+critical issues.
+
+\end{document}
