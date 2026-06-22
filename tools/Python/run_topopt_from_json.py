@@ -105,6 +105,9 @@ _DYNAMIC_OPT_KEYS = {
     "debug_semi_harmonic",
     "semi_harmonic_baseline",
     "semi_harmonic_rho_source",
+    "harmonic_baseline",
+    "load_sensitivity",
+    "gate_a0_diagnostics",
     "yuksel",
 }
 # Keys in postprocessing.* that require modal/frequency data.
@@ -385,6 +388,52 @@ def _save_elastic2d_image(
         print(f"Warning: failed to save topology image ({exc}).")
 
 
+def check_gate_a0_constraints(cfg: dict) -> None:
+    """Validate Gate A0 / revision_v1 authoritative-load constraints.
+
+    Must be called whenever optimization.gate_a0_diagnostics is true.
+    Raises ValueError for any obsolete or incompatible key combination.
+
+    Checks (all applied to the raw cfg dict):
+    - semi_harmonic_rho_source must be absent (obsolete projected-density formulation).
+    - harmonic_normalize must not be true (load must not be rescaled).
+    - semi_harmonic_baseline, if present, must be "solid".
+    - load_sensitivity must be explicitly set to "omitted" or "complete".
+    """
+    opt = cfg.get("optimization", {})
+
+    if "semi_harmonic_rho_source" in opt and opt["semi_harmonic_rho_source"] is not None:
+        raise ValueError(
+            "Gate A0 / revision_v1 configuration must not define "
+            "optimization.semi_harmonic_rho_source. "
+            "The authoritative load omega0^2*M(x)*Phi0 does not use projected element density."
+        )
+
+    if "harmonic_normalize" in opt:
+        if parse_bool(opt["harmonic_normalize"], "optimization.harmonic_normalize"):
+            raise ValueError(
+                "Gate A0 / revision_v1 configuration must not set "
+                "optimization.harmonic_normalize=true. "
+                "The authoritative inertial load omega0^2*M(x)*Phi0 must not be rescaled."
+            )
+
+    if "semi_harmonic_baseline" in opt:
+        baseline = str(opt["semi_harmonic_baseline"]).strip().lower()
+        if baseline != "solid":
+            raise ValueError(
+                f'Gate A0 / revision_v1 configuration requires '
+                f'optimization.semi_harmonic_baseline="solid" (got "{baseline}"). '
+                f'The authoritative load requires a fully solid reference design.'
+            )
+
+    if "load_sensitivity" not in opt:
+        raise ValueError(
+            "Gate A0 / revision_v1 configuration must explicitly set "
+            "optimization.load_sensitivity to \"omitted\" or \"complete\". "
+            "This field must not rely on the default."
+        )
+
+
 def run_topopt_from_json(
     json_input: str | dict,
     *,
@@ -521,8 +570,8 @@ def run_topopt_from_json(
             get_field_path(cfg, ["optimization", "gate_a0_diagnostics"]),
             "optimization.gate_a0_diagnostics",
         )
-    if gate_a0_diagnostics and has_field_path(cfg, ["optimization", "semi_harmonic_rho_source"]):
-        raise ValueError("Gate A0 fixture must not define optimization.semi_harmonic_rho_source.")
+    if gate_a0_diagnostics:
+        check_gate_a0_constraints(cfg)
 
     visualize_live = True
     if has_field_path(cfg, ["postprocessing", "visualize_live"]):

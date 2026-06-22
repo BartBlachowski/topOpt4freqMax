@@ -1,0 +1,36 @@
+{
+  "gate": "I1",
+  "status": "PASSED",
+  "experiment": "EXP_SMOKE",
+  "expected_failure": "iteration_cap",
+  "detected_condition": "reached iteration cap: 200/200 iterations without convergence, design change = 5.00e-03",
+  "runner_exit": "error",
+  "runner_error_id": "run_all:GateI1Confirmed",
+  "runner_error_message": "Gate I1 confirmed: master runner fails loud on mandatory experiment failure.\nDetected condition: reached iteration cap: 200/200 iterations without convergence, design change = 5.00e-03",
+  "stack_trace_preserved": true,
+  "artifact": "examples/Revision_v1/output/smoke/smoke_fail_result.mat",
+  "smoke_result_fields": {
+    "success": false,
+    "termination_reason": "iteration_cap",
+    "termination_capped": true,
+    "iterations_count": 200,
+    "iterations_cap": 200,
+    "final_design_change": 5.0e-3,
+    "constraint_residual": 0.0
+  },
+  "provenance": {
+    "commit": "2f3389bed1f5f994ce42f436e0fee83c5dd1ac48",
+    "matlab_version": "25.2.0.3042426 (R2025b) Update 1",
+    "platform": "MACA64",
+    "cpu": "Apple M1 Max",
+    "execution_timestamp": "2026-06-22 15:04:13"
+  },
+  "verification": {
+    "capped_run_detected": true,
+    "exact_condition_reported": true,
+    "runner_ended_with_error": true,
+    "stack_trace_in_console": true,
+    "schema_valid_struct_produced": true,
+    "mat_artifact_written": true
+  }
+}

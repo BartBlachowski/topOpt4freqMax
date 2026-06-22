@@ -91,6 +91,22 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
             'runtime will increase and comparisons are not fair.\n']);
         info.freq_iter_omega = NaN(maxIters, 3);
     end
+    if gateA0Diagnostics
+        info.cr2_history = struct( ...
+            'objective', NaN(maxIters,1), ...
+            'frequency', NaN(maxIters,6), ...
+            'design_change', NaN(maxIters,1), ...
+            'feasibility', NaN(maxIters,1), ...
+            'grayness', NaN(maxIters,1), ...
+            'volume', NaN(maxIters,1), ...
+            'tracked_mode_index', NaN(maxIters,1), ...
+            'tracked_mode_mac', NaN(maxIters,1), ...
+            'tracked_mode_omega', NaN(maxIters,1), ...
+            'topology_lag1_linf', NaN(maxIters,1), ...
+            'topology_lag2_linf', NaN(maxIters,1), ...
+            'sensitivity_difference_l2', NaN(maxIters,1), ...
+            'sensitivity_difference_linf', NaN(maxIters,1));
+    end
 
     ndof = 2*(nelx+1)*(nely+1);
     nNodes = (nelx+1) * (nely+1);
@@ -377,6 +393,8 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
     change = 1;
     dv = ones(nelx*nely, 1);
     dc = ones(nelx*nely, 1);
+    cr2PreviousTopology1 = [];
+    cr2PreviousTopology2 = [];
     loop_tic = tic;
 
     while change > convTol && loop < maxIters
@@ -424,7 +442,7 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
             dueModes = [];
         end
 
-        needMf = saveFrqIterations || ~isempty(dueModes);
+        needMf = saveFrqIterations || gateA0Diagnostics || ~isempty(dueModes);
         if needMf
             Mf = M(free, free);
         else
@@ -476,6 +494,23 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
                 Mf = M(free, free);
             end
             info.freq_iter_omega(loop,:) = localFirstNOmegasFromSubmatrices(Kf, Mf, 3);
+        end
+        if gateA0Diagnostics
+            [trackingOmegas, trackingModes] = localCurrentModesFromSubmatrices( ...
+                Kf, Mf, free, ndof, 6);
+            trackingMac = squared_mass_weighted_mac( ...
+                semiHarmonicPhi0(:,1), trackingModes, M);
+            [bestTrackingMac, bestTrackingIndex] = max(trackingMac(1,:));
+            if ~isfinite(bestTrackingMac) || bestTrackingMac < 0 || ...
+                    bestTrackingIndex > numel(trackingOmegas) || ...
+                    ~isfinite(trackingOmegas(bestTrackingIndex))
+                error('topopt_freq:InvalidModeTracking', ...
+                    'Unable to track the authoritative reference mode at iteration %d.', loop);
+            end
+            info.cr2_history.frequency(loop,:) = trackingOmegas(:)';
+            info.cr2_history.tracked_mode_index(loop) = bestTrackingIndex;
+            info.cr2_history.tracked_mode_mac(loop) = bestTrackingMac;
+            info.cr2_history.tracked_mode_omega(loop) = trackingOmegas(bestTrackingIndex);
         end
 
         clear Kf Mf;
@@ -601,6 +636,31 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
         vol    = mean(xPhys);
         change = max(abs(x - xold));
 
+        if gateA0Diagnostics
+            info.cr2_history.objective(loop) = obj;
+            info.cr2_history.design_change(loop) = change;
+            info.cr2_history.feasibility(loop) = max(0, vol - volfrac);
+            info.cr2_history.grayness(loop) = mean(4*xPhys.*(1-xPhys));
+            info.cr2_history.volume(loop) = vol;
+            if isempty(cr2PreviousTopology1)
+                info.cr2_history.topology_lag1_linf(loop) = 0;
+            else
+                info.cr2_history.topology_lag1_linf(loop) = ...
+                    norm(xPhys-cr2PreviousTopology1, Inf);
+            end
+            if isempty(cr2PreviousTopology2)
+                info.cr2_history.topology_lag2_linf(loop) = 0;
+            else
+                info.cr2_history.topology_lag2_linf(loop) = ...
+                    norm(xPhys-cr2PreviousTopology2, Inf);
+            end
+            cr2PreviousTopology2 = cr2PreviousTopology1;
+            cr2PreviousTopology1 = xPhys;
+            sensitivityDifference = dcCompleteRaw - dcOmittedRaw;
+            info.cr2_history.sensitivity_difference_l2(loop) = norm(sensitivityDifference, 2);
+            info.cr2_history.sensitivity_difference_linf(loop) = norm(sensitivityDifference, Inf);
+        end
+
         localLogLoadCaseDiagnostics(debugLoadCases, loop, loadCases, caseDiag);
 
         if visualizeLive
@@ -637,6 +697,14 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
     if saveFrqIterations
         info.freq_iter_omega = info.freq_iter_omega(1:loop,:);
     end
+    if gateA0Diagnostics
+        historyFields = fieldnames(info.cr2_history);
+        for iHistory = 1:numel(historyFields)
+            field = historyFields{iHistory};
+            values = info.cr2_history.(field);
+            info.cr2_history.(field) = values(1:loop,:);
+        end
+    end
     info.last_F = F;
     info.last_U = U;
     info.last_obj = obj;
@@ -662,11 +730,26 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
 
     Kf_final = K_final(free, free);
     Mf_final = M_final(free, free);
+    if gateA0Diagnostics
+        [finalTrackingOmegas, finalTrackingModes] = localCurrentModesFromSubmatrices( ...
+            Kf_final, Mf_final, free, ndof, 6);
+        finalTrackingMac = squared_mass_weighted_mac( ...
+            semiHarmonicPhi0(:,1), finalTrackingModes, M_final);
+        [finalBestMac, finalBestIndex] = max(finalTrackingMac(1,:));
+        info.cr2_final_tracking = struct( ...
+            'frequencies', finalTrackingOmegas(:), ...
+            'mac_values', finalTrackingMac(1,:)', ...
+            'tracked_mode_index', finalBestIndex, ...
+            'tracked_mode_mac', finalBestMac, ...
+            'tracked_mode_omega', finalTrackingOmegas(finalBestIndex));
+        lam_vals = finalTrackingOmegas(isfinite(finalTrackingOmegas)).^2;
+    else
+        nReq = min(3, max(1, size(Kf_final, 1) - 1));
+        [~, Lam_final] = eigs(Kf_final, Mf_final, nReq, 'smallestabs');
+        lam_vals = sort(real(diag(Lam_final)), 'ascend');
+        lam_vals = lam_vals(lam_vals > 0);
+    end
     clear K_final sK_final M_final sM_final rhoPhys_final;
-    nReq = min(3, max(1, size(Kf_final, 1) - 1));
-    [~, Lam_final] = eigs(Kf_final, Mf_final, nReq, 'smallestabs');
-    lam_vals = sort(real(diag(Lam_final)), 'ascend');
-    lam_vals = lam_vals(lam_vals > 0);
     fHz = NaN(3,1);
     if ~isempty(lam_vals)
         nOk = min(3, numel(lam_vals));
@@ -786,14 +869,8 @@ V = V(:, valid);
 nOk = min(maxMode, numel(lamVals));
 for k = 1:nOk
     phi = V(:, k);
-    mn = real(phi' * (Mf * phi));
-    if mn > 0
-        phi = phi / sqrt(mn);
-    end
-    [~, phaseIdx] = max(abs(phi));
-    if ~isempty(phaseIdx) && phi(phaseIdx) < 0
-        phi = -phi;
-    end
+    phi = mass_normalize_modes(phi, Mf);
+    phi = orient_modes_deterministic(phi);
     harmonicOmegas(k) = sqrt(lamVals(k));
     phiGlobal = zeros(ndof, 1);
     phiGlobal(free) = phi;

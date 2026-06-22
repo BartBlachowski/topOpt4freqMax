@@ -1,0 +1,65 @@
+{
+  "gate": "V1-6",
+  "status": "passed",
+  "fixture": "scripts/revision_v1/gate_a0_fixture.json (6x2 mesh, inline FE)",
+  "timestamp": "2026-06-22 15:15:20",
+  "matlab_version": "25.2.0.3042426 (R2025b) Update 1",
+  "n_modes": 5,
+  "solid_omegas": [
+    1221.0110368529149,
+    1670.8513075617032,
+    2863.7327379184749,
+    4530.2628815256739,
+    5105.7986229197431
+  ],
+  "half_density_omegas": [
+    366.30948387859155,
+    501.26383925923915,
+    859.13429897972878,
+    1359.1017672069665,
+    1531.7653992467967
+  ],
+  "check_1_mac_self_consistency": {
+    "passed": true,
+    "mac_diagonal_min": 0.99999999999999956,
+    "mac_off_diagonal_max": 2.4271532124140135E-31
+  },
+  "check_2_reordering_robustness": {
+    "passed": true,
+    "permutation": [
+      3,
+      2,
+      5,
+      4,
+      1
+    ],
+    "phi1_expected_at_index": 5,
+    "phi1_found_at_index": 5,
+    "best_mac": 1,
+    "all_mac_values": [
+      3.9000081373841533E-33,
+      2.4646637073464938E-32,
+      1.2714146898493862E-34,
+      3.0814879110195774E-33,
+      1
+    ]
+  },
+  "check_3_cross_design_tracking": {
+    "passed": true,
+    "best_mac": 1,
+    "best_mode_index": 1,
+    "threshold": 0.5,
+    "all_mac_values": [
+      1,
+      4.7798692511971994E-30,
+      1.9436530350554314E-31,
+      8.3431479863853837E-32,
+      1.1123174162510196E-32
+    ]
+  },
+  "check_4_phase_invariance": {
+    "passed": true,
+    "mac_phi_phi": 1,
+    "mac_phi_neg_phi": 1
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "status": "computed",
+  "mean_absolute_difference": 0.22982860807391234,
+  "rms_difference": 0.39456584644434545,
+  "maximum_absolute_difference": 1,
+  "fraction_abs_difference_gt_0_01": 0.534375,
+  "fraction_abs_difference_gt_0_05": 0.4684375,
+  "density_correlation": 0.61929739680395435
+}

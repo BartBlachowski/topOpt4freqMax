@@ -1,0 +1,59 @@
+{
+  "gate": "V1-4",
+  "status": "passed",
+  "fixture": "scripts/revision_v1/gate_a0_fixture.json",
+  "timestamp": "2026-06-22 15:14:50",
+  "matlab_version": "25.2.0.3042426 (R2025b) Update 1",
+  "check_1_both_finite": true,
+  "check_2_branches_distinguishable": {
+    "passed": true,
+    "max_relative_difference": 0.71331640047080458,
+    "min_required": 0.001
+  },
+  "check_3_cross_run_consistency": {
+    "passed": true,
+    "complete_sensitivity_cross_run_rel_error": 0
+  },
+  "check_4_complete_fd": {
+    "passed": true,
+    "perturbation_size": 1E-6,
+    "relative_error_tolerance": 1E-5,
+    "tested_element_indices": [
+      1,
+      3,
+      5,
+      8,
+      10,
+      12
+    ],
+    "finite_difference_values": [
+      -2.67991852783598E+6,
+      -425824.44474101067,
+      451466.01973101497,
+      512781.44447132945,
+      205703.82080040872,
+      -2.1165391118265688E+6
+    ],
+    "complete_analytical_values": [
+      -2.6799185390654798E+6,
+      -425824.44751127274,
+      451466.02659995225,
+      512781.43810803234,
+      205703.81230674614,
+      -2.1165391126888031E+6
+    ],
+    "complete_relative_errors": [
+      4.1902391976350807E-9,
+      6.5056435534727732E-9,
+      1.5214737944619729E-8,
+      1.2409374759473223E-8,
+      4.1290738042373874E-8,
+      4.0737932358236255E-10
+    ],
+    "max_relative_error": 4.1290738042373874E-8
+  },
+  "check_5_determinism": {
+    "passed": true,
+    "max_difference_second_run": 0
+  }
+}

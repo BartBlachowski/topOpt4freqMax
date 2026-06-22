@@ -1,0 +1,25 @@
+{
+  "gate": "V1-3",
+  "status": "passed",
+  "fixture": "scripts/revision_v1/gate_a0_fixture.json",
+  "timestamp": "2026-06-22 15:14:15",
+  "matlab_version": "25.2.0.3042426 (R2025b) Update 1",
+  "objective_additivity": {
+    "description": "obj(case1+case2) == obj(case1) + obj(case2) with factors=1",
+    "obj_A_mode1_factor1": 2.9817209956611791E+6,
+    "obj_B_mode2_factor1": 5.5834602667214042E+6,
+    "obj_C_both_factors_1_1": 8.5651812623825837E+6,
+    "expected_C": 8.5651812623825837E+6,
+    "relative_error": 0,
+    "tolerance": 1E-10,
+    "passed": true
+  },
+  "factor_square_scaling": {
+    "description": "obj(mode1_f2 + mode2_f3) == 4*obj_A + 9*obj_B",
+    "obj_D_factors_2_3": 6.2178026383137465E+7,
+    "expected_D": 6.2178026383137353E+7,
+    "relative_error": 1.7973987830557184E-15,
+    "tolerance": 1E-10,
+    "passed": true
+  }
+}

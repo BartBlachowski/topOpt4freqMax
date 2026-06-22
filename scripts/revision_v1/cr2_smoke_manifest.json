@@ -1,0 +1,52 @@
+{
+  "study": "CR2 preparation and smoke validation",
+  "status": "passed",
+  "scientific_effect_claim": "not_evaluated",
+  "entries": [
+    {
+      "path": "examples/Revision_v1/cr2/cr2_variant_a_omitted.json",
+      "role": "CR2 Variant A config",
+      "status": "present"
+    },
+    {
+      "path": "examples/Revision_v1/cr2/cr2_variant_b_complete.json",
+      "role": "CR2 Variant B config",
+      "status": "present"
+    },
+    {
+      "path": "scripts/revision_v1/validate_v1c_cr2_configs.py",
+      "role": "V1c config validator",
+      "status": "present"
+    },
+    {
+      "path": "scripts/revision_v1/run_cr2_smoke.m",
+      "role": "small-mesh smoke runner",
+      "status": "present"
+    },
+    {
+      "path": "scripts/revision_v1/v1c_cr2_validation.json",
+      "role": "V1c validation result",
+      "status": "present"
+    },
+    {
+      "path": "scripts/revision_v1/cr2_smoke_results.json",
+      "role": "smoke JSON result",
+      "status": "present"
+    },
+    {
+      "path": "scripts/revision_v1/cr2_smoke_results.mat",
+      "role": "smoke MAT result",
+      "status": "present"
+    },
+    {
+      "path": "scripts/revision_v1/cr2_smoke_summary.md",
+      "role": "pass/fail summary and remaining steps",
+      "status": "present"
+    },
+    {
+      "path": "scripts/revision_v1/cr2_smoke_manifest.json",
+      "role": "artifact manifest",
+      "status": "present"
+    }
+  ]
+}

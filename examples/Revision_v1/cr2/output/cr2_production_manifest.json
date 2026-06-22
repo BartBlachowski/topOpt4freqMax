@@ -1,0 +1,128 @@
+{
+  "study": "CR2 production",
+  "gate": "E4-CR2",
+  "status": "failed_partial",
+  "output_directory": "examples/Revision_v1/cr2/output",
+  "entries": [
+    {
+      "path": "examples/Revision_v1/cr2/run_cr2_production.m",
+      "role": "production runner",
+      "exists": true
+    },
+    {
+      "path": "examples/Revision_v1/cr2/cr2_variant_a_omitted.json",
+      "role": "Variant A config",
+      "exists": true
+    },
+    {
+      "path": "examples/Revision_v1/cr2/cr2_variant_b_complete.json",
+      "role": "Variant B config",
+      "exists": true
+    },
+    {
+      "path": "scripts/revision_v1/validate_v1c_cr2_configs.py",
+      "role": "V1c validator",
+      "exists": true
+    },
+    {
+      "path": "examples/Revision_v1/cr2/output/v1c_cr2_production_validation.json",
+      "role": "V1c result",
+      "exists": true
+    },
+    {
+      "path": "examples/Revision_v1/cr2/output/cr2_variant_a_result.mat",
+      "role": "Variant A MAT",
+      "exists": true
+    },
+    {
+      "path": "examples/Revision_v1/cr2/output/cr2_variant_a_histories.csv",
+      "role": "Variant A full histories",
+      "exists": true
+    },
+    {
+      "path": "examples/Revision_v1/cr2/output/cr2_variant_a_mode_tracking.csv",
+      "role": "Variant A mode history",
+      "exists": true
+    },
+    {
+      "path": "examples/Revision_v1/cr2/output/cr2_variant_a_sensitivity_norms.csv",
+      "role": "Variant A sensitivity history",
+      "exists": true
+    },
+    {
+      "path": "examples/Revision_v1/cr2/output/cr2_variant_a_topology.csv",
+      "role": "Variant A topology data",
+      "exists": true
+    },
+    {
+      "path": "examples/Revision_v1/cr2/output/cr2_variant_a_topology.png",
+      "role": "Variant A topology figure",
+      "exists": true
+    },
+    {
+      "path": "examples/Revision_v1/cr2/output/cr2_variant_b_result.mat",
+      "role": "Variant B MAT",
+      "exists": true
+    },
+    {
+      "path": "examples/Revision_v1/cr2/output/cr2_variant_b_histories.csv",
+      "role": "Variant B full histories",
+      "exists": true
+    },
+    {
+      "path": "examples/Revision_v1/cr2/output/cr2_variant_b_mode_tracking.csv",
+      "role": "Variant B mode history",
+      "exists": true
+    },
+    {
+      "path": "examples/Revision_v1/cr2/output/cr2_variant_b_sensitivity_norms.csv",
+      "role": "Variant B sensitivity history",
+      "exists": true
+    },
+    {
+      "path": "examples/Revision_v1/cr2/output/cr2_variant_b_topology.csv",
+      "role": "Variant B topology data",
+      "exists": true
+    },
+    {
+      "path": "examples/Revision_v1/cr2/output/cr2_variant_b_topology.png",
+      "role": "Variant B topology figure",
+      "exists": true
+    },
+    {
+      "path": "examples/Revision_v1/cr2/output/cr2_topology_difference.csv",
+      "role": "topology difference data",
+      "exists": true
+    },
+    {
+      "path": "examples/Revision_v1/cr2/output/cr2_topology_difference.png",
+      "role": "topology difference figure",
+      "exists": true
+    },
+    {
+      "path": "examples/Revision_v1/cr2/output/cr2_topology_difference_metrics.json",
+      "role": "topology difference metrics",
+      "exists": true
+    },
+    {
+      "path": "examples/Revision_v1/cr2/output/cr2_production_results.json",
+      "role": "production result JSON",
+      "exists": true
+    },
+    {
+      "path": "examples/Revision_v1/cr2/output/cr2_production_summary.md",
+      "role": "production summary",
+      "exists": true
+    },
+    {
+      "path": "examples/Revision_v1/cr2/output/cr2_production_run.log",
+      "role": "complete run log",
+      "exists": true
+    },
+    {
+      "path": "examples/Revision_v1/cr2/output/cr2_production_manifest.json",
+      "role": "artifact manifest",
+      "exists": true
+    }
+  ]
+}

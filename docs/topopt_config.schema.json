@@ -392,6 +392,10 @@
               "type": "string",
               "enum": ["symmetric", "reflect"],
               "description": "How the filter kernel is handled at domain boundaries."
+            },
+            "heaviside": {
+              "type": "boolean",
+              "description": "Enable Heaviside projection sharpening. Only valid for density_projection filter type; harmless no-op otherwise."
             }
           }
         },
@@ -412,9 +416,18 @@
           "description": "Random seed for reproducibility. null → no fixed seed."
         },
 
+        "load_sensitivity": {
+          "type": "string",
+          "enum": ["omitted", "complete"],
+          "description": "Inertial-load sensitivity mode. omitted: the nonzero term omega0^2*(dM/dx)*Phi0 is deliberately excluded (proposed method, Gate A0). complete: the full mass-derivative term is included (CR2 comparator). Required when gate_a0_diagnostics is true; defaults to 'omitted' otherwise."
+        },
+        "gate_a0_diagnostics": {
+          "type": "boolean",
+          "description": "Enable strict Gate A0 / revision_v1 validation and solver diagnostics. When true, the wrapper rejects semi_harmonic_rho_source, harmonic_normalize=true, non-solid semi_harmonic_baseline, and absent load_sensitivity. The solver returns gate_a0 diagnostic fields."
+        },
         "harmonic_normalize": {
           "type": "boolean",
-          "description": "Normalise each inertial load case to unit energy. ourApproach only."
+          "description": "Rescale each inertial load case to unit Euclidean norm. ourApproach only. MUST be false (or absent) for Gate A0 / revision_v1 authoritative-load configurations; rejected when gate_a0_diagnostics is true and the value is true."
         },
         "debug_semi_harmonic": {
           "type": "boolean",
@@ -423,12 +436,17 @@
         "semi_harmonic_baseline": {
           "type": "string",
           "enum": ["solid", "current"],
-          "description": "Design used to compute the reference eigenpairs for the semi-harmonic load."
+          "description": "Reference design used to compute the frozen eigenpairs for the semi-harmonic load. 'solid': fully solid domain (rho=1 everywhere) — required for Gate A0 / revision_v1 authoritative-load configurations; rejected when gate_a0_diagnostics is true and the value is not 'solid'. 'current': use the design at each refresh (legacy/non-authoritative only)."
+        },
+        "harmonic_baseline": {
+          "type": "string",
+          "enum": ["solid", "initial"],
+          "description": "Reference design for the harmonic (A4/Eq.7) load. 'solid': fully solid domain. 'initial': uniform x=volfrac design. MATLAB only; Python uses semi_harmonic_baseline."
         },
         "semi_harmonic_rho_source": {
           "type": "string",
           "enum": ["x", "x_filtered"],
-          "description": "Density field used when assembling the inertial load vector."
+          "description": "DEPRECATED for revision_v1 / authoritative-load configurations. Rejected when gate_a0_diagnostics is true. Density field used by the obsolete projected-density semi-harmonic formulation (rho_nodal * omega0 * M0 * Phi0). Not part of the authoritative load omega0^2 * M(x) * Phi0."
         },
 
         "yuksel": {
@@ -503,8 +521,9 @@
             "topology_count":              { "type": "integer", "minimum": 0, "default": 0 },
             "metric": {
               "type": "string",
-              "enum": ["mass_inner_product", "mac"],
-              "default": "mass_inner_product"
+              "enum": ["mac", "mass_inner_product"],
+              "default": "mac",
+              "description": "Correlation metric. 'mac': squared mass-weighted MAC — required for Gate A0 / revision_v1 evidence (Eq. 9). 'mass_inner_product': unsquared cosine — legacy only, not acceptable for revision evidence."
             },
             "write_csv":                   { "type": "boolean", "default": true },
             "csv_filename":                { "type": "string" },

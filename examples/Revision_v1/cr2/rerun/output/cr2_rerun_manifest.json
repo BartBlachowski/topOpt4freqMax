@@ -1,0 +1,129 @@
+{
+  "study": "CR2 protocol rerun",
+  "gate": "E4-CR2-rerun",
+  "outcome_category": "diagnostic algorithm-failure evidence",
+  "further_tuning_performed": false,
+  "output_directory": "examples/Revision_v1/cr2/rerun/output",
+  "entries": [
+    {
+      "path": "examples/Revision_v1/cr2/rerun/run_cr2_rerun.m",
+      "role": "protocol rerun runner",
+      "exists": true
+    },
+    {
+      "path": "examples/Revision_v1/cr2/rerun/cr2_rerun_variant_a_omitted.json",
+      "role": "rerun Variant A config",
+      "exists": true
+    },
+    {
+      "path": "examples/Revision_v1/cr2/rerun/cr2_rerun_variant_b_complete_move002.json",
+      "role": "rerun Variant B config",
+      "exists": true
+    },
+    {
+      "path": "scripts/revision_v1/validate_cr2_rerun_configs.py",
+      "role": "rerun config validator",
+      "exists": true
+    },
+    {
+      "path": "examples/Revision_v1/cr2/rerun/output/cr2_rerun_config_validation.json",
+      "role": "config hashes and validation",
+      "exists": true
+    },
+    {
+      "path": "examples/Revision_v1/cr2/rerun/output/cr2_variant_a_result.mat",
+      "role": "Variant A MAT",
+      "exists": true
+    },
+    {
+      "path": "examples/Revision_v1/cr2/rerun/output/cr2_variant_a_histories.csv",
+      "role": "Variant A full histories",
+      "exists": true
+    },
+    {
+      "path": "examples/Revision_v1/cr2/rerun/output/cr2_variant_a_mode_tracking.csv",
+      "role": "Variant A mode history",
+      "exists": true
+    },
+    {
+      "path": "examples/Revision_v1/cr2/rerun/output/cr2_variant_a_sensitivity_norms.csv",
+      "role": "Variant A sensitivity history",
+      "exists": true
+    },
+    {
+      "path": "examples/Revision_v1/cr2/rerun/output/cr2_variant_a_topology.csv",
+      "role": "Variant A topology data",
+      "exists": true
+    },
+    {
+      "path": "examples/Revision_v1/cr2/rerun/output/cr2_variant_a_topology.png",
+      "role": "Variant A topology figure",
+      "exists": true
+    },
+    {
+      "path": "examples/Revision_v1/cr2/rerun/output/cr2_variant_b_result.mat",
+      "role": "Variant B MAT",
+      "exists": true
+    },
+    {
+      "path": "examples/Revision_v1/cr2/rerun/output/cr2_variant_b_histories.csv",
+      "role": "Variant B full histories",
+      "exists": true
+    },
+    {
+      "path": "examples/Revision_v1/cr2/rerun/output/cr2_variant_b_mode_tracking.csv",
+      "role": "Variant B mode history",
+      "exists": true
+    },
+    {
+      "path": "examples/Revision_v1/cr2/rerun/output/cr2_variant_b_sensitivity_norms.csv",
+      "role": "Variant B sensitivity history",
+      "exists": true
+    },
+    {
+      "path": "examples/Revision_v1/cr2/rerun/output/cr2_variant_b_topology.csv",
+      "role": "Variant B topology data",
+      "exists": true
+    },
+    {
+      "path": "examples/Revision_v1/cr2/rerun/output/cr2_variant_b_topology.png",
+      "role": "Variant B topology figure",
+      "exists": true
+    },
+    {
+      "path": "examples/Revision_v1/cr2/rerun/output/cr2_topology_difference.csv",
+      "role": "topology difference data",
+      "exists": true
+    },
+    {
+      "path": "examples/Revision_v1/cr2/rerun/output/cr2_topology_difference.png",
+      "role": "topology difference figure",
+      "exists": true
+    },
+    {
+      "path": "examples/Revision_v1/cr2/rerun/output/cr2_topology_difference_metrics.json",
+      "role": "topology difference metrics",
+      "exists": true
+    },
+    {
+      "path": "examples/Revision_v1/cr2/rerun/output/cr2_rerun_results.json",
+      "role": "production result JSON",
+      "exists": true
+    },
+    {
+      "path": "examples/Revision_v1/cr2/rerun/output/cr2_rerun_summary.md",
+      "role": "production summary",
+      "exists": true
+    },
+    {
+      "path": "examples/Revision_v1/cr2/rerun/output/cr2_rerun_run.log",
+      "role": "complete run log",
+      "exists": true
+    },
+    {
+      "path": "examples/Revision_v1/cr2/rerun/output/cr2_rerun_manifest.json",
+      "role": "artifact manifest",
+      "exists": true
+    }
+  ]
+}

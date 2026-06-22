@@ -1,0 +1,20 @@
+{
+  "status": "passed",
+  "protocol": "examples/Revision_v1/cr2/cr2_rerun_protocol.md",
+  "accepted_comparison_eligible": false,
+  "reason": "Variant B stabilization changes move_limit; the pair is intentionally unmatched.",
+  "feasibility_tolerance": 0.0001,
+  "hashes": {
+    "original_variant_a": "6b4659d3e8b0911a583ea690f30ffd81dd6415ed9b0534326a949a1c37d98690",
+    "original_variant_b": "779386f5b4ce299f5304c83e38e9a8a13fcce6e3eb6cee626a1c074837e6f56f",
+    "rerun_variant_a": "1c96a056839aee030527855ef2ee9e08df0e15ff3f481f780d8db893325c0481",
+    "rerun_variant_b": "e58aa50205aad4a1262a095da123d6f35a126a44aaea81ceef913ef07aa0a60e"
+  },
+  "checks": {
+    "original_configs_preserved": true,
+    "variant_a_numerically_identical_to_original": true,
+    "variant_b_only_numerical_change_is_move_limit_0_02": true,
+    "both_convergence_tolerances_are_1e_3": true,
+    "authoritative_load_constraints_pass": true
+  }
+}

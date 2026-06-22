@@ -1,0 +1,27 @@
+{
+  "gate": "V1c",
+  "status": "passed",
+  "authoritative_load": "F(x) = omega0^2 * M(x) * Phi0",
+  "variant_a": {
+    "path": "/Users/piotrek/Programming/topOpt4freqMax/examples/Revision_v1/cr2/cr2_variant_a_omitted.json",
+    "load_sensitivity": "omitted",
+    "sha256": "6b4659d3e8b0911a583ea690f30ffd81dd6415ed9b0534326a949a1c37d98690"
+  },
+  "variant_b": {
+    "path": "/Users/piotrek/Programming/topOpt4freqMax/examples/Revision_v1/cr2/cr2_variant_b_complete.json",
+    "load_sensitivity": "complete",
+    "sha256": "779386f5b4ce299f5304c83e38e9a8a13fcce6e3eb6cee626a1c074837e6f56f"
+  },
+  "shared_configuration_sha256": "ecb35dd4fe86b34c364354ae713dc9d72117430dbcad2907bc6d2da20b602e96",
+  "allowed_differences": [
+    "meta",
+    "optimization.load_sensitivity"
+  ],
+  "checks": {
+    "solid_reference": true,
+    "gate_a0_diagnostics": true,
+    "load_normalization_disabled": true,
+    "obsolete_rho_source_absent": true,
+    "same_initial_design_mesh_filter_stopping_and_mode_tracking": true
+  }
+}

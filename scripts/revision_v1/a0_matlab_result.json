@@ -1,0 +1,76 @@
+{
+  "gate": "A0-MATLAB-ONLY",
+  "status": "passed",
+  "fixture": "scripts/revision_v1/gate_a0_fixture.json",
+  "timestamp": "2026-06-22 14:59:50",
+  "matlab_version": "25.2.0.3042426 (R2025b) Update 1",
+  "verified": {
+    "item_1_solid_reference_eigenpair": true,
+    "item_2_omega_sq_scalar": true,
+    "item_3_load_formula_F_eq_omega_sq_M_phi": true,
+    "item_4_no_rho_nodal_scaling": true,
+    "item_5_mass_normalisation": true,
+    "item_6_deterministic_phase": true,
+    "item_7_branches_distinguishable": true,
+    "item_8_complete_fd_tolerance_met": true,
+    "item_9_obsolete_rho_source_rejected": true,
+    "item_10_harmonic_normalize_rejected": true
+  },
+  "fd_check": {
+    "perturbation_size": 1E-6,
+    "relative_error_tolerance": 1E-5,
+    "tested_element_indices": [
+      1,
+      3,
+      5,
+      8,
+      10,
+      12
+    ],
+    "finite_difference_values": [
+      -2.67991852783598E+6,
+      -425824.44474101067,
+      451466.01973101497,
+      512781.44447132945,
+      205703.82080040872,
+      -2.1165391118265688E+6
+    ],
+    "complete_analytical_values": [
+      -2.6799185390654798E+6,
+      -425824.44751127274,
+      451466.02659995225,
+      512781.43810803234,
+      205703.81230674614,
+      -2.1165391126888031E+6
+    ],
+    "complete_relative_errors": [
+      4.1902391976350807E-9,
+      6.5056435534727732E-9,
+      1.5214737944619729E-8,
+      1.2409374759473223E-8,
+      4.1290738042373874E-8,
+      4.0737932358236255E-10
+    ],
+    "max_complete_relative_error": 4.1290738042373874E-8,
+    "omitted_analytical_values": [
+      -2.7565266047523115E+6,
+      -1.0135179498746258E+6,
+      -1.0073176446854218E+6,
+      -1.3988484077331328E+6,
+      -1.2286342089464138E+6,
+      -2.5991749577828827E+6
+    ],
+    "omitted_relative_errors_vs_complete_fd": [
+      0.027791524589045304,
+      0.57985505358470857,
+      1.4481863512596413,
+      1.3665739916037822,
+      1.1674247870542407,
+      0.18568809479759152
+    ],
+    "omitted_expected_to_match_complete_fd": false
+  },
+  "reference_omega": 1221.011036852916,
+  "reference_omega_sq": 1.4908679521166331E+6,
+  "reference_modal_mass": 1
+}

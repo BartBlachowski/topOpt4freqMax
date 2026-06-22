@@ -14,6 +14,11 @@ import numpy as np
 from scipy.sparse import csc_array, coo_array
 from scipy.sparse.linalg import spsolve, eigsh
 
+try:
+    from .modal_utils import normalize_and_orient_modes
+except ImportError:
+    from modal_utils import normalize_and_orient_modes
+
 import os
 import sys as _sys
 _sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', 'OlhoffApproach', 'Python'))
@@ -384,6 +389,17 @@ def topopt_freq(
     info: dict = {}
     if save_frq_iter:
         info["freq_iter_omega"] = np.full((max_iters, 3), np.nan)
+    if gate_a0_diagnostics:
+        info["cr2_history"] = {
+            "objective": [],
+            "frequency": [],
+            "design_change": [],
+            "feasibility": [],
+            "grayness": [],
+            "volume": [],
+            "sensitivity_difference_l2": [],
+            "sensitivity_difference_linf": [],
+        }
 
     # ==========================================================================
     # Optimization loop
@@ -500,6 +516,11 @@ def topopt_freq(
             if Mf is None:
                 Mf = M[free][:, free]
             info["freq_iter_omega"][loop - 1, :] = _first_n_omegas(Kf, Mf, 3)
+            current_cr2_frequency = info["freq_iter_omega"][loop - 1, :].copy()
+        elif gate_a0_diagnostics:
+            if Mf is None:
+                Mf = M[free][:, free]
+            current_cr2_frequency = _first_n_omegas(Kf, Mf, 3)
 
         # --- Objective and sensitivities ---
         obj = 0.0
@@ -624,6 +645,18 @@ def topopt_freq(
         # --- Change and volume ---
         vol = np.mean(xPhys)
         change = np.max(np.abs(x - xold))
+
+        if gate_a0_diagnostics:
+            history = info["cr2_history"]
+            history["objective"].append(float(obj))
+            history["frequency"].append(current_cr2_frequency.tolist())
+            history["design_change"].append(float(change))
+            history["feasibility"].append(float(max(0.0, vol - volfrac)))
+            history["grayness"].append(float(np.mean(4.0 * xPhys * (1.0 - xPhys))))
+            history["volume"].append(float(vol))
+            sensitivity_difference = dc_complete_raw - dc_omitted_raw
+            history["sensitivity_difference_l2"].append(float(np.linalg.norm(sensitivity_difference)))
+            history["sensitivity_difference_linf"].append(float(np.linalg.norm(sensitivity_difference, ord=np.inf)))
 
         obj_hist.append(obj)
         vol_hist.append(vol)
@@ -787,14 +820,7 @@ def _compute_modes(
         V = V[:, valid]
         n_ok = min(n_modes, lam_vals.size)
         for k in range(n_ok):
-            phi = V[:, k]
-            mn = float(phi @ (Mf @ phi))
-            if not np.isfinite(mn) or mn <= 0:
-                raise RuntimeError(f"Invalid modal mass for reference mode {k + 1}: {mn}")
-            phi = phi / np.sqrt(mn)
-            phase_idx = int(np.argmax(np.abs(phi)))
-            if phi[phase_idx] < 0:
-                phi = -phi
+            phi = normalize_and_orient_modes(V[:, k], Mf)
             omegas[k] = np.sqrt(lam_vals[k])
             phis[free, k] = phi
     except Exception as exc:
