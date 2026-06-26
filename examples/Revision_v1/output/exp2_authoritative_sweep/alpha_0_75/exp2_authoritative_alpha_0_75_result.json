@@ -1,0 +1,77 @@
+{
+  "study": "Exp2 authoritative clamped-beam alpha sweep",
+  "implementation_language": "MATLAB",
+  "source_config": "examples/Revision_v1/clamped_beam_200x25.json",
+  "case_config": "examples/Revision_v1/output/exp2_authoritative_sweep/alpha_0_75/exp2_authoritative_alpha_0_75_config.json",
+  "authoritative_load": "F(x) = omega0^2 * M(x) * Phi0",
+  "alpha": 0.75,
+  "mesh": {
+    "nelx": 200,
+    "nely": 25
+  },
+  "load_sensitivity": "omitted",
+  "gate_a0_diagnostics": true,
+  "criteria": {
+    "mac_threshold": 0.8,
+    "feasibility_tolerance": 1E-8,
+    "design_change_tolerance": 0.001
+  },
+  "solver_success": true,
+  "accepted": true,
+  "classification": "accepted",
+  "exception": "",
+  "iterations": 1,
+  "iteration_cap": 2000,
+  "final": {
+    "omega_rad_s": [
+      145.55722095585924,
+      362.97894826903473,
+      622.63923387639568
+    ],
+    "frequency_hz": [
+      23.166151217844213,
+      57.769893855314244,
+      99.096111834379073
+    ],
+    "grayness": 0.99999989001559875,
+    "volume": 0.49999999999982808,
+    "feasibility": 0,
+    "design_change": 0.00068572676014011513,
+    "tracked_mode_index": 1,
+    "tracked_mode_mac": 0.99999999872476841,
+    "tracked_mode_omega": 145.55722095585924
+  },
+  "a5_lowest_mode_check": {
+    "pass": true,
+    "tracked_mode_index": 1,
+    "tracked_mode_omega_rad_s": 145.55722095585924,
+    "lowest_mode_omega_rad_s": 145.55722095585924,
+    "modes_below_tracked_count": 0,
+    "message": "tracked mode is the lowest computed mode"
+  },
+  "spectrum_below_tracked": {
+    "tracked_mode_index": 1,
+    "modes": []
+  },
+  "artifacts": {
+    "config": "examples/Revision_v1/output/exp2_authoritative_sweep/alpha_0_75/exp2_authoritative_alpha_0_75_config.json",
+    "mat": "examples/Revision_v1/output/exp2_authoritative_sweep/alpha_0_75/exp2_authoritative_alpha_0_75_result.mat",
+    "result_json": "examples/Revision_v1/output/exp2_authoritative_sweep/alpha_0_75/exp2_authoritative_alpha_0_75_result.json",
+    "convergence_csv": "examples/Revision_v1/output/exp2_authoritative_sweep/alpha_0_75/exp2_authoritative_alpha_0_75_convergence_history.csv",
+    "frequency_csv": "examples/Revision_v1/output/exp2_authoritative_sweep/alpha_0_75/exp2_authoritative_alpha_0_75_frequency_history.csv",
+    "mode_tracking_csv": "examples/Revision_v1/output/exp2_authoritative_sweep/alpha_0_75/exp2_authoritative_alpha_0_75_mode_tracking.csv",
+    "feasibility_csv": "examples/Revision_v1/output/exp2_authoritative_sweep/alpha_0_75/exp2_authoritative_alpha_0_75_feasibility_history.csv",
+    "grayness_csv": "examples/Revision_v1/output/exp2_authoritative_sweep/alpha_0_75/exp2_authoritative_alpha_0_75_grayness_history.csv",
+    "topology_csv": "examples/Revision_v1/output/exp2_authoritative_sweep/alpha_0_75/exp2_authoritative_alpha_0_75_topology.csv",
+    "topology_json": "examples/Revision_v1/output/exp2_authoritative_sweep/alpha_0_75/exp2_authoritative_alpha_0_75_topology.json",
+    "topology_png": "examples/Revision_v1/output/exp2_authoritative_sweep/alpha_0_75/exp2_authoritative_alpha_0_75_topology.png",
+    "spectrum_below_tracked_csv": "examples/Revision_v1/output/exp2_authoritative_sweep/alpha_0_75/exp2_authoritative_alpha_0_75_spectrum_below_tracked.csv",
+    "spectrum_below_tracked_json": "examples/Revision_v1/output/exp2_authoritative_sweep/alpha_0_75/exp2_authoritative_alpha_0_75_spectrum_below_tracked.json",
+    "a5_lowest_mode_check_csv": "examples/Revision_v1/output/exp2_authoritative_sweep/alpha_0_75/exp2_authoritative_alpha_0_75_a5_lowest_mode_check.csv",
+    "a5_lowest_mode_check_json": "examples/Revision_v1/output/exp2_authoritative_sweep/alpha_0_75/exp2_authoritative_alpha_0_75_a5_lowest_mode_check.json",
+    "manifest": "examples/Revision_v1/output/exp2_authoritative_sweep/alpha_0_75/exp2_authoritative_alpha_0_75_manifest.json"
+  },
+  "timing_total_s": 1.0736889583333333,
+  "timing_per_iter_s": 0.64252366666666672,
+  "peak_memory_MB": 13.015625
+}

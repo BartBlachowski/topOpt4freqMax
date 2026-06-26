@@ -1,0 +1,22 @@
+{
+  "coarse_shape_nely_by_nelx": [
+    25,
+    200
+  ],
+  "fine_shape_nely_by_nelx": [
+    50,
+    400
+  ],
+  "mapped_fine_shape_nely_by_nelx": [
+    25,
+    200
+  ],
+  "mean_abs_difference": 0.51875967673419077,
+  "root_mean_square_difference": 0.66472227293857766,
+  "max_abs_difference": 0.96965042999804452,
+  "correlation": -0.087969251187012487,
+  "binary_threshold_0_5_jaccard": 0.30010357327809423,
+  "coarse_volume": 0.49999999999992945,
+  "mapped_fine_volume": 0.49999999999992267,
+  "volume_difference": -6.7723604502134549E-15
+}

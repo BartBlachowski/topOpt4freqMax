@@ -1,0 +1,131 @@
+{
+  "study": "CR2-MMA matched diagnostic",
+  "gate": "E4-CR2-MMA",
+  "outcome_category": "inconclusive",
+  "rationale": "One or both variants hit the iteration cap without converging or showing a clear failure signature.",
+  "authoritative_load": "F(x) = omega0^2 * M(x) * Phi0",
+  "acceptance_criteria": {
+    "design_change_tolerance": 0.001,
+    "feasibility_tolerance": 0.0001,
+    "mac_threshold": 0.8,
+    "not_capped": true,
+    "all_artifacts_present": true
+  },
+  "variant_a": {
+    "label": "a",
+    "load_sensitivity": "omitted",
+    "optimizer": "MMA",
+    "config_path": "examples/Revision_v1/cr2/mma_diagnostic/cr2_mma_variant_a_omitted.json",
+    "config_sha256": "fe834387eedbdc55229fa5c06acc4901577242cbd1ca33d248ed33127e07fe26",
+    "iteration_cap": 400,
+    "solver_success": true,
+    "iterations": 400,
+    "final_design_change": 0.07401944398098789,
+    "final_feasibility": 0.0,
+    "final_mac": 0.8115828884206678,
+    "tracked_mode_index": 1,
+    "tracked_mode_omega": 2.770817241826065,
+    "final_objective": 22036423.871560387,
+    "final_freq_omega1": 2.770817241826065,
+    "timing_total_s": 34.580500541999754,
+    "plateau_diagnostics": {
+      "status": "computed",
+      "window_length": 50,
+      "relative_objective_range": 0.43454201088499295,
+      "relative_frequency_range": 0.1749876995679516,
+      "median_design_change": 0.09908733386907764,
+      "max_design_change": 0.18174319405841644,
+      "feasibility_min": 0.0,
+      "feasibility_max": 0.0,
+      "move_saturation_fraction": 0.0,
+      "median_relative_lag1_objective": 0.0040816644360606134,
+      "median_relative_lag2_objective": 0.006362378345979842,
+      "objective_plateau": false,
+      "move_saturation_signature": false,
+      "period2_signature": false,
+      "persistent_bounded_cycle_signature": false,
+      "algorithm_failure_signature": false
+    },
+    "acceptance": {
+      "accepted": false,
+      "failures": [
+        "iteration cap reached",
+        "design_change 7.402e-02 > 1.0e-03"
+      ],
+      "conv_tol": 0.001,
+      "feas_tol": 0.0001,
+      "mac_threshold": 0.8
+    },
+    "artifacts": {
+      "histories_csv": "examples/Revision_v1/cr2/mma_diagnostic/output/cr2_mma_variant_a_histories.csv",
+      "mode_tracking_csv": "examples/Revision_v1/cr2/mma_diagnostic/output/cr2_mma_variant_a_mode_tracking.csv",
+      "sensitivity_norms_csv": "examples/Revision_v1/cr2/mma_diagnostic/output/cr2_mma_variant_a_sensitivity_norms.csv",
+      "topology_csv": "examples/Revision_v1/cr2/mma_diagnostic/output/cr2_mma_variant_a_topology.csv",
+      "topology_png": "examples/Revision_v1/cr2/mma_diagnostic/output/cr2_mma_variant_a_topology.png"
+    },
+    "exception": ""
+  },
+  "variant_b": {
+    "label": "b",
+    "load_sensitivity": "complete",
+    "optimizer": "MMA",
+    "config_path": "examples/Revision_v1/cr2/mma_diagnostic/cr2_mma_variant_b_complete.json",
+    "config_sha256": "61bf2d44ff96c6786981dee97d1e20016d998e332d4728d3fed715d6f9e5dcc0",
+    "iteration_cap": 400,
+    "solver_success": true,
+    "iterations": 400,
+    "final_design_change": 0.018111600030630615,
+    "final_feasibility": 0.0,
+    "final_mac": 0.9921183388934488,
+    "tracked_mode_index": 2,
+    "tracked_mode_omega": 170.5970180760995,
+    "final_objective": 4952.397773481021,
+    "final_freq_omega1": 132.6175036752009,
+    "timing_total_s": 27.553050500000154,
+    "plateau_diagnostics": {
+      "status": "computed",
+      "window_length": 50,
+      "relative_objective_range": 0.003699556737969551,
+      "relative_frequency_range": 0.0060450634038561575,
+      "median_design_change": 0.01877877207078658,
+      "max_design_change": 0.12299397426189664,
+      "feasibility_min": 0.0,
+      "feasibility_max": 0.0,
+      "move_saturation_fraction": 0.0,
+      "median_relative_lag1_objective": 0.00010633417606528872,
+      "median_relative_lag2_objective": 0.00016334985931289162,
+      "objective_plateau": false,
+      "move_saturation_signature": false,
+      "period2_signature": false,
+      "persistent_bounded_cycle_signature": false,
+      "algorithm_failure_signature": false
+    },
+    "acceptance": {
+      "accepted": false,
+      "failures": [
+        "iteration cap reached",
+        "design_change 1.811e-02 > 1.0e-03"
+      ],
+      "conv_tol": 0.001,
+      "feas_tol": 0.0001,
+      "mac_threshold": 0.8
+    },
+    "artifacts": {
+      "histories_csv": "examples/Revision_v1/cr2/mma_diagnostic/output/cr2_mma_variant_b_histories.csv",
+      "mode_tracking_csv": "examples/Revision_v1/cr2/mma_diagnostic/output/cr2_mma_variant_b_mode_tracking.csv",
+      "sensitivity_norms_csv": "examples/Revision_v1/cr2/mma_diagnostic/output/cr2_mma_variant_b_sensitivity_norms.csv",
+      "topology_csv": "examples/Revision_v1/cr2/mma_diagnostic/output/cr2_mma_variant_b_topology.csv",
+      "topology_png": "examples/Revision_v1/cr2/mma_diagnostic/output/cr2_mma_variant_b_topology.png"
+    },
+    "exception": ""
+  },
+  "topology_difference": {
+    "status": "computed",
+    "mean_absolute_difference": 0.5431356706743364,
+    "rms_difference": 0.7042354069423239,
+    "max_absolute_difference": 0.9980175229023189,
+    "fraction_gt_0_01": 0.825,
+    "fraction_gt_0_05": 0.6325,
+    "pearson_correlation": -0.11085500670258484
+  }
+}

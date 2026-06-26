@@ -1,0 +1,46 @@
+{
+  "study": "Exp2 authoritative clamped-beam alpha=1 pilot",
+  "implementation_language": "MATLAB",
+  "scope": "Exp2 pilot only",
+  "excluded": [
+    "full Exp2 alpha sweep",
+    "Exp3",
+    "A4",
+    "S1",
+    "P1",
+    "manuscript edits"
+  ],
+  "classification": "converged pilot",
+  "viable": true,
+  "authoritative_load": "F(x) = omega0^2 * M(x) * Phi0",
+  "alpha": 1,
+  "mesh": {
+    "nelx": 200,
+    "nely": 25
+  },
+  "artifacts": {
+    "log": "examples/Revision_v1/output/exp2_pilot_authoritative/exp2_pilot_authoritative_run.log",
+    "failure_trace": "examples/Revision_v1/output/exp2_pilot_authoritative/exp2_pilot_authoritative_failure_reproduction_stack.txt",
+    "config": "examples/Revision_v1/output/exp2_pilot_authoritative/exp2_pilot_authoritative_config.json",
+    "mat": "examples/Revision_v1/output/exp2_pilot_authoritative/exp2_pilot_authoritative_result.mat",
+    "result_json": "examples/Revision_v1/output/exp2_pilot_authoritative/exp2_pilot_authoritative_result.json",
+    "convergence_csv": "examples/Revision_v1/output/exp2_pilot_authoritative/exp2_pilot_authoritative_convergence_history.csv",
+    "frequency_csv": "examples/Revision_v1/output/exp2_pilot_authoritative/exp2_pilot_authoritative_frequency_history.csv",
+    "mode_tracking_csv": "examples/Revision_v1/output/exp2_pilot_authoritative/exp2_pilot_authoritative_mode_tracking.csv",
+    "feasibility_csv": "examples/Revision_v1/output/exp2_pilot_authoritative/exp2_pilot_authoritative_feasibility_history.csv",
+    "grayness_csv": "examples/Revision_v1/output/exp2_pilot_authoritative/exp2_pilot_authoritative_grayness_history.csv",
+    "topology_csv": "examples/Revision_v1/output/exp2_pilot_authoritative/exp2_pilot_authoritative_topology.csv",
+    "topology_json": "examples/Revision_v1/output/exp2_pilot_authoritative/exp2_pilot_authoritative_topology.json",
+    "topology_png": "examples/Revision_v1/output/exp2_pilot_authoritative/exp2_pilot_authoritative_topology.png",
+    "summary": "examples/Revision_v1/output/exp2_pilot_authoritative/exp2_pilot_authoritative_summary.md",
+    "manifest": "examples/Revision_v1/output/exp2_pilot_authoritative/exp2_pilot_authoritative_manifest.json"
+  },
+  "created_utc": "2026-06-26T09:16:56Z",
+  "failure_reproduction": {
+    "attempted": true,
+    "expected_failure_reproduced": true,
+    "identifier": "run_topopt_from_json:GateA0ObsoleteRhoSource",
+    "message": "Gate A0 / revision_v1 configuration must not define optimization.semi_harmonic_rho_source. The authoritative load omega0^2*M(x)*Phi0 does not use projected element density.",
+    "trace_file": "/Users/piotrek/Programming/topOpt4freqMax/examples/Revision_v1/output/exp2_pilot_authoritative/exp2_pilot_authoritative_failure_reproduction_stack.txt"
+  }
+}

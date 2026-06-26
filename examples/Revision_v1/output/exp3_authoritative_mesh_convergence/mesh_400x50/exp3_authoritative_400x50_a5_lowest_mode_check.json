@@ -1,0 +1,8 @@
+{
+  "pass": true,
+  "tracked_mode_index": 1,
+  "tracked_mode_omega_rad_s": 64.393651634490965,
+  "lowest_mode_omega_rad_s": 64.393651634490965,
+  "modes_below_tracked_count": 0,
+  "message": "tracked mode is the lowest computed mode"
+}

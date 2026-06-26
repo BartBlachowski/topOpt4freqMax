@@ -1,0 +1,109 @@
+{
+  "study": "CR2-MMA matched diagnostic",
+  "gate": "E4-CR2-MMA",
+  "outcome_category": "inconclusive",
+  "no_further_tuning": true,
+  "output_directory": "examples/Revision_v1/cr2/mma_diagnostic/output",
+  "entries": [
+    {
+      "path": "examples/Revision_v1/cr2/mma_diagnostic/run_cr2_mma_diagnostic.py",
+      "role": "run script",
+      "exists": true
+    },
+    {
+      "path": "examples/Revision_v1/cr2/mma_diagnostic/cr2_mma_variant_a_omitted.json",
+      "role": "Variant A config",
+      "exists": true
+    },
+    {
+      "path": "examples/Revision_v1/cr2/mma_diagnostic/cr2_mma_variant_b_complete.json",
+      "role": "Variant B config",
+      "exists": true
+    },
+    {
+      "path": "examples/Revision_v1/cr2/mma_diagnostic/output/cr2_mma_run.log",
+      "role": "run log",
+      "exists": true
+    },
+    {
+      "path": "examples/Revision_v1/cr2/mma_diagnostic/output/cr2_mma_results.json",
+      "role": "result summary JSON",
+      "exists": true
+    },
+    {
+      "path": "examples/Revision_v1/cr2/mma_diagnostic/output/cr2_mma_summary.md",
+      "role": "result summary markdown",
+      "exists": true
+    },
+    {
+      "path": "examples/Revision_v1/cr2/mma_diagnostic/output/cr2_topology_difference_metrics.json",
+      "role": "topology difference metrics",
+      "exists": true
+    },
+    {
+      "path": "examples/Revision_v1/cr2/mma_diagnostic/output/cr2_topology_difference.png",
+      "role": "topology difference figure",
+      "exists": true
+    },
+    {
+      "path": "examples/Revision_v1/cr2/mma_diagnostic/output/cr2_mma_variant_a_histories.csv",
+      "role": "Variant A histories CSV",
+      "exists": true
+    },
+    {
+      "path": "examples/Revision_v1/cr2/mma_diagnostic/output/cr2_mma_variant_b_histories.csv",
+      "role": "Variant B histories CSV",
+      "exists": true
+    },
+    {
+      "path": "examples/Revision_v1/cr2/mma_diagnostic/output/cr2_mma_variant_a_mode_tracking.csv",
+      "role": "Variant A mode tracking CSV",
+      "exists": true
+    },
+    {
+      "path": "examples/Revision_v1/cr2/mma_diagnostic/output/cr2_mma_variant_b_mode_tracking.csv",
+      "role": "Variant B mode tracking CSV",
+      "exists": true
+    },
+    {
+      "path": "examples/Revision_v1/cr2/mma_diagnostic/output/cr2_mma_variant_a_sensitivity_norms.csv",
+      "role": "Variant A sensitivity norms CSV",
+      "exists": true
+    },
+    {
+      "path": "examples/Revision_v1/cr2/mma_diagnostic/output/cr2_mma_variant_b_sensitivity_norms.csv",
+      "role": "Variant B sensitivity norms CSV",
+      "exists": true
+    },
+    {
+      "path": "examples/Revision_v1/cr2/mma_diagnostic/output/cr2_mma_variant_a_topology.csv",
+      "role": "Variant A topology CSV",
+      "exists": true
+    },
+    {
+      "path": "examples/Revision_v1/cr2/mma_diagnostic/output/cr2_mma_variant_b_topology.csv",
+      "role": "Variant B topology CSV",
+      "exists": true
+    },
+    {
+      "path": "examples/Revision_v1/cr2/mma_diagnostic/output/cr2_mma_variant_a_topology.png",
+      "role": "Variant A topology PNG",
+      "exists": true
+    },
+    {
+      "path": "examples/Revision_v1/cr2/mma_diagnostic/output/cr2_mma_variant_b_topology.png",
+      "role": "Variant B topology PNG",
+      "exists": true
+    },
+    {
+      "path": "examples/Revision_v1/cr2/mma_diagnostic/output/cr2_mma_diagnosis.md",
+      "role": "failure diagnosis document",
+      "exists": true
+    },
+    {
+      "path": "analysis/OlhoffApproach/Python/mma.py",
+      "role": "Svanberg MMA Python implementation (mmasub)",
+      "exists": true
+    }
+  ]
+}

@@ -1,0 +1,75 @@
+{
+  "study": "Exp3 authoritative alpha=1 mesh convergence",
+  "implementation_language": "MATLAB",
+  "scope": "Exp3 alpha=1.00 mesh convergence case",
+  "mesh_label": "200x25",
+  "mesh": {
+    "nelx": 200,
+    "nely": 25
+  },
+  "alpha": 1,
+  "source_config": "examples/Revision_v1/clamped_beam_200x25.json",
+  "case_config": "examples/Revision_v1/output/exp3_authoritative_mesh_convergence/mesh_200x25/exp3_authoritative_200x25_config.json",
+  "authoritative_load": "F(x) = omega0^2 * M(x) * Phi0",
+  "filter_physical_radius": 0.08,
+  "criteria": {
+    "mac_threshold": 0.8,
+    "feasibility_tolerance": 1E-8,
+    "design_change_tolerance": 0.001,
+    "tracked_omega_relative_tolerance": 0.05,
+    "topology_correlation_minimum": 0.8,
+    "topology_mean_abs_difference_maximum": 0.15
+  },
+  "solver_success": true,
+  "accepted": true,
+  "classification": "accepted",
+  "exception": "",
+  "iterations": 1052,
+  "iteration_cap": 2000,
+  "final": {
+    "omega_rad_s": [
+      141.78982535805085,
+      374.309771773102,
+      614.650190135589
+    ],
+    "frequency_hz": [
+      22.566551585870361,
+      59.573250425288386,
+      97.824616032452326
+    ],
+    "grayness": 0.0857778265073689,
+    "volume": 0.4999999999999295,
+    "feasibility": 0,
+    "design_change": 0.00016618994509209895,
+    "tracked_mode_index": 1,
+    "tracked_mode_mac": 0.99253313270153587,
+    "tracked_mode_omega": 141.78982535805085
+  },
+  "a5_lowest_mode_check": {
+    "pass": true,
+    "tracked_mode_index": 1,
+    "tracked_mode_omega_rad_s": 141.78982535805085,
+    "lowest_mode_omega_rad_s": 141.78982535805085,
+    "modes_below_tracked_count": 0,
+    "message": "tracked mode is the lowest computed mode"
+  },
+  "artifacts": {
+    "config": "examples/Revision_v1/output/exp3_authoritative_mesh_convergence/mesh_200x25/exp3_authoritative_200x25_config.json",
+    "mat": "examples/Revision_v1/output/exp3_authoritative_mesh_convergence/mesh_200x25/exp3_authoritative_200x25_result.mat",
+    "result_json": "examples/Revision_v1/output/exp3_authoritative_mesh_convergence/mesh_200x25/exp3_authoritative_200x25_result.json",
+    "convergence_csv": "examples/Revision_v1/output/exp3_authoritative_mesh_convergence/mesh_200x25/exp3_authoritative_200x25_convergence_history.csv",
+    "frequency_csv": "examples/Revision_v1/output/exp3_authoritative_mesh_convergence/mesh_200x25/exp3_authoritative_200x25_frequency_history.csv",
+    "mode_tracking_csv": "examples/Revision_v1/output/exp3_authoritative_mesh_convergence/mesh_200x25/exp3_authoritative_200x25_mode_tracking.csv",
+    "feasibility_csv": "examples/Revision_v1/output/exp3_authoritative_mesh_convergence/mesh_200x25/exp3_authoritative_200x25_feasibility_history.csv",
+    "grayness_csv": "examples/Revision_v1/output/exp3_authoritative_mesh_convergence/mesh_200x25/exp3_authoritative_200x25_grayness_history.csv",
+    "topology_csv": "examples/Revision_v1/output/exp3_authoritative_mesh_convergence/mesh_200x25/exp3_authoritative_200x25_topology.csv",
+    "topology_json": "examples/Revision_v1/output/exp3_authoritative_mesh_convergence/mesh_200x25/exp3_authoritative_200x25_topology.json",
+    "topology_png": "examples/Revision_v1/output/exp3_authoritative_mesh_convergence/mesh_200x25/exp3_authoritative_200x25_topology.png",
+    "a5_lowest_mode_check_csv": "examples/Revision_v1/output/exp3_authoritative_mesh_convergence/mesh_200x25/exp3_authoritative_200x25_a5_lowest_mode_check.csv",
+    "a5_lowest_mode_check_json": "examples/Revision_v1/output/exp3_authoritative_mesh_convergence/mesh_200x25/exp3_authoritative_200x25_a5_lowest_mode_check.json",
+    "manifest": "examples/Revision_v1/output/exp3_authoritative_mesh_convergence/mesh_200x25/exp3_authoritative_200x25_manifest.json"
+  },
+  "timing_total_s": 106.630139125,
+  "timing_per_iter_s": 0.098584397378010141,
+  "peak_memory_MB": 260.140625
+}

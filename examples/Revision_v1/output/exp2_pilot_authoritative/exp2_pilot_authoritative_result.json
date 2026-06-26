@@ -1,0 +1,71 @@
+{
+  "study": "Exp2 authoritative clamped-beam alpha=1 pilot",
+  "implementation_language": "MATLAB",
+  "source_config": "examples/Revision_v1/clamped_beam_200x25.json",
+  "pilot_config": "examples/Revision_v1/output/exp2_pilot_authoritative/exp2_pilot_authoritative_config.json",
+  "authoritative_load": "F(x) = omega0^2 * M(x) * Phi0",
+  "alpha": 1,
+  "mesh": {
+    "nelx": 200,
+    "nely": 25
+  },
+  "load_sensitivity": "omitted",
+  "gate_a0_diagnostics": true,
+  "failure_reproduction": {
+    "attempted": true,
+    "expected_failure_reproduced": true,
+    "identifier": "run_topopt_from_json:GateA0ObsoleteRhoSource",
+    "message": "Gate A0 / revision_v1 configuration must not define optimization.semi_harmonic_rho_source. The authoritative load omega0^2*M(x)*Phi0 does not use projected element density.",
+    "trace_file": "/Users/piotrek/Programming/topOpt4freqMax/examples/Revision_v1/output/exp2_pilot_authoritative/exp2_pilot_authoritative_failure_reproduction_stack.txt"
+  },
+  "criteria": {
+    "mac_threshold": 0.8,
+    "feasibility_tolerance": 1E-8,
+    "design_change_tolerance": 0.001
+  },
+  "solver_success": true,
+  "classification": "converged pilot",
+  "viable": true,
+  "exception": "",
+  "iterations": 1052,
+  "iteration_cap": 2000,
+  "final": {
+    "omega_rad_s": [
+      141.78982535805085,
+      374.309771773102,
+      614.650190135589
+    ],
+    "frequency_hz": [
+      22.566551585870361,
+      59.573250425288386,
+      97.824616032452326
+    ],
+    "grayness": 0.0857778265073689,
+    "volume": 0.4999999999999295,
+    "feasibility": 0,
+    "design_change": 0.00016618994509209895,
+    "tracked_mode_index": 1,
+    "tracked_mode_mac": 0.99253313270153587,
+    "tracked_mode_omega": 141.78982535805085
+  },
+  "artifacts": {
+    "log": "examples/Revision_v1/output/exp2_pilot_authoritative/exp2_pilot_authoritative_run.log",
+    "failure_trace": "examples/Revision_v1/output/exp2_pilot_authoritative/exp2_pilot_authoritative_failure_reproduction_stack.txt",
+    "config": "examples/Revision_v1/output/exp2_pilot_authoritative/exp2_pilot_authoritative_config.json",
+    "mat": "examples/Revision_v1/output/exp2_pilot_authoritative/exp2_pilot_authoritative_result.mat",
+    "result_json": "examples/Revision_v1/output/exp2_pilot_authoritative/exp2_pilot_authoritative_result.json",
+    "convergence_csv": "examples/Revision_v1/output/exp2_pilot_authoritative/exp2_pilot_authoritative_convergence_history.csv",
+    "frequency_csv": "examples/Revision_v1/output/exp2_pilot_authoritative/exp2_pilot_authoritative_frequency_history.csv",
+    "mode_tracking_csv": "examples/Revision_v1/output/exp2_pilot_authoritative/exp2_pilot_authoritative_mode_tracking.csv",
+    "feasibility_csv": "examples/Revision_v1/output/exp2_pilot_authoritative/exp2_pilot_authoritative_feasibility_history.csv",
+    "grayness_csv": "examples/Revision_v1/output/exp2_pilot_authoritative/exp2_pilot_authoritative_grayness_history.csv",
+    "topology_csv": "examples/Revision_v1/output/exp2_pilot_authoritative/exp2_pilot_authoritative_topology.csv",
+    "topology_json": "examples/Revision_v1/output/exp2_pilot_authoritative/exp2_pilot_authoritative_topology.json",
+    "topology_png": "examples/Revision_v1/output/exp2_pilot_authoritative/exp2_pilot_authoritative_topology.png",
+    "summary": "examples/Revision_v1/output/exp2_pilot_authoritative/exp2_pilot_authoritative_summary.md",
+    "manifest": "examples/Revision_v1/output/exp2_pilot_authoritative/exp2_pilot_authoritative_manifest.json"
+  },
+  "timing_total_s": 107.45231916666667,
+  "timing_per_iter_s": 0.099260153398288975,
+  "peak_memory_MB": 272.203125
+}

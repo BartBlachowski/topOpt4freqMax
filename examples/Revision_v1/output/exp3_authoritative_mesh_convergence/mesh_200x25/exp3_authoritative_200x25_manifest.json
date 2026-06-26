@@ -1,0 +1,48 @@
+{
+  "study": "Exp3 authoritative alpha=1 mesh convergence",
+  "implementation_language": "MATLAB",
+  "scope": "Exp3 alpha=1.00 mesh convergence case",
+  "excluded": [
+    "Exp2 alpha sweep",
+    "CR2",
+    "A4",
+    "S1",
+    "P1",
+    "Python",
+    "manuscript edits"
+  ],
+  "mesh_label": "200x25",
+  "mesh": {
+    "nelx": 200,
+    "nely": 25
+  },
+  "alpha": 1,
+  "classification": "accepted",
+  "accepted": true,
+  "acceptance": {
+    "not_capped": true,
+    "design_change_ok": true,
+    "feasibility_ok": true,
+    "tracked_mac_ok": true,
+    "a5_lowest_mode_ok": true
+  },
+  "authoritative_load": "F(x) = omega0^2 * M(x) * Phi0",
+  "filter_physical_radius": 0.08,
+  "artifacts": {
+    "config": "examples/Revision_v1/output/exp3_authoritative_mesh_convergence/mesh_200x25/exp3_authoritative_200x25_config.json",
+    "mat": "examples/Revision_v1/output/exp3_authoritative_mesh_convergence/mesh_200x25/exp3_authoritative_200x25_result.mat",
+    "result_json": "examples/Revision_v1/output/exp3_authoritative_mesh_convergence/mesh_200x25/exp3_authoritative_200x25_result.json",
+    "convergence_csv": "examples/Revision_v1/output/exp3_authoritative_mesh_convergence/mesh_200x25/exp3_authoritative_200x25_convergence_history.csv",
+    "frequency_csv": "examples/Revision_v1/output/exp3_authoritative_mesh_convergence/mesh_200x25/exp3_authoritative_200x25_frequency_history.csv",
+    "mode_tracking_csv": "examples/Revision_v1/output/exp3_authoritative_mesh_convergence/mesh_200x25/exp3_authoritative_200x25_mode_tracking.csv",
+    "feasibility_csv": "examples/Revision_v1/output/exp3_authoritative_mesh_convergence/mesh_200x25/exp3_authoritative_200x25_feasibility_history.csv",
+    "grayness_csv": "examples/Revision_v1/output/exp3_authoritative_mesh_convergence/mesh_200x25/exp3_authoritative_200x25_grayness_history.csv",
+    "topology_csv": "examples/Revision_v1/output/exp3_authoritative_mesh_convergence/mesh_200x25/exp3_authoritative_200x25_topology.csv",
+    "topology_json": "examples/Revision_v1/output/exp3_authoritative_mesh_convergence/mesh_200x25/exp3_authoritative_200x25_topology.json",
+    "topology_png": "examples/Revision_v1/output/exp3_authoritative_mesh_convergence/mesh_200x25/exp3_authoritative_200x25_topology.png",
+    "a5_lowest_mode_check_csv": "examples/Revision_v1/output/exp3_authoritative_mesh_convergence/mesh_200x25/exp3_authoritative_200x25_a5_lowest_mode_check.csv",
+    "a5_lowest_mode_check_json": "examples/Revision_v1/output/exp3_authoritative_mesh_convergence/mesh_200x25/exp3_authoritative_200x25_a5_lowest_mode_check.json",
+    "manifest": "examples/Revision_v1/output/exp3_authoritative_mesh_convergence/mesh_200x25/exp3_authoritative_200x25_manifest.json"
+  },
+  "created_utc": "2026-06-26T10:22:24Z"
+}
