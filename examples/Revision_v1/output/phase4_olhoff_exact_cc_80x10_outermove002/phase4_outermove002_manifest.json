@@ -1,0 +1,41 @@
+{
+  "study": "Phase 4 numerical-behaviour investigation: outer_move 0.02",
+  "created_utc": "2026-06-30T10:40:44Z",
+  "output_dir": "/Users/piotrek/Programming/topOpt4freqMax/examples/Revision_v1/output/phase4_olhoff_exact_cc_80x10_outermove002",
+  "files": [
+    "phase4_outermove002_result.mat",
+    "phase4_outermove002_result.json",
+    "phase4_outermove002_summary.md",
+    "phase4_outermove002_manifest.json",
+    "phase4_outermove002_comparison.md",
+    "phase4_outermove002_vs_phase3.md",
+    "phase4_outermove002_parameter_verification.json",
+    "phase4_outermove002_convergence_history.csv",
+    "phase4_outermove002_multiplicity_history.csv",
+    "phase4_outermove002_omega_history.png",
+    "phase4_outermove002_beta_history.png",
+    "phase4_outermove002_design_change_history.png",
+    "phase4_outermove002_asymptote_width_history.png",
+    "phase4_outermove002_inner_iteration_histogram.png",
+    "phase4_outermove002_topology.csv",
+    "phase4_outermove002_topology.png",
+    "s1_mode_summary.json",
+    "s1_modes.csv",
+    "phase4_outermove002_run.log",
+    "phase4_outermove002_mode_01_shape.png",
+    "phase4_outermove002_mode_02_shape.png",
+    "phase4_outermove002_mode_03_shape.png",
+    "phase4_outermove002_mode_04_shape.png",
+    "phase4_outermove002_mode_05_shape.png",
+    "phase4_outermove002_mode_06_shape.png"
+  ],
+  "changed_parameter": {
+    "name": "outer_move",
+    "phase3": 0.05,
+    "phase4": 0.02
+  },
+  "decision": {
+    "code": "A",
+    "label": "outer_move = 0.02 removes the oscillation and achieves convergence."
+  }
+}

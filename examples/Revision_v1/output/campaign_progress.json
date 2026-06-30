@@ -1,0 +1,26 @@
+{
+  "campaign_id": "r1_full_20260630T130500417",
+  "start_time_utc": "2026-06-30T11:05:00.427Z",
+  "last_update_utc": "2026-06-30T11:05:00.504Z",
+  "mode": "full",
+  "current_stage": "",
+  "status": "completed",
+  "elapsed_seconds": 0.075660999998450273,
+  "progress_file": "/Users/piotrek/Programming/topOpt4freqMax/examples/Revision_v1/output/campaign_progress.json",
+  "output_root": "/Users/piotrek/Programming/topOpt4freqMax/examples/Revision_v1/output",
+  "resume": false,
+  "dry_run": true,
+  "force": false,
+  "completed_stages": [],
+  "failed_stages": [],
+  "skipped_stages": [],
+  "per_stage_elapsed": {},
+  "output_directories": {
+    "exp1": "/Users/piotrek/Programming/topOpt4freqMax/examples/Revision_v1/output/exp1",
+    "exp2": "/Users/piotrek/Programming/topOpt4freqMax/examples/Revision_v1/output/exp2",
+    "exp2b": "/Users/piotrek/Programming/topOpt4freqMax/examples/Revision_v1/output/exp2b",
+    "exp3": "/Users/piotrek/Programming/topOpt4freqMax/examples/Revision_v1/output/exp3",
+    "exp4": "/Users/piotrek/Programming/topOpt4freqMax/examples/Revision_v1/output/exp4",
+    "exp5": "/Users/piotrek/Programming/topOpt4freqMax/examples/Revision_v1/output/exp5"
+  }
+}

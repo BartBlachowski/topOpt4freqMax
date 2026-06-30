@@ -145,6 +145,9 @@ hist.beta         = nan(inner_max_iter, 1);
 hist.fval_cluster = nan(inner_max_iter, 1);
 hist.fval_vol     = nan(inner_max_iter, 1);
 hist.n_iters      = 0;
+hist.converged    = false;
+hist.hit_max_iter = false;
+hist.termination_reason = 'not_started';
 
 % -----------------------------------------------------------------
 % Inner MMA iterations.
@@ -232,7 +235,18 @@ for inner_it = 1:inner_max_iter
     xval  = xnew;
 
     if drho_change < inner_tol * sqrt(nEl)
+        hist.converged = true;
+        hist.termination_reason = 'convergence';
         break
+    end
+end
+
+if ~hist.converged
+    hist.hit_max_iter = hist.n_iters >= inner_max_iter;
+    if hist.hit_max_iter
+        hist.termination_reason = 'max_iterations';
+    else
+        hist.termination_reason = 'stopped';
     end
 end
 

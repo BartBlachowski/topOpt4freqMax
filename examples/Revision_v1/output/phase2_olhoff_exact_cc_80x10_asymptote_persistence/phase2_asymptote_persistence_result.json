@@ -1,0 +1,265 @@
+{
+  "study": "Phase 2 numerical-behaviour investigation: persistent MMA asymptotes",
+  "created_utc": "2026-06-30T09:30:18Z",
+  "scope": "Single implementation-feature test; OlhoffApproachExact CC 80x10 alpha=0.5 inner_max_iter=300",
+  "changed_feature": {
+    "name": "persistent_mma_state",
+    "phase1": false,
+    "phase2": true
+  },
+  "parameter_verification": {
+    "pass": true,
+    "changed_feature": "persistent_mma_state",
+    "phase1_value": false,
+    "phase2_value": true,
+    "differences_other_than_persistence": [],
+    "phase1_config": {
+      "L": 8,
+      "H": 1,
+      "nelx": 80,
+      "nely": 10,
+      "E0": 1.0E+7,
+      "nu": 0.3,
+      "rho0": 1,
+      "t": 1,
+      "volfrac": 0.5,
+      "rho_min": 0.001,
+      "penal": 3,
+      "mass_mode": "du2007_c1",
+      "rmin_elem": 2.5,
+      "sensitivity_filter": true,
+      "support_type": "CC",
+      "n_target": 1,
+      "n_modes": 10,
+      "mult_tol": 0.001,
+      "outer_max_iter": 400,
+      "outer_tol": 0.001,
+      "inner_max_iter": 300,
+      "inner_tol": 0.0001,
+      "move_lim": null,
+      "outer_move": 0.2,
+      "acceptance_check": false,
+      "alpha": 0.5,
+      "verbose": true,
+      "persistent_mma_state": false
+    },
+    "phase2_config": {
+      "L": 8,
+      "H": 1,
+      "nelx": 80,
+      "nely": 10,
+      "E0": 1.0E+7,
+      "nu": 0.3,
+      "rho0": 1,
+      "t": 1,
+      "volfrac": 0.5,
+      "rho_min": 0.001,
+      "penal": 3,
+      "mass_mode": "du2007_c1",
+      "rmin_elem": 2.5,
+      "sensitivity_filter": true,
+      "support_type": "CC",
+      "n_target": 1,
+      "n_modes": 10,
+      "mult_tol": 0.001,
+      "outer_max_iter": 400,
+      "outer_tol": 0.001,
+      "inner_max_iter": 300,
+      "inner_tol": 0.0001,
+      "move_lim": null,
+      "outer_move": 0.2,
+      "acceptance_check": false,
+      "alpha": 0.5,
+      "verbose": true,
+      "persistent_mma_state": true
+    }
+  },
+  "config": {
+    "L": 8,
+    "H": 1,
+    "nelx": 80,
+    "nely": 10,
+    "E0": 1.0E+7,
+    "nu": 0.3,
+    "rho0": 1,
+    "t": 1,
+    "volfrac": 0.5,
+    "rho_min": 0.001,
+    "penal": 3,
+    "mass_mode": "du2007_c1",
+    "rmin_elem": 2.5,
+    "sensitivity_filter": true,
+    "support_type": "CC",
+    "n_target": 1,
+    "n_modes": 10,
+    "mult_tol": 0.001,
+    "outer_max_iter": 400,
+    "outer_tol": 0.001,
+    "inner_max_iter": 300,
+    "inner_tol": 0.0001,
+    "move_lim": null,
+    "outer_move": 0.2,
+    "acceptance_check": false,
+    "alpha": 0.5,
+    "verbose": true,
+    "persistent_mma_state": true
+  },
+  "elapsed_s": 458.90242716666666,
+  "outer_iters": 400,
+  "capped": true,
+  "final_design_change": 0.092109817852935136,
+  "outer_tol": 0.001,
+  "final_volume": 0.4999998032887491,
+  "final_N": 1,
+  "first_6_omega_rad_s": [
+    270.74666252327353,
+    387.8116528436168,
+    575.96846042194522,
+    621.68332258044313,
+    700.37346960718548,
+    831.09163756823023
+  ],
+  "first_6_frequency_hz": [
+    43.090669666212193,
+    61.7221415386997,
+    91.668227541181267,
+    98.943973826470838,
+    111.46789969840489,
+    132.27234228132178
+  ],
+  "inner_solver": {
+    "average_inner_iterations": 162.3075,
+    "maximum_inner_iterations": 300,
+    "minimum_inner_iterations": 90,
+    "fraction_hitting_cap": 0.01,
+    "count_hitting_cap": 4,
+    "outer_iteration_count": 400,
+    "average_cpu_time_s": 1.1293451622916668,
+    "total_cpu_time_s": 451.73806491666676
+  },
+  "outer_convergence": {
+    "final_omega1": 270.74666252327353,
+    "final_beta_rad_s": 365.70409989476116,
+    "final_design_change": 0.092109817852935136,
+    "design_change_mean": 0.091509857650613008,
+    "omega_even_mean": 270.48882029089697,
+    "omega_odd_mean": 272.30708418051574,
+    "omega_parity_gap": 1.8182638896187768,
+    "beta_even_mean": 369.97353234483182,
+    "beta_odd_mean": 388.08776314869971,
+    "beta_parity_gap": 18.114230803867883
+  },
+  "s1_overall": {
+    "classification": "ambiguous",
+    "physical_global_count": 0,
+    "localized_low_density_count": 0,
+    "localized_non_low_density_count": 0,
+    "ambiguous_count": 10
+  },
+  "topology_connectedness": {
+    "count": 9,
+    "largest_support_connected_component_id": 0,
+    "support_connected_component_count": 0,
+    "largest_component_size": 199,
+    "largest_support_connected_component_size": 0
+  },
+  "comparison_vs_phase1": {
+    "phase1": {
+      "inner_solver": {
+        "average_inner_iterations": 155.315,
+        "maximum_inner_iterations": 300,
+        "minimum_inner_iterations": 81,
+        "fraction_hitting_cap": 0.015,
+        "count_hitting_cap": 6,
+        "outer_iteration_count": 400,
+        "average_cpu_time_s": 1.1923694385416668,
+        "total_cpu_time_s": 476.94777541666667
+      },
+      "outer": {
+        "final_omega1": 263.652182130924,
+        "final_beta_rad_s": 358.537194386338,
+        "final_design_change": 0.0914338629766823,
+        "design_change_mean": 0.09188885186160016,
+        "omega_even_mean": 263.48729923928471,
+        "omega_odd_mean": 267.18801911809356,
+        "omega_parity_gap": 3.7007198788088544,
+        "beta_even_mean": 362.08627389758806,
+        "beta_odd_mean": 377.75657088623842,
+        "beta_parity_gap": 15.670296988650364
+      },
+      "s1": {
+        "classification": "ambiguous",
+        "physical_global_count": 0,
+        "localized_low_density_count": 0,
+        "localized_non_low_density_count": 0,
+        "ambiguous_count": 10
+      },
+      "mode1_ld_strain": 0.0016501132925212591,
+      "components": {
+        "count": 13,
+        "largest_support_connected_component_id": 0,
+        "support_connected_component_count": 0,
+        "largest_component_size": 196,
+        "largest_support_connected_component_size": 0
+      }
+    },
+    "phase2": {
+      "inner_solver": {
+        "average_inner_iterations": 162.3075,
+        "maximum_inner_iterations": 300,
+        "minimum_inner_iterations": 90,
+        "fraction_hitting_cap": 0.01,
+        "count_hitting_cap": 4,
+        "outer_iteration_count": 400,
+        "average_cpu_time_s": 1.1293451622916668,
+        "total_cpu_time_s": 451.73806491666676
+      },
+      "outer": {
+        "final_omega1": 270.74666252327353,
+        "final_beta_rad_s": 365.70409989476116,
+        "final_design_change": 0.092109817852935136,
+        "design_change_mean": 0.091509857650613008,
+        "omega_even_mean": 270.48882029089697,
+        "omega_odd_mean": 272.30708418051574,
+        "omega_parity_gap": 1.8182638896187768,
+        "beta_even_mean": 369.97353234483182,
+        "beta_odd_mean": 388.08776314869971,
+        "beta_parity_gap": 18.114230803867883
+      },
+      "s1": {
+        "classification": "ambiguous",
+        "physical_global_count": 0,
+        "localized_low_density_count": 0,
+        "localized_non_low_density_count": 0,
+        "ambiguous_count": 10
+      },
+      "mode1_ld_strain": 0.001198138693504253,
+      "components": {
+        "count": 9,
+        "largest_support_connected_component_id": 0,
+        "support_connected_component_count": 0,
+        "largest_component_size": 199,
+        "largest_support_connected_component_size": 0
+      },
+      "persistence": {
+        "reuse_fraction": 0.9975,
+        "first_reused_iteration": 2,
+        "mean_asym_width": 0.076701053977340075
+      }
+    },
+    "reductions": {
+      "omega_parity_gap": 1.8824559891900776,
+      "beta_parity_gap": -2.4439338152175196,
+      "design_change_mean": 0.00037899421098715191
+    }
+  },
+  "decision": {
+    "code": "C",
+    "label": "Persistent asymptotes have negligible effect."
+  },
+  "final_answers": {
+    "q1": "No. Decision C: Persistent asymptotes have negligible effect.",
+    "q2": "No; asymptote persistence is not the dominant explanation of the previous oscillation.",
+    "q3": "The remaining fixed-point/linearized-increment outer update dynamics under the current outer move and alpha settings. Phase 2 omega parity gap is 1.81826 rad/s and mean design change is 0.0915099."
+  }
+}

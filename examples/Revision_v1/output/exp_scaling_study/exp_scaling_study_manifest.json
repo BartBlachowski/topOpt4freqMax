@@ -1,0 +1,77 @@
+{
+  "study": "Extended Exp3/S1 scaling study: onset of localised modes",
+  "purpose": "Characterise onset of mesh-dependent localised low-density modes. NOT mesh convergence.",
+  "created_utc": "2026-06-29T10:36:13Z",
+  "scope_excluded": [
+    "alpha sweep",
+    "CR2",
+    "A4",
+    "P1",
+    "Python",
+    "manuscript edits",
+    "mesh convergence claim"
+  ],
+  "onset_mesh": "80x10",
+  "cases": [
+    {
+      "label": "80x10",
+      "classification": "accepted",
+      "accepted": true,
+      "n_elements": 800,
+      "iterations": 1309,
+      "omega_1_rad_s": 3.9772001634667449,
+      "tracked_mac": 0.90411062804795406,
+      "s1_overall": "likely localized/spurious low-density mode influence"
+    },
+    {
+      "label": "160x20",
+      "classification": "accepted",
+      "accepted": true,
+      "n_elements": 3200,
+      "iterations": 873,
+      "omega_1_rad_s": 4.5610316995744951,
+      "tracked_mac": 0.91340659746470831,
+      "s1_overall": "likely localized/spurious low-density mode influence"
+    },
+    {
+      "label": "240x30",
+      "classification": "mode invalid",
+      "accepted": false,
+      "n_elements": 7200,
+      "iterations": 2000,
+      "omega_1_rad_s": 15.724556214624341,
+      "tracked_mac": 0.077200764956119758,
+      "s1_overall": "likely localized/spurious low-density mode influence"
+    },
+    {
+      "label": "320x40",
+      "classification": "mode invalid",
+      "accepted": false,
+      "n_elements": 12800,
+      "iterations": 1428,
+      "omega_1_rad_s": 94.343123533957751,
+      "tracked_mac": 0.61482453735977771,
+      "s1_overall": "likely localized/spurious low-density mode influence"
+    },
+    {
+      "label": "400x50",
+      "classification": "mode invalid",
+      "accepted": false,
+      "n_elements": 20000,
+      "iterations": 1750,
+      "omega_1_rad_s": 64.393651634490965,
+      "tracked_mac": 0.78612668758286619,
+      "s1_overall": "likely localized/spurious low-density mode influence"
+    },
+    {
+      "label": "480x60",
+      "classification": "accepted",
+      "accepted": true,
+      "n_elements": 28800,
+      "iterations": 1083,
+      "omega_1_rad_s": 89.121335366674927,
+      "tracked_mac": 0.93237533460179567,
+      "s1_overall": "likely localized/spurious low-density mode influence"
+    }
+  ]
+}

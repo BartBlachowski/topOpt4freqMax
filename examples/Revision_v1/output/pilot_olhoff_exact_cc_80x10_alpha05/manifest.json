@@ -1,0 +1,37 @@
+{
+  "study": "Stabilized OlhoffApproachExact CC 80x10 alpha=0.5 pilot",
+  "created_utc": "2026-06-30T08:22:05Z",
+  "output_dir": "/Users/piotrek/Programming/topOpt4freqMax/examples/Revision_v1/output/pilot_olhoff_exact_cc_80x10_alpha05",
+  "files": [
+    "settings_verification.json",
+    "stabilized_pilot_result.mat",
+    "stabilized_pilot_result.json",
+    "stabilized_pilot_summary.md",
+    "topology_final.csv",
+    "topology_final.png",
+    "convergence_history.csv",
+    "convergence_history.png",
+    "multiplicity_history.csv",
+    "s1_mode_summary.json",
+    "s1_modes.csv",
+    "pilot_run.log",
+    "mode_01_shape.png",
+    "mode_02_shape.png",
+    "mode_03_shape.png",
+    "mode_04_shape.png",
+    "mode_05_shape.png",
+    "mode_06_shape.png"
+  ],
+  "classification": {
+    "label": "still 2-cycle",
+    "reason": "Last-window omega parity gap 6.962 rad/s with design-change mean 0.07674.",
+    "converged": false,
+    "capped": true,
+    "no_localized_low_density_modes": true
+  },
+  "changed_parameter": {
+    "name": "alpha",
+    "baseline": 1,
+    "pilot": 0.5
+  }
+}

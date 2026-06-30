@@ -49,6 +49,7 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
     rho_min = localOpt(runCfg, 'rho_min', 1e-6);
     rho0 = localOpt(runCfg, 'rho0', 1.0);
     pmass = localOpt(runCfg, 'pmass', 1.0);
+    massInterp = localParseMassInterpolation(runCfg, pmass);
     nu = localOpt(runCfg, 'nu', 0.3);
     move = localOpt(runCfg, 'move', 0.2);
     convTol = localOpt(runCfg, 'conv_tol', 0.01);
@@ -61,6 +62,8 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
             'runCfg.optimizer must be "OC" or "MMA" (got "%s").', optimizerType);
     end
     fprintf('Optimizer: %s\n', optimizerType);
+    fprintf('Mass interpolation: mode=%s, pmass=%g\n', massInterp.mode, massInterp.pmass);
+    info.mass_interpolation = massInterp;
     if isfield(runCfg, 'visualize_live') && ~isempty(runCfg.visualize_live)
         visualizeLive = localParseVisualizeLive(runCfg.visualize_live, true);
     else
@@ -262,7 +265,7 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
         K0  = sparse(iK, jK, sK0, ndof, ndof);
         K0  = (K0 + K0') / 2;
 
-        rhoPhys0 = rho_min + xPhys.^pmass * (rho0 - rho_min);
+        [rhoPhys0, ~] = our_mass_interpolation(xPhys, rho0, rho_min, massInterp.mode, massInterp.pmass);
         sM0 = reshape(ME(:) * rhoPhys0', [], 1);
         M0  = sparse(iK, jK, sM0, ndof, ndof);
         M0  = (M0 + M0') / 2;
@@ -315,7 +318,7 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
             K0  = sparse(iK, jK, sK0, ndof, ndof);
             K0  = (K0 + K0') / 2;
 
-            rhoPhys0 = rho_min + xBase.^pmass * (rho0 - rho_min);
+            [rhoPhys0, ~] = our_mass_interpolation(xBase, rho0, rho_min, massInterp.mode, massInterp.pmass);
             sM0 = reshape(ME(:) * rhoPhys0', [], 1);
             semiHarmonicM0 = sparse(iK, jK, sM0, ndof, ndof);
             semiHarmonicM0 = (semiHarmonicM0 + semiHarmonicM0') / 2;
@@ -364,7 +367,7 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
         Ksol  = sparse(iK, jK, sKsol, ndof, ndof);
         Ksol  = (Ksol + Ksol') / 2;
 
-        rhoSol = rho_min + xSolid.^pmass * (rho0 - rho_min);
+        [rhoSol, ~] = our_mass_interpolation(xSolid, rho0, rho_min, massInterp.mode, massInterp.pmass);
         sMsol  = reshape(ME(:) * rhoSol', [], 1);
         Msol   = sparse(iK, jK, sMsol, ndof, ndof);
         Msol   = (Msol + Msol') / 2;
@@ -404,7 +407,7 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
         mmaProjected = false;
 
         % Assemble M(x); needed for rho-dependent loads and (optional) mode solves.
-        rhoPhys = rho_min + xPhys.^pmass * (rho0 - rho_min);
+        [rhoPhys, ~] = our_mass_interpolation(xPhys, rho0, rho_min, massInterp.mode, massInterp.pmass);
         sM = reshape(ME(:) * rhoPhys', [], 1);
         M  = sparse(iK, jK, sM, ndof, ndof);
         M  = (M + M') / 2;
@@ -521,7 +524,7 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
         dcOmittedRaw = zeros(nEl, 1);
         dcCompleteRaw = zeros(nEl, 1);
         stiffScale = -penal * xPhys.^(penal-1) * (Emax - Emin);
-        dMdxScale = pmass * (xPhys.^(pmass-1)) * (rho0 - rho_min);
+        [~, dMdxScale] = our_mass_interpolation(xPhys, rho0, rho_min, massInterp.mode, massInterp.pmass);
 
         for icase = 1:nCases
             Ui = U(:, icase);
@@ -723,7 +726,7 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
     K_final  = sparse(iK, jK, sK_final, ndof, ndof);
     K_final  = (K_final + K_final') / 2;
 
-    rhoPhys_final = rho_min + xPhys.^pmass * (rho0 - rho_min);
+    [rhoPhys_final, ~] = our_mass_interpolation(xPhys, rho0, rho_min, massInterp.mode, massInterp.pmass);
     sM_final = reshape(ME(:) * rhoPhys_final', [], 1);
     M_final  = sparse(iK, jK, sM_final, ndof, ndof);
     M_final  = (M_final + M_final') / 2;
@@ -1777,6 +1780,47 @@ mode = lower(strtrim(char(string(value))));
 if ~any(strcmp(mode, {'omitted', 'complete'}))
     error('topopt_freq:InvalidLoadSensitivityMode', ...
         'load_sensitivity must be "omitted" or "complete".');
+end
+end
+
+function massInterp = localParseMassInterpolation(runCfg, defaultPmass)
+massInterp = struct('mode', 'power', 'pmass', double(defaultPmass));
+if isstruct(runCfg) && isfield(runCfg, 'mass_interpolation') && ~isempty(runCfg.mass_interpolation)
+    raw = runCfg.mass_interpolation;
+    if isstruct(raw)
+        if isfield(raw, 'mode') && ~isempty(raw.mode)
+            massInterp.mode = char(string(raw.mode));
+        end
+        if isfield(raw, 'pmass') && ~isempty(raw.pmass)
+            massInterp.pmass = double(raw.pmass);
+        elseif isfield(raw, 'exponent') && ~isempty(raw.exponent)
+            massInterp.pmass = double(raw.exponent);
+        end
+    else
+        massInterp.mode = char(string(raw));
+    end
+elseif isstruct(runCfg) && isfield(runCfg, 'mass_interpolation_mode') && ...
+        ~isempty(runCfg.mass_interpolation_mode)
+    massInterp.mode = char(string(runCfg.mass_interpolation_mode));
+end
+
+modeKey = lower(strtrim(massInterp.mode));
+switch modeKey
+    case {'', 'power', 'simp_power', 'pmass'}
+        massInterp.mode = 'power';
+    case 'linear'
+        massInterp.mode = 'linear';
+        massInterp.pmass = 1.0;
+    case {'du2007_c1', 'du_olhoff_c1', 'eq4b'}
+        massInterp.mode = 'du2007_c1';
+    otherwise
+        error('topopt_freq:InvalidMassInterpolation', ...
+            'Unknown mass interpolation mode "%s".', massInterp.mode);
+end
+
+if ~isfinite(massInterp.pmass) || massInterp.pmass <= 0
+    error('topopt_freq:InvalidPmass', ...
+        'mass interpolation pmass must be a positive finite scalar.');
 end
 end
 

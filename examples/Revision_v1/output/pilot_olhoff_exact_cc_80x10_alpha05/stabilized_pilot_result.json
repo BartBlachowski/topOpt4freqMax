@@ -1,0 +1,209 @@
+{
+  "study": "Stabilized OlhoffApproachExact CC 80x10 alpha=0.5 pilot",
+  "created_utc": "2026-06-30T08:22:05Z",
+  "scope": "Single alpha-damping pilot; OlhoffApproachExact only",
+  "changed_parameter": {
+    "name": "alpha",
+    "baseline": 1,
+    "pilot": 0.5
+  },
+  "settings_verification": {
+    "pass": true,
+    "baseline_alpha": 1,
+    "pilot_alpha": 0.5,
+    "differences_other_than_alpha": [],
+    "unchanged": {
+      "L": 8,
+      "H": 1,
+      "nelx": 80,
+      "nely": 10,
+      "E0": 1.0E+7,
+      "nu": 0.3,
+      "rho0": 1,
+      "t": 1,
+      "volfrac": 0.5,
+      "rho_min": 0.001,
+      "penal": 3,
+      "mass_mode": "du2007_c1",
+      "rmin_elem": 2.5,
+      "sensitivity_filter": true,
+      "support_type": "CC",
+      "n_target": 1,
+      "n_modes": 10,
+      "mult_tol": 0.001,
+      "outer_max_iter": 400,
+      "outer_tol": 0.001,
+      "inner_max_iter": 30,
+      "inner_tol": 0.0001,
+      "move_lim": null,
+      "outer_move": 0.2,
+      "acceptance_check": false,
+      "verbose": true
+    }
+  },
+  "mesh": {
+    "nelx": 80,
+    "nely": 10,
+    "L": 8,
+    "H": 1,
+    "N_e": 800
+  },
+  "config": {
+    "L": 8,
+    "H": 1,
+    "nelx": 80,
+    "nely": 10,
+    "E0": 1.0E+7,
+    "nu": 0.3,
+    "rho0": 1,
+    "t": 1,
+    "volfrac": 0.5,
+    "rho_min": 0.001,
+    "penal": 3,
+    "mass_mode": "du2007_c1",
+    "rmin_elem": 2.5,
+    "sensitivity_filter": true,
+    "support_type": "CC",
+    "n_target": 1,
+    "n_modes": 10,
+    "mult_tol": 0.001,
+    "outer_max_iter": 400,
+    "outer_tol": 0.001,
+    "inner_max_iter": 30,
+    "inner_tol": 0.0001,
+    "move_lim": null,
+    "outer_move": 0.2,
+    "acceptance_check": false,
+    "alpha": 0.5,
+    "verbose": true
+  },
+  "elapsed_s": 128.65509579166667,
+  "outer_iters": 400,
+  "capped": true,
+  "final_design_change": 0.076375385269708135,
+  "outer_tol": 0.001,
+  "final_volume": 0.4998139650769341,
+  "final_N": 1,
+  "omega_final": [
+    278.84182703894732,
+    391.869513666925,
+    565.10705392706859,
+    654.76743399542067,
+    708.24898472308053,
+    904.42155238075213,
+    1009.6315538116781,
+    1083.8741414431772,
+    1111.3743788465115,
+    1413.9873088773338
+  ],
+  "first_6_omega_rad_s": [
+    278.84182703894732,
+    391.869513666925,
+    565.10705392706859,
+    654.76743399542067,
+    708.24898472308053,
+    904.42155238075213
+  ],
+  "first_6_frequency_hz": [
+    44.379055114023785,
+    62.367970147108153,
+    89.939581008591233,
+    104.20947369596752,
+    112.72132685849454,
+    143.94316070024226
+  ],
+  "s1_overall": {
+    "classification": "ambiguous",
+    "reason": "Mixed classification among first three modes.",
+    "physical_global_count": 0,
+    "localized_low_density_count": 0,
+    "localized_non_low_density_count": 0,
+    "ambiguous_count": 10
+  },
+  "topology_connectedness": {
+    "count": 8,
+    "largest_support_connected_component_id": 0,
+    "support_connected_component_count": 0,
+    "largest_component_size": 216,
+    "largest_support_connected_component_size": 0
+  },
+  "comparison_vs_undamped": {
+    "baseline_available": true,
+    "baseline": {
+      "iterations": 400,
+      "omega1_final": 249.658308402212,
+      "beta_final": 533389.186696588,
+      "cycle": {
+        "window": 80,
+        "omega_even_mean": 249.5722459107908,
+        "omega_odd_mean": 222.54574014544431,
+        "omega_parity_gap": 27.026505765346485,
+        "beta_even_mean": 745.02294892402131,
+        "beta_odd_mean": 474.75574229032082,
+        "beta_parity_gap": 270.26720663370048,
+        "design_change_mean": 0.14988812499999998,
+        "design_change_final": 0.14993,
+        "two_cycle_present": true
+      },
+      "s1_overall": {
+        "classification": "ambiguous",
+        "reason": "Mixed classification among first three modes.",
+        "physical_global_count": 0,
+        "localized_low_density_count": 0,
+        "localized_non_low_density_count": 0,
+        "ambiguous_count": 10
+      },
+      "mode1_ld_strain": 0.00019584448793741248,
+      "components": {
+        "count": 14,
+        "largest_support_id": 0,
+        "support_connected_count": 0
+      }
+    },
+    "damped": {
+      "iterations": 400,
+      "omega1_final": 278.84182703894732,
+      "beta_final": 143956.66459277869,
+      "final_design_change": 0.076375385269708135,
+      "cycle": {
+        "window": 80,
+        "omega_even_mean": 277.71309660780355,
+        "omega_odd_mean": 284.67472966101326,
+        "omega_parity_gap": 6.9616330532097095,
+        "beta_even_mean": 381.51250204182804,
+        "beta_odd_mean": 389.029900521671,
+        "beta_parity_gap": 7.5173984798429387,
+        "design_change_mean": 0.076739057638857217,
+        "design_change_final": 0.076375385269708135,
+        "two_cycle_present": true
+      },
+      "s1_overall": {
+        "classification": "ambiguous",
+        "reason": "Mixed classification among first three modes.",
+        "physical_global_count": 0,
+        "localized_low_density_count": 0,
+        "localized_non_low_density_count": 0,
+        "ambiguous_count": 10
+      },
+      "mode1_ld_strain": 0.0029267069264611273,
+      "components": {
+        "count": 8,
+        "largest_support_connected_component_id": 0,
+        "support_connected_component_count": 0,
+        "largest_component_size": 216,
+        "largest_support_connected_component_size": 0
+      }
+    },
+    "outer_tol": 0.001,
+    "omega_cycle_gap_reduction": 20.064872712136776,
+    "beta_cycle_gap_reduction": 262.74980815385754,
+    "two_cycle_removed": false
+  },
+  "classification": {
+    "label": "still 2-cycle",
+    "reason": "Last-window omega parity gap 6.962 rad/s with design-change mean 0.07674.",
+    "converged": false,
+    "capped": true,
+    "no_localized_low_density_modes": true
+  }
+}

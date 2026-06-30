@@ -1,0 +1,123 @@
+{
+  "meta": {
+    "name": "S1 mitigation 400x50 alpha=1.00 mass exponent pmass=6",
+    "notes": "S1 one-parameter mitigation pilot from failed Exp3 400x50. Changed exactly one mitigation parameter relative to generated Exp3 config: mass interpolation exponent pmass 1 -> 6. Du-Olhoff du2007_c1 is not implemented in ourApproach; this uses the closest existing mass-penalization option."
+  },
+  "domain": {
+    "shape": "rectangular",
+    "size": {
+      "length": 8,
+      "height": 1
+    },
+    "thickness": 1,
+    "mesh": {
+      "nelx": 400,
+      "nely": 50
+    },
+    "load_cases": [
+      {
+        "name": "alpha1.00_solid_reference_mode_1",
+        "factor": 1,
+        "loads": {
+          "type": "semi_harmonic",
+          "mode": 1,
+          "factor": 1
+        }
+      },
+      {
+        "name": "alpha0.00_solid_reference_mode_2",
+        "factor": 0,
+        "loads": {
+          "type": "semi_harmonic",
+          "mode": 2,
+          "factor": 1
+        }
+      }
+    ]
+  },
+  "material": {
+    "model": "plane_stress_isotropic",
+    "E": 1.0E+7,
+    "nu": 0.3,
+    "rho": 1
+  },
+  "void_material": {
+    "E_min_ratio": 1E-6,
+    "rho_min": 1E-6
+  },
+  "bc": {
+    "supports": [
+      {
+        "type": "vertical_line",
+        "x": 0,
+        "dofs": [
+          "ux",
+          "uy"
+        ],
+        "tol": 1E-6
+      },
+      {
+        "type": "vertical_line",
+        "x": 8,
+        "dofs": [
+          "ux",
+          "uy"
+        ],
+        "tol": 1E-6
+      }
+    ]
+  },
+  "optimization": {
+    "approach": "ourApproach",
+    "optimizer": "MMA",
+    "objective": "compliance",
+    "interpolation": "SIMP",
+    "volume_fraction": 0.5,
+    "penalization": 3,
+    "semi_harmonic_baseline": "solid",
+    "harmonic_normalize": false,
+    "filter": {
+      "type": "sensitivity",
+      "heaviside": false,
+      "radius": 0.08,
+      "radius_units": "physical",
+      "boundary_condition": "symmetric"
+    },
+    "move_limit": 0.2,
+    "max_iters": 2000,
+    "convergence_tol": 0.001,
+    "load_sensitivity": "omitted",
+    "gate_a0_diagnostics": true,
+    "mass_interpolation": {
+      "mode": "power",
+      "pmass": 6,
+      "baseline_pmass": 1,
+      "documented_basis": "closest existing ourApproach low-density mass penalization; not du2007_c1"
+    }
+  },
+  "postprocessing": {
+    "compute_modes": 1,
+    "visualize_live": false,
+    "visualize_quality": "regular",
+    "visualize_modes": {
+      "enabled": false,
+      "count": 0
+    },
+    "visualize_topology_modes": {
+      "enabled": false,
+      "count": 0
+    },
+    "save_snapshot_image": false,
+    "save_final_image": false,
+    "save_frequency_iterations": false,
+    "correlation": {
+      "enabled": false,
+      "initial_count": 0,
+      "topology_count": 0,
+      "metric": "mac",
+      "write_csv": false
+    },
+    "compute_modes_initial": 0,
+    "write_correlation_table": false
+  }
+}

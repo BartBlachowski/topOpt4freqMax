@@ -1,0 +1,22 @@
+{
+  "study": "Eq4b controlled hypothesis test for Exp3 400x50 alpha=1.00",
+  "created_utc": "2026-06-29T08:50:15Z",
+  "result_json": "examples/Revision_v1/output/eq4b_exp3_400x50/eq4b_exp3_400x50_result.json",
+  "result_mat": "examples/Revision_v1/output/eq4b_exp3_400x50/eq4b_exp3_400x50_result.mat",
+  "port_review_md": "examples/Revision_v1/output/eq4b_exp3_400x50/eq4b_port_review.md",
+  "validation_json": "examples/Revision_v1/output/eq4b_exp3_400x50/eq4b_validation_result.json",
+  "s1_summary_md": "examples/Revision_v1/output/eq4b_exp3_400x50/eq4b_s1_summary.md",
+  "s1_diagnosis_md": "examples/Revision_v1/output/eq4b_exp3_400x50/s1_postprocessing/eq4b_mode_diagnosis.md",
+  "study_json": "examples/Revision_v1/output/eq4b_exp3_400x50/eq4b_study.json",
+  "topology_csv": "examples/Revision_v1/output/eq4b_exp3_400x50/eq4b_exp3_400x50_topology.csv",
+  "topology_png": "examples/Revision_v1/output/eq4b_exp3_400x50/eq4b_exp3_400x50_topology.png",
+  "energy_csv_count": 10,
+  "mode_shape_png_count": 6,
+  "conclusion": {
+    "q1_does_eq4b_improve_accepted_tracked_global_response": "no",
+    "q2_does_eq4b_reduce_localized_low_density_modes": "no",
+    "q3_does_eq4b_rescue_exp3_mesh_validation": "no",
+    "q4_is_eq4b_sufficient_missing_mechanism": "no",
+    "reason": "The single benchmark does not simultaneously improve the tracked response, reduce localized low-density modes, and establish mesh convergence."
+  }
+}

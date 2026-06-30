@@ -1,0 +1,40 @@
+{
+  "study": "Phase 2 numerical-behaviour investigation: persistent MMA asymptotes",
+  "created_utc": "2026-06-30T09:30:18Z",
+  "output_dir": "/Users/piotrek/Programming/topOpt4freqMax/examples/Revision_v1/output/phase2_olhoff_exact_cc_80x10_asymptote_persistence",
+  "files": [
+    "phase2_asymptote_persistence_result.mat",
+    "phase2_asymptote_persistence_result.json",
+    "phase2_asymptote_persistence_summary.md",
+    "phase2_asymptote_persistence_manifest.json",
+    "phase2_asymptote_persistence_comparison.md",
+    "phase2_asymptote_persistence_parameter_verification.json",
+    "phase2_asymptote_persistence_convergence_history.csv",
+    "phase2_asymptote_persistence_multiplicity_history.csv",
+    "phase2_asymptote_persistence_omega_history.png",
+    "phase2_asymptote_persistence_beta_history.png",
+    "phase2_asymptote_persistence_design_change_history.png",
+    "phase2_asymptote_persistence_asymptote_width_history.png",
+    "phase2_asymptote_persistence_inner_iteration_histogram.png",
+    "phase2_asymptote_persistence_topology.csv",
+    "phase2_asymptote_persistence_topology.png",
+    "s1_mode_summary.json",
+    "s1_modes.csv",
+    "phase2_asymptote_persistence_run.log",
+    "phase2_asymptote_persistence_mode_01_shape.png",
+    "phase2_asymptote_persistence_mode_02_shape.png",
+    "phase2_asymptote_persistence_mode_03_shape.png",
+    "phase2_asymptote_persistence_mode_04_shape.png",
+    "phase2_asymptote_persistence_mode_05_shape.png",
+    "phase2_asymptote_persistence_mode_06_shape.png"
+  ],
+  "changed_feature": {
+    "name": "persistent_mma_state",
+    "phase1": false,
+    "phase2": true
+  },
+  "decision": {
+    "code": "C",
+    "label": "Persistent asymptotes have negligible effect."
+  }
+}

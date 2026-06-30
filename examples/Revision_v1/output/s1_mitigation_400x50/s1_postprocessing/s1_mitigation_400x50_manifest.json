@@ -1,0 +1,49 @@
+{
+  "study": "S1 diagnostic pilot for s1_mitigation_400x50",
+  "scope": "Postprocessing-only saved-artifact mode diagnosis; no optimization rerun",
+  "created_utc": "2026-06-29T08:20:20Z",
+  "inputs": {
+    "result_mat": "examples/Revision_v1/output/s1_mitigation_400x50/s1_mitigation_400x50_result.mat",
+    "result_json": "examples/Revision_v1/output/s1_mitigation_400x50/s1_mitigation_400x50_result.json",
+    "config_json": "examples/Revision_v1/output/s1_mitigation_400x50/s1_mitigation_400x50_config.json",
+    "topology_csv": "examples/Revision_v1/output/s1_mitigation_400x50/s1_mitigation_400x50_topology.csv"
+  },
+  "overall": {
+    "classification": "likely localized/spurious low-density mode influence",
+    "reason": "At least one of the first three modes is classified as localized low-density.",
+    "physical_global_count": 1,
+    "localized_low_density_count": 9,
+    "disconnected_component_count": 0,
+    "ambiguous_count": 0
+  },
+  "outputs": {
+    "log": "examples/Revision_v1/output/s1_mitigation_400x50/s1_postprocessing/s1_mitigation_400x50_run.log",
+    "report_md": "examples/Revision_v1/output/s1_mitigation_400x50/s1_postprocessing/s1_mitigation_400x50_mode_diagnosis.md",
+    "summary_json": "examples/Revision_v1/output/s1_mitigation_400x50/s1_postprocessing/s1_mitigation_400x50_mode_summary.json",
+    "mode_summary_csv": "examples/Revision_v1/output/s1_mitigation_400x50/s1_postprocessing/s1_mitigation_400x50_modes_summary.csv",
+    "manifest_json": "examples/Revision_v1/output/s1_mitigation_400x50/s1_postprocessing/s1_mitigation_400x50_manifest.json",
+    "energy_csv": [
+      "examples/Revision_v1/output/s1_mitigation_400x50/s1_postprocessing/s1_mitigation_400x50_mode_01_energy.csv",
+      "examples/Revision_v1/output/s1_mitigation_400x50/s1_postprocessing/s1_mitigation_400x50_mode_02_energy.csv",
+      "examples/Revision_v1/output/s1_mitigation_400x50/s1_postprocessing/s1_mitigation_400x50_mode_03_energy.csv",
+      "examples/Revision_v1/output/s1_mitigation_400x50/s1_postprocessing/s1_mitigation_400x50_mode_04_energy.csv",
+      "examples/Revision_v1/output/s1_mitigation_400x50/s1_postprocessing/s1_mitigation_400x50_mode_05_energy.csv",
+      "examples/Revision_v1/output/s1_mitigation_400x50/s1_postprocessing/s1_mitigation_400x50_mode_06_energy.csv",
+      "examples/Revision_v1/output/s1_mitigation_400x50/s1_postprocessing/s1_mitigation_400x50_mode_07_energy.csv",
+      "examples/Revision_v1/output/s1_mitigation_400x50/s1_postprocessing/s1_mitigation_400x50_mode_08_energy.csv",
+      "examples/Revision_v1/output/s1_mitigation_400x50/s1_postprocessing/s1_mitigation_400x50_mode_09_energy.csv",
+      "examples/Revision_v1/output/s1_mitigation_400x50/s1_postprocessing/s1_mitigation_400x50_mode_10_energy.csv"
+    ],
+    "mode_shape_png": [
+      "examples/Revision_v1/output/s1_mitigation_400x50/s1_postprocessing/s1_mitigation_400x50_mode_01_shape.png",
+      "examples/Revision_v1/output/s1_mitigation_400x50/s1_postprocessing/s1_mitigation_400x50_mode_02_shape.png",
+      "examples/Revision_v1/output/s1_mitigation_400x50/s1_postprocessing/s1_mitigation_400x50_mode_03_shape.png",
+      "examples/Revision_v1/output/s1_mitigation_400x50/s1_postprocessing/s1_mitigation_400x50_mode_04_shape.png",
+      "examples/Revision_v1/output/s1_mitigation_400x50/s1_postprocessing/s1_mitigation_400x50_mode_05_shape.png",
+      "examples/Revision_v1/output/s1_mitigation_400x50/s1_postprocessing/s1_mitigation_400x50_mode_06_shape.png"
+    ]
+  },
+  "no_optimization_rerun": true,
+  "no_solver_code_edit": true,
+  "no_manuscript_edit": true
+}

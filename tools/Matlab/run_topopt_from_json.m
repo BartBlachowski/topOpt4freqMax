@@ -431,6 +431,11 @@ function [x, omega, tIter, nIter, mem_usage, diagnostics] = run_topopt_from_json
             runCfg.nu = nu;
             runCfg.rho0 = rho0;
             runCfg.rho_min = rho_min;
+            if hasFieldPath(cfg, {'optimization','mass_interpolation'})
+                runCfg.mass_interpolation = getFieldPath(cfg, {'optimization','mass_interpolation'});
+            elseif hasFieldPath(cfg, {'optimization','pmass'})
+                runCfg.pmass = reqNum(cfg, {'optimization','pmass'}, 'optimization.pmass');
+            end
             runCfg.move = move;
             runCfg.conv_tol = convTol;
             runCfg.max_iters = maxiter;

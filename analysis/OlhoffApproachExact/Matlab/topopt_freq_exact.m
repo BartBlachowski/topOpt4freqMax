@@ -83,6 +83,7 @@ max_freq_drop    = cfg.max_freq_drop;
 min_alpha        = cfg.min_alpha;
 verbose        = cfg.verbose;
 rho_snapshot_interval = cfg.rho_snapshot_interval;
+persistent_mma_state = cfg.persistent_mma_state;
 
 %% ------------------------------------------------------------------
 %  Mesh and FE setup
@@ -138,6 +139,17 @@ hist.volume      = nan(outer_max_iter, 1);
 hist.N           = nan(outer_max_iter, 1);
 hist.N_trial     = nan(outer_max_iter, 1);
 hist.inner_iters = nan(outer_max_iter, 1);
+hist.inner_cpu_time = nan(outer_max_iter, 1);
+hist.inner_converged = false(outer_max_iter, 1);
+hist.inner_hit_max_iter = false(outer_max_iter, 1);
+hist.inner_termination_reason = cell(outer_max_iter, 1);
+hist.mma_reused_previous_state = false(outer_max_iter, 1);
+hist.asym_width_min = nan(outer_max_iter, 1);
+hist.asym_width_mean = nan(outer_max_iter, 1);
+hist.asym_width_max = nan(outer_max_iter, 1);
+hist.asym_expand_count = nan(outer_max_iter, 1);
+hist.asym_contract_count = nan(outer_max_iter, 1);
+hist.asym_same_count = nan(outer_max_iter, 1);
 hist.drho_norm   = nan(outer_max_iter, 1);
 hist.drho_max    = nan(outer_max_iter, 1);
 hist.omega_trial = nan(outer_max_iter, n_modes);
@@ -159,6 +171,7 @@ end
 
 opts_eig.tol   = 1e-10;
 opts_eig.maxit = 600;
+mma_state = [];
 
 %% ------------------------------------------------------------------
 %  Outer loop
@@ -236,9 +249,19 @@ for out_it = 1:outer_max_iter
     end
 
     %% --- Inner loop (MMA increment subproblem, paper Eq. 19) ---
-    [drho, beta_fin, i_hist] = inner_loop_mma(rho, lambda_bar, fsk_use, ...
-        lambda_J, dlam_J, volfrac, rho_min, inner_max_iter, inner_tol, ...
-        move_lim, outer_move);
+    inner_tic = tic;
+    reused_mma_state = persistent_mma_state && ~isempty(mma_state) && ...
+        isfield(mma_state, 'initialized') && mma_state.initialized;
+    if persistent_mma_state
+        [drho, beta_fin, i_hist, mma_state] = inner_loop_mma_persistent_phase2( ...
+            rho, lambda_bar, fsk_use, lambda_J, dlam_J, volfrac, rho_min, ...
+            inner_max_iter, inner_tol, move_lim, outer_move, mma_state);
+    else
+        [drho, beta_fin, i_hist] = inner_loop_mma(rho, lambda_bar, fsk_use, ...
+            lambda_J, dlam_J, volfrac, rho_min, inner_max_iter, inner_tol, ...
+            move_lim, outer_move);
+    end
+    inner_cpu_time = toc(inner_tic);
 
     %% --- Update design variables (paper Fig. 1 step 4: rho := rho + Delta_rho) ---
     step_alpha = alpha;
@@ -285,8 +308,25 @@ for out_it = 1:outer_max_iter
     hist.N(out_it)           = N;
     hist.N_trial(out_it)     = N_trial;
     hist.inner_iters(out_it) = i_hist.n_iters;
+    hist.inner_cpu_time(out_it) = inner_cpu_time;
+    hist.mma_reused_previous_state(out_it) = reused_mma_state;
+    hist.inner_converged(out_it) = isfield(i_hist, 'converged') && i_hist.converged;
+    hist.inner_hit_max_iter(out_it) = isfield(i_hist, 'hit_max_iter') && i_hist.hit_max_iter;
+    if isfield(i_hist, 'termination_reason')
+        hist.inner_termination_reason{out_it} = i_hist.termination_reason;
+    else
+        hist.inner_termination_reason{out_it} = 'unknown';
+    end
     hist.drho_norm(out_it)   = drho_norm;
     hist.drho_max(out_it)    = drho_max;
+    if isfield(i_hist, 'asym_width_min')
+        hist.asym_width_min(out_it) = i_hist.asym_width_min;
+        hist.asym_width_mean(out_it) = i_hist.asym_width_mean;
+        hist.asym_width_max(out_it) = i_hist.asym_width_max;
+        hist.asym_expand_count(out_it) = i_hist.asym_expand_count;
+        hist.asym_contract_count(out_it) = i_hist.asym_contract_count;
+        hist.asym_same_count(out_it) = i_hist.asym_same_count;
+    end
     hist.omega_trial(out_it, :) = omega_trial(:)';
     hist.step_alpha(out_it)  = step_alpha;
     hist.outer_iters         = out_it;
@@ -329,6 +369,10 @@ for fi = 1:numel(fns)
     fn = fns{fi};
     v  = hist.(fn);
     if isnumeric(v) && size(v,1) == outer_max_iter
+        hist.(fn) = v(1:ni, :);
+    elseif islogical(v) && size(v,1) == outer_max_iter
+        hist.(fn) = v(1:ni, :);
+    elseif iscell(v) && size(v,1) == outer_max_iter
         hist.(fn) = v(1:ni, :);
     end
 end
@@ -389,6 +433,7 @@ function cfg = set_defaults(cfg)
     cfg = def(cfg, 'min_alpha',          1e-3);  % inactive unless acceptance_check = true
     cfg = def(cfg, 'verbose',            true);
     cfg = def(cfg, 'rho_snapshot_interval', 0);
+    cfg = def(cfg, 'persistent_mma_state', false);
 end
 
 %% ------------------------------------------------------------------

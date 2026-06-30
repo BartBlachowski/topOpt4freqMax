@@ -1,0 +1,85 @@
+{
+  "study": "S1 mitigation pilot 400x50 alpha=1.00",
+  "scope": "same Exp3 400x50 setup except mass_interpolation.pmass=6",
+  "implementation_language": "MATLAB",
+  "mesh_label": "400x50",
+  "mesh": {
+    "nelx": 400,
+    "nely": 50
+  },
+  "alpha": 1,
+  "source_baseline_config": "examples/Revision_v1/output/exp3_authoritative_mesh_convergence/mesh_400x50/exp3_authoritative_400x50_config.json",
+  "case_config": "examples/Revision_v1/output/s1_mitigation_400x50/s1_mitigation_400x50_config.json",
+  "authoritative_load": "F(x) = omega0^2 * M(x) * Phi0",
+  "mitigation": {
+    "mode": "power",
+    "pmass": 6,
+    "baseline_pmass": 1,
+    "documented_basis": "closest existing ourApproach low-density mass penalization; not du2007_c1"
+  },
+  "filter_physical_radius": 0.08,
+  "criteria": {
+    "mac_threshold": 0.8,
+    "feasibility_tolerance": 1E-8,
+    "design_change_tolerance": 0.001
+  },
+  "solver_success": true,
+  "iterations": 1579,
+  "iteration_cap": 2000,
+  "final": {
+    "omega_rad_s": [
+      131.93419570292457,
+      145.88550031714644,
+      147.10785954505681
+    ],
+    "frequency_hz": [
+      20.997979408973944,
+      23.218398500908123,
+      23.412943014264052
+    ],
+    "grayness": 0.053774370713787878,
+    "volume": 0.4999999999999285,
+    "feasibility": 0,
+    "design_change": 0.000515876883454891,
+    "tracked_mode_index": 1,
+    "tracked_mode_mac": 0.97351447254810153,
+    "tracked_mode_omega": 131.93419570292457
+  },
+  "a5_lowest_mode_check": {
+    "pass": true,
+    "tracked_mode_index": 1,
+    "tracked_mode_omega_rad_s": 131.93419570292457,
+    "lowest_mode_omega_rad_s": 131.93419570292457,
+    "modes_below_tracked_count": 0,
+    "message": "tracked mode is the lowest computed mode"
+  },
+  "acceptance": {
+    "not_capped": true,
+    "design_change_ok": true,
+    "feasibility_ok": true,
+    "tracked_mac_ok": true,
+    "a5_lowest_mode_ok": true,
+    "artifacts_complete": true
+  },
+  "accepted": true,
+  "classification": "accepted",
+  "timing_total_s": 720.74902295833328,
+  "timing_per_iter_s": 0.45478630446485119,
+  "artifacts": {
+    "log": "examples/Revision_v1/output/s1_mitigation_400x50/s1_mitigation_400x50_run.log",
+    "config_json": "examples/Revision_v1/output/s1_mitigation_400x50/s1_mitigation_400x50_config.json",
+    "result_json": "examples/Revision_v1/output/s1_mitigation_400x50/s1_mitigation_400x50_result.json",
+    "result_mat": "examples/Revision_v1/output/s1_mitigation_400x50/s1_mitigation_400x50_result.mat",
+    "study_json": "examples/Revision_v1/output/s1_mitigation_400x50/s1_mitigation_400x50_study.json",
+    "summary_md": "examples/Revision_v1/output/s1_mitigation_400x50/s1_mitigation_400x50_summary.md",
+    "manifest_json": "examples/Revision_v1/output/s1_mitigation_400x50/s1_mitigation_400x50_manifest.json",
+    "convergence_csv": "examples/Revision_v1/output/s1_mitigation_400x50/s1_mitigation_400x50_convergence_history.csv",
+    "frequency_csv": "examples/Revision_v1/output/s1_mitigation_400x50/s1_mitigation_400x50_frequency_history.csv",
+    "mode_tracking_csv": "examples/Revision_v1/output/s1_mitigation_400x50/s1_mitigation_400x50_mode_tracking.csv",
+    "topology_csv": "examples/Revision_v1/output/s1_mitigation_400x50/s1_mitigation_400x50_topology.csv",
+    "topology_json": "examples/Revision_v1/output/s1_mitigation_400x50/s1_mitigation_400x50_topology.json",
+    "topology_png": "examples/Revision_v1/output/s1_mitigation_400x50/s1_mitigation_400x50_topology.png",
+    "a5_json": "examples/Revision_v1/output/s1_mitigation_400x50/s1_mitigation_400x50_a5_lowest_mode_check.json",
+    "s1_dir": "examples/Revision_v1/output/s1_mitigation_400x50/s1_postprocessing"
+  }
+}

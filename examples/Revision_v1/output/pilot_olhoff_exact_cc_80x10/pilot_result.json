@@ -1,0 +1,39 @@
+{
+  "study": "Pilot: OlhoffApproachExact CC 80x10 vs ourApproach 80x10",
+  "created_utc": "2026-06-30T07:44:06Z",
+  "mesh": {
+    "nelx": 80,
+    "nely": 10,
+    "L": 8,
+    "H": 1,
+    "N_e": 800
+  },
+  "mass_mode": "du2007_c1",
+  "rmin_elem": 2.5,
+  "penal_stages": 3,
+  "iters_per_stage": 400,
+  "outer_move": 0.2,
+  "inner_max_iter": 30,
+  "total_outer_iters": 400,
+  "omega_final": [
+    249.65830840221204,
+    315.42897287550068,
+    345.25116876697035,
+    459.00097105867491,
+    499.33389400994815,
+    627.221112523977,
+    836.64879284764845,
+    849.65214724492353,
+    921.69247997005937,
+    1085.8513892739338
+  ],
+  "omega_1_rad_s": 249.65830840221204,
+  "omega_1_hz": 39.734353866172917,
+  "final_N": 1,
+  "final_volume": 0.49989862501162846,
+  "s1_overall": "ambiguous",
+  "s1_localized_count": 0,
+  "s1_physical_count": 0,
+  "s1_mode1_class": "ambiguous",
+  "s1_mode1_ld_strain": 0.00019584448793741248
+}

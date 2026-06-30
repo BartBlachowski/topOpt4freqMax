@@ -1,0 +1,85 @@
+{
+  "study": "Eq4b Exp3 400x50 alpha=1.00",
+  "scope": "same Exp3 400x50 setup except mass_interpolation.mode=du2007_c1",
+  "implementation_language": "MATLAB",
+  "mesh_label": "400x50",
+  "mesh": {
+    "nelx": 400,
+    "nely": 50
+  },
+  "alpha": 1,
+  "source_baseline_config": "examples/Revision_v1/output/exp3_authoritative_mesh_convergence/mesh_400x50/exp3_authoritative_400x50_config.json",
+  "case_config": "examples/Revision_v1/output/eq4b_exp3_400x50/eq4b_exp3_400x50_config.json",
+  "authoritative_load": "F(x) = omega0^2 * M(x) * Phi0",
+  "mass_interpolation": {
+    "mode": "du2007_c1",
+    "pmass": 1,
+    "source": "Du and Olhoff 2007 Eq. 4b, C1 low-density mass interpolation",
+    "threshold": 0.1,
+    "c1": 600000,
+    "c2": -5.0E+6
+  },
+  "filter_physical_radius": 0.08,
+  "criteria": {
+    "mac_threshold": 0.8,
+    "feasibility_tolerance": 1E-8,
+    "design_change_tolerance": 0.001
+  },
+  "solver_success": true,
+  "iterations": 2000,
+  "iteration_cap": 2000,
+  "final": {
+    "omega_rad_s": [
+      77.013880574734713,
+      112.64203365103344,
+      167.58522164025285
+    ],
+    "frequency_hz": [
+      12.257139780157928,
+      17.927536455485587,
+      26.67201641319711
+    ],
+    "grayness": 0.13051260940725351,
+    "volume": 0.49999999999991213,
+    "feasibility": 0,
+    "design_change": 0.10656860544426106,
+    "tracked_mode_index": 2,
+    "tracked_mode_mac": 0.92443995273836532,
+    "tracked_mode_omega": 112.64203365103343
+  },
+  "a5_lowest_mode_check": {
+    "pass": false,
+    "tracked_mode_index": 2,
+    "tracked_mode_omega_rad_s": 112.64203365103343,
+    "lowest_mode_omega_rad_s": 77.013880574734713,
+    "modes_below_tracked_count": 1
+  },
+  "acceptance": {
+    "not_capped": false,
+    "design_change_ok": false,
+    "feasibility_ok": true,
+    "tracked_mac_ok": true,
+    "a5_lowest_mode_ok": false,
+    "artifacts_complete": true
+  },
+  "accepted": false,
+  "classification": "capped",
+  "timing_total_s": 931.6721165416667,
+  "timing_per_iter_s": 0.4643841535,
+  "artifacts": {
+    "port_review_md": "examples/Revision_v1/output/eq4b_exp3_400x50/eq4b_port_review.md",
+    "validation_json": "examples/Revision_v1/output/eq4b_exp3_400x50/eq4b_validation_result.json",
+    "config_json": "examples/Revision_v1/output/eq4b_exp3_400x50/eq4b_exp3_400x50_config.json",
+    "result_json": "examples/Revision_v1/output/eq4b_exp3_400x50/eq4b_exp3_400x50_result.json",
+    "result_mat": "examples/Revision_v1/output/eq4b_exp3_400x50/eq4b_exp3_400x50_result.mat",
+    "study_json": "examples/Revision_v1/output/eq4b_exp3_400x50/eq4b_study.json",
+    "s1_summary_md": "examples/Revision_v1/output/eq4b_exp3_400x50/eq4b_s1_summary.md",
+    "manifest_json": "examples/Revision_v1/output/eq4b_exp3_400x50/eq4b_manifest.json",
+    "convergence_csv": "examples/Revision_v1/output/eq4b_exp3_400x50/eq4b_exp3_400x50_convergence_history.csv",
+    "frequency_csv": "examples/Revision_v1/output/eq4b_exp3_400x50/eq4b_exp3_400x50_frequency_history.csv",
+    "mode_tracking_csv": "examples/Revision_v1/output/eq4b_exp3_400x50/eq4b_exp3_400x50_mode_tracking.csv",
+    "topology_csv": "examples/Revision_v1/output/eq4b_exp3_400x50/eq4b_exp3_400x50_topology.csv",
+    "topology_png": "examples/Revision_v1/output/eq4b_exp3_400x50/eq4b_exp3_400x50_topology.png",
+    "s1_dir": "examples/Revision_v1/output/eq4b_exp3_400x50/s1_postprocessing"
+  }
+}

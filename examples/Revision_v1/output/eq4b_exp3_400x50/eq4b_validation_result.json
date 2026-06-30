@@ -1,0 +1,17 @@
+{
+  "disabled_behavior_pass": true,
+  "disabled_behavior": {
+    "max_abs_rho_power_pmass1_minus_old": 0,
+    "max_abs_drho_power_pmass1_minus_old": 0,
+    "max_abs_rho_linear_minus_old": 0,
+    "max_abs_drho_linear_minus_old": 0
+  },
+  "eq4b_equivalence_pass": true,
+  "eq4b_equivalence": {
+    "max_abs_m_minus_authoritative_formula": 0,
+    "max_abs_dm_minus_authoritative_formula": 0,
+    "rho_at_threshold_minus_linear": -2.7755575615628914E-17,
+    "drho_at_threshold_minus_linear": -7.1054273576010019E-15,
+    "max_abs_drho_scaled_minus_formula": 0
+  }
+}

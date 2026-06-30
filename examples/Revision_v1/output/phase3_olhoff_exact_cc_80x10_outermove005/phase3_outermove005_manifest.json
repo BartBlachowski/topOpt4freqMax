@@ -1,0 +1,40 @@
+{
+  "study": "Phase 3 numerical-behaviour investigation: outer_move 0.05",
+  "created_utc": "2026-06-30T09:55:00Z",
+  "output_dir": "/Users/piotrek/Programming/topOpt4freqMax/examples/Revision_v1/output/phase3_olhoff_exact_cc_80x10_outermove005",
+  "files": [
+    "phase3_outermove005_result.mat",
+    "phase3_outermove005_result.json",
+    "phase3_outermove005_summary.md",
+    "phase3_outermove005_manifest.json",
+    "phase3_outermove005_comparison.md",
+    "phase3_outermove005_parameter_verification.json",
+    "phase3_outermove005_convergence_history.csv",
+    "phase3_outermove005_multiplicity_history.csv",
+    "phase3_outermove005_omega_history.png",
+    "phase3_outermove005_beta_history.png",
+    "phase3_outermove005_design_change_history.png",
+    "phase3_outermove005_asymptote_width_history.png",
+    "phase3_outermove005_inner_iteration_histogram.png",
+    "phase3_outermove005_topology.csv",
+    "phase3_outermove005_topology.png",
+    "s1_mode_summary.json",
+    "s1_modes.csv",
+    "phase3_outermove005_run.log",
+    "phase3_outermove005_mode_01_shape.png",
+    "phase3_outermove005_mode_02_shape.png",
+    "phase3_outermove005_mode_03_shape.png",
+    "phase3_outermove005_mode_04_shape.png",
+    "phase3_outermove005_mode_05_shape.png",
+    "phase3_outermove005_mode_06_shape.png"
+  ],
+  "changed_parameter": {
+    "name": "outer_move",
+    "phase2": 0.2,
+    "phase3": 0.05
+  },
+  "decision": {
+    "code": "B",
+    "label": "Smaller outer_move substantially reduces the 2-cycle."
+  }
+}

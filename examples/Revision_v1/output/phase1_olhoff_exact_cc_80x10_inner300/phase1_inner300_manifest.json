@@ -1,0 +1,39 @@
+{
+  "study": "Phase 1 numerical-behaviour investigation: inner_max_iter 300",
+  "created_utc": "2026-06-30T09:05:31Z",
+  "output_dir": "/Users/piotrek/Programming/topOpt4freqMax/examples/Revision_v1/output/phase1_olhoff_exact_cc_80x10_inner300",
+  "files": [
+    "phase1_inner300_result.mat",
+    "phase1_inner300_result.json",
+    "phase1_inner300_summary.md",
+    "phase1_inner300_manifest.json",
+    "phase1_inner300_comparison.md",
+    "phase1_inner300_parameter_verification.json",
+    "phase1_inner300_convergence_history.csv",
+    "phase1_inner300_multiplicity_history.csv",
+    "phase1_inner300_omega_history.png",
+    "phase1_inner300_beta_history.png",
+    "phase1_inner300_design_change_history.png",
+    "phase1_inner300_inner_iteration_histogram.png",
+    "phase1_inner300_topology.csv",
+    "phase1_inner300_topology.png",
+    "s1_mode_summary.json",
+    "s1_modes.csv",
+    "phase1_inner300_run.log",
+    "phase1_inner300_mode_01_shape.png",
+    "phase1_inner300_mode_02_shape.png",
+    "phase1_inner300_mode_03_shape.png",
+    "phase1_inner300_mode_04_shape.png",
+    "phase1_inner300_mode_05_shape.png",
+    "phase1_inner300_mode_06_shape.png"
+  ],
+  "changed_parameter": {
+    "name": "inner_max_iter",
+    "baseline": 30,
+    "phase1": 300
+  },
+  "decision": {
+    "code": "C",
+    "label": "Inner solver still reaches the cap."
+  }
+}

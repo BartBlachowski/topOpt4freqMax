@@ -1,0 +1,257 @@
+{
+  "study": "Phase 1 numerical-behaviour investigation: inner_max_iter 300",
+  "created_utc": "2026-06-30T09:05:31Z",
+  "scope": "Single-parameter test; OlhoffApproachExact CC 80x10 alpha=0.5",
+  "changed_parameter": {
+    "name": "inner_max_iter",
+    "baseline": 30,
+    "phase1": 300
+  },
+  "parameter_verification": {
+    "pass": true,
+    "changed_parameter": "inner_max_iter",
+    "baseline_value": 30,
+    "phase1_value": 300,
+    "differences_other_than_inner_max_iter": [],
+    "baseline_config": {
+      "L": 8,
+      "H": 1,
+      "nelx": 80,
+      "nely": 10,
+      "E0": 1.0E+7,
+      "nu": 0.3,
+      "rho0": 1,
+      "t": 1,
+      "volfrac": 0.5,
+      "rho_min": 0.001,
+      "penal": 3,
+      "mass_mode": "du2007_c1",
+      "rmin_elem": 2.5,
+      "sensitivity_filter": true,
+      "support_type": "CC",
+      "n_target": 1,
+      "n_modes": 10,
+      "mult_tol": 0.001,
+      "outer_max_iter": 400,
+      "outer_tol": 0.001,
+      "inner_max_iter": 30,
+      "inner_tol": 0.0001,
+      "move_lim": null,
+      "outer_move": 0.2,
+      "acceptance_check": false,
+      "alpha": 0.5,
+      "verbose": true
+    },
+    "phase1_config": {
+      "L": 8,
+      "H": 1,
+      "nelx": 80,
+      "nely": 10,
+      "E0": 1.0E+7,
+      "nu": 0.3,
+      "rho0": 1,
+      "t": 1,
+      "volfrac": 0.5,
+      "rho_min": 0.001,
+      "penal": 3,
+      "mass_mode": "du2007_c1",
+      "rmin_elem": 2.5,
+      "sensitivity_filter": true,
+      "support_type": "CC",
+      "n_target": 1,
+      "n_modes": 10,
+      "mult_tol": 0.001,
+      "outer_max_iter": 400,
+      "outer_tol": 0.001,
+      "inner_max_iter": 300,
+      "inner_tol": 0.0001,
+      "move_lim": null,
+      "outer_move": 0.2,
+      "acceptance_check": false,
+      "alpha": 0.5,
+      "verbose": true
+    }
+  },
+  "config": {
+    "L": 8,
+    "H": 1,
+    "nelx": 80,
+    "nely": 10,
+    "E0": 1.0E+7,
+    "nu": 0.3,
+    "rho0": 1,
+    "t": 1,
+    "volfrac": 0.5,
+    "rho_min": 0.001,
+    "penal": 3,
+    "mass_mode": "du2007_c1",
+    "rmin_elem": 2.5,
+    "sensitivity_filter": true,
+    "support_type": "CC",
+    "n_target": 1,
+    "n_modes": 10,
+    "mult_tol": 0.001,
+    "outer_max_iter": 400,
+    "outer_tol": 0.001,
+    "inner_max_iter": 300,
+    "inner_tol": 0.0001,
+    "move_lim": null,
+    "outer_move": 0.2,
+    "acceptance_check": false,
+    "alpha": 0.5,
+    "verbose": true
+  },
+  "elapsed_s": 483.97828795833334,
+  "outer_iters": 400,
+  "capped": true,
+  "final_design_change": 0.091433862976682323,
+  "outer_tol": 0.001,
+  "final_volume": 0.49999979869945216,
+  "final_N": 1,
+  "first_6_omega_rad_s": [
+    263.65218213092447,
+    380.91769692783657,
+    554.07724556299877,
+    623.56417077595665,
+    716.38319088142475,
+    848.46769939690557
+  ],
+  "first_6_frequency_hz": [
+    41.96154804310131,
+    60.624934377245665,
+    88.184132486093191,
+    99.243320113992283,
+    114.01592597672355,
+    135.03782841282586
+  ],
+  "inner_solver": {
+    "average_inner_iterations": 155.315,
+    "maximum_inner_iterations": 300,
+    "minimum_inner_iterations": 81,
+    "fraction_hitting_cap": 0.015,
+    "count_hitting_cap": 6,
+    "outer_iteration_count": 400,
+    "average_cpu_time_s": 1.1923694385416668,
+    "total_cpu_time_s": 476.94777541666667
+  },
+  "outer_convergence": {
+    "final_omega1": 263.65218213092447,
+    "final_beta_rad_s": 358.53719438633783,
+    "final_design_change": 0.091433862976682323,
+    "design_change_mean": 0.091888851861600174,
+    "omega_even_mean": 263.48729923928482,
+    "omega_odd_mean": 267.18801911809362,
+    "omega_parity_gap": 3.7007198788087976,
+    "beta_even_mean": 362.08627389758811,
+    "beta_odd_mean": 377.75657088623859,
+    "beta_parity_gap": 15.670296988650477
+  },
+  "s1_overall": {
+    "classification": "ambiguous",
+    "physical_global_count": 0,
+    "localized_low_density_count": 0,
+    "localized_non_low_density_count": 0,
+    "ambiguous_count": 10
+  },
+  "topology_connectedness": {
+    "count": 13,
+    "largest_support_connected_component_id": 0,
+    "support_connected_component_count": 0,
+    "largest_component_size": 196,
+    "largest_support_connected_component_size": 0
+  },
+  "comparison_vs_inner30": {
+    "baseline": {
+      "inner_solver": {
+        "average_inner_iterations": 30,
+        "maximum_inner_iterations": 30,
+        "minimum_inner_iterations": 30,
+        "fraction_hitting_cap": 1,
+        "count_hitting_cap": 400,
+        "outer_iteration_count": 400
+      },
+      "outer": {
+        "final_omega1": 278.841827038947,
+        "final_beta_rad_s": 379.416215511117,
+        "final_design_change": 0.0763753852697081,
+        "design_change_mean": 0.076739057638857217,
+        "omega_even_mean": 277.71309660780349,
+        "omega_odd_mean": 284.67472966101332,
+        "omega_parity_gap": 6.9616330532098232,
+        "beta_even_mean": 381.5125020418281,
+        "beta_odd_mean": 389.02990052167104,
+        "beta_parity_gap": 7.5173984798429387
+      },
+      "s1": {
+        "classification": "ambiguous",
+        "reason": "Mixed classification among first three modes.",
+        "physical_global_count": 0,
+        "localized_low_density_count": 0,
+        "localized_non_low_density_count": 0,
+        "ambiguous_count": 10
+      },
+      "mode1_ld_strain": 0.0029267069264611273,
+      "components": {
+        "count": 8,
+        "largest_support_connected_component_id": 0,
+        "support_connected_component_count": 0,
+        "largest_component_size": 216,
+        "largest_support_connected_component_size": 0
+      }
+    },
+    "phase1": {
+      "inner_solver": {
+        "average_inner_iterations": 155.315,
+        "maximum_inner_iterations": 300,
+        "minimum_inner_iterations": 81,
+        "fraction_hitting_cap": 0.015,
+        "count_hitting_cap": 6,
+        "outer_iteration_count": 400,
+        "average_cpu_time_s": 1.1923694385416668,
+        "total_cpu_time_s": 476.94777541666667
+      },
+      "outer": {
+        "final_omega1": 263.65218213092447,
+        "final_beta_rad_s": 358.53719438633783,
+        "final_design_change": 0.091433862976682323,
+        "design_change_mean": 0.091888851861600174,
+        "omega_even_mean": 263.48729923928482,
+        "omega_odd_mean": 267.18801911809362,
+        "omega_parity_gap": 3.7007198788087976,
+        "beta_even_mean": 362.08627389758811,
+        "beta_odd_mean": 377.75657088623859,
+        "beta_parity_gap": 15.670296988650477
+      },
+      "s1": {
+        "classification": "ambiguous",
+        "physical_global_count": 0,
+        "localized_low_density_count": 0,
+        "localized_non_low_density_count": 0,
+        "ambiguous_count": 10
+      },
+      "mode1_ld_strain": 0.0016501132925212591,
+      "components": {
+        "count": 13,
+        "largest_support_connected_component_id": 0,
+        "support_connected_component_count": 0,
+        "largest_component_size": 196,
+        "largest_support_connected_component_size": 0
+      },
+      "final_design_change": 0.091433862976682323
+    },
+    "reductions": {
+      "omega_parity_gap": 3.2609131744010256,
+      "beta_parity_gap": -8.1528985088075387,
+      "design_change_mean": -0.015149794222742957
+    }
+  },
+  "decision": {
+    "code": "C",
+    "label": "Inner solver still reaches the cap."
+  },
+  "final_answers": {
+    "q1": "No. Fraction hitting the inner cap is 0.015.",
+    "q2": "No. Omega parity gap is 3.70072 rad/s and design-change mean is 0.0918889.",
+    "q3": "The MMA inner subproblem still failing to converge within the enlarged cap."
+  }
+}
