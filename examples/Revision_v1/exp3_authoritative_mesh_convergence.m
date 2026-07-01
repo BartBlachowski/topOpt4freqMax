@@ -93,12 +93,15 @@ for i = 1:numel(meshCases)
         result.timing_total_s = toc(runTic);
         result.timing_per_iter_s = tIter;
         result.peak_memory_MB = memUsage;
+        result.topology_quality = checkTopologyQuality( ...
+            xFinal, double(cfg.domain.mesh.nelx), double(cfg.domain.mesh.nely));
 
         localValidateDiagnostics(info, nIter);
         result.a5_lowest_mode_check = localA5LowestModeCheck(info);
         localWriteHistories(paths, info, cfg);
         localWriteTopology(paths, xFinal, cfg, mc.label);
         localWriteA5(paths, result.a5_lowest_mode_check);
+        localWriteJson(paths.topology_quality_json, localJsonSafe(result.topology_quality));
 
         result.classification = localClassifyCase(result, cfg, criteria);
         result.accepted = strcmp(result.classification, 'accepted');
@@ -151,7 +154,7 @@ cfg.meta.name = sprintf('Exp3 authoritative alpha=1.00 mesh convergence %dx%d', 
     cfg.domain.mesh.nelx, cfg.domain.mesh.nely);
 cfg.meta.notes = ['Exp3 scoped mesh-convergence case for accepted nontrivial ', ...
     'Exp2 alpha=1.00. Authoritative load F(x)=omega0^2*M(x)*Phi0, ', ...
-    'solid reference, load_sensitivity=omitted, Gate A0 diagnostics enabled.'];
+    'solid reference, load_sensitivity=complete, Gate A0 diagnostics enabled.'];
 
 cfg.domain.load_cases(1).name = 'alpha1.00_solid_reference_mode_1';
 cfg.domain.load_cases(1).factor = 1.0;
@@ -169,7 +172,7 @@ if isfield(cfg.optimization, 'semi_harmonic_rho_source')
     cfg.optimization = rmfield(cfg.optimization, 'semi_harmonic_rho_source');
 end
 cfg.optimization.harmonic_normalize = false;
-cfg.optimization.load_sensitivity = 'omitted';
+cfg.optimization.load_sensitivity = 'complete';
 cfg.optimization.gate_a0_diagnostics = true;
 cfg.optimization.convergence_tol = criteria.design_change_tolerance;
 
@@ -224,6 +227,8 @@ result.final = struct( ...
     'tracked_mode_index', NaN, ...
     'tracked_mode_mac', NaN, ...
     'tracked_mode_omega', NaN);
+result.topology_quality = struct('pass', false, 'issues', {{'not evaluated'}}, ...
+    'metrics', struct(), 'thresholds', struct());
 result.a5_lowest_mode_check = struct( ...
     'pass', false, ...
     'tracked_mode_index', NaN, ...
@@ -262,6 +267,11 @@ end
 function classification = localClassifyCase(result, cfg, criteria)
 if ~result.solver_success
     classification = 'implementation failure';
+    return;
+end
+if ~isfield(result, 'topology_quality') || ~isfield(result.topology_quality, 'pass') || ...
+        ~result.topology_quality.pass
+    classification = 'topology invalid';
     return;
 end
 if ~isfinite(result.final.tracked_mode_mac) || ...
@@ -381,15 +391,15 @@ end
 function classification = localClassifyStudy(caseResults, comparison, criteria)
 classes = string({caseResults.classification});
 if any(classes == "implementation failure")
-    classification = 'inconclusive/capped/mode invalid';
+    classification = 'inconclusive/capped/mode/topology invalid';
     return;
 end
-if any(classes == "capped") || any(classes == "mode invalid")
-    classification = 'inconclusive/capped/mode invalid';
+if any(classes == "capped") || any(classes == "mode invalid") || any(classes == "topology invalid")
+    classification = 'inconclusive/capped/mode/topology invalid';
     return;
 end
 if ~comparison.available
-    classification = 'inconclusive/capped/mode invalid';
+    classification = 'inconclusive/capped/mode/topology invalid';
     return;
 end
 if all(classes == "accepted") && comparison.tracked_mode_match && ...
@@ -522,6 +532,7 @@ paths = struct( ...
     'topology_csv', [prefix, '_topology.csv'], ...
     'topology_json', [prefix, '_topology.json'], ...
     'topology_png', [prefix, '_topology.png'], ...
+    'topology_quality_json', [prefix, '_topology_quality.json'], ...
     'a5_lowest_mode_check_csv', [prefix, '_a5_lowest_mode_check.csv'], ...
     'a5_lowest_mode_check_json', [prefix, '_a5_lowest_mode_check.json'], ...
     'manifest', [prefix, '_manifest.json']);

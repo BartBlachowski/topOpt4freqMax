@@ -1,0 +1,90 @@
+{
+  "gate": "TOPOLOGY-QUALITY",
+  "status": "passed",
+  "clean": {
+    "pass": true,
+    "issues": [],
+    "thresholds": {
+      "solid_threshold": 0.5,
+      "max_solid_components": 20,
+      "min_largest_solid_fraction": 0.95,
+      "require_left_right_spanning": true
+    },
+    "metrics": {
+      "solid_cell_count": 1600,
+      "solid_fraction": 1,
+      "solid_component_count": 1,
+      "largest_solid_component_id": 1,
+      "largest_solid_component_size": 1600,
+      "largest_solid_component_fraction": 1,
+      "largest_component_touches_left_support": true,
+      "largest_component_touches_right_support": true,
+      "largest_component_touches_both_supports": true,
+      "top_component_sizes": 1600
+    }
+  },
+  "speckled": {
+    "pass": false,
+    "issues": [
+      "too many solid components: 73 > 20"
+    ],
+    "thresholds": {
+      "solid_threshold": 0.5,
+      "max_solid_components": 20,
+      "min_largest_solid_fraction": 0.8,
+      "require_left_right_spanning": true
+    },
+    "metrics": {
+      "solid_cell_count": 456,
+      "solid_fraction": 0.285,
+      "solid_component_count": 73,
+      "largest_solid_component_id": 1,
+      "largest_solid_component_size": 384,
+      "largest_solid_component_fraction": 0.84210526315789469,
+      "largest_component_touches_left_support": true,
+      "largest_component_touches_right_support": true,
+      "largest_component_touches_both_supports": true,
+      "top_component_sizes": [
+        384,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    }
+  },
+  "split": {
+    "pass": false,
+    "issues": [
+      "largest solid component does not span left and right supports"
+    ],
+    "thresholds": {
+      "solid_threshold": 0.5,
+      "max_solid_components": 20,
+      "min_largest_solid_fraction": 0.4,
+      "require_left_right_spanning": true
+    },
+    "metrics": {
+      "solid_cell_count": 480,
+      "solid_fraction": 0.3,
+      "solid_component_count": 2,
+      "largest_solid_component_id": 1,
+      "largest_solid_component_size": 240,
+      "largest_solid_component_fraction": 0.5,
+      "largest_component_touches_left_support": true,
+      "largest_component_touches_right_support": false,
+      "largest_component_touches_both_supports": false,
+      "top_component_sizes": [
+        240,
+        240
+      ]
+    }
+  },
+  "timestamp": "2026-07-01 14:12:49",
+  "matlab_version": "25.2.0.3042426 (R2025b) Update 1"
+}

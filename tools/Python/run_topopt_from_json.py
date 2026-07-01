@@ -559,7 +559,7 @@ def run_topopt_from_json(
         semi_baseline = str(get_field_path(cfg, ["optimization", "semi_harmonic_baseline"])).lower()
 
     load_sensitivity_mode = str(
-        cfg.get("optimization", {}).get("load_sensitivity", "omitted")
+        cfg.get("optimization", {}).get("load_sensitivity", "complete")
     ).lower().strip()
     if load_sensitivity_mode not in {"omitted", "complete"}:
         raise ValueError('optimization.load_sensitivity must be "omitted" or "complete".')

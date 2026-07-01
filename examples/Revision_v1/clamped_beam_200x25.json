@@ -79,8 +79,8 @@
     "volume_fraction": 0.5,
     "penalization": 3.0,
     "semi_harmonic_baseline": "solid",
-    "semi_harmonic_rho_source": "x",
-    "harmonic_normalize": true,
+    "harmonic_normalize": false,
+    "load_sensitivity": "complete",
     "filter": {
       "type": "sensitivity",
       "heaviside": false,

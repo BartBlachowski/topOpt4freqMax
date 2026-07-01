@@ -113,7 +113,7 @@ function [x, omega, tIter, nIter, mem_usage, diagnostics] = run_topopt_from_json
     if hasSemiHarmonicRhoSource
         semiHarmonicRhoSource = char(string(getFieldPath(cfg, {'optimization','semi_harmonic_rho_source'})));
     end
-    loadSensitivityMode = 'omitted';
+    loadSensitivityMode = 'complete';
     if hasFieldPath(cfg, {'optimization','load_sensitivity'})
         loadSensitivityMode = lower(strtrim(reqStr(cfg, ...
             {'optimization','load_sensitivity'}, 'optimization.load_sensitivity')));

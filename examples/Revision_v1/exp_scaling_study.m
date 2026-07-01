@@ -176,6 +176,7 @@ try
     result.tracked_omega   = localFinalHist(info, {'cr2_final_tracking','tracked_mode_omega'});
     result.tracked_index   = localFinalHist(info, {'cr2_final_tracking','tracked_mode_index'});
     result.a5_pass         = localA5Pass(info);
+    result.topology_quality = checkTopologyQuality(xFinal, nelx, nely);
     result.classification  = localClassify(result, cfg, criteria);
     result.accepted        = strcmp(result.classification, 'accepted');
 
@@ -374,7 +375,7 @@ nelx = double(cfg.domain.mesh.nelx);
 nely = double(cfg.domain.mesh.nely);
 cfg.meta.name = sprintf('Scaling study alpha=1.00 %dx%d', nelx, nely);
 cfg.meta.notes = ['Extended Exp3/S1 scaling study. Authoritative load F=omega0^2*M*Phi0, ', ...
-    'solid reference, load_sensitivity=omitted, Gate A0 diagnostics enabled.'];
+    'solid reference, load_sensitivity=complete, Gate A0 diagnostics enabled.'];
 
 cfg.domain.load_cases(1).name   = 'alpha1.00_solid_reference_mode_1';
 cfg.domain.load_cases(1).factor = 1.0;
@@ -392,7 +393,7 @@ if isfield(cfg.optimization, 'semi_harmonic_rho_source')
     cfg.optimization = rmfield(cfg.optimization, 'semi_harmonic_rho_source');
 end
 cfg.optimization.harmonic_normalize  = false;
-cfg.optimization.load_sensitivity    = 'omitted';
+cfg.optimization.load_sensitivity    = 'complete';
 cfg.optimization.gate_a0_diagnostics = true;
 cfg.optimization.convergence_tol     = criteria.design_change_tolerance;
 
@@ -429,6 +430,9 @@ nely = double(cfg.domain.mesh.nely);
 % Topology
 topo = reshape(xFinal(:), nely, nelx);
 writematrix(topo, [prefix, '_topology.csv']);
+if isfield(result, 'topology_quality')
+    localWriteJson([prefix, '_topology_quality.json'], localJsonSafe(result.topology_quality));
+end
 
 % History tables
 if isfield(info,'cr2_history')
@@ -890,6 +894,10 @@ end
 
 function cls = localClassify(result, cfg, criteria)
 if ~result.solver_success;           cls = 'implementation failure'; return; end
+if ~isfield(result, 'topology_quality') || ~isfield(result.topology_quality, 'pass') || ...
+        ~result.topology_quality.pass
+    cls = 'topology invalid'; return;
+end
 if ~isfinite(result.tracked_mac) || result.tracked_mac < criteria.mac_threshold || ...
         ~isfinite(result.tracked_index) || result.tracked_index < 1 || ~result.a5_pass
     cls = 'mode invalid'; return;
@@ -951,6 +959,11 @@ result.tracked_mac          = r.final.tracked_mode_mac;
 result.tracked_omega        = r.final.tracked_mode_omega;
 result.tracked_index        = r.final.tracked_mode_index;
 result.a5_pass              = r.a5_lowest_mode_check.pass;
+if isfield(r, 'topology_quality')
+    result.topology_quality = r.topology_quality;
+else
+    result.topology_quality = checkTopologyQuality(S.xFinal, result.nelx, result.nely);
+end
 result.reused_from_exp3     = true;
 % Absolute path for S1 to find the MAT
 exp3Mat = fullfile(repoRoot, 'examples', 'Revision_v1', 'output', ...
@@ -976,6 +989,8 @@ result = struct( ...
     'grayness',NaN, 'volume',NaN, 'feasibility',NaN, ...
     'design_change',NaN, 'tracked_mac',NaN, ...
     'tracked_omega',NaN, 'tracked_index',NaN, ...
+    'topology_quality',struct('pass',false,'issues',{{'not evaluated'}}, ...
+        'metrics',struct(),'thresholds',struct()), ...
     'a5_pass',false, 'exception','', ...
     'reused_from_exp3',false, 'result_mat','', 'result_mat_abs','', ...
     's1_overall_classification','not run', ...

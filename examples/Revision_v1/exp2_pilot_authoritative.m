@@ -144,7 +144,7 @@ function cfg = localBuildPilotConfig(sourceConfig)
 cfg = jsondecode(fileread(sourceConfig));
 cfg.meta.name = 'Exp2 pilot authoritative clamped beam alpha=1 (200x25)';
 cfg.meta.notes = ['Pilot only. Authoritative load F(x)=omega0^2*M(x)*Phi0, ', ...
-    'solid reference, load_sensitivity=omitted, Gate A0 diagnostics enabled.'];
+    'solid reference, load_sensitivity=complete, Gate A0 diagnostics enabled.'];
 
 cfg.domain.load_cases(1).name = 'alpha1_solid_reference_mode_1';
 cfg.domain.load_cases(1).factor = 1.0;
@@ -162,7 +162,7 @@ if isfield(cfg.optimization, 'semi_harmonic_rho_source')
     cfg.optimization = rmfield(cfg.optimization, 'semi_harmonic_rho_source');
 end
 cfg.optimization.harmonic_normalize = false;
-cfg.optimization.load_sensitivity = 'omitted';
+cfg.optimization.load_sensitivity = 'complete';
 cfg.optimization.gate_a0_diagnostics = true;
 
 cfg.postprocessing.compute_modes = 1;

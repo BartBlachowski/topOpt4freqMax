@@ -109,7 +109,7 @@ def topopt_freq(
             pas_s, pas_v       : 0-based int arrays (passive solid / void)
             load_cases         : normalized list from validate_load_cases()
             semi_harmonic_baseline : "solid" | "initial"
-            load_sensitivity : "omitted" | "complete"
+            load_sensitivity : "omitted" | "complete" (default "complete")
             harmonic_normalize : bool
             visualize_live     : bool
             save_frq_iterations: bool
@@ -144,7 +144,7 @@ def topopt_freq(
     save_frq_iter = bool(run_cfg.get("save_frq_iterations", False))
     harmonic_normalize = bool(run_cfg.get("harmonic_normalize", True))
     semi_baseline = str(run_cfg.get("semi_harmonic_baseline", "solid")).lower().strip()
-    load_sensitivity_mode = str(run_cfg.get("load_sensitivity", "omitted")).lower().strip()
+    load_sensitivity_mode = str(run_cfg.get("load_sensitivity", "complete")).lower().strip()
     if load_sensitivity_mode not in {"omitted", "complete"}:
         raise ValueError('load_sensitivity must be "omitted" or "complete".')
     gate_a0_diagnostics = bool(run_cfg.get("gate_a0_diagnostics", False))
