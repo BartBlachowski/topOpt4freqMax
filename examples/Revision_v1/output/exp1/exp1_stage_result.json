@@ -1,0 +1,38 @@
+{
+  "stage": "EXP1",
+  "key": "exp1",
+  "description": "Performance table (timing + omega_1 statistics)",
+  "status": "accepted",
+  "condition": "",
+  "expected_diagnostic": false,
+  "elapsed_seconds": 55931.019518458335,
+  "completed_utc": "2026-07-03T12:12:04.621Z",
+  "output_dir": "/Users/piotrek/Programming/topOpt4freqMax/examples/Revision_v1/output/exp1",
+  "config_hash": "fnv1a32_ffffffff",
+  "config": {
+    "nSamples": 10,
+    "meshTable": [
+      [
+        160,
+        20
+      ],
+      [
+        240,
+        30
+      ],
+      [
+        320,
+        40
+      ],
+      [
+        400,
+        50
+      ]
+    ]
+  },
+  "required_artifacts": [
+    "/Users/piotrek/Programming/topOpt4freqMax/examples/Revision_v1/output/exp1/exp1_perf_table_results.mat"
+  ],
+  "result_json": "/Users/piotrek/Programming/topOpt4freqMax/examples/Revision_v1/output/exp1/exp1_stage_result.json",
+  "manifest": "/Users/piotrek/Programming/topOpt4freqMax/examples/Revision_v1/output/exp1/exp1_stage_manifest.json"
+}

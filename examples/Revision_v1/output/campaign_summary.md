@@ -1,11 +1,11 @@
 # Revision R1 Campaign Summary
 
-- Campaign ID: `r1_full_20260701T141455742`
+- Campaign ID: `r1_full_20260706T100544049`
 - Mode: `full`
 - Status: `failed`
-- Started UTC: `2026-07-01T12:14:55.743Z`
-- Last update UTC: `2026-07-01T12:14:55.807Z`
-- Elapsed seconds: `0.06`
+- Started UTC: `2026-07-06T08:05:44.062Z`
+- Last update UTC: `2026-07-06T08:05:44.214Z`
+- Elapsed seconds: `0.15`
 
 | Stage | State | Elapsed s | Output directory | Message |
 |---|---:|---:|---|---|

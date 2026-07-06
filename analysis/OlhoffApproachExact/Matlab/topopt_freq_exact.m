@@ -49,10 +49,10 @@ function [rho_final, hist] = topopt_freq_exact(cfg)
 %
 %   Outputs:
 %     rho_final   nEl x 1   converged physical density
-%     hist        struct with fields omega, beta, volume, N, inner_iters,
+%     hist        struct with fields omega, lambda, beta, volume, N, inner_iters,
 %                 drho_norm, outer_iters.  omega/N are pre-update diagnostics;
-%                 omega_trial/N_trial and final_omega/final_N describe the
-%                 accepted post-update designs.
+%                 omega_trial/lambda_trial/N_trial and final_omega/final_N
+%                 describe the accepted post-update designs.
 %
 %   Reference: Du & Olhoff (2007), Struct Multidisc Optim 34:91-110,
 %              DOI 10.1007/s00158-007-0101-y, plus erratum
@@ -134,6 +134,7 @@ else
 end
 
 hist.omega       = nan(outer_max_iter, n_modes);
+hist.lambda      = nan(outer_max_iter, n_modes);
 hist.beta        = nan(outer_max_iter, 1);
 hist.volume      = nan(outer_max_iter, 1);
 hist.N           = nan(outer_max_iter, 1);
@@ -153,8 +154,10 @@ hist.asym_same_count = nan(outer_max_iter, 1);
 hist.drho_norm   = nan(outer_max_iter, 1);
 hist.drho_max    = nan(outer_max_iter, 1);
 hist.omega_trial = nan(outer_max_iter, n_modes);
+hist.lambda_trial = nan(outer_max_iter, n_modes);
 hist.step_alpha  = nan(outer_max_iter, 1);
 hist.outer_iters = 0;
+hist.rho_initial = rho;
 if rho_snapshot_interval > 0
     nSnapMax = ceil(outer_max_iter / rho_snapshot_interval);
     hist.rho_snapshot_iters = nan(nSnapMax, 1);
@@ -303,6 +306,7 @@ for out_it = 1:outer_max_iter
     end
 
     hist.omega(out_it, :)    = omega(:)';
+    hist.lambda(out_it, :)   = lam(:)';
     hist.beta(out_it)        = beta_fin;
     hist.volume(out_it)      = mean(rho_new);
     hist.N(out_it)           = N;
@@ -328,6 +332,7 @@ for out_it = 1:outer_max_iter
         hist.asym_same_count(out_it) = i_hist.asym_same_count;
     end
     hist.omega_trial(out_it, :) = omega_trial(:)';
+    hist.lambda_trial(out_it, :) = omega_trial(:)'.^2;
     hist.step_alpha(out_it)  = step_alpha;
     hist.outer_iters         = out_it;
     if rho_snapshot_interval > 0 && (mod(out_it, rho_snapshot_interval) == 0 || out_it == 1)
@@ -378,9 +383,11 @@ for fi = 1:numel(fns)
 end
 
 rho_final = rho;
+hist.rho_final = rho_final;
 [final_omega, final_flag] = eval_omega_only(rho_final, Ke_phys_l, Me_phys_l, ...
     iK, jK, nDof, free, n_modes, opts_eig, penal, mass_mode);
 hist.final_omega = final_omega(:)';
+hist.final_lambda = final_omega(:)'.^2;
 hist.final_flag  = final_flag;
 if final_flag == 0
     [hist.final_N, hist.final_J_idx, hist.final_cluster_idx] = ...

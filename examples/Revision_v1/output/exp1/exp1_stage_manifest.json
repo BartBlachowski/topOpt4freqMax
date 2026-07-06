@@ -1,0 +1,15 @@
+{
+  "stage": "EXP1",
+  "status": "accepted",
+  "created_utc": "2026-07-03T12:12:04.631Z",
+  "output_dir": "/Users/piotrek/Programming/topOpt4freqMax/examples/Revision_v1/output/exp1",
+  "result_json": "/Users/piotrek/Programming/topOpt4freqMax/examples/Revision_v1/output/exp1/exp1_stage_result.json",
+  "manifest_json": "/Users/piotrek/Programming/topOpt4freqMax/examples/Revision_v1/output/exp1/exp1_stage_manifest.json",
+  "required_artifacts": [
+    "/Users/piotrek/Programming/topOpt4freqMax/examples/Revision_v1/output/exp1/exp1_perf_table_results.mat"
+  ],
+  "files": [
+    "/Users/piotrek/Programming/topOpt4freqMax/examples/Revision_v1/output/exp1/exp1_perf_table_results.mat",
+    "/Users/piotrek/Programming/topOpt4freqMax/examples/Revision_v1/output/exp1/exp1_stage_result.json"
+  ]
+}

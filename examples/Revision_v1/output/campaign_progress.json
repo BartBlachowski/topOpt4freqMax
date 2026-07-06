@@ -1,20 +1,24 @@
 {
-  "campaign_id": "r1_full_20260701T141604990",
-  "start_time_utc": "2026-07-01T12:16:04.991Z",
-  "last_update_utc": "2026-07-01T12:16:05.023Z",
+  "campaign_id": "r1_full_20260706T100544049",
+  "start_time_utc": "2026-07-06T08:05:44.062Z",
+  "last_update_utc": "2026-07-06T08:05:44.215Z",
   "mode": "full",
   "current_stage": "EXP1",
-  "status": "running",
-  "elapsed_seconds": 0.0063210000023245809,
+  "status": "failed",
+  "elapsed_seconds": 0.15103999999910592,
   "progress_file": "/Users/piotrek/Programming/topOpt4freqMax/examples/Revision_v1/output/campaign_progress.json",
   "output_root": "/Users/piotrek/Programming/topOpt4freqMax/examples/Revision_v1/output",
   "resume": false,
   "dry_run": false,
   "force": false,
   "completed_stages": [],
-  "failed_stages": [],
+  "failed_stages": [
+    "EXP1"
+  ],
   "skipped_stages": [],
-  "per_stage_elapsed": {},
+  "per_stage_elapsed": {
+    "exp1": 0.0047266666666666663
+  },
   "output_directories": {
     "exp1": "/Users/piotrek/Programming/topOpt4freqMax/examples/Revision_v1/output/exp1",
     "exp2": "/Users/piotrek/Programming/topOpt4freqMax/examples/Revision_v1/output/exp2",
