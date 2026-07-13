@@ -45,9 +45,11 @@ resolutions = [
 
 nRes = size(resolutions, 1);
 
-% Methods to compare
-approaches   = {'Olhoff',         'OlhoffExact',         'Yuksel',         'OurApproach'       };
-methodLabels = {'OlhoffApproach', 'OlhoffApproachExact', 'YukselApproach', 'ProposedApproach'  };
+% Methods to compare. The Olhoff branch is the local OlhoffApproach
+% implementation only. The unsuccessful OlhoffApproachExact reconstruction is
+% archived diagnostic code and is excluded from production comparisons.
+approaches   = {'Olhoff',                                  'Yuksel',                  'OurApproach'      };
+methodLabels = {'OlhoffApproach (local Olhoff-inspired)', 'YukselApproach (local)', 'ProposedApproach' };
 nMethods     = numel(approaches);
 
 nSamples = 5;
@@ -165,7 +167,8 @@ fprintf('%s\n', sep);
 % Save Table 1 as CSV
 % -------------------------------------------------------------------------
 csvPath = fullfile(fileparts(mfilename('fullpath')), 'table1_performance.csv');
-displayNames = {'Olhoff', 'Yuksel', 'Proposed'};
+displayNames = {'OlhoffApproach (local Olhoff-inspired)', ...
+                'YukselApproach (local)', 'ProposedApproach'};
 fid = fopen(csvPath, 'w');
 fprintf(fid, 'Method,Mesh,Iterations,RunTime_s,RunTimePerIter_s,MaxRAM_MB\n');
 for r = 1:nRes

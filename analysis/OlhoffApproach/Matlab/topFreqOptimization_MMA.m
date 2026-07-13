@@ -1,7 +1,9 @@
 function [omega_best, xPhys_best, diagnostics] = topFreqOptimization_MMA(cfg, varargin)
 
 % ==============================================================
-% Frequency maximization via MMA (BOUND formulation)
+% Local Olhoff-inspired frequency maximization via MMA (bound formulation).
+% This repository implementation is a comparison implementation, not a
+% paper-faithful or canonical Du--Olhoff reconstruction.
 % Maximize min_{j=1..J} lambda_j using variable Eb = E/lambda_ref.
 %
 % Task parameters (geometry, mesh, materials, continuation schedule, etc.)
@@ -40,7 +42,7 @@ diagnostics = struct();
 localEnsurePlotHelpersOnPath();
 plotLive = localParseVisualizeLive(opts.visualize_live, true);
 visualizationQuality = localParseVisualizationQuality(opts.visualization_quality);
-approachName = localApproachName(opts, 'Olhoff');
+approachName = localApproachName(opts, 'OlhoffApproach (local)');
 saveFrqIterations = localParseVisualizeLive(opts.save_frq_iterations, false);
 
 % Shorthand locals (keeps the algorithm body intact)

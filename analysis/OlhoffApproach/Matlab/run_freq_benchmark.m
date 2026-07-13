@@ -1,7 +1,9 @@
-% Benchmark runner for Olhoff & Du (2014) 2D beam cases.
-% Runs CC, CS, SS boundary conditions and reports initial/final eigenfrequencies.
+% Local Olhoff-inspired comparison runner for the 2D beam cases.
+% Runs CC, CS, SS boundary conditions and reports local initial/final
+% eigenfrequencies. Published values below are literature context only; agreement
+% or disagreement does not validate a Du--Olhoff reconstruction.
 %
-% Paper targets (Section 3.1):
+% Published context values (Section 3.1; not reproduction targets):
 %   CC: initial 146.1 -> optimal 456.4 (212% improvement)
 %   CS: initial 104.1 -> optimal 288.7 (177% improvement)
 %   SS: initial 68.7  -> optimal 174.7 (154% improvement)
@@ -35,7 +37,7 @@ if isfield(baseCfg, 'visualization_quality') && ~isempty(baseCfg.visualization_q
     opts.visualization_quality = baseCfg.visualization_quality;
 end
 
-% Paper reference values
+% Published context values; never use them as a reproduction gate.
 paper = struct();
 paper.CC = struct('init', 146.1, 'opt', 456.4);
 paper.CS = struct('init', 104.1, 'opt', 288.7);
@@ -54,7 +56,8 @@ for k = 1:numel(cases)
     cfg.supportType = c.code;
 
     fprintf('\n================== %s ==================\n', c.label);
-    fprintf('Paper: init=%.1f, opt=%.1f\n', paper.(c.code).init, paper.(c.code).opt);
+    fprintf('Published context (not validation): init=%.1f, optimum=%.1f\n', ...
+        paper.(c.code).init, paper.(c.code).opt);
     fprintf('=========================================\n');
 
     tic;
@@ -78,12 +81,13 @@ for k = 1:numel(cases)
     imagesc(1 - imgDisp);
     set(gca, 'YDir', 'normal');
     axis equal tight off; colormap(gray(256));
-    title(sprintf('%s: omega1=%.1f (paper: %.1f)', c.code, omega_best, paper.(c.code).opt));
+    title(sprintf('Local %s: omega1=%.1f (published context: %.1f)', ...
+        c.code, omega_best, paper.(c.code).opt));
 end
 
 % Final summary table
-fprintf('\n\n========== FINAL BENCHMARK SUMMARY ==========\n');
-fprintf('BC   | Init(code) | Init(paper) | Opt(code) | Opt(paper) | Improve\n');
+fprintf('\n\n====== LOCAL COMPARISON SUMMARY (NOT REPRODUCTION EVIDENCE) ======\n');
+fprintf('BC   | Init(local) | Init(publ.) | Endpoint(local) | Opt(publ.) | Improve\n');
 fprintf('-----|------------|-------------|-----------|------------|--------\n');
 for k = 1:numel(cases)
     r = results{k};
@@ -92,7 +96,8 @@ for k = 1:numel(cases)
     fprintf('%s  | %10.1f | %11.1f | %9.1f | %10.1f | %5.0f%%\n', ...
         r.code, r.diag.initial.omega(1), p.init, r.diag.final.omega(1), p.opt, improv);
 end
-fprintf('==============================================\n');
+fprintf('Published values are context only; no optimum-gap inference is valid.\n');
+fprintf('=================================================================\n');
 
 function print_block(name, data)
     fprintf('%s eigenfreqs (rad/s): %8.2f %8.2f %8.2f\n', name, data.omega(1:min(3,end)));

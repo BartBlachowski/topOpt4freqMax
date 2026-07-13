@@ -21,6 +21,14 @@ converged, traceable output that addresses the requested formulation.
 **NOT COMPLETE. `examples/Revision_v1` does not completely fulfill the reviewer
 demands and is not sufficient evidence for a resubmission-ready response.**
 
+**Comparator-evidence update (2026-07-13):** the separate
+`OlhoffApproachExact` reconstruction campaign is closed as an unsuccessful
+reproduction attempt. It is not part of this audit's positive evidence and
+must not be used to cure any deficiency listed below. Every “Olhoff” entry in
+the Exp1 discussion refers only to the local `analysis/OlhoffApproach`
+implementation. No claim may generalize those data to a canonical Du--Olhoff
+implementation or published optimum.
+
 The directory contains useful partial work, particularly the 10-run performance
 dataset, a scaling fit, a building eigenspectrum/MAC export, and a controlled
 semi-harmonic sensitivity experiment. However, two central experiment groups
@@ -137,7 +145,8 @@ V1/C1, V1/C4 and V2/C1 remain **NOT FULFILLED**.
 ### 4. Exp1's timing breakdown is methodologically unsound
 
 `run_topopt_from_json` defines `tIter` as average optimization-loop time, with
-initialization excluded for the proposed and Olhoff implementations. Exp1 then:
+initialization excluded for the proposed method and the local
+`OlhoffApproach` implementation. Exp1 then:
 
 1. computes `tTotal = tIter * nIter`, which is loop time, not wall-clock total;
 2. subtracts an estimated setup time from this already setup-free value to
@@ -146,9 +155,10 @@ initialization excluded for the proposed and Olhoff implementations. Exp1 then:
    `x=volume_fraction` model even though the active performance configuration
    uses a solid semi-harmonic baseline;
 4. times only `eigs`, excluding matrix assembly and other initialization work;
-5. estimates Yuksel/Olhoff setup as one-iteration wall time minus mean loop time.
+5. estimates local Yuksel/`OlhoffApproach` setup as one-iteration wall time
+   minus mean loop time.
 
-The saved setup values become exactly zero for Olhoff at the 320x40 and 400x50
+The saved setup values become exactly zero for `OlhoffApproach` at the 320x40 and 400x50
 meshes, demonstrating failure of the estimator. The issue is best described as a
 methodologically unsound decomposition rather than a purely algebraic error: its
 quantities do not represent consistently measured setup, loop and wall-clock
@@ -159,7 +169,8 @@ presented as a measured decomposition.
 ### 5. Exp1 contains non-converged comparator results
 
 The saved 10-run dataset is valuable and includes frequencies, timing standard
-deviations and memory standard deviations at four meshes. However, Olhoff
+deviations and memory standard deviations at four meshes. However, the local
+`OlhoffApproach`
 reports exactly 2,000 iterations at every mesh, indicating termination at the
 configured cap rather than convergence. Frequencies and timings from a capped
 comparator do not establish a fair converged-method comparison.
@@ -169,13 +180,15 @@ The Exp1 evidence therefore only **PARTIALLY** fulfills:
 - frequency versus mesh for all methods;
 - timing variance;
 - speedup decomposition;
-- frequency-gap and canonical-comparator claims.
+- frequency-difference statements and any attempt to generalize the local
+  comparator to canonical Du--Olhoff evidence.
 
 The regenerated values also conflict directly with the manuscript's headline
-numbers. Across the four meshes, the proposed-versus-Olhoff omega1 differences
+numbers. Across the four meshes, the proposed-versus-local-`OlhoffApproach`
+omega1 differences
 are approximately -0.5%, +0.6%, +0.4% and +0.5%, rather than the stated 8.6%
-gap; at some meshes the proposed result is slightly higher. The capped Olhoff
-times would imply a speedup near 80x at 400x50 rather than 7.1x. Because Olhoff
+gap; at some meshes the proposed result is slightly higher. The capped local comparator
+times would imply a speedup near 80x at 400x50 rather than 7.1x. Because the local `OlhoffApproach`
 did not converge, these regenerated values do not establish that the proposed
 method is actually more accurate or 80x faster. They establish that the new
 dataset is unreconciled with the manuscript and cannot support the existing
@@ -223,14 +236,14 @@ remains uncorrected in the paper's prose. CR1 is **OPEN / NOT FULFILLED**.
 | Explain Yuksel iteration discrepancy against published 180-200 iterations | No original-code comparison or resolved diagnosis; Exp1 only reruns in-house code | NOT FULFILLED |
 | Quantify frozen-eigenvector error / refresh every N iterations | Only N=50 versus frozen, both unconverged; planned N={1,5,10,50,infinity} study absent | NOT FULFILLED |
 | Analyze clustering/coalescence and a posteriori target-mode validity | Building MAC/eigenspectrum exists; clamped-beam Exp2 failed; manuscript discussion unavailable | PARTIAL |
-| Clarify speedup source | New timing data exist, but total/setup decomposition is invalid and Olhoff is capped | PARTIAL |
+| Clarify local runtime-ratio source | New timing data exist, but total/setup decomposition is invalid and local `OlhoffApproach` is capped | PARTIAL |
 | Validate omitted load sensitivity for Eq. 6 | FD check validates different semi-harmonic formula; all ablation endpoints unconverged | NOT FULFILLED |
 | Unify frozen reference design | Initial and solid baselines coexist | NOT FULFILLED |
 | Reconcile OC/MMA and scope contribution | Configurations document optimizer choice, but manuscript/algorithm correction unavailable | MANUSCRIPT-ONLY / NOT ASSESSABLE HERE |
 | Correct/qualify Table 3 alpha=0.75 non-monotonicity | Intended Exp2 output absent; manuscript still omits the 1.73x counterexample from its monotonicity statement | NOT FULFILLED |
 | Report full spectrum below tracked clamped mode | Exp2 absent; building spectra do not substitute for clamped Table 3 case | NOT FULFILLED |
-| Bound speedup versus canonical Olhoff | No canonical-algorithm ablation or removed-overhead estimate | NOT FULFILLED |
-| Add omega1 for every method and mesh | Exp1 contains values, but Olhoff is nonconverged at all meshes | PARTIAL |
+| Remove canonical Du--Olhoff speedup/optimum language | Exact reconstruction is invalid evidence; only local `OlhoffApproach` may remain as a named comparator | REQUIRED CORRECTION; no replacement experiment |
+| Add omega1 for every local method and mesh | Exp1 contains values, but `OlhoffApproach` is nonconverged at all meshes | PARTIAL |
 | Reference comparator for a multi-mode example | Exp2/Exp3 compare semi-harmonic against harmonic Eq. 7, not Olhoff/Yuksel; outputs absent | NOT FULFILLED |
 | Timing and memory standard deviations | Exp1 contains 10-run standard deviations | FULFILLED as data collection; manuscript integration unverified |
 | Hardware/software specification | Master script prints data to console, but no run log or hardware artifact was saved | PARTIAL / UNVERIFIABLE |
@@ -259,7 +272,7 @@ The following work is useful after the blockers above are corrected:
 1. **Exp1 repeated-run framework.** It executes 10 samples over four meshes and
    stores mean/standard-deviation arrays for frequencies, loop timing and memory.
 2. **Exp5 scaling fit.** It uses measured Exp1 timings and yields exponents near
-   0.904 (Olhoff), 0.910 (Yuksel) and 1.037 (proposed), directly showing that the
+   0.904 (local `OlhoffApproach`), 0.910 (local Yuksel implementation) and 1.037 (proposed), directly showing that the
    existing `O(n_e^1.3)` claim should be replaced.
 3. **Semi-harmonic derivative implementation check.** The FD checks demonstrate
    that the implemented semi-harmonic load derivative is coded consistently for
@@ -287,10 +300,13 @@ The following work is useful after the blockers above are corrected:
    the planned refresh sweep N={1,5,10,50,infinity}, not only N=50.
 6. Correct Exp1 timing: store actual wall-clock total, measured initialization and
    measured loop time from each solver. Do not subtract setup from an already
-   setup-free loop time. Rerun capped Olhoff cases or explicitly report failure to
-   converge rather than treating them as comparable optima.
-7. Add an Olhoff/Yuksel reference run for at least one multi-mode case and a
-   canonical-Olhoff overhead ablation or defensible bound.
+   setup-free loop time. Complete the already planned local comparison only if
+   it is retained; otherwise explicitly report `OlhoffApproach` failure to
+   converge rather than treating its endpoint as a comparable optimum.
+7. If the already planned external comparison is retained, use only
+   `analysis/OlhoffApproach` (and the named local Yuksel implementation), label
+   both as local, and make no canonical-overhead, Du--Olhoff-optimum, or exact-
+   reproduction inference.
 8. Treat Exp2b's low-MAC modes as evidence requiring characterization; do not claim
    absence of spurious modes without mode localization/energy evidence.
 9. Produce a repository mapping from every revised manuscript table/figure to its

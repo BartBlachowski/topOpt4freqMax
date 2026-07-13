@@ -62,21 +62,21 @@
 \maketitle
 
 % ============================================================
-\section{Algorithm Pseudocodes and Complexity Analysis}
+\section{Algorithm Pseudocodes and Comparison-Evidence Policy}
 \label{sec:algorithms}
 % ============================================================
 
-This section presents pseudocodes for the three compared methods in a
-uniform notation, followed by a detailed complexity assessment.
-The comparison must distinguish canonical algorithms from the repository
-implementations used to generate Table~1.  In particular, the local
-Olhoff implementation adds a trial eigensolve after each MMA update, and the
-local Yuksel timing aggregates Stage~1 and Stage~2 iterations.  Those
-implementation choices should be stated explicitly wherever empirical
-runtime ratios are discussed.
+This section presents the three algorithmic ideas in a uniform notation.
+Algorithm~1 is a literature-level synopsis of the published Du--Olhoff
+bound formulation; it is not a claim that any repository implementation is
+paper-faithful or reproduces the published benchmark.  The only Olhoff-based
+implementation admitted to production comparisons is
+\texttt{analysis/OlhoffApproach}, which must be described as the
+\emph{local Olhoff-inspired comparison implementation}.  The unsuccessful
+\texttt{OlhoffApproachExact} reconstruction campaign is archived diagnostic
+work and is not part of the reviewer-evidence chain.
 Notation throughout:
 $N_e$ = number of finite elements;
-$N_\mathrm{dof} \approx 2N_e$ = degrees of freedom;
 $n$ = index of the lowest targeted eigenfrequency (the one being maximized);
 $J$ = number of candidate eigenpairs tracked ($J \geq n$);
 $p,d$ = SIMP penalization exponents for stiffness and mass, respectively;
@@ -93,25 +93,24 @@ $V_0$ = total domain volume;
 $V_e$ = volume of element $e$;
 $V^* = V_f\cdot V_0$ = prescribed material volume;
 $r_{\min}$ = sensitivity filter radius;
-$h$ = uniform element size;
-$c_f = r_{\min}/h$ = filter radius in element units (constant for a fixed mesh);
 $\varepsilon$ = generic outer convergence tolerance;
 $\varepsilon_1,\varepsilon_2$ = Stage~1 and Stage~2 convergence tolerances (Yuksel--Yilmaz);
 $\varepsilon_{\mathrm{inner}}$ = inner MMA loop tolerance (Olhoff--Du);
-$\varepsilon_{\mathrm{tol}}$ = main loop tolerance (Proposed);
-$bw \approx \sqrt{N_e}$ = effective half-bandwidth of $\mathbf{K}$ for a
-  column-ordered 2-D Q4 mesh.
+$\varepsilon_{\mathrm{tol}}$ = main loop tolerance (Proposed).
 
 % -----------------------------------------------------------
-\subsection{Algorithm 1: Olhoff--Du Bound Formulation}
+\subsection{Algorithm 1: Published Du--Olhoff Bound Formulation}
 \label{subsec:alg-olhoff}
 % -----------------------------------------------------------
 
-The method maximizes a scalar bound variable $\beta \leq \omega_j^2$,
-$j = n,\ldots,J$, through a nested double-loop procedure.
-The outer loop solves the eigenvalue problem and assembles sensitivities;
-the inner loop runs MMA iteratively until the design increments converge
-\cite{Olhoff2014}.
+At the literature level, the method maximizes a scalar bound variable
+$\beta \leq \omega_j^2$, $j = n,\ldots,J$, through a nested double-loop
+procedure.  The outer loop solves the eigenvalue problem and assembles
+sensitivities; the inner loop runs MMA iteratively until the design
+increments converge \cite{Olhoff2014}.  The pseudocode below records that
+published conceptual structure only.  It must not be read as a validated
+mapping to \texttt{OlhoffApproach}, and it supplies no empirical benchmark
+for the revision.
 
 \medskip
 \begin{algobox}
@@ -313,347 +312,57 @@ solve $\mathbf{K}(\var{x}^*)\boldsymbol{\varphi}_j
 \end{algobox}
 
 % -----------------------------------------------------------
-\subsection{Complexity Analysis and Comparison}
+\subsection{Performance-Comparison Scope}
 \label{subsec:complexity}
 % -----------------------------------------------------------
 
-\subsubsection*{Dominant operations}
+\subsubsection*{Evidence boundary}
 
-For a 2-D FEM mesh with $N_e$ elements the key cost drivers per
-iteration are listed below.
-Sparse Cholesky factorization of a quasi-banded system scales as
-$O(N_e^{1.5})$ and dominates all other operations for meshes beyond
-a few thousand elements.
-Let $C_{\mathrm{fact}}$ denote the wall-clock cost of one Cholesky
-factorization and $C_{\mathrm{sol}}$ the cost of one triangular
-(forward/back-substitution) solve of the same system.
-An eigensolve via shift-and-invert Arnoldi
-(\textsc{arpack}/\texttt{eigsh}) requires one factorization (cost
-$C_{\mathrm{fact}}$) plus $k_{\mathrm{Krylov}} \approx 3J$ Krylov
-iterations each costing $O(N_e \cdot bw) = O(N_e^{1.5})$, i.e.\
-$k_{\mathrm{Krylov}}$ triangular solves; the total eigensolve cost
-$C_{\mathrm{eig}} = C_{\mathrm{fact}} + k_{\mathrm{Krylov}}\,C_{\mathrm{sol}}$
-therefore exceeds the simple-solve cost~$C_{\mathrm{sol}}$ by a
-factor of $3J$--$5J$ in practice.
+The published Algorithm~1 and the local \texttt{OlhoffApproach} code play
+different roles.  Algorithm~1 provides literature context for the bound
+formulation.  The local code is an Olhoff-inspired implementation that may
+be used only as a local empirical comparator.  Agreement between the two
+has not been established, so observations from the local code cannot be
+reported as properties, costs, convergence behaviour, or achieved optima of
+the published Du--Olhoff method.
 
-\paragraph{Origin of the $O(N_e^{1.5})$ bound.}
-Consider a rectangular mesh with $\mathit{nelx}\times\mathit{nely}$ bilinear
-Q4 elements ($N_e = \mathit{nelx}\cdot\mathit{nely}$,
-$N_{\mathrm{dof}}\approx 2N_e$).
-Number the nodes column-by-column; the stiffness matrix $\mathbf{K}$ is then
-banded because the largest node-index difference produced by a Q4 element
-spans exactly one column, i.e.\ $\mathit{nely}+1$ nodes, giving
-\begin{equation*}
-  bw \;\approx\; 2(\mathit{nely}+1) \;=\; O\!\left(\sqrt{N_e}\right),
-\end{equation*}
-where the last step uses $\mathit{nely}\approx\sqrt{N_e}$ for a quasi-square
-mesh ($\mathit{nelx}\approx\mathit{nely}$).
-Two cost estimates follow.
+The attempted \texttt{OlhoffApproachExact} reconstruction did not establish
+a paper-faithful implementation.  Its scripts, outputs, timings, iteration
+histories, and terminal frequencies are archived diagnostics.  They must not
+be used to infer a frequency gap to a Du--Olhoff optimum, a speedup relative
+to a canonical implementation, a convergence advantage, or a mesh-scaling
+law.
 
-\begin{enumerate}[leftmargin=1.6em]
-  \item \emph{Triangular solve} (forward/back substitution with a precomputed
-  Cholesky factor $\mathbf{L}$).
-  Each step of $\mathbf{L}\mathbf{y}=\mathbf{b}$ touches at most $bw$
-  off-diagonal entries per row, so
-  \begin{equation*}
-    \text{solve cost}
-    \;=\; O(N_{\mathrm{dof}}\cdot bw)
-    \;=\; O\!\left(N_e\cdot\sqrt{N_e}\right)
-    \;=\; O\!\left(N_e^{1.5}\right).
-  \end{equation*}
-  The same bound applies to the sparse matrix--vector product
-  $\mathbf{K}\mathbf{v}$ used in each Krylov step of the eigensolve.
+\subsubsection*{Permitted local comparison}
 
-  \item \emph{Cholesky factorization.}
-  Na\"ive banded elimination eliminates one column at cost $O(bw^2)$,
-  totalling $O(N_{\mathrm{dof}}\cdot bw^2)=O(N_e^2)$; this is the
-  worst-case bound for a column-ordered 2-D mesh.
-  A \emph{nested-dissection} reordering (used by default in
-  CHOLMOD/UMFPACK/MUMPS) recursively bisects the mesh with
-  separators of size $O(\sqrt{N_e})$.
-  The fill introduced at each level of the recursion tree is
-  $O(N_e)$, and with $O(\log\sqrt{N_e})$ levels the total fill is
-  $O(N_e\log N_e)$.
-  The corresponding factorization work is dominated by the top-level
-  dense block of size $O(\sqrt{N_e})$, giving
-  \begin{equation*}
-    \text{factorization cost (nested dissection)}
-    \;=\; O\!\left(\bigl(\sqrt{N_e}\bigr)^3\right)
-    \;=\; O\!\left(N_e^{1.5}\right),
-  \end{equation*}
-  a classical result for planar finite-element graphs.
-\end{enumerate}
+If an empirical performance comparison is retained in the revision, its
+Olhoff-based column must be generated by and explicitly labelled
+\emph{local \texttt{OlhoffApproach}}.  Such a comparison may describe only
+the observed behaviour of the repository implementations under the stated
+settings.  It must not use ``canonical'', ``exact'', ``reference'',
+``paper-faithful'', or ``benchmark implementation'' as qualifiers for the
+local comparator, and it must not reinterpret local endpoint differences as
+gaps to the published optimum.
 
-The two bounds together justify the $O(N_e^{1.5})$ label in
-Table~\ref{tab:ops} for every operation that involves a direct linear solve
-or eigensolve.
-Although all three methods share the same asymptotic class, their
-per-iteration prefactors differ substantially; Table~\ref{tab:prefactor}
-breaks down the prefactor for each method.
-The empirical exponent $\approx 1.3$ observed in
-Table~\ref{tab:complexity} is lower than $1.5$ because the actual sparse
-pattern of a structured Q4 mesh has less fill than the worst-case
-nested-dissection bound, and because BLAS-level cache effects further reduce
-the effective exponent on modern hardware.
+No quantitative timing, frequency-gap, convergence, memory, or scaling
+table is carried forward in this planning document.  Any separate
+reviewer-facing table or figure is admissible only after its provenance is
+verified against the production campaign and its caption states the local
+implementation scope.  This policy removes the unsupported empirical chain
+without requesting a replacement experiment.
 
-\begin{table}[htbp]
-\centering
-\caption{Per-iteration operation count.
-$bw \approx \sqrt{N_e}$ denotes the effective half-bandwidth;
-$J$ is the number of tracked modes;
-$c_f = r_{\min}/h$ is the filter radius in element units (constant for a fixed mesh).}
-\label{tab:ops}
-\renewcommand\arraystretch{1.2}
-\begin{tabularx}{\textwidth}{@{}lXXX@{}}
-\toprule
-Operation & Olhoff--Du implementation & Yuksel--Yilmaz (Stage~2) & Proposed \\
-\midrule
-Shift-invert eigensolves / factorizations
-  & $2 \times O(N_e^{1.5})$ (main + trial)
-  & $0$ & $0$ \\
-Static linear solves
-  & --- & $1 \times O(N_e^{1.5})$ & $1 \times O(N_e^{1.5})$ \\
-Stiffness assembly & $O(N_e)$ & $O(N_e)$ & $O(N_e)$ \\
-Mass assembly & $O(N_e)$ & $O(N_e)$ & $O(N_e)$ \\
-Sensitivity ($J$ modes) & $J \times O(N_e)$ & $O(N_e)$ & $O(N_e)$ \\
-Filter (conv.) & $J \times O(c_f^2 N_e)$ & $O(c_f^2 N_e)$ & $O(c_f^2 N_e)$ \\
-MMA update & $O((J{+}2)N_e)$ & --- & --- \\
-OC bisection & --- & $O(N_e)$ & $O(N_e)$ \\
-\midrule
-\textbf{Total}
-  & $\boldsymbol{O(N_e^{1.5})}$
-  & $\boldsymbol{O(N_e^{1.5})}$
-  & $\boldsymbol{O(N_e^{1.5})}$ \\
-\bottomrule
-\end{tabularx}
-\end{table}
+\subsubsection*{Qualitative algorithmic distinction}
 
-\begin{table}[htbp]
-\centering
-\caption{Per-iteration prefactor $C$ relative to one static triangular solve
-  $C_{\mathrm{sol}}$.
-  $C_{\mathrm{fact}}$ = cost of one Cholesky factorization
-    ($C_{\mathrm{fact}} \approx 3$--$5\,C_{\mathrm{sol}}$ in practice);
-  $k_{\mathrm{Krylov}}\approx 3J$--$5J$ = number of Krylov steps per eigensolve;
-  $n_{\mathrm{MMA}}\approx 5$--$20$ = inner MMA sub-iterations per outer step.
-  Empirical values are from the $400{\times}50$ benchmark.}
-\label{tab:prefactor}
-\renewcommand\arraystretch{1.4}
-\begin{tabularx}{\textwidth}{@{}l X X r@{}}
-\toprule
-Method & Prefactor formula & Dominant contributor & $C / C_{\mathrm{sol}}$ \\
-\midrule
-Olhoff--Du
-  & $C = 2\bigl(C_{\mathrm{fact}}
-      + k_{\mathrm{Krylov}}\,C_{\mathrm{sol}}\bigr)
-      + n_{\mathrm{MMA}}\,O(N_e)$
-  & Two shift-invert eigensolves per outer iteration, each
-    requiring one factorization plus $k_{\mathrm{Krylov}}$
-    triangular solves; inner MMA loop adds $O(N_e)$ overhead
-  & $\approx 8$ \\
-Yuksel--Yilmaz
-  & $C \approx C_{\mathrm{sol}}$
-  & Single triangular solve (Stage~2);
-    all $O(N_e)$ terms (assembly, filter, OC bisection)
-    negligible for large $N_e$
-  & $\approx 1$ \\
-Proposed
-  & $C \approx C_{\mathrm{sol}} + O(N_e)$
-  & Single triangular solve; extra cost from
-    per-iteration $\mathbf{M}(\boldsymbol{x})$ assembly
-    and $n_{\mathrm{modes}}$ eigenvector projections
-    needed to refresh $\mathbf{f}_\alpha$
-  & $\approx 1.5$ \\
-\bottomrule
-\end{tabularx}
-\end{table}
-
-\subsubsection*{Total cost and empirical validation}
-
-The total wall-clock time is $T = n_{\mathrm{iter}} \times
-t_{\mathrm{iter}}$, where $t_{\mathrm{iter}}$ is the per-iteration
-time and $n_{\mathrm{iter}}$ is the number of iterations to
-convergence.
-Table~\ref{tab:complexity} records both quantities from the benchmark
-at four mesh resolutions (Table~1 of the manuscript) and derives
-the implied speedup ratios.
-
-\begin{table}[htbp]
-\centering
-\caption{Empirical performance at the four mesh sizes.
-$t_{\mathrm{iter}}$ = average time per iteration (s);
-$n_{\mathrm{iter}}$ = total iterations to convergence;
-$T$ = total wall-clock time (s);
-speedup is relative to Olhoff--Du.
-Data reproduced from Table~1 of the manuscript; final values should be
-updated after rerunning with timing diagnostics separated and
-\texttt{save\_frequency\_iterations=false}.}
-\label{tab:complexity}
-\renewcommand\arraystretch{1.2}
-\setlength{\tabcolsep}{4pt}
-\begin{tabular}{@{}l r r r r r r r r r@{}}
-\toprule
-& \multicolumn{3}{c}{\textbf{Olhoff--Du}}
-& \multicolumn{3}{c}{\textbf{Yuksel--Yilmaz}}
-& \multicolumn{3}{c}{\textbf{Proposed}} \\
-\cmidrule(lr){2-4}\cmidrule(lr){5-7}\cmidrule(lr){8-10}
-Mesh & $t_\mathrm{iter}$ & $n_\mathrm{iter}$ & $T$ (s)
-     & $t_\mathrm{iter}$ & $n_\mathrm{iter}$ & $T$ (s)
-     & $t_\mathrm{iter}$ & $n_\mathrm{iter}$ & $T$ (s) \\
-\midrule
-$160{\times}20$  & 0.09 & 372 & 32.0
-                 & 0.02 & 300 &  4.7
-                 & 0.02 & 264 &  5.1 \\
-$240{\times}30$  & 0.20 & 363 & 74.4
-                 & 0.03 & 702 & 21.5
-                 & 0.04 & 250 & 10.5 \\
-$320{\times}40$  & 0.39 & 350 & 135.7
-                 & 0.05 & 1723 & 89.4
-                 & 0.08 & 217 & 16.4 \\
-$400{\times}50$  & 0.64 & 345 & 221.9
-                 & 0.08 & 1083 & 84.1
-                 & 0.12 & 263 & 31.1 \\
-\midrule
-Scaling exponent
-  & \multicolumn{3}{c}{$t_\mathrm{iter}\sim O(N_e^{1.30})$}
-  & \multicolumn{3}{c}{$t_\mathrm{iter}\sim O(N_e^{1.25})$}
-  & \multicolumn{3}{c}{$t_\mathrm{iter}\sim O(N_e^{1.35})$} \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-The per-iteration scaling exponent is estimated by a log--log fit
-across the four mesh sizes.
-All three methods exhibit an empirical exponent near~$1.3$, consistent
-with the theoretical $O(N_e^{1.5})$ bound for banded Cholesky (the
-incomplete fill-in of the actual sparse pattern yields a lower
-empirical exponent).
-
-\subsubsection*{Structured complexity summary}
-
-Table~\ref{tab:summary} provides a qualitative side-by-side comparison
-of the three algorithms covering algorithmic structure, achieved
-accuracy, and practical properties.
-
-\begin{table}[htbp]
-\centering
-\caption{Qualitative algorithm comparison.
-``$\approx$'' denotes approximate (heuristic) convergence criterion.}
-\label{tab:summary}
-\renewcommand\arraystretch{1.3}
-\begin{tabularx}{\textwidth}{@{}p{4.5cm}XXX@{}}
-\toprule
-Property & Olhoff--Du & Yuksel--Yilmaz & Proposed \\
-\midrule
-\textbf{Loop structure}
-  & \emph{Nested} double-loop: outer eigensolve loop wraps inner MMA loop
-  & \emph{Sequential} double loop: Stage~1 OC loop runs to convergence, then Stage~2 OC loop
-  & \emph{Single} OC loop; no stages, no inner loop \\
-\textbf{Outer / Stage-1 loop body}
-  & Eigensolve $\rightarrow$ sensitivity assembly $\rightarrow$ launch inner MMA loop $\rightarrow$ update $x$
-  & Static solve with point load $\mathbf{f}_s$; OC bisection; builds mode-shape seed $\mathbf{u}_s$
-  & Static solve with frozen inertial load $\mathbf{f}_\alpha$; OC bisection; single convergence test \\
-\textbf{Inner / Stage-2 loop body}
-  & MMA sub-problem (bound form): $\sim$5--20 sub-iterations per outer step until $\|\Delta x\|<\varepsilon_{\mathrm{inner}}$
-  & Inertial-load solve $\mathbf{K}\mathbf{u}_d{=}\mathbf{M}\hat{\mathbf{u}}_d$; OC bisection; self-consistent update of $\mathbf{f}_d$ each step
-  & \emph{None} \\
-\textbf{Eigensolves in loop} & 2 per outer iteration
-  & 0 (Stage~2) & 0 \\
-\textbf{One-time eigensolves} & 0--1 (diagnostic)
-  & 0--1 (asymm.\ BCs) & 1 (init, fixed) \\
-\textbf{Linear solves / iter.} & 2 (main + trial)
-  & 1 & 1 \\
-\textbf{Mode shape updated} & Every outer iteration (new eigenvec.)
-  & Every Stage-2 iteration (self-consistent $\hat{\mathbf{u}}_d$) & Never (frozen $\boldsymbol{\Phi}_j$) \\
-\textbf{Handles repeated $\omega_j$} & Yes (sub-eigenproblem)
-  & Partial (OC heuristic) & N/A (no eigensolve) \\
-\textbf{Multi-mode targeting} & Yes ($J$ modes, bound $\beta$)
-  & No (mode~1 only) & Yes ($\alpha$-weighted) \\
-\textbf{Per-iter cost (observed)} & $\sim8\times$ baseline
-  & $\sim1\times$ baseline & $\sim1.5\times$ baseline \\
-\textbf{Typical iterations ($400{\times}50$)} & $\sim$345
-  & $\sim$1083 (Stage~1+2) & $\sim$263 \\
-\textbf{Total time speedup vs.\ Olhoff} & 1$\times$ (reference)
-  & $2.6\times$ & $7.1\times$ \\
-\textbf{Source of speedup} & ---
-  & Low $t_\mathrm{iter}$, many iters & Moderate $t_\mathrm{iter}$, few iters \\
-\textbf{Peak RAM ($400{\times}50$)} & 303~MB
-  & 131~MB & 56~MB \\
-\textbf{Projection / post-proc.} & Yes (Heaviside $\beta$-schedule)
-  & Yes (Heaviside post-proc.) & Optional \\
-\textbf{Achievable $\omega_1$ quality} & Near-optimal (bound)
-  & Approx.\ (${\sim}8\%$ below bound) & Approx.\ (${\sim}9\%$ below bound) \\
-\textbf{Code complexity} & High (MMA, Heaviside, bound var.)
-  & Medium (two-stage logic) & Low (compliance + OC) \\
-\bottomrule
-\end{tabularx}
-\end{table}
-
-\subsubsection*{Key observations}
-
-\begin{enumerate}[leftmargin=1.6em]
-
-  \item \textbf{All three methods have the same asymptotic per-iteration
-        complexity} $O(N_e^{1.5})$ (Table~\ref{tab:ops}).
-        The practical speedup of the Proposed method over Olhoff--Du
-        ($7.1\times$ at $400{\times}50$, Table~\ref{tab:complexity}) is
-        therefore entirely determined by two factors: a smaller constant
-        in the per-iteration cost (no Arnoldi iterations, no bound/MMA
-        overhead, no trial eigensolve; see Table~\ref{tab:prefactor})
-        and a substantially lower iteration count.
-
-  \item \textbf{The dominant cost driver in Olhoff--Du is the double
-        eigensolve per outer iteration} (Table~\ref{tab:prefactor}).
-        At $400{\times}50$, each eigensolve requires a sparse Cholesky
-        factorization of a $40{,}902 \times 40{,}902$ system, repeated
-        twice (main + trial), accounting for $\sim$80\,\% of the
-        $0.64$~s per-iteration time (Table~\ref{tab:complexity}).
-        The static-load methods replace both eigensolves in this implementation
-        with a single linear solve, reducing the dominant cost by a
-        factor of $\sim$5--8$\times$.
-
-  \item \textbf{The Proposed method converges in fewer iterations than
-        Yuksel--Yilmaz.}
-        The fixed frozen gradient provides a consistent, non-oscillating
-        descent direction from the first iteration, whereas the
-        self-consistent load update in Yuksel--Yilmaz can introduce
-        oscillatory behaviour that inflates the iteration count at fine
-        meshes (1083 vs.\ 263 at $400{\times}50$, a ratio of $4.1\times$).
-        The net speedup over Yuksel--Yilmaz is $84.1/31.1 = 2.7\times$,
-        which is the product of the per-iteration cost ratio
-        ($0.08/0.12 \approx 0.67$, i.e.\ Yuksel is slightly cheaper per
-        iteration) and the iteration-count ratio ($1083/263 \approx 4.1$).
-        The smallest mesh is an exception in the current table: Yuksel is
-        slightly faster than the proposed method at $160{\times}20$.
-
-  \item \textbf{Memory scales as $O(N_e)$ for all methods, but with
-        very different constants} (Table~\ref{tab:summary}, row
-        \emph{Peak RAM}).
-        The Olhoff--Du implementation retains two Cholesky-factorized
-        matrices simultaneously (current + trial), MMA history arrays
-        ($\mathbf{x}^{(k-1)},\mathbf{x}^{(k-2)}$, asymptote vectors),
-        and the $(J{+}2)\times N_e$ gradient matrix, together accounting
-        for the observed 303~MB at $400{\times}50$.
-        The Proposed method needs only one factorized $\mathbf{K}_f$
-        (the stiffness matrix restricted to free degrees of freedom), the
-        frozen vectors $\boldsymbol{\Phi}_j$ ($n_{\mathrm{modes}} \times N_e$),
-        and the OC bisection buffers, yielding 56~MB at the same mesh ---
-        a $5.4\times$ reduction.
-
-  \item \textbf{Accuracy of the static-approximation methods is
-        fundamentally limited} (Table~\ref{tab:summary}, row
-        \emph{Achievable $\omega_1$ quality}).
-        Because neither Yuksel--Yilmaz nor the Proposed method tracks the
-        true eigenvalue objective at each iteration, they should not be
-        claimed to recover the bound-formulation optimum in general.
-        The gap ($\sim$8--9\,\% below the Olhoff--Du $\omega_1$ for the
-        simply supported beam) is the observed price of the static
-        approximation for this benchmark.  Reducing that gap may require
-        eigenpair refreshes, mode aggregation, or returning to an eigenvalue
-        objective, all of which change the cost/accuracy trade-off.
-
-\end{enumerate}
-
+At the conceptual level, the published bound formulation repeatedly solves
+an eigenvalue problem and uses eigenvalue sensitivities within its
+optimization structure, whereas the proposed quasi-static approximation
+freezes its reference eigenpair and performs static solves in its main loop.
+This structural distinction motivates discussing computational work, but by
+itself it does not establish a numerical speedup, convergence ranking, or
+scaling advantage.  Those are empirical properties of specific
+implementations and run conditions; for the revision, the only eligible
+Olhoff-based implementation is the local \texttt{OlhoffApproach} comparator
+defined above.
 \bibliographystyle{plain}
 \bibliography{../literature}
 

@@ -81,7 +81,7 @@ Gate V1 must pass before Exp1–Exp5 are regenerated.
 | E2-4 | Export per-α: initial frequencies, complete spectrum below tracked mode, MAC matrices, selected mode indices, convergence histories, grayness, topology plots, tracked mode shapes | `exp2_clamped_beam.m` | For each α: `.mat` (histories), mode-shape `.png`, topology `.png`, MAC `.mat`, grayness scalar in result struct | E23 | 1 | experiment |
 | E2-5 | Diagnose α=0.75 result without assuming monotonicity; explain observed behaviour | `exp2_clamped_beam.m`; analysis in response letter | Written diagnosis in experiment diary or response draft; does not assert monotonicity unless convergence data supports it | E23 | 1 | experiment |
 | E2-6 | A5 a-posteriori check for every α case: state whether tracked mode is the structure's lowest mode; explain that the method targets a reference mode shape, not necessarily the fundamental | `exp2_clamped_beam.m` | Per-case flag `is_lowest_mode` in result struct; narrative explanation in response letter | E23 | 1 | experiment |
-| E2-7 | One fair external-method comparison (prefer α=1 single-mode case); accurate comparator label | New sub-script or extension of `exp2_clamped_beam.m`; `analysis/OlhoffApproach/` or `analysis/LabandaApproach/` | Comparison table: objective, frequency, topology quality, iterations; comparator labelled as "Olhoff-inspired" unless canonical Olhoff is faithfully reproduced | E23 | 1 | experiment |
+| E2-7 | If the planned external-method comparison is retained, use the local `OlhoffApproach` implementation (prefer α=1 single-mode case) | Existing Exp2 comparison path; `analysis/OlhoffApproach/` | Comparison table identifies `OlhoffApproach` as a local Olhoff-inspired implementation; no inference to the published Du--Olhoff optimum | E23 | 1 | experiment |
 
 ### Exp3: Mesh Convergence
 
@@ -127,11 +127,10 @@ Gate V1 must pass before Exp1–Exp5 are regenerated.
 | P1-1 | Instrument solvers: independently record init time, optimization-loop time, postprocessing time, total wall-clock time, per-iteration time, and peak memory; do not derive init by subtraction | `analysis/ourApproach/Matlab/topopt_freq.m`, `analysis/YukselApproach/Matlab/top99neo_inertial_freq.m`, `analysis/OlhoffApproach/Matlab/topFreqOptimization_MMA.m` | Telemetry fields in every result struct; timing methodology documented in experiment header | P1 | 1 | code |
 | P1-2 | Benchmark mode: disable live plots, saved images, correlation exports, frequency-history eigensolves, and other diagnostics | Same solvers; `examples/Revision_v1/exp1_perf_table.m` | Config flag `benchmark_mode: true` accepted; confirmed no diagnostic overhead in timing | P1 | 1 | code |
 | P1-3 | Warm-up runs then ≥10 measured executions at each mesh; report standard deviations for timing and memory | `examples/Revision_v1/exp1_perf_table.m` | Table with mean ± std for each timing component and mesh; min 10 measurements per data point | P1 | 1 | experiment |
-| P1-4 | Investigate Yuksel 180–200 vs 1,000+ iteration discrepancy using matched stopping criteria and reference implementation where available | `exp1_perf_table.m`; `analysis/YukselApproach/Matlab/` | Written explanation of discrepancy; matched-criteria comparison table | P1 | 1 | experiment |
-| P1-5 | Correct comparator labels: use "Olhoff-inspired" for the local modified implementation; claim performance against canonical Olhoff only after faithful reproduction; bound removed overhead explicitly if canonical cannot be run | `exp1_perf_table.m`; manuscript tables | Updated labels in all tables and figures; no "canonical" language unless reproduced | P1 | 1 | experiment |
+| P1-4 | Investigate Yuksel 180–200 vs 1,000+ iteration discrepancy using matched stopping criteria and an author-provided Yuksel implementation where available | `exp1_perf_table.m`; `analysis/YukselApproach/Matlab/` | Written explanation of discrepancy; matched-criteria comparison table | P1 | 1 | experiment |
+| P1-5 | Scope the Olhoff comparator to `analysis/OlhoffApproach` and label it "local Olhoff-inspired implementation" everywhere | `exp1_perf_table.m`; manuscript tables and figures | Every local comparison names `OlhoffApproach`; `OlhoffApproachExact` and canonical Du--Olhoff language are absent from production evidence | P1 | 1 | experiment |
 | P1-6 | Recompute scaling fit from corrected timing data | `examples/Revision_v1/exp5_scaling.m` | New `exp5_scaling_loglog.png` and `.mat` generated from corrected data | P1 | 1 | experiment |
-| P1-7 | Replace or re-verify 8.6% frequency gap, 7.1× speedup, and complexity claims from converged measurements | `exp1_perf_table.m`; `exp5_scaling.m`; manuscript | Claims updated to match regenerated evidence; stale numbers removed unless reproduced | P1 | 2 | experiment |
-| P1-8 | Canonical Olhoff benchmark (faithful reproduction) | `analysis/OlhoffApproach/Matlab/topFreqOptimization_MMA.m` or `analysis/OlhoffApproachExact/` | Verified canonical result enabling "canonical speedup" language; or explicit removal of that language | P1 | 2 | experiment |
+| P1-7 | Remove the 8.6% gap-to-Du--Olhoff-optimum and canonical 7.1× speedup narratives; if local performance reporting is retained, derive new statements only from accepted `OlhoffApproach` and other named local runs | `exp1_perf_table.m`; `exp5_scaling.m`; manuscript | No published-optimum gap or canonical speedup remains; any timing ratio, frequency difference, or scaling fit is explicitly local | P1 | 1 | experiment |
 
 ---
 
@@ -165,7 +164,7 @@ All items depend on accepted artifacts from Workstreams 2–6. Tables and figure
 | MS-6 | Correct load equation, baseline equation, MAC definition, filter description, and sensitivity equations | `paper/` sources | Equations consistent with authoritative formulation and V1 verification | DoC-8 | 1 | manuscript |
 | MS-7 | Correct manuscript Eq. 9 to use mass-weighted inner product matching the implementation | `paper/` sources | Eq. 9 uses ⟨Φᵢ, MΦⱼ⟩ form; consistent with A0-F4 | DoC-8 | 1 | manuscript |
 | MS-8 | Reconcile OC/MMA descriptions and the actual contribution scope | `paper/` sources | No description of OC where MMA is used, or vice versa | DoC-8 | 1 | manuscript |
-| MS-9 | Distinguish canonical methods (Olhoff, Yuksel-Yilmaz) from local modified implementations throughout | `paper/` sources; all tables | Every comparator has an accurate label | DoC-8 | 1 | manuscript |
+| MS-9 | Distinguish literature methods from local implementations throughout; identify `OlhoffApproach` as the sole active local Olhoff-inspired comparator and the exact reconstruction as archived | `paper/` sources; all tables and figures | Every comparator has an accurate local label; no exact-reconstruction artifact appears in reviewer evidence | DoC-8 | 1 | manuscript |
 | MS-10 | Replace unsupported speedup, frequency gap, convergence, complexity, and no-spurious-mode claims; replace with evidence-bounded statements | `paper/` sources; tables from P1, S1 | No unsubstantiated headline numbers remain; adverse findings incorporated | DoC-8 | 1 | manuscript |
 | MS-11 | Report convergence status, feasibility, grayness, MAC validity, and mesh-convergence evidence for every result | `paper/` sources | Every result table includes these columns or a written statement | DoC-8 | 1 | manuscript |
 | MS-12 | Explain design-dependent-load difficulties; state symmetric/asymmetric-domain applicability | `paper/` sources | Limitations section or dedicated paragraph | DoC-8 | 1 | manuscript |
@@ -175,7 +174,7 @@ All items depend on accepted artifacts from Workstreams 2–6. Tables and figure
 | MS-16 | Complete all bibliography entries (topology-method, Rayleigh, MMA, filter, load-sensitivity, design-dependent-load references) | `paper/` sources; `.bib` file | No `[?]` or missing-reference placeholders | DoC-8 | 1 | manuscript |
 | MS-17 | Enumerate supplementary material precisely | `paper/` sources; reproducibility package (WS8) | Supplementary section lists each file with a one-line description | DoC-8 | 1 | manuscript |
 | MS-18 | Regenerate all affected tables and figures from accepted artifacts | Plotting scripts; result `.mat` files from Exp1–Exp5, CR2, A4, S1 | All paper figures and tables sourced from accepted results; no manually edited numbers | DoC-8 | 1 | manuscript |
-| MS-19 | Response letter: address every reviewer item individually with exact manuscript location and supporting artifact; incorporate adverse results; retract or qualify 8.6%/7.1×/4.61× building-gain narratives if not reproduced | Response letter document | Every reviewer item marked FULFILLED with citation; no PARTIAL or NOT FULFILLED items remaining | DoC-8 | 1 | manuscript |
+| MS-19 | Response letter: address every reviewer item individually with exact manuscript location and supporting artifact; incorporate adverse results; remove the 8.6% gap-to-optimum and canonical 7.1× speedup narratives; qualify the 4.61× building-gain narrative if unsupported | Response letter document | Every reviewer item is answered with accepted evidence or an explicit correction/retraction; no claim cites `OlhoffApproachExact` | DoC-8 | 1 | manuscript |
 
 ---
 
@@ -202,10 +201,7 @@ These items are not needed if the corresponding claim is removed from the manusc
 
 | ID | Claim at risk | Item | Gate | Category |
 |---|---|---|---|---|
-| T2-1 | Canonical Olhoff speedup / "canonical" benchmark language | Faithful reproduction of canonical Olhoff (P1-8) | P1 | experiment |
 | T2-2 | Absence of spurious low-density modes | RAMP / Heaviside / void-mass mitigation comparison (S1-4) | S1 | experiment |
-| T2-3 | 8.6% frequency gap | Regenerated evidence reproducing that value from converged, matched runs | P1 | experiment |
-| T2-4 | 7.1× speedup | Regenerated evidence reproducing that value under matched stopping rules | P1 | experiment |
 | T2-5 | 4.61× building frequency gain | Converged building result supporting that gain | S1 / E23 | experiment |
 | T2-6 | Strong monotonicity (α sweep) | Converged α-sweep evidence supporting monotonicity | E23 | experiment |
 | T2-7 | Frozen-reference accuracy claims | A4 converged comparisons supporting accuracy | E4 | experiment |
@@ -276,25 +272,24 @@ Phase 4 — Performance Evidence (only after scientific gates)
   Step 28  P1-4    Investigate Yuksel iteration discrepancy
   Step 29  P1-5    Correct comparator labels
   Step 30  P1-6    Recompute scaling fit
-  Step 31  P1-7    Replace/verify 8.6% / 7.1× claims (→ Tier 2 decision)
+  Step 31  P1-7    Remove canonical gap/speedup claims; scope any retained metrics to local implementations
             ★ GATE P1 must pass ★
 
 Phase 4b — Tier 2 decisions (parallel with Phase 4 or after)
-  Step 32  T2-1    Canonical Olhoff benchmark (if claim retained)
-  Step 33  S1-4    RAMP/Heaviside mitigation (if spurious-mode claim retained)
+  Step 32  S1-4    RAMP/Heaviside mitigation (if spurious-mode claim retained)
 
 Phase 5 — Manuscript and Response (only after all gates pass)
-  Step 34  MS-18   Regenerate all tables and figures from accepted artifacts
-  Step 35  MS-1…17 Corrections and qualifications in order listed
-  Step 36  MS-19   Response letter
+  Step 33  MS-18   Regenerate all tables and figures from accepted artifacts
+  Step 34  MS-1…17 Corrections and qualifications in order listed
+  Step 35  MS-19   Response letter
 
 Phase 6 — Reproducibility Package
-  Step 37  RP-3    Collect sysinfo and run log
-  Step 38  RP-1/4  Manifest and supplementary inventory
-  Step 39  RP-7    Checksums for accepted artifacts
-  Step 40  RP-2    Clean-run instructions
-  Step 41  RP-5/6  Release tag + archive / DOI
-  Step 42  RP-8    Machine-readable completion report
+  Step 36  RP-3    Collect sysinfo and run log
+  Step 37  RP-1/4  Manifest and supplementary inventory
+  Step 38  RP-7    Checksums for accepted artifacts
+  Step 39  RP-2    Clean-run instructions
+  Step 40  RP-5/6  Release tag + archive / DOI
+  Step 41  RP-8    Machine-readable completion report
 ```
 
 ### Hard ordering constraints

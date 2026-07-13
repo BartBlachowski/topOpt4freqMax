@@ -13,7 +13,7 @@
 \contentsline {subsection}{\numberline {3.3}B3 — Same issues in building example (Section\nobreakspace {}3.3)}{10}{subsection.3.3}%
 \contentsline {subsection}{\numberline {3.4}B4 — RAMP interpolation for spurious-mode suppression}{11}{subsection.3.4}%
 \contentsline {subsection}{\numberline {3.5}B5 — Grey regions in Figs.\nobreakspace {}9 and\nobreakspace {}10}{11}{subsection.3.5}%
-\contentsline {subsection}{\numberline {3.6}B6 — Why the frozen-load approach avoids spurious localized modes}{11}{subsection.3.6}%
+\contentsline {subsection}{\numberline {3.6}B6 — Why the frozen-load approach avoids spurious localized modes}{12}{subsection.3.6}%
 \contentsline {section}{\numberline {4}Minor Revisions (C-group)}{13}{section.4}%
 \contentsline {subsection}{\numberline {4.1}C1 — Application references in Introduction}{13}{subsection.4.1}%
 \contentsline {subsection}{\numberline {4.2}C2 — SIMP, BESO, LSM, MMC references at first mention}{13}{subsection.4.2}%
@@ -30,7 +30,7 @@
 \contentsline {section}{\numberline {6}Code Changes Required}{16}{section.6}%
 \contentsline {section}{\numberline {7}New Experiments Required}{16}{section.7}%
 \contentsline {section}{\numberline {8}Algorithm Pseudocodes and Complexity Analysis}{19}{section.8}%
-\contentsline {subsection}{\numberline {8.1}Algorithm 1: Olhoff--Du Bound Formulation}{19}{subsection.8.1}%
+\contentsline {subsection}{\numberline {8.1}Algorithm 1: Published Olhoff--Du Bound Formulation (Literature Background)}{19}{subsection.8.1}%
 \contentsline {subsection}{\numberline {8.2}Algorithm 2: Yuksel--Yilmaz Two-Stage Static Method}{20}{subsection.8.2}%
 \contentsline {subsection}{\numberline {8.3}Algorithm 3: Proposed Quasi-Static Approximation}{21}{subsection.8.3}%
 \contentsline {subsection}{\numberline {8.4}Complexity Analysis and Comparison}{22}{subsection.8.4}%

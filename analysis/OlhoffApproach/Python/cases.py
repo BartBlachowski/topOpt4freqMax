@@ -2,6 +2,8 @@ from __future__ import annotations
 
 from .solver import OlhoffConfig
 
+# Literature context only. These values are not validation targets and must not
+# be used to infer a gap to the published optimum.
 
 PAPER_TARGETS = {
     "CC": {"init": 146.1, "opt": 456.4},

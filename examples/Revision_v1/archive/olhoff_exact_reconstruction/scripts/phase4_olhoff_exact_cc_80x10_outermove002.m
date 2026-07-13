@@ -1,6 +1,8 @@
 function result = phase4_olhoff_exact_cc_80x10_outermove002(outDir)
 %PHASE4_OLHOFF_EXACT_CC_80X10_OUTERMOVE002
 % Phase 4: reduce outer_move from 0.05 to 0.02 with Phase 3 settings.
+% ARCHIVED DIAGNOSTIC ONLY (2026-07-13): closed reconstruction campaign;
+% not a production experiment, benchmark, or reviewer evidence.
 
 warning('off', 'MATLAB:nearlySingularMatrix');
 warning('off', 'MATLAB:singularMatrix');

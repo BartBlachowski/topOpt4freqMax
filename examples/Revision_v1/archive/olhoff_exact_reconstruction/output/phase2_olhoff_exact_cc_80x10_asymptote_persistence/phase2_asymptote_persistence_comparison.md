@@ -1,5 +1,8 @@
 # Phase 2 Comparison: Phase 1 vs Persistent Asymptotes
 
+> **Archived diagnostic.** This comparison belongs to the closed unsuccessful
+> reconstruction campaign and is not reviewer evidence.
+
 | category | metric | Phase 1 | Phase 2 |
 |---|---|---:|---:|
 | outer convergence | omega parity gap | 3.70072 | 1.81826 |

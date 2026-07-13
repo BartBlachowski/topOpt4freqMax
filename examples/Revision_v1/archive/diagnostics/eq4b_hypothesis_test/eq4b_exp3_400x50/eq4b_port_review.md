@@ -8,9 +8,9 @@
 - `examples/Revision_v1/s1_exp3_400x50_mode_diagnostic.m`
 - `examples/Revision_v1/eq4b_exp3_400x50_hypothesis_test.m`
 
-## Authoritative Source
+## Published Source
 
-`analysis/OlhoffApproachExact/Matlab/mass_interp.m` implements `du2007_c1` as `m=rho` above `rho=0.1` and `m=6e5*rho^6-5e6*rho^7` below or at `rho=0.1`.
+Du and Olhoff (2007), Eq. 4b, defines `du2007_c1` as `m=rho` above `rho=0.1` and `m=6e5*rho^6-5e6*rho^7` below or at `rho=0.1`.
 
 ## Ported Formula
 
@@ -25,6 +25,6 @@
 
 ## Unavoidable Difference
 
-The authoritative helper returns normalized `m(rho_e)`. `ourApproach` stores physical density scaling separately, so the port wraps the same normalized `m(x)` with the existing `rho_min/rho0` scaling. This preserves backward compatibility and the existing mass floor.
+The local helper implements the published normalized `m(rho_e)`. `ourApproach` stores physical density scaling separately, so the port wraps that normalized `m(x)` with the existing `rho_min/rho0` scaling. This preserves backward compatibility and the existing mass floor.
 
 Repo root: `/Users/piotrek/Programming/topOpt4freqMax`.

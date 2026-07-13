@@ -1,5 +1,8 @@
 # Comparison: OlhoffApproachExact vs ourApproach (CC 80×10)
 
+> **Archived diagnostic comparison.** These quantitative values are excluded
+> from the revision evidence chain and all reviewer-facing comparisons.
+
 Generated: 2026-06-30T07:44:06Z
 
 | metric | OlhoffApproachExact | ourApproach (scaling study) |

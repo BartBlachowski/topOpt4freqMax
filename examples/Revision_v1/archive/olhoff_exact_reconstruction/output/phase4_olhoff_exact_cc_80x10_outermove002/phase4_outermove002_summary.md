@@ -1,5 +1,8 @@
 # Phase 4 outer_move=0.02 Result
 
+> **Archived/superseded diagnostic.** The former production-freeze
+> recommendation is withdrawn; this result is not reviewer evidence.
+
 Generated: 2026-06-30T10:40:44Z
 
 ## Parameter Verification

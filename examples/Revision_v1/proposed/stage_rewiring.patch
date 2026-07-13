@@ -1,0 +1,743 @@
+diff --git a/examples/Revision_v1/run_all_revision_experiments.m b/examples/Revision_v1/run_all_revision_experiments.m
+index 2e949ee..5e43eb6 100644
+--- a/examples/Revision_v1/run_all_revision_experiments.m
++++ b/examples/Revision_v1/run_all_revision_experiments.m
+@@ -28,25 +28,37 @@ function run_all_revision_experiments(mode, varargin)
+ %         (detectable for schema-based results; partial check for legacy)
+ %     (e) loses the target mode (MAC < declared threshold)
+ %     (f) omits a required .mat artifact
++%     (g) is a mandatory stage with no implementation (e.g. A4).  Such a stage
++%         is registered as a visible placeholder and can never be silently
++%         skipped or resume-validated.
++%
++%   PREFLIGHT (runs before ANY computation; see localPreflight)
++%   ----------------------------------------------------------
++%     P1  no active MATLAB path entry may reference OlhoffApproachExact
++%     P2  no stage may invoke an archived or pre-authoritative runner
++%     P3  no mandatory placeholder stage may be silently skipped
++%     P4  output conflicts are reported for every stage up-front
+ %
+ %   Full stack traces are preserved and printed for all exceptions.
+ %
+ %   COMPARATOR SCOPE
+ %   ----------------
+-%   The EXP1 Olhoff branch selects "Olhoff", which dispatches only to the
+-%   local analysis/OlhoffApproach implementation. OlhoffApproachExact and its
+-%   reconstruction pilots are archived diagnostics and are not production
+-%   stages, dependencies, fallback comparators, or reviewer evidence.
++%   No stage performs a cross-code performance comparison. The former EXP1
++%   (performance table) and EXP5 (scaling fit) are RETIRED as reviewer evidence:
++%   the local Olhoff and Yuksel comparators are not faithful reference
++%   implementations, so a timing or scaling comparison against them is
++%   construct-invalid regardless of instrumentation. Both are preserved in
++%   archive/obsolete_evidence/exp1_exp5/. See SCIENTIFIC_DECISION_EXP1_EXP5.md.
++%   OlhoffApproachExact and its reconstruction pilots remain archived diagnostics.
+ %
+ %   OUTPUT DIRECTORIES
+ %   ------------------
+ %   Each experiment writes to its own subdirectory under output/:
+-%     examples/Revision_v1/output/exp1/
++%     examples/Revision_v1/output/s1/
+ %     examples/Revision_v1/output/exp2/
+ %     examples/Revision_v1/output/exp2b/
+ %     examples/Revision_v1/output/exp3/
+-%     examples/Revision_v1/output/exp4/
+-%     examples/Revision_v1/output/exp5/
++%     examples/Revision_v1/output/a4/     (placeholder; not implemented)
+ %     examples/Revision_v1/output/smoke/
+ %
+ %   Unless resume=true or force=true, the runner refuses to overwrite an output
+@@ -54,12 +66,16 @@ function run_all_revision_experiments(mode, varargin)
+ %
+ %   REVIEWER ISSUES ADDRESSED
+ %   -------------------------
+-%   Exp 1  V1/MR1  Timing std devs. V2/MR2 omega_1. R2/MR4 hardware spec.
++%   S1     M7      Localized low-density mode mitigation. Gates Exp2b/Exp3.
+ %   Exp 2  V5/m5   Initial freqs. M5 mode shapes. M6 grayness. CR1/V4 MAC.
+ %   Exp 2b V3/MR5  Building tables. M7 spurious modes.
+ %   Exp 3  V3/MR5  Mesh convergence 200x25 vs 400x50.
+-%   Exp 4  CR2/C1  Sensitivity ablation + FD check.
+-%   Exp 5  M4/mn8  Log-log scaling fit.
++%   A4     R1/V1C4 Eigenpair-refresh N={1,5,10,50,inf}.  NOT IMPLEMENTED.
++%
++%   RETIRED: the former Exp4 stage (exp4_sensitivity_ablation) used the
++%   pre-authoritative load rho_nodal(x)*omega0*M_solid*Phi_solid and all four of
++%   its variants terminated at the iteration cap.  It is superseded by the CR2
++%   study and is NOT an A4 implementation.  It must not be relabelled as one.
+ %
+ %   EXPECTED RUNTIMES (Apple M-class, R2025b)
+ %   -----------------------------------------
+@@ -118,13 +134,15 @@ function run_all_revision_experiments(mode, varargin)
+ end
+ 
+ % ---- per-experiment output directories ----------------------------------
++% EXP4 is retired: exp4_sensitivity_ablation is a pre-authoritative runner
++% (load rho_nodal(x)*omega0*M_solid*Phi_solid) and is superseded by CR2.
++% It is NOT relabelled as A4.  A4 is a separate, not-yet-implemented study.
+ od = struct( ...
+-    'exp1',  fullfile(outRoot, 'exp1'),  ...
++    's1',    fullfile(outRoot, 's1'),    ...
+     'exp2',  fullfile(outRoot, 'exp2'),  ...
+     'exp2b', fullfile(outRoot, 'exp2b'), ...
+     'exp3',  fullfile(outRoot, 'exp3'),  ...
+-    'exp4',  fullfile(outRoot, 'exp4'),  ...
+-    'exp5',  fullfile(outRoot, 'exp5') );
++    'a4',    fullfile(outRoot, 'a4') );
+ 
+ campaignCfg = localCampaignConfig(mode, nSamples, meshTable, alphaVals);
+ stages = localBuildStages(od, nSamples, meshTable, alphaVals);
+@@ -132,6 +150,9 @@ function run_all_revision_experiments(mode, varargin)
+     stages = localSelectStage(stages, opts.stageName);
+ end
+ 
++% ---- PREFLIGHT: fail loud BEFORE any computation starts ------------------
++localPreflight(stages, opts, mode);
++
+ progressPath = fullfile(outRoot, 'campaign_progress.json');
+ summaryPath  = fullfile(outRoot, 'campaign_summary.md');
+ progress = localInitProgress(progressPath, outRoot, mode, opts, stages);
+@@ -185,9 +206,6 @@ function run_all_revision_experiments(mode, varargin)
+             mkdir(stage.outDir);
+         end
+ 
+-        if strcmp(stage.key, 'exp5')
+-            stage.runFn = @() exp5_scaling(localGetField(allResults, 'exp1'), stage.outDir);
+-        end
+ 
+         [res, pass, cond, trace, elapsed] = localRunAndAccept( ...
+             stage.tag, stage.desc, stage.runFn, stage.acceptFn);
+@@ -427,51 +445,73 @@ function localRunSmokeVerification(scriptDir, outRoot) %#ok<DEFNU>
+ end
+ 
+ function stages = localBuildStages(od, nSamples, meshTable, alphaVals)
++%LOCALBUILDSTAGES  Authoritative stage registry.
++%
++%   Execution order is the registry order.  S1 is FIRST because the localized
++%   low-density mode mitigation is unresolved: EXP2b and EXP3 fail the MAC gate
++%   at fine meshes until S1 is settled.
++%
++%   Thin adapters below resolve signature differences.  The numerical experiment
++%   implementations are NOT modified to satisfy this interface.
++%
++%   ALPHA NOTE: exp2_authoritative_sweep fixes its own alpha list internally
++%   ([1 .75 .5 .25 0]); the campaign alphaVals do NOT control it.  The stage
++%   config records this honestly so the resume config-hash does not imply a
++%   control that does not exist.
++
+ stages = repmat(localEmptyStage(), 0, 1);
+ 
++% ---- S1: localized-mode mitigation (gates EXP2b and EXP3) ----------------
+ stages(end+1, 1) = localMakeStage( ...
+-    'exp1', 'EXP1', 'Local-implementation performance table (timing + omega_1 statistics)', od.exp1, ...
+-    @() exp1_perf_table(nSamples, meshTable, od.exp1), ...
+-    @(r) localAccept_Exp1(r, od.exp1), ...
+-    {fullfile(od.exp1, 'exp1_perf_table_results.mat')}, ...
+-    struct('nSamples', nSamples, 'meshTable', meshTable));
+-
++    's1', 'S1', 'Localized low-density mode mitigation (gates EXP2b/EXP3)', od.s1, ...
++    @() s1_mitigation_400x50_pilot(od.s1), ...              % adapter: (outDir)
++    @(r) localAccept_S1(r, od.s1), ...
++    {fullfile(od.s1, 's1_mitigation_400x50_result.mat'), ...
++     fullfile(od.s1, 's1_mitigation_400x50_manifest.json')}, ...
++    struct('mesh', '400x50', 'alpha', 1.0, 'mitigation', 'mass_interpolation'), ...
++    struct('dependsOn', {{}}, 'estRuntimeSeconds', 10800));
++
++% ---- EXP2: authoritative clamped-beam alpha sweep ------------------------
+ stages(end+1, 1) = localMakeStage( ...
+-    'exp2', 'EXP2', 'Clamped beam benchmark', od.exp2, ...
+-    @() exp2_clamped_beam(alphaVals, od.exp2), ...
+-    @(r) localAccept_Exp2(r, od.exp2), ...
+-    {fullfile(od.exp2, 'exp2_clamped_beam_results.mat')}, ...
+-    struct('alphaVals', alphaVals));
+-
++    'exp2', 'EXP2', 'Clamped beam authoritative alpha sweep (F = omega0^2*M(x)*Phi0)', od.exp2, ...
++    @() exp2_authoritative_sweep(od.exp2), ...              % adapter: drops alphaVals
++    @(r) localAccept_Exp2Authoritative(r, od.exp2), ...
++    {fullfile(od.exp2, 'exp2_authoritative_sweep_result.mat'), ...
++     fullfile(od.exp2, 'exp2_authoritative_sweep_manifest.json')}, ...
++    struct('alpha_source', 'script-internal fixed [1 0.75 0.5 0.25 0]', ...
++           'mesh', '200x25', 'load', 'omega0^2*M(x)*Phi0'), ...
++    struct('dependsOn', {{'S1'}}, 'estRuntimeSeconds', 10800));
++
++% ---- EXP2b: building benchmark ------------------------------------------
+ stages(end+1, 1) = localMakeStage( ...
+     'exp2b', 'EXP2b', 'Building benchmark', od.exp2b, ...
+     @() exp2b_building(alphaVals, od.exp2b), ...
+     @(r) localAccept_Exp2b(r, od.exp2b), ...
+     {fullfile(od.exp2b, 'exp2b_building_results.mat')}, ...
+-    struct('alphaVals', alphaVals));
+-
+-stages(end+1, 1) = localMakeStage( ...
+-    'exp3', 'EXP3', 'Mesh convergence study', od.exp3, ...
+-    @() exp3_mesh_convergence(alphaVals, od.exp3), ...
+-    @(r) localAccept_Exp3(r, od.exp3), ...
+-    {fullfile(od.exp3, 'exp3_mesh_convergence_results.mat')}, ...
+-    struct('alphaVals', alphaVals));
++    struct('alphaVals', alphaVals), ...
++    struct('dependsOn', {{'S1'}}, 'estRuntimeSeconds', 7200));
+ 
++% ---- EXP3: authoritative mesh convergence -------------------------------
+ stages(end+1, 1) = localMakeStage( ...
+-    'exp4', 'EXP4', 'Sensitivity ablation + finite-difference check', od.exp4, ...
+-    @() exp4_sensitivity_ablation(od.exp4), ...
+-    @(r) localAccept_Exp4(r, od.exp4), ...
+-    {fullfile(od.exp4, 'exp4_sensitivity_ablation_results.mat'), ...
+-     fullfile(od.exp4, 'exp4_variant1_diary.txt')}, ...
+-    struct());
++    'exp3', 'EXP3', 'Mesh convergence 200x25 vs 400x50 (authoritative)', od.exp3, ...
++    @() exp3_authoritative_mesh_convergence(od.exp3), ...   % adapter: drops alphaVals
++    @(r) localAccept_Exp3Authoritative(r, od.exp3), ...
++    {fullfile(od.exp3, 'exp3_authoritative_mesh_convergence_result.mat'), ...
++     fullfile(od.exp3, 'exp3_authoritative_mesh_convergence_manifest.json')}, ...
++    struct('alpha', 1.0, 'meshes', '200x25,400x50', 'load', 'omega0^2*M(x)*Phi0'), ...
++    struct('dependsOn', {{'S1', 'EXP2'}}, 'estRuntimeSeconds', 21600));
++
++% ---- A4: eigenpair-refresh study -- NOT IMPLEMENTED ---------------------
++% Mandatory for the frozen-eigenpair reliability claim (N = {1,5,10,50,inf}).
++% No script, no config, no artifact exists.  exp4_sensitivity_ablation is NOT
++% an A4 implementation and must not be relabelled or reused as one.
++stages(end+1, 1) = localMakePlaceholderStage( ...
++    'a4', 'A4', 'Eigenpair-refresh study N={1,5,10,50,inf} (SS 400x50)', od.a4, ...
++    ['A4 is not implemented: no runner, configuration, or artifact exists. ' ...
++     'exp4_sensitivity_ablation is a pre-authoritative sensitivity ablation ' ...
++     'and is NOT an A4 implementation.'], ...
++    struct('dependsOn', {{}}, 'estRuntimeSeconds', 57600));
+ 
+-stages(end+1, 1) = localMakeStage( ...
+-    'exp5', 'EXP5', 'Scaling log-log analysis', od.exp5, ...
+-    @() exp5_scaling([], od.exp5), ...
+-    @(r) localAccept_Exp5(r, od.exp5), ...
+-    {fullfile(od.exp5, 'exp5_scaling_results.mat'), ...
+-     fullfile(od.exp5, 'exp5_scaling_loglog.png')}, ...
+-    struct('depends_on', 'EXP1'));
+ end
+ 
+ function st = localEmptyStage()
+@@ -486,10 +526,15 @@ function localRunSmokeVerification(scriptDir, outRoot) %#ok<DEFNU>
+     'resultJson', '', ...
+     'manifestJson', '', ...
+     'expectedDiagnostic', false, ...
+-    'config', struct());
++    'config', struct(), ...
++    'implemented', true, ...
++    'notImplementedReason', '', ...
++    'dependsOn', {{}}, ...
++    'estRuntimeSeconds', NaN);
+ end
+ 
+-function st = localMakeStage(key, tag, desc, outDir, runFn, acceptFn, requiredArtifacts, cfg)
++function st = localMakeStage(key, tag, desc, outDir, runFn, acceptFn, requiredArtifacts, cfg, meta)
++if nargin < 9 || isempty(meta), meta = struct(); end
+ st = localEmptyStage();
+ st.key = key;
+ st.tag = tag;
+@@ -502,6 +547,36 @@ function localRunSmokeVerification(scriptDir, outRoot) %#ok<DEFNU>
+ st.manifestJson = fullfile(outDir, sprintf('%s_stage_manifest.json', key));
+ st.expectedDiagnostic = false;
+ st.config = cfg;
++st.implemented = true;
++st.notImplementedReason = '';
++if isfield(meta, 'dependsOn'), st.dependsOn = meta.dependsOn; end
++if isfield(meta, 'estRuntimeSeconds'), st.estRuntimeSeconds = meta.estRuntimeSeconds; end
++end
++
++function st = localMakePlaceholderStage(key, tag, desc, outDir, reason, meta)
++%LOCALMAKEPLACEHOLDERSTAGE  A mandatory stage that has no implementation yet.
++%
++%   The stage is registered so that it is VISIBLE in the registry, the dry run,
++%   the progress file, and the campaign summary.  It can never be silently
++%   skipped: preflight refuses to start a full/fast campaign while it is absent,
++%   and if it is ever dispatched its acceptance check fails loud.
++if nargin < 6 || isempty(meta), meta = struct(); end
++st = localEmptyStage();
++st.key = key;
++st.tag = tag;
++st.desc = desc;
++st.outDir = outDir;
++st.runFn = @() error('run_all:A4NotImplemented', '%s', reason);
++st.acceptFn = @(r) localAccept_NotImplemented(r, reason);
++st.requiredArtifacts = {};
++st.resultJson = fullfile(outDir, sprintf('%s_stage_result.json', key));
++st.manifestJson = fullfile(outDir, sprintf('%s_stage_manifest.json', key));
++st.expectedDiagnostic = false;
++st.config = struct('state', 'A4_NOT_IMPLEMENTED');
++st.implemented = false;
++st.notImplementedReason = reason;
++if isfield(meta, 'dependsOn'), st.dependsOn = meta.dependsOn; end
++if isfield(meta, 'estRuntimeSeconds'), st.estRuntimeSeconds = meta.estRuntimeSeconds; end
+ end
+ 
+ function stages = localSelectStage(allStages, stageName)
+@@ -588,6 +663,12 @@ function localRunSmokeVerification(scriptDir, outRoot) %#ok<DEFNU>
+ valid = false;
+ msg = '';
+ 
++% A not-implemented mandatory stage is NEVER resumable and never skippable.
++if ~stage.implemented
++    msg = sprintf('%s_NOT_IMPLEMENTED: %s', stage.tag, stage.notImplementedReason);
++    return;
++end
++
+ if ~localCheckArtifact(stage.resultJson)
+     msg = sprintf('missing result JSON: %s', stage.resultJson);
+     return;
+@@ -979,96 +1060,250 @@ function localPrintStageSummary(records)
+ 
+ % -------------------------------------------------------------------------
+ 
+-function [pass, condition] = localAccept_Exp1(res, outDir)
+-%LOCALACCEPT_EXP1  Acceptance checks for exp1_perf_table.
++% =========================================================================
++%  PREFLIGHT (fail-loud, before any computation)
++% =========================================================================
+ 
+-pass = false; condition = '';
++function localPreflight(stages, opts, mode)
++%LOCALPREFLIGHT  Refuse to start a campaign that cannot produce valid evidence.
++%
++%   P1  no active MATLAB path entry may reference OlhoffApproachExact
++%   P2  no stage may invoke an archived or pre-authoritative runner
++%   P3  no mandatory placeholder stage may be silently skipped
++%   P4  output conflicts are reported for ALL stages before anything runs
++%
++%   In dry_run mode the findings are reported and the run continues; in
++%   fast/full/stage mode any finding is fatal.
++
++fprintf('---- PREFLIGHT\n');
++problems = {};
++
++% -- P1: archived reconstruction tree must not be on the path -------------
++pathEntries = strsplit(path, pathsep);
++badPath = pathEntries(contains(pathEntries, 'OlhoffApproachExact'));
++if ~isempty(badPath)
++    problems{end+1} = sprintf( ...
++        'P1 path violation: OlhoffApproachExact is on the MATLAB path (%d entr(y/ies), e.g. %s). It is an archived diagnostic reconstruction and must not be reachable from a production run.', ...
++        numel(badPath), badPath{1}); %#ok<AGROW>
++end
++
++% -- P2: no stage may dispatch to a retired / pre-authoritative runner -----
++% Retired runners: pre-authoritative scripts, the archived Exact reconstruction,
++% and the EXP1/EXP5 performance-benchmark pair (obsolete as reviewer evidence --
++% the local comparators are not faithful reference implementations; see
++% SCIENTIFIC_DECISION_EXP1_EXP5.md).
++denied = {'exp2_clamped_beam', 'exp3_mesh_convergence', 'exp4_sensitivity_ablation', ...
++          'exp1_perf_table', 'exp5_scaling', ...
++          'pilot_olhoff_exact', 'phase1_olhoff_exact', 'phase2_olhoff_exact', ...
++          'phase3_olhoff_exact', 'phase4_olhoff_exact'};
++for k = 1:numel(stages)
++    if ~stages(k).implemented, continue; end
++    fnText = func2str(stages(k).runFn);
++    for d = 1:numel(denied)
++        if contains(fnText, denied{d})
++            problems{end+1} = sprintf( ...
++                'P2 registry violation: stage %s dispatches to retired/pre-authoritative runner "%s".', ...
++                stages(k).tag, denied{d}); %#ok<AGROW>
++        end
++    end
++end
++for k = 1:numel(stages)
++    if ~stages(k).implemented, continue; end
++    fnText = func2str(stages(k).runFn);
++    tok = regexp(fnText, '([A-Za-z_]\w*)\s*\(', 'tokens');
++    for t = 1:numel(tok)
++        name = tok{t}{1};
++        w = which(name);
++        if ~isempty(w) && contains(w, [filesep 'archive' filesep])
++            problems{end+1} = sprintf( ...
++                'P2 registry violation: stage %s resolves "%s" to an ARCHIVED file: %s', ...
++                stages(k).tag, name, w); %#ok<AGROW>
++        end
++    end
++end
+ 
+-if isempty(res) || ~isstruct(res)
+-    condition = 'returned empty or non-struct result'; return;
++% -- P3: mandatory placeholder stages block a campaign --------------------
++notImpl = stages(~[stages.implemented]);
++if ~isempty(notImpl)
++    for k = 1:numel(notImpl)
++        fprintf('  [%s] state: %s_NOT_IMPLEMENTED\n', notImpl(k).tag, notImpl(k).tag);
++    end
++    if any(strcmp(mode, {'full', 'fast'}))
++        names = strjoin({notImpl.tag}, ', ');
++        problems{end+1} = sprintf( ...
++            ['P3 mandatory stage not implemented: %s. A %s campaign cannot produce a ' ...
++             'complete evidence chain and will not be started. Implement the stage, or ' ...
++             'run individual stages with run_all_revision_experiments(''stage'', ''EXP2'').'], ...
++            names, mode); %#ok<AGROW>
++    end
+ end
+ 
+-% Required fields
+-for fn = {'omega_mean', 'tIter_mean', 'tTotal_mean'}
+-    if ~isfield(res, fn{1}) || isempty(res.(fn{1}))
+-        condition = sprintf('required field missing or empty: %s', fn{1}); return;
++% -- P4: output conflicts, reported up-front for every stage --------------
++if ~opts.resume && ~opts.force
++    conflicts = {};
++    for k = 1:numel(stages)
++        d = stages(k).outDir;
++        if exist(d, 'dir') ~= 7, continue; end
++        listing = [dir(fullfile(d,'*.mat')); dir(fullfile(d,'*.csv')); dir(fullfile(d,'*.png'))];
++        listing = listing(~[listing.isdir]);
++        if ~isempty(listing)
++            conflicts{end+1} = sprintf('%s (%d file(s) in %s)', ...
++                stages(k).tag, numel(listing), d); %#ok<AGROW>
++        end
++    end
++    if ~isempty(conflicts)
++        problems{end+1} = sprintf( ...
++            ['P4 output conflict, detected BEFORE any computation: %s. ' ...
++             'Archive or remove these directories, or pass force=true / resume=true.'], ...
++            strjoin(conflicts, '; ')); %#ok<AGROW>
+     end
+ end
+ 
+-% Required NaN check: omega_mean (all runs must have produced a frequency)
+-[nanOk, nanField] = localCheckNoNaN(res.omega_mean, 'omega_mean');
+-if ~nanOk, condition = nanField; return; end
++if isempty(problems)
++    fprintf('  All preflight checks passed (P1 path, P2 registry, P3 placeholders, P4 outputs).\n\n');
++    return;
++end
+ 
+-% Required NaN check: tIter_mean
+-[nanOk, nanField] = localCheckNoNaN(res.tIter_mean, 'tIter_mean');
+-if ~nanOk, condition = nanField; return; end
++fprintf('\n  PREFLIGHT FAILED -- %d problem(s):\n', numel(problems));
++for k = 1:numel(problems)
++    fprintf('   %2d. %s\n', k, problems{k});
++end
++fprintf('\n');
+ 
+-% Required artifact
+-if ~localCheckArtifact(fullfile(outDir, 'exp1_perf_table_results.mat'))
+-    condition = sprintf('required artifact missing: exp1_perf_table_results.mat in %s', outDir);
++if opts.dryRun
++    fprintf('  [DRY RUN] Continuing so the full stage table can be reported.\n\n');
+     return;
+ end
+ 
+-pass = true;
++error('run_all:PreflightFailed', ...
++    'Preflight failed with %d problem(s):\n  - %s', ...
++    numel(problems), strjoin(problems, sprintf('\n  - ')));
+ end
+ 
+ % -------------------------------------------------------------------------
+ 
+-function [pass, condition] = localAccept_Exp2(res, outDir)
+-%LOCALACCEPT_EXP2  Acceptance checks for exp2_clamped_beam.
++% =========================================================================
++%  ACCEPTANCE GATES
++% =========================================================================
++
++function [pass, condition] = localAccept_NotImplemented(~, reason)
++%LOCALACCEPT_NOTIMPLEMENTED  A placeholder stage can never be accepted.
++pass = false;
++condition = sprintf('stage not implemented: %s', reason);
++end
+ 
++function [pass, condition] = localAccept_S1(res, outDir)
++%LOCALACCEPT_S1  Acceptance gate for s1_mitigation_400x50_pilot.
++%   The mitigation must be CONCLUSIVE. The saved pilot classified itself as
++%   "inconclusive" (9/10 modes still localized), which is a failure here.
+ pass = false; condition = '';
+ 
+ if isempty(res) || ~isstruct(res)
+     condition = 'returned empty or non-struct result'; return;
+ end
+-if ~isfield(res, 'allRes') || isempty(res.allRes)
+-    condition = 'required field allRes is missing or empty'; return;
++if ~isfield(res, 'classification') || isempty(res.classification)
++    condition = 'required field missing: classification'; return;
++end
++cls = char(res.classification);
++if ~strcmpi(cls, 'accepted')
++    condition = sprintf( ...
++        'S1 mitigation classification is "%s", not "accepted": the localized low-density mode mitigation is unresolved, so EXP2b and EXP3 cannot be trusted at fine meshes.', cls);
++    return;
++end
++for a = {'s1_mitigation_400x50_result.mat', 's1_mitigation_400x50_manifest.json'}
++    if ~localCheckArtifact(fullfile(outDir, a{1}))
++        condition = sprintf('required artifact missing: %s in %s', a{1}, outDir); return;
++    end
++end
++pass = true;
+ end
+ 
+-macThresh = 0.8;
+-if isfield(res, 'MAC_threshold') && ~isnan(res.MAC_threshold)
+-    macThresh = res.MAC_threshold;
++function [pass, condition] = localAccept_Exp2Authoritative(res, outDir)
++%LOCALACCEPT_EXP2AUTHORITATIVE  Acceptance gate for exp2_authoritative_sweep.
++%   The sweep classifies each alpha internally (accepted / capped / mode invalid
++%   / implementation failure).  A capped run is a failure.  Every alpha must be
++%   accepted for the stage to pass.
++pass = false; condition = '';
++
++if isempty(res) || ~isstruct(res)
++    condition = 'returned empty or non-struct result'; return;
++end
++if ~isfield(res, 'cases') || isempty(res.cases)
++    condition = 'required field missing or empty: cases'; return;
++end
++if ~isfield(res, 'all_accepted')
++    condition = 'required field missing: all_accepted'; return;
+ end
+ 
+-nForms = numel(res.allRes);
+-for f = 1:nForms
+-    r = res.allRes{f};
++bad = {};
++for k = 1:numel(res.cases)
++    c = res.cases(k);
++    cls = '';
++    if isfield(c, 'classification'), cls = char(c.classification); end
++    if ~strcmpi(cls, 'accepted')
++        alpha = NaN;
++        if isfield(c, 'alpha'), alpha = c.alpha; end
++        bad{end+1} = sprintf('alpha=%.2f -> %s', alpha, cls); %#ok<AGROW>
++    end
++end
++if ~isempty(bad)
++    condition = sprintf('non-accepted alpha case(s): %s', strjoin(bad, '; '));
++    return;
++end
++if ~res.all_accepted
++    condition = 'sweep reports all_accepted = false'; return;
++end
+ 
+-    % Required NaN: omega1 (each run must have produced a frequency)
+-    [nanOk, msg] = localCheckNoNaN(r.omega1, sprintf('allRes{%d}.omega1', f));
+-    if ~nanOk, condition = msg; return; end
++for a = {'exp2_authoritative_sweep_result.mat', 'exp2_authoritative_sweep_manifest.json'}
++    if ~localCheckArtifact(fullfile(outDir, a{1}))
++        condition = sprintf('required artifact missing: %s in %s', a{1}, outDir); return;
++    end
++end
++pass = true;
++end
+ 
+-    % Required NaN: grayness
+-    [nanOk, msg] = localCheckNoNaN(r.grayness, sprintf('allRes{%d}.grayness', f));
+-    if ~nanOk, condition = msg; return; end
++function [pass, condition] = localAccept_Exp3Authoritative(res, outDir)
++%LOCALACCEPT_EXP3AUTHORITATIVE  Acceptance gate for
++%   exp3_authoritative_mesh_convergence.  The study-level classification must be
++%   "passed mesh convergence"; "failed mesh convergence" and
++%   "inconclusive/capped/mode/topology invalid" are failures.
++pass = false; condition = '';
+ 
+-    % MAC threshold: check primary tracked mode (mode 1) when data is available
+-    for i = 1:numel(r.macData)
+-        macD = r.macData{i};
+-        if isempty(macD) || ~isfield(macD, 'best_mac') || isempty(macD.best_mac)
+-            continue;
+-        end
+-        if macD.best_mac(1) < macThresh
+-            condition = sprintf( ...
+-                'allRes{%d}, alpha index %d: tracked mode MAC = %.3f < threshold %.2f', ...
+-                f, i, macD.best_mac(1), macThresh);
++if isempty(res) || ~isstruct(res)
++    condition = 'returned empty or non-struct result'; return;
++end
++if ~isfield(res, 'classification') || isempty(res.classification)
++    condition = 'required field missing: classification'; return;
++end
++cls = char(res.classification);
++if ~strcmpi(cls, 'passed mesh convergence')
++    condition = sprintf('Exp3 study classification is "%s"; mesh convergence is not demonstrated.', cls);
++    return;
++end
++if isfield(res, 'cases')
++    for k = 1:numel(res.cases)
++        c = res.cases(k);
++        if isfield(c, 'classification') && ~strcmpi(char(c.classification), 'accepted')
++            lbl = '';
++            if isfield(c, 'label'), lbl = char(c.label); end
++            condition = sprintf('mesh %s not accepted: %s', lbl, char(c.classification));
+             return;
+         end
+     end
+ end
+-
+-% Required artifact
+-if ~localCheckArtifact(fullfile(outDir, 'exp2_clamped_beam_results.mat'))
+-    condition = sprintf('required artifact missing: exp2_clamped_beam_results.mat in %s', outDir);
+-    return;
++for a = {'exp3_authoritative_mesh_convergence_result.mat', ...
++         'exp3_authoritative_mesh_convergence_manifest.json'}
++    if ~localCheckArtifact(fullfile(outDir, a{1}))
++        condition = sprintf('required artifact missing: %s in %s', a{1}, outDir); return;
++    end
+ end
+-
+ pass = true;
+ end
+ 
+ % -------------------------------------------------------------------------
+ 
++% -------------------------------------------------------------------------
++
+ function [pass, condition] = localAccept_Exp2b(res, outDir)
+ %LOCALACCEPT_EXP2B  Acceptance checks for exp2b_building.
+ 
+@@ -1123,138 +1358,6 @@ function localPrintStageSummary(records)
+ 
+ % -------------------------------------------------------------------------
+ 
+-function [pass, condition] = localAccept_Exp3(res, outDir)
+-%LOCALACCEPT_EXP3  Acceptance checks for exp3_mesh_convergence.
+-
+-pass = false; condition = '';
+-
+-if isempty(res) || ~isstruct(res)
+-    condition = 'returned empty or non-struct result'; return;
+-end
+-if ~isfield(res, 'res_all') || isempty(res.res_all)
+-    condition = 'required field res_all is missing or empty'; return;
+-end
+-
+-macThresh = 0.8;
+-if isfield(res, 'MAC_threshold') && ~isnan(res.MAC_threshold)
+-    macThresh = res.MAC_threshold;
+-end
+-
+-[nMeshes, nForms] = size(res.res_all);
+-for mi = 1:nMeshes
+-    for f = 1:nForms
+-        r = res.res_all{mi, f};
+-        if isempty(r), continue; end
+-
+-        tag_mf = sprintf('res_all{%d,%d}', mi, f);
+-
+-        % Required NaN: omega1
+-        [nanOk, msg] = localCheckNoNaN(r.omega1, [tag_mf '.omega1']);
+-        if ~nanOk, condition = msg; return; end
+-
+-        % MAC check
+-        for i = 1:numel(r.macData)
+-            macD = r.macData{i};
+-            if isempty(macD) || ~isfield(macD, 'best_mac') || isempty(macD.best_mac)
+-                continue;
+-            end
+-            if macD.best_mac(1) < macThresh
+-                condition = sprintf( ...
+-                    '%s, alpha index %d: tracked mode MAC = %.3f < threshold %.2f', ...
+-                    tag_mf, i, macD.best_mac(1), macThresh);
+-                return;
+-            end
+-        end
+-    end
+-end
+-
+-% Required artifact
+-if ~localCheckArtifact(fullfile(outDir, 'exp3_mesh_convergence_results.mat'))
+-    condition = sprintf('required artifact missing: exp3_mesh_convergence_results.mat in %s', outDir);
+-    return;
+-end
+-
+-pass = true;
+-end
+-
+-% -------------------------------------------------------------------------
+-
+-function [pass, condition] = localAccept_Exp4(res, outDir)
+-%LOCALACCEPT_EXP4  Acceptance checks for exp4_sensitivity_ablation.
+-
+-pass = false; condition = '';
+-
+-if isempty(res) || ~isstruct(res)
+-    condition = 'returned empty or non-struct result'; return;
+-end
+-
+-for fn = {'omega1', 'nIter', 'grayness'}
+-    if ~isfield(res, fn{1})
+-        condition = sprintf('required field missing: %s', fn{1}); return;
+-    end
+-end
+-
+-% Required NaN: all four variants must have completed
+-[nanOk, msg] = localCheckNoNaN(res.omega1, 'omega1');
+-if ~nanOk, condition = msg; return; end
+-
+-[nanOk, msg] = localCheckNoNaN(res.nIter, 'nIter');
+-if ~nanOk, condition = msg; return; end
+-
+-% Required diary for Variant A (FD check output)
+-diaryA = fullfile(outDir, 'exp4_variant1_diary.txt');
+-if ~localCheckArtifact(diaryA)
+-    condition = sprintf('required artifact missing: exp4_variant1_diary.txt (FD check log) in %s', outDir);
+-    return;
+-end
+-
+-% Required mat artifact
+-if ~localCheckArtifact(fullfile(outDir, 'exp4_sensitivity_ablation_results.mat'))
+-    condition = sprintf('required artifact missing: exp4_sensitivity_ablation_results.mat in %s', outDir);
+-    return;
+-end
+-
+-pass = true;
+-end
+-
+-% -------------------------------------------------------------------------
+-
+-function [pass, condition] = localAccept_Exp5(res, outDir)
+-%LOCALACCEPT_EXP5  Acceptance checks for exp5_scaling.
+-
+-pass = false; condition = '';
+-
+-if isempty(res) || ~isstruct(res)
+-    condition = 'returned empty or non-struct result'; return;
+-end
+-
+-for fn = {'beta', 'R2', 'tIter_data'}
+-    if ~isfield(res, fn{1})
+-        condition = sprintf('required field missing: %s', fn{1}); return;
+-    end
+-end
+-
+-% At least one valid beta fit
+-if all(isnan(res.beta))
+-    condition = 'beta is all-NaN: no scaling fit completed (insufficient data?)';
+-    return;
+-end
+-
+-% Required plot artifact
+-if ~localCheckArtifact(fullfile(outDir, 'exp5_scaling_loglog.png'))
+-    condition = sprintf('required artifact missing: exp5_scaling_loglog.png in %s', outDir);
+-    return;
+-end
+-
+-% Required mat artifact
+-if ~localCheckArtifact(fullfile(outDir, 'exp5_scaling_results.mat'))
+-    condition = sprintf('required artifact missing: exp5_scaling_results.mat in %s', outDir);
+-    return;
+-end
+-
+-pass = true;
+-end
+-
+ % =========================================================================
+ %  UTILITIES
+ % =========================================================================
+@@ -1319,14 +1422,13 @@ function localPrepareDirFail(d)
+ % =========================================================================
+ 
+ function localPrintSummaryTable(od, failures)
+-experiments = {'exp1','exp2','exp2b','exp3','exp4','exp5'};
++experiments = {'s1','exp2','exp2b','exp3','a4'};
+ descs = { ...
+-    'Exp1: Performance table (omega_1, timing, init cost)'; ...
+-    'Exp2: Clamped beam (freqs, modes, MAC, semi_harm vs Eq.7)'; ...
++    'S1: Localized low-density mode mitigation (gates EXP2b/EXP3)'; ...
++    'Exp2: Clamped beam authoritative alpha sweep'; ...
+     'Exp2b: Building (Tables 4/5, spurious modes)'; ...
+     'Exp3: Mesh convergence (200x25 vs 400x50)'; ...
+-    'Exp4: Sensitivity ablation + FD gradient check'; ...
+-    'Exp5: Scaling log-log analysis' };
++    'A4: Eigenpair-refresh study -- NOT IMPLEMENTED' };
+ failTags = cellfun(@(f) f.tag, failures, 'UniformOutput', false);
+ fprintf('\n  %-52s  %s\n', 'Experiment', 'Status');
+ fprintf('  %s\n', repmat('-', 1, 70));

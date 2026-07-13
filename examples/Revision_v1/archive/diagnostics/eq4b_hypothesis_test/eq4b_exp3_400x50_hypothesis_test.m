@@ -461,8 +461,8 @@ fprintf(fid, '- `analysis/ourApproach/Matlab/topopt_freq.m`\n');
 fprintf(fid, '- `tools/Matlab/run_topopt_from_json.m`\n');
 fprintf(fid, '- `examples/Revision_v1/s1_exp3_400x50_mode_diagnostic.m`\n');
 fprintf(fid, '- `examples/Revision_v1/eq4b_exp3_400x50_hypothesis_test.m`\n\n');
-fprintf(fid, '## Authoritative Source\n\n');
-fprintf(fid, '`analysis/OlhoffApproachExact/Matlab/mass_interp.m` implements `du2007_c1` as `m=rho` above `rho=0.1` and `m=6e5*rho^6-5e6*rho^7` below or at `rho=0.1`.\n\n');
+fprintf(fid, '## Published Source\n\n');
+fprintf(fid, 'Du and Olhoff (2007), Eq. 4b, defines `du2007_c1` as `m=rho` above `rho=0.1` and `m=6e5*rho^6-5e6*rho^7` below or at `rho=0.1`.\n\n');
 fprintf(fid, '## Ported Formula\n\n');
 fprintf(fid, '`ourApproach` now applies the same normalized coefficient `m(x)` and derivative `dm/dx`, then preserves the existing density scaling: `rho_e = rho_min + m(x)*(rho0-rho_min)`.\n\n');
 fprintf(fid, '## Equivalence\n\n');
@@ -471,7 +471,7 @@ fprintf(fid, '- Eq. 4b formula equivalence pass: `%s`.\n', localYesNo(validation
 fprintf(fid, '- Max disabled rho difference: `%.17g`.\n', validation.disabled_behavior.max_abs_rho_power_pmass1_minus_old);
 fprintf(fid, '- Max Eq. 4b coefficient difference: `%.17g`.\n\n', validation.eq4b_equivalence.max_abs_m_minus_authoritative_formula);
 fprintf(fid, '## Unavoidable Difference\n\n');
-fprintf(fid, 'The authoritative helper returns normalized `m(rho_e)`. `ourApproach` stores physical density scaling separately, so the port wraps the same normalized `m(x)` with the existing `rho_min/rho0` scaling. This preserves backward compatibility and the existing mass floor.\n\n');
+fprintf(fid, 'The local helper implements the published normalized `m(rho_e)`. `ourApproach` stores physical density scaling separately, so the port wraps that normalized `m(x)` with the existing `rho_min/rho0` scaling. This preserves backward compatibility and the existing mass floor.\n\n');
 fprintf(fid, 'Repo root: `%s`.\n', repoRoot);
 end
 

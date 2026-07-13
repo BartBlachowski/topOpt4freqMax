@@ -1,3 +1,9 @@
+"""Local Olhoff-inspired comparison solver.
+
+This implementation is not a paper-faithful or canonical Du--Olhoff
+reconstruction. Its outputs describe this local code only.
+"""
+
 from __future__ import annotations
 
 from dataclasses import dataclass, field

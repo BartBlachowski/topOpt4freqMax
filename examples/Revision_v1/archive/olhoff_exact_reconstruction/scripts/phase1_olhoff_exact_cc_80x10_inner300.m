@@ -1,5 +1,7 @@
 function result = phase1_olhoff_exact_cc_80x10_inner300(outDir)
 %PHASE1_OLHOFF_EXACT_CC_80X10_INNER300  Numerical-behaviour Phase 1.
+% ARCHIVED DIAGNOSTIC ONLY (2026-07-13): closed reconstruction campaign;
+% not a production experiment, benchmark, or reviewer evidence.
 %
 % Changes exactly one parameter relative to the saved alpha=0.5 pilot:
 % inner_max_iter: 30 -> 300.

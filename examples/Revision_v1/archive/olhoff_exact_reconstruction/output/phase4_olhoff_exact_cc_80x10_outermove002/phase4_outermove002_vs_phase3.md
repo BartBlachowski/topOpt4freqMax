@@ -1,5 +1,8 @@
 # Phase 4 Comparison: Phase 3 vs outer_move=0.02
 
+> **Archived diagnostic.** This comparison belongs to the closed unsuccessful
+> reconstruction campaign and is not reviewer evidence.
+
 | category | metric | Phase 3 | Phase 4 |
 |---|---|---:|---:|
 | outer convergence | final design change | 0.0206388 | 0.000101792 |

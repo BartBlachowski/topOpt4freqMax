@@ -1,5 +1,8 @@
 # Phase 1 Inner-Max-Iter 300 Result
 
+> **Archived diagnostic.** This result belongs to the closed unsuccessful
+> reconstruction campaign and is not reviewer evidence.
+
 Generated: 2026-06-30T09:05:31Z
 
 ## Parameter Verification

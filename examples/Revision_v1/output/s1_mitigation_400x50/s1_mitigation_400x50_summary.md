@@ -6,7 +6,7 @@ Scope: one mitigated Exp3 400x50 alpha=1.00 run only. No manuscript edits, no fu
 
 Changed exactly one mitigation parameter: mass interpolation exponent `pmass` from baseline `1` to mitigated `6`.
 
-Du-Olhoff `du2007_c1` is implemented in `analysis/OlhoffApproachExact/Matlab/mass_interp.m`, but not in `ourApproach`; this pilot uses the closest existing `ourApproach` mass-penalization option.
+Du--Olhoff Eq. 4b (`du2007_c1`) is a separate published mass interpolation; this pilot uses the closest existing `ourApproach` mass-penalization option and does not claim to reproduce Eq. 4b.
 
 ## Classification
 

@@ -13,7 +13,7 @@ except ImportError:  # direct script execution fallback
 
 
 def _build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(description="Run Olhoff clamped-clamped (CC) benchmark.")
+    parser = argparse.ArgumentParser(description="Run the local Olhoff-inspired clamped-clamped (CC) comparison.")
     parser.add_argument("--quick", action="store_true", help="Reduced mesh/iterations for smoke tests")
     parser.add_argument("--out", type=Path, default=None, help="Output base folder")
     parser.add_argument("--max-iter", type=int, default=None, help="Override maximum iterations")

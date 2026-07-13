@@ -74,7 +74,16 @@ toolsDir  = fullfile(repoRoot, 'tools', 'Matlab');
 schemaDir = fullfile(repoRoot, 'scripts', 'revision_v1');
 if exist(toolsDir,  'dir') == 7, addpath(toolsDir);  end
 if exist(schemaDir, 'dir') == 7, addpath(schemaDir); end
-addpath(genpath(fullfile(repoRoot, 'analysis')));
+localAddActiveAnalysisPaths(repoRoot);
+end
+
+function localAddActiveAnalysisPaths(repoRoot)
+% Production allowlist: archived reconstruction trees must not enter the path.
+activeDirNames = {'ourApproach','OlhoffApproach','YukselApproach','elastic2D','LabandaApproach'};
+for iDir = 1:numel(activeDirNames)
+    activeDir = fullfile(repoRoot, 'analysis', activeDirNames{iDir});
+    if exist(activeDir, 'dir') == 7, addpath(genpath(activeDir)); end
+end
 end
 
 % =========================================================================

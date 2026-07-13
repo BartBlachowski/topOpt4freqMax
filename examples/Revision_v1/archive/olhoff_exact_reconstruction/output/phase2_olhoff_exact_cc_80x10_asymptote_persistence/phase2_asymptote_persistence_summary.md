@@ -1,5 +1,8 @@
 # Phase 2 Asymptote Persistence Result
 
+> **Archived diagnostic.** This result belongs to the closed unsuccessful
+> reconstruction campaign and is not reviewer evidence.
+
 Generated: 2026-06-30T09:30:18Z
 
 ## Parameter Verification

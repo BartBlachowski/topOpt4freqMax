@@ -1,6 +1,14 @@
-# OlhoffApproachExactOpus — clean-room reconstruction of Du & Olhoff (2007)
+# OlhoffApproachExactOpus — archived reconstruction diagnostics
 
-Independent, paper-first reconstruction and discrepancy analysis of Du & Olhoff (2007)
+> **Final status (2026-07-13): unsuccessful reproduction attempt.** A
+> paper-faithful reconstruction of Du and Olhoff (2007) could not be
+> established. The materials below are retained as diagnostic history only.
+> They are not a reference or benchmark implementation and cannot support
+> reviewer-facing quantitative comparisons. Statements below that call the
+> implementation “exact,” “faithful,” or “validated” are superseded historical
+> assessments. Active revision comparisons use `analysis/OlhoffApproach` only.
+
+Independent, paper-first reproduction attempt and discrepancy analysis of Du & Olhoff (2007)
 "Topological design of freely vibrating continuum structures…" (Struct Multidisc Optim 34:91-110)
 + erratum (34:545). This is **not** a refactor of `OlhoffApproachExact`; the algorithm was
 re-derived from the PDFs before any code was inspected.
@@ -45,7 +53,7 @@ design exceeds ~288 while disconnected reach 462. So the reconstruction's discon
 single highest-value test is **one finer-mesh (80×20) run**. This *refines* the prior on-record conclusion that
 "disconnected is genuinely superior, not numerics."
 
-## Headline conclusions
+## Historical conclusions (superseded by the final status above)
 
 - The paper's equations are unambiguous *after the erratum*; the reproduction risk lives entirely in the
   **[N]-classified numerical choices** (mesh, filter radius, mass model, multiplicity tolerance, continuation

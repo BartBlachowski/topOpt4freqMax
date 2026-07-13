@@ -287,6 +287,11 @@ function [x, omega, tIter, nIter, mem_usage, diagnostics] = run_topopt_from_json
             end
 
         case 'olhoffexact'
+            % Archive-compatibility path only. This reconstruction attempt is
+            % not a production comparator or reviewer-evidence source.
+            warning('run_topopt_from_json:ArchivedOlhoffExact', ...
+                ['OlhoffExact is an archived diagnostic reconstruction. ', ...
+                 'Use approach="Olhoff" for the active local OlhoffApproach comparison.']);
             addpath(fullfile(repoRoot, 'analysis', 'OlhoffApproachExact', 'Matlab'));
 
             cfgE = struct();
@@ -504,8 +509,9 @@ function [x, omega, tIter, nIter, mem_usage, diagnostics] = run_topopt_from_json
 
         otherwise
             error('run_topopt_from_json:UnknownApproach', ...
-                ['Unknown optimization.approach "%s". Use "Olhoff", "OlhoffExact", ' ...
-                 '"Yuksel", "ourApproach", "elastic2D", or "elastc2D".'], approach);
+                ['Unknown optimization.approach "%s". Production choices are ', ...
+                 '"Olhoff", "Yuksel", "ourApproach", "elastic2D", or "elastc2D". ', ...
+                 '"OlhoffExact" is retained only for archived diagnostics.'], approach);
     end
 
     % --- Finalize memory measurement ---

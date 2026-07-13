@@ -408,27 +408,27 @@ and has not been tested.
 
 ---
 
-## Gate NB — OlhoffApproachExact Numerical Behaviour Freeze
+## Archived diagnostic — OlhoffApproachExact reconstruction campaign
 
-**Status: PASSED / FROZEN**
+**Status: CLOSED / NOT REVIEWER EVIDENCE**
 
 ### Supporting artifacts
 
 | Study | Artifact | Key finding |
 |---|---|---|
-| Freeze memo | `NUMERICAL_BEHAVIOR_FREEZE.md` | Production settings frozen |
+| Archive memo | `NUMERICAL_BEHAVIOR_FREEZE.md` | Former production freeze withdrawn |
 | Phase 1 | `phase1_inner300_summary.md` | `inner_max_iter=300` mostly solved inner convergence but did not remove cycle |
 | Phase 2 | `phase2_asymptote_persistence_summary.md` | persistent asymptotes had negligible convergence effect |
 | Phase 3 | `phase3_outermove005_summary.md` | `outer_move=0.05` strongly reduced cycle but capped |
 | Phase 4 | `phase4_outermove002_summary.md` | `outer_move=0.02` converged at iteration 24; S1 found 0/10 localized modes |
 
-### Accepted evidence
+### Diagnostic evidence retained
 
-The numerical-behaviour investigation was restricted to MATLAB and
-`OlhoffApproachExact`. It did not modify `ourApproach`, manuscript files,
-mass/stiffness interpolation, objective, sensitivities, update ordering,
-convergence tolerances, `alpha`, `inner_max_iter` after Phase 1, or the MMA
-algorithm.
+The numerical-behaviour investigation was restricted to MATLAB and the
+`OlhoffApproachExact` reproduction attempt. It did not modify `ourApproach`.
+The results document the tested reconstruction and stabilization hypotheses,
+but they are not accepted evidence for the Du--Olhoff benchmark or for any
+reviewer-facing method comparison.
 
 Phase outcomes:
 - **Phase 1:** `inner_max_iter: 30 -> 300` reduced inner cap hits to 1.5%
@@ -442,37 +442,35 @@ Phase outcomes:
   `final_design_change=1.0179e-4 < 1e-3`; S1 found 0/10 localized low-density
   modes.
 
-### Frozen settings
+### Historical settings
 
-Frozen for the final `OlhoffApproachExact` experimental campaign:
+The final diagnostic phase used:
 `inner_max_iter=300`, `outer_move=0.02`, `alpha=0.5`,
 `persistent_mma_state=true`, `mass_mode='du2007_c1'`, `penal=3`,
 `rmin_elem=2.5`, `inner_tol=1e-4`, `outer_tol=1e-3`,
 `mult_tol=1e-3`, `acceptance_check=false`, `move_lim=Inf`.
 
-This is classified as numerical stabilization of paper-ambiguous move-limit
-choices, not an algorithmic change: FE assembly, eigenproblem, generalized
-sensitivities, interpolation laws, objective, multiplicity handling, update
-ordering, and MMA update rules remain unchanged.
+These values are retained only for reproducibility of the archived diagnostic
+campaign. They are not production defaults and are not a basis for calling the
+implementation exact, canonical, reference, or benchmark-faithful.
 
 ### Claim impact
 
-Supportable for `OlhoffApproachExact`: the verified implementation can be run
-with a documented, frozen numerical-stabilization setting (`outer_move=0.02`)
-that removes the previously observed outer two-cycle in the CC 80x10 diagnostic
-pilot.
-
-This gate does **not** change the evidence status of `ourApproach` Exp2/Exp3,
-the 400x50 mesh-convergence failure, or the S1 findings for the original Exp3
-fine-mesh result.
+No positive reviewer-facing claim is supportable from this campaign. In
+particular, convergence of a stabilized diagnostic trajectory does not establish
+paper fidelity, the published optimum, a quantitative frequency gap, or a fair
+performance baseline. The campaign supports only the negative conclusion that
+the attempted reconstruction did not close the benchmark discrepancy after the
+listed mechanisms were investigated.
 
 ### Reviewer-response impact
 
-The final response can state that the Olhoff-style reference implementation
-required an explicit move-limit stabilization and that the selected value was
-chosen by a controlled one-parameter numerical-behaviour investigation. It
-should be described as a numerical implementation detail where the paper is
-ambiguous, not as a new optimization algorithm.
+Do not cite `OlhoffApproachExact`, its stabilization sequence, its tables, or
+its figures as comparison evidence. If the failed reconstruction is mentioned
+at all, describe it as an archived reproduction attempt whose unresolved
+discrepancy most plausibly reflects benchmark under-specification or unpublished
+implementation details. Active local comparisons use `OlhoffApproach` only and
+must be labelled local Olhoff-inspired comparisons.
 
 ---
 
@@ -482,7 +480,8 @@ ambiguous, not as a new optimization algorithm.
 
 ### Supporting artifacts
 
-None. No instrumented timing measurements exist under the authoritative formulation.
+None. No accepted instrumented timing measurements exist under the authoritative
+formulation for the proposed method and the local comparison implementations.
 
 ### Accepted evidence
 
@@ -503,15 +502,20 @@ scaling claims have no evidence base under the revised formulation.
 ### Reviewer-response impact
 
 All performance headline claims must be removed or marked "pending regeneration"
-until P1 produces accepted timing data.
+until P1 produces accepted timing data. Any retained Olhoff comparison is against
+the local `OlhoffApproach` implementation only; it must not be generalized to the
+canonical Du--Olhoff method or its published optimum.
 
 ---
 
 ## Gate MS — Manuscript and Response Update
 
-**Status: NOT_STARTED**
+**Status: PARTIAL**
 
-No manuscript or response letter updates have been made.
+The Olhoff comparator-evidence migration is complete in the manuscript and
+reviewer-response planning: canonical gap/speedup claims were removed, local
+comparators were identified, and the failed reconstruction was archived. Other
+manuscript corrections and the response letter remain outstanding.
 
 ---
 
@@ -537,9 +541,9 @@ No reproducibility artifacts exist.
 | E2 | PARTIAL (1/5 accepted) | 1 | clamped-beam claims |
 | E3 | FAILED / INCONCLUSIVE | 1 | mesh-convergence claims |
 | S1 | PARTIAL / INSUFFICIENT | 1 | spurious-mode claim |
-| NB | PASSED / FROZEN | 1 | OlhoffApproachExact production settings |
+| Exact archive | CLOSED / NOT EVIDENCE | — | none; excluded from production |
 | P1 | NOT_STARTED | 1 | all performance claims |
-| MS | NOT_STARTED | 1 | submission |
+| MS | PARTIAL (Olhoff migration complete) | 1 | submission |
 | RP | NOT_STARTED | 1 | submission |
 
 ### Artifact inventory
@@ -567,14 +571,14 @@ No reproducibility artifacts exist.
 | S1 baseline mode summary | YES | S1 | 0 physical global, 8 localized |
 | S1 pmass=6 mode summary | YES | S1 | 1 physical, 9 localized |
 | Eq.4b validation result | YES | S1 | REJECTED (capped) |
-| Numerical behaviour freeze memo | YES | NB | FROZEN |
-| Phase 1 inner300 result | YES | NB | DIAGNOSTIC |
-| Phase 2 asymptote persistence result | YES | NB | DIAGNOSTIC |
-| Phase 3 outermove005 result | YES | NB | DIAGNOSTIC |
-| Phase 4 outermove002 result | YES | NB | PASSED |
+| Superseded numerical-behaviour memo | YES | Exact archive | ARCHIVED / WITHDRAWN |
+| Phase 1 inner300 result | YES | Exact archive | ARCHIVED DIAGNOSTIC |
+| Phase 2 asymptote persistence result | YES | Exact archive | ARCHIVED DIAGNOSTIC |
+| Phase 3 outermove005 result | YES | Exact archive | ARCHIVED DIAGNOSTIC |
+| Phase 4 outermove002 result | YES | Exact archive | ARCHIVED DIAGNOSTIC |
 | Any A4 result | NO | A4 | NOT_STARTED |
 | Any P1 timing result | NO | P1 | NOT_STARTED |
-| Manuscript diff | NO | MS | NOT_STARTED |
+| Manuscript diff | YES | MS | PARTIAL (Olhoff migration complete) |
 | Response letter | NO | MS | NOT_STARTED |
 | Reproducibility manifest | NO | RP | NOT_STARTED |
 
@@ -604,10 +608,10 @@ No reproducibility artifacts exist.
 8. **Variant B (complete sensitivity, OC) fails to converge (CR2):** period-2
    cycle documented; Variant A exhibits stable plateau; no accepted comparison
    pair exists.
-9. **OlhoffApproachExact numerical settings are frozen (NB):** controlled
-   Phases 1-4 identify `outer_move=0.02`, `inner_max_iter=300`, `alpha=0.5`,
-   and persistent MMA asymptotes as the frozen production settings. Phase 4
-   converged at iteration 24 and S1 found 0/10 localized low-density modes.
+9. **The OlhoffApproachExact campaign is archived:** the attempted
+   reconstruction did not establish a paper-faithful Du--Olhoff implementation.
+   Its Phase 1--4 settings and outputs are diagnostic history only and are
+   excluded from production and reviewer evidence.
 
 ### Claims that must be removed before submission
 
@@ -662,11 +666,15 @@ No reproducibility artifacts exist.
    or replace the mesh-convergence claim with an explicit limitation.
 4. **S1:** Either demonstrate a mitigation strategy that produces a clean
    spectrum (0 localized modes) or limit the no-spurious-mode claim entirely.
-5. **P1:** Run ≥10 benchmark timing measurements per mesh to produce defensible
-   scaling exponents and speedup values.
-6. **NB:** No additional numerical-behaviour tuning is required for
-   `OlhoffApproachExact`; use the frozen settings in `NUMERICAL_BEHAVIOR_FREEZE.md`.
-7. **MS + RP:** All manuscript and response letter work remains to be done.
+5. **P1:** Complete the already planned ≥10-run timing protocol per mesh if a
+   performance comparison is retained. Report any resulting ratios and scaling
+   exponents only for the named local implementations, including
+   `OlhoffApproach`; do not infer a canonical Du--Olhoff comparison.
+6. **Comparator migration:** Use only the local `OlhoffApproach` implementation
+   for any retained comparison; do not resume or extend the exact-reconstruction
+   campaign.
+7. **MS + RP:** Complete the remaining manuscript corrections, response letter,
+   and reproducibility package; the Olhoff comparator migration itself is done.
 
 *Status derived exclusively from documented artifacts. Unexecuted scripts,
 planning documents, and audit intentions do not constitute evidence of completion.*

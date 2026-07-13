@@ -1,4 +1,7 @@
 # Pilot Report: OlhoffApproachExact CC Beam 80×10
+
+> **Archived/superseded diagnostic.** Production-migration, reproduction, and
+> comparison recommendations in this historical report are withdrawn.
 Generated: 2026-06-30
 
 ## Setup

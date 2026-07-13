@@ -1,5 +1,8 @@
 # Phase 1 Comparison: inner_max_iter 30 vs 300
 
+> **Archived diagnostic.** This comparison belongs to the closed unsuccessful
+> reconstruction campaign and is not reviewer evidence.
+
 | category | metric | inner=30 alpha=0.5 | inner=300 alpha=0.5 |
 |---|---|---:|---:|
 | inner solver | average iterations | 30 | 155.315 |

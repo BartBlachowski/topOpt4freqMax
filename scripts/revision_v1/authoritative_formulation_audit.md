@@ -203,7 +203,7 @@ would invalidate comparator fidelity.
 | `analysis/YukselApproach/Matlab/top99neo_inertial_freq.m:2-8,27-28,552-585` | Stage 2 uses `F=M(x)*u_hat`, Euclidean-normalizes the evolving displacement estimate, phase-aligns it, and omits `dF/dx`. | Preserve Yuksel comparator semantics; do not call it the authoritative frozen-reference load. | No formula change | Add comparator provenance/labeling only. Any N=1 refreshed proposed variant must not be called Yuksel unless full equivalence is established. |
 | `analysis/YukselApproach/Python/solver.py:403-445,674-743` | Python counterpart uses `F=M(x)*u_hat`, Euclidean normalization and phase alignment, omitted load derivative. | Same as MATLAB comparator and published-method interpretation. | No authoritative change | Verify MATLAB/Python comparator parity separately; do not merge with Gate A0 proposed-method implementation. |
 | `analysis/OlhoffApproach/Matlab/topFreqOptimization_MMA.m:199-207,274-355` and `analysis/OlhoffApproach/Python/solver.py:195,356-449` | `omega0` names initial diagnostic frequencies; eigenpairs are recomputed for bound optimization. They do not construct the proposed inertial load. | Keep as comparator behavior. | No | Do not replace diagnostic `omega0` merely because it matches the search token. Label comparator accurately. |
-| `analysis/OlhoffApproachExact/Matlab/compute_elem_sensitivity.m` and `compute_generalized_gradients.m` | Use mass-normalized eigenvectors and exact eigenvalue sensitivities, not compliance-load sensitivity. | Preserve canonical/exact comparator implementation. | No | Reuse only normalization test ideas; do not transplant proposed-load changes. |
+| `analysis/OlhoffApproachExact/Matlab/compute_elem_sensitivity.m` and `compute_generalized_gradients.m` | Use mass-normalized eigenvectors and eigenvalue sensitivities, not compliance-load sensitivity. | Archived reconstruction diagnostics; not a production comparator or reviewer-evidence source. | No algorithm change | Preserve as historical diagnostic code only. Do not transplant it into production or cite it as canonical/exact evidence; derive formulation requirements from the paper and verified active code instead. |
 
 ## Historical/non-authoritative records
 
@@ -215,7 +215,8 @@ review evidence or prior audits, not executable specifications:
 - `paper/reviews/REVISION_AUDIT.md`
 - `examples/Revision_v1/revision_implementation_audit.md`
 - `docs/olhoff_audit.md`
-- `analysis/OlhoffApproachExactOpus/**`
+- `analysis/OlhoffApproachExactOpus/**` (archived diagnostic reconstruction;
+  excluded from production and reviewer evidence)
 
 They should remain immutable evidence unless a separate documentation-cleanup
 task explicitly asks to annotate them. Statements copied from them into current
@@ -236,4 +237,3 @@ pseudocode, comments, or response text must use the update1 authority.
 
 Until steps 1-6 pass, no existing `Revision_v1` result is evidence for the
 authoritative formulation.
-

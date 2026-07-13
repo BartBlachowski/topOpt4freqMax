@@ -1,6 +1,10 @@
-% Algorithmic analysis of the implemented Olhoff approach relative to the original
-% formulation of Olhoff and Du (2014).  This fragment is intended for \input{} into
+% Algorithmic analysis of the local Olhoff-inspired implementation relative to
+% the published formulation of Olhoff and Du (2014). This fragment is intended for \input{} into
 % a journal manuscript; it contains no \documentclass or \begin{document}.
+% CURRENT STATUS (2026-07-13): local provenance/diagnostic text only. The
+% OlhoffApproachExact campaign did not establish a paper-faithful reconstruction.
+% No frequency-gap, speedup, convergence, scaling, or optimum claim may be based
+% on that archive or generalized from OlhoffApproach to canonical Du--Olhoff.
 %
 % References assumed available in the parent document:
 %   \cite{OlhoffDu2014}  -- Olhoff & Du, CISM 2014 (978-3-7091-1643-2_11)
@@ -8,7 +12,11 @@
 %   \cite{Svanberg1987}  -- Svanberg, IJNME 1987
 %   \cite{Du2007}  -- Du & Olhoff, Struct.\ Multidisc.\ Optim.\ 2007
 
-\subsection*{Algorithmic Differences Between the Implemented and Original Olhoff Formulations}
+\subsection*{Algorithmic Differences Between the Local Olhoff-Inspired and Published Formulations}
+
+The implementation discussed below is `OlhoffApproach', the repository's local
+comparison implementation. Component-level similarities and differences are
+useful for provenance, but do not establish a paper-faithful reconstruction.
 
 The original formulation of Olhoff and Du~\cite{OlhoffDu2014} casts the
 fundamental-eigenfrequency maximization problem as a max-min bound problem in
@@ -23,7 +31,7 @@ or linear programming until those increments converge, after which the design
 variables are updated as $\rho_e \mathrel{:=} \rho_e + \Delta\rho_e$.  No density
 filter or projection is present in the original formulation.
 
-The present implementation retains the bound variable (scaled as
+The local implementation retains the bound variable (scaled as
 $E_b = \lambda_1 / \lambda_\mathrm{ref}$) and MMA, but departs from the original
 in three consequential respects.  First, a Heaviside projection
 $H(\tilde{x},\beta,\eta)$ with a seven-level continuation schedule
@@ -36,21 +44,20 @@ additional adjoint pass through the Heaviside Jacobian for the penalty gradient.
 Second, the inner convergence loop for increments is collapsed to a single MMA call
 per outer iteration on the absolute design variables; the dual Newton solver solves
 the separable convex approximation to optimality in one shot but without the explicit
-increment-convergence check of the original inner loop.  Third---and most
-consequentially for runtime---a \emph{trial eigensolve} is performed immediately
+increment-convergence check of the original inner loop. Third, a
+\emph{trial eigensolve} is performed immediately
 after every MMA update: the trial physical field is assembled into new $\mathbf{K}$
 and $\mathbf{M}$ matrices, and $\min(J,3)$ modes are recomputed to reject MMA steps
-that decrease $\omega_1$ by more than $1\,\%$.  This effectively doubles the number
-of eigensolves per outer iteration relative to the original scheme.
+that decrease $\omega_1$ by more than $1\,\%$. This creates a second local
+eigensolver call in addition to the main-loop call; it is not attributed to the
+canonical Du--Olhoff implementation.
 
-Both the original and the present implementation employ the implicitly restarted
-Arnoldi method (\textsc{arpack} via \texttt{eigs(\ldots,\,\textquotesingle SM\textquotesingle)})
-with shift-and-invert to extract the $J = 3$ lowest eigenpairs.  Shift-and-invert
-requires a sparse Cholesky factorization of $\mathbf{K}$ at each \texttt{eigs}
-invocation; because $\mathbf{K}$ changes at every iteration, this factorization is
-performed \emph{twice} per outer iteration in the present code.  For the
-quasi-banded beam-like meshes considered here, factorization cost scales as
-$O(N_\mathrm{dof}^{\,1.5})$ and dominates the per-iteration budget.
+The local implementation uses the implicitly restarted Arnoldi method
+(\textsc{arpack} via \texttt{eigs(\ldots,\,\textquotesingle SM\textquotesingle)})
+with shift-and-invert to extract the $J = 3$ lowest eigenpairs. Because
+$\mathbf{K}$ changes at every iteration, the local trial-step logic invokes it
+twice per outer iteration. The published sources do not justify transferring
+this solver choice or cost model to a canonical Du--Olhoff implementation.
 
 Regarding sensitivity analysis, the original formulation handles repeated
 eigenvalues through an $N\times N$ sub-eigenvalue problem~(Eq.~12 of the reference),
@@ -63,32 +70,11 @@ independently to each of the $J$ modes, omitting off-diagonal terms; each elemen
 sensitivity is then propagated through the Heaviside Jacobian and the adjoint filter,
 requiring $J$ further convolution passes.
 
-These deviations collectively determine the observed performance ratios.  The Yuksel
-dynamic code~\cite{Yuksel2025} employs an OC bisection update
-($O(N_\mathrm{el})$ per bisection step, $\approx\!15$ steps per iteration) and
-performs a single eigensolve per outer iteration, with no projection chain and no
-penalty-gradient filter pass.  The MMA dual Newton solver in the Olhoff
-implementation costs $O(m \cdot N_\mathrm{el})$ with $m = J + 2 = 5$ constraints,
-and the trial eigensolve doubles the sparse-factorization overhead.  Taken together,
-these contributions yield a per-iteration cost approximately $7$--$8\times$ higher
-for the Olhoff approach, as observed in Table~1 (e.g.\ $0.38$ vs.\ $0.05$~s/iter at
-$320{\times}40$).  Because the Olhoff implementation terminates in $\approx\!300$
-outer iterations against $\approx\!700$ for the Yuksel dynamic code, the net total
-runtime ratio is $300/700 \times 7.5 \approx 3.2$--$3.5$, consistent with the
-measured factor of $3.5$ across all four mesh sizes.  Both methods exhibit an
-empirical per-iteration scaling of roughly $O(N_\mathrm{el}^{\,1.3})$
-($0.08 \to 0.58$~s/iter and $0.01 \to 0.08$~s/iter across the mesh range), confirming
-that sparse Cholesky factorization dominates over the $O(N_\mathrm{el})$ filter and
-sensitivity-assembly costs.
-
-Memory consumption follows directly from the MMA storage requirements: the
-implementation retains the two MMA history iterates $\mathbf{x}^{(k-1)}$,
-$\mathbf{x}^{(k-2)}$, the asymptote vectors $\ell_i$, $u_i$, and the gradient
-matrix $\mathbf{dfdx}$ of size $m \times (N_\mathrm{el}{+}1)$; moreover, the trial
-eigensolve requires that $\mathbf{K}_f$ and $\mathbf{M}_f$ remain allocated
-simultaneously for both the current and trial fields.  At $400{\times}50$
-($N_\mathrm{el} = 20{,}000$) this explains the observed $384$~MB peak against
-$123$~MB for the Yuksel approach.
+These deviations are reasons to keep empirical evidence implementation-specific.
+The local MMA state, projection/filter passes, and additional trial eigensolve
+may be measured in a controlled comparison, but no accepted measurement is
+reported here. They cannot support speedup, convergence, memory, or scaling
+claims about the canonical Du--Olhoff method.
 
 \subsection*{The Proposed Approach: Algorithm, Efficiency, and Practical Merits}
 
@@ -112,47 +98,17 @@ that is inexpensive to compute and straightforward to filter.  A single eigensol
 is performed at termination to verify the achieved fundamental frequency.
 
 From a computational standpoint, each iteration requires one sparse
- factorization of $\mathbf{K}_f$ (to solve the linear system
+factorization of $\mathbf{K}_f$ (to solve the linear system
 $\mathbf{K}_f\mathbf{u}_f = \mathbf{f}_f$), one mass-matrix assembly,
-one sensitivity evaluation, and one OC bisection sweep — identical in
-structure and cost to a standard compliance minimization step.  Because
-the Krylov iterations of \textsc{arpack} are absent, the per-iteration
-wall time matches that of the Yuksel  code
-(e.g.\ $0.05$~s/iter at $320{\times}40$) while the number of outer
-iterations is markedly lower: the fixed-mode gradient provides a stable
-and consistent descent direction from the first iteration, allowing
-convergence in $259$--$500$ iterations against $622$--$700$ for the
-Yuksel  code across the four meshes.  The net effect is a total
-runtime that is consistently the lowest of the three methods: at
-$320{\times}40$ the proposed approach completes in $13.2$~s against
-$33.1$~s for the Yuksel  code and $114.4$~s for the Olhoff
-implementation, representing speedups of $2.5\times$ and $8.7\times$
-respectively.  At $400{\times}50$ the advantage over the Yuksel code
-narrows to $1.2\times$ because the Yuksel iteration count is capped and
-the per-iteration costs converge, yet the proposed method remains the
-fastest throughout.
+one sensitivity evaluation, and one OC bisection sweep. The absence of an
+iterative eigensolve provides an algorithmic reason to expect a different cost
+profile, but runtime, convergence, memory, and scaling require accepted
+instrumented evidence. Any retained comparison must name `OlhoffApproach' as a
+local implementation and must not be interpreted as canonical-method evidence.
 
-Memory consumption of the proposed approach is minimal and practically
-mesh-independent at small scales ($\approx\!4$~MB at $160{\times}20$ and
-$240{\times}30$), growing to $21$~MB and $112$~MB at the two largest meshes
-— comparable to the Yuksel  code and three to four times lower than
-the Olhoff implementation.  The absence of MMA history arrays
-($\mathbf{x}^{(k-1)}$, $\mathbf{x}^{(k-2)}$, asymptote vectors, and the
-$(J{+}2)\times(N_\mathrm{el}{+}1)$ gradient matrix) accounts for most of
-the difference relative to the Olhoff approach.
-
-Despite the algorithmic simplification, the fundamental frequencies
-achieved by the proposed method are in close agreement with those produced
-by the Yuksel  code, as confirmed by the final eigensolve performed
-after convergence.  This is consistent with Rayleigh's principle: because
-the initial uniform design is a reasonable starting estimate of the optimal
-mode shape (both are unimodal for the beam problems considered), fixing
-$\boldsymbol{\varphi}_1$ empirically observed to produce only minor deviations in the
-eigenvalue approximation throughout the iteration.  In engineering practice
-this trade-off — a marginal reduction in the attained frequency in exchange
-for a substantially shorter computation — is frequently acceptable,
-particularly in preliminary design stages or when rapid exploration of
-multiple boundary-condition configurations is required.
+The intended application is preliminary design and rapid exploration of
+boundary-condition configurations. The size of any accuracy--cost trade-off is
+not established by the archived reconstruction campaign.
 
 Beyond numerical performance, the simplicity of the proposed method
 constitutes a practical advantage in its own right.  The algorithm requires
@@ -186,37 +142,18 @@ edge nodes free.  No concentrated nonstructural mass is attached.  The
 prescribed volume fraction is $\alpha = 0.5$, and a sensitivity filter with
 radius $r_\mathrm{min} = 2$ elements is applied in all three implementations to
 suppress checkerboard patterns and ensure mesh-independent topologies.
-Convergence of the Yuksel dynamic code and the proposed approach is declared
+Convergence of the local Yuksel-inspired code and the proposed approach is declared
 when the maximum element-wise density change satisfies $\max|\Delta x_e| <
-10^{-3}$; the Olhoff implementation uses an additional grayness criterion
+10^{-3}$; the local `OlhoffApproach' implementation uses an additional grayness criterion
 ($\bar{g} < 0.05$) in conjunction with the projection continuation schedule.
 
-The optimized topologies obtained by the three approaches at the $400{\times}50$
-resolution are shown in Figs.~5--7.  All three designs share the same global
+The saved topologies obtained by the three local approaches at the $400{\times}50$
+resolution are shown in Figs.~5--7. All three designs share the same global
 load-path architecture: two stiff flanges connected by a system of diagonal
 bracing members, consistent with classical beam-frequency optimization results
-reported in the literature~\cite{Du2007,Yuksel2025}.  The Olhoff
-approach achieves the highest fundamental frequency $\omega_1 = 174.2$~rad/s
-and produces a topology in which the first two eigenfrequencies are bimodal at
-the optimum---a known characteristic of the bound formulation for simply
-supported beams~\cite{Du2007}.  The Yuksel dynamic code and the proposed
-approach yield $\omega_1 = 160.5$~rad/s and $\omega_1 = 159.6$~rad/s
-respectively, a mutual difference of less than $0.6\,\%$, while the gap with
-respect to the Olhoff result is approximately $8.4\,\%$.  This discrepancy
-reflects the intrinsic approximation shared by both static-load-based methods:
-fixing $\omega_1$ and $\boldsymbol{\varphi}_1$ from an intermediate or initial
-design introduces a bias that prevents these methods from reaching the true
-eigenvalue maximum, whereas the Olhoff bound formulation directly maximizes
-the smallest eigenfrequency at every iteration.  In terms of computational
-resources, the Olhoff implementation requires $172.6$~s and $384$~MB of RAM
-to execute $296$ outer iterations, whereas the Yuksel dynamic code converges
-in $700$ iterations over $48.3$~s with $123$~MB, and the proposed approach
-terminates in $500$ iterations in $40.0$~s using $112$~MB.  The proposed
-method thus achieves a runtime $4.3\times$ shorter than the Olhoff
-implementation and $1.2\times$ shorter than the Yuksel dynamic code while
-producing a topology and fundamental frequency that are practically
-indistinguishable from the Yuksel result, confirming the practical
-competitiveness of the proposed approach for engineering design scenarios in
-which computational turnaround time and implementation simplicity are primary
-concerns.
-
+reported in the literature~\cite{Du2007,Yuksel2025}. The local
+`OlhoffApproach' endpoint has $\omega_1 = 174.2$~rad/s, while the local
+Yuksel-inspired and proposed endpoints have $\omega_1 = 160.5$~rad/s and
+$\omega_1 = 159.6$~rad/s, respectively. These values describe distinct local
+formulations. They do not establish the published optimum, a frequency gap to
+that optimum, or a canonical speedup/convergence comparison.

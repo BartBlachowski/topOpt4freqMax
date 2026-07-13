@@ -1,8 +1,14 @@
-# Olhoff & Du (2014) — Algorithm Audit
+# Local OlhoffApproach audit against Olhoff & Du (2014)
 
 **Paper:** N. Olhoff & J. Du, "Structural Topology Optimization with Respect to Eigenfrequencies of Vibration," Chapter 11 in *Topology Optimization in Structural and Continuum Mechanics*, CISM 2014. DOI 10.1007/978-3-7091-1643-2_11.
 
 **MATLAB implementation:** `OlhoffApproach/Matlab/topFreqOptimization_MMA.m`
+
+**Scope:** This is a component-by-component provenance audit of the local
+Olhoff-inspired comparison implementation. A `MATCH` entry means only that the
+named component agrees with the cited formula; it does not establish a
+paper-faithful or canonical implementation. Empirical results from
+`OlhoffApproach` are local-comparator results, not the Du--Olhoff optimum.
 
 ---
 
@@ -71,14 +77,14 @@ for it = 1 : maxiter                          % outer loop, line 187
 | Paper | Code | Status |
 |-------|------|--------|
 | Simple eigenvalue sensitivity (Eq. 4/5): ∂λⱼ/∂ρₑ = φⱼᵀ(K'ₑ − λⱼM'ₑ)φⱼ | `dlam(:,j) = penal*(E0-Emin)*(xPhys.^(penal-1)).*sum((pe*Ke).*pe,2) - lam_sorted(j)*(rho0-rho_min).*sum((pe*Me).*pe,2)` (lines 288–296). Computed for all j = 1,…,J. | **MATCH** — exact implementation of Eq. 4/5 for the SIMP+linear-mass model. |
-| Generalised gradient vectors t_sk for N-fold eigenvalue (Eq. 12/13, Sec. 2.4) | **Not implemented.** `dlam(:,j)` uses only the diagonal j==k terms; off-diagonal coupling terms (φₛᵀ(K'ₑ−λ̄M'ₑ)φₖ for s≠k) are never formed. | **MISSING** — consequence: when eigenvalues coalesce the sub-eigenvalue problem (Eq. 12) is not solved; MMA receives incorrect gradients for the multiple-eigenvalue case. In practice the optimizer still converges to near-optimal bimodal topologies, but convergence is not guaranteed to be monotone near coalescence. |
+| Generalised gradient vectors t_sk for N-fold eigenvalue (Eq. 12/13, Sec. 2.4) | **Not implemented.** `dlam(:,j)` uses only the diagonal j==k terms; off-diagonal coupling terms (φₛᵀ(K'ₑ−λ̄M'ₑ)φₖ for s≠k) are never formed. | **MISSING** — consequence: when eigenvalues coalesce the sub-eigenvalue problem (Eq. 12) is not solved; MMA receives incomplete gradients for the multiple-eigenvalue case. A bimodal local endpoint does not establish proximity to the published optimum. |
 | Chain rule through Heaviside projection: dλ/dx = dλ/dxPhys · dH/dxTilde (not in paper) | `reshape(-dlam(:,j)/lambda_ref,nely,nelx).*dH` then `bwd(g)` (lines 324–326). | **EXTRA** — correct chain rule for the Heaviside + PDE-filter pipeline not in the paper. |
 
 ### Step 3 — Iterative solution of optimisation sub-problem (Fig. 1; Eq. 19)
 
 | Paper | Code | Status |
 |-------|------|--------|
-| "Iterative solution of optimization sub-problem (19) for increments Δρₑ" — an **inner loop** until Δρₑ converged (Fig. 1, inner branch) | **Single** call to `mmasub` per outer iteration (line 354). No inner convergence loop. | **DIFFERENT** — paper explicitly shows an inner loop (see the "Increments Δρₑ converged?" diamond in Fig. 1). The current code exits the sub-problem after one MMA step. Task 1 adds the inner loop scaffold (`cfg.inner.enabled`). |
+| "Iterative solution of optimization sub-problem (19) for increments Δρₑ" — an **inner loop** until Δρₑ converged (Fig. 1, inner branch) | **Single** call to `mmasub` per outer iteration (line 354). No inner convergence loop. | **DIFFERENT** — paper explicitly shows an inner loop (see the "Increments Δρₑ converged?" diamond in Fig. 1). The local code exits the sub-problem after one MMA step; an optional inner-loop scaffold (`cfg.inner.enabled`) exists but does not establish paper fidelity. |
 | Sub-problem solved by MMA (Svanberg 1987) (Sec. 2.5, last paragraph) | `mmasub.m` + `subsolv.m` — Svanberg's September 2007 reference implementation. | **MATCH** |
 | Sub-problem (19b): β − [ωⱼ² + t_jjᵀΔρ] ≤ 0 for j = J = n+N (simple neighbour) (Eq. 19b) | `fval(j) = (Eb - lam_sorted(j)/lambda_ref)` (line 323). All J modes contribute separate constraints; no distinction between 19b (simple upper neighbour) and 19c (multiple modes). | **DIFFERENT** — because N is always assumed 1, the code treats all J modes identically rather than using the two-category structure of Eq. 19b vs 19c. |
 | Move limit on Δρₑ embedded in MMA asymptotes (Eq. 19f implicit in MMA) | Additional hard move limit: `xnew(1:nEl) = min(max(xnew(1:nEl), xval-move_lim), xval+move_lim)` (lines 374–376). | **EXTRA** — explicit trust-region clamp on top of the MMA asymptote move, not in the paper. Improves robustness during β continuation. |
@@ -99,7 +105,9 @@ for it = 1 : maxiter                          % outer loop, line 187
 
 ## 3. Features in the Code Not Present in the Paper
 
-These are practical additions made during implementation; they do not alter the underlying mathematical problem.
+These are practical additions made during implementation. Several alter the
+optimization path or objective and are part of why this code is classified as
+a local Olhoff-inspired implementation rather than a reproduction.
 
 | Feature | Code location | Rationale |
 |---------|---------------|-----------|
@@ -140,7 +148,7 @@ These are practical additions made during implementation; they do not alter the 
 | Multiplicity detection (N, R) | Fig. 1 Step 1, Sec. 2.5 | — | **MISSING** |
 | Simple eigenvalue sensitivity | Eq. 4/5, Sec. 2.2 | lines 288–296 | **MATCH** |
 | Generalised gradients (multiple eig) | Eq. 12/13, Sec. 2.4 | — | **MISSING** |
-| Inner loop (sub-problem iterations) | Fig. 1 Step 3 (inner branch) | — (scaffold added in Task 1) | **DIFFERENT** → scaffold |
+| Inner loop (sub-problem iterations) | Fig. 1 Step 3 (inner branch) | Optional local scaffold only | **DIFFERENT** |
 | MMA sub-problem solver | Sec. 2.5, Svanberg 1987 | `mmasub.m`, `subsolv.m` | **MATCH** |
 | Outer convergence criterion | Fig. 1 outer check | lines 438–450 | **DIFFERENT** (augmented) |
 | Design update | Fig. 1 Step 4 | line 392 | **MATCH** |

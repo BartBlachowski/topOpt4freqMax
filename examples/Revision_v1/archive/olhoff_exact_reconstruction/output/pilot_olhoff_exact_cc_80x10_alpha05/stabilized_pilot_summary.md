@@ -1,5 +1,8 @@
 # Stabilized OlhoffApproachExact Pilot
 
+> **Archived diagnostic.** Stabilization of this attempted reconstruction does
+> not validate paper fidelity and is not reviewer evidence.
+
 Generated: 2026-06-30T08:22:05Z
 
 ## Scope

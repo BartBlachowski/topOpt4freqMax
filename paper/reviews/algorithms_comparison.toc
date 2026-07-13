@@ -30,7 +30,9 @@
 \contentsline {section}{\numberline {6}Code Changes Required}{16}{section.6}%
 \contentsline {section}{\numberline {7}New Experiments Required}{16}{section.7}%
 \contentsline {section}{\numberline {8}Algorithm Pseudocodes and Complexity Analysis}{19}{section.8}%
-\contentsline {subsection}{\numberline {8.1}Algorithm 1: Olhoff--Du Bound Formulation}{19}{subsection.8.1}%
+\contentsline {subsection}{\numberline {8.1}Algorithm 1: Published Olhoff--Du Bound Formulation (Literature Background)}{19}{subsection.8.1}%
 \contentsline {subsection}{\numberline {8.2}Algorithm 2: Yuksel--Yilmaz Two-Stage Static Method}{20}{subsection.8.2}%
 \contentsline {subsection}{\numberline {8.3}Algorithm 3: Proposed Quasi-Static Approximation}{21}{subsection.8.3}%
 \contentsline {subsection}{\numberline {8.4}Complexity Analysis and Comparison}{22}{subsection.8.4}%
+% NON-AUTHORITATIVE legacy auxiliary. algorithms_comparison.tex has no
+% table of contents; scientific scope is defined by the .tex source.

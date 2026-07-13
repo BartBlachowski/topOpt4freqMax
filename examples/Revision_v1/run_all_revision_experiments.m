@@ -31,6 +31,13 @@ function run_all_revision_experiments(mode, varargin)
 %
 %   Full stack traces are preserved and printed for all exceptions.
 %
+%   COMPARATOR SCOPE
+%   ----------------
+%   The EXP1 Olhoff branch selects "Olhoff", which dispatches only to the
+%   local analysis/OlhoffApproach implementation. OlhoffApproachExact and its
+%   reconstruction pilots are archived diagnostics and are not production
+%   stages, dependencies, fallback comparators, or reviewer evidence.
+%
 %   OUTPUT DIRECTORIES
 %   ------------------
 %   Each experiment writes to its own subdirectory under output/:
@@ -423,7 +430,7 @@ function stages = localBuildStages(od, nSamples, meshTable, alphaVals)
 stages = repmat(localEmptyStage(), 0, 1);
 
 stages(end+1, 1) = localMakeStage( ...
-    'exp1', 'EXP1', 'Performance table (timing + omega_1 statistics)', od.exp1, ...
+    'exp1', 'EXP1', 'Local-implementation performance table (timing + omega_1 statistics)', od.exp1, ...
     @() exp1_perf_table(nSamples, meshTable, od.exp1), ...
     @(r) localAccept_Exp1(r, od.exp1), ...
     {fullfile(od.exp1, 'exp1_perf_table_results.mat')}, ...
@@ -1405,6 +1412,15 @@ toolsDir  = fullfile(repoRoot, 'tools', 'Matlab');
 schemaDir = fullfile(repoRoot, 'scripts', 'revision_v1');
 if exist(toolsDir,  'dir') == 7, addpath(toolsDir);  end
 if exist(schemaDir, 'dir') == 7, addpath(schemaDir); end
-addpath(genpath(fullfile(repoRoot, 'analysis')));
+localAddActiveAnalysisPaths(repoRoot);
 addpath(scriptDir);
+end
+
+function localAddActiveAnalysisPaths(repoRoot)
+% Production allowlist: archived reconstruction trees must not enter the path.
+activeDirNames = {'ourApproach','OlhoffApproach','YukselApproach','elastic2D','LabandaApproach'};
+for iDir = 1:numel(activeDirNames)
+    activeDir = fullfile(repoRoot, 'analysis', activeDirNames{iDir});
+    if exist(activeDir, 'dir') == 7, addpath(genpath(activeDir)); end
+end
 end

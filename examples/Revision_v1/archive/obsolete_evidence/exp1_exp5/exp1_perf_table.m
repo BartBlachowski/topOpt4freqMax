@@ -1,5 +1,8 @@
 function results = exp1_perf_table(nSamples, meshSizes, outDir)
 %EXP1_PERF_TABLE  Performance table with omega_1, timing statistics, init cost.
+%   Comparator scope: "Olhoff" dispatches to analysis/OlhoffApproach only.
+%   This is a local Olhoff-inspired comparison; OlhoffApproachExact is an
+%   archived diagnostic and is never selected by this production experiment.
 %
 %   Addresses reviewer demands:
 %     V1/MR1 : Standard deviations for Table 1 timing and RAM.
@@ -55,7 +58,8 @@ data.optimization.filter.radius_units = 'element';
 
 nRes     = size(meshSizes,1);
 approaches   = {'Olhoff','Yuksel','OurApproach'};
-methodLabels = {'OlhoffApproach','YukselApproach','ProposedApproach'};
+methodLabels = {'OlhoffApproach (local Olhoff-inspired)', ...
+                'YukselApproach (local)', 'ProposedApproach'};
 nMethods     = numel(approaches);
 
 % Storage: (nRes, nMethods, nSamples)
@@ -299,5 +303,14 @@ function localEnsurePaths(scriptDir)
 repoRoot=fileparts(fileparts(scriptDir));
 toolsDir=fullfile(repoRoot,'tools','Matlab');
 if exist(toolsDir,'dir')==7, addpath(toolsDir); end
-addpath(genpath(fullfile(repoRoot,'analysis')));
+localAddActiveAnalysisPaths(repoRoot);
+end
+
+function localAddActiveAnalysisPaths(repoRoot)
+% Production allowlist: archived reconstruction trees must not enter the path.
+activeDirNames={'ourApproach','OlhoffApproach','YukselApproach','elastic2D','LabandaApproach'};
+for iDir=1:numel(activeDirNames)
+    activeDir=fullfile(repoRoot,'analysis',activeDirNames{iDir});
+    if exist(activeDir,'dir')==7, addpath(genpath(activeDir)); end
+end
 end

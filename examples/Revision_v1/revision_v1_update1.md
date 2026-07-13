@@ -118,9 +118,12 @@ its effect is evaluated through converged optimization outcomes.
    mode is the structure's lowest mode. Explain that the method targets a
    reference mode shape and does not necessarily maximize the fundamental
    frequency.
-7. Add one fair external-method comparison. Prefer the \(\alpha=1\)
-   single-mode case unless an equivalent two-mode objective is implemented for
-   the comparator.
+7. If the already planned external-method comparison is retained, use the
+   local `analysis/OlhoffApproach` implementation and label it "local
+   Olhoff-inspired implementation." Prefer the \(\alpha=1\) single-mode case
+   unless an equivalent two-mode objective already exists for that comparator.
+   Do not use `OlhoffApproachExact` and do not infer agreement with the
+   published Du--Olhoff optimum.
 
 ### Exp3: mesh convergence
 
@@ -197,24 +200,33 @@ otherwise. Report standard deviations for timing and memory, and explain their
 system-level variability; do not imply stochastic variation in deterministic
 frequencies or designs.
 
-Require convergence before including a run in frequency-gap or speedup claims.
+Require convergence before including a run in any local frequency-difference
+or runtime-ratio statement.
 Investigate the Yuksel 180--200 versus 1,000+ iteration discrepancy using
-matched stopping criteria and, where available, the reference implementation.
+matched stopping criteria and, where available, an author-provided Yuksel
+implementation. This task does not involve the archived Olhoff reconstruction.
 
-Keep comparator labels exact:
+Keep comparator scope explicit:
 
-- call the local modified implementation `Olhoff-inspired`;
-- claim performance against canonical Olhoff only after faithful reproduction;
-- otherwise remove canonical speedup and optimality language;
-- bound removed overhead explicitly if a canonical implementation cannot be
-  run.
+- the only Olhoff comparator in production is
+  `analysis/OlhoffApproach`, labelled "local Olhoff-inspired implementation";
+- `OlhoffApproachExact` is an archived diagnostic reconstruction attempt and
+  is excluded from all production runs, tables, figures, scaling fits, and
+  reviewer evidence;
+- do not claim a canonical Du--Olhoff reproduction, a frequency gap to the
+  published optimum, or a speedup relative to the canonical method;
+- any retained frequency difference, runtime ratio, convergence comparison,
+  or scaling fit applies only to the named local implementations.
 
-Recompute the scaling fit from corrected timing data. Replace the existing
-8.6%, 7.1x, and complexity claims unless the converged measurements reproduce
-them.
+Recompute the scaling fit from corrected timing data only if the existing P1
+comparison is retained. Remove the existing 8.6% gap-to-optimum and canonical
+7.1x speedup narratives; do not attempt to restore them through the archived
+reconstruction. Any replacement value must be explicitly local to
+`OlhoffApproach` and the other named repository implementations.
 
 **Gate P1:** no capped or methodologically mismatched result enters a table,
-speedup, gap, or scaling regression.
+local runtime ratio, local frequency-difference statement, or scaling
+regression.
 
 ## Workstream 6: Low-Mode and Grayness Diagnosis
 
@@ -252,7 +264,10 @@ Regenerate all affected tables and figures from accepted artifacts. Then:
 - correct manuscript Eq. 9 explicitly so that MAC uses the documented
   mass-weighted inner product implemented by the revision experiments;
 - reconcile OC/MMA descriptions and the actual contribution scope;
-- distinguish canonical methods from local modified implementations;
+- distinguish literature methods from local implementations and identify
+  `OlhoffApproach` as the sole local Olhoff-inspired comparator;
+- state that the `OlhoffApproachExact` reconstruction attempt is archived and
+  is not reviewer evidence;
 - replace unsupported speedup, gap, convergence, complexity, and
   no-spurious-mode claims;
 - report convergence, feasibility, grayness, MAC validity, and mesh evidence;
@@ -269,9 +284,10 @@ Regenerate all affected tables and figures from accepted artifacts. Then:
 
 The response letter must address every reviewer item individually and cite the
 exact manuscript location and supporting artifact. Adverse results must trigger
-narrative rewriting, not selective omission. In particular, the 8.6% gap,
-7.1x speedup, monotonicity, and 4.61x building-gain narratives are explicitly
-at risk until regenerated evidence is accepted.
+narrative rewriting, not selective omission. The 8.6% gap-to-published-optimum
+and canonical 7.1x speedup narratives are withdrawn and cannot be regenerated
+from the archived reconstruction. The monotonicity and 4.61x building-gain
+narratives remain evidence-contingent under their existing gates.
 
 ## Workstream 8: Reproducibility Package
 
@@ -301,13 +317,16 @@ Create:
 
 ### Tier 2: mandatory if the associated claim is retained
 
-- canonical Olhoff benchmark;
+- accepted local `OlhoffApproach` comparison evidence for any local
+  performance statement;
 - RAMP/Heaviside mitigation comparison;
 - claims of absence of spurious modes;
 - strong frozen-accuracy or monotonicity claims;
-- original 8.6%, 7.1x, or 4.61x headline numbers.
+- the 4.61x building-gain headline, if retained.
 
 If Tier 2 evidence cannot be completed, remove or narrow the associated claim.
+Canonical Du--Olhoff reproduction is not a Tier 2 task; that workstream is
+closed and archived.
 Do not substitute capped or partial results.
 
 ### Tier 3: useful supplementary additions

@@ -1,5 +1,8 @@
 function result = pilot_olhoff_exact_cc_160x20(outDir)
-%PILOT_OLHOFF_EXACT_CC_80X10  Du-Olhoff reproduction pilot: CC beam 80×10.
+%PILOT_OLHOFF_EXACT_CC_80X10  Archived reconstruction diagnostic: CC beam 80×10.
+% ARCHIVED DIAGNOSTIC ONLY (2026-07-13): unsuccessful reconstruction
+% attempt; not a production experiment, benchmark, or reviewer evidence.
+% Active local comparisons use analysis/OlhoffApproach.
 %
 % Scope: MATLAB only. OlhoffApproachExact solver only. Do not edit manuscript.
 % Purpose: test whether bound formulation + du2007_c1 mass suppresses

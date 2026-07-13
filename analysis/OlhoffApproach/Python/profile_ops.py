@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Profile individual operations of the Olhoff solver to find bottleneck."""
+"""Profile operations of the local Olhoff-inspired comparison solver."""
 from __future__ import annotations
 
 import sys

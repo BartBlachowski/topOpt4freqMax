@@ -1,5 +1,8 @@
 function result = pilot_olhoff_exact_cc_80x10_alpha05(outDir)
-%PILOT_OLHOFF_EXACT_CC_80X10_ALPHA05  Stabilized OlhoffExact pilot.
+%PILOT_OLHOFF_EXACT_CC_80X10_ALPHA05  Archived stabilization diagnostic.
+% ARCHIVED DIAGNOSTIC ONLY (2026-07-13): unsuccessful reconstruction
+% attempt; not a production experiment, benchmark, or reviewer evidence.
+% Active local comparisons use analysis/OlhoffApproach.
 %
 % Scope: MATLAB only; OlhoffApproachExact only.  This pilot changes one
 % stabilization parameter relative to the saved undamped 80x10 pilot:

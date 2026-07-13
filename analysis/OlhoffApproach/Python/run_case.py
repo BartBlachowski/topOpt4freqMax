@@ -40,7 +40,7 @@ def _save_freq_iteration_plot(freq_iter_omega: np.ndarray, case: str, nelx: int,
                 color=colors[j], label=f"$\\omega_{j + 1}$")
     ax.set_xlabel("Outer iteration")
     ax.set_ylabel("Frequency (rad/s)")
-    ax.set_title(f"Olhoff {case} frequency history", pad=8)
+    ax.set_title(f"Local Olhoff-inspired {case} frequency history", pad=8)
     ax.grid(True)
     ax.set_xlim(1, max(1, n_iter))
     ax.legend(loc="best")
@@ -101,7 +101,7 @@ def run_case(
             snapshot_every=max(0, snapshot_every),
         )
 
-        _plot_topology(res.xPhys_best, cfg.nely, cfg.nelx, res.omega_best, case_out / "final_plot.png", f"Olhoff {c}")
+        _plot_topology(res.xPhys_best, cfg.nely, cfg.nelx, res.omega_best, case_out / "final_plot.png", f"Local Olhoff-inspired {c}")
         _save_freq_iteration_plot(res.freq_iter_omega, c, cfg.nelx, cfg.nely, case_out)
         np.savez(
             case_out / "final_design_field.npz",
@@ -117,9 +117,10 @@ def run_case(
         target = PAPER_TARGETS[c]
         summary = (
             f"Case {c}\n"
-            f"initial paper omega1: {target['init']:.1f}\n"
-            f"optimal paper omega1: {target['opt']:.1f}\n"
-            f"code omega1: {res.omega_best:.4f}\n"
+            "scope: local Olhoff-inspired diagnostic; not reconstruction validation\n"
+            f"published initial omega1 (context): {target['init']:.1f}\n"
+            f"published optimum omega1 (context; no gap inference): {target['opt']:.1f}\n"
+            f"local endpoint omega1: {res.omega_best:.4f}\n"
         )
         (case_out / "summary.txt").write_text(summary, encoding="utf-8")
         created.append(case_out)
@@ -128,7 +129,7 @@ def run_case(
 
 
 def _build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(description="Run Olhoff SIMP+MMA benchmark.")
+    parser = argparse.ArgumentParser(description="Run the local Olhoff-inspired SIMP+MMA comparison.")
     parser.add_argument("--case", default="all", choices=["all", "CC", "CS", "SS"], help="Boundary-condition case")
     parser.add_argument("--quick", action="store_true", help="Reduced mesh/iterations for smoke tests")
     parser.add_argument("--out", type=Path, default=None, help="Output base folder")

@@ -4,9 +4,9 @@ function [rho_e, drho_dx, m, dm_dx] = our_mass_interpolation(x, rho0, rho_min, m
 % The default power law preserves the previous implementation:
 %   rho_e = rho_min + x^pmass * (rho0 - rho_min).
 %
-% The du2007_c1 option ports Du & Olhoff Eq. 4b from
-% analysis/OlhoffApproachExact/Matlab/mass_interp.m, then applies the same
-% rho_min/rho0 scaling used by ourApproach.
+% The du2007_c1 option implements the normalized coefficient published in
+% Du & Olhoff (2007), Eq. 4b, then applies the rho_min/rho0 scaling used by
+% ourApproach. The archived reconstruction is not a source dependency.
 
 if nargin < 4 || isempty(mode)
     mode = 'power';

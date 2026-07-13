@@ -1,6 +1,13 @@
 # Phase 4 — Decision: is a new clean-room implementation required?
 
-## Decision
+> **Superseded (2026-07-13).** This intermediate decision predates the completed
+> reconstruction campaign. The final verdict is that a paper-faithful
+> Du--Olhoff reconstruction could not be established, most plausibly because
+> of benchmark under-specification or unpublished implementation details. No
+> further reconstruction task is active, and none of these artifacts is
+> reviewer evidence.
+
+## Historical decision
 
 **No full new optimizer reimplementation is warranted as a deliverable right now.** The primary deliverables (a trustworthy paper-derived specification and a discrepancy analysis) are complete and have been **empirically validated** at the paper's own first gate. A from-scratch optimizer would re-derive components that the spec already *confirms* are correctly implemented in `OlhoffApproachExact`, and would not, by itself, resolve the one genuinely open question (which basin the optimum lives in).
 
@@ -27,7 +34,7 @@ A reconstruction is justified only if the goal shifts from "validate the spec" (
 
 This is a focused experiment of perhaps a few hundred lines, **not** a parallel framework. It is deliberately **not** built now because: (a) the mission's primary deliverable is the spec + analysis, which are done; (b) it would not be "clean-room of architecture" so much as "the confirmed core + two knobs"; and (c) it is a meaningful new effort that should be explicitly requested rather than assumed.
 
-## Recommendation
+## Historical recommendation (closed; not an active TODO)
 
 - **Treat Phases 1–3 + the FE verification as the deliverable.** The spec is trustworthy and the discrepancy is fully characterized and evidence-backed.
 - **If benchmark reproduction is desired**, green-light the focused Python reconstruction above. Its success criterion is not "match 456.4 at any cost" but "with paper-faithful settings + minimal trust region, does the optimum converge to the connected bimodal Fig. 3c, or to the feasible disconnected basin?" — which is the real open scientific question this whole exercise surfaced.

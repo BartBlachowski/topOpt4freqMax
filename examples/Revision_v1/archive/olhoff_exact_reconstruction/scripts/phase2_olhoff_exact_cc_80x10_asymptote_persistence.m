@@ -1,6 +1,8 @@
 function result = phase2_olhoff_exact_cc_80x10_asymptote_persistence(outDir)
 %PHASE2_OLHOFF_EXACT_CC_80X10_ASYMPTOTE_PERSISTENCE
 % Phase 2: preserve MMA asymptote state across outer iterations.
+% ARCHIVED DIAGNOSTIC ONLY (2026-07-13): closed reconstruction campaign;
+% not a production experiment, benchmark, or reviewer evidence.
 
 warning('off', 'MATLAB:nearlySingularMatrix');
 warning('off', 'MATLAB:singularMatrix');

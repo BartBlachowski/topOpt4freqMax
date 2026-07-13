@@ -1,0 +1,437 @@
+diff --git a/examples/Revision_v1/run_all_revision_experiments.m b/examples/Revision_v1/run_all_revision_experiments.m
+index 5e43eb6..e05bedd 100644
+--- a/examples/Revision_v1/run_all_revision_experiments.m
++++ b/examples/Revision_v1/run_all_revision_experiments.m
+@@ -566,7 +566,7 @@ function localRunSmokeVerification(scriptDir, outRoot) %#ok<DEFNU>
+ st.tag = tag;
+ st.desc = desc;
+ st.outDir = outDir;
+-st.runFn = @() error('run_all:A4NotImplemented', '%s', reason);
++st.runFn = @() localRaiseNotImplemented(reason);
+ st.acceptFn = @(r) localAccept_NotImplemented(r, reason);
+ st.requiredArtifacts = {};
+ st.resultJson = fullfile(outDir, sprintf('%s_stage_result.json', key));
+@@ -1186,6 +1186,19 @@ function localPreflight(stages, opts, mode)
+ %  ACCEPTANCE GATES
+ % =========================================================================
+ 
++function res = localRaiseNotImplemented(reason)
++%LOCALRAISENOTIMPLEMENTED  Fail loud when a mandatory placeholder stage is
++%   dispatched (only reachable via stage mode; preflight blocks full/fast).
++%
++%   Declared WITH an output argument on purpose.  localRunAndAccept calls
++%   res = stage.runFn(), so an anonymous handle wrapping a bare error() raises
++%   MATLAB:maxlhs ("Too many output arguments") and masks the real reason.
++%   Routing through a named 1-output function makes the intended
++%   run_all:A4NotImplemented identifier surface instead.
++res = []; %#ok<NASGU>
++error('run_all:A4NotImplemented', '%s', reason);
++end
++
+ function [pass, condition] = localAccept_NotImplemented(~, reason)
+ %LOCALACCEPT_NOTIMPLEMENTED  A placeholder stage can never be accepted.
+ pass = false;
+@@ -1306,6 +1319,12 @@ function localPreflight(stages, opts, mode)
+ 
+ function [pass, condition] = localAccept_Exp2b(res, outDir)
+ %LOCALACCEPT_EXP2B  Acceptance checks for exp2b_building.
++%
++%   Every alpha must satisfy the declared revision acceptance rule via
++%   CHECK_REVISION_RUN, and must carry MAC evidence.  Previously nIter was
++%   required to exist but its value was never compared with the cap, so the
++%   capped alpha=1.00 and alpha=0.75 runs were accepted; and an alpha with no
++%   MAC data was skipped rather than rejected.
+ 
+ pass = false; condition = '';
+ 
+@@ -1313,9 +1332,11 @@ function localPreflight(stages, opts, mode)
+     condition = 'returned empty or non-struct result'; return;
+ end
+ 
+-for fn = {'omega1', 'omega2', 'grayness', 'nIter'}
++for fn = {'omega1', 'omega2', 'grayness', 'nIter', 'macData', ...
++          'max_iters', 'design_change_tol', 'success', 'design_change'}
+     if ~isfield(res, fn{1})
+-        condition = sprintf('required field missing: %s', fn{1}); return;
++        condition = sprintf('invalid result schema: required field missing: %s', fn{1});
++        return;
+     end
+ end
+ 
+@@ -1324,26 +1345,42 @@ function localPreflight(stages, opts, mode)
+     macThresh = res.MAC_threshold;
+ end
+ 
+-% Required NaN: omega1, omega2
++% Required NaN: omega1, omega2, grayness
+ [nanOk, msg] = localCheckNoNaN(res.omega1, 'omega1');
+ if ~nanOk, condition = msg; return; end
+ 
+ [nanOk, msg] = localCheckNoNaN(res.omega2, 'omega2');
+ if ~nanOk, condition = msg; return; end
+ 
+-% MAC threshold
+-if isfield(res, 'macData')
+-    for i = 1:numel(res.macData)
+-        macD = res.macData{i};
+-        if isempty(macD) || ~isfield(macD, 'best_mac') || isempty(macD.best_mac)
+-            continue;
+-        end
+-        if macD.best_mac(1) < macThresh
+-            condition = sprintf( ...
+-                'alpha index %d: tracked mode MAC = %.3f < threshold %.2f', ...
+-                i, macD.best_mac(1), macThresh);
+-            return;
+-        end
++[nanOk, msg] = localCheckNoNaN(res.grayness, 'grayness');
++if ~nanOk, condition = msg; return; end
++
++nAlpha = numel(res.alphaVals);
++for i = 1:nAlpha
++    label = sprintf('EXP2b alpha=%.2f', res.alphaVals(i));
++
++    % Declared acceptance rule: completed, not capped, converged.
++    run = struct( ...
++        'success',       logical(res.success(i)), ...
++        'iterations',    res.nIter(i), ...
++        'cap',           res.max_iters, ...
++        'design_change', res.design_change(i), ...
++        'tol',           res.design_change_tol);
++    [ok, why] = check_revision_run(label, run);
++    if ~ok, condition = why; return; end
++
++    % Mode evidence must be PRESENT, not merely non-contradictory.
++    macD = res.macData{i};
++    if isempty(macD) || ~isfield(macD, 'best_mac') || isempty(macD.best_mac)
++        condition = sprintf( ...
++            '%s: missing convergence metadata (no MAC data); tracked-mode validity cannot be verified', ...
++            label);
++        return;
++    end
++    if macD.best_mac(1) < macThresh
++        condition = sprintf('%s: tracked mode MAC = %.3f < threshold %.2f', ...
++            label, macD.best_mac(1), macThresh);
++        return;
+     end
+ end
+ 
+diff --git a/examples/Revision_v1/exp2b_building.m b/examples/Revision_v1/exp2b_building.m
+index a7dd45c..4981cf6 100644
+--- a/examples/Revision_v1/exp2b_building.m
++++ b/examples/Revision_v1/exp2b_building.m
+@@ -64,6 +64,15 @@
+ macData_cell = cell(nAlpha,1);
+ xFinal_cell  = cell(nAlpha,1);
+ 
++% Acceptance metadata (recorded, never used to alter the computation).
++% nIter was already stored but never checked against the cap, so the capped
++% alpha=1.00 and alpha=0.75 runs were accepted.  These fields let
++% localAccept_Exp2b apply the declared rule.
++success_arr = false(nAlpha,1);
++dchange_arr = NaN(nAlpha,1);    % final design change (NaN if unreported)
++iterCap     = double(data.optimization.max_iters);
++dchangeTol  = double(data.optimization.convergence_tol);
++
+ for i = 1:nAlpha
+     alpha = alphaVals(i);
+     fprintf('--- alpha = %.2f ---\n', alpha);
+@@ -74,12 +83,16 @@
+     if isfile(csvBefore), delete(csvBefore); end
+ 
+     try
+-        [xFin, omega, ~, nIter, ~] = run_topopt_from_json(data);
++        % 6th output = solver diagnostics.  Requesting it does not change the
++        % computation; it only exposes termination/convergence data.
++        [xFin, omega, ~, nIter, ~, info] = run_topopt_from_json(data);
+         omega1_arr(i)    = omega(1);
+         omega2_arr(i)    = omega(2);
+         grayness_arr(i)  = mean(4*xFin.*(1-xFin));
+         nIter_arr(i)     = nIter;
+         xFinal_cell{i}   = xFin;
++        dchange_arr(i)   = localFinalDesignChange(info);
++        success_arr(i)   = true;
+         fprintf('  omega1=%.4f, omega2=%.4f, g=%.4f, nIter=%d\n', ...
+             omega(1), omega(2), grayness_arr(i), nIter);
+     catch ME
+@@ -107,12 +120,29 @@
+ 
+ results = struct('alphaVals', alphaVals, 'omega1', omega1_arr, 'omega2', omega2_arr, ...
+     'grayness', grayness_arr, 'nIter', nIter_arr, 'macData', {macData_cell}, ...
+-    'xFinal', {xFinal_cell}, 'MAC_threshold', MAC_THRESHOLD);
++    'xFinal', {xFinal_cell}, 'MAC_threshold', MAC_THRESHOLD, ...
++    'max_iters', iterCap, 'design_change_tol', dchangeTol, ...
++    'success', success_arr, 'design_change', dchange_arr);
+ 
+ save(fullfile(outDir,'exp2b_building_results.mat'),'results');
+ fprintf('Results saved.\n');
+ end
+ 
++% =========================================================================
++function dc = localFinalDesignChange(info)
++%LOCALFINALDESIGNCHANGE  Last reported design change, or NaN when the solver
++%   does not report one.  NaN is preserved deliberately: the acceptance gate
++%   must reject a run whose convergence cannot be verified rather than assume it.
++dc = NaN;
++if ~isstruct(info), return; end
++if isfield(info, 'cr2_history') && isstruct(info.cr2_history) && ...
++        isfield(info.cr2_history, 'design_change')
++    v = info.cr2_history.design_change(:);
++    v = v(isfinite(v));
++    if ~isempty(v), dc = v(end); end
++end
++end
++
+ % =========================================================================
+ function localPrintMACDiagnostic(alpha, macD, omega_init, MAC_THRESH)
+ if isempty(macD) || isempty(macD.best_mode), return; end
+diff --git a/scripts/revision_v1/check_revision_run.m b/scripts/revision_v1/check_revision_run.m
+new file mode 100644
+index 0000000..7ace445
+--- /dev/null
++++ b/scripts/revision_v1/check_revision_run.m
+@@ -0,0 +1,95 @@
++function [ok, reason] = check_revision_run(label, run)
++%CHECK_REVISION_RUN  Apply the declared revision acceptance rule to one run.
++%
++%   [ok, reason] = check_revision_run(label, run)
++%
++%   This introduces NO new convergence criteria.  It is the same rule already
++%   implemented by exp2_authoritative_sweep/localClassify and stated in
++%   REVISION_EXECUTION_PLAN.md:
++%
++%       not capped  AND  design_change <= declared tolerance
++%
++%   where the declared tolerance is the run's own configured
++%   optimization.convergence_tol, and "capped" means iterations >= max_iters.
++%   A run that reaches the iteration cap is a FAILURE, not a result.
++%
++%   RUN is a struct describing a single completed optimization:
++%     .success        logical  -- solver returned without exception
++%     .iterations     double   -- iterations executed
++%     .cap            double   -- iteration cap (optimization.max_iters)
++%     .design_change  double   -- final design change (NaN if not reported)
++%     .tol            double   -- declared tolerance (optimization.convergence_tol)
++%
++%   Rejection order (first match wins):
++%     R1  invalid schema                -- run is not a struct / fields absent
++%     R2  success = false               -- the run did not complete
++%     R3  missing termination metadata  -- iterations or cap absent/non-finite
++%     R4  iteration cap reached         -- iterations >= cap
++%     R5  missing convergence metadata  -- design_change absent or NaN
++%     R6  unconverged design change     -- design_change > tol
++%
++%   See also CHECK_EXPERIMENT_RESULT.
++
++ok = false;
++
++% ---- R1: schema ---------------------------------------------------------
++if ~isstruct(run) || ~isscalar(run)
++    reason = sprintf('%s: invalid result schema (not a scalar struct)', label);
++    return;
++end
++required = {'success', 'iterations', 'cap', 'design_change', 'tol'};
++missing = required(~isfield(run, required));
++if ~isempty(missing)
++    reason = sprintf('%s: invalid result schema (missing field(s): %s)', ...
++        label, strjoin(missing, ', '));
++    return;
++end
++
++% ---- R2: run completed --------------------------------------------------
++if ~islogical(run.success) && ~isnumeric(run.success)
++    reason = sprintf('%s: invalid result schema (success is not logical)', label);
++    return;
++end
++if ~run.success
++    reason = sprintf('%s: success=false (the run did not complete)', label);
++    return;
++end
++
++% ---- R3: termination metadata ------------------------------------------
++if isempty(run.iterations) || ~isfinite(run.iterations) || run.iterations < 0 || ...
++        isempty(run.cap) || ~isfinite(run.cap) || run.cap <= 0
++    reason = sprintf(['%s: missing termination metadata ' ...
++        '(iterations/cap absent or non-finite); cannot prove the run was not capped'], label);
++    return;
++end
++
++% ---- R4: iteration cap = failure ---------------------------------------
++if run.iterations >= run.cap
++    reason = sprintf(['%s: reached iteration cap %d/%d without converging; ' ...
++        'a capped run is a failure, not a result'], ...
++        label, round(run.iterations), round(run.cap));
++    return;
++end
++
++% ---- R5: convergence metadata ------------------------------------------
++if isempty(run.design_change) || ~isfinite(run.design_change)
++    reason = sprintf(['%s: missing convergence metadata ' ...
++        '(final design change not reported); convergence cannot be verified'], label);
++    return;
++end
++
++% ---- R6: declared tolerance --------------------------------------------
++if isempty(run.tol) || ~isfinite(run.tol) || run.tol <= 0
++    reason = sprintf('%s: invalid result schema (declared tolerance absent or non-positive)', label);
++    return;
++end
++if run.design_change > run.tol
++    reason = sprintf(['%s: final design change %.3e exceeds the declared ' ...
++        'tolerance %.3e (optimization.convergence_tol); run is unconverged'], ...
++        label, run.design_change, run.tol);
++    return;
++end
++
++ok = true;
++reason = '';
++end
+diff --git a/scripts/revision_v1/test_acceptance_gates.m b/scripts/revision_v1/test_acceptance_gates.m
+new file mode 100644
+index 0000000..a83e48a
+--- /dev/null
++++ b/scripts/revision_v1/test_acceptance_gates.m
+@@ -0,0 +1,144 @@
++function test_acceptance_gates()
++%TEST_ACCEPTANCE_GATES  Lightweight tests for the EXP1/EXP2b acceptance gates.
++%
++%   test_acceptance_gates()
++%
++%   Pure struct fixtures.  No solver, no MATLAB optimization run, no file I/O
++%   beyond a temporary directory.  Runs in well under one second.
++%
++%   Covers CHECK_REVISION_RUN, which is the single implementation of the
++%   declared revision acceptance rule used by localAccept_Exp1 and
++%   localAccept_Exp2b:
++%
++%       PASS  valid converged run
++%       FAIL  capped run
++%       FAIL  success = false
++%       FAIL  missing termination metadata
++%       FAIL  missing convergence metadata
++%       FAIL  invalid schema
++%       FAIL  design change above the declared tolerance
++
++fprintf('\n=== test_acceptance_gates ===\n');
++nPass = 0; nFail = 0;
++
++% Baseline: a valid, converged run (cap 2000, tol 2e-3).
++good = struct('success', true, 'iterations', 1052, 'cap', 2000, ...
++              'design_change', 1.66e-4, 'tol', 2e-3);
++
++% ---- PASS: valid converged result --------------------------------------
++[nPass, nFail] = expectPass('valid converged run', good, nPass, nFail);
++
++% ---- FAIL: capped run ---------------------------------------------------
++r = good; r.iterations = 2000;                       % iterations == cap
++[nPass, nFail] = expectFail('capped run (iterations == cap)', r, ...
++    'iteration cap', nPass, nFail);
++
++r = good; r.iterations = 2001;                       % iterations > cap
++[nPass, nFail] = expectFail('capped run (iterations > cap)', r, ...
++    'iteration cap', nPass, nFail);
++
++% A capped run must be rejected EVEN IF its design change looks converged.
++r = good; r.iterations = 2000; r.design_change = 1e-9;
++[nPass, nFail] = expectFail('capped run with small design change', r, ...
++    'iteration cap', nPass, nFail);
++
++% ---- FAIL: success = false ---------------------------------------------
++r = good; r.success = false;
++[nPass, nFail] = expectFail('success = false', r, 'success=false', nPass, nFail);
++
++% ---- FAIL: missing termination metadata --------------------------------
++r = good; r.iterations = NaN;
++[nPass, nFail] = expectFail('missing termination metadata (iterations NaN)', r, ...
++    'missing termination metadata', nPass, nFail);
++
++r = good; r.cap = NaN;
++[nPass, nFail] = expectFail('missing termination metadata (cap NaN)', r, ...
++    'missing termination metadata', nPass, nFail);
++
++r = good; r.cap = 0;
++[nPass, nFail] = expectFail('missing termination metadata (cap = 0)', r, ...
++    'missing termination metadata', nPass, nFail);
++
++% ---- FAIL: missing convergence metadata --------------------------------
++% This is the Olhoff/Yuksel case: the comparator reports no design change.
++r = good; r.design_change = NaN;
++[nPass, nFail] = expectFail('missing convergence metadata (design change NaN)', r, ...
++    'missing convergence metadata', nPass, nFail);
++
++r = good; r.design_change = [];
++[nPass, nFail] = expectFail('missing convergence metadata (design change empty)', r, ...
++    'missing convergence metadata', nPass, nFail);
++
++% ---- FAIL: invalid schema ----------------------------------------------
++[nPass, nFail] = expectFail('invalid schema (not a struct)', 42, ...
++    'invalid result schema', nPass, nFail);
++
++r = rmfield(good, 'design_change');
++[nPass, nFail] = expectFail('invalid schema (field removed)', r, ...
++    'invalid result schema', nPass, nFail);
++
++r = rmfield(good, 'cap');
++[nPass, nFail] = expectFail('invalid schema (cap removed)', r, ...
++    'invalid result schema', nPass, nFail);
++
++% ---- FAIL: design change above declared tolerance ----------------------
++r = good; r.design_change = 5.24e-3;                 % the CR2 Variant A value
++[nPass, nFail] = expectFail('design change above declared tolerance', r, ...
++    'exceeds the declared', nPass, nFail);
++
++r = good; r.design_change = 2.0e-3 + eps(2.0e-3);    % just above tol
++[nPass, nFail] = expectFail('design change marginally above tolerance', r, ...
++    'exceeds the declared', nPass, nFail);
++
++% Boundary: design_change exactly == tol is ACCEPTED (rule is <=, as declared).
++r = good; r.design_change = 2e-3;
++[nPass, nFail] = expectPass('design change exactly at tolerance', r, nPass, nFail);
++
++% ---- Regression: the two historically mis-accepted runs ----------------
++% EXP2b alpha=1.00 and alpha=0.75 terminated at 2000/2000 and were ACCEPTED by
++% the old gate.  They must now be rejected.
++r = struct('success', true, 'iterations', 2000, 'cap', 2000, ...
++           'design_change', 0.15522, 'tol', 2e-3);
++[nPass, nFail] = expectFail('regression: historically accepted capped EXP2b run', r, ...
++    'iteration cap', nPass, nFail);
++
++% EXP1: Olhoff comparator ran to its cap at every mesh.
++r = struct('success', true, 'iterations', 10000, 'cap', 10000, ...
++           'design_change', NaN, 'tol', 3e-3);
++[nPass, nFail] = expectFail('regression: capped Olhoff comparator', r, ...
++    'iteration cap', nPass, nFail);
++
++fprintf('\n  passed: %d   failed: %d\n', nPass, nFail);
++if nFail > 0
++    error('test_acceptance_gates:Failed', ...
++        '%d acceptance-gate test(s) failed.', nFail);
++end
++fprintf('  ALL ACCEPTANCE-GATE TESTS PASSED\n\n');
++end
++
++% =========================================================================
++function [nPass, nFail] = expectPass(name, run, nPass, nFail)
++[ok, reason] = check_revision_run('T', run);
++if ok
++    fprintf('  [PASS] %s\n', name);
++    nPass = nPass + 1;
++else
++    fprintf(2, '  [FAIL] %s -- expected accept, got reject: %s\n', name, reason);
++    nFail = nFail + 1;
++end
++end
++
++function [nPass, nFail] = expectFail(name, run, expectSubstring, nPass, nFail)
++[ok, reason] = check_revision_run('T', run);
++if ok
++    fprintf(2, '  [FAIL] %s -- expected reject, got ACCEPT\n', name);
++    nFail = nFail + 1;
++elseif ~contains(lower(reason), lower(expectSubstring))
++    fprintf(2, '  [FAIL] %s -- rejected for the wrong reason:\n         got: %s\n         want substring: %s\n', ...
++        name, reason, expectSubstring);
++    nFail = nFail + 1;
++else
++    fprintf('  [PASS] %s  (rejected: %s)\n', name, reason);
++    nPass = nPass + 1;
++end
++end

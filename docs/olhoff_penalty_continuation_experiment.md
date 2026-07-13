@@ -1,5 +1,11 @@
 # Du & Olhoff (2007) CC beam — SIMP penalty-continuation experiment
 
+> **Archived reconstruction diagnostic (2026-07-13).** This experiment is one
+> eliminated hypothesis within the unsuccessful `OlhoffApproachExact`
+> campaign. It is not production or reviewer evidence, and statements below
+> about preferred/global optima must be read only as historical hypotheses for
+> the attempted implementation.
+
 **Date:** 2026-06-18
 **Question:** Is SIMP penalty continuation (p: 1 → 3, stated in the paper as the
 normal procedure) the missing mechanism that kept Du & Olhoff's optimization in

@@ -1,5 +1,6 @@
 function results = exp5_scaling(perfResults, outDir)
-%EXP5_SCALING  Per-iteration scaling analysis (log-log) for all three methods.
+%EXP5_SCALING  Per-iteration scaling analysis (log-log) for three local implementations.
+%   The Olhoff series is OlhoffApproach only. OlhoffApproachExact is excluded.
 %
 %   Addresses reviewer demands:
 %     M4 (mn8) : Support or correct the O(n_e^1.3) per-iteration scaling claim
@@ -37,16 +38,17 @@ if ~isempty(perfResults) && isstruct(perfResults) && isfield(perfResults,'tIter_
     methodLabels = perfResults.methodLabels;
     nMethods = numel(methodLabels);
 else
-    fprintf('Using paper Table 1 values (reported averages over 10 runs).\n');
-    fprintf('Source: main.tex Table 1 -- per-iteration times.\n\n');
+    fprintf('Using embedded historical local-implementation values (diagnostic fallback).\n');
+    fprintf('These values are not accepted performance or canonical-method evidence.\n\n');
 
     tIter_data = [
-        0.09,  0.02,  0.02;  % 160x20:  Olhoff, Yuksel, Proposed
+        0.09,  0.02,  0.02;  % 160x20: local OlhoffApproach, local Yuksel, Proposed
         0.20,  0.03,  0.04;  % 240x30
         0.39,  0.05,  0.08;  % 320x40
         0.64,  0.08,  0.12;  % 400x50
     ];
-    methodLabels = {'OlhoffApproach','YukselApproach','ProposedApproach'};
+    methodLabels = {'OlhoffApproach (local Olhoff-inspired)', ...
+                    'YukselApproach (local)', 'ProposedApproach'};
     nMethods = numel(methodLabels);
 end
 

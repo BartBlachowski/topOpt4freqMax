@@ -1,6 +1,6 @@
 %% ========================================================================
-%  Olhoff & Du (2014) - Simply-Simply beam (SS)
-%  Natural frequency maximization with SIMP + MMA
+%  Local Olhoff-inspired comparison - Simply-Simply beam (SS)
+%  Published values are context only, not reconstruction-validation targets.
 %  ========================================================================
 clear; clc; close all;
 
@@ -43,14 +43,14 @@ paper = struct('init', 68.7, 'opt', 174.7);
 
 [omega_best, xPhys_best, diag_out] = topFreqOptimization_MMA(cfg, opts);
 
-fprintf('SS case: omega1 initial=%.1f (paper %.1f) | optimized=%.1f (paper %.1f)\n', ...
+fprintf('Local SS: omega1 initial=%.1f (published context %.1f) | endpoint=%.1f (published optimum context %.1f; no gap inference)\n', ...
     diag_out.initial.omega(1), paper.init, omega_best, paper.opt);
 
-figure('Name', 'Olhoff SS topology');
+figure('Name', 'Local Olhoff-inspired SS topology');
 theme("light");
 hold on;
 imgDisp = buildTopologyDisplayImage(xPhys_best, cfg.nelx, cfg.nely, opts.visualization_quality, true);
 imagesc(1 - imgDisp);
 set(gca, 'YDir', 'normal');
 axis equal tight off; colormap(gray(256));
-title(sprintf('SS: omega1=%.1f (paper: %.1f)', omega_best, paper.opt));
+title(sprintf('Local SS: omega1=%.1f (published context: %.1f)', omega_best, paper.opt));

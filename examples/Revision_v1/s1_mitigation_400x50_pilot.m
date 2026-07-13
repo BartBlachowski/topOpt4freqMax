@@ -4,8 +4,8 @@ function study = s1_mitigation_400x50_pilot(outDir)
 % Runs only the failed Exp3 400x50 alpha=1.00 setup with one mitigation:
 % mass interpolation exponent pmass = 6 instead of the baseline linear
 % pmass = 1. This is the closest existing ourApproach mass-penalization
-% control; Du-Olhoff du2007_c1 exists in OlhoffExact but is not implemented
-% in ourApproach.
+% control; the distinct du2007_c1 interpolation is defined by Du--Olhoff
+% Eq. 4b and is not selected in this pilot.
 
 if nargin < 1 || isempty(outDir)
     scriptDir = fileparts(mfilename('fullpath'));
@@ -429,7 +429,7 @@ fprintf(fid, '# S1 Mitigation 400x50 Summary\n\n');
 fprintf(fid, 'Scope: one mitigated Exp3 400x50 alpha=1.00 run only. No manuscript edits, no full Exp2/Exp3 rerun, and no CR2/A4/P1 run.\n\n');
 fprintf(fid, '## Mitigation\n\n');
 fprintf(fid, 'Changed exactly one mitigation parameter: mass interpolation exponent `pmass` from baseline `1` to mitigated `6`.\n\n');
-fprintf(fid, 'Du-Olhoff `du2007_c1` is implemented in `analysis/OlhoffApproachExact/Matlab/mass_interp.m`, but not in `ourApproach`; this pilot uses the closest existing `ourApproach` mass-penalization option.\n\n');
+fprintf(fid, 'Du--Olhoff Eq. 4b (`du2007_c1`) is a separate published mass interpolation; this pilot uses the closest existing `ourApproach` mass-penalization option and does not claim to reproduce Eq. 4b.\n\n');
 fprintf(fid, '## Classification\n\n');
 fprintf(fid, '**%s.** %s\n\n', study.classification.label, study.classification.reason);
 fprintf(fid, '## Acceptance Gates\n\n');

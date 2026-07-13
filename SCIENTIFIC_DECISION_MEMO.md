@@ -1,12 +1,41 @@
 # SCIENTIFIC DECISION MEMO
 
-**Date:** 2026-06-29
+**Date:** 2026-06-29; comparator-evidence decision updated 2026-07-13
 **Purpose:** Conservative, reviewer-safe assessment of which original manuscript
 claims are supportable, which must be removed, and which can be reformulated
 as limitations based solely on documented artifacts.
 **Scope:** A0, I1, V1, CR2, Exp2, Exp3, S1 baseline, S1 pmass=6 mitigation,
-Eq.4b hypothesis test. Does not cover A4, P1, MS, RP.
+Eq.4b hypothesis test, and the final disposition of the
+`OlhoffApproachExact` reconstruction campaign. A4, P1, MS, and RP remain
+unexecuted workstreams except where this memo removes obsolete comparator tasks.
 **Constraint:** No experiment reruns. No solver code edits. No manuscript edits.
+
+---
+
+## Final comparator-evidence decision
+
+A paper-faithful reconstruction of Du and Olhoff (2007) could not be
+established. The completed `OlhoffApproachExact` campaign investigated and
+eliminated the implemented FE formulation, interpolation, sensitivities,
+generalized gradients, multiplicity handling, mode tracking, optimizer
+stabilization, persistent MMA, the tested regularization variants, and the
+tested support interpretations as sufficient explanations of the benchmark
+discrepancy. Benchmark under-specification or unpublished implementation details
+are the most plausible remaining explanation.
+
+Therefore:
+
+- `OlhoffApproachExact` and `OlhoffApproachExactOpus` are archived diagnostic
+  reconstruction attempts;
+- their runs, summaries, tables, and figures are not reviewer evidence;
+- no production experiment or active task may depend on them;
+- no frequency gap to the Du--Olhoff optimum, canonical speedup, convergence
+  comparison, or scaling claim may be derived from them;
+- any retained Olhoff comparison uses only `analysis/OlhoffApproach`, described
+  as the local Olhoff-inspired comparison implementation.
+
+This decision closes the reconstruction workstream. It does not create a
+replacement experiment.
 
 ---
 
@@ -187,8 +216,10 @@ due to localized-mode pathology. No mesh-convergence evidence exists.
 ### 2.5 Performance claims: 7.1× speedup, 8.6% frequency gap, 4.61× building gain
 
 **Why they must be removed:** P1 not run. No instrumented timing data
-exists under the authoritative formulation. The frequency gap cannot be
-stated without a converged Olhoff-inspired comparison on the same problem.
+exists under the authoritative formulation. A frequency difference cannot be
+stated without a converged run of the named local `OlhoffApproach` comparison
+on the same problem, and it must not be described as a gap to the published
+Du--Olhoff optimum.
 The building gain cannot be stated without converged building results.
 
 **Action:** Remove all three numbers from manuscript and response letter.
@@ -219,11 +250,13 @@ exponents will be recomputed from instrumented benchmarks.
 ### 2.8 Comparator labeled as "Olhoff" or "Yuksel-Yilmaz" without qualification
 
 **Why it must be removed:** Implementations are local modifications of those
-methods. Faithful reproduction has not been verified.
+methods. The Olhoff reconstruction campaign is complete and did not establish a
+paper-faithful Du--Olhoff implementation. Fidelity of the separate local
+Yuksel--Yilmaz-inspired implementation has not been established either.
 
-**Action:** Relabel as "Olhoff-inspired implementation" and
-"Yuksel-Yilmaz-inspired implementation" throughout all tables, figures,
-and text. Remove "canonical" language.
+**Action:** Relabel them as "local Olhoff-inspired implementation" and "local
+Yuksel--Yilmaz-inspired implementation" throughout all tables, figures, and
+text. The archived reconstruction cannot be used to restore a canonical label.
 
 ---
 
@@ -280,7 +313,7 @@ as future work."
 **Original claim (to remove):** 7.1× speedup, 8.6% gap.
 
 **Reformulation:** "The proposed method eliminates the per-iteration eigensolve
-required by the Olhoff-inspired approach, replacing it with a single static
+used by the local `OlhoffApproach` implementation, replacing it with a single static
 linear solve per iteration. This is expected to reduce per-iteration cost by
 a factor proportional to the Krylov solver overhead. Quantitative speedup
 measurements require instrumented benchmarks and are not reported in this
@@ -330,9 +363,10 @@ in the response letter or revised manuscript with appropriate qualification.
 | Topology figures from Exp3 400×50 | Mode-invalid; localized modes; topology anti-correlated with 200×25 |
 | Comparison of 200×25 vs 400×50 topologies as mesh convergence | Forbidden — designs are unrelated |
 | Table 3 timing values (algorithms_comparison.tex) as stated | Placeholder values; exponents inconsistent with data |
-| Any speedup table showing 7.1× or similar | No accepted evidence base |
-| Any frequency gap table showing 8.6% | No accepted evidence base |
+| Any speedup table showing 7.1× or similar | No accepted evidence base; no canonical comparison is available |
+| Any frequency gap table showing 8.6% | No accepted evidence base; it cannot be framed as distance to the Du--Olhoff optimum |
 | Performance comparison table with unqualified "Olhoff" / "Yuksel-Yilmaz" labels | Local implementations; not canonical |
+| Any `OlhoffApproachExact` result, table, topology, frequency history, or convergence plot | Archived unsuccessful reconstruction attempt; diagnostic only |
 | Any figure claiming "no spurious modes" | Directly contradicted |
 | Topology figures from pmass=6 run presented as "clean" | 9/10 modes still localized |
 | Eq.4b result as a positive demonstration | Run capped and rejected |
@@ -380,18 +414,14 @@ that is not eliminated by reducing move_limit. Resolution requires either:
 can be produced. Option (a) is scientifically defensible; option (c) is the
 minimum safe path for R1.
 
-### 6.3 Performance claims require P1 but are structurally achievable
+### 6.3 Local performance comparisons require P1
 
-The timing measurements needed for P1 require solver instrumentation and
-≥10 benchmark runs per mesh. There is no scientific barrier — the code works;
-timing just needs to be measured. The corrected scaling exponent will likely
-be ≈1.07–1.11 based on current placeholder data, which still qualitatively
-supports the complexity analysis.
-
-**Assessment:** P1 is achievable with ≈1–2 weeks of implementation and
-benchmark runs. The headline speedup claim may change when measured properly,
-but the qualitative advantage of eliminating eigensolves per iteration is
-structurally sound.
+The existing P1 plan may be completed only as a comparison among named local
+implementations. Its Olhoff branch is `analysis/OlhoffApproach`; the archived
+reconstruction is excluded. No outcome may be presented as speedup versus a
+canonical Du--Olhoff implementation or as scaling of the published method.
+Until accepted P1 artifacts exist, retain only qualitative operation-count
+reasoning and make no numerical runtime or scaling claim.
 
 ### 6.4 The α-sweep narrative depends on fixing the localized-mode problem
 
@@ -478,10 +508,12 @@ and must be removed. Identify Heaviside projection as the recommended fix
 
 ### 7.5 Performance claims
 
-No instrumented timing data exists. The placeholder values in Table 3
-(`algorithms_comparison.tex`) do not constitute evidence and the stated exponents
-are inconsistent with the data they supposedly summarize. All headline performance
-numbers (speedup, frequency gap, scaling exponent) must be removed until P1 is run.
+No instrumented timing data exists. The former placeholder tables in
+`algorithms_comparison.tex` did not constitute evidence and have been removed.
+The 8.6% gap to the published optimum and canonical 7.1× speedup are withdrawn
+permanently, not deferred to P1. Any new runtime ratio, local frequency
+difference, or scaling exponent requires P1 and must name the local
+implementations to which it applies.
 
 **Minimum acceptable response-letter treatment:** State that timing benchmarks
 are being regenerated with isolated diagnostic overhead removed. Provide a

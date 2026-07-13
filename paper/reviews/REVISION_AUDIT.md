@@ -7,6 +7,18 @@
 and `final_review_V1.tex` / `final_review_V2.tex` (AI consensus: CR/MR/M items).
 **Date of audit:** 2026-06-19
 
+**Comparator-evidence update:** 2026-07-13
+
+> **Current-status override.** The completed `OlhoffApproachExact`
+> reconstruction campaign did not establish a paper-faithful Du--Olhoff
+> implementation. All earlier language in this audit about recovering,
+> reproducing, or validating the 8.6% gap to the published optimum or a 7.1x
+> speedup over a canonical implementation is superseded. Those claims are
+> withdrawn. `OlhoffApproach` is the sole active Olhoff-inspired comparator and
+> may support only explicitly local comparisons after the normal evidence gates
+> pass. The reconstruction artifacts are archived diagnostics, not reviewer
+> evidence.
+
 ---
 
 ## Verdict
@@ -61,14 +73,14 @@ Legend: ✅ delivered with usable data · ⚠️ delivered but data is problemat
 |---|---|---|---|
 | A0 | Align frozen-load definition (ω vs ω², solid vs initial baseline); rerun | exp2 (semi_harmonic vs harmonic-Eq.7 comparison) | ❌ designed in exp2 but **exp2 failed → no data**, and **still unresolved in `main.tex`** (see §2.5) |
 | A1 | Reframe novelty vs Yuksel | main.tex §Related work | 📝 partial |
-| A2 | Table 1 runtime breakdown (setup / per-iter / iters) | exp1 (`tSetup`, `tProbe`, `tPerIterAdj`), `save_frequency_iterations=false` | ⚠️ delivered, **but Olhoff capped at 2000 iters (see §2)** |
+| A2 | Table 1 runtime breakdown (setup / per-iter / iters) | exp1 (`tSetup`, `tProbe`, `tPerIterAdj`), `save_frequency_iterations=false` | ⚠️ delivered, **but local `OlhoffApproach` capped at 2000 iters (see §2)** |
 | A3 | Explain Yuksel 1083/1723-iter discrepancy | exp1 reproduces high counts (298/698/1610/878) | 🟡 data only; **no explanation** (text task) |
 | A4 | Approx-error / N-refresh study (plan: SS-beam 400×50, N∈{∞,50,10,5,1}) | exp4 variants C/D | ⚠️ only **160×20, N∈{0,50}**, and result is adverse (§2) |
 | A5 | Mode coalescence + a-posteriori mode check | exp2 (α=0.75 near-coalescence), exp2b MAC | 🟡 exp2b only; **exp2 failed** |
 | A6 | Reframe efficiency claim | main.tex §6 | 📝 depends on exp1 timing (problematic) |
 | **CR1** | **Verify/correct Table 3 Φ₂ α=0.75 non-monotone gain** | **exp2** full MAC/freq diagnostic | **❌ exp2 failed → no output, and `main.tex` L469 still asserts the monotonicity its own table breaks (see §2.6)** |
 | CR2 | Validate omitted load sensitivity (Eq. 6) | exp4 FD check + Variant A vs B + direct ratio | ⚠️ rigorous, **but validates the implemented `semi_harmonic` load, not the documented Eq. 5–6 (`ω²M(x)Φ`)** — FD relerr ≈ 1e-7; A vs B = +1.13 % (see §2.5) |
-| CR3 | Relabel Olhoff comparator "in-house"; include/exclude table | main.tex (+ `algorithms_comparison.tex`) | 📝 "in-house" appears once; partial |
+| CR3 | Identify the empirical Olhoff comparator accurately | main.tex (+ `algorithms_comparison.tex`) | 📝 must say "local Olhoff-inspired implementation"; the archived reconstruction is excluded |
 
 ### Major (AI-review MR + Reviewer-3/4 B-group)
 
@@ -80,7 +92,7 @@ Legend: ✅ delivered with usable data · ⚠️ delivered but data is problemat
 | MR4 / V4 | Define + apply MAC validity threshold | exp2b (0.8 threshold; flags building Φ₂) | ✅ for building; 🟡 clamped (exp2 failed) |
 | **MR5 / V3** | **Mesh-convergence study (≥2 meshes)** | **exp3** | **❌ exp3 failed → no data** |
 | MR6 / C4 | Frozen-mode reliability diagnostic | exp4 C vs D | ⚠️ delivered but **adverse: −62 %** (§2) |
-| MR7 | Scope headline claims to benchmark/mesh | main.tex | 📝 |
+| MR7 | Scope headline claims to benchmark/mesh | main.tex | 🟡 Olhoff comparator scope corrected; other claim reconciliation remains |
 | B1 / M5 | Classify/plot two new modes at α=1 (clamped) | exp2 `localSaveModeShapes` | ❌ exp2 failed → **no plots** |
 | B2 | High-index Φ₂ tracking = spurious modes | exp2b (indices 33/58/81/69/71) + spurious check | ✅ for building |
 | B3 | Same discussion for building | exp2b | ✅ |
@@ -103,18 +115,17 @@ Legend: ✅ delivered with usable data · ⚠️ delivered but data is problemat
 These are arguably more serious than the missing experiments, because they would
 **undermine the paper if dropped in as-is**:
 
-1. **exp1 Olhoff does not converge — it is capped at exactly 2000 iterations at
+1. **exp1's local `OlhoffApproach` run does not converge — it is capped at exactly 2000 iterations at
    every mesh** (`nIter_mean = [2000,2000,2000,2000]`). Consequences:
    - Total times balloon to 493/796/1532/2570 s vs the paper's 32/74/136/222 s
      (≈ 11× at 400×50). The "clean timing" the reviewers asked for (A2/A6) is
      therefore *not* achieved; the comparator ran to a cap, not to convergence.
-   - **The 8.6 % accuracy-gap headline is not reproduced.** exp1 gives
-     Proposed-vs-Olhoff ω₁ gaps of **−0.53 %, +0.58 %, +0.43 %, +0.49 %**
-     (Proposed is sometimes *above* Olhoff). The manuscript still states "within
-     8.6 %" (main.tex L98, L661) and "7.1×" (L349, L639). With exp1 numbers the
-     speedup would be ≈ 80×, not 7.1×. The regenerated data **contradicts the
-     manuscript's two central claims** and cannot be inserted without
-     reconciliation.
+   - **The 8.6 % accuracy-gap headline is not supported.** exp1 gives
+     Proposed-vs-local-comparator ω₁ differences of **−0.53 %, +0.58 %, +0.43 %, +0.49 %**
+     (Proposed is sometimes *above* the local comparator). The pre-migration
+     manuscript stated "within 8.6 %" and "7.1×"; both claims have now been
+     removed rather than recalculated from this capped run. The local values
+     are also unusable until the comparator converges and P1 passes.
    - The **setup/per-iteration decomposition itself is not trustworthy**
      (methodologically unsound, not merely capped). For `ourApproach`, `tSetup`
      is a *standalone* eigensolve timed with **hardcoded, mismatched BCs**
@@ -123,7 +134,8 @@ These are arguably more serious than the missing experiments, because they would
      subtracts that separately-measured time from `tTotal = tIter·nIter`, risking
      a double-subtraction. For Yuksel the "setup" is Stage 1 (~200 static-compliance
      iters), which a `max_iters=1` probe **cannot capture**. The three columns are
-     therefore measured in inconsistent frames and rest on a non-converged Olhoff.
+     therefore measured in inconsistent frames and rest on a non-converged local
+     comparator.
 
 2. **exp4 frozen-vs-periodic (MR6/C4/A4) gives the opposite of the desired
    conclusion.** Frozen (Variant C) ω₁ = 131.24 rad/s; periodic-refresh every 50
@@ -174,9 +186,12 @@ These are arguably more serious than the missing experiments, because they would
 
 ## 3. What is genuinely solid
 
-- **exp5 scaling (M4/mn8):** clean log-log fit, β = 0.90 (Olhoff), 0.91
+- **exp5 scaling (M4/mn8), diagnostic only:** the log-log fit gives β = 0.90
+  for the local `OlhoffApproach`, 0.91
   (Yuksel), 1.04 (Proposed), R² = 0.97–0.998. Decisively corrects the wrong
-  "O(nₑ^1.3)" claim. Figure `exp5_scaling_loglog.png` produced. ✅
+  "O(nₑ^1.3)" claim, but does not establish scaling of the canonical
+  Du--Olhoff method. The figure `exp5_scaling_loglog.png` is not accepted
+  performance evidence until P1 passes. ⚠️
 - **exp4 CR2 load-sensitivity validation (machinery):** FD gradient check passes
   (relerr ≈ 1e-7 on significant elements), the omitted-term ratio is computed
   analytically, and the A-vs-B ablation isolates exactly the load-sens term
@@ -185,7 +200,8 @@ These are arguably more serious than the missing experiments, because they would
   load documented in Eqs. 5–6, so it only closes CR2 once A0 is resolved. ⚠️
 - **exp1 structure & exp6 hardware block:** the *design* (ω₁ column, std devs,
   separated setup time, hardware spec) matches MR1/MR2/R1/R2/C5 exactly — only
-  the Olhoff convergence / numbers need fixing.
+  the local `OlhoffApproach` convergence and measurements need fixing if that
+  comparison is retained.
 - **exp2b building:** reproduces Tables 4/5, applies the MAC threshold, runs the
   spurious-mode check, and exposes the high Φ₂ indices (B2/B3/M7). ✅
 
@@ -194,8 +210,10 @@ These are arguably more serious than the missing experiments, because they would
 ## 4. Manuscript-incorporation gap (`paper/main.tex`)
 
 Even for experiments that succeeded, the data is largely **not yet written into
-the manuscript**. Inspection of `main.tex` (modified Jun 19) finds:
-present — Huang ×4 (M8), RAMP ×1 (B4), "in-house" ×1 (CR3), Svanberg ×3 (C4),
+the manuscript**. The July 13 comparator migration has corrected CR3, removed
+the unsupported Du--Olhoff optimum/speedup claims, and scoped the retained
+figures to local implementations. The remaining June 19 audit finds:
+present — Huang ×4 (M8), RAMP ×1 (B4), Svanberg ×3 (C4),
 Heaviside ×5, spurious ×3; **absent** — any "finite difference" (CR2 validation),
 "standard deviation"/`\pm` (MR1), "mesh convergence"/"refinement" (MR5),
 "MAC threshold" (MR4), "init/setup time" (A2/R1), explicit "load sensitivity"
@@ -220,9 +238,11 @@ that is still present**:
    α=0.75 diagnostic, and the M5 mode plots. **Without this the revision cannot
    answer its #1 reviewer demand.**
 2. **Fix and rerun exp3 (mesh convergence, MR5/V3).** Same — no data currently.
-3. **Make the Olhoff comparator converge in exp1** (its own grayness<0.05 / a
-   sane iteration cap), then reconcile the regenerated ω₁/timing with the paper's
-   8.6 % gap and 7.1× speedup — or revise those headline claims to match.
+3. **If a local performance comparison is retained, make the local
+   `OlhoffApproach` comparator converge in exp1** (its own grayness<0.05 / a
+   sane iteration cap), and report only explicitly local measurements. Remove
+   the 8.6% published-optimum gap and canonical 7.1× speedup; they are not
+   targets to reproduce.
 4. **Diagnose the exp4 periodic-refresh collapse** (−62 %). Add mode-tracking on
    refresh, or reframe the result. Extend A4 to the planned SS-beam 400×50 with
    N ∈ {∞,50,10,5,1} rather than one 160×20 point.
@@ -289,11 +309,12 @@ until equivalence is proved.
 |---|---|---|---|
 | **CR2** (load-sensitivity ablation) | Omit vs retain `∂f/∂xₑ` | Does dropping the load-sensitivity term change the converged objective? | **Evolving** `M(x)` — the paper's Eqs. 5–6 |
 | **A4** (eigenpair-refresh ablation) | Frozen vs N∈{∞,50,10,5,1} | Does stale eigenpair quality degrade the optimum? | Fixed at whichever N is being tested |
-| **Comparator** (exp1/exp2) | Proposed vs Olhoff vs Yuksel | How does the proposed method rank against canonical algorithms? | Each algorithm uses its own documented load; Yuksel is its own method, not N=1 |
+| **Local comparator** (exp1/exp2) | Proposed vs named local implementations | How do the implementations in this repository compare under one controlled protocol? | Each implementation uses its documented local formulation; no result is generalized to a canonical literature method |
 
 These three studies use overlapping machinery (eigensolve, adjoint, MMA/OC) but
 measure orthogonal effects. Mixing results across studies — e.g. reporting the
-A4 N=1 ω₁ against Olhoff's converged ω₁ as a "performance comparison" — is
+A4 N=1 ω₁ against a local `OlhoffApproach` endpoint as a "performance
+comparison" — is
 invalid. Phases 3, 5, and 6 of the plan must keep them separate.
 
 ### Phase-by-phase assessment
@@ -319,10 +340,10 @@ gradient — a different quantity; retain it as an internal regression test but 
 not cite it as the CR2 result.
 
 **Phase 4 — Recover exp2 and exp3.** Highest priority. Document the failure
-cause in the manifest before rerunning. For the multi-mode comparator in exp2
+cause in the manifest before rerunning. For the local multi-mode comparison in exp2
 (M3 / MR3), scope it to the α=1 single-mode case or define an explicit fair
 comparator; do not compare the two-mode α-weighted objective directly against
-Olhoff's single-mode result. The α=0.75 MAC diagnostic must appear in the
+the local `OlhoffApproach` single-mode result. The α=0.75 MAC diagnostic must appear in the
 rerun; it is the specific output CR1 demanded.
 
 **Phase 5 — Replace exp4 with a valid approximation study.** Accepted with one
@@ -336,12 +357,11 @@ converges, and apply MAC+frequency-continuity mode tracking to diagnose the
 periodic refresh — which would vindicate the frozen-mode approach). Per W2, the
 N=1 column must be labelled "fully refreshed," not "Yuksel."
 
-**Phase 6 — Rebuild exp1 performance evidence.** Accepted with one explicit risk
-acknowledgement. Instrument timings *inside* each solver; require Olhoff
-convergence (grayness < 0.05 or `Δω/ω < 1e-3`) before entering any speedup or
-gap calculation. The 8.6 % accuracy-gap and 7.1× speedup claims may not survive
-converged runs; if they cannot be reproduced, replace them with the measured
-values labelled relative to the authors' modified implementation. The std-dev on
+**Phase 6 — Rebuild exp1 local performance evidence, if retained.** Instrument
+timings *inside* each solver; require the local `OlhoffApproach` run to converge
+(grayness < 0.05 or `Δω/ω < 1e-3`) before calculating any local ratio. Do not
+calculate a gap to the published Du--Olhoff optimum, seek to reproduce the 8.6%
+or 7.1× headlines, or describe the local run as canonical. The std-dev on
 ω₁ is **timing-only variability** — the eigenfrequency objective of a
 deterministic code does not vary between runs; the revision text must say so
 explicitly (answers MR1's "why does a deterministic code have standard
@@ -361,8 +381,9 @@ E3 in `final_review_V2.tex` and is called out in `exp2b_building.m` line 43.
 (mn2), "quasi-static" non-standard wording (mn9), void-material penalty
 (1e-9 vs 1e-6 inconsistency, R4), convergence tolerance (1e-3 vs 2e-3, R5/A4),
 and the Huang et al. (M8) citation (already ×4, confirm placement is adequate).
-Rewrite, not merely update, any narrative that depends on the 8.6 % / 7.1× /
-monotonicity claims; expect structural prose changes in §§4–6.
+Remove the 8.6% gap-to-optimum and canonical 7.1× speedup narratives. Rewrite,
+not merely update, the separate monotonicity narrative; expect structural prose
+changes in §§4–6.
 
 **Phase 9 — Reproducibility package.** No changes. Manifest, immutable release
 tag, checksums, machine-readable completion report, and supplementary-material
@@ -386,8 +407,10 @@ The revision is complete when all of the following hold:
 2. Every numerical claim in the manuscript traces to a convergence-verified artifact.
 3. CR2 is validated for the evolving-M(x) load (W1 correction applied throughout).
 4. The N=1 column, if present, is labelled "fully refreshed" not "Yuksel" (W2).
-5. The 8.6 % / 7.1× / monotonicity claims are either reproduced by converged data
-   or replaced by the actual measured values with honest labelling.
+5. The 8.6% gap-to-published-optimum and canonical 7.1× speedup claims are
+   absent; any retained performance statement names the local implementation
+   and traces to accepted local evidence. The separate monotonicity claim is
+   either supported or removed.
 6. Adverse findings (exp4 periodic collapse, MAC-below-threshold Φ₂ gains) are
    reported, diagnosed, and discussed — not omitted.
 7. A fresh independent audit finds no remaining ❌ or ⚠️ in §1's coverage matrix.

@@ -1,5 +1,8 @@
 # Phase 3 outer_move=0.05 Result
 
+> **Archived diagnostic.** This result belongs to the closed unsuccessful
+> reconstruction campaign and is not reviewer evidence.
+
 Generated: 2026-06-30T09:55:00Z
 
 ## Parameter Verification

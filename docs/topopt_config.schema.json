@@ -345,7 +345,7 @@
         "approach": {
           "type": "string",
           "enum": ["ourApproach", "olhoff", "yuksel", "elastic2D", "elastc2D"],
-          "description": "Solver implementation to use. elastic2D and elastc2D select the static minimum-compliance solver."
+          "description": "Solver implementation to use. olhoff selects the local Olhoff-inspired comparison implementation, not a canonical Du–Olhoff reconstruction. elastic2D and elastc2D select the static minimum-compliance solver."
         },
         "optimizer": {
           "type": "string",

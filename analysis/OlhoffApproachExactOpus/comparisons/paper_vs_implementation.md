@@ -1,5 +1,11 @@
 # Phase 3 — Paper-derived spec vs. `analysis/OlhoffApproachExact` (MATLAB)
 
+> **Superseded diagnostic assessment (2026-07-13).** Later campaign evidence
+> did not establish a paper-faithful reconstruction. This document records an
+> intermediate equation-mapping assessment only; its “faithful” conclusions
+> must not be used as reviewer evidence or as the basis for performance,
+> convergence, frequency-gap, scaling, or optimality comparisons.
+
 Clean-room comparison of the **paper-derived specification** ([du_olhoff_2007_spec.md](../specification/du_olhoff_2007_spec.md), built without reading code) against the existing **`OlhoffApproachExact`** MATLAB implementation. Read-only inspection; no files in `OlhoffApproachExact/` were modified.
 
 **Scope note:** the pre-existing `OlhoffApproachExact/OlhoffApproachExact.txt` compares the paper against the *older* `analysis/OlhoffApproach` solver — a different artifact. This document instead compares the paper against `OlhoffApproachExact` *itself* (the "exact" rewrite), which is the relevant question for Phase 4.
@@ -9,7 +15,7 @@ Files inspected (all under `analysis/OlhoffApproachExact/Matlab/`):
 
 ---
 
-## 0. Verdict up front
+## 0. Historical interim verdict
 
 The implementation is an **algorithmically faithful** reconstruction of the paper — including the hardest part (the multiple-eigenvalue subeigenvalue problem, which my spec flagged as the single biggest reproduction ambiguity, §11.9). Every numbered equation I derived has a correct counterpart in the code.
 

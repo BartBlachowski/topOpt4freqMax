@@ -1,8 +1,10 @@
 # Topology optimization for frequency maximization
 
-This repository contains code for three diffrent approaches to topology optimization for frequency maximization. All of them are based on SIMP method, but differ in selected way for fundamental frequency maximization.
+This repository contains code for three different local approaches to topology optimization for frequency maximization. All of them are based on SIMP, but they differ in how the fundamental frequency objective is approximated.
 
-The first approach uses classical double-loop approach proposed by Du and Olhoff (2007). The second one uses two level static approximation proposed by Yuksel and Yilmaz (2025). Finally, the third approach is newly proposed one-level quasi-static approximation.
+`analysis/OlhoffApproach` is a local Olhoff-inspired comparison implementation; it is not claimed to be a canonical or paper-faithful Du--Olhoff reconstruction. The second local implementation is inspired by the two-stage static approximation of Yuksel and Yilmaz (2025). The third is the proposed one-level quasi-static approximation.
+
+The unsuccessful paper-reconstruction campaign under `analysis/OlhoffApproachExact*` is retained only as an archived diagnostic record. It is not production code and is not reviewer evidence. Revision experiments that retain an Olhoff comparison use `analysis/OlhoffApproach` only.
 
 ## JSON-driven MATLAB runner
 

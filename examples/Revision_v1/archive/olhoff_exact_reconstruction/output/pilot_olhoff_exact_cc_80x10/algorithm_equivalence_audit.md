@@ -1,5 +1,9 @@
 # Algorithm Equivalence Audit: OlhoffApproachExact vs Du & Olhoff (2007)
 
+> **Archived/superseded diagnostic.** Component-level matches recorded here did
+> not establish a paper-faithful reconstruction. This file is not reviewer
+> evidence and cannot support equivalence, benchmark, or performance claims.
+
 **Date:** 2026-06-30  
 **Scope:** Determine whether the stable 2-cycle is (A) an implementation deviation, (B) a paper ambiguity requiring engineering choices, (C) an intrinsic property of the published algorithm, or (D) insufficient evidence.  
 **Ground truth:** Du & Olhoff (2007) Struct Multidisc Optim 34:91–110, DOI 10.1007/s00158-007-0101-y, plus erratum DOI 10.1007/s00158-007-0167-6.  
