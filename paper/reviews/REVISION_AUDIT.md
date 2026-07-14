@@ -18,6 +18,16 @@ and `final_review_V1.tex` / `final_review_V2.tex` (AI consensus: CR/MR/M items).
 > may support only explicitly local comparisons after the normal evidence gates
 > pass. The reconstruction artifacts are archived diagnostics, not reviewer
 > evidence.
+>
+> **EXP1/EXP5 override (2026-07-13).** `exp1` (performance table) and `exp5`
+> (log-log scaling fit) are **retired from the reviewer evidence chain** by
+> [`SCIENTIFIC_DECISION_EXP1_EXP5.md`](../../examples/Revision_v1/SCIENTIFIC_DECISION_EXP1_EXP5.md).
+> Gate P1 no longer exists and no performance study is scheduled. Every `exp1`
+> and `exp5` entry below is a **historical record of the June-2026 audit**, not a
+> pending deliverable: their demands (MR1 timing std devs, MR2/M2 ω₁ per method
+> × mesh, the Yuksel iteration-count discrepancy, mn8/M4 scaling exponent) are
+> now **resolved by retraction**, not by evidence. The active campaign is
+> `S1 → EXP2 → EXP2b → EXP3 → A4`.
 
 ---
 
@@ -99,13 +109,13 @@ Legend: ✅ delivered with usable data · ⚠️ delivered but data is problemat
 | B4 | RAMP interpolation discussion | main.tex (RAMP ×1) | 📝 discussion-only (per plan, acceptable) |
 | B5 / M6 | Grey regions / discreteness metric; optional Heaviside run | exp2b grayness `g`; Heaviside run not done | 🟡 metric ✅ (building); clamped failed; Heaviside demo ❌ |
 | B6 | Why frozen-load avoids spurious modes | exp2b spurious check + main.tex | 🟡 |
-| M7 | Demonstrate no spurious low-density modes at d=p=3 | exp2b `localPrintSpuriousModeCheck` | ✅ (building) |
+| M7 | ~~Demonstrate no spurious low-density modes at d=p=3~~ | **OBSOLETE PREMISE + REFUTED.** The method uses **linear** mass, not `d=p=3` ([MASS_INTERPOLATION_DECISION.md](../../MASS_INTERPOLATION_DECISION.md)). The absence claim is **refuted**: spurious modes are present (S1: 8–9 of the first 10 modes flagged at 400×50, under every mass model tested). | ❌ retracted — reported as a limitation, not demonstrated |
 | M8 | Address Huang et al. (2025) gap claim | main.tex (Huang ×4) | 📝 done |
 
 ### Minor (C-group / mn) — mostly manuscript text, outside `Revision_v1`
 
 - C5 hardware platform → **delivered** by `exp6_hardware_info` (MATLAB ver, CPU, cores, RAM, OS, BLAS).
-- mn8 / M4 scaling exponent → **delivered** by exp5 (see §3).
+- mn8 / M4 scaling exponent → **resolved by removal** of the `O(nₑ^1.3)` claim; exp5 is retired (see §3).
 - C1–C4, C6–C11, mn1–mn7, mn9–mn11 (references, notation, Eq.9 mass-weighting, void-material/tolerance justification, "no eigensolve in loop" wording, figure-number fix) → 📝 manuscript edits; not assessable from `Revision_v1`.
 
 ---
@@ -124,8 +134,8 @@ These are arguably more serious than the missing experiments, because they would
      Proposed-vs-local-comparator ω₁ differences of **−0.53 %, +0.58 %, +0.43 %, +0.49 %**
      (Proposed is sometimes *above* the local comparator). The pre-migration
      manuscript stated "within 8.6 %" and "7.1×"; both claims have now been
-     removed rather than recalculated from this capped run. The local values
-     are also unusable until the comparator converges and P1 passes.
+     removed rather than recalculated from this capped run. The local values are
+     not reinstated: EXP1 is retired and no performance gate remains.
    - The **setup/per-iteration decomposition itself is not trustworthy**
      (methodologically unsound, not merely capped). For `ourApproach`, `tSetup`
      is a *standalone* eigensolve timed with **hardcoded, mismatched BCs**
@@ -186,12 +196,13 @@ These are arguably more serious than the missing experiments, because they would
 
 ## 3. What is genuinely solid
 
-- **exp5 scaling (M4/mn8), diagnostic only:** the log-log fit gives β = 0.90
+- **exp5 scaling (M4/mn8) — RETIRED, historical:** the log-log fit gave β = 0.90
   for the local `OlhoffApproach`, 0.91
-  (Yuksel), 1.04 (Proposed), R² = 0.97–0.998. Decisively corrects the wrong
-  "O(nₑ^1.3)" claim, but does not establish scaling of the canonical
-  Du--Olhoff method. The figure `exp5_scaling_loglog.png` is not accepted
-  performance evidence until P1 passes. ⚠️
+  (Yuksel), 1.04 (Proposed), R² = 0.97–0.998, which contradicted the wrong
+  "O(nₑ^1.3)" claim but did not establish scaling of the canonical
+  Du--Olhoff method. The `O(nₑ^1.3)` claim is now **resolved by removal**, not by
+  this fit. `exp5_scaling_loglog.png` is archived and is **not** reviewer
+  evidence; it may not be published. ⚠️
 - **exp4 CR2 load-sensitivity validation (machinery):** FD gradient check passes
   (relerr ≈ 1e-7 on significant elements), the omitted-term ratio is computed
   analytically, and the A-vs-B ablation isolates exactly the load-sens term

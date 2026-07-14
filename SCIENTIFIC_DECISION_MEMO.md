@@ -269,15 +269,28 @@ is possible without overstating the findings.
 
 **Original claim (to remove):** The method avoids spurious modes.
 
-**Reformulation:** "Under SIMP with linear mass interpolation (pmass=1), localized
-low-density modes appear in the frequency spectrum at fine mesh resolution
-(400×50 clamped beam). Energy analysis confirms 8 of the first 10 modes
-of the final design are localized in low-density regions with strain-energy
-fractions >96%. Increasing the mass penalization exponent to pmass=6 recovers
-the fundamental mode as a physical global mode (MAC=0.974) but does not
-eliminate spurious modes from the adjacent spectrum. Length-scale enforcement
-(Heaviside projection or void-mass penalization) is required to fully resolve
-this issue and is identified as a necessary extension."
+**Reformulation** (revised 2026-07-14 per
+[MASS_INTERPOLATION_DECISION.md](MASS_INTERPOLATION_DECISION.md)):
+"The proposed method interpolates mass **linearly** in the element density, with a
+`ρ_min` regularization floor and **no low-density correction branch**; the stiffness
+penalization `p = 3` is applied to the stiffness only. Spurious low-frequency modes
+nevertheless appear in the post-convergence spectrum at fine mesh resolution (400×50
+clamped beam): 8 of the first 10 modes of the final design are flagged by their
+strain-energy fraction (>96%) in low-density elements.
+
+**These modes are not attributable to the mass interpolation.** Three mass models were
+tested on the same case — linear, `pmass = 6`, and Du–Olhoff Eq. 4b — and none removes the
+family (8, 9 and 9 flagged modes respectively). `pmass = 6` recovers the fundamental mode
+as a physical global mode (MAC = 0.974) but does not clean the adjacent spectrum, and
+Eq. 4b capped. Diagnostics show the flagged modes carry **negligible kinetic energy in the
+low-density material** (`low_density_kinetic_fraction = 0.0000` in every case) and instead
+concentrate on **solid components not connected to the supports**, in designs containing
+126–198 disconnected components.
+
+Current evidence therefore associates the artefact with structural disconnection rather
+than with void mass. **This is reported as current evidence, not as an established
+mechanism**: the role of `E_min` has not been isolated, no connectivity treatment has been
+tested, and no remedy is claimed. Resolution is left to future work."
 
 ---
 
@@ -378,20 +391,33 @@ in the response letter or revised manuscript with appropriate qualification.
 
 ### 6.1 The localized-mode problem is the central blocker
 
-All major failures (Exp3 400×50 mode-invalid, α=0.25/0.50 mode-invalid,
-Eq.4b capped) share the same root cause: localized low-density modes
-overwhelming the physical response at fine mesh resolution. This is a
-well-understood SIMP artifact, and its solution is also well-understood:
-Heaviside projection combined with void-mass penalization. However:
+> **REVISED 2026-07-14 by [MASS_INTERPOLATION_DECISION.md](MASS_INTERPOLATION_DECISION.md).**
+> The paragraph below asserted that the localized modes are a "well-understood SIMP artifact"
+> whose "solution is also well-understood: Heaviside projection combined with void-mass
+> penalization." **That causal attribution is withdrawn.** Three mass models (linear — the
+> declared method — `pmass=6`, and Du–Olhoff Eq. 4b) were each tested and **none removes the
+> family**. The affected modes carry `low_density_kinetic_fraction = 0.0000` at every `pmass`
+> tested, i.e. **essentially no kinetic energy in the void**, which is the opposite of the
+> classical void-mass signature. Current evidence instead associates them with **disconnected
+> solid components** (126–198 per design; energy concentrated on solid regions not connected to
+> the supports). This is current evidence, **not an established mechanism** — the role of
+> `E_min` has not been isolated and no connectivity treatment has been tested. Consequently the
+> "known fix" below is **not known to be a fix**, and must not be cited as one.
 
-- Both require solver code changes (not permitted in this memo's scope).
+All major failures (Exp3 400×50 mode-invalid, α=0.25/0.50 mode-invalid,
+Eq.4b capped) coincide with the presence of localized low-density modes
+overwhelming the physical response at fine mesh resolution. The following
+assessment of remedies is **superseded** by the note above and is retained only
+as the historical record of what was tried:
+
 - pmass=6 alone is insufficient (demonstrated).
 - Eq.4b alone is insufficient (run capped).
 - The forensic audit found no simpler fix (BCs, filter, material all correct).
 
-**Assessment:** Resolving the localized-mode problem requires implementing
-Heaviside projection or void-mass penalization in `topopt_freq.m`. If
-implemented and verified, it would likely:
+**Historical assessment (superseded):** it was believed that resolving the
+localized-mode problem required implementing Heaviside projection or void-mass
+penalization in `topopt_freq.m`, and that if implemented and verified this would
+likely:
 - Fix the 400×50 Exp3 failure (restoring mesh-convergence evidence).
 - Fix the α=0.25/0.50 Exp2 failures (restoring the α-sweep narrative).
 - Eliminate spurious modes from the S1 spectrum.

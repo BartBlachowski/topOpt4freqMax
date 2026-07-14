@@ -5,6 +5,18 @@
 comparison implementations, campaign launchers, result summaries, tables,
 figures, and supporting documentation
 
+> **Superseded in part (later on 2026-07-13) by
+> [`examples/Revision_v1/SCIENTIFIC_DECISION_EXP1_EXP5.md`](examples/Revision_v1/SCIENTIFIC_DECISION_EXP1_EXP5.md).**
+> This report is a **historical record** of the `OlhoffApproachExact` migration and
+> is preserved as written. Two of the files it lists as modified,
+> `exp1_perf_table.m` and `exp5_scaling.m`, were **subsequently retired and moved**
+> to `examples/Revision_v1/archive/obsolete_evidence/exp1_exp5/`; the paths shown
+> for them below are historical. EXP1 and EXP5 are no longer stages of the
+> campaign, and `EXP4` was retired earlier. The active campaign is
+> `S1 → EXP2 → EXP2b → EXP3 → A4`. The migration's conclusions about
+> `OlhoffApproachExact` (archived diagnostic, not reviewer evidence) are unchanged
+> and remain in force.
+
 ## Scientific decision applied
 
 The completed reconstruction campaign did not establish a paper-faithful
@@ -268,8 +280,11 @@ No remaining production experiment depends on `OlhoffApproachExact`.
 Evidence for that conclusion:
 
 - `run_all_revision_experiments.m` calls no Exact script or approach.
-- Exp1 selects `Olhoff`, which dispatches to `analysis/OlhoffApproach`.
-- Exp2, Exp2b, Exp3, Exp4, Exp5, and the smoke stage contain no Exact selection.
+- (Historical: at the time of this audit, Exp1 selected `Olhoff`, which dispatched
+  to `analysis/OlhoffApproach`. EXP1 has since been retired; no active stage
+  performs a cross-code comparison at all.)
+- No active stage (S1, EXP2, EXP2b, EXP3, A4) or the smoke stage contains an Exact
+  selection; preflight P1/P2 now fail the campaign if one is reached.
 - No production JSON configuration selects `OlhoffExact` or
   `OlhoffApproachExact`.
 - Production launchers no longer add the complete `analysis/**` tree; their

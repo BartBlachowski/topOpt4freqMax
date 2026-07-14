@@ -64,6 +64,15 @@ nIter_arr   = NaN(nAlpha,1);
 macData_cell = cell(nAlpha,1);
 xFinal_cell  = cell(nAlpha,1);
 
+% Acceptance metadata (recorded, never used to alter the computation).
+% nIter was already stored but never checked against the cap, so the capped
+% alpha=1.00 and alpha=0.75 runs were accepted.  These fields let
+% localAccept_Exp2b apply the declared rule.
+success_arr = false(nAlpha,1);
+dchange_arr = NaN(nAlpha,1);    % final design change (NaN if unreported)
+iterCap     = double(data.optimization.max_iters);
+dchangeTol  = double(data.optimization.convergence_tol);
+
 for i = 1:nAlpha
     alpha = alphaVals(i);
     fprintf('--- alpha = %.2f ---\n', alpha);
@@ -74,12 +83,16 @@ for i = 1:nAlpha
     if isfile(csvBefore), delete(csvBefore); end
 
     try
-        [xFin, omega, ~, nIter, ~] = run_topopt_from_json(data);
+        % 6th output = solver diagnostics.  Requesting it does not change the
+        % computation; it only exposes termination/convergence data.
+        [xFin, omega, ~, nIter, ~, info] = run_topopt_from_json(data);
         omega1_arr(i)    = omega(1);
         omega2_arr(i)    = omega(2);
         grayness_arr(i)  = mean(4*xFin.*(1-xFin));
         nIter_arr(i)     = nIter;
         xFinal_cell{i}   = xFin;
+        dchange_arr(i)   = localFinalDesignChange(info);
+        success_arr(i)   = true;
         fprintf('  omega1=%.4f, omega2=%.4f, g=%.4f, nIter=%d\n', ...
             omega(1), omega(2), grayness_arr(i), nIter);
     catch ME
@@ -107,10 +120,27 @@ localPrintSpuriousModeCheck(alphaVals, macData_cell);
 
 results = struct('alphaVals', alphaVals, 'omega1', omega1_arr, 'omega2', omega2_arr, ...
     'grayness', grayness_arr, 'nIter', nIter_arr, 'macData', {macData_cell}, ...
-    'xFinal', {xFinal_cell}, 'MAC_threshold', MAC_THRESHOLD);
+    'xFinal', {xFinal_cell}, 'MAC_threshold', MAC_THRESHOLD, ...
+    'max_iters', iterCap, 'design_change_tol', dchangeTol, ...
+    'success', success_arr, 'design_change', dchange_arr);
 
 save(fullfile(outDir,'exp2b_building_results.mat'),'results');
 fprintf('Results saved.\n');
+end
+
+% =========================================================================
+function dc = localFinalDesignChange(info)
+%LOCALFINALDESIGNCHANGE  Last reported design change, or NaN when the solver
+%   does not report one.  NaN is preserved deliberately: the acceptance gate
+%   must reject a run whose convergence cannot be verified rather than assume it.
+dc = NaN;
+if ~isstruct(info), return; end
+if isfield(info, 'cr2_history') && isstruct(info.cr2_history) && ...
+        isfield(info.cr2_history, 'design_change')
+    v = info.cr2_history.design_change(:);
+    v = v(isfinite(v));
+    if ~isempty(v), dc = v(end); end
+end
 end
 
 % =========================================================================

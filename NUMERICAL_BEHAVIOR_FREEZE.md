@@ -62,13 +62,18 @@ published benchmark.
 
 ## Archived artifacts
 
+All paths below are relative to
+`examples/Revision_v1/archive/olhoff_exact_reconstruction/output/`, where these
+directories were moved when the reconstruction campaign was archived (2026-07-13).
+They are no longer under `examples/Revision_v1/output/`.
+
 | Artifact | Diagnostic role |
 |---|---|
-| `examples/Revision_v1/output/phase1_olhoff_exact_cc_80x10_inner300/` | Inner-iteration diagnostic |
-| `examples/Revision_v1/output/phase2_olhoff_exact_cc_80x10_asymptote_persistence/` | Persistent-asymptote diagnostic |
-| `examples/Revision_v1/output/phase3_olhoff_exact_cc_80x10_outermove005/` | Outer-move diagnostic (`0.05`) |
-| `examples/Revision_v1/output/phase4_olhoff_exact_cc_80x10_outermove002/` | Outer-move diagnostic (`0.02`) |
-| `examples/Revision_v1/output/pilot_olhoff_exact_cc_80x10*/` | Earlier reconstruction pilots |
+| `phase1_olhoff_exact_cc_80x10_inner300/` | Inner-iteration diagnostic |
+| `phase2_olhoff_exact_cc_80x10_asymptote_persistence/` | Persistent-asymptote diagnostic |
+| `phase3_olhoff_exact_cc_80x10_outermove005/` | Outer-move diagnostic (`0.05`) |
+| `phase4_olhoff_exact_cc_80x10_outermove002/` | Outer-move diagnostic (`0.02`) |
+| `pilot_olhoff_exact_cc_80x10*/` | Earlier reconstruction pilots |
 
 All numeric files, tables, and figures in these directories remain unchanged
 historical outputs. They are excluded from production manifests, revised

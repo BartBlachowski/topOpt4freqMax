@@ -53,7 +53,7 @@ No production experiment may start before Gate A0 passes.
 
 **Source:** §"Workstream 2: Solver Verification"
 
-Gate V1 must pass before Exp1–Exp5 are regenerated.
+Gate V1 must pass before any active stage (S1, EXP2, EXP2b, EXP3, A4) is regenerated.
 
 | ID | Item | Dependent code / modules | Required outputs / artifacts | Gate | Tier | Category |
 |---|---|---|---|---|---|---|
@@ -118,19 +118,31 @@ Gate V1 must pass before Exp1–Exp5 are regenerated.
 
 ---
 
-## Workstream 5 — Rebuild Performance Evidence
+## Workstream 5 — Rebuild Performance Evidence — **RETIRED**
 
 **Source:** §"Workstream 5: Rebuild Performance Evidence"
 
-| ID | Item | Dependent code / modules | Required outputs / artifacts | Gate | Tier | Category |
-|---|---|---|---|---|---|---|
-| P1-1 | Instrument solvers: independently record init time, optimization-loop time, postprocessing time, total wall-clock time, per-iteration time, and peak memory; do not derive init by subtraction | `analysis/ourApproach/Matlab/topopt_freq.m`, `analysis/YukselApproach/Matlab/top99neo_inertial_freq.m`, `analysis/OlhoffApproach/Matlab/topFreqOptimization_MMA.m` | Telemetry fields in every result struct; timing methodology documented in experiment header | P1 | 1 | code |
-| P1-2 | Benchmark mode: disable live plots, saved images, correlation exports, frequency-history eigensolves, and other diagnostics | Same solvers; `examples/Revision_v1/exp1_perf_table.m` | Config flag `benchmark_mode: true` accepted; confirmed no diagnostic overhead in timing | P1 | 1 | code |
-| P1-3 | Warm-up runs then ≥10 measured executions at each mesh; report standard deviations for timing and memory | `examples/Revision_v1/exp1_perf_table.m` | Table with mean ± std for each timing component and mesh; min 10 measurements per data point | P1 | 1 | experiment |
-| P1-4 | Investigate Yuksel 180–200 vs 1,000+ iteration discrepancy using matched stopping criteria and an author-provided Yuksel implementation where available | `exp1_perf_table.m`; `analysis/YukselApproach/Matlab/` | Written explanation of discrepancy; matched-criteria comparison table | P1 | 1 | experiment |
-| P1-5 | Scope the Olhoff comparator to `analysis/OlhoffApproach` and label it "local Olhoff-inspired implementation" everywhere | `exp1_perf_table.m`; manuscript tables and figures | Every local comparison names `OlhoffApproach`; `OlhoffApproachExact` and canonical Du--Olhoff language are absent from production evidence | P1 | 1 | experiment |
-| P1-6 | Recompute scaling fit from corrected timing data | `examples/Revision_v1/exp5_scaling.m` | New `exp5_scaling_loglog.png` and `.mat` generated from corrected data | P1 | 1 | experiment |
-| P1-7 | Remove the 8.6% gap-to-Du--Olhoff-optimum and canonical 7.1× speedup narratives; if local performance reporting is retained, derive new statements only from accepted `OlhoffApproach` and other named local runs | `exp1_perf_table.m`; `exp5_scaling.m`; manuscript | No published-optimum gap or canonical speedup remains; any timing ratio, frequency difference, or scaling fit is explicitly local | P1 | 1 | experiment |
+**RETIRED by [`SCIENTIFIC_DECISION_EXP1_EXP5.md`](../../examples/Revision_v1/SCIENTIFIC_DECISION_EXP1_EXP5.md)
+(2026-07-13).** EXP1 and EXP5 are removed from the reviewer evidence chain, so
+there is no performance evidence to rebuild. Items P1-1 … P1-7 are **void**: they
+are not scheduled, not gated, and must not be reinstated. Gate P1 no longer
+exists.
+
+The withdrawal is not a measurement problem. The local comparators are not
+faithful reference implementations (`OlhoffApproach` performs a trial eigensolve
+after every MMA update, roughly doubling its eigensolves per outer iteration, and
+adds a Heaviside projection, a continuation schedule, and a grayness penalty the
+published method does not have), so no level of instrumentation makes a cross-code
+timing, memory, or scaling comparison valid. Comparator telemetry is therefore
+**deliberately not implemented**.
+
+`exp1_perf_table.m` and `exp5_scaling.m` are preserved unmodified under
+`examples/Revision_v1/archive/obsolete_evidence/exp1_exp5/` and are denied by name
+in the runner's preflight P2.
+
+The one scientifically live question EXP1 proxied — the accuracy and cost of
+freezing the eigenpair — is answered **within a single implementation** by
+**A4** (eigenpair-refresh sweep, above), with no unfaithful comparator.
 
 ---
 
@@ -143,7 +155,7 @@ Gate V1 must pass before Exp1–Exp5 are regenerated.
 | S1-1 | Rerun capped building cases to convergence under authoritative formulation | `examples/Revision_v1/exp2b_building.m`; `analysis/ourApproach/Matlab/topopt_freq.m` | Converged building result `.mat`; no iteration-cap flag in result | S1 | 1 | experiment |
 | S1-2 | For every suspicious low-MAC mode: export mode shape, elementwise kinetic energy, elementwise strain energy, energy fraction in low-density regions, localization metric, density support, and MAC value | `exp2b_building.m`; post-processing script `scripts/revision_v1/diagnose_modes.m` | Per-mode `.mat` and mode-shape `.png`; summary table of energy fractions and localization metrics | S1 | 1 | experiment |
 | S1-3 | Classify every suspicious mode from localization and energy evidence (not MAC alone); determine physical vs spurious | `diagnose_modes.m`; manual review | Classification table in experiment diary; each mode labelled with evidence-based classification | S1 | 1 | experiment |
-| S1-4 | Compare baseline SIMP interpolation with one documented mitigation (RAMP, increased void-mass penalization, or Heaviside continuation) | New `scripts/revision_v1/run_s1_mitigation.m`; modified solver config | Mitigation result `.mat`; topology and mode comparison figures | S1 | 2 | experiment |
+| S1-4 | Compare the baseline interpolation with one documented mitigation. **Scope revised 2026-07-14 per [`MASS_INTERPOLATION_DECISION.md`](../../MASS_INTERPOLATION_DECISION.md): the mass-interpolation axis is exhausted** — linear (the declared method), `pmass=6`, and Du–Olhoff Eq. 4b have all been tested and none removes the localized-mode family, and the flagged modes carry ~zero kinetic energy in low-density material. Any further mitigation attempt must not be premised on void-mass penalization being the fix. **No new experiment is scheduled by this decision.** | `s1_mitigation_400x50_pilot.m` (pmass=6, run); `archive/diagnostics/eq4b_hypothesis_test/` (Eq. 4b, refuted) | Existing mitigation results; no new run mandated | S1 | 2 | experiment |
 | S1-5 | Report grayness for every final topology in the paper; explain gray regions in affected figures | `diagnose_modes.m`; manuscript | Grayness scalar in every result struct; gray regions explained in figure captions | S1 | 1 | experiment |
 
 ---
@@ -173,7 +185,7 @@ All items depend on accepted artifacts from Workstreams 2–6. Tables and figure
 | MS-15 | Verify Huang comparison and all figure/table cross-references | `paper/` sources | All cross-references checked; Huang comparison traceable to a citable artifact | DoC-8 | 1 | manuscript |
 | MS-16 | Complete all bibliography entries (topology-method, Rayleigh, MMA, filter, load-sensitivity, design-dependent-load references) | `paper/` sources; `.bib` file | No `[?]` or missing-reference placeholders | DoC-8 | 1 | manuscript |
 | MS-17 | Enumerate supplementary material precisely | `paper/` sources; reproducibility package (WS8) | Supplementary section lists each file with a one-line description | DoC-8 | 1 | manuscript |
-| MS-18 | Regenerate all affected tables and figures from accepted artifacts | Plotting scripts; result `.mat` files from Exp1–Exp5, CR2, A4, S1 | All paper figures and tables sourced from accepted results; no manually edited numbers | DoC-8 | 1 | manuscript |
+| MS-18 | Regenerate all affected tables and figures from accepted artifacts | Plotting scripts; result `.mat` files from S1, EXP2, EXP2b, EXP3, A4, CR2 (Exp1/Exp5 retired — no performance table or scaling figure is regenerated) | All paper figures and tables sourced from accepted results; no manually edited numbers | DoC-8 | 1 | manuscript |
 | MS-19 | Response letter: address every reviewer item individually with exact manuscript location and supporting artifact; incorporate adverse results; remove the 8.6% gap-to-optimum and canonical 7.1× speedup narratives; qualify the 4.61× building-gain narrative if unsupported | Response letter document | Every reviewer item is answered with accepted evidence or an explicit correction/retraction; no claim cites `OlhoffApproachExact` | DoC-8 | 1 | manuscript |
 
 ---
@@ -266,13 +278,8 @@ Phase 3 — Scientific Experiments (one production config first, then sweeps)
   Step 25  S1-1…3/5   Rerun building cases; diagnose modes; report grayness
             ★ GATE S1 (classification) must pass ★
 
-Phase 4 — Performance Evidence (only after scientific gates)
-  Step 26  P1-1/2  Instrument solvers; benchmark mode
-  Step 27  P1-3    Warm-up + ≥10 timing runs per mesh
-  Step 28  P1-4    Investigate Yuksel iteration discrepancy
-  Step 29  P1-5    Correct comparator labels
-  Step 30  P1-6    Recompute scaling fit
-  Step 31  P1-7    Remove canonical gap/speedup claims; scope any retained metrics to local implementations
+Phase 4 — Performance Evidence — RETIRED (Steps 26-31 void; EXP1/EXP5 retired,
+         no cross-code performance study remains; see Workstream 5)
             ★ GATE P1 must pass ★
 
 Phase 4b — Tier 2 decisions (parallel with Phase 4 or after)
@@ -296,9 +303,9 @@ Phase 6 — Reproducibility Package
 
 - Gate A0 before any production experiment.
 - Gate I1 before any experiment is counted as accepted.
-- Gate V1 before Exp1–Exp5 are regenerated.
-- Gates E23 and E4 before the performance study (Exp1/Exp5).
-- All scientific and performance gates before manuscript regeneration.
+- Gate V1 before any active stage (S1, EXP2, EXP2b, EXP3, A4) is regenerated.
+- Gate P1 and the performance study (Exp1/Exp5) are retired; no such gate remains.
+- All scientific gates before manuscript regeneration.
 - Manuscript regeneration (MS-18) before all other MS items.
 - Accepted artifacts before reproducibility package.
 
@@ -308,4 +315,4 @@ Phase 6 — Reproducibility Package
 - V1-1 through V1-6 can run in parallel once A0-G passes.
 - CR2 and A4 are independent; E3 is independent of E2 once the solver is fixed — all three can run in parallel after V1 passes and E2-1 is resolved.
 - S1-1 can start as soon as the authoritative formulation is stable (does not require E23 gate to initiate, but must converge before S1 gate is checked).
-- P1-1 and P1-2 (instrumentation) can be implemented during Phase 3 in the background, as long as no timing data enters claims before Gate P1.
+- (Retired: the former P1-1 / P1-2 solver-instrumentation note. No timing data is collected for reviewer evidence.)

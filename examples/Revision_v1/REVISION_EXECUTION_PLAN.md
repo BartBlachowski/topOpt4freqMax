@@ -71,11 +71,15 @@ CR2       [independent]      ======                            ~3 h
 
 ## Blockers that must be cleared before launching
 
-1. **The two proposed patches must be applied, in order** — `proposed/stage_rewiring.patch`
-   then `proposed/acceptance_gates.patch`. Until then the master runner still dispatches
-   EXP2/EXP3 to pre-authoritative scripts and still references the now-archived
-   `exp1_perf_table` / `exp5_scaling`. **The runner will not work until it is patched.**
-2. **A4 does not exist.** Preflight P3 blocks any `full`/`fast` campaign until it does.
+1. ~~The two proposed patches must be applied, in order.~~ **CLEARED (2026-07-14).**
+   `proposed/stage_rewiring.patch` and `proposed/acceptance_gates.patch` have both been
+   applied, in that order, and verified in MATLAB R2025b: the registry is
+   `S1 → EXP2 → EXP2b → EXP3 → A4`, EXP2/EXP3 dispatch to the authoritative scripts,
+   the archived `exp1_perf_table` / `exp5_scaling` are denied by name in preflight P2,
+   18/18 acceptance-gate tests pass, and the smoke gate still reports
+   `run_all:GateI1Confirmed`. The runner is operable.
+2. **A4 does not exist.** Preflight P3 blocks any `full`/`fast` campaign until it does —
+   verified: `full` aborts in ~5 s with `run_all:PreflightFailed` before any computation.
    Individual stages remain runnable via `stage` mode.
 3. **CR2 is not a runner stage.** `run_cr2_production()` takes no `outDir` and writes to a
    hardcoded path, so registering it would require changing the experiment's signature.

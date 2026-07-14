@@ -94,6 +94,36 @@ must not be identified with the local implementation or used as its
 quantitative validation target.
 \end{tcolorbox}
 
+\begin{tcolorbox}[colback=red!6,colframe=black,title={Performance-evidence policy (13 July 2026) --- supersedes every timing, speedup, and scaling item below}]
+\textbf{EXP1} (local performance table: timing, memory, iteration counts,
+$\omega_1$) and \textbf{EXP5} (log-log scaling fit, which consumed EXP1) are
+\textbf{retired from the reviewer evidence chain}
+(\texttt{examples/Revision\_v1/SCIENTIFIC\_DECISION\_EXP1\_EXP5.md}).  Gate~P1 and
+planning items A2/A6 are \textbf{void}; no performance, timing, memory, or
+scaling stage remains in the campaign, and comparator telemetry is deliberately
+not implemented.  \textbf{No quantitative cross-code performance benchmark
+remains in the manuscript.}
+
+The reason is construct validity, not instrumentation: the local
+\texttt{OlhoffApproach} performs a trial eigensolve after every MMA update
+(roughly doubling its eigensolves per outer iteration) and adds a Heaviside
+projection, a continuation schedule, and a grayness penalty absent from the
+published method, while the local Yuksel-inspired code does not reproduce the
+published iteration counts.  Benchmarking against either would be a strawman.
+
+Consequently, every instruction below to rerun timing benchmarks, add
+initialization/per-iteration columns to Table~1, state the conditions under which
+the method is faster, explain the Yuksel 180--200 iteration discrepancy, or
+recompute a scaling fit is \textbf{withdrawn}.  Those reviewer demands are
+\emph{resolved by retraction}, not by evidence.  The efficiency argument survives
+only as an operation count (one eigensolve at initialization versus one per design
+iteration).  The frozen-eigenpair accuracy and cost question is answered
+within a single implementation by \textbf{A4}.
+
+The active campaign is \texttt{S1} $\to$ \texttt{EXP2} $\to$ \texttt{EXP2b} $\to$
+\texttt{EXP3} $\to$ \texttt{A4}.
+\end{tcolorbox}
+
 \begin{table}[htbp]
 \centering
 \caption{Priority map of required revisions (R = Reviewer, \# = comment number).}
@@ -455,13 +485,22 @@ switching.
         tracking correctly identifies them as not corresponding to any
         solid-domain shape, so the proposed tracking methodology is robust to
         this phenomenon.
-  \item If they are spurious modes: note that they arise from using $d=p=3$
-        for the mass interpolation in the proposed method (in contrast to
-        the local Olhoff-inspired comparison implementation, which uses
-        $d=6$ for low-density elements).  This is a comparison of repository
-        interpolation choices, not a statement about the published method.
-        Reference the Reviewer~3
-        comment~\#11 suggestion about RAMP (see B4 below).
+  \item If they are spurious modes: \textbf{do not attribute them to the mass
+        interpolation exponent.}  Per
+        \texttt{MASS\_INTERPOLATION\_DECISION.md} (2026-07-14), the proposed
+        method uses a \emph{linear} mass interpolation with $\rho_\mathrm{min}$
+        regularization and \emph{no} low-density correction branch; the earlier
+        statement that it uses $d=p=3$ was a manuscript error and is withdrawn.
+        The local Olhoff-inspired comparison implementation does use a
+        low-density branch.  Three mass models have been tested on the same
+        400$\times$50 case (linear, $x^6$, and Du--Olhoff Eq.~4b) and
+        \emph{none} removes the localized-mode family.  Current evidence
+        instead associates these modes with disconnected solid components:
+        they carry negligible kinetic energy in the low-density material and
+        concentrate on solid regions not connected to the supports.  State this
+        as current evidence, not as an established mechanism.  Reviewer~3's
+        comment~\#11 suggestion about RAMP (see B4 below) may still be
+        discussed, but it must not be presented as the identified cause.
 \end{itemize}
 
 % -----------------------------------------------------------
@@ -476,9 +515,12 @@ modes that may obscure genuinely structural modes.
 \begin{itemize}[leftmargin=1.6em]
   \item Add a note in Section~3.2 explaining that the high mode indices
         for $\boldsymbol{\Phi}_2$ tracking are consistent with the presence
-        of many spurious localized modes in the low-density regions (void
-        elements with $x_e \approx 10^{-3}$ and $d=p=3$), which populate
-        the lower end of the spectrum.
+        of many spurious localized modes populating the lower end of the
+        spectrum.  \textbf{Do not attribute them to the mass exponent}
+        (\texttt{MASS\_INTERPOLATION\_DECISION.md}): the method uses a linear
+        mass interpolation, and linear, $x^6$, and Du--Olhoff Eq.~4b were all
+        tested without removing the family.  Current evidence associates these
+        modes with disconnected solid components.
   \item Emphasise that MAC-based tracking bypasses the need to inspect each
         mode: only the mode with the highest MAC value (regardless of index)
         is reported, and its frequency is the physically relevant quantity.
@@ -510,13 +552,17 @@ spectral pollution.
         one-line or formula-free fix: the exact stiffness/mass interpolation
         pair must be taken from the cited RAMP literature and verified on the
         present plane-stress model before being reported.
-  \item In the paper, add a sentence in Section~4.2 (proposed approach)
-        acknowledging that SIMP with $d=p=3$ for the mass generates spurious
-        localized modes in low-density regions (as also noted for the local
-        Olhoff-inspired comparison implementation, which uses $d=6$ for this
-        reason).  State that this is a local implementation choice and that MAC
+  \item In the paper, acknowledge that spurious localized modes are present in
+        the post-convergence spectra.  \textbf{Superseded framing:} this item
+        formerly asked to state that ``SIMP with $d=p=3$ for the mass generates''
+        them.  Per \texttt{MASS\_INTERPOLATION\_DECISION.md} the proposed method
+        uses a \emph{linear} mass interpolation, and the mass exponent is
+        \emph{not} the identified cause --- three mass models were tested and
+        none removes the family.  The local Olhoff-inspired implementation does
+        use a low-density branch, and that contrast may still be drawn, but not
+        as an explanation of our spectra.  State that MAC
         tracking provides a robust mechanism to identify targeted modes
-        independent of spectral pollution.  Discuss RAMP or $d>p$ as a
+        independent of spectral pollution.  RAMP or $d>p$ may be discussed as a
         plausible mitigation to be tested, not as an already-demonstrated
         explanation for the present results.
 \end{itemize}
@@ -633,18 +679,23 @@ beam).
 
 Add a footnote or a sentence at the start of Section~4 (Numerical examples /
 Computational aspects) stating the computational platform used for all
-benchmarks: CPU model, number of cores used (serial or parallel), available
-RAM, operating system, MATLAB version (MATLAB 2025b is already mentioned
-on line~597), and Python version if the Python code was also used to
-generate Table~1 data.
+reported runs: CPU model, number of cores used (serial or parallel), available
+RAM, operating system, and MATLAB version (MATLAB 2025b is already mentioned
+on line~597).
 
-\textbf{Audit note:} do not state Python/NumPy/SciPy versions unless the
-table is actually regenerated with the Python implementation.  The manuscript
-currently states that all results were generated and verified in MATLAB
-2025b, and the active performance driver
-\texttt{examples/Performance/performance\_comparison.m} calls the MATLAB JSON
-wrapper.  The platform statement must match the implementation used for the
-final Table~1.
+\textbf{This demand survives the EXP1/EXP5 retirement.}  It is a
+platform-disclosure requirement, not a performance claim: the master runner
+prints and manifests the hardware/software specification for every stage,
+independently of any timing measurement.  There is no Table~1 to anchor it to
+--- the performance table is removed --- so the platform statement must simply
+match the implementation that produced the \emph{reported} results (the
+MATLAB campaign).
+
+\textbf{Audit note:} do not state Python/NumPy/SciPy versions unless results
+are actually regenerated with the Python implementation.  Do \emph{not} use
+\texttt{examples/Performance/performance\_comparison.m} as the basis of this
+statement: it is a legacy cross-code timing driver, it is not a campaign stage,
+and it is not reviewer evidence.
 
 % -----------------------------------------------------------
 \subsection{C6 — Sensitivity filter equation in Section~2.1}
@@ -1152,35 +1203,28 @@ OC bisection & --- & $O(N_e)$ & $O(N_e)$ \\
 
 \subsubsection*{Empirical comparison policy}
 
-The relationship
+\textbf{Superseded (13 July 2026): there is no performance table.}  EXP1 and
+EXP5 are retired, planning items A2/A6 are void, and no cross-code performance
+benchmark remains in the manuscript.  The relationship
 \[
   T = n_{\mathrm{iter}}\,t_{\mathrm{iter}}
 \]
-remains the appropriate way to separate iteration count from average
-per-iteration cost.  Any retained performance table must, however, report
-measurements for the actual repository implementations and must not imply that
-a published Du--Olhoff benchmark was reproduced.
-
-For the Olhoff-related column, the only permitted production source is
-\texttt{analysis/OlhoffApproach}.  The column heading and surrounding prose
-must call it the \emph{local Olhoff-inspired comparison implementation}.
-The table may report its frequency, initialization time, per-iteration time,
-iteration count, total time, and memory alongside the other tested local
-implementations once the existing A2 timing campaign has been accepted.
-These measurements characterize the local code only.
+is retained only as a qualitative decomposition; it is not populated with
+measurements for any comparator.
 
 The following interpretations are withdrawn and must not appear in the
 manuscript, response letter, figures, captions, or supplementary material:
 \begin{itemize}[leftmargin=1.6em]
   \item a frequency gap to a Du--Olhoff optimum;
   \item speedup relative to canonical or exactly reproduced Du--Olhoff;
-  \item convergence-rate comparisons attributed to the published method; and
-  \item scaling claims derived from any \texttt{OlhoffApproachExact} output.
+  \item convergence-rate comparisons attributed to the published method;
+  \item scaling claims derived from any \texttt{OlhoffApproachExact} output; and
+  \item any runtime, memory, speedup, or scaling comparison against the local
+        \texttt{OlhoffApproach} or the local Yuksel-inspired implementation,
+        which are not faithful reference implementations.
 \end{itemize}
-No replacement experiment is introduced.  Existing performance-planning
-items A2 and A6 are retained only to produce and interpret a comparison among
-the named local implementations.  Archived reconstruction results are
-excluded from every numerical aggregation.
+No replacement experiment is introduced.  Archived reconstruction results and
+the archived EXP1/EXP5 artifacts are excluded from every numerical aggregation.
 
 \subsubsection*{Permitted complexity interpretation}
 

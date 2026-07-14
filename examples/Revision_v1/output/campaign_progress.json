@@ -1,0 +1,21 @@
+{
+  "campaign_id": "r1_stage_20260714T150814677",
+  "start_time_utc": "2026-07-14T13:08:14.686Z",
+  "last_update_utc": "2026-07-14T13:08:14.752Z",
+  "mode": "stage",
+  "current_stage": "",
+  "status": "completed",
+  "elapsed_seconds": 0.064792000003159045,
+  "progress_file": "/Users/piotrek/Programming/topOpt4freqMax/examples/Revision_v1/output/campaign_progress.json",
+  "output_root": "/Users/piotrek/Programming/topOpt4freqMax/examples/Revision_v1/output",
+  "resume": false,
+  "dry_run": true,
+  "force": true,
+  "completed_stages": [],
+  "failed_stages": [],
+  "skipped_stages": [],
+  "per_stage_elapsed": {},
+  "output_directories": {
+    "a4": "/Users/piotrek/Programming/topOpt4freqMax/examples/Revision_v1/output/a4"
+  }
+}

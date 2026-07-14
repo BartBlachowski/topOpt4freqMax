@@ -29,6 +29,17 @@ the Exp1 discussion refers only to the local `analysis/OlhoffApproach`
 implementation. No claim may generalize those data to a canonical Du--Olhoff
 implementation or published optimum.
 
+**EXP1/EXP5 retirement (2026-07-13) — supersedes every Exp1/Exp5 finding and
+work item below.** `SCIENTIFIC_DECISION_EXP1_EXP5.md` removes EXP1 and EXP5 from
+the reviewer evidence chain. This audit's Exp1/Exp5 sections are retained as a
+**historical record of why**: they are precisely the evidence that the EXP1
+timing decomposition is methodologically unsound and that its comparator did not
+converge. That diagnosis is now acted on by **retirement, not repair**. Every
+Exp1/Exp5 item in “Positive Evidence That Can Be Retained” and “Minimum Work
+Required” is therefore **void** — no timing, memory, speedup, or scaling evidence
+will be produced, and comparator telemetry is deliberately not implemented. The
+active campaign is `S1 → EXP2 → EXP2b → EXP3 → A4`.
+
 The directory contains useful partial work, particularly the 10-run performance
 dataset, a scaling fit, a building eigenspectrum/MAC export, and a controlled
 semi-harmonic sensitivity experiment. However, two central experiment groups
@@ -269,11 +280,12 @@ remains uncorrected in the paper's prose. CR1 is **OPEN / NOT FULFILLED**.
 
 The following work is useful after the blockers above are corrected:
 
-1. **Exp1 repeated-run framework.** It executes 10 samples over four meshes and
-   stores mean/standard-deviation arrays for frequencies, loop timing and memory.
-2. **Exp5 scaling fit.** It uses measured Exp1 timings and yields exponents near
-   0.904 (local `OlhoffApproach`), 0.910 (local Yuksel implementation) and 1.037 (proposed), directly showing that the
-   existing `O(n_e^1.3)` claim should be replaced.
+1. ~~**Exp1 repeated-run framework.**~~ **VOID — EXP1 retired.** The repeated-run
+   timing/memory framework is not reused: no cross-code performance evidence is
+   produced. Archived under `archive/obsolete_evidence/exp1_exp5/`.
+2. ~~**Exp5 scaling fit.**~~ **VOID — EXP5 retired.** The `O(n_e^1.3)` claim is
+   resolved by *removal from the manuscript*, not by a replacement fit. Archived
+   under `archive/obsolete_evidence/exp1_exp5/`.
 3. **Semi-harmonic derivative implementation check.** The FD checks demonstrate
    that the implemented semi-harmonic load derivative is coded consistently for
    the sampled elements. This is software verification, not validation of the
@@ -298,15 +310,14 @@ The following work is useful after the blockers above are corrected:
 5. Redesign Exp4 so the full and omitted gradients correspond to the authoritative
    manuscript load. Run to convergence and report convergence histories. Perform
    the planned refresh sweep N={1,5,10,50,infinity}, not only N=50.
-6. Correct Exp1 timing: store actual wall-clock total, measured initialization and
-   measured loop time from each solver. Do not subtract setup from an already
-   setup-free loop time. Complete the already planned local comparison only if
-   it is retained; otherwise explicitly report `OlhoffApproach` failure to
-   converge rather than treating its endpoint as a comparable optimum.
-7. If the already planned external comparison is retained, use only
-   `analysis/OlhoffApproach` (and the named local Yuksel implementation), label
-   both as local, and make no canonical-overhead, Du--Olhoff-optimum, or exact-
-   reproduction inference.
+6. ~~Correct Exp1 timing.~~ **VOID — EXP1 retired.** The timing decomposition is
+   not repaired: no cross-code runtime, memory, speedup, or scaling comparison is
+   made. The unsound decomposition and the non-converged comparator documented in
+   this audit are the *reason* for retirement.
+7. ~~Retain the external comparison under local labelling.~~ **VOID — no external
+   comparison is retained.** The efficiency argument is stated only as an
+   operation count; the frozen-eigenpair accuracy question is answered by **A4**
+   within a single implementation.
 8. Treat Exp2b's low-MAC modes as evidence requiring characterization; do not claim
    absence of spurious modes without mode localization/energy evidence.
 9. Produce a repository mapping from every revised manuscript table/figure to its

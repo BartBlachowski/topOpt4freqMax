@@ -187,6 +187,30 @@ for i = 1:nCases
                         '%s.mode must be an integer >= 1.', loadPath);
                 end
                 loadsNorm(j).mode = round(double(ld.mode));
+                % R-1 (A4_SPECIFICATION_V3 §7.1): optional refresh interval for the
+                % semi_harmonic reference eigenpair.  DEFAULT 0 = FROZEN, which is
+                % the pre-R-1 behaviour, so every existing configuration is
+                % unchanged.  Inf is accepted and normalized to 0 (frozen).
+                % NOTE: the harmonic branch above defaults to 1 (recompute every
+                % iteration); semi_harmonic must default to 0, never 1.
+                semiUpdateAfter = 0;
+                if isfield(ld, 'update_after') && ~isempty(ld.update_after)
+                    uaS = ld.update_after;
+                    if ~isnumeric(uaS) || ~isscalar(uaS)
+                        error('validateLoadCases:InvalidSemiHarmonicUpdateAfter', ...
+                            '%s.update_after must be a numeric scalar (nonneg integer, or Inf for frozen).', loadPath);
+                    end
+                    uaS = double(uaS);
+                    if isinf(uaS) && uaS > 0
+                        semiUpdateAfter = 0;             % Inf -> frozen
+                    elseif ~isfinite(uaS) || uaS < 0 || uaS ~= round(uaS)
+                        error('validateLoadCases:InvalidSemiHarmonicUpdateAfter', ...
+                            '%s.update_after must be a nonneg integer scalar, or Inf.', loadPath);
+                    else
+                        semiUpdateAfter = round(uaS);
+                    end
+                end
+                loadsNorm(j).update_after = semiUpdateAfter;
                 loadsNorm(j).factor = loadFactor;
 
             otherwise

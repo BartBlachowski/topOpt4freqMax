@@ -446,6 +446,13 @@ function [x, omega, tIter, nIter, mem_usage, diagnostics] = run_topopt_from_json
             runCfg.max_iters = maxiter;
             runCfg.supportType = supportCode;
             runCfg.approach_name = approach;
+            % A4 endpoint export (A4_SPECIFICATION_V3 §4.1/§4.2). DEFAULT-OFF:
+            % forwarded only when the config asks for it, so every existing
+            % config produces exactly the info struct it produced before.
+            if hasFieldPath(cfg, {'optimization','a4_endpoint_export'})
+                runCfg.a4_endpoint_export = ...
+                    logical(getFieldPath(cfg, {'optimization','a4_endpoint_export'}));
+            end
             runCfg.save_frq_iterations = postproc.saveFrequencyIterations;
             runCfg.visualization_quality = postproc.visualizeQuality;
             if ~isempty(postproc.visualizeLive)

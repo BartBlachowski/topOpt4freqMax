@@ -1,3 +1,31 @@
+% =========================================================================
+%  LEGACY CROSS-CODE TIMING DRIVER -- NOT REVIEWER EVIDENCE
+% =========================================================================
+%  This script prints a cross-implementation performance table (Olhoff /
+%  Yuksel / Proposed).  It is NOT a stage of the revision campaign and its
+%  output MUST NOT be used as reviewer evidence.
+%
+%  EXP1 (performance table) and EXP5 (scaling fit) were retired from the
+%  reviewer evidence chain -- see
+%  examples/Revision_v1/SCIENTIFIC_DECISION_EXP1_EXP5.md -- because the local
+%  comparators are NOT faithful reference implementations: OlhoffApproach
+%  performs a trial eigensolve after every MMA update (roughly doubling its
+%  eigensolves per outer iteration) and adds a Heaviside projection, a
+%  continuation schedule, and a grayness penalty absent from the published
+%  method, while the local Yuksel-inspired code does not reproduce the
+%  published iteration counts.  A timing, memory, speedup, or scaling
+%  comparison against either measures implementation choices, not methods, at
+%  ANY level of instrumentation.
+%
+%  The same prohibition therefore applies to THIS script.  Its numbers may not
+%  populate a manuscript table or figure, a response-letter statement, or any
+%  speedup / runtime-ratio / memory / scaling claim.  No quantitative
+%  cross-code performance benchmark remains in the manuscript.
+%
+%  Retained for local exploration only.  The active campaign is
+%  S1 -> EXP2 -> EXP2b -> EXP3 -> A4 (examples/Revision_v1).
+% =========================================================================
+
 clear; clc;
 close all;
 

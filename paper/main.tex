@@ -209,9 +209,10 @@ The material distribution is described by element densities $\mathbf{x} = \{x_e\
 Under the SIMP interpolation, the element stiffness and mass matrices are
 \begin{equation}
   \mathbf{k}_e(x_e) = \bigl[E_\mathrm{min} + x_e^p(E_0 - E_\mathrm{min})\bigr]\mathbf{k}_e^0, \qquad
-  \mathbf{m}_e(x_e) = x_e^d \mathbf{m}_e^0,
+  \mathbf{m}_e(x_e) = \bigl[\rho_\mathrm{min} + x_e(\rho_0 - \rho_\mathrm{min})\bigr]\mathbf{m}_e^0,
 \end{equation}
-where $\mathbf{k}_e^0$ and $\mathbf{m}_e^0$ are the unit-density element stiffness and consistent mass matrices, $E_0$ is the solid Young's modulus, $E_\mathrm{min} = 10^{-9}E_0$ is the void pseudo-stiffness, and $p = d = 3$ are the penalization exponents.
+where $\mathbf{k}_e^0$ and $\mathbf{m}_e^0$ are the element stiffness and consistent mass matrices evaluated at unit modulus and unit density, $E_0$ is the solid Young's modulus, $E_\mathrm{min}$ is the void pseudo-stiffness, $\rho_0$ is the solid mass density, and $\rho_\mathrm{min} \ll \rho_0$ is a small void density that regularizes $\mathbf{M}$ against singularity.
+The penalization exponent $p = 3$ is applied to the \emph{stiffness only}: the element mass is interpolated \emph{linearly} in $x_e$, so that it remains proportional to the amount of material in the element. This keeps the mass consistent with the (linear) volume measure of the design and with the inertial interpretation of the design-dependent load~\eqref{eqn:load}, in which $\mathbf{M}(\mathbf{x})$ must represent the physical mass of the structure.
 The global stiffness and mass matrices are assembled as $\mathbf{K}(\mathbf{x}) = \sum_{e} \mathbf{k}_e(x_e)$ and $\mathbf{M}(\mathbf{x}) = \sum_{e} \mathbf{m}_e(x_e)$.
 
 The standard topology optimization problem for maximizing the fundamental natural frequency subject to a volume constraint is
@@ -231,11 +232,14 @@ The design sensitivity of a simple (non-repeated) eigenvalue $\lambda_j = \omega
   \!\left(\frac{\partial \mathbf{K}}{\partial x_e} - \lambda_j \frac{\partial \mathbf{M}}{\partial x_e}\right)
   \boldsymbol{\varphi}_j =
   p\,x_e^{p-1}(E_0 - E_\mathrm{min})\,\boldsymbol{\varphi}_{j,e}^\top\mathbf{k}_e^0\boldsymbol{\varphi}_{j,e}
-  - \lambda_j\, d\,x_e^{d-1}\,\boldsymbol{\varphi}_{j,e}^\top\mathbf{m}_e^0\boldsymbol{\varphi}_{j,e},
+  - \lambda_j\, (\rho_0 - \rho_\mathrm{min})\,\boldsymbol{\varphi}_{j,e}^\top\mathbf{m}_e^0\boldsymbol{\varphi}_{j,e},
 \end{equation}
-where $\boldsymbol{\varphi}_{j,e}$ denotes the restriction of $\boldsymbol{\varphi}_j$ to the degrees of freedom of element~$e$.
+where $\boldsymbol{\varphi}_{j,e}$ denotes the restriction of $\boldsymbol{\varphi}_j$ to the degrees of freedom of element~$e$; the mass term carries no power of $x_e$ because the mass interpolation is linear.
+
 A localized-mode artefact can arise at low densities because the stiffness-to-mass ratio becomes small, generating spurious low-frequency modes.
-Following the recommendation of Du and Olhoff~\citep{Du2007}, the mass interpolation uses a higher penalization exponent $d \gg p$ for elements with $x_e \leq 0.1$; the specific value $d = 6$ is used in the local `OlhoffApproach' implementation described in Section~\ref{sec:discussion}, while $d = p = 3$ is used in the proposed approach without inducing localized modes in the examples reported here.
+Two distinct devices must be distinguished here. The first is the \emph{global} mass interpolation law, which fixes how mass varies with density over the whole admissible range; the present work uses the linear law of~(1) throughout. The second is a \emph{low-density correction branch}, which modifies the mass law only for nearly void elements. Du and Olhoff~\citep{Du2007} retain a linear mass law for $x_e > 0.1$ and replace it below that threshold with a higher-order polynomial that drives the element mass to zero faster than its stiffness; the local `OlhoffApproach' comparison implementation described in Section~\ref{sec:discussion} adopts such a low-density branch. \emph{The proposed method applies no low-density correction}: it uses the linear law of~(1) at all densities, with $\rho_\mathrm{min}$ providing the only regularization.
+
+We therefore make no claim that the mass interpolation removes the artefact. Spurious low-frequency modes are present in the post-convergence spectra of the finer meshes reported in Section~\ref{sec:numericalExamples}, and are visible there as topology modes with negligible MAC correlation to any solid-domain mode. In the diagnostic examinations we performed on those designs, these modes carried negligible \emph{kinetic} energy in the low-density material and were instead concentrated on solid regions not connected to the supports, which places them closer to the isolated-island and point-connection modes discussed by Deng et al.~\citep{Deng2024} than to classical void-mass modes. We report this as the current empirical evidence rather than as an established mechanism: we have not shown that disconnection is the sole cause, and raising the mass penalization exponent was found to change which mode is lowest without eliminating the family. The targeted mode is identified throughout by the MAC-based tracking of Section~\ref{sec:numericalExamples}, and the presence of these modes is stated as a limitation of the present work rather than as a solved problem.
 
 \subsection{Quasi-static approximation}
 
@@ -341,7 +345,7 @@ assessment of the frequency gains achieved by each $\alpha$ configuration.
 The benchmark problem follows the simply supported beam configuration studied by \citet{Du2007} and reproduced in \citet{Yuksel2025}.  The admissible design domain is a rectangular beam of length $L = 8$~m and height $H = 1$~m, discretized into $400 \times 50$ four-node quadrilateral plane-stress finite elements, yielding $n_\mathrm{e} =
 20{,}000$ design variables and $n_\mathrm{dof} = 40{,}902$ degrees of freedom.
 The material is isotropic with Young's modulus $E_0 = 10^7$~Pa, Poisson's ratio $\nu = 0.3$, and mass density $\rho_0 = 1~\mathrm{kg/m}^3$.  A void pseudo-material with $E_\mathrm{min} = 10^{-9}E_0$ and $\rho_\mathrm{min} =
-10^{-9}\rho_0$ is used to prevent singularity of the global stiffness and mass matrices.  The SIMP penalization exponent is $p = 3$ for both stiffness and mass.  Boundary conditions follow Fig.~2(a) of \citet{Du2007}: both end edges are simply supported by pin constraints applied at the mid-height node of each edge (neutral axis), leaving all other edge nodes free.  No concentrated nonstructural mass is attached.  The prescribed volume fraction is $V_f = 0.5$, and a sensitivity filter with
+10^{-9}\rho_0$ is used to prevent singularity of the global stiffness and mass matrices.  The SIMP penalization exponent is $p = 3$ and is applied to the stiffness only; the mass is interpolated linearly, as in~(1), and no low-density correction branch is used.  Boundary conditions follow Fig.~2(a) of \citet{Du2007}: both end edges are simply supported by pin constraints applied at the mid-height node of each edge (neutral axis), leaving all other edge nodes free.  No concentrated nonstructural mass is attached.  The prescribed volume fraction is $V_f = 0.5$, and a sensitivity filter with
 radius $r_\mathrm{min} = 2$ finite elements is applied in all three implementations to suppress checkerboard patterns and ensure mesh-independent topologies.
 Convergence of the local Yuksel-inspired code and the proposed approach is declared when the maximum element-wise density change satisfies $\max|\Delta x_e| < 10^{-3}$; the local `OlhoffApproach' implementation uses an additional grayness criterion ($\bar{g} < 0.05$) in conjunction with the projection continuation schedule.
 \begin{figure}[htbp]
@@ -368,9 +372,11 @@ literature methods. MAC analysis gives a correlation of $0.9998$ for the
 $\boldsymbol{\Phi}_1$-shaped mode in the proposed-method endpoint.
 
 The previous canonical-performance headline and supporting table have been
-removed: no accepted instrumented comparison is presently available. If quantitative
-performance reporting is retained after the revision evidence gates, it will
-compare only the named local implementations, including `OlhoffApproach'.
+removed. No quantitative cross-code performance comparison is reported in this
+work, and none is deferred to a later stage of the revision: as explained in
+Section~\ref{sec:discussion}, the available local comparators are not faithful
+reference implementations, so such a comparison would measure implementation
+choices rather than the methods themselves.
 
 The evolution of the three lowest eigenfrequencies over the optimization iterations is shown in Fig.~\ref{fig:freqHistory} for the local `OlhoffApproach' and the proposed approach at the $400\times50$ mesh.
 

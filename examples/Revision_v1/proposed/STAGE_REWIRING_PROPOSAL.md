@@ -1,6 +1,10 @@
-# Proposed stage rewiring — `run_all_revision_experiments.m`
+# Stage rewiring — `run_all_revision_experiments.m`
 
-**Status: PROPOSED, NOT APPLIED.** The patch is `proposed/stage_rewiring.patch`.
+**Status: APPLIED 2026-07-14.** The patch `proposed/stage_rewiring.patch` was applied
+cleanly to the working tree (first of the two, before `acceptance_gates.patch`) and
+verified in MATLAB R2025b: the registry is `S1 → EXP2 → EXP2b → EXP3 → A4`, dry-run
+reports that graph, and `full` aborts at preflight P3 (A4 not implemented) before any
+computation. This document is retained as the rationale record for the applied change.
 
 > **REGENERATED 2026-07-13** — EXP1 and EXP5 are now **retired from the reviewer evidence
 > chain** ([SCIENTIFIC_DECISION_EXP1_EXP5.md](../SCIENTIFIC_DECISION_EXP1_EXP5.md)). The

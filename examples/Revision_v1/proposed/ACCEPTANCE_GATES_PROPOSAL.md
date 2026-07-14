@@ -1,7 +1,11 @@
-# Acceptance-gate safety patch — EXP1 / EXP2b
+# Acceptance-gate safety patch — EXP2b
 
-**Status: PROPOSED, NOT APPLIED.** Patch: `proposed/acceptance_gates.patch`. Your working
-tree is untouched.
+**Status: APPLIED 2026-07-14.** Patch: `proposed/acceptance_gates.patch`, applied second
+(it depends on `stage_rewiring.patch` and does not apply to the pre-rewiring runner).
+Verified in MATLAB R2025b: 18/18 acceptance-gate tests pass against the working tree, and
+the capped-run rule is now enforced by `check_revision_run.m`. EXP1 is retired, so this
+patch touches only the EXP2b gate; the title's former "EXP1 /" scope no longer applies.
+This document is retained as the rationale record for the applied change.
 
 > **REGENERATED 2026-07-13 — the EXP1 blocker is DISSOLVED, not worked around.**
 > EXP1 is retired from the reviewer evidence chain

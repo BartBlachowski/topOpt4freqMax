@@ -391,12 +391,20 @@ Eq.4b mitigation: run capped; result rejected.
   documented evidence. Even the accepted pmass=6 run has 9 localized modes
   in the spectrum below and near the tracked mode.
 - **"The method avoids spurious modes"**: same — MUST be removed.
-- **Reformulable as limitation:** "SIMP with linear mass interpolation (pmass=1)
-  produces localized low-density modes at fine mesh resolution (400×50); aggressive
-  mass penalization (pmass=6) partially mitigates this for the tracked mode but
-  does not eliminate spurious modes from the surrounding spectrum. This is a known
-  SIMP limitation; length-scale enforcement (Heaviside projection) or void-mass
-  penalization is required for a clean spectrum."
+- **Reformulable as limitation** (revised per
+  [MASS_INTERPOLATION_DECISION.md](MASS_INTERPOLATION_DECISION.md), 2026-07-14):
+  "Spurious low-frequency modes appear in the post-convergence spectra at fine mesh
+  resolution (400×50). **They must not be attributed to the mass interpolation.**
+  Three mass models have been tested on the same case — linear (`pmass=1`, the declared
+  method), `pmass=6`, and Du–Olhoff Eq. 4b — and **none removes the family** (8, 9 and 9
+  of the first 10 modes respectively). `pmass=6` changes which mode is lowest
+  (MAC 0.786 → 0.974) but does not clean the spectrum. Current evidence associates these
+  modes with **disconnected solid components**: they carry ~zero kinetic energy in the
+  low-density material (`low_density_kinetic_fraction = 0.0000` at every `pmass` tested)
+  and concentrate on solid regions not connected to the supports, in designs with
+  126–198 disconnected components. This is **current evidence, not an established
+  mechanism**; the role of `E_min` has not been isolated and no connectivity treatment
+  has been tested."
 
 ### Reviewer-response impact
 
@@ -474,25 +482,38 @@ must be labelled local Olhoff-inspired comparisons.
 
 ---
 
-## Gate P1 — Performance Evidence
+## Gate P1 — Performance Evidence — **RETIRED**
 
-**Status: NOT_STARTED**
+**Status: RETIRED (2026-07-13) — the gate no longer exists.**
+
+EXP1 and EXP5 are removed from the reviewer evidence chain by
+`examples/Revision_v1/SCIENTIFIC_DECISION_EXP1_EXP5.md`. No performance, timing,
+memory, or scaling stage remains in the campaign, so there is no P1 gate to pass
+and nothing is "pending regeneration". The reason is construct validity, not
+missing instrumentation: the local comparators are not faithful reference
+implementations, so no level of measurement makes a cross-code benchmark valid.
+Comparator telemetry is deliberately not implemented.
 
 ### Supporting artifacts
 
-None. No accepted instrumented timing measurements exist under the authoritative
-formulation for the proposed method and the local comparison implementations.
+None, and none will be produced. The archived EXP1/EXP5 scripts and outputs live
+under `examples/Revision_v1/archive/obsolete_evidence/exp1_exp5/` and
+`archive/superseded_runs/`; they are **not** reviewer evidence.
 
 ### Accepted evidence
 
-None.
+None. The efficiency argument survives only as an operation count (one eigensolve
+at initialization versus one per design iteration). The frozen-eigenpair accuracy
+and cost question is answered within a single implementation by **A4**.
 
 ### Rejected evidence
 
-Table 3 timing values in `paper/reviews/algorithms_comparison.tex` are
-placeholder estimates copied from manuscript Table 1, not from clean
-benchmark runs. The stated scaling exponents (1.30, 1.25, 1.35) do not
-match the log-log fit of the current table data (actual fit ≈ 1.07).
+Historical: the former Table 3 timing values in
+`paper/reviews/algorithms_comparison.tex` were placeholder estimates copied from
+manuscript Table 1, not clean benchmark runs, and the stated scaling exponents
+(1.30, 1.25, 1.35) did not match the log-log fit of that table's data (≈ 1.07).
+That table has since been removed from the planning document, and with EXP1/EXP5
+retired it is not regenerated.
 
 ### Claim impact
 
@@ -501,10 +522,12 @@ scaling claims have no evidence base under the revised formulation.
 
 ### Reviewer-response impact
 
-All performance headline claims must be removed or marked "pending regeneration"
-until P1 produces accepted timing data. Any retained Olhoff comparison is against
-the local `OlhoffApproach` implementation only; it must not be generalized to the
-canonical Du--Olhoff method or its published optimum.
+All performance headline claims are **removed permanently**, not marked "pending
+regeneration": P1 is retired and no timing data will be produced. The reviewer
+demands for a runtime decomposition, timing/memory standard deviations, the
+source and bound of the speedup, and the scaling correction are **resolved by
+retraction**. No cross-code comparison is retained, against `OlhoffApproach` or
+any other implementation.
 
 ---
 
@@ -535,14 +558,14 @@ No reproducibility artifacts exist.
 |------|--------|------|-------------|
 | A0 | PASSED (MATLAB-only) | 1 | all experiments |
 | I1 | PASSED | 1 | all accepted evidence |
-| V1 | PASSED | 1 | Exp1–Exp5 |
+| V1 | PASSED | 1 | S1, EXP2, EXP2b, EXP3, A4 |
 | CR2 | FAILED / DIAGNOSTIC | 1 | load-sensitivity claim |
 | A4 | NOT_STARTED | 1/2 | refresh/accuracy claims |
 | E2 | PARTIAL (1/5 accepted) | 1 | clamped-beam claims |
 | E3 | FAILED / INCONCLUSIVE | 1 | mesh-convergence claims |
 | S1 | PARTIAL / INSUFFICIENT | 1 | spurious-mode claim |
 | Exact archive | CLOSED / NOT EVIDENCE | — | none; excluded from production |
-| P1 | NOT_STARTED | 1 | all performance claims |
+| P1 | RETIRED (gate removed) | — | none; all cross-code performance claims withdrawn |
 | MS | PARTIAL (Olhoff migration complete) | 1 | submission |
 | RP | NOT_STARTED | 1 | submission |
 
@@ -624,10 +647,12 @@ No reproducibility artifacts exist.
    mode-invalid; α=0.75/0.00 are trivial.
 4. **Mesh convergence** — Exp3 400×50 is mode-invalid; convergence is not
    demonstrated at fine mesh.
-5. **7.1× speedup, 8.6% frequency gap, 4.61× building gain** — no accepted
-   evidence under authoritative formulation; P1 not run.
-6. **O(N_e^1.3) scaling with stated precision** — Table 3 values are placeholders;
-   actual log-log fit of current data gives ≈1.07; P1 not run.
+5. **7.1× speedup, 8.6% frequency gap** — **withdrawn permanently.** EXP1 is
+   retired as construct-invalid; no cross-code performance claim is made.
+   (The 4.61× building gain is a MAC-tracked frequency gain from EXP2b, not a
+   performance claim, and depends on EXP2b being accepted.)
+6. **O(N_e^1.3) scaling with stated precision** — **withdrawn permanently.** EXP5
+   is retired; the claim is resolved by removal, not by a replacement fit.
 7. **"Equivalent to Yuksel-Yilmaz"** (N=1 refresh claim) — A4 not run.
 8. **"Converges" for the proposed method** applied broadly — only α=1.00 on
    200×25 is demonstrated; 400×50 fails.
@@ -636,12 +661,15 @@ No reproducibility artifacts exist.
 
 ### Claims reformulable as limitations
 
-1. **Spurious modes:** "Under SIMP with linear mass interpolation (pmass=1),
-   localized low-density modes appear in the spectrum at fine resolution (400×50).
-   Aggressive mass penalization (pmass=6) recovers the tracked mode (MAC=0.974)
-   but does not eliminate spurious modes from the adjacent spectrum. Length-scale
-   enforcement (Heaviside projection) or void-mass penalization is required for
-   a clean spectrum and is left to future work."
+1. **Spurious modes** (revised per [MASS_INTERPOLATION_DECISION.md](MASS_INTERPOLATION_DECISION.md)):
+   "Spurious low-frequency modes appear in the post-convergence spectra at fine resolution
+   (400×50). The method uses a **linear** mass interpolation with `ρ_min` regularization and
+   no low-density correction branch. **The mass interpolation is not the identified cause:**
+   linear, `pmass=6`, and Du–Olhoff Eq. 4b were each tested and none eliminates the family.
+   Current evidence associates these modes with disconnected solid components — they carry
+   negligible kinetic energy in low-density material and concentrate on solid regions not
+   connected to the supports. We report this as current evidence, not as an established
+   mechanism, and a remedy is left to future work."
 2. **Mesh convergence:** "The method converges on a 200×25 mesh but produces
    a mode-invalid result on the 400×50 refinement due to localized-mode
    pathology. Mesh convergence cannot be demonstrated without resolving the
@@ -651,9 +679,16 @@ No reproducibility artifacts exist.
    effect on converged results could not be quantified: Variant B (complete,
    OC optimizer) failed to converge due to a period-2 instability, and no
    accepted matched comparison pair is available."
-4. **Performance claims:** "Timing measurements were made under conditions
-   that include diagnostic overhead; clean benchmark data is required before
-   speedup and scaling exponents can be stated."
+4. **Performance claims:** "No quantitative cross-code performance comparison is
+   made. The available local comparators are not faithful reference
+   implementations — the local Olhoff-inspired code performs a trial eigensolve
+   after every MMA update, roughly doubling its eigensolves per outer iteration,
+   and the local Yuksel-inspired code does not reproduce the published iteration
+   counts — so a runtime, memory, or scaling comparison against them would
+   measure implementation choices rather than the methods. The efficiency
+   argument is stated at the level of operation count: one eigensolve at
+   initialization instead of one per design iteration. Empirical benchmarking
+   against faithful reference implementations is left as future work."
 
 ### Minimum required work before R1 submission
 

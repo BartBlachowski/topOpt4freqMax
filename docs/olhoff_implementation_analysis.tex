@@ -102,9 +102,11 @@ factorization of $\mathbf{K}_f$ (to solve the linear system
 $\mathbf{K}_f\mathbf{u}_f = \mathbf{f}_f$), one mass-matrix assembly,
 one sensitivity evaluation, and one OC bisection sweep. The absence of an
 iterative eigensolve provides an algorithmic reason to expect a different cost
-profile, but runtime, convergence, memory, and scaling require accepted
-instrumented evidence. Any retained comparison must name `OlhoffApproach' as a
-local implementation and must not be interpreted as canonical-method evidence.
+profile, but this remains an operation-count argument only. No runtime,
+convergence, memory, or scaling comparison is made or pending: EXP1 and EXP5 are
+retired from the reviewer evidence chain, and the local comparators are not
+faithful reference implementations, so no such measurement would license an
+inference about either published method.
 
 The intended application is preliminary design and rapid exploration of
 boundary-condition configurations. The size of any accuracy--cost trade-off is

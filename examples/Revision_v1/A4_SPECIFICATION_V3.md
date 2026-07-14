@@ -1,4 +1,4 @@
-# A4_SPECIFICATION_V2 — Eigenpair-Refresh Study
+# A4_SPECIFICATION_V3 — Eigenpair-Refresh Study
 
 **Status:** authoritative definition of A4. Supersedes A4-1 … A4-4 in
 `scripts/revision_v1/IMPLEMENTATION_MAP.md` and the A4 section of
@@ -816,7 +816,7 @@ that would have silently published its own contamination was not.
 Plus one new capability: **R-1**, the refresh interval on the `semi_harmonic` load path — which does
 not currently exist, and whose absence is the reason the previous plan went wrong.
 
-> ## **A4_SPECIFICATION_V2 is ready to become the authoritative experiment definition.**
+> ## **A4_SPECIFICATION_V3 is the authoritative experiment definition.**
 
 ---
 

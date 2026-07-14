@@ -1,7 +1,8 @@
 # Revision_v1 experiment scope
 
 The production entry point is `run_all_revision_experiments.m`. Its active
-stages are Exp1--Exp5 and their declared verification/acceptance gates.
+stages are `S1`, `EXP2`, `EXP2b`, `EXP3`, and `A4`, plus their declared
+verification/acceptance gates.
 
 Current state, remaining computation, and reviewer blockers are tracked in:
 
@@ -30,12 +31,14 @@ or scaling stage remains active, and comparator telemetry is deliberately not im
 
 The production dependency chain is:
 
-`run_all_revision_experiments` → `exp1_perf_table` → `Olhoff` →
-`analysis/OlhoffApproach`.
+`run_all_revision_experiments` → `S1` → `EXP2` → `EXP2b` → `EXP3` → `A4`.
 
-Exp5 consumes Exp1's three local method series. No link in this chain imports
-`OlhoffApproachExact`, and the path allowlist in
-`run_all_revision_experiments.m` (`localAddActiveAnalysisPaths`) excludes it.
+No active stage consumes a cross-code comparator: the stage that did
+(`exp1_perf_table`, with `exp5_scaling` consuming its output) is retired and
+archived. No link in this chain imports `OlhoffApproachExact`; the path
+allowlist in `run_all_revision_experiments.m` (`localAddActiveAnalysisPaths`)
+excludes it, and preflight P1/P2 fail the campaign if an archived tree or an
+archived runner is reached.
 
 ## Directory layout
 

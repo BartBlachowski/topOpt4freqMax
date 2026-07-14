@@ -99,7 +99,8 @@ tolerance, recommended relative error \(\le 10^{-5}\). The omitted-gradient
 variant is not expected to match the complete finite-difference derivative;
 its effect is evaluated through converged optimization outcomes.
 
-**Gate V1:** all regression checks pass before Exp1--Exp5 are regenerated.
+**Gate V1:** all regression checks pass before any active stage (S1, EXP2, EXP2b,
+EXP3, A4) is regenerated.
 
 ## Workstream 3: Recover the Clamped-Beam Experiments
 
@@ -178,55 +179,37 @@ reference.
 A4 comparisons are converged and track the same physical mode. Otherwise the
 corresponding reliability claim must be qualified or retracted.
 
-## Workstream 5: Rebuild Performance Evidence
+## Workstream 5: Rebuild Performance Evidence — RETIRED
 
-Instrument timings inside each solver. Do not estimate initialization by
-subtracting one-iteration probes from loop averages. Record independently:
+**Retired 2026-07-13 by `SCIENTIFIC_DECISION_EXP1_EXP5.md`.** EXP1 and EXP5 are
+removed from the reviewer evidence chain, so there is no performance evidence to
+rebuild. This workstream is **void in its entirety**: no solver instrumentation,
+no benchmark mode, no warm-up/repeat timing campaign, no timing or memory
+standard deviations, no Yuksel iteration-discrepancy investigation, and no
+scaling fit. **Gate P1 no longer exists.**
 
-- initialization time;
-- optimization-loop time;
-- postprocessing time;
-- total wall-clock time;
-- iterations and per-iteration time;
-- peak memory.
+The defect is construct validity, not instrumentation. The local comparators are
+not faithful reference implementations: `OlhoffApproach` performs a trial
+eigensolve after every MMA update — roughly doubling its eigensolves per outer
+iteration — and adds a Heaviside projection, a continuation schedule, and a
+grayness penalty absent from the published method, while the local
+Yuksel-inspired code does not reproduce the published iteration counts. A timing,
+memory, or scaling comparison against either measures implementation choices, not
+methods, at any level of instrumentation. Comparator telemetry is therefore
+**deliberately not implemented**.
 
-Disable live plots, saved images, correlation exports, frequency-history
-eigensolves, and other diagnostics for benchmark runs. Use identical stopping
-rules and required outputs across methods. Perform warm-up runs followed by at
-least ten measured executions at each mesh.
+The affected reviewer demands (runtime decomposition, timing/memory standard
+deviations, source and bound of the speedup, ω₁ per method and mesh, the Yuksel
+180–200 iteration discrepancy, and the O(nₑ^1.3) scaling correction) are
+**resolved by retraction**, which the Definition of Complete explicitly permits.
+The manuscript makes no cross-code performance claim; the efficiency argument
+survives only as an operation count (one eigensolve at initialization versus one
+per design iteration).
 
-Optimization outputs are deterministic unless the implementation proves
-otherwise. Report standard deviations for timing and memory, and explain their
-system-level variability; do not imply stochastic variation in deterministic
-frequencies or designs.
-
-Require convergence before including a run in any local frequency-difference
-or runtime-ratio statement.
-Investigate the Yuksel 180--200 versus 1,000+ iteration discrepancy using
-matched stopping criteria and, where available, an author-provided Yuksel
-implementation. This task does not involve the archived Olhoff reconstruction.
-
-Keep comparator scope explicit:
-
-- the only Olhoff comparator in production is
-  `analysis/OlhoffApproach`, labelled "local Olhoff-inspired implementation";
-- `OlhoffApproachExact` is an archived diagnostic reconstruction attempt and
-  is excluded from all production runs, tables, figures, scaling fits, and
-  reviewer evidence;
-- do not claim a canonical Du--Olhoff reproduction, a frequency gap to the
-  published optimum, or a speedup relative to the canonical method;
-- any retained frequency difference, runtime ratio, convergence comparison,
-  or scaling fit applies only to the named local implementations.
-
-Recompute the scaling fit from corrected timing data only if the existing P1
-comparison is retained. Remove the existing 8.6% gap-to-optimum and canonical
-7.1x speedup narratives; do not attempt to restore them through the archived
-reconstruction. Any replacement value must be explicitly local to
-`OlhoffApproach` and the other named repository implementations.
-
-**Gate P1:** no capped or methodologically mismatched result enters a table,
-local runtime ratio, local frequency-difference statement, or scaling
-regression.
+`exp1_perf_table.m` and `exp5_scaling.m` are preserved unmodified under
+`archive/obsolete_evidence/exp1_exp5/` and are denied by name in the runner's
+preflight P2. The frozen-eigenpair accuracy and cost question that EXP1 proxied
+is answered within a single implementation by **A4**.
 
 ## Workstream 6: Low-Mode and Grayness Diagnosis
 
@@ -239,10 +222,19 @@ mode, export:
 - localization metric;
 - density support and selected-mode MAC.
 
-Classify modes from localization and energy evidence, not MAC alone. Compare the
-baseline SIMP interpolation with one documented mitigation such as RAMP,
-increased void-mass penalization, or Heaviside continuation. Report grayness for
+Classify modes from localization and energy evidence, not MAC alone. Report grayness for
 every final topology and explain the gray regions in the affected figures.
+
+**Mass-interpolation axis: exhausted (2026-07-14, see
+[`MASS_INTERPOLATION_DECISION.md`](../../MASS_INTERPOLATION_DECISION.md)).** The declared
+method uses **linear** mass interpolation with `ρ_min` regularization and no low-density
+correction branch. Linear, `pmass=6`, and Du–Olhoff Eq. 4b have all been tested on the same
+400×50 case; **none removes the localized-mode family**, and the flagged modes carry
+essentially **no kinetic energy in the low-density material**. Any further mitigation
+comparison (RAMP, Heaviside, void-mass penalization) must therefore not be premised on the
+mass model being the cause. Current evidence associates the modes with **disconnected solid
+components** — stated as evidence, not as an established mechanism. **This decision schedules
+no new experiment.**
 
 Retain the claim that the method avoids spurious low-density modes only if this
 evidence supports it. Otherwise replace it with a bounded limitation and explain
@@ -310,15 +302,12 @@ Create:
 - fail-loud runner and convergence telemetry;
 - successful, converged Exp2 and Exp3;
 - valid CR2 and A4 studies;
-- corrected Exp1 comparator/timing evidence;
 - low-mode classification for every published case;
 - manuscript claim reconciliation and response letter;
 - artifact manifest, commit, license, and permanent release.
 
 ### Tier 2: mandatory if the associated claim is retained
 
-- accepted local `OlhoffApproach` comparison evidence for any local
-  performance statement;
 - RAMP/Heaviside mitigation comparison;
 - claims of absence of spurious modes;
 - strong frozen-accuracy or monotonicity claims;
@@ -343,11 +332,9 @@ Tier 3 work must not delay correction of Tier 1 blockers.
 1. Run unit and small-mesh smoke tests first.
 2. Run one production configuration per experiment and inspect convergence and
    artifacts before launching a sweep.
-3. Run Exp2/Exp3/CR2/A4 scientific gates before the expensive repeated timing
-   study.
-4. Launch Exp1 only after formulations, diagnostics, and stopping rules are
-   frozen.
-5. Preserve failed runs and logs for diagnosis, but exclude them from accepted
+3. Run the scientific gates (S1, EXP2, EXP2b, EXP3, A4, CR2). There is no timing
+   study: EXP1 and EXP5 are retired (Workstream 5).
+4. Preserve failed runs and logs for diagnosis, but exclude them from accepted
    evidence.
 
 ## Definition of Complete

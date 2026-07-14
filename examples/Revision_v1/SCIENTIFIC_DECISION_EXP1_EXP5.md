@@ -144,6 +144,14 @@ either way. **Decision required.**
 
 ## 5. Implementation impact
 
+**Delivery note (2026-07-14).** The runner changes below were specified here on
+2026-07-13 but were carried in `proposed/stage_rewiring.patch` and
+`proposed/acceptance_gates.patch`, which were **not yet applied to the working tree** —
+so between 07-13 and 07-14 this section described the *intended* runner, not the actual
+one. Both patches have now been applied, in that order, and re-verified against the real
+repository (see the verification line at the end of this section). Everything below is now
+true of `examples/Revision_v1/run_all_revision_experiments.m` as it stands.
+
 - Master runner: EXP1 and EXP5 stages removed; the EXP5→EXP1 dispatch rebinding and the
   `localLoadExp1Result` helper are gone; the now-dead `localAccept_Exp1` and
   `localAccept_Exp5` gates are removed. **No scaling stage remains active.**
@@ -154,10 +162,11 @@ either way. **Decision required.**
 - Preserved unchanged: **smoke, dry_run, resume, force, stage mode, progress tracking**.
 - **Untouched, as required: S1, EXP2, EXP2b, EXP3, A4, CR2.**
 
-Validated in a disposable sandbox with MATLAB R2025b: runner parses, 18/18 acceptance-gate
-tests pass, dry-run reports **S1 → EXP2 → EXP2b → EXP3 → A4**, `full` aborts with
-`run_all:PreflightFailed` (A4 not implemented) before any computation, `smoke` still yields
-`run_all:GateI1Confirmed`.
+**Verified against the actual repository** (not a sandbox) with MATLAB R2025b on
+2026-07-14, after both patches were applied: runner parses; 18/18 acceptance-gate tests
+pass; dry-run reports **S1 → EXP2 → EXP2b → EXP3 → A4**; `full` aborts in ~5 s with
+`run_all:PreflightFailed` (P3: A4 not implemented) before any computation; `smoke` still
+yields `run_all:GateI1Confirmed`.
 
 ---
 

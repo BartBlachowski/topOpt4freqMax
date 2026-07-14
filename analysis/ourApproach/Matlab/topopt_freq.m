@@ -120,8 +120,8 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
     yDown = zeros(ndof, 1);
     yDown(2:2:end) = -1;
 
-    [loadCases, usingConfiguredLoadCases, maxHarmonicMode, modeUpdateAfter, maxSemiHarmonicMode] = ...
-        localResolveLoadCases(runCfg, nodeX, nodeY, nodeIds);
+    [loadCases, usingConfiguredLoadCases, maxHarmonicMode, modeUpdateAfter, maxSemiHarmonicMode, ...
+        semiHarmonicUpdateAfter] = localResolveLoadCases(runCfg, nodeX, nodeY, nodeIds);
     nCases = numel(loadCases);
     fprintf('Load cases: %d\n', nCases);
     for ci = 1:nCases
@@ -334,10 +334,47 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
                 phiFree = semiHarmonicPhi0(free, k);
                 semiHarmonicModalMass(k) = real(phiFree' * (semiHarmonicM0(free, free) * phiFree));
             end
+            % Retain the ORIGINAL solid reference eigenpair. For N=inf this is
+            % identical to semiHarmonicPhi0; for refreshed arms semiHarmonicPhi0
+            % is overwritten, so Phi0_solid must be kept separately to report
+            % MAC(current, Phi0_solid). Always captured; costs one vector.
+            semiHarmonicPhiSolidRef = semiHarmonicPhi0(:, 1);
+            semiHarmonicOmegaSolidRef = semiHarmonicOmega0(1);
+
             clear K0 sK0 sM0 rhoPhys0 semiHarmonicM0;
             fprintf('[Load cases] semi_harmonic baseline cached up to mode %d.\n', maxSemiHarmonicMode);
         end
     end
+
+    % ------------------------------------------------------------------
+    % R-1 (A4_SPECIFICATION_V3 §7.1): semi_harmonic eigenpair-refresh state.
+    % DEFAULT-OFF. semiHarmonicRefreshActive is false unless a semi_harmonic
+    % load declares update_after > 0, so every pre-existing configuration
+    % (EXP2/EXP2b/EXP3/S1/CR2) takes exactly the frozen path it took before.
+    % ------------------------------------------------------------------
+    semiHarmonicRefreshActive = usingConfiguredLoadCases && maxSemiHarmonicMode > 0 && ...
+        isfinite(semiHarmonicUpdateAfter) && semiHarmonicUpdateAfter > 0;
+    semiHarmonicRefreshEvents = repmat(localBlankRefreshEvent(), 0, 1);
+    semiHarmonicRefreshCount = 0;
+    semiHarmonicPhiPrev = [];
+    semiHarmonicPhiSolid = [];
+    semiHarmonicOmegaSolid = NaN;
+    if exist('semiHarmonicPhiSolidRef', 'var')
+        semiHarmonicPhiSolid = semiHarmonicPhiSolidRef;
+        semiHarmonicOmegaSolid = semiHarmonicOmegaSolidRef;
+    end
+    semiRefreshNModes = 20;   % spec V3 §4.3.1: candidates are the first 20 modes
+    if semiHarmonicRefreshActive
+        % Continuity reference for the first refresh is the frozen solid mode.
+        semiHarmonicPhiPrev = semiHarmonicPhi0(:, 1);
+        fprintf('[R-1] semi_harmonic eigenpair refresh ACTIVE: N = %g (mod(iter,N)==0)\n', ...
+            semiHarmonicUpdateAfter);
+    end
+    info.semi_harmonic_refresh = struct( ...
+        'active', semiHarmonicRefreshActive, ...
+        'update_after', semiHarmonicUpdateAfter, ...
+        'n_refresh', 0, ...
+        'events', {{}});
 
     % ------------------------------------------------------------------
     % Eigenpair cache for harmonic loads (persists across iterations).
@@ -445,11 +482,83 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
             dueModes = [];
         end
 
-        needMf = saveFrqIterations || gateA0Diagnostics || ~isempty(dueModes);
+        % R-1: is a semi_harmonic reference refresh due this iteration?
+        % Spec V3 §7.1: "at every iteration i with i mod k = 0".
+        semiRefreshDue = semiHarmonicRefreshActive && ...
+            (mod(loop, semiHarmonicUpdateAfter) == 0);
+
+        needMf = saveFrqIterations || gateA0Diagnostics || ~isempty(dueModes) || semiRefreshDue;
         if needMf
             Mf = M(free, free);
         else
             Mf = [];
+        end
+
+        % ------------------------------------------------------------------
+        % R-1: refresh the semi_harmonic reference eigenpair on the CURRENT
+        % design.  This replaces ONLY (omega0, Phi0); it does not touch FE
+        % assembly, interpolation, sensitivities, OC, filtering, the eigensolver
+        % or the load definition.  Inert unless semiHarmonicRefreshActive.
+        % ------------------------------------------------------------------
+        if semiRefreshDue
+            [refreshOmegas, refreshPhi] = localCurrentModesFromSubmatrices( ...
+                Kf, Mf, free, ndof, semiRefreshNModes);
+
+            screenCtx = struct( ...
+                'nelx', nelx, 'nely', nely, 'edofMat', edofMat, ...
+                'KE', KE, 'ME', ME, 'M', M, 'free', free, ...
+                'Emax', Emax, 'Emin', Emin, 'rho0', rho0, 'rho_min', rho_min, ...
+                'penal', penal, 'massInterp', massInterp);
+
+            screen = a4_mode_screen(refreshPhi, refreshOmegas, xPhys, screenCtx, semiHarmonicPhiPrev);
+
+            if screen.selected == 0
+                % Spec V3 §7.1: "If no mode passes the screen, the run does not
+                % silently pick one: it records a B3 event and terminates that
+                % arm as Class C."  Fail loud; the A4 classifier maps this
+                % identifier to B3.  It is NOT silently recovered.
+                error('topopt_freq:SemiHarmonicRefreshInadmissible', ...
+                    ['R-1 refresh at iteration %d: no admissible mode among the first %d. ' ...
+                     'Every candidate failed the support-connectivity screen ' ...
+                     '(A4_SPECIFICATION_V3 §4.3.1). Solid components = %d. ' ...
+                     'This is a B3 event and must be classified, not recovered.'], ...
+                    loop, semiRefreshNModes, screen.nComponents);
+            end
+
+            jSel = screen.selected;
+            selRow = screen.modes(jSel);
+
+            % Replace the frozen reference for mode 1 (the tracked reference).
+            % Normalization/phase come from localCurrentModesFromSubmatrices,
+            % i.e. the same routine and conventions as the solid baseline.
+            semiHarmonicOmega0(1)   = refreshOmegas(jSel);
+            semiHarmonicOmega0Sq(1) = refreshOmegas(jSel)^2;
+            semiHarmonicPhi0(:, 1)  = refreshPhi(:, jSel);
+            phiFreeSel = refreshPhi(free, jSel);
+            semiHarmonicModalMass(1) = real(phiFreeSel' * (Mf * phiFreeSel));
+
+            semiHarmonicPhiPrev = refreshPhi(:, jSel);
+            semiHarmonicRefreshCount = semiHarmonicRefreshCount + 1;
+
+            ev = localBlankRefreshEvent();
+            ev.iter = loop;
+            ev.index = jSel;
+            ev.omega = refreshOmegas(jSel);
+            ev.mac_prev = selRow.mac_prev;
+            ev.mac_phi0 = a4_mac(refreshPhi(:, jSel), semiHarmonicPhiSolid, M);
+            ev.low_density_kinetic_fraction = selRow.low_density_kinetic_fraction;
+            ev.low_density_strain_fraction = selRow.low_density_strain_fraction;
+            ev.largest_support_component_kinetic_fraction = ...
+                selRow.largest_support_component_kinetic_fraction;
+            ev.n_components = screen.nComponents;
+            ev.n_admissible = sum([screen.modes.admissible]);
+            ev.reason = screen.reason;
+            semiHarmonicRefreshEvents(end+1, 1) = ev; %#ok<AGROW>
+
+            fprintf(['[R-1 refresh] it=%d  mode=%d  omega=%.4f  MAC(prev)=%.4f  ' ...
+                     'MAC(Phi0)=%.4f  supportKin=%.4f  comps=%d  admissible=%d\n'], ...
+                loop, jSel, ev.omega, ev.mac_prev, ev.mac_phi0, ...
+                ev.largest_support_component_kinetic_fraction, ev.n_components, ev.n_admissible);
         end
 
         % Update eigenpair cache for all due modes (single eigs call up to max needed).
@@ -697,6 +806,20 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
     loop_time = toc(loop_tic);
     tIter = loop_time / max(loop, 1);
     nIter = loop;
+
+    % R-1: publish the refresh record (every refresh event is recorded).
+    info.semi_harmonic_refresh.active = semiHarmonicRefreshActive;
+    info.semi_harmonic_refresh.update_after = semiHarmonicUpdateAfter;
+    info.semi_harmonic_refresh.n_refresh = semiHarmonicRefreshCount;
+    info.semi_harmonic_refresh.n_candidate_modes = semiRefreshNModes;
+    info.semi_harmonic_refresh.events = semiHarmonicRefreshEvents;
+    % Analytic prediction (validator V-A4-3): eigensolves inside the loop.
+    if semiHarmonicRefreshActive
+        info.semi_harmonic_refresh.n_refresh_predicted = floor(loop / semiHarmonicUpdateAfter);
+    else
+        info.semi_harmonic_refresh.n_refresh_predicted = 0;
+    end
+
     if saveFrqIterations
         info.freq_iter_omega = info.freq_iter_omega(1:loop,:);
     end
@@ -733,6 +856,26 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
 
     Kf_final = K_final(free, free);
     Mf_final = M_final(free, free);
+
+    % ------------------------------------------------------------------
+    % A4 endpoint export (spec V3 §4.1/§4.2).  DEFAULT-OFF: only populated
+    % when runCfg.a4_endpoint_export is true, so EXP2/EXP2b/EXP3/S1/CR2 emit
+    % exactly the info struct they emitted before (no new fields, no larger
+    % .mat).  Exposes ALREADY-COMPUTED quantities only -- no new numerics --
+    % so the A4 driver need not duplicate FE assembly and cannot drift from
+    % the solver.
+    % ------------------------------------------------------------------
+    if localOpt(runCfg, 'a4_endpoint_export', false)
+        info.a4_endpoint = struct( ...
+            'K_final', K_final, 'M_final', M_final, ...
+            'free', free, 'ndof', ndof, ...
+            'edofMat', edofMat, 'KE', KE, 'ME', ME, ...
+            'xPhys', xPhys(:), 'nelx', nelx, 'nely', nely, ...
+            'Emax', Emax, 'Emin', Emin, 'rho0', rho0, 'rho_min', rho_min, ...
+            'penal', penal, 'volfrac', volfrac, 'massInterp', massInterp, ...
+            'phi0_solid', semiHarmonicPhiSolid, ...
+            'omega0_solid', semiHarmonicOmegaSolid);
+    end
     if gateA0Diagnostics
         [finalTrackingOmegas, finalTrackingModes] = localCurrentModesFromSubmatrices( ...
             Kf_final, Mf_final, free, ndof, 6);
@@ -778,7 +921,12 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
     xOut = xPhys(:);
 end
 
-function [loadCases, usingConfiguredLoadCases, maxHarmonicMode, modeUpdateAfter, maxSemiHarmonicMode] = localResolveLoadCases(runCfg, nodeX, nodeY, nodeIds)
+function [loadCases, usingConfiguredLoadCases, maxHarmonicMode, modeUpdateAfter, maxSemiHarmonicMode, semiHarmonicUpdateAfter] = localResolveLoadCases(runCfg, nodeX, nodeY, nodeIds)
+% R-1 (A4_SPECIFICATION_V3 §7.1): semiHarmonicUpdateAfter is the refresh
+% interval N for the semi_harmonic reference eigenpair.
+%   0 / absent / Inf -> FROZEN (default; bit-identical to pre-R-1 behaviour)
+%   k > 0            -> refresh on the CURRENT design when mod(iter, k) == 0
+semiHarmonicUpdateAfter = 0;   % default-off
 usingConfiguredLoadCases = false;
 if isstruct(runCfg) && isfield(runCfg, 'load_cases')
     if isempty(runCfg.load_cases)
@@ -829,6 +977,21 @@ for icase = 1:numel(loadCases)
                 modeUpdateAfterRaw(modeK) = min(modeUpdateAfterRaw(modeK), ua);
             case 'semi_harmonic'
                 maxSemiHarmonicMode = max(maxSemiHarmonicMode, ld.mode);
+                % R-1: refresh interval. Absent -> frozen (default-off).
+                if isfield(ld, 'update_after') && ~isempty(ld.update_after)
+                    uaS = double(ld.update_after);
+                    if ~isfinite(uaS) || uaS < 0
+                        uaS = 0;   % Inf / negative -> frozen
+                    end
+                    if uaS > 0
+                        if semiHarmonicUpdateAfter == 0
+                            semiHarmonicUpdateAfter = uaS;
+                        else
+                            % Most-frequent refresh wins (mirrors the harmonic rule).
+                            semiHarmonicUpdateAfter = min(semiHarmonicUpdateAfter, uaS);
+                        end
+                    end
+                end
         end
     end
 end
@@ -837,6 +1000,24 @@ if maxHarmonicMode > 0
 else
     modeUpdateAfter = zeros(0, 1);
 end
+end
+
+function ev = localBlankRefreshEvent()
+%LOCALBLANKREFRESHEVENT  R-1 (A4_SPECIFICATION_V3 §7.1) refresh-event record.
+%   Every refresh event is recorded: iteration, chosen index, MAC continuity,
+%   MAC to the original solid reference, the screen metrics, and omega.
+ev = struct( ...
+    'iter', 0, ...
+    'index', 0, ...
+    'omega', NaN, ...
+    'mac_prev', NaN, ...
+    'mac_phi0', NaN, ...
+    'low_density_kinetic_fraction', NaN, ...
+    'low_density_strain_fraction', NaN, ...
+    'largest_support_component_kinetic_fraction', NaN, ...
+    'n_components', 0, ...
+    'n_admissible', 0, ...
+    'reason', '');
 end
 
 function [harmonicOmegas, harmonicPhi] = localCurrentModesFromSubmatrices(Kf, Mf, free, ndof, maxMode)

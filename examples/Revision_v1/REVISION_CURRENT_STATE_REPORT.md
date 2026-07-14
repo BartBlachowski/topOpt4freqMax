@@ -110,7 +110,7 @@ See `REVISION_EXECUTION_PLAN.md` for the full table. Summary:
 | Stage | Why it must run | Est. |
 |---|---|---:|
 | **A4** | **No script, no config, no artifact exists.** Must be implemented, then run. **New critical path.** | ~16 h |
-| S1 mitigation | `pmass=6` failed: 9/10 modes still localized. Gates EXP2b and EXP3. | ~3 h |
+| S1 mitigation | `pmass=6` did not clean the spectrum: 9/10 modes still flagged. **The mass axis is exhausted** — linear (the declared method), `pmass=6`, and Du–Olhoff Eq. 4b all fail to remove the family; current evidence points to disconnected solid components, not void mass ([`MASS_INTERPOLATION_DECISION.md`](../../MASS_INTERPOLATION_DECISION.md)). Gates EXP2b and EXP3. | ~3 h |
 | CR2 | All three attempts capped (OC **and** MMA) → cause is not the optimizer. Claim withheld. | ~3 h |
 | EXP2 | 0/5 alphas accepted; two "accepted" rows are degenerate iteration-1 runs. | ~3 h |
 | EXP3 | 400×50 mode-invalid; Δω = 0.55 vs 0.05 threshold. | ~6 h |
@@ -157,15 +157,21 @@ Verified by exhaustive grep over the post-migration tree:
 - **Executable dependencies:** every `addpath(... 'OlhoffApproachExact' ...)` occurrence —
   all six of them — now resides inside `archive/olhoff_exact_reconstruction/scripts/`.
   **Zero** occurrences remain in any active script, configuration, or output.
-- **Approach dispatch:** `exp1_perf_table.m` selects `approaches = {'Olhoff','Yuksel','OurApproach'}`.
-  The `Olhoff` key dispatches to `analysis/OlhoffApproach` only. No configuration anywhere
-  selects an `OlhoffExact` key.
+- **Approach dispatch:** no active stage selects any cross-code comparator at all. The only
+  stage that did (`exp1_perf_table.m`, which selected `approaches =
+  {'Olhoff','Yuksel','OurApproach'}`) is retired and archived. No configuration anywhere
+  selects an `OlhoffExact` key; `tools/Matlab/run_topopt_from_json.m` retains the
+  `OlhoffExact` branch for archive compatibility only, behind a warning, and excludes it
+  from the production-choice list.
 - **Path allowlist:** `run_all_revision_experiments.m::localAddActiveAnalysisPaths` admits
   only `{ourApproach, OlhoffApproach, YukselApproach, elastic2D, LabandaApproach}`. The
-  archived reconstruction tree cannot enter the MATLAB path during a production run.
-- **Residual mentions** in `exp1_perf_table.m`, `exp5_scaling.m` and
-  `run_all_revision_experiments.m` are **exclusionary comments only** (e.g. `exp5_scaling.m:3`:
-  "The Olhoff series is OlhoffApproach only. OlhoffApproachExact is excluded."), not imports.
+  archived reconstruction tree cannot enter the MATLAB path during a production run, and
+  **preflight P1** fails the campaign if any active path entry references
+  `OlhoffApproachExact`.
+- **Residual mentions** in `run_all_revision_experiments.m` are **exclusionary comments and
+  the preflight P2 denylist only** (`exp1_perf_table`, `exp5_scaling`,
+  `exp4_sensitivity_ablation`, and the `*_olhoff_exact` pilots are denied *by name*), not
+  imports.
 
 **Confirmed: no active Revision_v1 experiment depends on `OlhoffApproachExact`.**
 `analysis/OlhoffApproach` is the sole active local comparison implementation.
