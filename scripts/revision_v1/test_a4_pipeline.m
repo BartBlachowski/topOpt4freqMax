@@ -137,6 +137,68 @@ end
 [nPass, nFail] = ck('Gate A4-Pre executes and writes a verdict', ...
     okPre && isfile(fullfile(outDir, 'a4_pre_screen.json')), nPass, nFail);
 
+% ==== CONVERGED-PATH REGRESSION (production-readiness audit, blocker FM1) ====
+% The sweep above runs at max_iters=4 with tol=1e-16, so every arm CAPS and
+% takes the B4-unattributed classifier branch.  That masked a production
+% blocker: info.last_change was never exported by topopt_freq, so
+% final_design_change was NaN for every arm and check_a4_run classified every
+% CONVERGED arm as REJECTED -- i.e. the campaign's healthiest outcome failed
+% its own acceptance gate.  This section exercises the CONVERGED branch:
+% a near-solid 40x5 run with a reachable tolerance converges before the cap
+% and MUST classify ACCEPTED (Class B).
+convBase = base;
+convBase.optimization.max_iters = 300;          % generous cap
+convBase.optimization.convergence_tol = 1e-2;   % reachable before the cap
+convPath = fullfile(outDir, 'a4_tiny_converged.json');
+fid = fopen(convPath, 'w');
+fprintf(fid, '%s\n', jsonencode(convBase, PrettyPrint=true));
+fclose(fid);
+
+convOpts = struct('base_config', convPath, 'n_levels', [Inf, 2], 'n_modes', 6, ...
+                  'run_pre_screen', false);
+convDir = fullfile(outDir, 'converged');
+mkdir(convDir);
+cres = [];
+try
+    evalc('cres = a4_eigenpair_refresh(convDir, convOpts);');
+    [nPass, nFail] = ck('converged-path: driver ran', ...
+        isstruct(cres) && isfield(cres, 'arms'), nPass, nFail);
+catch ME
+    [nPass, nFail] = ck(sprintf('converged-path: driver ran (got: [%s] %s)', ...
+        ME.identifier, ME.message), false, nPass, nFail);
+end
+
+if isstruct(cres) && isfield(cres, 'arms')
+    % (1) The runs must actually converge before the cap -- otherwise this
+    % section is vacuously re-testing the capped branch.
+    convergedAll = all(arrayfun(@(a) a.iterations < a.cap, cres.arms));
+    [nPass, nFail] = ck(sprintf('converged-path: every arm stopped before the cap (%s)', ...
+        strjoin(arrayfun(@(a) sprintf('%d/%d', a.iterations, a.cap), cres.arms, ...
+        'UniformOutput', false)', ', ')), convergedAll, nPass, nFail);
+
+    % (2) THE FM1 REGRESSION: final_design_change must be a real number that
+    % reached the classifier (info.last_change export), not NaN.
+    fdcOk = all(arrayfun(@(a) isfinite(a.final_design_change) && ...
+        a.final_design_change <= a.tol, cres.arms));
+    [nPass, nFail] = ck('converged-path: final_design_change finite and <= tol for every arm', ...
+        fdcOk, nPass, nFail);
+
+    % (3) A clean converged arm must classify ACCEPTED (Class B) -- before the
+    % fix it classified REJECTED ("unconverged without a recognized breakdown
+    % signature (change NaN > tol)").
+    clsOk = all(arrayfun(@(a) strcmp(a.class, 'ACCEPTED'), cres.arms));
+    [nPass, nFail] = ck(sprintf('converged-path: every arm Class B/ACCEPTED (%s)', ...
+        strjoin(arrayfun(@(a) sprintf('N=%s:%s%s', a.tag, a.class, a.breakdown), ...
+        cres.arms, 'UniformOutput', false)', ', ')), clsOk, nPass, nFail);
+
+    % (4) With all arms Class B and gains within delta, the pre-registered
+    % rule 1 (spec 5.3) must emit H0 -- not INDETERMINATE, and never the
+    % previously-vacuous FROZEN_EXCEEDS_CLEAN_REFRESH.
+    [nPass, nFail] = ck(sprintf('converged-path: decision is H0 via rule 1 (got %s)', ...
+        cres.decision.outcome), ...
+        strcmp(cres.decision.outcome, 'H0_FREEZING_IS_BENIGN'), nPass, nFail);
+end
+
 fprintf('\n  passed: %d   failed: %d\n', nPass, nFail);
 if nFail > 0
     error('test_a4_pipeline:Failed', '%d A4 pipeline check(s) failed.', nFail);

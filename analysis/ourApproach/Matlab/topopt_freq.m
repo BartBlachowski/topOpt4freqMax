@@ -837,6 +837,12 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
     info.last_obj_cases = objCases;
     info.load_case_names = {loadCases.name};
     info.last_vol = mean(xPhys);
+    % Final max|Δx_e| of the run. TELEMETRY ONLY -- read by the A4 driver as
+    % final_design_change so check_a4_run can evaluate its convergence clause
+    % (A4_SPECIFICATION_V3 §5.2 Class B: "converged before the cap"). Without
+    % this export the driver saw NaN and classified every CONVERGED arm as
+    % REJECTED (production-readiness audit, blocker FM1).
+    info.last_change = change;
     if debugReturnDc
         info.last_dc = dc;
         info.last_dv = dv;

@@ -196,6 +196,38 @@ end
 end
 
 function d = localDecide(arms, delta)
+%LOCALDECIDE  Pre-registered decision rule (A4_SPECIFICATION_V3 §5.3), verbatim.
+%
+%   The four pre-registered outcomes are implemented EXACTLY as fixed before
+%   execution.  An arm configuration matching NONE of them is INDETERMINATE
+%   with an explicit statement -- it is never forced into a pre-registered
+%   label.  (The previous implementation admitted only Class B arms as H1
+%   evidence -- spec rule 2 admits Class C/B1 and C/B2 -- and its empty-set
+%   fall-through `all([] < -delta) == true` emitted FROZEN_EXCEEDS_CLEAN_REFRESH
+%   vacuously.  Both were production blockers; both are removed here.)
+%
+%   Definitions used below, from the spec:
+%     clean(a)        Class B, or Class C with breakdown B1/B2 -- §1.2: "not
+%                     classified as spurious-mode contaminated (B3) or
+%                     sensitivity-omission unstable (B4)"; restated in rule 2
+%                     as "(Class B, or Class C/B1 or C/B2 only)".
+%     disqualified(a) breakdown B3 or B4 -- recorded, but its endpoint may
+%                     never be read as accuracy evidence.
+%     reference       the N=inf arm.  "Only Class B arms may serve as an
+%                     accuracy reference in the H0/H1 decision" (§5.2), so the
+%                     reference must be ACCEPTED -- a B1/B2 finite arm may
+%                     EXCEED the reference (rule 2) but may not BE it.
+%
+%   The four rules (mutually exclusive by construction):
+%     rule 1  all arms Class B and every finite gain <= delta   -> H0 retained
+%     rule 2  some clean finite arm gain > delta                -> H1 supported
+%     rule 3  every finite arm B3/B4                            -> outcome 3
+%             (§1.2 pre-registers outcome 3 as "every refreshed arm is
+%              contaminated or unstable, so no accuracy reference can be
+%              constructed" -- a classification condition; the disqualified
+%              endpoints are not compared, since they may not be read as
+%              accuracy evidence.)
+%     rule 4  every finite arm clean and every gain < -delta    -> refresh hurts
 d = struct('outcome', '', 'statement', '', 'delta', delta, 'reference', NaN);
 
 frozen = arms([arms.N] == Inf);
@@ -205,24 +237,32 @@ if isempty(frozen)
     return;
 end
 frozen = frozen(1);
-
-isClean = @(a) strcmp(a.class, 'ACCEPTED');
 finite = arms(~isinf([arms.N]));
 
-if ~isClean(frozen)
+% Only a Class B arm may serve as the accuracy reference (spec §5.2). If the
+% published method's own arm is not Class B, no reference exists; that is an
+% observation about the published method, not a decidable H0/H1 outcome.
+if ~strcmp(frozen.class, 'ACCEPTED')
     d.outcome = 'INDETERMINATE';
-    d.statement = sprintf(['the N=inf arm (the published method) is %s/%s -- it cannot serve ' ...
-        'as the reference. Report as an observation about the published method.'], ...
-        frozen.class, frozen.breakdown);
+    d.statement = sprintf(['the N=inf arm (the published method) is %s%s -- only a Class B ' ...
+        'arm may serve as the accuracy reference (spec §5.2). Report as an observation ' ...
+        'about the published method.'], frozen.class, localBd(frozen.breakdown));
     return;
 end
 d.reference = frozen.omega1_tracked;
 
-usable = finite(arrayfun(isClean, finite));
-contaminated = finite(arrayfun(@(a) strcmp(a.breakdown, 'B3') || strcmp(a.breakdown, 'B4'), finite));
+if isempty(finite)
+    d.outcome = 'INDETERMINATE';
+    d.statement = 'no finite-N arms present; the H0/H1 decision requires refreshed arms';
+    return;
+end
 
-if isempty(usable) && ~isempty(contaminated)
-    % Pre-registered outcome 3 -- and it is EXP4's outcome.
+cleanFinite = finite(arrayfun(@localIsCleanArm, finite));
+disqFinite  = finite(arrayfun(@(a) any(strcmp(a.breakdown, {'B3', 'B4'})), finite));
+gains = arrayfun(@(a) (a.omega1_tracked - d.reference) / d.reference, cleanFinite);
+
+% ---- rule 3: every finite arm is B3/B4 (pre-registered outcome 3) ---------
+if numel(disqFinite) == numel(finite)
     d.outcome = 'OUTCOME_3_REFRESH_REFERENCE_UNAVAILABLE';
     d.statement = ['Neither hypothesis is supported: every refreshed arm is contaminated (B3) ' ...
         'or unstable (B4), so no refreshed reference could be constructed. This is EXP4''s ' ...
@@ -232,23 +272,62 @@ if isempty(usable) && ~isempty(contaminated)
     return;
 end
 
-gains = arrayfun(@(a) (a.omega1_tracked - d.reference) / d.reference, usable);
+% ---- rule 2: some clean finite arm exceeds the reference by > delta -------
 if any(gains > delta)
     d.outcome = 'H1_FREEZING_COSTS_ACCURACY';
-    d.statement = sprintf(['H0 REJECTED: a clean refreshed arm exceeds the frozen arm by ' ...
-        '%.1f%% > delta=%.1f%%. Freezing costs accuracy; report the penalty and bound the ' ...
-        'scope. main.tex:704 is evidenced.'], 100*max(gains), 100*delta);
-elseif all(gains < -delta)
+    d.statement = sprintf(['H0 REJECTED: a clean refreshed arm (Class B, or Class C/B1 or ' ...
+        'C/B2) exceeds the frozen arm by %.1f%% > delta=%.1f%%. Freezing costs accuracy; ' ...
+        'report the penalty and bound the scope. main.tex:704 is evidenced.'], ...
+        100*max(gains), 100*delta);
+    return;
+end
+
+% ---- rule 4: every finite arm clean, and frozen exceeds each by > delta ---
+if numel(cleanFinite) == numel(finite) && all(gains < -delta)
     d.outcome = 'FROZEN_EXCEEDS_CLEAN_REFRESH';
-    d.statement = ['The frozen arm exceeds every CLEAN refreshed arm by more than delta. ' ...
-        'Refreshing hurts, and the refreshed arms are not contaminated. Report it; do not ' ...
+    d.statement = ['The frozen arm exceeds every CLEAN refreshed arm by more than delta, and ' ...
+        'the refreshed arms are not contaminated. Refreshing hurts. Report it; do not ' ...
         'explain it away.'];
-else
+    return;
+end
+
+% ---- rule 1: all arms Class B and every finite gain <= delta (signed) -----
+% Note: when all arms are Class B, cleanFinite == finite, so `gains` covers
+% every finite arm.  The inequality is SIGNED per the H0 statement of §1.2.
+if all(arrayfun(@(a) strcmp(a.class, 'ACCEPTED'), arms(:))) && all(gains <= delta)
     d.outcome = 'H0_FREEZING_IS_BENIGN';
-    d.statement = sprintf(['H0 RETAINED: every clean refreshed arm is within delta=%.1f%% of ' ...
-        'the frozen arm (max deviation %.1f%%). Refreshing confers no measurable benefit on ' ...
-        'this benchmark; main.tex:704''s directional claim must be softened.'], ...
-        100*delta, 100*max(abs(gains)));
+    d.statement = sprintf(['H0 RETAINED: all arms are Class B and every refreshed arm is ' ...
+        'within delta=%.1f%% of the frozen arm (max gain %+.1f%%). Refreshing confers no ' ...
+        'measurable benefit on this benchmark; main.tex:704''s directional claim must be ' ...
+        'softened.'], 100*delta, 100*max(gains));
+    return;
+end
+
+% ---- no pre-registered rule applies ---------------------------------------
+% Mixed configurations (e.g. B1/B2 arms within delta alongside Class B arms,
+% or a REJECTED arm blocking the "all arms" quantifiers) are OUTSIDE the four
+% pre-registered outcomes and must be reported per arm, not forced into a label.
+d.outcome = 'INDETERMINATE';
+d.statement = sprintf(['no pre-registered decision rule (spec §5.3) matches this arm ' ...
+    'configuration: %d clean finite arm(s) (gains vs N=inf: %s), %d disqualified (B3/B4), ' ...
+    '%d other. Report the per-arm classes and endpoints (Table A4-1); do not force a ' ...
+    'pre-registered label.'], ...
+    numel(cleanFinite), localGainsStr(gains), numel(disqFinite), ...
+    numel(finite) - numel(cleanFinite) - numel(disqFinite));
+end
+
+function tf = localIsCleanArm(a)
+%LOCALISCLEANARM  "Clean" per spec §1.2 / §5.3 rule 2: Class B (ACCEPTED), or
+%   Class C with breakdown B1 or B2 -- i.e. not B3/B4 and not REJECTED.
+tf = strcmp(a.class, 'ACCEPTED') || ...
+    (strcmp(a.class, 'ACCEPTED_WITH_BREAKDOWN') && any(strcmp(a.breakdown, {'B1', 'B2'})));
+end
+
+function s = localGainsStr(gains)
+if isempty(gains)
+    s = 'none';
+else
+    s = strtrim(sprintf('%+.2f%% ', 100*gains));
 end
 end
 
@@ -301,9 +380,10 @@ L{end+1} = sprintf('Spec: `A4_SPECIFICATION_V3`. Base config hash: `%s`. Commit:
     res.base_config_hash, res.commit_sha);
 L{end+1} = sprintf('Pre-declared equivalence margin delta = %.1f%%.', 100*res.delta);
 L{end+1} = '';
-L{end+1} = '`Δω₁ vs N=∞` is populated **only for clean (Class B) arms**. It is left BLANK for';
-L{end+1} = 'B3/B4 arms — a contaminated or unstable arm is disqualified as an accuracy reference';
-L{end+1} = 'and its endpoint must not be read as one.';
+L{end+1} = '`Δω₁ vs N=∞` is populated **only for clean arms** (Class B, or Class C/B1–B2 —';
+L{end+1} = 'spec §7.6). It is left BLANK for B3/B4 and REJECTED arms — a contaminated or';
+L{end+1} = 'unstable arm is disqualified as an accuracy reference and its endpoint must not';
+L{end+1} = 'be read as one.';
 L{end+1} = '';
 L{end+1} = '| N | ω₁_tracked | ω₁_min | ω₁_thresh | MAC | j* | iters | conv | refreshes | eigensolves | grayness | comps | class | Δω₁ vs N=∞ |';
 L{end+1} = '|---|---:|---:|---:|---:|---:|---:|:--:|---:|---:|---:|---:|---|---:|';
@@ -316,7 +396,9 @@ end
 
 for i = 1:numel(res.arms)
     a = res.arms(i);
-    if strcmp(a.class, 'ACCEPTED') && isfinite(ref) && ref > 0
+    % Populated for CLEAN arms (Class B, or C/B1-B2 -- spec §7.6); blank for
+    % B3/B4 and REJECTED. The REFERENCE itself must still be Class B (§5.2).
+    if localIsCleanArm(a) && isfinite(ref) && ref > 0
         dstr = sprintf('%+.2f%%', 100*(a.omega1_tracked - ref)/ref);
     else
         dstr = '';   % deliberately blank, not zero, not a dash
