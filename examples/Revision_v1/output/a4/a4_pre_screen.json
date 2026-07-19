@@ -1,0 +1,74 @@
+{
+  "gate": "A4-Pre",
+  "base_config": "/Users/piotrek/Programming/topOpt4freqMax/examples/Revision_v1/a4_ss_400x50_base.json",
+  "checkpoints": [
+    100,
+    300,
+    600,
+    2000
+  ],
+  "mac_threshold": 0.8,
+  "n_modes": 10,
+  "created_utc": "2026-07-16T11:55:03Z",
+  "entries": [
+    {
+      "iteration_requested": 100,
+      "iteration_reached": 100,
+      "elapsed_s": 12.374881041666667,
+      "n_components": 1,
+      "omega1_min": 159.63973782636657,
+      "omega1_tracked": 159.63973782636657,
+      "mode_index_jstar": 1,
+      "mac_to_phi0": 0.99961944188431229,
+      "n_admissible": 1,
+      "selected": 1,
+      "admissible_tracked": true,
+      "reason": "max MAC continuity 0.9996 at index 1 among 1 admissible mode(s)"
+    },
+    {
+      "iteration_requested": 300,
+      "iteration_reached": 300,
+      "elapsed_s": 30.50824825,
+      "n_components": 1,
+      "omega1_min": 159.50999763966857,
+      "omega1_tracked": 159.50999763966857,
+      "mode_index_jstar": 1,
+      "mac_to_phi0": 0.99962328456865934,
+      "n_admissible": 1,
+      "selected": 1,
+      "admissible_tracked": true,
+      "reason": "max MAC continuity 0.9996 at index 1 among 1 admissible mode(s)"
+    },
+    {
+      "iteration_requested": 600,
+      "iteration_reached": 600,
+      "elapsed_s": 56.467482791666669,
+      "n_components": 1,
+      "omega1_min": 159.60038519571984,
+      "omega1_tracked": 159.60038519571984,
+      "mode_index_jstar": 1,
+      "mac_to_phi0": 0.99962045362734941,
+      "n_admissible": 1,
+      "selected": 1,
+      "admissible_tracked": true,
+      "reason": "max MAC continuity 0.9996 at index 1 among 1 admissible mode(s)"
+    },
+    {
+      "iteration_requested": 2000,
+      "iteration_reached": 2000,
+      "elapsed_s": 183.97744645833333,
+      "n_components": 1,
+      "omega1_min": 159.56562699328319,
+      "omega1_tracked": 159.56562699328319,
+      "mode_index_jstar": 1,
+      "mac_to_phi0": 0.99962842513638983,
+      "n_admissible": 1,
+      "selected": 1,
+      "admissible_tracked": true,
+      "reason": "max MAC continuity 0.9996 at index 1 among 1 admissible mode(s)"
+    }
+  ],
+  "pass": true,
+  "verdict": "PASS: an admissible Phi1-type mode is identifiable at every checkpoint. The SS beam intermediate spectra are usable; the refreshed arms have a clean spectrum to refresh into. A4 proceeds.",
+  "fail_reasons": []
+}
