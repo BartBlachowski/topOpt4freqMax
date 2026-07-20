@@ -75,6 +75,15 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
     harmonicNormalize = localParseVisualizeLive(localOpt(runCfg, 'harmonic_normalize', true), true);
     debugReturnDc = localParseVisualizeLive(localOpt(runCfg, 'debug_return_dc', false), false);
     gateA0Diagnostics = localParseVisualizeLive(localOpt(runCfg, 'gate_a0_diagnostics', false), false);
+    a4Phase2Enabled = localParseVisualizeLive(localOpt(runCfg, 'a4_phase2_enabled', false), false);
+    a4DiagnosticsEnabled = a4Phase2Enabled && localParseVisualizeLive( ...
+        localOpt(runCfg, 'a4_diagnostics_enabled', true), true);
+    if a4Phase2Enabled
+        a4p2 = a4_phase2_constants();
+    else
+        a4p2 = struct('diagnostic_grid', []);
+    end
+    a4CheckpointPath = char(string(localOpt(runCfg, 'a4_checkpoint_path', '')));
     debugSemiHarmonic = localParseVisualizeLive(localOpt(runCfg, 'debug_semi_harmonic', false), false);
     debugLoadCases = localParseDebugLoadCases(localOpt(runCfg, 'debug_load_cases', 'off'));
     semiHarmonicBaseline = localParseSemiHarmonicBaseline( ...
@@ -355,7 +364,21 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
     semiHarmonicRefreshActive = usingConfiguredLoadCases && maxSemiHarmonicMode > 0 && ...
         isfinite(semiHarmonicUpdateAfter) && semiHarmonicUpdateAfter > 0;
     semiHarmonicRefreshEvents = repmat(localBlankRefreshEvent(), 0, 1);
+    a4Phase2DiagnosticEvents = repmat(localBlankPhase2DiagnosticEvent(), 0, 1);
+    a4Phase2Events = repmat(localBlankPhase2Event(), 0, 1);
+    a4Phase2Candidates = repmat(localBlankPhase2Candidate(), 0, 1);
+    a4Phase2History = repmat(localBlankPhase2History(), maxIters, 1);
+    a4Phase2EventId = 0;
+    if semiHarmonicUpdateAfter > 0
+        a4ArmTag = sprintf('%d', semiHarmonicUpdateAfter);
+    else
+        a4ArmTag = 'inf';
+    end
     semiHarmonicRefreshCount = 0;
+    semiHarmonicRefreshScheduledCount = 0;
+    semiHarmonicDeferralCount = 0;
+    semiHarmonicReferenceIndex = 1;
+    semiHarmonicReferenceEventId = 0;
     semiHarmonicPhiPrev = [];
     semiHarmonicPhiSolid = [];
     semiHarmonicOmegaSolid = NaN;
@@ -369,6 +392,10 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
         semiHarmonicPhiPrev = semiHarmonicPhi0(:, 1);
         fprintf('[R-1] semi_harmonic eigenpair refresh ACTIVE: N = %g (mod(iter,N)==0)\n', ...
             semiHarmonicUpdateAfter);
+    end
+    if a4Phase2Enabled && isempty(semiHarmonicPhiPrev)
+        % Diagnostics for N=inf use the reference actually in force: solid Phi0.
+        semiHarmonicPhiPrev = semiHarmonicPhi0(:, 1);
     end
     info.semi_harmonic_refresh = struct( ...
         'active', semiHarmonicRefreshActive, ...
@@ -439,6 +466,11 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
 
     while change > convTol && loop < maxIters
         loop = loop + 1;
+        if a4Phase2Enabled && ~isempty(a4CheckpointPath)
+            localWritePhase2Checkpoint(a4CheckpointPath, loop, ...
+                xPhys, semiHarmonicRefreshScheduledCount, semiHarmonicRefreshCount, ...
+                semiHarmonicDeferralCount);
+        end
         mmaConstraintPre = NaN;
         mmaConstraintPost = NaN;
         mmaProjected = false;
@@ -449,6 +481,12 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
         M  = sparse(iK, jK, sM, ndof, ndof);
         M  = (M + M') / 2;
         clear sM;
+        if a4Phase2Enabled
+            a4ReferenceMacThisIter = a4_mac( ...
+                semiHarmonicPhi0(:,1), semiHarmonicPhiSolid, M);
+        else
+            a4ReferenceMacThisIter = NaN;
+        end
 
         % Assemble K(x) and solve FE for all load cases at once.
         sK = reshape(KE(:) * (Emin + xPhys'.^penal * (Emax - Emin)), [], 1);
@@ -486,8 +524,8 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
         % Spec V3 §7.1: "at every iteration i with i mod k = 0".
         semiRefreshDue = semiHarmonicRefreshActive && ...
             (mod(loop, semiHarmonicUpdateAfter) == 0);
-
-        needMf = saveFrqIterations || gateA0Diagnostics || ~isempty(dueModes) || semiRefreshDue;
+        needMf = saveFrqIterations || gateA0Diagnostics || ~isempty(dueModes) || ...
+            (semiRefreshDue && ~a4Phase2Enabled);
         if needMf
             Mf = M(free, free);
         else
@@ -500,7 +538,8 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
         % assembly, interpolation, sensitivities, OC, filtering, the eigensolver
         % or the load definition.  Inert unless semiHarmonicRefreshActive.
         % ------------------------------------------------------------------
-        if semiRefreshDue
+        if semiRefreshDue && ~a4Phase2Enabled
+            % Frozen legacy protocol retained for every non-Phase-2 caller.
             [refreshOmegas, refreshPhi] = localCurrentModesFromSubmatrices( ...
                 Kf, Mf, free, ndof, semiRefreshNModes);
 
@@ -748,6 +787,165 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
         vol    = mean(xPhys);
         change = max(abs(x - xold));
 
+        % Phase 2 screening observes the design produced by iteration `loop`.
+        % This convention is required by V-P2-3 (the audit's iteration-25/30
+        % snapshots) and lets diagnostic and operational schedules share one
+        % search. The selected reference is in force for the following solve.
+        if a4Phase2Enabled
+            phase2OperationalDue = semiHarmonicRefreshActive && ...
+                mod(loop, semiHarmonicUpdateAfter) == 0;
+            phase2TerminalDue = change <= convTol || loop >= maxIters;
+            a4DiagnosticDue = a4DiagnosticsEnabled && ...
+                (any(loop == a4p2.diagnostic_grid) || phase2TerminalDue);
+            if a4DiagnosticDue || phase2OperationalDue
+                sKscreen = reshape(KE(:) * (Emin + xPhys'.^penal * ...
+                    (Emax - Emin)), [], 1);
+                Kscreen = sparse(iK,jK,sKscreen,ndof,ndof); Kscreen=(Kscreen+Kscreen')/2;
+                [rhoScreen,~] = our_mass_interpolation(xPhys,rho0,rho_min, ...
+                    massInterp.mode,massInterp.pmass);
+                sMscreen = reshape(ME(:)*rhoScreen',[],1);
+                Mscreen = sparse(iK,jK,sMscreen,ndof,ndof); Mscreen=(Mscreen+Mscreen')/2;
+                Kfscreen=Kscreen(free,free); Mfscreen=Mscreen(free,free);
+                screenCtx=struct('nelx',nelx,'nely',nely,'edofMat',edofMat, ...
+                    'KE',KE,'ME',ME,'M',Mscreen,'free',free,'Emax',Emax, ...
+                    'Emin',Emin,'rho0',rho0,'rho_min',rho_min,'penal',penal, ...
+                    'massInterp',massInterp);
+                searchTic=tic;
+                [phase2Search,phase2SearchProof]=a4_readonly_diagnostic( ...
+                    Kfscreen,Mfscreen,free,ndof,xPhys,screenCtx, ...
+                    semiHarmonicPhiPrev,semiHarmonicPhiSolid);
+                phase2SearchElapsed=toc(searchTic);
+                if a4DiagnosticDue
+                    dev=localBlankPhase2DiagnosticEvent(); dev.iteration=loop;
+                    dev.search=struct('search_outcome',phase2Search.search_outcome, ...
+                        'window_rungs_solved',phase2Search.window_rungs_solved, ...
+                        'm_final',phase2Search.m_final, ...
+                        'selected_index',phase2Search.selected_index, ...
+                        'stability_flag',phase2Search.stability_flag);
+                    dev.read_only_proof=phase2SearchProof;
+                    a4Phase2DiagnosticEvents(end+1,1)=dev; %#ok<AGROW>
+                end
+                if phase2OperationalDue
+                    semiHarmonicRefreshScheduledCount=semiHarmonicRefreshScheduledCount+1;
+                end
+                referenceChanged=false; deferred=false;
+                if phase2OperationalDue && strcmp(phase2Search.search_outcome,'SELECTED')
+                    jSel=phase2Search.selected_index;
+                    selectedPhi=phase2Search.Phi(:,jSel);
+                    selectedOmega=phase2Search.omegas(jSel);
+                    semiHarmonicOmega0(1)=selectedOmega;
+                    semiHarmonicOmega0Sq(1)=selectedOmega^2;
+                    semiHarmonicPhi0(:,1)=selectedPhi;
+                    phiFreeSel=selectedPhi(free);
+                    semiHarmonicModalMass(1)=real(phiFreeSel'*(Mfscreen*phiFreeSel));
+                    semiHarmonicPhiPrev=selectedPhi;
+                    semiHarmonicRefreshCount=semiHarmonicRefreshCount+1;
+                    semiHarmonicReferenceIndex=jSel;
+                    referenceChanged=true;
+                elseif phase2OperationalDue && ...
+                        strcmp(phase2Search.search_outcome,'REFERENCE_UNAVAILABLE')
+                    deferred=true;
+                    semiHarmonicDeferralCount=semiHarmonicDeferralCount+1;
+                end
+                a4Phase2EventId=a4Phase2EventId+1;
+                if a4DiagnosticDue && phase2OperationalDue, eventKind='both';
+                elseif phase2OperationalDue, eventKind='operational';
+                else, eventKind='diagnostic'; end
+                meta=struct('arm_N',a4ArmTag,'iteration',loop,'event_kind',eventKind, ...
+                    'event_id',a4Phase2EventId,'wall_clock_s',phase2SearchElapsed, ...
+                    'max_design_change',change,'feasibility_relative', ...
+                    abs(vol-volfrac)/volfrac,'surrogate_objective',obj, ...
+                    'min_x_e',min(xPhys),'reference_changed',referenceChanged, ...
+                    'deferred',deferred);
+                [phase2Event,phase2Rows]=a4_build_event_telemetry(phase2Search,meta);
+                phase2Event.read_only_proof=phase2SearchProof;
+                [phase2Event.event_classes,phase2Event.classification_details]= ...
+                    a4_classify_event(phase2Event,phase2Rows);
+                a4Phase2Events(end+1,1)=phase2Event; %#ok<AGROW>
+                a4Phase2Candidates=[a4Phase2Candidates;phase2Rows]; %#ok<AGROW>
+                if ~isempty(a4CheckpointPath)
+                    a4_append_jsonl([a4CheckpointPath '.events.jsonl'], ...
+                        struct('event',phase2Event,'candidates',phase2Rows));
+                end
+                if phase2OperationalDue
+                    rev=localBlankRefreshEvent(); rev.iter=loop;
+                    rev.index=phase2Search.selected_index; rev.outcome=phase2Search.search_outcome;
+                    rev.reference_changed=referenceChanged; rev.deferred=deferred;
+                    rev.event_id=a4Phase2EventId;
+                    if phase2Search.selected_index>0
+                        selRow=phase2Search.candidates(phase2Search.selected_index);
+                        rev.omega=selRow.omega; rev.mac_prev=selRow.mac_prev;
+                        rev.mac_phi0=selRow.mac_phi0;
+                        rev.low_density_kinetic_fraction=selRow.low_density_kinetic_fraction;
+                        rev.low_density_strain_fraction=selRow.low_density_strain_fraction;
+                        rev.largest_support_component_kinetic_fraction= ...
+                            selRow.largest_support_component_kinetic_fraction;
+                    end
+                    rev.n_components=phase2Event.n_solid_components;
+                    rev.n_admissible=phase2Search.n_admissible;
+                    semiHarmonicRefreshEvents(end+1,1)=rev; %#ok<AGROW>
+                    if referenceChanged, semiHarmonicReferenceEventId=a4Phase2EventId; end
+                end
+                a4ReferenceMacThisIter=a4_mac( ...
+                    semiHarmonicPhi0(:,1),semiHarmonicPhiSolid,Mscreen);
+                if strcmp(phase2Search.search_outcome,'SOLVER_FAILURE')
+                    if ~isempty(a4CheckpointPath)
+                        localWritePhase2Checkpoint(a4CheckpointPath,loop,xPhys, ...
+                            semiHarmonicRefreshScheduledCount,semiHarmonicRefreshCount, ...
+                            semiHarmonicDeferralCount);
+                    end
+                    error('topopt_freq:A4Phase2SolverFailure', ...
+                        'A4 Phase-2 search failed at iteration %d: [%s] %s',loop, ...
+                        phase2Search.failure_identifier,phase2Search.failure_message);
+                end
+                clear Kscreen Mscreen Kfscreen Mfscreen sKscreen sMscreen rhoScreen;
+            end
+            % §4.3 history is evaluated on the design produced this iteration,
+            % including iterations without a screening event.
+            [rhoHistory,~]=our_mass_interpolation(xPhys,rho0,rho_min, ...
+                massInterp.mode,massInterp.pmass);
+            sMhistory=reshape(ME(:)*rhoHistory',[],1);
+            Mhistory=sparse(iK,jK,sMhistory,ndof,ndof); Mhistory=(Mhistory+Mhistory')/2;
+            a4ReferenceMacThisIter=a4_mac( ...
+                semiHarmonicPhi0(:,1),semiHarmonicPhiSolid,Mhistory);
+            clear rhoHistory sMhistory Mhistory;
+        end
+
+        if a4Phase2Enabled
+            h = localBlankPhase2History();
+            h.arm_N = a4ArmTag;
+            h.iteration = loop;
+            h.max_design_change = change;
+            h.surrogate_objective = obj;
+            h.feasibility_relative = abs(vol - volfrac) / volfrac;
+            h.reference_mac_phi0 = a4ReferenceMacThisIter;
+            h.reference_mode_index = semiHarmonicReferenceIndex;
+            h.reference_omega = semiHarmonicOmega0(1);
+            h.reference_event_id = semiHarmonicReferenceEventId;
+            if semiHarmonicReferenceEventId == 0
+                h.reference_identity = 'solid_phi0';
+            else
+                h.reference_identity = sprintf('event_%d', semiHarmonicReferenceEventId);
+            end
+            a4Phase2History(loop) = h;
+            if ~isempty(a4CheckpointPath)
+                a4_append_jsonl([a4CheckpointPath '.history.jsonl'], h);
+            end
+            % Quantities first known after objective/update are patched into an
+            % event at this iteration without affecting search or optimization.
+            idxEvent = find([a4Phase2Events.iteration] == loop, 1, 'last');
+            if ~isempty(idxEvent)
+                a4Phase2Events(idxEvent).surrogate_objective = obj;
+                a4Phase2Events(idxEvent).max_design_change = change;
+                a4Phase2Events(idxEvent).feasibility_relative = h.feasibility_relative;
+            end
+            if ~isempty(a4CheckpointPath)
+                localWritePhase2Checkpoint(a4CheckpointPath, loop, ...
+                    xPhys, semiHarmonicRefreshScheduledCount, semiHarmonicRefreshCount, ...
+                    semiHarmonicDeferralCount);
+            end
+        end
+
         if gateA0Diagnostics
             info.cr2_history.objective(loop) = obj;
             info.cr2_history.design_change(loop) = change;
@@ -811,11 +1009,22 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
     info.semi_harmonic_refresh.active = semiHarmonicRefreshActive;
     info.semi_harmonic_refresh.update_after = semiHarmonicUpdateAfter;
     info.semi_harmonic_refresh.n_refresh = semiHarmonicRefreshCount;
+    info.semi_harmonic_refresh.n_refresh_scheduled = semiHarmonicRefreshScheduledCount;
+    info.semi_harmonic_refresh.n_refresh_effective = semiHarmonicRefreshCount;
+    info.semi_harmonic_refresh.n_deferred = semiHarmonicDeferralCount;
     info.semi_harmonic_refresh.n_candidate_modes = semiRefreshNModes;
     info.semi_harmonic_refresh.events = semiHarmonicRefreshEvents;
+    info.a4_phase2 = struct('enabled', a4Phase2Enabled, ...
+        'diagnostics_enabled', a4DiagnosticsEnabled, ...
+        'diagnostic_grid', a4p2.diagnostic_grid, ...
+        'diagnostic_events', a4Phase2DiagnosticEvents, ...
+        'screening_events', a4Phase2Events, ...
+        'candidate_telemetry', a4Phase2Candidates, ...
+        'iteration_histories', a4Phase2History(1:loop));
     % Analytic prediction (validator V-A4-3): eigensolves inside the loop.
     if semiHarmonicRefreshActive
-        info.semi_harmonic_refresh.n_refresh_predicted = floor(loop / semiHarmonicUpdateAfter);
+        info.semi_harmonic_refresh.n_refresh_predicted = ...
+            1 + floor((loop - 1) / semiHarmonicUpdateAfter);
     else
         info.semi_harmonic_refresh.n_refresh_predicted = 0;
     end
@@ -881,6 +1090,12 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
             'penal', penal, 'volfrac', volfrac, 'massInterp', massInterp, ...
             'phi0_solid', semiHarmonicPhiSolid, ...
             'omega0_solid', semiHarmonicOmegaSolid);
+    end
+
+    if a4Phase2Enabled
+        info.a4_phase2.screening_events = a4Phase2Events;
+        info.a4_phase2.candidate_telemetry = a4Phase2Candidates;
+        info.a4_phase2.iteration_histories = a4Phase2History(1:loop);
     end
     if gateA0Diagnostics
         [finalTrackingOmegas, finalTrackingModes] = localCurrentModesFromSubmatrices( ...
@@ -1013,6 +1228,7 @@ function ev = localBlankRefreshEvent()
 %   Every refresh event is recorded: iteration, chosen index, MAC continuity,
 %   MAC to the original solid reference, the screen metrics, and omega.
 ev = struct( ...
+    'event_id', 0, ...
     'iter', 0, ...
     'index', 0, ...
     'omega', NaN, ...
@@ -1023,7 +1239,59 @@ ev = struct( ...
     'largest_support_component_kinetic_fraction', NaN, ...
     'n_components', 0, ...
     'n_admissible', 0, ...
+    'outcome', '', ...
+    'reference_changed', false, ...
+    'deferred', false, ...
     'reason', '');
+end
+
+function ev = localBlankPhase2DiagnosticEvent()
+ev = struct('iteration', 0, 'search', struct(), 'read_only_proof', struct());
+end
+
+function ev = localBlankPhase2Event()
+ev = struct('arm_N', '', 'iteration', 0, 'event_kind', '', 'event_id', 0, ...
+    'window_rungs_solved', [], 'm_final', 0, 'search_outcome', '', ...
+    'stability_flag', 'n/a', 'stability_mac', NaN, 'n_candidates', 0, ...
+    'n_admissible', 0, 'selected_index', 0, 'selected_omega', NaN, ...
+    'selected_mac_prev', NaN, 'selected_mac_phi0', NaN, 'omega_min', NaN, ...
+    'omega_tracked_minus_min', NaN, 'omega1_omega2_gap', NaN, ...
+    'n_solid_components', 0, 'low_density_kinetic_fraction', NaN, ...
+    'reference_changed', false, 'deferred', false, ...
+    'eigensolve_count_at_event', 0, 'wall_clock_s', NaN, ...
+    'max_design_change', NaN, 'feasibility_relative', NaN, ...
+    'surrogate_objective', NaN, 'omitted_term_ratio', NaN, 'min_x_e', NaN, ...
+    'tie_flag', false, 'event_classes', {{}}, ...
+    'failure_identifier', '', 'failure_message', '', 'read_only_proof', struct(), ...
+    'classification_details', struct());
+end
+
+function r = localBlankPhase2Candidate()
+r = struct('arm_N', '', 'iteration', 0, 'event_kind', '', 'event_id', 0, ...
+    'window_m_final', 0, 'mode_index', 0, 'omega', NaN, 'mac_prev', NaN, ...
+    'mac_phi0', NaN, 'mac_solid', NaN, 'support_kinetic_fraction', NaN, ...
+    'low_density_strain_fraction', NaN, 'low_density_kinetic_fraction', NaN, ...
+    'support_connectivity', false, 'cond_kinetic_pass', false, ...
+    'cond_supports_pass', false, 'cond_strain_pass', false, ...
+    'cond_mac_pass', false, 'rejection_reason', '', 'admissible', false, ...
+    'selected', false, 'tie_flag', false, 'eigensolver_status', '');
+end
+
+function h = localBlankPhase2History()
+h = struct('arm_N', '', 'iteration', 0, 'max_design_change', NaN, ...
+    'surrogate_objective', NaN, 'feasibility_relative', NaN, ...
+    'reference_mac_phi0', NaN, 'reference_mode_index', NaN, ...
+    'reference_omega', NaN, 'reference_identity', '', 'reference_event_id', 0);
+end
+
+function localWritePhase2Checkpoint(path, iterationStarted, xPhys, ...
+        nScheduled, nEffective, nDeferred)
+checkpoint = struct('iteration_started', iterationStarted, ...
+    'topology', xPhys, ...
+    'n_refresh_scheduled', nScheduled, 'n_refresh_effective', nEffective, ...
+    'n_deferred', nDeferred, 'events_journal', [path '.events.jsonl'], ...
+    'history_journal', [path '.history.jsonl']);
+a4_persist_phase2_checkpoint(path, checkpoint);
 end
 
 function [harmonicOmegas, harmonicPhi] = localCurrentModesFromSubmatrices(Kf, Mf, free, ndof, maxMode)

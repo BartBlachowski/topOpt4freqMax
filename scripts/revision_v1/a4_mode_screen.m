@@ -1,11 +1,11 @@
-function out = a4_mode_screen(Phi, omegas, xPhys, ctx, phiPrev)
-%A4_MODE_SCREEN  Mode-admissibility screen and selection for A4 (spec V3 §4.3.1).
+function out = a4_mode_screen(Phi, omegas, xPhys, ctx, phiPrev, phi0)
+%A4_MODE_SCREEN  Complete A4 Phase-2 candidate screen (Phase-2 spec §3.3).
 %
 %   out = A4_MODE_SCREEN(Phi, omegas, xPhys, ctx)
 %   out = A4_MODE_SCREEN(Phi, omegas, xPhys, ctx, phiPrev)
 %
-%   Implements the support-connectivity screen defined in
-%   examples/Revision_v1/A4_SPECIFICATION_V3.md §4.3.1.  This is the SINGLE
+%   Implements the support-connectivity screen amended by
+%   A4_RECOVERY_PHASE2_SPECIFICATION.md §3.3. This is the SINGLE
 %   implementation of the rule; it is reused by
 %     - topopt_freq.m            (R-1 refresh: mode selection at each refresh)
 %     - a4_preflight_spectral_screen.m (Gate A4-Pre)
@@ -29,10 +29,7 @@ function out = a4_mode_screen(Phi, omegas, xPhys, ctx, phiPrev)
 %   ctx fields (all required):
 %     nelx, nely, edofMat, KE, ME, M, free
 %     Emax, Emin, rho0, rho_min, penal, massInterp
-%   ctx optional:
-%     lowDensityThreshold (default 0.05), solidThreshold (default 0.5)
-%     macThreshold (default 0.8), supportKineticThreshold (default 0.5)
-%     lowDensityStrainThreshold (default 0.5)
+%   Protocol thresholds are read only from a4_phase2_constants.m.
 %
 %   out.modes(k)   per-mode metrics + .admissible
 %   out.selected   index of the selected mode (0 if none admissible)
@@ -41,12 +38,11 @@ function out = a4_mode_screen(Phi, omegas, xPhys, ctx, phiPrev)
 %   out.largestSupportCompId   id of the largest support-connected component
 
 if nargin < 5, phiPrev = []; end
+if nargin < 6, phi0 = []; end
 
-lowThr      = localField(ctx, 'lowDensityThreshold', 0.05);
-solidThr    = localField(ctx, 'solidThreshold', 0.5);
-macThr      = localField(ctx, 'macThreshold', 0.8);
-supKinThr   = localField(ctx, 'supportKineticThreshold', 0.5);
-lowStrainThr= localField(ctx, 'lowDensityStrainThreshold', 0.5);
+c = a4_phase2_constants();
+lowThr=c.x_low; solidThr=c.solid_threshold; macThr=c.tau_mac;
+supKinThr=c.tau_kin; lowStrainThr=c.tau_strain; tieTol=c.tie_tolerance;
 
 x = xPhys(:);
 nModes = numel(omegas);
@@ -62,6 +58,7 @@ out.largestSupportCompId = largestCompId;
 out.lowDensityThreshold = lowThr;
 out.solidThreshold = solidThr;
 out.modes = repmat(localBlankMode(), 0, 1);
+out.tieOccurred = false;
 
 % ---- per-mode metrics ----------------------------------------------------
 for k = 1:nModes
@@ -69,15 +66,13 @@ for k = 1:nModes
     row.index = k;
     row.omega = omegas(k);
 
-    if ~isfinite(omegas(k))
-        row.admissible = false;
-        row.reject_reason = 'eigenvalue not finite';
-        out.modes(end+1, 1) = row; %#ok<AGROW>
-        continue;
-    end
-
     phi = Phi(:, k);
-    [kin, str] = localElementEnergies(phi, omegas(k), x, ctx);
+    if isfinite(omegas(k)) && all(isfinite(phi))
+        [kin, str] = localElementEnergies(phi, omegas(k), x, ctx);
+    else
+        kin = NaN(size(x));
+        str = NaN(size(x));
+    end
 
     row.kinetic_energy_total = sum(kin);
     row.strain_energy_total  = sum(str);
@@ -100,22 +95,33 @@ for k = 1:nModes
     if ~isempty(phiPrev)
         row.mac_prev = a4_mac(phi, phiPrev, ctx.M);
     end
+    if ~isempty(phi0)
+        row.mac_phi0 = a4_mac(phi, phi0, ctx.M);
+        row.mac_solid = row.mac_phi0;
+    end
 
-    % ---- admissibility (spec §4.3.1) ------------------------------------
+    % Evaluate all four conditions independently. Do not short circuit: the
+    % complete failure list distinguishes E-2a from E-2b (§§3.3, 7.3).
     reasons = {};
-    if ~(row.largest_support_component_kinetic_fraction >= supKinThr)
-        reasons{end+1} = sprintf('support-connected kinetic fraction %.4f < %.2f', ...
+    row.cond_kinetic_pass = isfinite(row.largest_support_component_kinetic_fraction) && ...
+        row.largest_support_component_kinetic_fraction >= supKinThr;
+    row.cond_supports_pass = logical(row.dominant_component_touches_both_supports);
+    row.cond_strain_pass = isfinite(row.low_density_strain_fraction) && ...
+        row.low_density_strain_fraction <= lowStrainThr;
+    row.cond_mac_pass = ~isempty(phiPrev) && isfinite(row.mac_prev) && row.mac_prev >= macThr;
+    if ~row.cond_kinetic_pass
+        reasons{end+1} = sprintf('cond_kinetic: measured=%.17g threshold=>=%.17g', ...
             row.largest_support_component_kinetic_fraction, supKinThr); %#ok<AGROW>
     end
-    if ~row.dominant_component_touches_both_supports
-        reasons{end+1} = 'dominant component does not touch both supports'; %#ok<AGROW>
+    if ~row.cond_supports_pass
+        reasons{end+1} = 'cond_supports: measured=false threshold=true'; %#ok<AGROW>
     end
-    if ~(row.low_density_strain_fraction <= lowStrainThr)
-        reasons{end+1} = sprintf('low-density strain fraction %.4f > %.2f', ...
+    if ~row.cond_strain_pass
+        reasons{end+1} = sprintf('cond_strain: measured=%.17g threshold=<=%.17g', ...
             row.low_density_strain_fraction, lowStrainThr); %#ok<AGROW>
     end
-    if ~isempty(phiPrev) && ~(row.mac_prev >= macThr)
-        reasons{end+1} = sprintf('MAC to previous reference %.4f < %.2f', ...
+    if ~row.cond_mac_pass
+        reasons{end+1} = sprintf('cond_mac: measured=%.17g threshold=>=%.17g', ...
             row.mac_prev, macThr); %#ok<AGROW>
     end
 
@@ -136,27 +142,23 @@ if isempty(adm)
     return;
 end
 
-if isempty(phiPrev)
-    % No continuity reference (first screen): lowest admissible mode.
-    out.selected = adm(1);
-    out.reason = sprintf('lowest admissible mode (index %d); no continuity reference supplied', adm(1));
-else
-    macs = [out.modes(adm).mac_prev];
-    [bestMac, ii] = max(macs);
-    out.selected = adm(ii);
-    out.reason = sprintf('max MAC continuity %.4f at index %d among %d admissible mode(s)', ...
-        bestMac, out.selected, numel(adm));
+macs = [out.modes(adm).mac_prev];
+bestMac = max(macs);
+tied = adm(abs(macs - bestMac) <= tieTol);
+out.selected = min(tied); % deterministic lower-index tie break (§3.6)
+out.tieOccurred = numel(tied) > 1;
+for iTie = tied(:)'
+    out.modes(iTie).tie_flag = out.tieOccurred;
+end
+out.modes(out.selected).selected = true;
+out.reason = sprintf('max MAC continuity %.17g at index %d among %d admissible mode(s)', ...
+    bestMac, out.selected, numel(adm));
+if out.tieOccurred
+    out.reason = sprintf('%s; tie within %.1e resolved to lower index', out.reason, tieTol);
 end
 end
 
 % =========================================================================
-
-function v = localField(s, name, default)
-v = default;
-if isstruct(s) && isfield(s, name) && ~isempty(s.(name))
-    v = s.(name);
-end
-end
 
 function row = localBlankMode()
 row = struct( ...
@@ -170,9 +172,18 @@ row = struct( ...
     'dominant_solid_component_kinetic_fraction', NaN, ...
     'dominant_solid_component_strain_fraction', NaN, ...
     'dominant_component_touches_both_supports', false, ...
-    'largest_support_component_kinetic_fraction', NaN, ...
+    'largest_support_component_kinetic_fraction', 0, ...
     'mac_prev', NaN, ...
+    'mac_phi0', NaN, ...
+    'mac_solid', NaN, ...
+    'cond_kinetic_pass', false, ...
+    'cond_supports_pass', false, ...
+    'cond_strain_pass', false, ...
+    'cond_mac_pass', false, ...
     'admissible', false, ...
+    'selected', false, ...
+    'tie_flag', false, ...
+    'eigensolver_status', '', ...
     'reject_reason', '');
 end
 
@@ -180,7 +191,7 @@ function [kineticElem, strainElem] = localElementEnergies(phi, omega, x, ctx)
 % Vectorized form of the S1 diagnostic element energies (same formulas).
 %   strain_e  = 0.5 * [Emin + x^p (E0-Emin)]      * ue' KE ue
 %   kinetic_e = 0.5 * omega^2 * rho_e             * ue' ME ue
-Ue = phi(ctx.edofMat);                 % nEl x 8
+Ue = reshape(phi(ctx.edofMat), size(ctx.edofMat)); % nEl x 8 (also for nEl=1)
 if ~isreal(Ue), Ue = real(Ue); end
 keScale  = ctx.Emin + x.^ctx.penal * (ctx.Emax - ctx.Emin);
 [rhoScale, ~] = our_mass_interpolation(x, ctx.rho0, ctx.rho_min, ...

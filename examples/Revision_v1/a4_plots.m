@@ -1,153 +1,105 @@
 function figs = a4_plots(outDir, res)
-%A4_PLOTS  Figure generation for A4 (A4_SPECIFICATION_V3 §7.6).
-%
-%   figs = A4_PLOTS(outDir, res)
-%
-%   Figure 1 is the PRIMARY figure: omega1_tracked vs N, with the +/-delta
-%   equivalence band around the frozen (N=inf) arm.
-%
-%   GOVERNANCE (spec §7.6): arms classified B3 (contaminated) or B4 (unstable)
-%   are plotted in a visually distinct, EXPLICITLY DISQUALIFIED style -- shown,
-%   but never allowed to read as accuracy evidence.  This is the graphical form
-%   of the EXP4 lesson: the -62% point was real, and publishing it as an
-%   accuracy result was the error.
-%
-%   Headless-safe: figures are created invisible and closed after saving.
-
+%A4_PLOTS  Nine figures required by Phase-2 specification §10.5.
 figs = {};
-if ~exist(outDir, 'dir'), mkdir(outDir); end
+if isempty(res.arms), return; end
+arms = res.arms; c = a4_phase2_constants();
+colors = lines(numel(arms));
 
-arms = res.arms;
-if isempty(arms), return; end
-
-Ns = [arms.N];
-% Plot on a finite axis: inf -> the largest finite N, times 2 (log-friendly).
-finiteNs = Ns(~isinf(Ns));
-if isempty(finiteNs), finiteNs = 1; end
-infPos = max(finiteNs) * 2;
-xpos = Ns; xpos(isinf(xpos)) = infPos;
-
-clean = arrayfun(@(a) strcmp(a.class, 'ACCEPTED'), arms);
-disq  = arrayfun(@(a) any(strcmp(a.breakdown, {'B3','B4'})), arms);
-
-omega = [arms.omega1_tracked];
-omegaMin = [arms.omega1_min];
-
-% ---- Figure 1: PRIMARY -- omega1_tracked vs N ---------------------------
-f = figure('Visible', 'off', 'Position', [100 100 900 560]);
-hold on; grid on;
-
-ref = res.decision.reference;
+% 1 — tracked endpoint vs N with the complete ±delta band.
+f = localFigure(); hold on; grid on;
+Ns = [arms.N]; finiteN = Ns(isfinite(Ns)); if isempty(finiteN), finiteN = 1; end
+x = Ns; x(isinf(x)) = 2*max(finiteN);
+ref = localFrozen(arms, 'omega1_tracked');
+xl = [max(min(x)/1.5, 0.5), max(x)*1.5];
 if isfinite(ref)
-    xl = [min(xpos)/1.5, infPos*1.5];
-    fill([xl(1) xl(2) xl(2) xl(1)], ...
-         [ref*(1-res.delta) ref*(1-res.delta) ref*(1+res.delta) ref*(1+res.delta)], ...
-         [0.85 0.92 0.85], 'EdgeColor', 'none', 'FaceAlpha', 0.6, ...
-         'DisplayName', sprintf('\\pm%.0f%% equivalence band', 100*res.delta));
-    yline(ref, 'k--', 'LineWidth', 1.2, 'DisplayName', 'frozen (N=\infty) reference');
+    fill([xl fliplr(xl)], [ref*(1-res.delta)*[1 1], ref*(1+res.delta)*[1 1]], ...
+        [0.85 0.92 0.85], 'EdgeColor','none', 'DisplayName','5% equivalence band');
+    yline(ref,'k--','DisplayName','N=inf reference');
+end
+eligible = ~strcmp({arms.phase2_status}, 'UNAVAILABLE') & ...
+    ~strcmp({arms.phase2_status}, 'REJECTED');
+plot(x(eligible), [arms(eligible).omega1_tracked], 'o-', 'LineWidth',1.5, ...
+    'DisplayName','eligible endpoints');
+for i=find(~eligible), text(x(i),ref,sprintf('N=%s %s',arms(i).tag,arms(i).phase2_status)); end
+set(gca,'XScale','log','XTick',sort(x)); xlim(xl);
+if isfinite(ref), ylim([ref*(1-res.delta)*0.995, ref*(1+res.delta)*1.005]); end
+xlabel('refresh interval N'); ylabel('tracked omega1 [rad/s]');
+title('A4 Phase 2 — tracked endpoint and 5% equivalence band'); legend('Location','best');
+figs{end+1}=localSave(f,outDir,'a4_fig1_omega1_vs_N.png');
+
+% 2 — selected-reference MAC histories; deferrals marked.
+f=localFigure(); hold on; grid on;
+for i=1:numel(arms)
+    ev=arms(i).screening_events; if isempty(ev), continue; end
+    plot([ev.iteration],[ev.selected_mac_phi0],'-o','Color',colors(i,:), ...
+        'DisplayName',sprintf('N=%s',arms(i).tag));
+    d=ev([ev.deferred]); if ~isempty(d), scatter([d.iteration],[d.selected_mac_phi0],55,'x','MarkerEdgeColor',colors(i,:)); end
+end
+yline(c.tau_mac,'r--','DisplayName','MAC threshold'); xlabel('iteration'); ylabel('MAC to solid Phi0');
+title('Selected-mode continuity; x marks deferred refresh'); legend('Location','best');
+figs{end+1}=localSave(f,outDir,'a4_fig2_mac_vs_iteration.png');
+
+% 3 — design change.
+f=localFigure(); hold on; grid on;
+for i=1:numel(arms), h=arms(i).iteration_histories; if ~isempty(h), semilogy([h.iteration],[h.max_design_change], ...
+        'Color',colors(i,:),'DisplayName',sprintf('N=%s',arms(i).tag)); end; end
+xlabel('iteration'); ylabel('max absolute density change'); title('Optimization design-change histories'); legend('Location','best');
+figs{end+1}=localSave(f,outDir,'a4_fig3_design_change.png');
+
+% 4 — reference index, five panels.
+f=figure('Visible','off','Position',[100 100 900 900]);
+for i=1:numel(arms), subplot(numel(arms),1,i); h=arms(i).iteration_histories; grid on;
+    if ~isempty(h), stairs([h.iteration],[h.reference_mode_index],'Color',colors(i,:)); end
+    ylabel(sprintf('N=%s',arms(i).tag)); end
+xlabel('iteration'); sgtitle('Tracked index j* of reference in force','Interpreter','none');
+figs{end+1}=localSave(f,outDir,'a4_fig4_tracked_index.png');
+
+% 5 — full final-window spectra and admissibility.
+f=localFigure(); hold on; grid on;
+for i=1:numel(arms), rows=arms(i).candidate_telemetry; if isempty(rows), continue; end
+    adm=[rows.admissible]; scatter([rows(~adm).iteration],[rows(~adm).omega],5,colors(i,:),'filled','MarkerFaceAlpha',0.15);
+    scatter([rows(adm).iteration],[rows(adm).omega],16,colors(i,:),'o','DisplayName',sprintf('N=%s admissible',arms(i).tag)); end
+xlabel('iteration'); ylabel('candidate omega [rad/s]'); title('Final-window spectra and admissibility'); legend('Location','best');
+figs{end+1}=localSave(f,outDir,'a4_fig5_spectrum_screen.png');
+
+% 6 — final topologies.
+f=figure('Visible','off','Position',[100 100 1000 800]);
+for i=1:numel(arms), subplot(numel(arms),1,i); a=arms(i);
+    if ~isempty(a.topology), imagesc(reshape(1-a.topology,res.nely,res.nelx)); axis equal off; colormap(gray); end
+    title(sprintf('N=%s; %s; warnings=%s',a.tag,a.phase2_status,strjoin(a.warnings,',')),'Interpreter','none'); end
+figs{end+1}=localSave(f,outDir,'a4_fig6_topologies.png');
+
+% 7 — omega1/omega2 separation at common/operational events.
+f=localFigure(); hold on; grid on;
+for i=1:numel(arms), ev=arms(i).screening_events; if ~isempty(ev), plot([ev.iteration],[ev.omega1_omega2_gap],'-o', ...
+        'Color',colors(i,:),'DisplayName',sprintf('N=%s',arms(i).tag)); end; end
+xlabel('iteration'); ylabel('omega2 - omega1 [rad/s]'); title('First-mode spectral separation'); legend('Location','best');
+figs{end+1}=localSave(f,outDir,'a4_fig7_omega_gap.png');
+
+% 8 — required final window (central C-1 figure).
+f=localFigure(); hold on; grid on;
+for i=1:numel(arms), ev=arms(i).screening_events; if ~isempty(ev), stairs([ev.iteration],[ev.m_final],'-o', ...
+        'Color',colors(i,:),'DisplayName',sprintf('N=%s',arms(i).tag)); end; end
+yline(c.m0,'k--','DisplayName','old window m0=20'); yline(c.M_max,'r--','DisplayName','ceiling Mmax=320');
+xlabel('iteration'); ylabel('m final'); title('Adaptive mode window required'); legend('Location','best');
+figs{end+1}=localSave(f,outDir,'a4_fig8_required_window.png');
+
+% 9 — selected mode index.
+f=localFigure(); hold on; grid on;
+for i=1:numel(arms), ev=arms(i).screening_events; if ~isempty(ev), plot([ev.iteration],[ev.selected_index],'-o', ...
+        'Color',colors(i,:),'DisplayName',sprintf('N=%s',arms(i).tag)); end; end
+yline(c.m0,'k--','DisplayName','old window m0=20'); xlabel('iteration'); ylabel('selected mode index');
+title('Selected physical-mode index'); legend('Location','best');
+figs{end+1}=localSave(f,outDir,'a4_fig9_selected_index.png');
 end
 
-if any(clean)
-    plot(xpos(clean), omega(clean), 'o', 'MarkerSize', 10, 'LineWidth', 2, ...
-        'MarkerFaceColor', [0.20 0.45 0.75], 'MarkerEdgeColor', 'k', ...
-        'DisplayName', 'ACCEPTED (eligible as accuracy reference)');
+function f=localFigure(), f=figure('Visible','off','Position',[100 100 950 560]); end
+function p=localSave(f,outDir,name)
+set(findall(f,'Type','text'),'Interpreter','none');
+ax=findall(f,'Type','axes'); for i=1:numel(ax), ax(i).TickLabelInterpreter='none'; end
+lg=findall(f,'Type','legend'); for i=1:numel(lg), lg(i).Interpreter='none'; end
+p=fullfile(outDir,name); exportgraphics(f,p,'Resolution',150); close(f);
 end
-if any(disq)
-    % Disqualified arms: red crosses, explicitly labelled. NOT accuracy evidence.
-    plot(xpos(disq), omega(disq), 'x', 'MarkerSize', 14, 'LineWidth', 3, ...
-        'Color', [0.80 0.10 0.10], ...
-        'DisplayName', 'DISQUALIFIED (B3/B4) — NOT accuracy evidence');
-end
-other = ~clean & ~disq;
-if any(other)
-    plot(xpos(other), omega(other), 's', 'MarkerSize', 9, 'LineWidth', 1.5, ...
-        'MarkerFaceColor', [0.95 0.75 0.20], 'MarkerEdgeColor', 'k', ...
-        'DisplayName', 'breakdown B1/B2 (a result)');
-end
-
-set(gca, 'XScale', 'log');
-set(gca, 'XTick', sort(unique(xpos)));
-lbl = arrayfun(@(a) a.tag, arms, 'UniformOutput', false);
-[~, ord] = sort(xpos);
-set(gca, 'XTickLabel', lbl(ord));
-xlabel('refresh interval N  (\infty = frozen = the published method)');
-ylabel('\omega_1 of the tracked \Phi_1-type mode  [rad/s]   (TRUE, exact eigensolve)');
-title({'A4 — accuracy cost of freezing the reference eigenpair', ...
-       sprintf('decision: %s', strrep(res.decision.outcome, '_', ' '))}, ...
-       'Interpreter', 'none');
-legend('Location', 'best');
-p = fullfile(outDir, 'a4_fig1_omega1_vs_N.png');
-exportgraphics(f, p, 'Resolution', 150); close(f);
-figs{end+1} = p;
-
-% ---- Figure 2: omega1_tracked vs omega1_min (contamination signature) ----
-f = figure('Visible', 'off', 'Position', [100 100 900 520]);
-hold on; grid on;
-b = bar(1:numel(arms), [omega(:), omegaMin(:)], 'grouped');
-b(1).DisplayName = '\omega_1 tracked (\Phi_1-type)';
-b(2).DisplayName = '\omega_1 min (lowest mode, whatever it is)';
-set(gca, 'XTick', 1:numel(arms), 'XTickLabel', {arms.tag});
-xlabel('refresh interval N'); ylabel('\omega_1  [rad/s]');
-title({'A4 — spurious-mode signature', ...
-       'a large gap means a non-physical mode descended below the design mode'});
-legend('Location', 'best');
-p = fullfile(outDir, 'a4_fig2_tracked_vs_min.png');
-exportgraphics(f, p, 'Resolution', 150); close(f);
-figs{end+1} = p;
-
-% ---- Figure 3: refresh events (MAC continuity + admissibility) ----------
-f = figure('Visible', 'off', 'Position', [100 100 950 560]);
-hold on; grid on;
-anyEvents = false;
-for i = 1:numel(arms)
-    ev = arms(i).refresh_events;
-    if isempty(ev), continue; end
-    anyEvents = true;
-    plot([ev.iter], [ev.mac_phi0], '-o', 'LineWidth', 1.5, 'MarkerSize', 4, ...
-        'DisplayName', sprintf('N = %s', arms(i).tag));
-end
-if anyEvents
-    yline(0.8, 'r--', 'LineWidth', 1.2, 'DisplayName', 'MAC threshold 0.8');
-    xlabel('iteration'); ylabel('MAC( refreshed \Phi , solid \Phi_0 )');
-    title({'A4 — refresh events: does the refreshed reference stay the same physical mode?', ...
-           'each marker is one recorded refresh event'});
-    legend('Location', 'best');
-else
-    text(0.5, 0.5, 'no refresh events (all arms frozen)', 'HorizontalAlignment', 'center');
-    axis off;
-end
-p = fullfile(outDir, 'a4_fig3_refresh_events.png');
-exportgraphics(f, p, 'Resolution', 150); close(f);
-figs{end+1} = p;
-
-% ---- Figure 4: final topologies ----------------------------------------
-haveTopo = arrayfun(@(a) ~isempty(a.topology), arms);
-if any(haveTopo)
-    idx = find(haveTopo);
-    f = figure('Visible', 'off', 'Position', [100 100 1000 130*numel(idx)+80]);
-    % nelx/nely are fixed across arms by construction (single base config).
-    nelx = 400; nely = 50;
-    if isfield(res, 'nelx'), nelx = res.nelx; end
-    if isfield(res, 'nely'), nely = res.nely; end
-    for k = 1:numel(idx)
-        a = arms(idx(k));
-        subplot(numel(idx), 1, k);
-        try
-            imagesc(reshape(1 - a.topology, nely, nelx));
-        catch
-            imagesc(1 - a.topology(:)');
-        end
-        colormap(gray); axis equal off;
-        ttl = sprintf('N = %s   \\omega_1 = %.2f   %s%s', ...
-            a.tag, a.omega1_tracked, a.class, localBd(a.breakdown));
-        title(ttl, 'Interpreter', 'tex');
-    end
-    p = fullfile(outDir, 'a4_fig4_topologies.png');
-    exportgraphics(f, p, 'Resolution', 150); close(f);
-    figs{end+1} = p;
-end
-end
-
-function s = localBd(bd)
-if isempty(bd), s = ''; else, s = ['/' bd]; end
+function v=localFrozen(arms,field)
+v=NaN; i=find(isinf([arms.N]),1); if ~isempty(i), v=arms(i).(field); end
 end

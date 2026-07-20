@@ -74,7 +74,11 @@ ep.n_components = ep.screen.nComponents;
 % Gray material is where the localized modes are reported to live. If
 % omega1_tracked ~= omega1_thresholded, the result is not a gray-material
 % artifact. If they diverge, it is.
-xt = localVolumePreservingThreshold(endpoint.xPhys, endpoint.volfrac);
+% Recovery Phase 1 / C-3: use the configured material floor. The previous
+% implementation silently substituted 1e-3, six orders above the declared
+% rho_min=1e-9 in A4.
+xt = a4_volume_preserving_threshold( ...
+    endpoint.xPhys, endpoint.volfrac, endpoint.rho_min);
 try
     [Kt, Mt] = localAssembleFrom(endpoint, xt);
     [omT, PhiT] = localModes(Kt(free, free), Mt(free, free), free, endpoint.ndof, nModes);
@@ -84,10 +88,14 @@ try
             macT(k) = a4_mac(PhiT(:, k), phi0, Mt);
         end
     end
-    [~, jt] = max(macT);
+    [bestMacT, jt] = max(macT);
     ep.omega1_thresholded = omT(jt);
+    ep.mac_thresholded_to_phi0 = bestMacT;
+    ep.mode_index_thresholded = jt;
 catch ME
     ep.omega1_thresholded = NaN;
+    ep.mac_thresholded_to_phi0 = NaN;
+    ep.mode_index_thresholded = NaN;
     ep.omega1_thresholded_error = ME.message;
 end
 
@@ -125,16 +133,6 @@ K = (K + K') / 2;
 sM = reshape(endpoint.ME(:) * rhoPhys(:)', [], 1);
 M = sparse(iK, jK, sM, endpoint.ndof, endpoint.ndof);
 M = (M + M') / 2;
-end
-
-function xt = localVolumePreservingThreshold(x, volfrac)
-% Threshold at the density that preserves the volume fraction exactly.
-x = x(:);
-xs = sort(x, 'descend');
-nKeep = max(1, min(numel(x), round(volfrac * numel(x))));
-thr = xs(nKeep);
-xt = double(x >= thr);
-xt(xt == 0) = 1e-3;   % keep the declared lower bound; avoid singular K
 end
 
 function [omegas, Phi] = localModes(Kf, Mf, free, ndof, nModes)

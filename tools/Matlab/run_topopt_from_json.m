@@ -453,6 +453,18 @@ function [x, omega, tIter, nIter, mem_usage, diagnostics] = run_topopt_from_json
                 runCfg.a4_endpoint_export = ...
                     logical(getFieldPath(cfg, {'optimization','a4_endpoint_export'}));
             end
+            if hasFieldPath(cfg, {'optimization','a4_phase2_enabled'})
+                runCfg.a4_phase2_enabled = logical( ...
+                    getFieldPath(cfg, {'optimization','a4_phase2_enabled'}));
+            end
+            if hasFieldPath(cfg, {'optimization','a4_diagnostics_enabled'})
+                runCfg.a4_diagnostics_enabled = logical( ...
+                    getFieldPath(cfg, {'optimization','a4_diagnostics_enabled'}));
+            end
+            if hasFieldPath(cfg, {'optimization','a4_checkpoint_path'})
+                runCfg.a4_checkpoint_path = char(string( ...
+                    getFieldPath(cfg, {'optimization','a4_checkpoint_path'})));
+            end
             runCfg.save_frq_iterations = postproc.saveFrequencyIterations;
             runCfg.visualization_quality = postproc.visualizeQuality;
             if ~isempty(postproc.visualizeLive)

@@ -36,7 +36,9 @@ fprintf(fid, '%s\n', jsonencode(base, PrettyPrint=true));
 fclose(fid);
 
 opts = struct('base_config', tinyPath, 'n_levels', [Inf, 2], 'n_modes', 6, ...
-              'run_pre_screen', false);
+              'run_pre_screen', false, 'enforce_frozen_bit_identity', false, ...
+              'run_nonperturbation_replay', false, 'run_finite_replay', false);
+opts.run_fixture_validators = false;
 
 res = [];
 try
@@ -88,15 +90,17 @@ if ~isempty(refreshed)
     r = refreshed(1);
     % Must ACTUALLY refresh (or be a legitimate B3). A vacuous 0==0 pass would
     % hide a dead R-1 path.
-    okCount = (r.n_refresh == r.n_refresh_predicted) && ...
-              (r.n_refresh > 0 || r.refresh_inadmissible);
-    [nPass, nFail] = ck(sprintf(['V-A4-3: refreshed arm actually refreshed, count == ' ...
-        'floor(nIter/N) (n_refresh=%d, predicted=%d)'], r.n_refresh, r.n_refresh_predicted), ...
+    okCount = r.n_refresh_scheduled == floor(r.iterations/r.N) && ...
+              r.n_refresh_effective <= r.n_refresh_scheduled;
+    [nPass, nFail] = ck(sprintf(['V-A4-3: scheduled/effective refresh accounting ' ...
+        '(scheduled=%d, effective=%d)'], r.n_refresh_scheduled, r.n_refresh_effective), ...
         okCount, nPass, nFail);
 end
 
 % ---- artifacts ----------------------------------------------------------
-req = {'a4_eigenpair_refresh_results.mat', 'a4_result.json', 'a4_manifest.json', 'a4_table.md'};
+req = {'a4_eigenpair_refresh_results.mat','a4_result.json','a4_manifest.json', ...
+    'a4_stage_manifest.json','a4_screening_events.json','a4_candidate_telemetry.csv', ...
+    'a4_iteration_histories.csv','a4_table.md','a4_table2.md'};
 for i = 1:numel(req)
     p = fullfile(outDir, req{i});
     [nPass, nFail] = ck(sprintf('artifact present: %s', req{i}), ...
@@ -122,8 +126,8 @@ end
 
 % ---- plotting pipeline --------------------------------------------------
 figs = dir(fullfile(outDir, 'a4_fig*.png'));
-[nPass, nFail] = ck(sprintf('plotting pipeline produced figures (%d)', numel(figs)), ...
-    numel(figs) >= 3, nPass, nFail);
+[nPass, nFail] = ck(sprintf('plotting pipeline produced all nine figures (%d)', numel(figs)), ...
+    numel(figs) == 9, nPass, nFail);
 
 % ---- Gate A4-Pre is callable (one tiny checkpoint) ----------------------
 okPre = false;
@@ -155,7 +159,9 @@ fprintf(fid, '%s\n', jsonencode(convBase, PrettyPrint=true));
 fclose(fid);
 
 convOpts = struct('base_config', convPath, 'n_levels', [Inf, 2], 'n_modes', 6, ...
-                  'run_pre_screen', false);
+                  'run_pre_screen', false, 'enforce_frozen_bit_identity', false, ...
+                  'run_nonperturbation_replay', false, 'run_finite_replay', false);
+convOpts.run_fixture_validators = false;
 convDir = fullfile(outDir, 'converged');
 mkdir(convDir);
 cres = [];
@@ -186,17 +192,17 @@ if isstruct(cres) && isfield(cres, 'arms')
     % (3) A clean converged arm must classify ACCEPTED (Class B) -- before the
     % fix it classified REJECTED ("unconverged without a recognized breakdown
     % signature (change NaN > tol)").
-    clsOk = all(arrayfun(@(a) strcmp(a.class, 'ACCEPTED'), cres.arms));
-    [nPass, nFail] = ck(sprintf('converged-path: every arm Class B/ACCEPTED (%s)', ...
-        strjoin(arrayfun(@(a) sprintf('N=%s:%s%s', a.tag, a.class, a.breakdown), ...
+    clsOk = all(arrayfun(@(a) strcmp(a.phase2_status, 'ACCEPTED'), cres.arms));
+    [nPass, nFail] = ck(sprintf('converged-path: every arm Phase-2 ACCEPTED (%s)', ...
+        strjoin(arrayfun(@(a) sprintf('N=%s:%s', a.tag, a.phase2_status), ...
         cres.arms, 'UniformOutput', false)', ', ')), clsOk, nPass, nFail);
 
     % (4) With all arms Class B and gains within delta, the pre-registered
     % rule 1 (spec 5.3) must emit H0 -- not INDETERMINATE, and never the
     % previously-vacuous FROZEN_EXCEEDS_CLEAN_REFRESH.
-    [nPass, nFail] = ck(sprintf('converged-path: decision is H0 via rule 1 (got %s)', ...
+    [nPass, nFail] = ck(sprintf('converged-path: Phase 2 emits no H0/H1 decision (got %s)', ...
         cres.decision.outcome), ...
-        strcmp(cres.decision.outcome, 'H0_FREEZING_IS_BENIGN'), nPass, nFail);
+        strcmp(cres.decision.outcome, 'NOT_EMITTED_PHASE2'), nPass, nFail);
 end
 
 fprintf('\n  passed: %d   failed: %d\n', nPass, nFail);

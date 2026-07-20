@@ -326,6 +326,10 @@ claim must therefore be read from an **independent exact eigensolve of the final
 
 ## 4.1 Primary endpoint
 
+> **Phase-2 amendment:** mode-window and screening provisions in this section are
+> superseded by `A4_RECOVERY_PHASE2_SPECIFICATION.md` §§3–4. Endpoint definitions
+> not explicitly amended remain binding.
+
 > **`ω₁ᵗʳᵃᶜᵏ`** — the true frequency of the **Φ₁-type mode** in the converged design,
 > from an exact generalized eigensolve `K(x*)φ = ω²M(x*)φ` on the final density field.
 >
@@ -364,6 +368,10 @@ naively compute, and any divergence must be shown, not hidden behind mode tracki
 | **Grayness** | `ḡ = mean(4x(1−x))` of the final design. |
 
 ### 4.3.1 Mode-admissibility screen (support-connectivity based)
+
+> **Phase-2 amendment:** superseded by `A4_RECOVERY_PHASE2_SPECIFICATION.md` §§3–6
+> (adaptive ladder, common diagnostic grid, complete candidate telemetry, and
+> deferred operational refresh).
 
 **Corrected 2026-07-14.** The screen was originally specified as *"fraction of kinetic energy in
 elements with `x_e < 0.1`"*. **That quantity is `0.0000` for every mode in every diagnosed run, at
@@ -447,6 +455,9 @@ A4 is therefore gated on **integrity of measurement**, not on **success of optim
 
 ## 5.2 Three outcome classes
 
+> **Phase-2 amendment:** code B3 is retired and decomposed by
+> `A4_RECOVERY_PHASE2_SPECIFICATION.md` §7. Other provisions remain binding.
+
 ### Class A — REJECTED (experiment failure; fix and re-run)
 
 The run tells us nothing because the machinery was broken:
@@ -518,6 +529,9 @@ the previous design could not distinguish from outcome 4 — and it published th
 Reasoned, not assumed.
 
 ## 6.1 Does A4 depend on S1? — **YES, and the dependency is now HARDER than the previous version claimed.**
+
+> **Phase-2 amendment:** the four-point checkpoint set is superseded by the common
+> grid `G` in `A4_RECOVERY_PHASE2_SPECIFICATION.md` §4.1.
 
 The structural argument is unchanged and remains correct:
 

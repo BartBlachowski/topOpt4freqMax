@@ -509,16 +509,20 @@ stages(end+1, 1) = localMakeStage( ...
 % exp4_sensitivity_ablation is a pre-authoritative sensitivity ablation and is
 % NOT an A4 implementation; it remains denied by preflight P2.
 stages(end+1, 1) = localMakeStage( ...
-    'a4', 'A4', 'Eigenpair-refresh study N={inf,50,10,5,1} (SS 400x50, spec V3)', od.a4, ...
+    'a4', 'A4', 'Recovery Phase 2: adaptive search + common diagnostics', od.a4, ...
     @() a4_eigenpair_refresh(od.a4), ...
     @(r) localAccept_A4(r, od.a4), ...
     {fullfile(od.a4, 'a4_eigenpair_refresh_results.mat'), ...
      fullfile(od.a4, 'a4_result.json'), ...
      fullfile(od.a4, 'a4_manifest.json'), ...
-     fullfile(od.a4, 'a4_table.md')}, ...
+     fullfile(od.a4, 'a4_stage_manifest.json'), ...
+     fullfile(od.a4, 'a4_screening_events.json'), ...
+     fullfile(od.a4, 'a4_candidate_telemetry.csv'), ...
+     fullfile(od.a4, 'a4_iteration_histories.csv'), ...
+     fullfile(od.a4, 'a4_table.md'), fullfile(od.a4, 'a4_table2.md')}, ...
     struct('nLevels', [Inf 50 10 5 1], 'baseConfig', 'a4_ss_400x50_base.json', ...
            'pmass', 1, 'baseline', 'solid'), ...
-    struct('dependsOn', {{}}, 'estRuntimeSeconds', 57600));
+    struct('dependsOn', {{}}, 'estRuntimeSeconds', 43200));
 
 end
 
@@ -756,14 +760,23 @@ result.manifest = stage.manifestJson;
 localWriteJsonAtomic(stage.resultJson, result);
 
 manifest = struct();
-manifest.stage = stage.tag;
-manifest.status = status;
-manifest.created_utc = localUtcNow();
-manifest.output_dir = stage.outDir;
-manifest.result_json = stage.resultJson;
-manifest.manifest_json = stage.manifestJson;
-manifest.required_artifacts = stage.requiredArtifacts;
-manifest.files = localListOutputFiles(stage.outDir);
+if strcmp(stage.key,'a4') && isfile(fullfile(stage.outDir,'a4_manifest.json'))
+    % Phase-2 §10.2: campaign and stage manifests must carry the identical
+    % artifact set. Preserve the driver's authoritative set when the generic
+    % stage wrapper adds its status metadata.
+    manifest=localReadJsonSafe(fullfile(stage.outDir,'a4_manifest.json'));
+    manifest.status=status;
+    manifest.required_artifacts=stage.requiredArtifacts;
+else
+    manifest.stage = stage.tag;
+    manifest.status = status;
+    manifest.created_utc = localUtcNow();
+    manifest.output_dir = stage.outDir;
+    manifest.result_json = stage.resultJson;
+    manifest.manifest_json = stage.manifestJson;
+    manifest.required_artifacts = stage.requiredArtifacts;
+    manifest.files = localListOutputFiles(stage.outDir);
+end
 localWriteJsonAtomic(stage.manifestJson, manifest);
 end
 
@@ -856,39 +869,7 @@ end
 end
 
 function h = localHashStruct(s)
-txt = localJsonEncode(localOrderStruct(s));
-bytes = uint8(txt);
-hash = uint32(2166136261);
-prime = uint32(16777619);
-for k = 1:numel(bytes)
-    hash = bitxor(hash, uint32(bytes(k)));
-    hash = hash * prime;
-end
-h = sprintf('fnv1a32_%08x', hash);
-end
-
-function out = localOrderStruct(in)
-if isstruct(in)
-    out = in;
-    if numel(in) == 1
-        f = sort(fieldnames(in));
-        out = struct();
-        for k = 1:numel(f)
-            out.(f{k}) = localOrderStruct(in.(f{k}));
-        end
-    else
-        for k = 1:numel(in)
-            out(k) = localOrderStruct(in(k)); %#ok<AGROW>
-        end
-    end
-elseif iscell(in)
-    out = in;
-    for k = 1:numel(in)
-        out{k} = localOrderStruct(in{k});
-    end
-else
-    out = in;
-end
+h = fnv1a32_canonical_struct(s);
 end
 
 function files = localListOutputFiles(outDir)
@@ -1222,7 +1203,7 @@ end
 % -------------------------------------------------------------------------
 
 function [pass, condition] = localAccept_A4(res, outDir)
-%LOCALACCEPT_A4  Acceptance gate for A4 (A4_SPECIFICATION_V3 Part 5).
+%LOCALACCEPT_A4  Recovery Phase-2 run gate (§8.5).
 %
 %   *** A4's GATE IS DELIBERATELY DIFFERENT FROM EVERY OTHER STAGE. ***
 %
@@ -1245,7 +1226,7 @@ pass = false; condition = '';
 if isempty(res) || ~isstruct(res)
     condition = 'returned empty or non-struct result'; return;
 end
-for fn = {'arms', 'decision', 'base_config_hash', 'n_levels'}
+for fn = {'arms', 'run_verdict', 'base_config_hash', 'n_levels'}
     if ~isfield(res, fn{1}) || isempty(res.(fn{1}))
         condition = sprintf('required field missing or empty: %s', fn{1}); return;
     end
@@ -1275,29 +1256,29 @@ if ~all(strcmpi({res.arms.baseline}, 'solid'))
     return;
 end
 
-% Every arm must carry a classification. A REJECTED arm = broken machinery.
+% Every arm must carry a Phase-2 measurement-integrity status.
 for k = 1:numel(res.arms)
     a = res.arms(k);
-    if isempty(a.class)
+    if isempty(a.phase2_status)
         condition = sprintf('arm N=%s was not classified', a.tag);
         return;
     end
-    if strcmp(a.class, 'REJECTED')
-        condition = sprintf(['arm N=%s REJECTED (experiment failure, not approximation ' ...
-            'failure): %s'], a.tag, a.class_reason);
+    if strcmp(a.phase2_status, 'REJECTED')
+        condition = sprintf('arm N=%s REJECTED: %s', a.tag, ...
+            strjoin(a.implementation_failures,' | '));
         return;
     end
 end
 
-% A decision must have been emitted (including the pre-registered null outcome).
-if ~isfield(res.decision, 'outcome') || isempty(res.decision.outcome)
-    condition = 'no decision emitted';
+if ~strcmp(res.run_verdict,'COMPLETE')
+    condition = sprintf('Phase-2 run verdict is %s, not COMPLETE',res.run_verdict);
     return;
 end
 
 % Required artifacts.
-req = {'a4_eigenpair_refresh_results.mat', 'a4_result.json', ...
-       'a4_manifest.json', 'a4_table.md'};
+req = {'a4_eigenpair_refresh_results.mat','a4_result.json','a4_screening_events.json', ...
+       'a4_candidate_telemetry.csv','a4_iteration_histories.csv', ...
+       'a4_manifest.json','a4_stage_manifest.json','a4_table.md','a4_table2.md'};
 for k = 1:numel(req)
     p = fullfile(outDir, req{k});
     if ~localCheckArtifact(p)
@@ -1306,10 +1287,9 @@ for k = 1:numel(req)
     end
 end
 
-nBreak = sum(~cellfun(@isempty, {res.arms.breakdown}));
 pass = true;
-condition = sprintf(['accepted: %d/%d arms, %d with approximation breakdown (a RESULT, not a ' ...
-    'failure); decision = %s'], numel(res.arms), numel(res.n_levels), nBreak, res.decision.outcome);
+condition = sprintf('COMPLETE: %d/%d arms satisfy Phase-2 measurement integrity', ...
+    numel(res.arms), numel(res.n_levels));
 end
 
 function [pass, condition] = localAccept_S1(res, outDir)
