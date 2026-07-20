@@ -9,12 +9,12 @@
   ],
   "mac_threshold": 0.8,
   "n_modes": 10,
-  "created_utc": "2026-07-16T11:55:03Z",
+  "created_utc": "2026-07-19T22:25:39Z",
   "entries": [
     {
       "iteration_requested": 100,
       "iteration_reached": 100,
-      "elapsed_s": 12.374881041666667,
+      "elapsed_s": 13.212708208333334,
       "n_components": 1,
       "omega1_min": 159.63973782636657,
       "omega1_tracked": 159.63973782636657,
@@ -28,7 +28,7 @@
     {
       "iteration_requested": 300,
       "iteration_reached": 300,
-      "elapsed_s": 30.50824825,
+      "elapsed_s": 28.7871155,
       "n_components": 1,
       "omega1_min": 159.50999763966857,
       "omega1_tracked": 159.50999763966857,
@@ -42,7 +42,7 @@
     {
       "iteration_requested": 600,
       "iteration_reached": 600,
-      "elapsed_s": 56.467482791666669,
+      "elapsed_s": 54.045579791666668,
       "n_components": 1,
       "omega1_min": 159.60038519571984,
       "omega1_tracked": 159.60038519571984,
@@ -56,7 +56,7 @@
     {
       "iteration_requested": 2000,
       "iteration_reached": 2000,
-      "elapsed_s": 183.97744645833333,
+      "elapsed_s": 171.342108625,
       "n_components": 1,
       "omega1_min": 159.56562699328319,
       "omega1_tracked": 159.56562699328319,

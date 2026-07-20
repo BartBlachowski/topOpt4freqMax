@@ -1,0 +1,28 @@
+{
+  "stage": "A4",
+  "status": "accepted",
+  "created_utc": "2026-07-19T22:34:25.103Z",
+  "output_dir": "/Users/piotrek/Programming/topOpt4freqMax/examples/Revision_v1/output/a4",
+  "result_json": "/Users/piotrek/Programming/topOpt4freqMax/examples/Revision_v1/output/a4/a4_stage_result.json",
+  "manifest_json": "/Users/piotrek/Programming/topOpt4freqMax/examples/Revision_v1/output/a4/a4_stage_manifest.json",
+  "required_artifacts": [
+    "/Users/piotrek/Programming/topOpt4freqMax/examples/Revision_v1/output/a4/a4_eigenpair_refresh_results.mat",
+    "/Users/piotrek/Programming/topOpt4freqMax/examples/Revision_v1/output/a4/a4_result.json",
+    "/Users/piotrek/Programming/topOpt4freqMax/examples/Revision_v1/output/a4/a4_manifest.json",
+    "/Users/piotrek/Programming/topOpt4freqMax/examples/Revision_v1/output/a4/a4_table.md"
+  ],
+  "files": [
+    "/Users/piotrek/Programming/topOpt4freqMax/examples/Revision_v1/output/a4/a4_eigenpair_refresh_results.mat",
+    "/Users/piotrek/Programming/topOpt4freqMax/examples/Revision_v1/output/a4/a4_fig1_omega1_vs_N.png",
+    "/Users/piotrek/Programming/topOpt4freqMax/examples/Revision_v1/output/a4/a4_fig2_tracked_vs_min.png",
+    "/Users/piotrek/Programming/topOpt4freqMax/examples/Revision_v1/output/a4/a4_fig3_refresh_events.png",
+    "/Users/piotrek/Programming/topOpt4freqMax/examples/Revision_v1/output/a4/a4_fig4_topologies.png",
+    "/Users/piotrek/Programming/topOpt4freqMax/examples/Revision_v1/output/a4/a4_manifest.json",
+    "/Users/piotrek/Programming/topOpt4freqMax/examples/Revision_v1/output/a4/a4_pre_screen.json",
+    "/Users/piotrek/Programming/topOpt4freqMax/examples/Revision_v1/output/a4/a4_result.json",
+    "/Users/piotrek/Programming/topOpt4freqMax/examples/Revision_v1/output/a4/a4_stage_result.json",
+    "/Users/piotrek/Programming/topOpt4freqMax/examples/Revision_v1/output/a4/a4_table.md",
+    "/Users/piotrek/Programming/topOpt4freqMax/examples/Revision_v1/output/a4/a4_topology_N50.csv",
+    "/Users/piotrek/Programming/topOpt4freqMax/examples/Revision_v1/output/a4/a4_topology_Ninf.csv"
+  ]
+}

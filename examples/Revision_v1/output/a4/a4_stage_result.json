@@ -1,0 +1,32 @@
+{
+  "stage": "A4",
+  "key": "a4",
+  "description": "Eigenpair-refresh study N={inf,50,10,5,1} (SS 400x50, spec V3)",
+  "status": "accepted",
+  "condition": "accepted: 5/5 arms, 4 with approximation breakdown (a RESULT, not a failure); decision = INDETERMINATE",
+  "expected_diagnostic": false,
+  "elapsed_seconds": 526.35413345833331,
+  "completed_utc": "2026-07-19T22:34:25.095Z",
+  "output_dir": "/Users/piotrek/Programming/topOpt4freqMax/examples/Revision_v1/output/a4",
+  "config_hash": "fnv1a32_ffffffff",
+  "config": {
+    "nLevels": [
+      null,
+      50,
+      10,
+      5,
+      1
+    ],
+    "baseConfig": "a4_ss_400x50_base.json",
+    "pmass": 1,
+    "baseline": "solid"
+  },
+  "required_artifacts": [
+    "/Users/piotrek/Programming/topOpt4freqMax/examples/Revision_v1/output/a4/a4_eigenpair_refresh_results.mat",
+    "/Users/piotrek/Programming/topOpt4freqMax/examples/Revision_v1/output/a4/a4_result.json",
+    "/Users/piotrek/Programming/topOpt4freqMax/examples/Revision_v1/output/a4/a4_manifest.json",
+    "/Users/piotrek/Programming/topOpt4freqMax/examples/Revision_v1/output/a4/a4_table.md"
+  ],
+  "result_json": "/Users/piotrek/Programming/topOpt4freqMax/examples/Revision_v1/output/a4/a4_stage_result.json",
+  "manifest": "/Users/piotrek/Programming/topOpt4freqMax/examples/Revision_v1/output/a4/a4_stage_manifest.json"
+}
