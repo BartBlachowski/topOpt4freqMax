@@ -408,6 +408,9 @@ function [x, omega, tIter, nIter, mem_usage, diagnostics] = run_topopt_from_json
                 maxiter, stage1MaxIter, bcType, nHistModes, runCfg);
 
             x = xPhysStage2(:);
+            % Expose the full Yuksel info struct (incl. per-stage timing and
+            % iteration counts) so callers can report the two-step breakdown.
+            diagnostics = info;
             if isfield(info, 'stage2') && isfield(info.stage2, 'omegaFinal') && ~isempty(info.stage2.omegaFinal)
                 omega = toVec3(info.stage2.omegaFinal(:));
             elseif isfield(info, 'stage2') && isfield(info.stage2, 'omegaHist') && ~isempty(info.stage2.omegaHist)

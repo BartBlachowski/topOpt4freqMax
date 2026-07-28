@@ -1,0 +1,352 @@
+% Self-contained technical note for internal project documentation.
+% Rationale for the sequential-approximation strategy used in the
+% eigenfrequency topology-optimization implementation, framed as a
+% reinterpretation of the role of the local optimization subproblem in the
+% nested inner/outer procedure of Du and Olhoff (2007).
+%
+% Notation follows Du & Olhoff (2007), Struct Multidisc Optim 34:91-110,
+% and its erratum (s00158-007-0167-6).
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{bm}
+\usepackage[margin=1in]{geometry}
+
+\newcommand{\rhov}{\bm{\rho}}
+\newcommand{\Krho}{\mathbf{K}}
+\newcommand{\Mrho}{\mathbf{M}}
+\newcommand{\phiv}{\bm{\phi}}
+\newcommand{\fv}{\mathbf{f}}
+\newcommand{\NE}{N_{\mathrm{E}}}
+\newcommand{\T}{^{\mathsf{T}}}
+
+\title{Sequential Approximation Strategy for Eigenfrequency
+Maximization:\\ Rationale for the Present Implementation}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section{The reference algorithm of Du and Olhoff}
+
+We consider the maximization of the $n$-th natural eigenfrequency
+$\omega_n$ (or of a frequency gap) of a freely vibrating continuum
+discretized into $\NE$ finite elements with density design variables
+$\rho_e$, $e=1,\dots,\NE$, subject to a volume constraint. With
+$\lambda_j=\omega_j^2$, the state is governed by the generalized
+eigenvalue problem
+\begin{equation}
+\Krho(\rhov)\,\phiv_j = \lambda_j\,\Mrho(\rhov)\,\phiv_j,
+\qquad \phiv_j\T\Mrho\,\phiv_k=\delta_{jk}.
+\label{eq:gevp}
+\end{equation}
+Following Du and Olhoff (2007), the problem is cast in \emph{bound}
+(max--min) form: a scalar $\beta$ is maximized subject to
+$\beta\le\lambda_j$ for the relevant modes, so that raising $\beta$
+raises the lowest active eigenvalue. This formulation is essential
+because the eigenvalue of interest may be \emph{multiple}: when
+$\lambda_n=\dots=\lambda_{n+N-1}$ with multiplicity $N>1$, the
+eigenvalues are only directionally differentiable, and the bound
+variable absorbs the resulting non-smoothness.
+
+The computational procedure (their Fig.~1) is a \emph{nested} scheme
+with a main (outer) loop and an inner loop. Each outer iteration, at the
+current design $\rhov$, performs three analysis steps: (i) solve
+\eqref{eq:gevp} by finite element analysis and detect the multiplicity
+$N$ of $\omega_n$ within a small relative tolerance; (ii) assemble the
+\emph{generalized gradient vectors} $\fv_{sk}$, $s,k=n,\dots,n+N-1$,
+whose components are
+\begin{equation}
+\big(\fv_{sk}\big)_e=
+\phiv_s\T\!\left(\Krho'_{\rho_e}-\lambda_n\,\Mrho'_{\rho_e}\right)\!\phiv_k,
+\label{eq:fsk}
+\end{equation}
+reducing for a simple eigenvalue ($N=1$) to the ordinary sensitivity
+$\fv_{nn}=\nabla\lambda_n$; and (iii) freeze
+$\Krho,\Mrho,\lambda_j,\phiv_j,N,\fv_{sk}$ and solve, by MMA, a
+sub-optimization problem for the design \emph{increments} $\Delta\rho_e$.
+In compact form this frozen subproblem reads
+\begin{subequations}
+\label{eq:sub}
+\begin{align}
+\max_{\beta,\,\Delta\rhov}\ & \beta \\
+\text{s.t.}\quad
+ \beta &\le \lambda_j+\fv_{jj}\T\Delta\rhov, & j&=n+N,
+ \label{eq:sub-guard}\\
+ \beta &\le \lambda_j+\Delta\lambda_j, & j&=n,\dots,n+N-1,
+ \label{eq:sub-mult}\\
+ 0 &=\det\!\big[\fv_{sk}\T\Delta\rhov-\delta_{sk}\,\Delta\lambda\big],
+ & s,k&=n,\dots,n+N-1, \label{eq:sub-det}\\
+ &\textstyle\sum_{e}(\rho_e+\Delta\rho_e)V_e \le V^*, \\
+ &\ \rho_{\min}\le \rho_e+\Delta\rho_e\le 1, & e&=1,\dots,\NE.
+ \label{eq:sub-box}
+\end{align}
+\end{subequations}
+Here the multiple-eigenvalue increments $\Delta\lambda_j$ are the roots of
+the algebraic sub-eigenvalue problem \eqref{eq:sub-det} (with the erratum
+correction placing $\Delta$ on the eigenvalue $\Delta\lambda$), and
+\eqref{eq:sub-guard} is a linearized guard on the simple mode just above
+the cluster. The inner loop iterates \eqref{eq:sub} to convergence in
+$\Delta\rhov$; the design is then updated as
+$\rho_e\!:=\!\rho_e+\Delta\rho_e$ and the outer loop terminates once
+$\|\Delta\rhov\|<\varepsilon$. The inner loop exists precisely for the
+multiple case: through \eqref{eq:sub-det} the $\Delta\lambda_j$ are
+\emph{nonlinear} functions of $\Delta\rhov$, so the frozen subproblem is a
+genuinely nonlinear program that MMA must resolve iteratively. For $N=1$,
+\eqref{eq:sub-det} collapses to the scalar relation
+$\Delta\lambda_n=\fv_{nn}\T\Delta\rhov$ and \eqref{eq:sub} becomes linear
+in $\Delta\rhov$.
+
+\section{The present implementation}
+
+Our implementation retains the bound formulation and MMA but replaces the
+nested procedure by a single-loop sequential scheme. After each solution
+of \eqref{eq:gevp} we assemble a convex separable approximation of the
+bound problem and take \emph{one} MMA step on the absolute design
+variables $\rho_e$; the eigenproblem is then recomputed immediately at the
+new design. We do not detect multiplicity and do not form the generalized
+gradients \eqref{eq:fsk}: the bound variable is carried as a persistent
+MMA design variable, and the several lowest modes $\omega_1,\dots,\omega_J$
+are constrained simultaneously, $\beta\le\lambda_j$, $j=1,\dots,J$. The
+step is regularized by a move limit, by density filtering, by a Heaviside
+projection under a continuation schedule, and by an acceptance test that
+rejects any step which reduces $\omega_1$ beyond a small tolerance.
+
+The governing idea is a change of interpretation rather than of
+objective. We treat each finite element eigensolution as furnishing a
+local model of the eigenvalue landscape that is trustworthy only in a
+neighbourhood of the current design, and we advance by a single
+conservative step within that neighbourhood before rebuilding the model.
+What this reflects about the role of the frozen subproblem
+\eqref{eq:sub}---whether it is an optimization problem to be solved, or a
+predictor of a search direction---is developed in the next section, and it
+is there, rather than in the reduction to a single step, that the essential
+difference from the reference algorithm resides.
+
+\section{Mathematical interpretation}
+
+\subsection{Local optimization versus local prediction}
+
+The frozen subproblem \eqref{eq:sub} admits two mathematically legitimate
+readings, and the difference between them---rather than any single
+implementation detail---is what distinguishes the present scheme from the
+reference algorithm.
+
+Under the first reading, \eqref{eq:sub} is itself an optimization problem:
+given the current physical model, one seeks the increment $\Delta\rhov$
+that best improves the bound and solves this subproblem close to
+convergence before the finite element model is refreshed. This is the
+reading embodied by the nested inner loop of Du and Olhoff, and it follows
+naturally from the mathematical concern that shaped their formulation. Their
+central difficulty was the treatment of \emph{multiple} eigenvalues: at a
+multiplicity the ordinary eigenvalue sensitivities cease to exist, and the
+generalized gradients \eqref{eq:fsk} together with the coupled determinant
+\eqref{eq:sub-det} were introduced precisely to furnish a well-defined local
+model of the degenerate cluster. Once a local model of that richness
+had been constructed, solving it accurately before rebuilding is a natural
+design decision, since the subproblem then encodes genuine directional
+information about the multiple eigenvalue that is worth extracting in full.
+In this reading the governing question is \emph{how accurately the local
+approximation should be solved}.
+
+Under the second reading, adopted here, \eqref{eq:sub} is not an end in
+itself but a \emph{local predictor} of a useful search direction. It
+converts the frozen sensitivities into a descent direction; once a single
+conservative step has been taken, the eigendata on which that direction was
+built no longer describe the current design, and the proper response is to
+rebuild the model rather than to refine the increment further. The governing
+question here is therefore not how accurately the subproblem is solved but
+\emph{how long the local approximation remains trustworthy}. The limitation
+to a single MMA step reflects no deficiency of MMA as an optimizer: after one
+conservative update the optimization problem has itself changed, since the
+stiffness and mass matrices $\Krho,\Mrho$, the eigenvectors $\phiv_j$, and
+the eigenvalue sensitivities now all correspond to a different design. The
+decision to rebuild is thus prompted by the change in the underlying
+physical model rather than by any shortcoming of the solver; and because a
+fresh model is inexpensive to form here, keeping the approximation current
+is preferred to solving an increasingly outdated one to high accuracy.
+
+The two readings differ in where convergence is expected to arise. The
+first pursues accuracy within each frozen subproblem; the second expects it
+of the outer sequence
+\[
+\text{accurate FE model}\ \to\ \text{local approximation}\ \to\
+\text{conservative step}\ \to\ \text{new accurate FE model},
+\]
+no individual frozen approximation being solved to optimality. This is the
+stance of sequential convex programming and sequential approximate
+optimization, close in spirit to a line search along a predicted direction.
+Both readings are legitimate and address genuinely different questions; the
+implementation differences follow from the choice of question, not from any
+judgement that one viewpoint is superior.
+
+\subsection{First-order accuracy and the eigenvalue regimes}
+
+The data frozen in \eqref{eq:sub}---the matrices $\Krho,\Mrho$, the modes
+$\phiv_j$, and the gradients $\fv_{sk}$---all depend on $\rhov$, so the
+subproblem is a first-order surrogate whose fidelity degrades with
+$\|\Delta\rhov\|$. A distinction must be drawn between the first-order
+linearization of the eigenvalue dependence and the convex model actually
+optimized: the implementation does not solve \eqref{eq:sub} as a linear
+program but optimizes a convex separable MMA approximation, and the two
+should not be equated. For a simple eigenvalue the increment enters
+\eqref{eq:sub-mult} linearly through $\fv_{nn}$ and carries no intrinsic
+curvature from the physics. Absent additional regularization---the move
+limit and filtering introduced above---a convex model dominated by such a
+curvature-free term has no interior minimizer and is drawn toward the
+boundary of the admissible set, i.e.\ the active move limits. This bias
+toward large, bound-saturating increments is a tendency of the underlying
+linearization, not a literal linear-programming vertex.
+
+This exposes a competition inherent in the inner loop, which we regard as
+the central trade-off of the present scheme. Each additional inner MMA
+iteration advances the solution of the frozen subproblem toward its optimum,
+but it also moves the design away from the point at which the frozen data
+were evaluated, and there the approximation deteriorates in two related but
+conceptually distinct ways. First, the frozen operators $\Krho,\Mrho$ and
+modes $\phiv_j$ increasingly fail to represent the actual design: the finite
+element model on which the subproblem rests is no longer that of the current
+structure. Second, and independently, the first-order sensitivity model---the
+linearization of the eigenvalue dependence through $\fv_{sk}$---loses
+predictive accuracy as $\|\Delta\rhov\|$ grows, even relative to the frozen
+operators. Refining a fixed approximation that is deteriorating on both
+counts improves the solution of the model without necessarily improving the
+true objective, and whether continued iteration is worthwhile depends on
+which effect prevails. The present implementation rests on the implicit
+assumption that, for the problems considered, this joint loss of accuracy
+dominates before full convergence of the frozen subproblem becomes
+advantageous---so that a single step followed by re-analysis, which restores
+a current approximation, is preferable to a converged solve on an outdated
+one. We stress that this is a hypothesis supported by the numerical evidence
+reported below, not a mathematical proof, and that the balance may differ
+for other problem classes or regularizations.
+
+Within the sequential cycle set out above, MMA is a natural choice of step
+generator. Its moving asymptotes bound the admissible step and are updated
+from the iteration history at the current design; in limiting how far the
+variables may move per subproblem they play a role analogous to a
+trust-region mechanism, though they are mathematically distinct from it,
+bounding and shaping the variables of the convex model rather than
+constraining the step within an explicit trust radius. Iterating the frozen
+subproblem drives the variables toward those asymptotes, away from the
+design at which the model was calibrated.
+
+The force of the two readings is sharpest once the eigenvalue regime is made
+explicit, because the frozen subproblem behaves qualitatively differently in
+the two cases. In the \emph{simple-eigenvalue} regime---the situation during
+most iterations here---the subproblem is the curvature-free first-order
+model discussed above: continued optimization of it chiefly drives the
+increment toward the model bounds and refines the surrogate rather than the
+true objective, which is exactly where the predictor reading is most
+compelling and where full convergence of the inner loop stands to gain
+least. In the \emph{multiple-eigenvalue} regime the coupling in
+\eqref{eq:sub-det} makes the $\Delta\lambda_j$ nonlinear functions of
+$\Delta\rhov$, so the subproblem carries genuine curvature that a single
+linearized step cannot resolve; iterating it is then far better motivated,
+since its accurate solution reflects the true directional behaviour of the
+degenerate cluster. We therefore do not conclude that the inner loop is
+unnecessary. Rather, its computational importance appears to depend strongly
+on the current regime---weakest where the model is essentially first order,
+strongest in the multiple case for which it was designed.
+
+The simultaneous constraints on the $J$ lowest modes bear on the same
+point. Near a coalescence, several constraints $\beta\le\lambda_j$ may
+become active at once, and the associated MMA dual multipliers combine the
+corresponding single-mode sensitivities into a step reflecting several
+competing modes rather than one. This may play a practical role similar to
+that of the generalized-gradient direction that
+\eqref{eq:fsk}--\eqref{eq:sub-det} would supply, without forming $\fv_{sk}$
+or solving the sub-eigenvalue problem. We regard it as a resemblance in the
+computed step, not a demonstrated equivalence: the combination formed from
+the MMA duals need not coincide with the direction obtained from the coupled
+sub-eigenvalue problem, and we do not claim that it does.
+
+\section{Relation to numerical observations}
+
+The following are consistent with, and motivated by, the behaviour we have
+observed on the benchmark configurations.
+
+\emph{Observations.} A literal realization of the nested procedure---the
+frozen subproblem iterated to convergence, full increments applied, no
+additional damping---was unstable on every benchmark tested: the design
+drifted toward near-zero-frequency mechanisms with oscillatory,
+non-convergent iterates. The instability was not immediate; it appeared
+only after the frozen subproblem had been optimized at length, the
+increments then growing large and saturating the box bounds
+\eqref{eq:sub-box}, i.e.\ single-step design changes beyond the range in
+which the underlying first-order model can be expected to remain accurate.
+Rebuilding the approximation after each conservative MMA step, by contrast,
+consistently restored stable convergence on the same configurations.
+
+\emph{Interpretation.} These observations are consistent with the analysis
+of Section~3: in the simple-eigenvalue regime the curvature-free model
+draws its minimizer to the active bounds, and such a step leaves the region
+in which the linearization is reliable.
+
+\emph{Hypothesis.} A plausible interpretation is that frequent
+re-linearization, rather than convergence of any single frozen subproblem,
+is the dominant contributor to stability---as the predictor reading of
+Section~3 would suggest. That instability set in only after prolonged
+optimization of a fixed approximation, and that rebuilding the model after
+each step consistently avoided it, are consistent with the view that the
+essential stabilizing mechanism is the return to finite element analysis
+before the approximation drifts far from the current design, keeping the
+local model current as the optimization proceeds. We regard this as a
+working hypothesis supported by the present evidence, not as an established
+fact.
+
+\section{Limitations and outlook}
+
+The foregoing does not establish that the algorithm of Du and Olhoff is
+mathematically incorrect; it is a convergent scheme whose inner loop is
+well motivated for multiple eigenvalues. Our results show only that a
+particular literal reconstruction was unstable while a single-step variant
+was not, and several alternative explanations cannot be excluded. The
+published description leaves undocumented details---most notably the step
+control and stopping rule of the inner loop, a sufficiently loose inner
+tolerance being, in effect, close to a single-step scheme. Differences in
+MMA settings, particularly the initialization and adaptation of the moving
+asymptotes, materially affect step size and could account for part of the
+gap. Additional stabilization mechanisms may have been present but
+unreported. Finally, differences in the finite element model---notably the
+interpolation of the low-density element mass, which governs spurious
+localized modes and thereby reshapes the eigenvalue landscape near which
+\eqref{eq:sub} is built---could contribute independently of the loop
+structure.
+
+Taken together, these considerations suggest---as engineering
+interpretation rather than proven fact---that the two philosophies are
+advantageous under different circumstances. The nested strategy is naturally
+favoured when multiple eigenvalues dominate the optimization, so that the
+coupled local model carries genuine nonlinear information and solving it
+accurately is worthwhile. The present strategy is expected to be favoured
+when the optimization proceeds mostly through simple eigenvalues, when
+first-order local models lose accuracy rapidly with design change, and when
+frequently rebuilding the approximation yields more than repeatedly refining
+a single ageing model. On the balance of the available evidence, frequent
+rebuilding appears the more important factor for robustness in the regime we
+have examined.
+
+These observations raise a broader question that the present work does not
+resolve. If the value of solving the local subproblem accurately depends so
+strongly on the eigenvalue regime, it is not evident that a sequential
+approximation method for eigenfrequency optimization should commit to a
+single fixed strategy throughout. The optimal balance between local
+optimization and approximation rebuilding may itself be regime-dependent
+rather than fixed for the whole run. Whether such an adaptive strategy would
+in fact outperform either fixed philosophy is an open question, and a natural
+direction for further investigation suggested by the behaviour reported here.
+
+\begin{thebibliography}{9}
+\bibitem{DuOlhoff2007} J.~Du and N.~Olhoff.
+Topological design of freely vibrating continuum structures for maximum
+values of simple and multiple eigenfrequencies and frequency gaps.
+\emph{Struct.\ Multidisc.\ Optim.} 34:91--110, 2007.
+\bibitem{DuOlhoffErratum} J.~Du and N.~Olhoff. Erratum to
+\cite{DuOlhoff2007}. \emph{Struct.\ Multidisc.\ Optim.} 34, 2007.
+\bibitem{Svanberg1987} K.~Svanberg. The method of moving asymptotes---a
+new method for structural optimization.
+\emph{Int.\ J.\ Numer.\ Methods Eng.} 24:359--373, 1987.
+\end{thebibliography}
+
+\end{document}

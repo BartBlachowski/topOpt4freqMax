@@ -60,11 +60,21 @@ data.optimization.filter.radius_units = 'element';
 % -------------------------------------------------------------------------
 
 resolutions = [
-    160,  20;
-    240,  30;
-    320,  40;
-    400,  50;
-];
+     160,  20;
+     240,  30;
+ ];
+
+% resolutions = [
+%     160,  20;
+%     240,  30;
+%     320,  40;
+%     400,  50;
+%     480,  60;
+%     560,  70;
+%     640,  80;
+%     720,  90;
+%     800,  100;
+% ];
 
 % resolutions = [
 %     600,  75;
@@ -80,13 +90,20 @@ approaches   = {'Olhoff',                                  'Yuksel',            
 methodLabels = {'OlhoffApproach (local Olhoff-inspired)', 'YukselApproach (local)', 'ProposedApproach' };
 nMethods     = numel(approaches);
 
-nSamples = 5;
+nSamples = 1;
 
 % Storage: rows = resolutions, columns = methods
 omega_all  = NaN(nRes, nMethods);
 tIter_all  = NaN(nRes, nMethods);
 nIter_all  = NaN(nRes, nMethods);
 mem_all    = NaN(nRes, nMethods);
+
+% Yuksel is a two-step method: stage 1 (compliance warm-start) followed by
+% stage 2 (inertial-load frequency maximization).  Its iteration count is
+% therefore reported per stage rather than as a single total.  These stay NaN
+% for the single-loop methods (Olhoff, OurApproach).
+nIter1_all = NaN(nRes, nMethods);   % stage-1 iterations (two-step methods)
+nIter2_all = NaN(nRes, nMethods);   % stage-2 iterations (two-step methods)
 
 % -------------------------------------------------------------------------
 % Run all (resolution × method) combinations, averaged over nSamples runs
@@ -98,27 +115,41 @@ for r = 1:nRes
     for m = 1:nMethods
         data.optimization.approach = approaches{m};
 
-        omega_s = NaN(1, nSamples);
-        tIter_s = NaN(1, nSamples);
-        nIter_s = NaN(1, nSamples);
-        mem_s   = NaN(1, nSamples);
+        omega_s  = NaN(1, nSamples);
+        tIter_s  = NaN(1, nSamples);
+        nIter_s  = NaN(1, nSamples);
+        nIter1_s = NaN(1, nSamples);
+        nIter2_s = NaN(1, nSamples);
+        mem_s    = NaN(1, nSamples);
 
         for s = 1:nSamples
             fprintf('Running %-18s  mesh %4dx%-3d  sample %d/%d ...\n', ...
                 methodLabels{m}, resolutions(r,1), resolutions(r,2), s, nSamples);
 
-            [~, omega, tIter, nIter, mem] = run_topopt_from_json(data);
+
+            [~, omega, tIter, nIter, mem, diagInfo] = run_topopt_from_json(data);
 
             omega_s(s) = omega(1);
             tIter_s(s) = tIter;
             nIter_s(s) = nIter;
             mem_s(s)   = mem;
+
+            % Two-step methods (Yuksel) return per-stage iteration counts in
+            % diagInfo.timing; single-loop methods leave these unset -> NaN.
+            if isstruct(diagInfo) && isfield(diagInfo, 'timing') ...
+                    && isfield(diagInfo.timing, 'stage1_iterations') ...
+                    && isfield(diagInfo.timing, 'stage2_iterations')
+                nIter1_s(s) = diagInfo.timing.stage1_iterations;
+                nIter2_s(s) = diagInfo.timing.stage2_iterations;
+            end
         end
 
-        omega_all(r, m) = mean(omega_s);
-        tIter_all(r, m) = mean(tIter_s);
-        nIter_all(r, m) = round(mean(nIter_s));
-        mem_all(r, m)   = mean(mem_s);
+        omega_all(r, m)  = mean(omega_s);
+        tIter_all(r, m)  = mean(tIter_s);
+        nIter_all(r, m)  = round(mean(nIter_s));
+        nIter1_all(r, m) = round(mean(nIter1_s));   % NaN for single-loop methods
+        nIter2_all(r, m) = round(mean(nIter2_s));
+        mem_all(r, m)    = mean(mem_s);
     end
 end
 
@@ -128,15 +159,17 @@ tTotal_all = tIter_all .* nIter_all;
 % -------------------------------------------------------------------------
 % Print performance table (mirrors Table 1 from Yuksel et al.)
 % -------------------------------------------------------------------------
-sepWidth = 107;
+sepWidth = 113;
 sep = repmat('-', 1, sepWidth);
 
 fprintf('\n');
 fprintf('Table 1. Run time comparison between methods for maximizing the first\n');
 fprintf('natural frequency of a simply supported beam (8 m x 1 m, vf = 0.5).\n');
 fprintf('Results averaged over %d runs.\n', nSamples);
+fprintf('The Yuksel method runs in two stages; its iteration count is reported\n');
+fprintf('as total (stage1 + stage2).\n');
 fprintf('\n');
-fprintf('%-20s  %-9s  %12s  %16s  %20s  %18s\n', ...
+fprintf('%-20s  %-9s  %18s  %16s  %20s  %18s\n', ...
     'Method', 'Mesh size', 'Iterations', 'Run time (s)', 'Run time/iter (s/iter)', 'Max RAM (MB)');
 fprintf('%s\n', sep);
 
@@ -150,12 +183,18 @@ for r = 1:nRes
             iterStr   = 'N/A';
             ramStr    = 'N/A';
         else
-            nIterStr = sprintf('%d',   nIter_all(r,m));
+            if ~isnan(nIter1_all(r,m)) && ~isnan(nIter2_all(r,m))
+                % Two-step method: report the total plus the per-stage split.
+                nIterStr = sprintf('%d (%d+%d)', nIter_all(r,m), ...
+                    nIter1_all(r,m), nIter2_all(r,m));
+            else
+                nIterStr = sprintf('%d', nIter_all(r,m));
+            end
             timeStr  = sprintf('%.1f', tTotal_all(r,m));
             iterStr  = sprintf('%.2f', tIter_all(r,m));
             ramStr   = sprintf('%.0f', mem_all(r,m));
         end
-        fprintf('%-20s  %-9s  %12s  %16s  %20s  %18s\n', ...
+        fprintf('%-20s  %-9s  %18s  %16s  %20s  %18s\n', ...
             methodLabels{m}, meshStr, nIterStr, timeStr, iterStr, ramStr);
     end
 
@@ -198,16 +237,26 @@ csvPath = fullfile(fileparts(mfilename('fullpath')), 'table1_performance.csv');
 displayNames = {'OlhoffApproach (local Olhoff-inspired)', ...
                 'YukselApproach (local)', 'ProposedApproach'};
 fid = fopen(csvPath, 'w');
-fprintf(fid, 'Method,Mesh,Iterations,RunTime_s,RunTimePerIter_s,MaxRAM_MB\n');
+% Iterations is the total; Iterations_Stage1/Iterations_Stage2 give the
+% two-step split for Yuksel and are left blank for single-loop methods.
+fprintf(fid, ['Method,Mesh,Iterations,Iterations_Stage1,Iterations_Stage2,', ...
+    'RunTime_s,RunTimePerIter_s,MaxRAM_MB\n']);
 for r = 1:nRes
     meshStr = sprintf('%dx%d', resolutions(r,1), resolutions(r,2));
     for m = 1:nMethods
         if isnan(tTotal_all(r,m))
-            fprintf(fid, '%s,%s,,,\n', displayNames{m}, meshStr);
+            fprintf(fid, '%s,%s,,,,,,\n', displayNames{m}, meshStr);
         else
-            fprintf(fid, '%s,%s,%d,%.1f,%.2f,%.0f\n', ...
-                displayNames{m}, meshStr, nIter_all(r,m), tTotal_all(r,m), ...
-                tIter_all(r,m), mem_all(r,m));
+            if ~isnan(nIter1_all(r,m)) && ~isnan(nIter2_all(r,m))
+                s1Str = sprintf('%d', nIter1_all(r,m));
+                s2Str = sprintf('%d', nIter2_all(r,m));
+            else
+                s1Str = '';
+                s2Str = '';
+            end
+            fprintf(fid, '%s,%s,%d,%s,%s,%.1f,%.2f,%.0f\n', ...
+                displayNames{m}, meshStr, nIter_all(r,m), s1Str, s2Str, ...
+                tTotal_all(r,m), tIter_all(r,m), mem_all(r,m));
         end
     end
 end

@@ -37,6 +37,12 @@ addpath(fullfile(repoRoot, 'tools', 'Matlab'));
 
 if ~exist(outDir, 'dir'), mkdir(outDir); end
 
+% Immutable V-P2-2 reference lifecycle gate. This is deliberately before
+% configuration loading, fixture validators, and the arm loop: a missing,
+% altered, mutable-output-resident, or aliased baseline stops execution before
+% any production optimization begins.
+frozenBaseline = a4_frozen_baseline_reference(outDir);
+
 baseConfig = localOpt(opts, 'base_config', fullfile(scriptDir, 'a4_ss_400x50_base.json'));
 Nlevels    = localOpt(opts, 'n_levels', [Inf, 50, 10, 5, 1]);   % spec Part 2
 delta      = localOpt(opts, 'delta', 0.05);                     % spec §1.2: 5%
@@ -68,19 +74,24 @@ res.nelx = cfg.domain.mesh.nelx;
 res.nely = cfg.domain.mesh.nely;
 res.n_levels = Nlevels(:)';
 res.created_utc = localUtcNow();
+res.frozen_baseline = frozenBaseline;
 res.arms = repmat(localBlankArm(), 0, 1);
 res.pre_screen = struct('run', true, 'source', 'N=inf common-grid events', ...
     'artifact', fullfile(outDir, 'a4_pre_screen.json'));
 res.validation = struct();
+res.acceptance_checks = localBlankAcceptanceChecks();
+res.run_verdict = 'INCOMPLETE';
+res.scientific_decision = [];
+res.decision = struct('outcome', 'NOT_EMITTED_PHASE2', ...
+    'statement', 'Campaign has not reached its normal completion path.', ...
+    'reference', NaN);
+res.halt = struct('halted', false, 'identifier', '', 'reason', '', ...
+    'artifact_write_error', '');
 if runFixtureValidators
     res.validation.fixture_suite = localRunFixtureSuite();
 else
     res.validation.fixture_suite = struct('pass',false,'reason','disabled by test option');
 end
-preservedTopologyPath = fullfile(outDir, 'a4_topology_Ninf.csv');
-preservedTopology = [];
-if isfile(preservedTopologyPath), preservedTopology = readmatrix(preservedTopologyPath); end
-
 % ---- the sweep: N is the only thing that changes -------------------------
 for i = 1:numel(Nlevels)
     N = Nlevels(i);
@@ -186,23 +197,20 @@ for i = 1:numel(Nlevels)
     res.arms(end+1, 1) = arm; %#ok<AGROW>
 
     if isinf(N)
-        res.validation.frozen_bit_identity = localFrozenIdentity(arm, preservedTopology);
+        topologyPath = fullfile(outDir, sprintf('a4_topology_%s.csv', arm.tag));
+        writematrix(arm.topology, topologyPath);
+        res.validation.frozen_bit_identity = ...
+            a4_validate_frozen_identity(arm, topologyPath, frozenBaseline);
         res.validation.window_recovery = localValidateWindowRecovery(arm.screening_events);
         if enforceFrozenIdentity && ~res.validation.frozen_bit_identity.pass
-            res.run_verdict = 'HALTED';
-            res.scientific_decision = [];
-            res.artifacts = localWriteArtifacts(outDir, res);
-            error('a4:FrozenBitIdentityFailed', ...
-                'N=inf Phase-2 stop gate failed: %s', ...
-                strjoin(res.validation.frozen_bit_identity.failures, ' | '));
+            localPersistAndHalt(outDir, res, 'a4:FrozenBitIdentityFailed', ...
+                sprintf('N=inf Phase-2 stop gate failed: %s', ...
+                strjoin(res.validation.frozen_bit_identity.failures, ' | ')));
         end
         if runNonperturbationReplay
             res.validation.nonperturbation = localRunNonperturbationReplay(runCfg, arm);
             if ~res.validation.nonperturbation.pass
-                res.run_verdict = 'HALTED';
-                res.scientific_decision = [];
-                res.artifacts = localWriteArtifacts(outDir, res);
-                error('a4:DiagnosticPerturbation', ...
+                localPersistAndHalt(outDir, res, 'a4:DiagnosticPerturbation', ...
                     'Diagnostics-on/off bit identity failed.');
             end
         end
@@ -383,6 +391,9 @@ end
 function a = localWriteArtifacts(outDir, res)
 a = struct();
 
+% A previous generation's indexes must never survive a halted rewrite.
+localInvalidateArtifactIndexes(outDir);
+
 % ---- result .mat (runner requires a .mat artifact) ----------------------
 a.mat_file = fullfile(outDir, 'a4_eigenpair_refresh_results.mat');
 save(a.mat_file, 'res', '-v7.3');
@@ -440,8 +451,7 @@ a.figures = a4_plots(outDir, res);
 
 % Concise execution and validation reports (§10.1).
 repoRoot = fileparts(fileparts(fileparts(mfilename('fullpath'))));
-isProductionSweep = numel(res.arms)==5 && ...
-    isequal([res.arms.N],[Inf 50 10 5 1]);
+isProductionSweep = isequal(res.n_levels, [Inf 50 10 5 1]);
 if isProductionSweep
     a.report = fullfile(repoRoot, 'A4_RECOVERY_PHASE2_REPORT.md');
     a.validation_report = fullfile(repoRoot, 'A4_RECOVERY_PHASE2_VALIDATION.md');
@@ -455,7 +465,9 @@ localWriteValidationReport(a.validation_report, res);
 a.stage_result = fullfile(outDir, 'a4_stage_result.json');
 stageResult = struct('stage','A4','status',lower(res.run_verdict), ...
     'run_verdict',res.run_verdict,'scientific_decision',[], ...
-    'base_config_hash',res.base_config_hash,'commit_sha',res.commit_sha);
+    'base_config_hash',res.base_config_hash,'commit_sha',res.commit_sha, ...
+    'frozen_baseline',res.frozen_baseline, ...
+    'halt',res.halt);
 localWriteJson(a.stage_result,stageResult);
 
 % ---- matched manifests -------------------------------------------------
@@ -473,10 +485,14 @@ end
 artifactFiles=cellfun(@(n)fullfile(outDir,n),requiredNames,'UniformOutput',false)';
 artifactFiles=[artifactFiles;{a.report;a.validation_report; ...
     fullfile(repoRoot,'A4_RECOVERY_PHASE2_SPECIFICATION.md')}];
+artifactFiles=artifactFiles(cellfun(@isfile,artifactFiles) | ...
+    ismember(artifactFiles,{fullfile(outDir,'a4_manifest.json'); ...
+    fullfile(outDir,'a4_stage_manifest.json')}));
 artifactFiles=sort(artifactFiles);
 man = struct('stage', 'A4', 'spec', 'A4_RECOVERY_PHASE2_SPECIFICATION', ...
     'created_utc', res.created_utc, 'commit_sha', res.commit_sha, ...
     'base_config', res.base_config, 'base_config_hash', res.base_config_hash, ...
+    'frozen_baseline', res.frozen_baseline, ...
     'n_levels', {{'inf',50,10,5,1}}, 'run_verdict', res.run_verdict, ...
     'scientific_decision', [], 'output_dir', outDir, 'files', {artifactFiles});
 localWriteJson(a.manifest, man);
@@ -591,9 +607,15 @@ function localWriteRecoveryReport(path,res)
 L={'# A4 Recovery Phase 2 Report','', ...
     sprintf('- Specification: `A4_RECOVERY_PHASE2_SPECIFICATION.md`'), ...
     sprintf('- Base configuration hash: `%s`',res.base_config_hash), ...
+    sprintf('- Immutable frozen baseline: `%s`',res.frozen_baseline.path), ...
+    sprintf('- Immutable frozen baseline SHA-256: `%s`',res.frozen_baseline.actual_sha256), ...
     sprintf('- Commit: `%s`',res.commit_sha), ...
     sprintf('- Run verdict: **%s**',res.run_verdict),'', ...
     '## Per-arm measurement status',''};
+if res.halt.halted
+    L=[L(1:8), {sprintf('- Halt reason: `[%s] %s`', ...
+        res.halt.identifier,res.halt.reason)}, L(9:end)];
+end
 for i=1:numel(res.arms)
     a=res.arms(i);
     L{end+1}=sprintf('- N=%s: %s; events=%d; max window=%d; max index=%d; deferrals=%d/%d; warnings=%s.', ...
@@ -830,30 +852,6 @@ for i = 1:numel(events)
 end
 end
 
-function gate = localFrozenIdentity(arm, preservedTopology)
-expected = struct('omega1_tracked',159.56562699328325, ...
-    'final_design_change',3.034903639330122e-03, 'iterations',2000, ...
-    'mode_index_jstar',1, 'mac_to_phi0',0.9996284251363903, ...
-    'omega1_omega2_gap',67.37267502573462);
-gate = struct('pass', true, 'failures', {{}}, 'expected', expected, ...
-    'topology_bit_identical', false);
-names = fieldnames(expected);
-for i = 1:numel(names)
-    name = names{i};
-    if ~isequal(arm.(name), expected.(name))
-        gate.pass = false;
-        gate.failures{end+1} = sprintf('%s expected %.17g got %.17g', ...
-            name, expected.(name), arm.(name)); %#ok<AGROW>
-    end
-end
-gate.topology_bit_identical = ~isempty(preservedTopology) && ...
-    isequal(arm.topology(:), preservedTopology(:));
-if ~gate.topology_bit_identical
-    gate.pass = false;
-    gate.failures{end+1} = 'topology is not bit-identical to preserved N=inf CSV';
-end
-end
-
 function proof = localRunNonperturbationReplay(runCfg, referenceArm)
 t0=tic;
 runCfg.optimization.a4_diagnostics_enabled = false;
@@ -944,8 +942,7 @@ proof.pass=e25.selected_index==49 && e30.selected_index==37 && ...
 end
 
 function checks=localRunAcceptanceChecks(res,repoRoot,outDir)
-checks=struct('pass',false,'failures',{{}},'artifacts_git_tracked',false, ...
-    'reconstructability',false,'runtime_within_order',false);
+checks=localBlankAcceptanceChecks();
 if any(strcmp({res.arms.phase2_status},'REJECTED'))
     checks.failures{end+1}='one or more arms rejected';
 end
@@ -975,6 +972,47 @@ checks.runtime_within_order=actual>0 && actual>=estimate/10 && actual<=estimate*
 checks.runtime_actual_s=actual;checks.runtime_estimate_s=estimate;
 if ~checks.runtime_within_order,checks.failures{end+1}='runtime estimate is not within one order';end
 checks.pass=isempty(checks.failures);
+end
+
+function checks=localBlankAcceptanceChecks()
+checks=struct('pass',false,'failures',{{}},'artifacts_git_tracked',false, ...
+    'reconstructability',false,'runtime_within_order',false, ...
+    'runtime_actual_s',0,'runtime_estimate_s',43200);
+end
+
+function localPersistAndHalt(outDir,res,identifier,reason)
+res.run_verdict = 'HALTED';
+res.scientific_decision = [];
+res.decision = struct('outcome', 'NOT_EMITTED_PHASE2', ...
+    'statement', 'Campaign halted before a Phase-2 decision could be emitted.', ...
+    'reference', localFrozenOmega(res.arms));
+res.halt = struct('halted', true, 'identifier', identifier, 'reason', reason, ...
+    'artifact_write_error', '');
+res.acceptance_checks.pass = false;
+res.acceptance_checks.failures{end+1} = sprintf('[%s] %s', identifier, reason);
+
+artifactError = [];
+try
+    res.artifacts = localWriteArtifacts(outDir, res); %#ok<NASGU>
+catch ME
+    artifactError = ME;
+    warning('a4:HaltArtifactWriteFailed', ...
+        'HALTED artifact persistence reported [%s] %s', ME.identifier, ME.message);
+end
+
+haltException = MException(identifier, '%s', reason);
+if ~isempty(artifactError)
+    haltException = addCause(haltException, artifactError);
+end
+throwAsCaller(haltException);
+end
+
+function localInvalidateArtifactIndexes(outDir)
+names = {'a4_manifest.json','a4_stage_manifest.json','a4_stage_result.json'};
+for i = 1:numel(names)
+    path = fullfile(outDir, names{i});
+    if isfile(path), delete(path); end
+end
 end
 
 function tf=localReconstructable(arms)

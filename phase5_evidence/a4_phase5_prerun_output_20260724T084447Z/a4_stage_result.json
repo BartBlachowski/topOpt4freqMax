@@ -1,0 +1,69 @@
+{
+  "stage": "A4",
+  "key": "a4",
+  "description": "Eigenpair-refresh study N={inf,50,10,5,1} (SS 400x50, spec V3)",
+  "status": "accepted",
+  "condition": "accepted: 5/5 arms, 4 with approximation breakdown (a RESULT, not a failure); decision = INDETERMINATE",
+  "expected_diagnostic": false,
+  "elapsed_seconds": 526.35413345833331,
+  "completed_utc": "2026-07-19T22:34:25.095Z",
+  "output_dir": "/Users/piotrek/Programming/topOpt4freqMax/examples/Revision_v1/output/a4",
+  "config_hash": "fnv1a32_1f5c3fff",
+  "config": {
+    "nLevels": [
+      null,
+      50,
+      10,
+      5,
+      1
+    ],
+    "baseConfig": "a4_ss_400x50_base.json",
+    "pmass": 1,
+    "baseline": "solid"
+  },
+  "required_artifacts": [
+    "/Users/piotrek/Programming/topOpt4freqMax/examples/Revision_v1/output/a4/a4_eigenpair_refresh_results.mat",
+    "/Users/piotrek/Programming/topOpt4freqMax/examples/Revision_v1/output/a4/a4_result.json",
+    "/Users/piotrek/Programming/topOpt4freqMax/examples/Revision_v1/output/a4/a4_manifest.json",
+    "/Users/piotrek/Programming/topOpt4freqMax/examples/Revision_v1/output/a4/a4_table.md"
+  ],
+  "result_json": "/Users/piotrek/Programming/topOpt4freqMax/examples/Revision_v1/output/a4/a4_stage_result.json",
+  "manifest": "/Users/piotrek/Programming/topOpt4freqMax/examples/Revision_v1/output/a4/a4_stage_manifest.json",
+  "original_config_hash": "fnv1a32_ffffffff",
+  "recovery_phase1": {
+    "phase": "A4 Recovery Phase 1",
+    "kind": "post_hoc_endpoint_and_provenance_regeneration",
+    "regenerated_utc": "2026-07-20T09:42:16Z",
+    "original_optimization_created_utc": "2026-07-19T22:25:38Z",
+    "original_optimization_commit_sha": "2c945de",
+    "optimization_rerun": false,
+    "tracked_frequencies_reused_bitwise": true,
+    "topologies_reused_bitwise": true,
+    "optimization_histories_regenerated": false,
+    "threshold_endpoint_recomputed": true,
+    "provenance_hash_recomputed": true,
+    "hash_algorithm": "FNV-1a 32-bit, explicit modulo-2^32 wrapping",
+    "original_base_config_hash": "fnv1a32_ffffffff",
+    "corrected_base_config_hash": "fnv1a32_c141e407",
+    "threshold_updates": [
+      {
+        "tag": "inf",
+        "before": 26.519321448943305,
+        "after": 162.46769148252696,
+        "mode_index": 1,
+        "mac_to_solid": 0.99971522670040092,
+        "configured_floor": 1E-9
+      },
+      {
+        "tag": "50",
+        "before": 26.4802327707988,
+        "after": 162.47879418740942,
+        "mode_index": 1,
+        "mac_to_solid": 0.9997265495193155,
+        "configured_floor": 1E-9
+      }
+    ],
+    "original_stage_config_hash": "fnv1a32_ffffffff",
+    "corrected_stage_config_hash": "fnv1a32_1f5c3fff"
+  }
+}

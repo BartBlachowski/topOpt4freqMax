@@ -28,6 +28,16 @@ function result = topIQP(nelx, nely, volfrac, penal, rmin, opts)
 %       qpFormulation : 'dual' (default, paper), 'primal', or 'auto'
 %       practicalStop : stop stalled quadprog tails using eps4-level KKT
 %       maxIter       : outer SQP/IQP iteration cap
+%       bcType        : 'mbb' (default), 'cantilever', 'cc' (clamped-
+%                       clamped), 'cs' (clamped-simply), or 'ss' (simply-
+%                       simply) — see boundary condition block below for
+%                       the exact definitions. 'cc'/'cs'/'ss' reuse the
+%                       support geometry from analysis/OlhoffApproach
+%                       (mid-height pin/clamp nodes); since that source
+%                       problem is an unloaded eigenvalue problem, a
+%                       top-edge, mid-span point load fy=-1 (three-point
+%                       bending) is used here to define a compliance
+%                       objective.
 %
 %   Output
 %   ------
@@ -65,6 +75,11 @@ end
 qp_formulation = lower(string(getOption(opts, 'qpFormulation', 'dual')));
 use_practical_stop = getOption(opts, 'practicalStop', true);
 max_iter = getOption(opts, 'maxIter', max_iter);
+bc_type  = lower(string(getOption(opts, 'bcType', 'mbb')));
+if ~any(bc_type == ["mbb", "cantilever", "cc", "cs", "ss"])
+    error('TopIQP:InvalidBcType', ...
+          'opts.bcType must be ''mbb'', ''cantilever'', ''cc'', ''cs'', or ''ss''.');
+end
 
 % =========================================================================
 % Mesh and DOF bookkeeping
@@ -100,28 +115,77 @@ jK = reshape(kron(edofMat, ones(1,8,'int32'))', 64*nEl, 1);
 KE = keElastic(hx, hy, nu);
 
 % =========================================================================
-% MBB boundary conditions and load
-%   - symmetry half-beam: left edge ux=0, bottom-right corner uy=0
-%   - point load fy=-1 at top-left node
+% Boundary conditions and load (opts.bcType: 'mbb' [default], 'cantilever',
+% 'cc', 'cs', or 'ss')
 %
 %   Node numbering: n(elx,ely) = (nely+1)*elx + ely + 1  (1-based)
 %     ely=0 = bottom row,  ely=nely = top row
 %     elx=0 = left col,    elx=nelx = right col
 %   DOFs: ux(n) = 2n-1,  uy(n) = 2n
+%
+%   'mbb'        : symmetry half-beam; left edge ux=0, bottom-right corner
+%                  uy=0; point load fy=-1 at top-left node.
+%   'cantilever' : left edge fully clamped (ux=uy=0); point load fy=-1 at
+%                  the mid-height node of the right edge.
+%
+%   'cc'/'cs'/'ss' reuse the full-beam support geometry from
+%   analysis/OlhoffApproach/Matlab/topFreqOptimization_MMA.m
+%   (buildSupports): mid-height (neutral-axis) pins at ely = round(nely/2).
+%   That source problem is an unloaded eigenvalue problem, so here a
+%   top-edge, mid-span point load fy=-1 (three-point bending) is added to
+%   define a compliance objective:
+%     'cc' : both edges fully clamped (ux=uy=0)
+%     'cs' : left edge fully clamped; right edge pinned at mid-height
+%     'ss' : both edges pinned at mid-height
 % =========================================================================
-% Fixed DOFs (1-based)
-leftNodes    = 1:(nely+1);                    % elx=0, ely=0..nely
-botRightNode = (nely+1)*nelx + 1;             % elx=nelx, ely=0
-fixedDofs    = [2*leftNodes-1, ...            % ux=0 on left edge (symmetry)
-                2*botRightNode];              % uy=0 at bottom-right corner
-fixedDofs    = unique(fixedDofs(:));
-freeDofs     = setdiff((1:nDof)', fixedDofs);
-nFree        = numel(freeDofs);
+F = zeros(nDof, 1);
+switch bc_type
+    case "mbb"
+        leftNodes    = 1:(nely+1);                    % elx=0, ely=0..nely
+        botRightNode = (nely+1)*nelx + 1;             % elx=nelx, ely=0
+        fixedDofs    = [2*leftNodes-1, ...            % ux=0 on left edge (symmetry)
+                        2*botRightNode];              % uy=0 at bottom-right corner
+        fixedDofs    = unique(fixedDofs(:));
 
-% Load vector: fy=-1 at top-left node (elx=0, ely=nely)
-topLeftNode = nely + 1;
-F      = zeros(nDof, 1);
-F(2*topLeftNode) = -1.0;
+        topLeftNode      = nely + 1;                  % elx=0, ely=nely
+        F(2*topLeftNode) = -1.0;
+
+    case "cantilever"
+        leftNodes = 1:(nely+1);                       % elx=0, ely=0..nely
+        fixedDofs = unique([2*leftNodes-1, 2*leftNodes]');  % ux=uy=0 on left edge
+
+        midRightNode      = (nely+1)*nelx + floor(nely/2) + 1;  % elx=nelx, ely=nely/2
+        F(2*midRightNode) = -1.0;
+
+    case "cc"
+        leftNodes  = 1:(nely+1);                            % elx=0, ely=0..nely
+        rightNodes = (nely+1)*nelx + (1:(nely+1));          % elx=nelx, ely=0..nely
+        fixedDofs  = unique([2*leftNodes-1, 2*leftNodes, ...
+                             2*rightNodes-1, 2*rightNodes]');  % ux=uy=0 both edges
+
+        midSpanTopNode      = (nely+1)*round(nelx/2) + nely + 1;  % elx=nelx/2, ely=nely
+        F(2*midSpanTopNode) = -1.0;
+
+    case "cs"
+        leftNodes    = 1:(nely+1);                              % elx=0, ely=0..nely
+        rightMidNode = (nely+1)*nelx + round(nely/2) + 1;       % elx=nelx, ely=nely/2 (pin)
+        fixedDofs    = unique([2*leftNodes-1, 2*leftNodes, ...
+                               2*rightMidNode-1, 2*rightMidNode]');
+
+        midSpanTopNode      = (nely+1)*round(nelx/2) + nely + 1;
+        F(2*midSpanTopNode) = -1.0;
+
+    case "ss"
+        leftMidNode  = round(nely/2) + 1;                       % elx=0, ely=nely/2 (pin)
+        rightMidNode = (nely+1)*nelx + round(nely/2) + 1;       % elx=nelx, ely=nely/2 (pin)
+        fixedDofs    = unique([2*leftMidNode-1, 2*leftMidNode, ...
+                               2*rightMidNode-1, 2*rightMidNode]');
+
+        midSpanTopNode      = (nely+1)*round(nelx/2) + nely + 1;
+        F(2*midSpanTopNode) = -1.0;
+end
+freeDofs = setdiff((1:nDof)', fixedDofs);
+nFree    = numel(freeDofs);
 
 % =========================================================================
 % Density filter (Table 5: rmin = 0.04*Lx in element units for unit hx).
@@ -533,6 +597,7 @@ result.nIter       = iter;
 result.compHistory = compHistory(1:iter);
 result.kktHistory  = kktHistory(1:iter,:);
 result.qpFormulation = char(qp_formulation);
+result.bcType        = char(bc_type);
 end
 
 

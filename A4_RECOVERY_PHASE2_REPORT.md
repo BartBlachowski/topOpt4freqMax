@@ -1,28 +1,70 @@
-# A4 Recovery Phase 2 — Implementation Report
+# A4 Recovery Phase 2 Report
 
-**Status:** implementation complete; production five-arm recovery sweep not executed in this implementation pass.
+- Specification: `A4_RECOVERY_PHASE2_SPECIFICATION.md`
+- Base configuration hash: `fnv1a32_c141e407`
+- Immutable frozen baseline: `/Users/piotrek/Programming/topOpt4freqMax/examples/Revision_v1/reference/a4/a4_topology_Ninf.csv`
+- Immutable frozen baseline SHA-256: `9c3d961bcdf731cf413f0be7d4999b121acffea31d9e11356cb67d4b3f269806`
+- Commit: `3542a2d`
+- Run verdict: **COMPLETE**
 
-## Implemented protocol
+## Per-arm measurement status
 
-- One constants block defines `W=(20,40,80,160,320)`, `M_max=320`, all four thresholds, the `10^-12` tie tolerance, fixed eigensolver settings, and the 25-point grid `G`.
-- Every Phase-2 screening event uses the shared adaptive search, mandatory confirmation expansion, `MAC >= 0.99` stability test, and lower-index tie break.
-- Diagnostic screening is read-only, shares one search with a coincident operational refresh, and is applied to `G` plus the final iteration.
-- Operational `REFERENCE_UNAVAILABLE` outcomes defer the refresh, retain the previous reference, and never terminate an arm.
-- Candidate telemetry contains every §6.1 field for every final-window candidate. Per-iteration reference, objective, feasibility, and design-change histories are retained.
-- E-0, E-1, E-2a, E-2b, E-3, E-4, and E-5 and the §8 arm statuses/warnings are implemented. The Phase-2 path cannot emit B3.
-- Writers exist for the result/event JSON, long CSVs, MAT result, five topology CSVs, Tables A4-1/A4-2, nine plots, matched manifests, and reports.
+- N=inf: ACCEPTED_WITH_WARNING; events=25; max window=320; max index=49; deferrals=0/0; warnings=W-2,W-5.
+- N=50: ACCEPTED_WITH_WARNING; events=23; max window=320; max index=49; deferrals=0/10; warnings=W-2,W-5.
+- N=10: ACCEPTED_WITH_WARNING; events=62; max window=320; max index=40; deferrals=50/53; warnings=W-1,W-2,W-5.
+- N=5: ACCEPTED_WITH_WARNING; events=239; max window=320; max index=20; deferrals=233/234; warnings=W-1,W-2,W-5.
+- N=1: ACCEPTED_WITH_WARNING; events=1040; max window=320; max index=19; deferrals=1038/1040; warnings=W-1,W-2,W-5.
+- N=50 pre-Phase-2 endpoint: 159.60117294919709; Phase-2 endpoint: 159.60129669888926; difference: +0.00012374969216466525 rad/s.
 
-## Executed implementation validation
+## Scope limitation
 
-- `test_a4_phase2` protocol fixtures: **15/15 passed**, including diagnostics-on/off bit identity and Phase 1’s 10/10 regression.
-- Production-scale V-P2-3 through iteration 30: **PASS**. Iteration 25 selected index 49, MAC 0.9775288450; iteration 30 selected index 37, MAC 0.9663501395. Both are E-1 events.
-- `test_a4_pipeline` tiny end-to-end driver/artifact validation: **28/28 passed**.
-- Existing `test_a4_refresh`: **22/22 passed** (legacy path remains inert outside Phase 2).
-- Existing `test_a4_classifier`: **17/17 passed** (legacy classifier retained outside the Phase-2 execution path).
-- `test_a4_phase1`: **10/10 passed**.
+Phase 2 emits corrected measurements only. M-1, M-2, M-3, M-7 and M-9 remain open as specified in §7.6.
+No campaign-level H0/H1 decision or manuscript claim is emitted.
 
-## Production work still required
+## Screening-decision reconstruction
 
-The complete `{inf,50,10,5,1}` sweep, production `N=inf` bit-identity stop gate, finite-`N` full replay, production artifact reconstruction checks, git tracking, and runtime-estimate validation remain pending. Until they pass, the Section 8 run verdict is not available and Phase 2 must not be reported as COMPLETE.
+- N=inf, iteration 20, event 8: 1/160 candidates admissible; outcome SELECTED; selected index 43 from m_final=160; classes=E-1.
+- N=inf, iteration 1, event 1: 0/320 candidates admissible; outcome REFERENCE_UNAVAILABLE; selected index 0 from m_final=320; classes=E-2a,E-4.
+- N=inf, iteration 2, event 2: 0/320 candidates admissible; outcome REFERENCE_UNAVAILABLE; selected index 0 from m_final=320; classes=E-2a,E-4.
 
-M-1, M-2, M-3, M-7, and M-9 remain out of scope under §7.6. No campaign-level H0/H1 decision or manuscript claim has been emitted.
+## Section 11 evidence
+
+The following checklist is generated from run evidence; implementation fixtures do not substitute for production gates.
+- [x] **S-1**
+- [x] **S-2**
+- [x] **S-3**
+- [x] **S-4**
+- [x] **S-5**
+- [x] **S-6**
+- [x] **S-7**
+- [x] **S-8**
+- [x] **S-9**
+- [x] **I-1**
+- [x] **I-2**
+- [x] **I-3**
+- [x] **I-4**
+- [x] **I-5**
+- [x] **I-6**
+- [x] **I-7**
+- [x] **I-8**
+- [x] **I-9**
+- [x] **V-P2-1**
+- [x] **V-P2-2**
+- [x] **V-P2-3**
+- [x] **V-P2-4**
+- [x] **V-P2-5**
+- [x] **V-P2-6**
+- [x] **V-P2-7**
+- [x] **V-P2-8**
+- [x] **V-P2-9**
+- [x] **R-1**
+- [x] **R-2**
+- [x] **R-3**
+- [x] **R-4**
+- [x] **R-5**
+- [x] **D-1**
+- [x] **D-2**
+- [x] **D-3**
+- [x] **D-4**
+- [x] **D-5**
+- [x] **D-6**

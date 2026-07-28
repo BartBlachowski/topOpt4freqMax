@@ -59,12 +59,11 @@ codegen/
 *.pdf
 *.fig
 
-# A4 Recovery Phase 2 §10.9 requires its MAT/PNG/CSV evidence to be tracked.
-!examples/Revision_v1/output/a4/*.mat
+# A4 Recovery Phase 2 §10.9 PNG evidence remains tracked.
 !examples/Revision_v1/output/a4/*.png
 
 *.csv
-!examples/Revision_v1/output/a4/*.csv
+*.jsonl
 *.npz
 *.txt
 .DS_Store
