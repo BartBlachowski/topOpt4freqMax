@@ -81,7 +81,7 @@
 
     "move_limit": 0.2,
     "max_iters": 10000,
-    "convergence_tol": 0.011,
+    "convergence_tol": 0.005,
     "seed": null,
     "harmonic_normalize": true
   },

@@ -1,0 +1,24 @@
+# The repository root .gitignore excludes *.csv and *.txt as generated data
+# artifacts.  For this campaign the small per-run CSVs ARE the evidence base of
+# REPORT.md, so they are re-included below.  The bulk binaries (~148 MB) stay
+# excluded and can be regenerated with the commands in REPORT.md, Appendix.
+
+# --- Re-include the evidence base (negates the root *.csv / *.txt rules) ---
+!results/task1_support_geometry.csv
+!results/solver_sha256_BEFORE.txt
+!results/solver_sha256_AFTER.txt
+!results/topology_maps.txt
+!results/topology_maps_all.txt
+!results/*/summary.csv
+!results/*/history.csv
+!results/*/modes.csv
+!results/*/rho_final.csv
+!results/*/rho_snapshot_iters.csv
+!results/probe_support_placement/*.csv
+
+# --- Bulk artifacts: regenerable, excluded ---
+results/**/run.mat
+results/**/mac_history.mat
+results/**/rho_snapshots.csv
+results/**/log.txt
+results/*.out

@@ -1,0 +1,2 @@
+tag,bc,regime,nelx,nely,nEl,nDof,nFixedDof,mid_y_over_H,exact_midheight,outer_iters,final_omega1,final_omega2,final_omega3,final_omega4,final_N,final_volume,wall_time,cpu_time
+CS_regimeB_40x5_s0,CS,B,40,5,200,492,14,0.6000000000,0,80,204.37027209,266.30606498,504.51614418,852.42773882,1,0.49983754,18.1539,18.4300
