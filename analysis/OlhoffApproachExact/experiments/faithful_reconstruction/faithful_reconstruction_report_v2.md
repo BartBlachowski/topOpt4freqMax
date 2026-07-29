@@ -1,6 +1,10 @@
-# Faithful Reconstruction of the Du & Olhoff (2007) Optimization Procedure
+# Reconstruction and Evaluation of the Published Du & Olhoff (2007) Optimization Formulation
 
-## Revision V2
+**Subject of this report: the tested full-box reconstruction of the printed
+Eq. (25) formulation. It is not a reconstruction of the undocumented 2007
+implementation, and issues no verdict on it (§0.0, §11).**
+
+## Revision V2.1
 
 Clamped–clamped beam benchmark, production mesh **160 × 20** (diagnostic) and
 **240 × 30** (primary), square elements, exact mid-height supports, even `nely`.
@@ -11,6 +15,12 @@ Revision V2: 2026-07-29, following an independent scientific audit. **No
 experiment was rerun and no numerical result changed between V1 and V2.** V2
 revises scope, causal language, terminology and internal consistency only. Every
 change is itemised in Appendix B.
+Revision V2.1: 2026-07-29, following the second-round review
+(`independent_scientific_audit_round2.md`, recommendation: *accept with minor
+revision*). **No experiment was rerun and no numerical value, classification,
+gate result or evidence grade changed between V2 and V2.1.** V2.1 makes the four
+local qualifications and the two editorial removals the second round requested;
+every change is itemised in Appendix C.
 
 **Zero production files were modified.** Evidence: `results/production_sha256.txt`
 (SHA-256 of all 25 files in `analysis/OlhoffApproachExact/Matlab/` plus
@@ -54,7 +64,17 @@ certificate of subproblem optimality, and it does **not** claim that an inexact
 inner step is mathematically illegitimate in an outer sequential method. What it
 claims is narrower and is fully measured: at the recorded budget the production
 configuration never met its own declared inner stopping test, so its increments
-cannot be described as solutions of Eq. (25).
+**cannot be certified as solutions of Eq. (25)** under the adopted stopping rule.
+
+**Terminology for the inner solve, normative from V2.1 onward.** An inner solve
+that exhausted the iteration cap is described as having **not met the declared
+stopping test**, or equivalently as **not certified as an inner-solve solution
+of Eq. (25) under the adopted stopping rule**. It is never described as
+an "invalid step", as "not solving" Eq. (25), or as returning increments that
+"do not solve" the subproblem, and the adjective "mathematically valid" is not
+used of any increment: the declared test is a successive-iterate test, and
+failing it is evidence that the adopted convergence criterion was not met, not
+proof of non-optimality.
 
 **Evidence grading.** Every conclusion in §§9–11 carries one of:
 
@@ -109,7 +129,10 @@ evidence supports and no stronger; the object of each claim is named explicitly.
    an undeclared step restriction: in the paper-literal box, a budget of 10
    returns ‖Δρ‖∞ = 0.165 and *raises* ω₁ from 145.57 to 184.07, while a budget of
    20 returns ‖Δρ‖∞ = 0.500 and collapses it (§2.3). The recorded budget of 30
-   is on the collapsing side of that transition.
+   is on the collapsing side of that transition. This sweep is **corroborative
+   only**: raising the MMA budget changes the increment's direction and its
+   distribution over components as well as its magnitude, so it does not isolate
+   step length (§2.3, §9.1).
 
 3. **[A] No run converges.** Of 19 runs, 12 halt on a failed acceptance gate (5)
    or are classified `MECHANISM_COLLAPSE` (7), and 2 more report a void-localized
@@ -139,15 +162,18 @@ excludes inner-solver truncation as an *explanation of the collapse*:
 * [A] Multiplicity detection is not the obstacle to retaining the one tested
   near-cluster: forcing N = 2, which bypasses detection entirely, also fails to
   retain it.
-* [B] **A finite restriction on the step length is required for the tested
-  reconstruction to produce any iteration history at all.** Three independent
-  lines support this: the step profile along the *fixed* paper-literal direction,
-  which isolates length from every other control (§2.5); the inner-budget
-  transition of finding 2 above; and the survival of the Regime-B runs. It
-  remains a hypothesis rather than a demonstrated necessity because the
-  Regime-B comparison changes `move_lim`, `outer_move` and `alpha` together, so
-  only the first of the three lines isolates step length alone, and only at
-  outer iteration 1.
+* [B] **A finite restriction on the step length is required if the tested
+  reconstruction is to avoid the demonstrated first-step overshoot and thereby
+  produce any iteration history at all.** Three lines support this: the step
+  profile along the *fixed* paper-literal direction, which is the only
+  experiment in the campaign that isolates scalar step length from every other
+  control (§2.5); the inner-budget transition of finding 2 above, which
+  corroborates it; and the survival of the Regime-B runs. It remains a
+  hypothesis rather than a demonstrated necessity because the Regime-B
+  comparison changes `move_lim`, `outer_move` and `alpha` together, and because
+  raising the MMA iteration budget changes the increment's direction and
+  component distribution as well as its magnitude — so only the first of the
+  three lines isolates step length, and only at outer iteration 1.
 * [C] **That such a restriction must additionally *contract* as the iteration
   proceeds is untested.** It is motivated by the observation that a fixed
   restriction keeps the iteration alive but does not let it converge or hold a
@@ -254,21 +280,21 @@ the step is nevertheless accepted, and ω₁ falls by a factor of 1273.
 | Update ρ := ρ + Δρ | ✔ Fig. 1 box 4 | | α damping added in regime B | high |
 | Stop on ‖Δρ‖ < ε | ✔ Fig. 1 | | RMS norm; ε = 1e-4 / 1e-6 | med |
 | MMA used to solve Eq. (25) | ✔ §3.5.3 | | Svanberg 1987 `mmasub.m` | high |
-| Subproblem "reduces to a linear program" | ✔ §3.5.3 | | verified numerically, §3.2 | high |
-| Sensitivity filter (Sigmund) on objective sensitivities | ✔ §2 | | applied to every f_sk pair | high |
+| Subproblem "reduces to a linear program" | ✔ §3.5.3 | | verified numerically, §2.4 | high |
+| Sensitivity filter (Sigmund) on objective sensitivities | ✔ Du & Olhoff §2 | | applied to every f_sk pair | high |
 | Mass interpolation Eq. (4b), c₁=6e5, c₂=−5e6 | ✔ | | as written | high |
-| **p increasing from 1 to 3 during optimization** | ✔ §2.1 | | schedule invented, §4 | **high (that it happens) / low (how)** |
+| **p increasing from 1 to 3 during optimization** | ✔ Du & Olhoff §2.1 | | schedule invented, §3.2 | **high (that it happens) / low (how)** |
 | Mesh / element count | ✘ | ✘ | 160×20, 240×30 chosen | n/a |
 | ε in the stopping test | ✘ | ✘ | 1e-4 / 1e-6 | low |
 | Inner-loop convergence tolerance | ✘ | ✘ | `inner_tol = 1e-4`, scaled by √nEl | low |
-| Inner-loop iteration budget | ✘ | ✘ | 30 recorded; **shown insufficient**, §3.1 | low |
+| Inner-loop iteration budget | ✘ | ✘ | 30 recorded; **shown insufficient**, §2.3 | low |
 | Multiplicity tolerance | ✘ ("very small") | | `mult_tol = 1e-3` | low |
 | Number of modes computed J | ✘ ("sufficiently large") | | `n_modes = 4` | med |
-| Upper bound on β | ✘ (none in Eq. 25) | | `β̂ ≤ 1e6`; **not inert**, §3.4 | low |
+| Upper bound on β | ✘ (none in Eq. 25) | | `β̂ ≤ 1e6`; **not inert**, §2.6 | low |
 | MMA constants a₀, a, c, d | ✘ | | 1, 0, 1e3, 1 | low |
 | MMA asymptote handling across outer steps | ✘ | | reinitialised every outer step | low |
 | λ̄ = cluster mean in Eq. (25c) | ✘ (paper uses individual ω_j²) | | mean substituted; identical for N=1 | high |
-| **Move limit / trust region on Δρ** | ✘ **(absent from the paper)** | ✔ **hypothesised necessary, §9.1 [B]** | 0.2 in regime B | med |
+| **Move limit / trust region on Δρ** | ✘ **(absent from the paper)** | ✔ **hypothesised necessary to avoid the first-step overshoot, §9.1 [B]** | 0.2 in regime B | med |
 | Outer step damping α | ✘ | | 0.5 in regime B | low |
 | Acceptance test on the outer step | ✘ | | none on the default path | high |
 
@@ -296,7 +322,7 @@ at iteration 1 simultaneously:
 | subproblem becomes numerically singular | **no** | 0 singular/RCOND warnings at iteration 1; they appear only later, on already-collapsed designs |
 | volume correction destroys the MMA step | **no** | no volume correction exists; predicted volume residual −2.6e-4 |
 | multiplicity logic inconsistent | **no** | N = 1 correctly, gap 1.49 |
-| invalid (non-finite, out-of-bounds) increment returned | **no** | increment finite and within bounds |
+| non-finite or out-of-bounds increment returned | **no** | increment finite and within bounds |
 
 ### 2.2 Acceptance audit
 
@@ -306,7 +332,7 @@ at iteration 1 simultaneously:
 | Was the returned step feasible? | **Yes** | within box bounds; predicted mean density 0.49974 ≤ 0.5 |
 | Was it accepted despite failed convergence? | **Yes** | the default path never consults the flag (`topopt_freq_exact.m:413-418`) |
 | Was the predicted objective improvement realised? | **No** | predicted Δλ = +4.90e4, realised Δλ = −2.12e4 |
-| Would a fail-closed policy have prevented the collapse? | **No — it would only have prevented the *invalid* step** | §3.1: with a budget large enough to converge, the gate passes and the collapse still occurs |
+| Would a fail-closed policy have prevented the collapse? | **No — it would only have prevented the step that did not meet the declared stopping test** | §2.3, §5.2: with a budget large enough to meet that test, the gate passes and the collapse still occurs |
 
 ### 2.3 The inner-budget sweep
 
@@ -343,11 +369,20 @@ lines 9–26.
 uncalibrated restriction on step length**: a budget of 10 happens to return a
 step of roughly the magnitude the linear model supports (§2.5 puts the validity
 radius at t ≈ 0.3, i.e. ‖Δρ‖∞ ≈ 0.15), while the recorded budget of 30 sits past
-the transition. This is a second, independent line of evidence — one that
-involves no move limit, no damping and no outer bound — that what separates a
-productive step from a destructive one at outer iteration 1 is its **length**.
-It is used in §9.1 to address the objection that Regime B changes three step
-controls at once.
+the transition. This line involves no move limit, no damping and no outer bound,
+and it is **corroborative evidence** that what separates a productive step from
+a destructive one at outer iteration 1 is its **length**.
+
+**It is not an isolation of step length, and V2.1 does not describe it as one.**
+Changing the number of MMA iterations changes the whole approximate increment —
+its **magnitude**, its **direction**, and its **distribution over components** —
+not only its norm. The Regime-B column of the same sweep shows this directly: it
+is precisely the case in which the magnitude is pinned by the move limit, and
+what the additional inner iterations then change is *which* elements move. The
+sole experiment in this campaign that varies scalar step length with the
+direction and the component distribution held fixed is the fixed-direction
+t-profile of §2.5. §9.1 uses the present sweep as corroboration alongside that
+profile, and rests the isolation claim on the profile alone.
 
 [OBS] In the Regime-B box the move limit binds from budget 20 onward
 (‖Δρ‖∞ = 0.2000) and realised ω₁ is flat at 177.1–177.7 across budgets 20–1000.
@@ -431,9 +466,12 @@ where the paper-literal step produces 0.095. **This is a consistency
 observation, not an isolation experiment**: Regime B changes `move_lim`,
 `outer_move` and `alpha` simultaneously (§5.1), so the trajectory-level
 comparison V4/VR versus V0–V3 cannot attribute the difference to `move_lim`
-alone. The isolation of step length rests on the t-profile above and on the
-inner-budget transition of §2.3, both of which vary length with no other
-control changing.
+alone. The isolation of step length rests on the t-profile above, which is the
+**only** experiment in the campaign that varies scalar step length with the
+direction and the component distribution held fixed. The inner-budget transition
+of §2.3 corroborates it but does not isolate length, because raising the MMA
+iteration budget changes the increment's direction and component distribution as
+well as its magnitude.
 
 ### 2.6 MMA conditioning induced by the β variable box
 
@@ -519,10 +557,11 @@ mass model during continuation. [EV] The mass interpolation is separately fixed:
 Eq. (4b) with q = 1 above ρ = 0.1 and the C¹ branch below, with the note that
 the three variants (4), (4a), (4b) give "only negligible differences".
 
-[EV] The bimaterial exponent is stated as a *constant* 3 (§2.3), and the mass
-exponent r ≈ 6 is described as "much larger than the penalization power p for
-the stiffness, which is kept unchanged at a value about p = 3" (§2.2) — a
-sentence in tension with §2.1's "increasing from 1 to 3".
+[EV] The bimaterial exponent is stated as a *constant* 3 (Du & Olhoff §2.3), and
+the mass exponent r ≈ 6 is described as "much larger than the penalization power
+p for the stiffness, which is kept unchanged at a value about p = 3" (Du &
+Olhoff §2.2) — a sentence in tension with Du & Olhoff §2.1's "increasing from 1
+to 3".
 
 ### 3.2 Provenance table for continuation
 
@@ -625,10 +664,11 @@ Specifically:
   mathematically invalid.
 
 What the policy does establish is narrow, measured and unaffected by the above:
-the recorded production configuration does not solve the subproblem it declares
-it is solving, so its increments may not be described as solutions of Eq. (25),
-and any property attributed to "the Eq. (25) iteration" on the basis of those
-runs is attributed to a different iteration.
+the recorded production configuration never met the declared stopping test for
+the subproblem it declares it is solving, so its increments cannot be certified
+as solutions of Eq. (25), and any property attributed to "the Eq. (25)
+iteration" on the basis of those runs is attributed to an iteration whose inner
+steps carry no such certification.
 
 ### 4.2 Regression tests
 
@@ -655,7 +695,8 @@ runs is attributed to a different iteration.
 T1 and T2 establish that the campaign's instrumented code reproduces the
 production algorithm **bit-identically**; T3c establishes that the fail-closed
 gate is inert whenever the inner problem does converge, so any behavioural
-difference it produces is attributable solely to rejecting invalid steps.
+difference it produces is attributable solely to rejecting steps that did not
+meet the declared stopping test.
 
 ### 4.3 What the policy reveals
 
@@ -676,9 +717,10 @@ supports, and it covers every number this project has published for the
 benchmark.
 
 This is a defect in **inner-solve validity** as defined in §0.0 — the solver
-does not solve the subproblem it declares — and it is independent of whether the
-resulting trajectory looks reasonable. It is *not* a claim that the resulting
-increments are mathematically illegitimate (§4.1).
+does not meet the declared stopping test for the subproblem it declares it is
+solving — and it is independent of whether the resulting trajectory looks
+reasonable. It is *not* a claim that the resulting increments are mathematically
+illegitimate (§4.1).
 
 ---
 
@@ -788,21 +830,22 @@ produce a better final state; it produces a noisier one.
 [OBS] **Effect of meeting the declared inner stopping test, holding everything
 else fixed.** V4 (gated, 300/300 inner solves met the test) versus VR (ungated,
 0/300 met it), same step controls, same mesh: ω₁ **300.90 vs 328.55**, i.e. the
-configuration whose increments do *not* solve Eq. (25) reports a **9 % higher**
-frequency and a cleaner topology (1 structural component, spanning, y-symmetry
-1.000, grey fraction 0.570 against V4's 0.772). Both terminate in a period-2-like
-oscillation.
+configuration whose increments are *not* certified as solutions of Eq. (25)
+reports a **9 % higher** frequency and a cleaner topology (1 structural
+component, spanning, y-symmetry 1.000, grey fraction 0.570 against V4's 0.772).
+Both terminate in a period-2-like oscillation.
 
 [INF] V2 removes V1's causal phrasing that the 9 % difference exists "*because*"
-VR's solves are invalid. What is measured is that truncating MMA at 30 iterations
+VR's solves are "invalid". What is measured is that truncating MMA at 30 iterations
 produces a **materially different effective update** — §2.3 shows truncation
 changes both the length and the content of the increment — and that the two
 different iterations terminate 9 % apart. Neither terminal value is a converged
 optimum (§7.2), so the campaign cannot say which is closer to the fixed point of
 the true Eq. (25) iteration, or whether that iteration has one. The defensible
 statement is that the published-style figure and the figure obtained from
-increments that solve the declared subproblem differ by 9 %, and that the higher
-of the two comes from the configuration that does not solve it.
+increments that met the declared inner-solve stopping test differ by 9 %, and
+that the higher of the two comes from the configuration whose increments did not
+meet it.
 
 [OBS] **Interaction between continuation and step control.** Continuation
 changes nothing in the paper-literal regime (V0 ≡ V1, V2 ≈ V3 — all collapse)
@@ -945,9 +988,11 @@ eigenvalue**, because the eigenvectors of a clustered pair are determined only
 up to a rotation within their invariant subspace, so MAC₁₁ can collapse under a
 basis rotation that preserves the physical modal subspace entirely. No
 subspace-level MAC or other cluster-invariant diagnostic was computed in this
-campaign. The retention conclusions below are therefore rested on the **relative
-eigengap g₁₂**, which is basis-invariant and is measured directly, with MAC
-reported as corroborating but non-decisive.
+campaign. The retention conclusions below are therefore rested **solely** on the
+**relative eigengap g₁₂**, which is basis-invariant and is measured directly.
+Individual-mode MAC values are tabulated for completeness and are treated as
+**non-diagnostic** at or near a cluster; no conclusion in this report rests on
+them.
 
 ### 6.3 Is the N = 2 subproblem correctly reconstructed?
 
@@ -974,7 +1019,14 @@ respect to the physically clustered pair.
 [OBS] Nevertheless, **engaging N = 2 does not retain the cluster**. The forced
 N = 2 step is better — it re-opens the gap to 0.222 rather than 0.348, and the
 increments differ (cos = 0.8932) — but both steps saturate the move limit
-(‖Δρ‖∞ = 0.2000 in both cases) and both destroy mode identity (MAC ≈ 0.01).
+(‖Δρ‖∞ = 0.2000 in both cases) and **neither retains the cluster: the
+basis-invariant relative eigengap re-opens by two orders of magnitude under
+both**, from 1.48e-03 to 3.48e-01 and 2.22e-01 respectively. The MAC₁₁ ≈ 0.01
+values in the table above are reported for completeness only. They are **not**
+evidence that mode identity was destroyed: at a gap of 1.48e-03 the pair is
+effectively degenerate, individual eigenvectors are determined only up to a
+rotation within their invariant subspace, and no subspace-level diagnostic was
+computed (§6.2). The non-retention conclusion rests on the eigengap alone.
 
 [OBS] Retention test, eight further steps from the same design with the cluster
 re-detected each iteration under a **diagnostic** `mult_tol = 1e-2` chosen
@@ -1092,7 +1144,9 @@ subproblem predicted an increase and ω₁ fell by 74 %, from 346.27 to 90.86
 published optimum and below the design's own initial ω₁ of 145.49. It is not a
 mechanism by the declared 5 % criterion (90.86 > 7.27), so the run is not
 classified `MECHANISM_COLLAPSE` — but it is plainly not the paper's optimum
-either. The solver leaves it on the next step, with MAC₁₁ = **0.000**.
+either. The solver leaves it on the next step, the relative eigengap re-opening
+from 4.90e-04 to 2.93e-01. (The tabulated MAC₁₁ = 0.000 across that step is
+reported for completeness and is non-diagnostic at this gap, §6.2.)
 
 [CONC-preview] Across all 19 runs, `N ≥ 2` at `mult_tol = 1e-3` is reported at
 **one** outer iteration of **one** run that is not an outright mechanism, and
@@ -1363,31 +1417,33 @@ which is why it is described as a single spanning structural component and
 passes G8. V4 at 160 × 20 has `n_comp_8conn = 5`, `n_members = 1`, and fails G8
 on grey fraction (0.7716 against the 0.75 threshold), not on connectivity.
 
-Read this matrix **gate by gate**. The final column is reproduced from
-`results/gates.csv` for traceability only; per §8.3 it is not a score and is not
-used as evidence anywhere in V2.
+Read this matrix **gate by gate**. Per §8.3 the eight gates are heterogeneous and
+are not summed. V2.1 removes the raw per-run count that V2 still reproduced
+alongside them: it was already excluded from every inference, and retaining it
+served no scientific purpose. The per-gate results are unchanged and remain
+traceable to `results/gates.csv`.
 
-| tag | G1 inner | G2 no-mech | G3 feasible | G4 spectral | G5 multiplicity | G6 trajectory | G7 mesh | G8 topology | (raw count, not a score) |
-|---|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|---:|
-| V0_CC_160x20_i2000 | FAIL | FAIL | PASS | FAIL | FAIL | FAIL | n/a | FAIL | 1/8 |
-| V0_CC_160x20_i30 | FAIL | FAIL | PASS | FAIL | FAIL | FAIL | PASS | FAIL | 2/8 |
-| V0_CC_240x30_i30 | FAIL | FAIL | PASS | FAIL | FAIL | FAIL | PASS | FAIL | 2/8 |
-| V1_CC_160x20_i2000 | PASS | FAIL | PASS | FAIL | FAIL | FAIL | n/a | FAIL | 2/8 |
-| V1_CC_160x20_i30 | FAIL | FAIL | PASS | FAIL | FAIL | FAIL | n/a | FAIL | 1/8 |
-| V2_CC_160x20_i2000 | PASS | FAIL | PASS | FAIL | FAIL | FAIL | n/a | FAIL | 2/8 |
-| V2_CC_160x20_i30 | PASS | PASS | PASS | FAIL | FAIL | FAIL | n/a | FAIL | 3/8 |
-| V3_CC_160x20_i2000 | PASS | FAIL | PASS | FAIL | FAIL | FAIL | n/a | FAIL | 2/8 |
-| V3_CC_160x20_i30 | PASS | PASS | PASS | FAIL | FAIL | FAIL | n/a | FAIL | 3/8 |
-| V4_CC_160x20_i2000 | PASS | PASS | PASS | PASS | FAIL | FAIL | PASS | FAIL | 5/8 |
-| V4_CC_160x20_i30 | PASS | PASS | PASS | FAIL | FAIL | FAIL | n/a | FAIL | 3/8 |
-| V4_CC_240x30_i2000 | PASS | PASS | PASS | PASS | FAIL | FAIL | PASS | PASS | 6/8 |
-| V5_CC_160x20_i2000 | PASS | FAIL | PASS | PASS | FAIL | FAIL | PASS | FAIL | 4/8 |
-| V5_CC_160x20_i30 | PASS | PASS | PASS | FAIL | FAIL | FAIL | n/a | FAIL | 3/8 |
-| V5_CC_240x30_i2000 | PASS | FAIL | PASS | FAIL | FAIL | FAIL | PASS | FAIL | 3/8 |
-| V5a_CC_160x20_i2000 | PASS | FAIL | PASS | FAIL | FAIL | FAIL | n/a | FAIL | 2/8 |
-| V5b_CC_160x20_i2000 | PASS | FAIL | PASS | FAIL | FAIL | FAIL | n/a | FAIL | 2/8 |
-| VR_CC_160x20_i30 | FAIL | PASS | PASS | PASS | FAIL | FAIL | PASS | PASS | 5/8 |
-| VR_CC_240x30_i30 | FAIL | PASS | PASS | PASS | FAIL | FAIL | PASS | PASS | 5/8 |
+| tag | G1 inner | G2 no-mech | G3 feasible | G4 spectral | G5 multiplicity | G6 trajectory | G7 mesh | G8 topology |
+|---|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
+| V0_CC_160x20_i2000 | FAIL | FAIL | PASS | FAIL | FAIL | FAIL | n/a | FAIL |
+| V0_CC_160x20_i30 | FAIL | FAIL | PASS | FAIL | FAIL | FAIL | PASS | FAIL |
+| V0_CC_240x30_i30 | FAIL | FAIL | PASS | FAIL | FAIL | FAIL | PASS | FAIL |
+| V1_CC_160x20_i2000 | PASS | FAIL | PASS | FAIL | FAIL | FAIL | n/a | FAIL |
+| V1_CC_160x20_i30 | FAIL | FAIL | PASS | FAIL | FAIL | FAIL | n/a | FAIL |
+| V2_CC_160x20_i2000 | PASS | FAIL | PASS | FAIL | FAIL | FAIL | n/a | FAIL |
+| V2_CC_160x20_i30 | PASS | PASS | PASS | FAIL | FAIL | FAIL | n/a | FAIL |
+| V3_CC_160x20_i2000 | PASS | FAIL | PASS | FAIL | FAIL | FAIL | n/a | FAIL |
+| V3_CC_160x20_i30 | PASS | PASS | PASS | FAIL | FAIL | FAIL | n/a | FAIL |
+| V4_CC_160x20_i2000 | PASS | PASS | PASS | PASS | FAIL | FAIL | PASS | FAIL |
+| V4_CC_160x20_i30 | PASS | PASS | PASS | FAIL | FAIL | FAIL | n/a | FAIL |
+| V4_CC_240x30_i2000 | PASS | PASS | PASS | PASS | FAIL | FAIL | PASS | PASS |
+| V5_CC_160x20_i2000 | PASS | FAIL | PASS | PASS | FAIL | FAIL | PASS | FAIL |
+| V5_CC_160x20_i30 | PASS | PASS | PASS | FAIL | FAIL | FAIL | n/a | FAIL |
+| V5_CC_240x30_i2000 | PASS | FAIL | PASS | FAIL | FAIL | FAIL | PASS | FAIL |
+| V5a_CC_160x20_i2000 | PASS | FAIL | PASS | FAIL | FAIL | FAIL | n/a | FAIL |
+| V5b_CC_160x20_i2000 | PASS | FAIL | PASS | FAIL | FAIL | FAIL | n/a | FAIL |
+| VR_CC_160x20_i30 | FAIL | PASS | PASS | PASS | FAIL | FAIL | PASS | PASS |
+| VR_CC_240x30_i30 | FAIL | PASS | PASS | PASS | FAIL | FAIL | PASS | PASS |
 
 ### 8.1 Spectral-validity evidence (G4)
 
@@ -1411,9 +1467,10 @@ mode. This is a clean separation and it is what G4 is testing.
 ### 8.2 Vacuous and structural passes
 
 [OBS] The runs that halt at outer iteration 1 (`INNER_FAILURE`, budget 30) pass
-G1, G2 and G3 **vacuously**: no step was taken, so no invalid step was accepted,
-no mechanism was created and no constraint was violated. They fail G4–G8 and
-their design is the untouched uniform ρ = 0.5 field (grey fraction 1.000).
+G1, G2 and G3 **vacuously**: no step was taken, so no step from an inner solve
+that failed the declared stopping test was accepted, no mechanism was created
+and no constraint was violated. They fail G4–G8 and their design is the
+untouched uniform ρ = 0.5 field (grey fraction 1.000).
 
 [OBS] Added in V2: **G1 passes by construction for every fail-closed run**, not
 by measurement. The implementation sets G1 = true whenever the fail-closed
@@ -1427,7 +1484,8 @@ where G1 is genuinely measured — and fails for all three.
 
 [DEC] V1 summed the eight gates into a per-run score and used the best score
 (6/8, V4 at 240 × 30) as a headline. V2 withdraws every summed score, including
-from the executive summary, §5.4 and §11. The eight gates are not a calibrated
+from the executive summary, §5.4 and §11, and V2.1 additionally removes the raw
+per-run count from the gate matrix above. The eight gates are not a calibrated
 scale and must not be added:
 
 * they are **heterogeneous** — G3 (feasibility) is a basic sanity check that 19
@@ -1487,19 +1545,26 @@ obstacle to retaining the one tested near-cluster, since forcing N = 2 bypasses
 detection and still fails (§6.3). Inner-solver truncation does not explain the
 collapse, since removing it makes the collapse slightly worse (§2.3).
 
-**[B] Supported hypothesis — a finite restriction on step length is required.**
-Nothing in the paper bounds the step. Four lines of evidence support the
-hypothesis that some finite restriction is required for the tested
-reconstruction to produce any iteration history at all:
+**[B] Supported hypothesis — a finite restriction on step length is required to
+avoid the demonstrated first-step overshoot.** Nothing in the paper bounds the
+step. Four lines of evidence support the hypothesis that some restriction beyond
+the Eq. (25f) box is required if the tested reconstruction is to avoid the
+overshoot demonstrated at outer iteration 1, and thereby produce any iteration
+history at all:
 
-1. **The step profile isolates length directly.** Holding the paper-literal
-   direction fixed and varying only the scalar t, ω₁ rises to 187.61 at t = 0.3
-   and collapses at t = 1 (§2.5). No other control varies in this probe.
-2. **The inner-budget transition isolates it again, by a different route.** In
+1. **The step profile isolates length directly, and is the only experiment that
+   does.** Holding the paper-literal direction fixed and varying only the scalar
+   t, ω₁ rises to 187.61 at t = 0.3 and collapses at t = 1 (§2.5). No other
+   control varies in this probe: the direction and the distribution of the
+   increment over components are held fixed by construction.
+2. **The inner-budget transition corroborates it by a different route.** In
    the paper-literal box a budget of 10 returns ‖Δρ‖∞ = 0.165 and *raises* ω₁ to
    184.07, while budget 20 returns 0.500 and destroys the structure (§2.3). No
-   move limit, damping or outer bound is present in either case; only the
-   realised step length differs.
+   move limit, damping or outer bound is present in either case. This line is
+   **corroborative, not isolating**: raising the MMA iteration budget changes
+   the approximate increment's direction and its distribution over components as
+   well as its magnitude, so the transition cannot be attributed to length
+   alone (§2.3).
 3. **The surviving runs are the restricted ones.** V4 and VR complete their
    budgets; V0–V3 do not (§5.2).
 4. **The paper's own Fig. 4 is inconsistent with an unrestricted step.** The
@@ -1509,10 +1574,14 @@ reconstruction to produce any iteration history at all:
 
 Why this is graded [B] and not [A]: line 3 is confounded, because Regime B
 changes `move_lim`, `outer_move` and `alpha` together (§5.1), so it cannot
-attribute survival to a move limit specifically. Lines 1 and 2 are clean but
-both operate at **outer iteration 1 only**; neither shows that a finite
-restriction is sufficient for a whole trajectory, and indeed §7 shows it is not.
-Line 4 concerns the published computation, not the tested reconstruction.
+attribute survival to a move limit specifically. Line 2 does not isolate step
+length, for the reason stated in it. Line 1 is the campaign's only clean
+isolation of scalar step length, and it operates at **outer iteration 1 only**;
+it does not show that a finite restriction is sufficient for a whole trajectory,
+and indeed §7 shows it is not. Line 4 concerns the published computation, not
+the tested reconstruction. Accordingly the hypothesis is stated as a requirement
+for avoiding the demonstrated first-step overshoot, and **not** as a universal
+requirement for any viable trajectory of the formulation.
 
 [HYP] **Whether the historical implementation contained such a restriction is
 not determined here.** Line 4 above and the observation that Svanberg's
@@ -1576,11 +1645,13 @@ viability. It is a declared audit convention, not a mathematical requirement.**
 
 *Measurements.* At the recorded inner budget of 30 the inner subproblem
 converged **0 out of 300 times** (V0, V1, VR at 160 × 20; 0/120 and 0/150 at
-240 × 30). Every design update the production solver has ever applied to this
-benchmark came from an increment that had not met its own declared convergence
-condition. With the gate enabled at that budget, every variant halts at outer
-iteration 1. At a budget where the inner solve does converge, the gate passes
-and the paper-literal step is accepted — and still collapses the structure
+240 × 30). Every documented design update examined — that is, every outer step
+of every configuration recorded by this campaign and by the preceding
+mesh-resolution campaign (§4.3) — came from an increment that had not met its
+own declared convergence condition. With the gate enabled at that budget, every
+variant halts at outer iteration 1. At a budget where the inner solve does
+converge, the gate passes and the paper-literal step is accepted — and still
+collapses the structure
 (V2: 12/13 inner solves converged, ω₁ → 0.02; V3: 15/15 converged, ω₁ → 0.04).
 
 *Interpretation.* Fail-closed semantics convert a silent failure of the declared
@@ -1598,7 +1669,8 @@ or whether such a fixed point exists. What is measured is that **truncation at
 30 iterations produces a materially different effective update** (§2.3 shows it
 changes the length and content of the increment), and that the two different
 iterations terminate 9 % apart, with the higher value belonging to the
-configuration that does not solve its declared subproblem.
+configuration whose increments did not meet its declared inner-solve stopping
+test.
 
 *Grade.* **[A]** for the measurements. **Not claimed:** that the successive-
 iterate test is a necessary or sufficient certificate of subproblem optimality
@@ -1638,7 +1710,8 @@ that share unspecified continuation semantics.
 *Measurements, 160 × 20.* V4: the accepted step at outer iteration 21 lands on
 ω₁ = 284.4755, ω₂ = 284.8956, g₁₂ = 1.4766e-03 — on a step whose realised Δλ₁ was
 **negative** (ω₁ fell from 309.32). The next step re-opens the gap to 3.48e-01, a
-factor of 236, with MAC₁₁ = **0.016**. Forcing N = 2 at that same design and
+factor of 236 (the tabulated MAC₁₁ = 0.016 is non-diagnostic at this gap and
+carries no weight here, §6.2). Forcing N = 2 at that same design and
 solving the full generalized-gradient subproblem to convergence gives a better
 but still non-retaining step (g₁₂ after = 2.22e-01 versus 3.48e-01). Under a
 diagnostic `mult_tol = 1e-2`, N = 2 engages for exactly one step and the
@@ -1646,8 +1719,8 @@ trajectory returns to the same ω₁ ≈ 305, g₁₂ ≈ 0.3 cycle (§6.3).
 
 *Measurements, 240 × 30.* The same pattern, one iteration long: V4 reaches
 g₁₂ = 4.90e-04 at iteration 24 — the only genuine `N = 2` detection in the
-campaign — and leaves it in a single step with MAC₁₁ = 0.000, the gap re-opening
-to 2.93e-01. That state was itself produced by a step that cut ω₁ from 346.27 to
+campaign — and leaves it in a single step, the gap re-opening to 2.93e-01.
+That state was itself produced by a step that cut ω₁ from 346.27 to
 90.86 (§6.5), so it is a coalescence of the wrong pair of modes at the wrong
 design.
 
@@ -1736,7 +1809,7 @@ in the reported initial scalar eigenfrequency — replaces it.
 *Grade.* **[A]** for items 1–4 individually. **No grade is assigned to any
 causal decomposition of the gap, because none is supported.**
 
-### C6 — Does the tested paper-literal reconstruction become viable after faithful continuation and a converged inner solve, without modern globalization?
+### C6 — Does the tested paper-literal reconstruction become viable after continuation reconstructed from the paper and a converged inner solve, without modern globalization?
 
 **No, for the tested reconstruction.** V3 — continuation on the reconstructed
 p = 1 → 3 path, fail-closed inner semantics, an inner budget large enough that 15
@@ -1797,9 +1870,10 @@ reproduce — a step restriction being the leading candidate (§9.1).
   exact LP vertex to 0.02 % in objective and cos = 0.9976 in direction. Its
   extension to every outer iteration is not established (§9.1).
 * Regime B's `move_lim`/`outer_move` should be described as **a reconstruction
-  of a step restriction that the tested formulation appears to require [B]**,
-  rather than as ad hoc non-paper stabilization. They should **not** be
-  described as a restriction that the paper's procedure is known to have
+  of a step restriction that the tested formulation appears to require in order
+  to avoid the demonstrated first-step overshoot [B]**, rather than as ad hoc
+  non-paper stabilization. They should **not** be described as a restriction
+  that the paper's procedure is known to have
   contained [HYP]. Svanberg's `mmasub` exposes the identical parameter at its
   inactive value 1.0, and the paper's Fig. 4 is inconsistent with an
   unrestricted step; both are indirect evidence, not implementation evidence.
@@ -1858,8 +1932,9 @@ recorded without any change being made to the production solver.
    implemented only in the additive campaign solver.*
 
 4. **No move limit exists in the paper; one appears to be required by the
-   tested reconstruction** ([B], §9.1). *Not modified: Regime B's recorded 0.2
-   is used as-is and never retuned; no adaptive or contracting variant was
+   tested reconstruction to avoid the demonstrated first-step overshoot**
+   ([B], §9.1). *Not modified: Regime B's recorded 0.2 is used as-is and never
+   retuned; no adaptive or contracting variant was
    introduced.*
 
 5. **The move limit does not contract, and the terminal iteration saturates it
@@ -1961,8 +2036,9 @@ all 19 runs.
 
 ### The decisive question
 
-> *Does a mathematically valid, feasible, converged optimization trajectory reach
-> the clustered lowest-eigenvalue state described by Du and Olhoff?*
+> *Does a feasible, converged optimization trajectory whose inner solves meet the
+> declared inner-solve stopping test (§0.0) reach the clustered lowest-eigenvalue
+> state described by Du and Olhoff?*
 
 **No.** Of the 19 runs, 12 either halt on a failed acceptance gate (5) or are
 classified `MECHANISM_COLLAPSE` (7). Of those 7, six end at ω₁ < 10; the seventh,
@@ -1995,11 +2071,14 @@ realised change in λ₁ falls short of the change the subproblem predicted.**
 
 What the diagnosis actually supports, separated by grade:
 
-* **[B]** A *finite* restriction is required to keep the iteration alive at all.
-  Supported by the t-profile at fixed direction (§2.5) and by the inner-budget
-  transition (§2.3), both of which vary step length alone; and consistent with
-  V4/VR surviving where V0–V3 do not, though that comparison changes three
-  controls together.
+* **[B]** A *finite* restriction is required to avoid the demonstrated
+  first-step overshoot and so to keep the iteration alive at all. Supported by
+  the t-profile at fixed direction (§2.5), the campaign's only isolation of
+  scalar step length; corroborated by the inner-budget transition (§2.3), which
+  changes the increment's direction and component distribution as well as its
+  magnitude and therefore does not isolate length; and consistent with V4/VR
+  surviving where V0–V3 do not, though that comparison changes three controls
+  together.
 * **[A]** A fixed restriction at the recorded value 0.2 is *not* sufficient to
   converge: every terminal step saturates it while realising a median 0.2 % of
   predicted improvement.
@@ -2045,7 +2124,7 @@ throughout as properties of the tested reconstruction.
 | A10 | Continuation stage count and length | 5 stages (1, 1.5, 2, 2.5, 3), 25 outer iterations each | simplest reading of "increasing from 1 to 3" | yes — two alternative schedules, §5.4 | **no** (collapse at every tested p) |
 | A11 | Mass model during continuation | Eq. (4b) held fixed | paper fixes the mass model independently of p | no | **no** |
 | A12 | Density transfer across continuation stages | transferred, no reinitialisation | simplest defensible choice | no | **no** |
-| A13 | Move limit / trust region | 0.2 (Regime-B recorded value), fixed | hypothesised necessary [B], §9.1; value not retuned | partially — §2.5 profiles the validity radius | absent by construction |
+| A13 | Move limit / trust region | 0.2 (Regime-B recorded value), fixed | hypothesised necessary to avoid the first-step overshoot [B], §9.1; value not retuned | partially — §2.5 profiles the validity radius | absent by construction |
 | A14 | Outer damping α | 0.5 (Regime-B recorded value) | on-disk regime | no | absent by construction |
 | A15 | λ̄ = cluster mean in Eq. (25c) | mean | identical for N = 1 | no | **no** (N = 1) |
 | A16 | ρ_min | 1e-3 | production default | no | **yes** — sets the LP's lower box bound |
@@ -2066,22 +2145,22 @@ residual caveat on the campaign's strongest finding.
 ```bash
 cd analysis/OlhoffApproachExact/experiments/faithful_reconstruction
 
-# 0. regression suite: equivalence to production + fail-closed + continuation
+# --- step 0: regression suite, equivalence to production + fail-closed + continuation
 matlab -batch "cd tests; warning('off','all'); run_all_tests"
 
-# 1. Phase 1 — narrated algorithmic trace, both regimes
+# --- step 1: narrated algorithmic trace, both regimes (report section 1)
 matlab -batch "addpath(pwd); warning('off','all'); \
     phase1_trace(160,20,'CC','A',2); phase1_trace(160,20,'CC','B',2)"
 
-# 2. Phase 2 — paper-literal collapse forensics, both meshes
+# --- step 2: paper-literal collapse forensics, both meshes (report section 2)
 matlab -batch "addpath(pwd); warning('off','all'); phase2_diagnose(160,20,'CC')"
 matlab -batch "addpath(pwd); warning('off','all'); phase2_diagnose(240,30,'CC')"
 
-# 3. Phase 3 — continuation probe at every p on the 1->3 path, both meshes
+# --- step 3: continuation probe at every p on the 1->3 path (report section 3)
 matlab -batch "addpath(pwd); warning('off','all'); phase3_continuation_probe(160,20,'CC')"
 matlab -batch "addpath(pwd); warning('off','all'); phase3_continuation_probe(240,30,'CC')"
 
-# 4. Phase 5 — ablation matrix at 160x20 (run the six series in parallel)
+# --- step 4: ablation matrix at 160x20 (report section 5; six series in parallel)
 matlab -batch "warning('off','all'); drive('alphaA',160,20)"   # V0,V1 @ budget 30
 matlab -batch "warning('off','all'); drive('alphaB',160,20)"   # V2,V3 @ budget 30
 matlab -batch "warning('off','all'); drive('alphaC',160,20)"   # V4,V5 @ budget 30
@@ -2090,12 +2169,12 @@ matlab -batch "warning('off','all'); drive('betaB',160,20)"    # V2,V3 @ budget 
 matlab -batch "warning('off','all'); drive('betaC',160,20)"    # V4,V5 @ budget 2000
 matlab -batch "warning('off','all'); drive('sched',160,20)"    # V5a,V5b schedule sensitivity
 
-# 5. reference control = the preceding mesh-resolution campaign's configuration
+# --- step 5: reference control = the preceding mesh-resolution campaign's configuration
 matlab -batch "addpath(pwd); warning('off','all'); \
     run_variant('VR',160,20,'CC',struct('outer_max_iter',300,'inner_max_iter',30,'tag_suffix','_i30')); \
     run_variant('VR',240,30,'CC',struct('outer_max_iter',150,'inner_max_iter',30,'tag_suffix','_i30'))"
 
-# 6. Phase 7 / Gate G7 — mesh transfer at 240x30
+# --- step 6: mesh transfer at 240x30 (report section 7; Gate G7)
 matlab -batch "addpath(pwd); warning('off','all'); \
     run_variant('V4',240,30,'CC',struct('outer_max_iter',150,'inner_max_iter',2000,'tag_suffix','_i2000'))"
 matlab -batch "addpath(pwd); warning('off','all'); \
@@ -2103,10 +2182,10 @@ matlab -batch "addpath(pwd); warning('off','all'); \
 matlab -batch "addpath(pwd); warning('off','all'); \
     run_variant('V0',240,30,'CC',struct('outer_max_iter',120,'inner_max_iter',30,'tag_suffix','_i30'))"
 
-# 7. Phase 6 — N=1 vs N=2 probe at the near-coalescent iterate
+# --- step 7: N=1 vs N=2 probe at the near-coalescent iterate (report section 6)
 matlab -batch "addpath(pwd); warning('off','all'); phase6_bimodal_probe('V4_CC_160x20_i2000')"
 
-# 8. spectral-validity post-processing (Gate G4) and aggregation
+# --- step 8: spectral-validity post-processing (Gate G4) and aggregation
 matlab -batch "addpath(pwd); warning('off','all'); postprocess_final_modes"
 python3 analyze.py
 python3 topology_maps.py
@@ -2119,9 +2198,11 @@ git status --porcelain analysis/OlhoffApproachExact/Matlab tools/Matlab
 shasum -a 256 -c <(grep -v '^#' results/production_sha256.txt | awk '{print $1"  "$2}')
 ```
 
-**Nothing in Appendix A changed between V1 and V2.** V2 reruns no experiment and
-regenerates no artefact; every number in this report is the number V1 reported,
-read from the same files in `results/`.
+**No command in Appendix A changed between V1, V2 and V2.1.** Neither revision
+reruns an experiment or regenerates an artefact; every number in this report is
+the number V1 reported, read from the same files in `results/`. V2.1 reworded
+the comment lines above only, so that none of them mimics a report section
+heading; the commands themselves are byte-identical to V1's.
 
 ---
 
@@ -2148,11 +2229,11 @@ the report's evidence is stronger than the audit credited, not weaker.
 | C-2a | "Smallest step the procedure can take" is a logical error — a move limit is an upper bound | **Accepted** | Withdrawn from §6.3, §9.1, C4 and §11. Replaced by the measured statement that every tail step *saturates* the bound, plus an [INF] LP-boundary explanation of why saturation is expected |
 | C-2b | Basin width never measured; "order 10" contraction factor unsupported | **Accepted** | Both withdrawn entirely (§9.1, §11). No contraction factor is claimed anywhere in V2 |
 | C-2c | Contraction is untested; grade C | **Accepted** | Demoted from [CONC] to **[C] Speculative** in §0, §9.1, §10 item 5 and §11. §11 now names the three-arm experiment that would settle it |
-| C-2d | Regime B changes `move_lim`, `outer_move`, `alpha` together; cannot isolate | **Partially accepted** | Accepted for the *trajectory-level* comparison, which §2.5 and §9.1 now explicitly label a consistency observation rather than an isolation experiment. **Rejected for the first-step conclusion**: the §2.5 t-profile holds the direction fixed and varies only a scalar, and §2.3's inner-budget transition varies realised step length with no step control present at all. V2 adds the latter as a second clean isolation line (see B.5) |
+| C-2d | Regime B changes `move_lim`, `outer_move`, `alpha` together; cannot isolate | **Partially accepted** | Accepted for the *trajectory-level* comparison, which §2.5 and §9.1 now explicitly label a consistency observation rather than an isolation experiment. **Rejected for the first-step conclusion**: the §2.5 t-profile holds the direction fixed and varies only a scalar. V2 additionally offered §2.3's inner-budget transition as a second isolation line; **the second round rejected that characterisation and V2.1 withdraws it** — the sweep is retained as corroborative evidence only, and the t-profile is the campaign's sole isolation of scalar step length (Appendix C, item 2) |
 | C-3a | "Fail-closed necessary for validity" is policy, not theorem | **Accepted** | §0.0 defines four distinct senses of validity; §4.1 adds an explicit [DEC] stating that the successive-iterate test is not an optimality certificate, that no KKT residual was computed, and that an inexact inner step can be legitimate in an outer sequential method; C2 retitled and restated |
 | C-3b | The 9 % V4/VR difference is attributed causally to "invalidity" | **Accepted** | §5.3 and C2 rewritten: truncation produces a materially different effective update; both terminal values are non-converged; the campaign cannot say which is nearer the true fixed point |
 | C-4a | Multiplicity alternatives not excluded; "not a detection failure and not an N = 2 defect" too strong | **Partially accepted** | **Accepted** for the N = 2 subproblem: its correctness is assumed, not shown, and this is now stated. **Rejected** for detection: the forced-N = 2 probe imposes the cluster rather than detecting it and still fails, which does exclude detection alone. §6.3 rewritten with a six-item list of open alternatives; C4 regraded [A] for non-retention, [B] for step length |
-| C-4b | Individual MAC is fragile near multiplicity | **Accepted** | §6.2 adds the basis-rotation caveat; all retention conclusions re-rested on the basis-invariant relative eigengap, with MAC demoted to corroborating. MAC removed from the §11 sub-verdict |
+| C-4b | Individual MAC is fragile near multiplicity | **Accepted** | §6.2 adds the basis-rotation caveat; all retention conclusions re-rested on the basis-invariant relative eigengap, and MAC removed from the §11 sub-verdict. V2 demoted MAC to "corroborating"; **V2.1 demotes it further to non-diagnostic** and removes the one residual mode-identity inference in §6.3 (Appendix C, item 3) |
 | C-5 | Causal ranking of the residual frequency gap is unidentifiable | **Accepted** | C5 retitled "What can and cannot be said…"; the ranked attribution is withdrawn; four separately graded measured findings replace it; V1's "remaining modelling discrepancy — not supported" narrowed to "no large discrepancy in the reported initial scalar eigenfrequency" |
 | C-6 | "Exact period-2 limit cycle" overstates the diagnostics | **Accepted** | §7.3 retitled and rewritten; "persistent, move-limit-saturated period-2-like oscillation" used throughout §0, §5.3, §7, §11. Three reasons given: non-zero lag-2 distance (0.136), a 0.25 threshold rather than 0, and the unavailability of asymptotic language from a finite budget |
 
@@ -2211,7 +2292,7 @@ possible.
 |---|---|---|
 | X-1 | **§2.4 conflated two different metrics in one table row.** V1's "fraction at a bound" row reported 0.9997 for the LP and 0.8150 for MMA; these are the *exact-bound* and *within-1 %* fractions respectively. The MMA increment's exact-bound fraction is 0.0000 | Split into two rows with all four values (`results/phase2_CC_160x20/log.txt` lines 33–34). No conclusion affected |
 | X-2 | **The mechanism threshold is p-dependent.** It is 5 % of ω₁ at iteration 1, which is evaluated at p = 1 for continuation runs (291.14) and p = 3 for fixed-p runs (145.57), giving different absolute thresholds. V5a (min 12.88, 4.42 %) and V5 (min 15.31, 5.26 %) fall on opposite sides by less than one part in fifty | Disclosed in §7.1 and §5.4; no conclusion rests on the label |
-| X-3 | **The inner-budget sweep contains an unexploited transition.** In the paper-literal box, budget 10 returns ‖Δρ‖∞ = 0.165 and *raises* ω₁ to 184.07; budget 20 returns 0.500 and collapses it. Truncation is therefore acting as an undeclared step restriction | Added to §2.3 as [OBS] + [INF] and used in §9.1 as a **second, clean isolation of step length** that involves no move limit, damping or outer bound — which answers M-2/C-2d with evidence rather than by weakening the claim, and makes C6's scope statement stronger |
+| X-3 | **The inner-budget sweep contains an unexploited transition.** In the paper-literal box, budget 10 returns ‖Δρ‖∞ = 0.165 and *raises* ω₁ to 184.07; budget 20 returns 0.500 and collapses it. Truncation is therefore acting as an undeclared step restriction | Added to §2.3 as [OBS] + [INF] and used in §9.1 as evidence involving no move limit, damping or outer bound, which makes C6's scope statement stronger. V2 described it as a *second, clean isolation of step length*; **V2.1 withdraws that description** on the second round's finding that a larger MMA budget also changes the increment's direction and component distribution. The sweep is now labelled corroborative throughout (§2.3, §2.5, §9.1, §11) |
 
 ### B.6 Points rejected
 
@@ -2236,3 +2317,78 @@ more strongly in V2 than in V1:
 * the failure of all 19 runs to converge, and of all 19 to retain a cluster;
 * the inadmissibility of every terminal frequency in the directory as a
   converged optimum.
+
+---
+
+## Appendix C — Response to the Second-Round Review (Revision V2.1)
+
+Revision V2 was reviewed a second time
+(`independent_scientific_audit_round2.md`, recommendation: **accept with minor
+revision**). The second round found **no remaining critical and no remaining
+major issue**, and confirmed that none of the outstanding points overturns the
+first-step LP result, the rejection of convergence for the reported runs, or the
+failure to retain bimodality. Four minor points and two editorial points
+remained. All six are accepted in full and actioned below.
+
+**No experiment was rerun, no numerical value altered, no run reclassified, no
+gate result changed, and no evidence grade changed.** V2.1 modifies wording,
+scope qualification and editorial consistency only.
+
+### C.1 Disposition of every remaining second-round point
+
+| # | Reviewer issue | Decision | Action taken | Sections modified |
+|---|---|---|---|---|
+| 1 | **Inner-solve language must match the stated evidence.** "Invalid step", "does not solve Eq. (25)", "increments do not solve the subproblem" and "mathematically valid" assert non-optimality that a successive-iterate test cannot establish | **Accepted** | §0.0 gains a normative terminology rule fixing "did not meet the declared stopping test" and "not certified as an inner-solve solution of Eq. (25) under the adopted stopping rule" as the only permitted forms, and expressly forbidding the four flagged phrasings. Every occurrence in the body is rewritten to the permitted form. The decisive question in §11 no longer asks for a "mathematically valid" trajectory but for one "whose inner solves meet the declared inner-solve stopping test". The measurements, the 0/300 record and the [A] grade on C2 are untouched. The flagged words survive only where they are quoted or explicitly disclaimed: §0.0's normative rule that forbids them, §4.1's disclaimer that failing the test proves neither solution nor non-solution, §5.3's quotation of V1's withdrawn phrasing, Appendix B's record of the round-1 audit point, and this table | §0.0, §2.1, §2.2, §4.1, §4.2, §4.3, §5.3, §8.2, C2, §11 |
+| 2 | **The inner-budget sweep is not an isolation of step length.** A larger MMA budget changes the approximate increment's direction and component distribution, not only its magnitude | **Accepted** | Every description of the sweep now states explicitly that raising the budget may change **step magnitude, step direction and component distribution**, and labels the experiment **corroborative**. The fixed-direction *t*-profile of §2.5 is named as the campaign's **sole** isolation of scalar step length. V2's "second, clean isolation" characterisation is withdrawn, including in the Appendix B rows that recorded it (B.1 C-2d, B.5 X-3). The [B] claim is re-phrased as *a finite restriction is required to avoid the demonstrated first-step overshoot*, rather than as an unqualified universal requirement for any viable trajectory; the grade remains **[B]** and the conclusion is not weakened | §0 (finding 2, missing-ingredient bullet), §2.3, §2.5, §9.1, §10 item 4, C7, §11, §12 A13, §1.3, B.1, B.5 |
+| 3 | **Remove the remaining individual-MAC inference.** "Both destroy mode identity (MAC ≈ 0.01)" is unsupported near multiplicity | **Accepted** | The sentence is removed. §6.3 now rests non-retention on the basis-invariant eigengap alone (1.48e-03 → 3.48e-01 and 2.22e-01) and states that the tabulated MAC values are reported for completeness and are **not** evidence of destroyed mode identity at this gap. §6.2 demotes individual-mode MAC from "corroborating" to **non-diagnostic**. The remaining MAC figures in §6.5 and C4 are retained as tabulated measurements and carry an explicit non-diagnostic cross-reference to §6.2. No conclusion in the report now rests on individual MAC; the eigengap evidence and the [A] grade on C4 are unchanged | §6.2, §6.3, §6.5, C4, B.1 |
+| 4 | **Close the remaining scope leaks.** The title implies established historical fidelity; C2 retains "every design update the production solver has ever applied" | **Accepted** | The title becomes *Reconstruction and Evaluation of the Published Du & Olhoff (2007) Optimization Formulation*, with a standing subtitle naming the tested full-box reconstruction of the printed formulation as the subject and disclaiming any verdict on the undocumented 2007 implementation. C2's universal sentence becomes "every documented design update examined — that is, every outer step of every configuration recorded by this campaign and by the preceding mesh-resolution campaign". C6's heading replaces "faithful continuation" with "continuation reconstructed from the paper". Title, subtitle and C2 are now consistent with §§0.0, 4.3, C6 and 11 | title, §C6 heading, C2 |
+| 5 | **Remove the raw `x/8` gate-count column** | **Accepted** | The column is removed from the §8 gate matrix. §8 and §8.3 record the removal and the reason. Per-gate results are unchanged and remain traceable to `results/gates.csv`. The three surviving references to "6/8" are the passages that *withdraw* V1's summed score | §8, §8.3 |
+| 6 | **Remove the duplicated `## 5. Phase 5` and `## 7. Phase 7` headings** | **Accepted** | On inspection the report contains **no duplicated markdown headings**: `## 5. Phase 5` and `## 7. Phase 7` each occur exactly once. The duplication is an artefact of the Appendix A reproduction script, whose shell comments `# 4. Phase 5 — …` and `# 6. Phase 7 / Gate G7 — …` are read as level-1 headings by a scanner that does not honour code fences. All comment lines in that block are reworded to the form `# --- step N: … (report section M)`, so that none mimics a section heading. **No command changed**; the commands are byte-identical to V1's | Appendix A |
+
+### C.2 Final consistency check
+
+Performed across the whole report after the edits above.
+
+* **Terminology.** One inner-solve vocabulary throughout, fixed normatively in
+  §0.0. The four senses of "validity" defined in §0.0 are used consistently and
+  never interchangeably. "Corroborative" versus "isolating" is now used
+  consistently for the inner-budget sweep and the *t*-profile respectively.
+* **Section references.** Five stale references inherited from an earlier
+  section numbering were corrected: §3.2 → §2.4 and §4 → §3.2 in the §1.3
+  provenance table; §3.1 → §2.3 (inner budget shown insufficient) and §3.4 →
+  §2.6 (β box not inert) in the same table; and §3.1 → §2.3, §5.2 in the §2.2
+  acceptance audit. References to Du & Olhoff §§2, 2.1, 2.2 and 2.3 in the §1.3
+  provenance table and in §3.1 are now prefixed "Du & Olhoff", so they cannot be
+  read as references to this report's own §§2–2.3; the paper references to
+  §3.5/§3.5.3 need no prefix, since this report has no such section. Every
+  remaining reference to a section of *this* report resolves to an existing
+  heading.
+* **Figure references.** All figure references are to the paper (Figs. 1, 2, 3c,
+  4) and are unchanged; this report contains no numbered figures of its own.
+* **Table references.** All tables are referenced by their containing section or
+  by artefact path (`results/tables.md`, `results/gates.csv`,
+  `results/aggregate.json`, `results/classification.csv`); none is referenced by
+  a number. Unchanged, except that the §8 gate matrix has one fewer column.
+* **Evidence labels.** The label set is exactly as defined in §0.0 — [A], [B],
+  [C], [OBS], [EV], [INF], [DEC], [HYP], [CONC], [CONC-preview] — with no stray
+  or undefined labels. **No label was changed on any claim in V2.1.** The grade
+  distribution is identical to V2: C1 [A], C2 [A], C3 [A], C4 [A]/[B], C5 [A],
+  C6 [A] + [HYP], step restriction [B], contraction [C].
+
+### C.3 Effect on the scientific conclusions
+
+**None.** Only wording, scope qualification and editorial consistency were
+modified. Every measurement, classification, gate result, evidence grade,
+verdict and sub-verdict of Revision V2 stands unchanged, including:
+
+* the exact-LP first-step collapse and its independence from nine of the
+  eighteen unspecified reconstruction choices;
+* the 0/300, 0/120 and 0/150 inner-solve record at the recorded budget;
+* the failure of all 19 runs to converge and of all 19 to retain a cluster;
+* the failure of continuation under all three tested schedules;
+* the [B] hypothesis that a finite step restriction is required — now scoped to
+  avoiding the demonstrated first-step overshoot, and still supported;
+* the [C] status of contraction;
+* the final verdict `THE TESTED FULL-BOX RECONSTRUCTION IS NUMERICALLY
+  NONVIABLE`, and its explicit non-application to the historical 2007
+  implementation.

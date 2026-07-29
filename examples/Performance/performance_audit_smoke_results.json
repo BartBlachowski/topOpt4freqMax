@@ -1,0 +1,136 @@
+{
+  "audit": "performance_comparison wrapper smoke runs",
+  "status": "completed",
+  "timestamp": "2026-07-29 20:30:24",
+  "matlab_version": "25.2.0.2998904 (R2025b)",
+  "fixture": {
+    "source_config": "examples/Performance/performance_comparison.json",
+    "mesh": "32x4",
+    "max_iters": 12,
+    "convergence_tol": 1E-12,
+    "purpose": "Control-flow, timing-boundary, termination-schema, and final-eigenvalue checks only. No values are reviewer-facing performance evidence."
+  },
+  "methods": [
+    {
+      "approach": "Olhoff",
+      "iterations_returned": 12,
+      "average_iteration_time_seconds": 0.035612631944444445,
+      "reconstructed_loop_time_seconds": 0.42735158333333334,
+      "wrapper_wall_time_seconds": 3.1584107916666668,
+      "reported_incremental_rss_mb": 164.390625,
+      "returned_omega_rad_per_s": [
+        79.683974012374108,
+        293.05926040827774,
+        513.06189854129
+      ],
+      "independent_common_linear_mass_omega_rad_per_s": [
+        79.6839740125713,
+        293.05926040821475,
+        513.06189854116042
+      ],
+      "omega1_relative_difference_from_common_recompute": 2.474648415464739E-12,
+      "final_density": {
+        "minimum": 0.5136679820165001,
+        "maximum": 0.57986807852245037,
+        "mean": 0.5560143439941474,
+        "gray_fraction_0p1_to_0p9": 1
+      },
+      "diagnostics_top_level_fields": [
+        "initial",
+        "iterations",
+        "loop_time",
+        "t_iter",
+        "final"
+      ],
+      "has_explicit_converged_field": false,
+      "has_explicit_termination_reason": false,
+      "iteration_cap_semantics": "single loop: maxiter=12; returned iterations=12",
+      "last_change": null
+    },
+    {
+      "approach": "Yuksel",
+      "iterations_returned": 24,
+      "average_iteration_time_seconds": 0.0029375833333333337,
+      "reconstructed_loop_time_seconds": 0.070502000000000009,
+      "wrapper_wall_time_seconds": 0.29748891666666666,
+      "reported_incremental_rss_mb": 10.546875,
+      "returned_omega_rad_per_s": [
+        122.51224566778887,
+        188.59974543397604,
+        452.43691074612491
+      ],
+      "independent_common_linear_mass_omega_rad_per_s": [
+        120.71310599044303,
+        187.81105629135649,
+        447.91334762747948
+      ],
+      "omega1_relative_difference_from_common_recompute": 0.014904261327583507,
+      "final_density": {
+        "minimum": 0.0525014520316514,
+        "maximum": 1,
+        "mean": 0.50004107861509417,
+        "gray_fraction_0p1_to_0p9": 0.6875
+      },
+      "diagnostics_top_level_fields": [
+        "stage1",
+        "stage2",
+        "timing"
+      ],
+      "has_explicit_converged_field": false,
+      "has_explicit_termination_reason": false,
+      "iteration_cap_semantics": "two loops: stage1_max_iters=12 plus stage2 maxiter=12; optimization.max_iters is not a total budget",
+      "stage1_iterations": 12,
+      "stage2_iterations": 12,
+      "stage1_last_change": 0.041705087888192549,
+      "stage2_last_change": 0.00892051201344879
+    },
+    {
+      "approach": "ourApproach",
+      "iterations_returned": 12,
+      "average_iteration_time_seconds": 0.025380083333333334,
+      "reconstructed_loop_time_seconds": 0.304561,
+      "wrapper_wall_time_seconds": 0.56322820833333331,
+      "reported_incremental_rss_mb": 19.25,
+      "returned_omega_rad_per_s": [
+        96.755734420063277,
+        254.08360413556738,
+        518.68160566496965
+      ],
+      "independent_common_linear_mass_omega_rad_per_s": [
+        96.755734420109121,
+        254.08360413543861,
+        518.68160566495862
+      ],
+      "omega1_relative_difference_from_common_recompute": 4.7381395620633809E-13,
+      "final_density": {
+        "minimum": 0.1775395067925265,
+        "maximum": 0.6530688359127107,
+        "mean": 0.4999999999998474,
+        "gray_fraction_0p1_to_0p9": 1
+      },
+      "diagnostics_top_level_fields": [
+        "mass_interpolation",
+        "semi_harmonic_refresh",
+        "t_harmonic_baseline_init",
+        "a4_phase2",
+        "last_F",
+        "last_U",
+        "last_obj",
+        "last_obj_cases",
+        "load_case_names",
+        "last_vol",
+        "last_change"
+      ],
+      "has_explicit_converged_field": false,
+      "has_explicit_termination_reason": false,
+      "iteration_cap_semantics": "single loop: max_iters=12; returned iterations=12",
+      "last_change": 0.024587210386612962
+    }
+  ],
+  "interpretation": [
+    "wrapper_wall_time includes setup and postprocessing that tIter*nIter excludes",
+    "Yuksel can return twice optimization.max_iters because the wrapper applies the budget separately to two stages",
+    "the common independent recomputation uses stiffness SIMP and linear mass for every returned topology",
+    "a Yuksel frequency mismatch is expected because that branch returns frequencies from its discontinuous modified mass law"
+  ]
+}
