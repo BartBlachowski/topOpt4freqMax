@@ -1,17 +1,19 @@
-function [x, omega, tIter, nIter, mem_usage] = run_topopt_from_json(jsonInput)
+function [x, omega, tIter, nIter, mem_usage, nIterStage] = run_topopt_from_json(jsonInput)
 %RUN_TOPOPT_FROM_JSON Run selected topology-optimization approach from JSON task file.
 %
-%   [x, omega, tIter, nIter, mem_usage] = run_topopt_from_json(jsonInput)
+%   [x, omega, tIter, nIter, mem_usage, nIterStage] = run_topopt_from_json(jsonInput)
 %
 % Inputs:
 %   jsonInput : either path to JSON task file, or a decoded JSON struct.
 %
 % Outputs:
-%   x         : final density vector (nelx*nely, 1)
-%   omega     : first three circular frequencies in rad/s (3,1)
-%   tIter     : average time per optimization iteration [s]
-%   nIter     : number of optimization iterations executed
-%   mem_usage : peak additional memory used during this call [MB]
+%   x          : final density vector (nelx*nely, 1)
+%   omega      : first three circular frequencies in rad/s (3,1)
+%   tIter      : average time per optimization iteration [s]
+%   nIter      : number of optimization iterations executed
+%   mem_usage  : peak additional memory used during this call [MB]
+%   nIterStage : struct with .stage1 / .stage2 iteration counts (NaN when the
+%                selected approach has no two-stage breakdown, e.g. not Yuksel)
 
     ensureCompatHelpersOnPath();
 
@@ -162,6 +164,7 @@ function [x, omega, tIter, nIter, mem_usage] = run_topopt_from_json(jsonInput)
     tIter = NaN;
     nIter = NaN;
     mem_usage = 0;
+    nIterStage = struct('stage1', NaN, 'stage2', NaN);
     Emin = E0 * EminRatio;
     freqIterOmega = [];
 
@@ -368,6 +371,12 @@ function [x, omega, tIter, nIter, mem_usage] = run_topopt_from_json(jsonInput)
             end
             if isfield(info, 'timing') && isfield(info.timing, 'total_iterations')
                 nIter = info.timing.total_iterations;
+            end
+            if isfield(info, 'timing') && isfield(info.timing, 'stage1_iterations')
+                nIterStage.stage1 = info.timing.stage1_iterations;
+            end
+            if isfield(info, 'timing') && isfield(info.timing, 'stage2_iterations')
+                nIterStage.stage2 = info.timing.stage2_iterations;
             end
             if postproc.saveFrequencyIterations && isfield(info, 'freq_iter_omega')
                 freqIterOmega = info.freq_iter_omega;
