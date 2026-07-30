@@ -15,6 +15,8 @@ function T = run_all_olhoff_2014(which_cases, overrides)
 %   Prints one row per case with the paper value, the computed value, the
 %   multiplicity, the connectivity, the stop reason and the declared-rule
 %   verdict, and writes the table to experiments/paper_examples/summary.csv.
+%   The optimized topologies of all cases are stacked into a single figure,
+%   experiments/paper_examples/topologies_all.png.
 
 if nargin < 1 || isempty(which_cases)
     which_cases = {'ss_n1','cs_n1','cc_n1','ss_n2','cs_n2','cc_n2','cc_gap23'};
@@ -28,8 +30,10 @@ outroot = fullfile(here, '..', 'experiments', 'paper_examples');
 if ~exist(outroot, 'dir'), mkdir(outroot); end
 
 rows = {};
+res  = cell(1, numel(which_cases));
 for k = 1:numel(which_cases)
     r = run_olhoff_case(which_cases{k}, overrides);
+    res{k} = r;
     rows{end+1} = struct( ...
         'case',        string(r.name), ...
         'figure',      string(r.target.figure), ...
@@ -51,6 +55,8 @@ end
 T = struct2table(cell2mat(rows));
 writetable(T, fullfile(outroot, 'summary.csv'));
 
+panel = plot_all_topologies(res, fullfile(outroot, 'topologies_all.png'));
+
 fprintf('\n\n%s\n', repmat('=', 1, 112));
 fprintf('  OLHOFF & DU (2014) 2D EXAMPLES -- SUMMARY\n');
 fprintf('%s\n', repmat('=', 1, 112));
@@ -65,5 +71,6 @@ end
 fprintf('%s\n', repmat('=', 1, 112));
 fprintf(' verdicts: %d PASS, %d PARTIAL, %d FAIL   (rule: PLAN_Olhoff2014_exact.md section 7.1)\n', ...
     sum(T.verdict == "PASS"), sum(T.verdict == "PARTIAL"), sum(T.verdict == "FAIL"));
-fprintf(' summary written to %s\n\n', fullfile(outroot, 'summary.csv'));
+fprintf(' summary written to %s\n', fullfile(outroot, 'summary.csv'));
+fprintf(' topologies written to %s\n\n', panel);
 end
