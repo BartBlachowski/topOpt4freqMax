@@ -168,6 +168,14 @@ fprintf('%s\n', sep);
 fprintf('\n');
 
 % -------------------------------------------------------------------------
+% Print Table 1 in the paper's grouped-column layout (Mesh rows, one column
+% group per method: t_iter, n_iter, T (s)), and export it as a LaTeX table.
+% -------------------------------------------------------------------------
+groupLabels = {'Olhoff--Du', 'Yuksel--Yilmaz', 'Proposed'};
+paperTexPath = fullfile(fileparts(mfilename('fullpath')), 'table1_paper_style.tex');
+print_table1_paper_style(resolutions, groupLabels, tIter_all, nIter_all, tTotal_all, paperTexPath);
+
+% -------------------------------------------------------------------------
 % Also print achieved natural frequencies for reference
 % -------------------------------------------------------------------------
 fprintf('Achieved first natural frequency omega_1 [rad/s]:\n');
@@ -224,123 +232,46 @@ fclose(fid);
 fprintf('Table 1 saved to: %s\n', csvPath);
 
 % -------------------------------------------------------------------------
-% Fit computational-complexity model T(N_e) = C * N_e^exp per method,
-% via least-squares linear regression on log(T) = log(C) + exp*log(N_e).
+% Fit computational-complexity model T(N_e) = C * N_e^exp per method.
 % N_e = nelx*nely is the number of finite elements in the mesh.
 % -------------------------------------------------------------------------
 Ne = resolutions(:,1) .* resolutions(:,2);
+outDir = fileparts(mfilename('fullpath'));
 
-fprintf('\n');
-fprintf('Table 2. Computational complexity fit  T(N_e) = C * N_e^exp\n');
-fprintf('(least-squares fit of log(T) vs log(N_e); N_e = nelx*nely)\n');
-fprintf('\n');
-fprintf('%-20s  %14s  %10s  %10s  %8s\n', 'Method', 'C', 'exp', 'R^2', 'N pts');
-fprintf('%s\n', sep);
+% ---- Table 2: free fit -- both C and exp estimated by least-squares
+% linear regression on log(T) = log(C) + exp*log(N_e). ----
+[complexity_C, complexity_exp, complexity_R2, complexity_n] = ...
+    fit_complexity_model(Ne, tTotal_all, 'free');
 
-complexity_C   = NaN(1, nMethods);
-complexity_exp = NaN(1, nMethods);
-complexity_R2  = NaN(1, nMethods);
+complexityCsvPath = fullfile(outDir, 'table1_complexity_fit.csv');
+print_complexity_fit_table(methodLabels, displayNames, complexity_C, complexity_exp, ...
+    complexity_R2, complexity_n, ...
+    {'Table 2. Computational complexity fit  T(N_e) = C * N_e^exp', ...
+     '(least-squares fit of log(T) vs log(N_e); N_e = nelx*nely)'}, ...
+    complexityCsvPath);
 
-for m = 1:nMethods
-    validMask = isfinite(tTotal_all(:,m)) & tTotal_all(:,m) > 0 & Ne > 0;
-    nValid = sum(validMask);
-    if nValid < 2
-        fprintf('%-20s  %14s  %10s  %10s  %8d\n', methodLabels{m}, 'N/A', 'N/A', 'N/A', nValid);
-        continue;
-    end
+% ---- Table 3: fixed-exponent fit -- exp is held fixed at an arbitrarily
+% chosen value (default 1.5) and only C (the prefactor) is estimated by
+% least squares. ----
+fixedExp = 1.5;
+[complexity_C_fixed, complexity_exp_fixed, complexity_R2_fixed, complexity_n_fixed] = ...
+    fit_complexity_model(Ne, tTotal_all, 'fixed', fixedExp);
 
-    logNe = log(Ne(validMask));
-    logT  = log(tTotal_all(validMask, m));
-
-    A = [logNe, ones(nValid, 1)];
-    coeffs = A \ logT;      % least-squares solution [exp; log(C)]
-    expFit = coeffs(1);
-    Cfit   = exp(coeffs(2));
-
-    logTHat = A * coeffs;
-    ssRes = sum((logT - logTHat).^2);
-    ssTot = sum((logT - mean(logT)).^2);
-    if ssTot > 0
-        R2 = 1 - ssRes / ssTot;
-    else
-        R2 = 1;
-    end
-
-    complexity_C(m)   = Cfit;
-    complexity_exp(m) = expFit;
-    complexity_R2(m)  = R2;
-
-    fprintf('%-20s  %14.4e  %10.3f  %10.3f  %8d\n', ...
-        methodLabels{m}, Cfit, expFit, R2, nValid);
-end
-fprintf('%s\n', sep);
-fprintf('\n');
-
-% Save complexity fit as CSV
-complexityCsvPath = fullfile(fileparts(mfilename('fullpath')), 'table1_complexity_fit.csv');
-fid = fopen(complexityCsvPath, 'w');
-fprintf(fid, 'Method,C,exp,R2,NPoints\n');
-for m = 1:nMethods
-    if isnan(complexity_exp(m))
-        fprintf(fid, '%s,,,,%d\n', displayNames{m}, sum(isfinite(tTotal_all(:,m)) & tTotal_all(:,m) > 0 & Ne > 0));
-    else
-        fprintf(fid, '%s,%.6e,%.4f,%.4f,%d\n', displayNames{m}, complexity_C(m), ...
-            complexity_exp(m), complexity_R2(m), sum(isfinite(tTotal_all(:,m)) & tTotal_all(:,m) > 0 & Ne > 0));
-    end
-end
-fclose(fid);
-fprintf('Complexity fit saved to: %s\n', complexityCsvPath);
+complexityCsvPathFixed = fullfile(outDir, 'table1_complexity_fit_fixedexp.csv');
+print_complexity_fit_table(methodLabels, displayNames, complexity_C_fixed, complexity_exp_fixed, ...
+    complexity_R2_fixed, complexity_n_fixed, ...
+    {sprintf('Table 3. Fixed-exponent complexity fit  T(N_e) = C * N_e^%.2f', fixedExp), ...
+     '(exponent held fixed; only C estimated by linear-space least squares on T, i.e. minimizing', ...
+     'absolute run-time error sum((T - C*N_e^exp)^2); R^2 is on T, not log(T))'}, ...
+    complexityCsvPathFixed);
 
 % -------------------------------------------------------------------------
 % Plot measured run times (Table 1 points) together with the fitted
-% power-law curves C * N_e^exp on log-log axes.
+% power-law curves, on both log-log and linear axes -- once for the free
+% fit (Table 2), once for the fixed-exponent fit (Table 3).
 % -------------------------------------------------------------------------
-colors  = [0.0000, 0.4470, 0.7410; ...
-           0.8500, 0.3250, 0.0980; ...
-           0.4660, 0.6740, 0.1880];
-markers = {'o', 's', '^'};
+plot_table1_complexity(Ne, methodLabels, tTotal_all, complexity_C, complexity_exp, outDir);
 
-fig = figure('Color', 'white');
-ax = axes('Parent', fig);
-hold(ax, 'on');
-
-for m = 1:nMethods
-    validMask = isfinite(tTotal_all(:,m)) & tTotal_all(:,m) > 0 & Ne > 0;
-    if ~any(validMask)
-        continue;
-    end
-
-    % Measured points from Table 1.
-    plot(ax, Ne(validMask), tTotal_all(validMask, m), markers{m}, ...
-        'MarkerSize', 8, 'LineWidth', 1.5, ...
-        'MarkerFaceColor', colors(m,:), 'MarkerEdgeColor', colors(m,:), ...
-        'LineStyle', 'none', ...
-        'DisplayName', sprintf('%s (data)', methodLabels{m}));
-
-    % Fitted curve C * N_e^exp.
-    if ~isnan(complexity_exp(m))
-        NeFine = linspace(min(Ne(validMask)), max(Ne(validMask)), 100);
-        Tfit = complexity_C(m) * NeFine .^ complexity_exp(m);
-        plot(ax, NeFine, Tfit, '-', 'Color', colors(m,:), 'LineWidth', 2, ...
-            'DisplayName', sprintf('%s fit: C=%.3g, exp=%.2f', ...
-                methodLabels{m}, complexity_C(m), complexity_exp(m)));
-    end
-end
-
-set(ax, 'XScale', 'log', 'YScale', 'log');
-xlabel(ax, 'Number of elements N_e', 'FontSize', 12);
-ylabel(ax, 'Total run time T (s)', 'FontSize', 12);
-title(ax, 'Computational complexity fit:  T(N_e) = C \cdot N_e^{exp}', ...
-    'Interpreter', 'tex', 'FontSize', 12);
-grid(ax, 'on');
-box(ax, 'on');
-legend(ax, 'Location', 'best', 'FontSize', 9);
-
-complexityFigPath = fullfile(fileparts(mfilename('fullpath')), 'table1_complexity_fit.png');
-try
-    exportgraphics(fig, complexityFigPath, 'Resolution', 180, 'BackgroundColor', 'white');
-    fprintf('Complexity fit plot saved to: %s\n', complexityFigPath);
-catch plotErr
-    warning('performance_comparison:PlotSaveFailed', ...
-        'Failed to save complexity fit plot (%s).', plotErr.message);
-end
+plot_table1_complexity(Ne, methodLabels, tTotal_all, complexity_C_fixed, complexity_exp_fixed, ...
+    outDir, 'table1_complexity_fit_fixedexp', ...
+    sprintf('Fixed-exponent fit (C estimated only):  T(N_e) = C \\cdot N_e^{%.2f}', fixedExp));
