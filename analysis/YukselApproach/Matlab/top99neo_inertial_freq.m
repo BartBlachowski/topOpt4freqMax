@@ -174,6 +174,18 @@ info.stage1 = struct('c',[],'v',[],'ch',[],'xHist',[],'omegaHist',[],'omegaFinal
     'freq_iter_omega', []);
 info.stage2 = struct('c',[],'v',[],'ch',[],'xHist',[],'omegaHist',[],'omegaFinal',[], ...
     'freq_iter_omega', []);
+% Opt-in scientific-audit logging.  These fields do not participate in the
+% optimization update and are disabled by default.
+auditCollect = logical(localOpt(runCfg, 'audit_collect', false));
+auditSnapshotEvery = max(1, floor(double(localOpt(runCfg, 'audit_snapshot_every', 10))));
+info.stage1.audit_collect = auditCollect;
+info.stage1.audit_snapshot_every = auditSnapshotEvery;
+info.stage2.audit_collect = auditCollect;
+info.stage2.audit_snapshot_every = auditSnapshotEvery;
+% Diagnostic ablations are opt-in and false by default. They are used only
+% by the independent audit runner and are reported separately from baseline.
+info.stage2.audit_freeze_mode = logical(localOpt(runCfg, 'audit_freeze_mode', false));
+info.stage2.audit_freeze_load = logical(localOpt(runCfg, 'audit_freeze_load', false));
 if saveFrqIterations
     info.stage1.freq_iter_omega = NaN(stage1_maxit, 3);
     info.stage2.freq_iter_omega = NaN(maxit, 3);
@@ -407,6 +419,8 @@ cnt  = @(v,vCnt,l) v+(l>=vCnt{1})*(v<vCnt{2})*(mod(l,vCnt{3})==0)*vCnt{4};
 
 loop = 0;
 loop_tic = tic;
+auditCollect = isfield(stageInfo, 'audit_collect') && stageInfo.audit_collect;
+auditSnapshotEvery = localOpt(stageInfo, 'audit_snapshot_every', 10);
 while loop < maxit
     loop = loop + 1;
     % ---- physical density
@@ -455,7 +469,8 @@ while loop < maxit
     end
 
     % ---- OC update (robust bisection bracket + finite guards)
-    [x, ch] = localOcUpdate(x, act, dc, dV0, move, mean(xPhys));
+    xOldAudit = x;
+    [x, ch, lambdaOC] = localOcUpdate(x, act, dc, dV0, move, mean(xPhys));
 
     penalLog = penal;
     [penal,beta] = deal(cnt(penal,penalCnt,loop), cnt(beta,betaCnt,loop));
@@ -464,6 +479,11 @@ while loop < maxit
     stageInfo.c(end+1,1)  = cVal;
     stageInfo.v(end+1,1)  = mean(xPhys);
     stageInfo.ch(end+1,1) = ch;
+    if auditCollect
+        [stageInfo, ~] = localRecordAuditStep( ...
+            stageInfo, loop, xOldAudit, x, xPhys, act, dc, dV0, ...
+            lambdaOC, move, NaN, NaN, NaN, auditSnapshotEvery);
+    end
     if saveFrqIterations
         stageInfo.freq_iter_omega(loop,:) = localFirstNOmegas( ...
             xPhys, free, nEl, nDof, Iar, Ke, Me0, E0, Emin, penalLog, ...
@@ -512,6 +532,12 @@ cnt  = @(v,vCnt,l) v+(l>=vCnt{1})*(v<vCnt{2})*(mod(l,vCnt{3})==0)*vCnt{4};
 tolX = stage2Tol;
 loop = 0; U = U_est;
 loop_tic = tic;
+auditCollect = isfield(stageInfo, 'audit_collect') && stageInfo.audit_collect;
+auditSnapshotEvery = localOpt(stageInfo, 'audit_snapshot_every', 10);
+auditFreezeMode = isfield(stageInfo, 'audit_freeze_mode') && stageInfo.audit_freeze_mode;
+auditFreezeLoad = isfield(stageInfo, 'audit_freeze_load') && stageInfo.audit_freeze_load;
+frozenModeEstimate = U_est;
+frozenLoad = [];
 
 while loop < maxit
     loop = loop + 1;
@@ -562,12 +588,23 @@ while loop < maxit
     end
 
     % ---- inertial load from current mode-shape estimate
-    uhat = U;
+    if auditFreezeMode
+        uhat = frozenModeEstimate;
+    else
+        uhat = U;
+    end
     nrm = norm( uhat( free ) );
     if nrm == 0, nrm = 1; end
     uhat = uhat / nrm;
     F = M * uhat;
     F(fixed) = 0;
+    if auditFreezeLoad
+        if isempty(frozenLoad)
+            frozenLoad = F;
+        else
+            F = frozenLoad;
+        end
+    end
 
     % ---- solve
     U(:) = 0;
@@ -578,6 +615,7 @@ while loop < maxit
     uhatNew = uhatNew / nrmNew;
     sgn = sign( uhat( free )' * uhatNew( free ) );
     if sgn == 0, sgn = 1; end
+    modeCos = abs(uhat( free )' * uhatNew( free ));
     uhatNew = sgn * uhatNew;
     du = norm( uhatNew( free ) - uhat( free ) ) / max( 1, norm( uhat( free ) ) );
 
@@ -595,7 +633,8 @@ while loop < maxit
     end
 
     % ---- OC update (robust bisection bracket + finite guards)
-    [x, ch] = localOcUpdate(x, act, dc, dV0, move, mean(xPhys));
+    xOldAudit = x;
+    [x, ch, lambdaOC] = localOcUpdate(x, act, dc, dV0, move, mean(xPhys));
 
     penalLog = penal;
     [penal,beta] = deal(cnt(penal,penalCnt,loop), cnt(beta,betaCnt,loop));
@@ -604,6 +643,11 @@ while loop < maxit
     stageInfo.c(end+1,1)  = cVal;
     stageInfo.v(end+1,1)  = mean(xPhys);
     stageInfo.ch(end+1,1) = ch;
+    if auditCollect
+        [stageInfo, ~] = localRecordAuditStep( ...
+            stageInfo, loop, xOldAudit, x, xPhys, act, dc, dV0, ...
+            lambdaOC, move, modeCos, du, norm(F(free)), auditSnapshotEvery);
+    end
     if saveFrqIterations
         stageInfo.freq_iter_omega(loop,:) = localFirstNOmegas( ...
             xPhys, free, nEl, nDof, Iar, Ke, Me0, E0, Emin, penalLog, ...
@@ -643,9 +687,10 @@ end
 end
 
 %% =======================================================================
-function [x, ch] = localOcUpdate(x, act, dc, dV0, move, targetMean)
+function [x, ch, lambdaOC] = localOcUpdate(x, act, dc, dV0, move, targetMean)
 if isempty(act)
     ch = 0;
+    lambdaOC = NaN;
     return;
 end
 
@@ -693,6 +738,67 @@ for k = 1:120
 end
 
 ch = max(abs(x(act) - xT));
+lambdaOC = 0.5 * (l1 + l2);
+end
+
+%% =======================================================================
+function [stageInfo, stepAbs] = localRecordAuditStep( ...
+    stageInfo, loop, xOld, xNew, xPhys, act, dc, dV0, ...
+    lambdaOC, move, modeCos, du, forceNorm, snapshotEvery)
+% Scalar diagnostics only; no values produced here feed back into the solver.
+if ~isfield(stageInfo, 'audit') || ~isfield(stageInfo.audit, 'iter')
+    stageInfo.audit = struct( ...
+        'iter', [], 'lambdaOC', [], 'stepMean', [], 'stepRms', [], ...
+        'stepP95', [], 'stepActiveFrac', [], 'moveFrac', [], 'grayFrac', [], ...
+        'dcMean', [], 'dcStd', [], 'dcMaxAbs', [], 'dcP95Abs', [], ...
+        'ocArgMean', [], 'ocArgCV', [], 'modeCos', [], 'modeAngleDeg', [], ...
+        'du', [], 'forceNorm', [], 'snapshotIter', [], 'xPhysSnapshots', []);
+end
+stepAbs = abs(xNew(act) - xOld(act));
+sens = dc(act);
+denom = max(dV0(act), 1e-30);
+ocArg = max(-sens ./ denom, 1e-30);
+
+stageInfo.audit.iter(end+1,1) = loop;
+stageInfo.audit.lambdaOC(end+1,1) = lambdaOC;
+stageInfo.audit.stepMean(end+1,1) = mean(stepAbs);
+stageInfo.audit.stepRms(end+1,1) = sqrt(mean(stepAbs.^2));
+stageInfo.audit.stepP95(end+1,1) = localPercentile(abs(stepAbs), 95);
+stageInfo.audit.stepActiveFrac(end+1,1) = mean(stepAbs > 1e-12);
+stageInfo.audit.moveFrac(end+1,1) = mean(stepAbs >= 0.999 * move);
+stageInfo.audit.grayFrac(end+1,1) = mean(xPhys(act) > 0.1 & xPhys(act) < 0.9);
+stageInfo.audit.dcMean(end+1,1) = mean(sens);
+stageInfo.audit.dcStd(end+1,1) = std(sens);
+stageInfo.audit.dcMaxAbs(end+1,1) = max(abs(sens));
+stageInfo.audit.dcP95Abs(end+1,1) = localPercentile(abs(sens), 95);
+stageInfo.audit.ocArgMean(end+1,1) = mean(ocArg);
+stageInfo.audit.ocArgCV(end+1,1) = std(ocArg) / max(mean(ocArg), eps);
+stageInfo.audit.modeCos(end+1,1) = modeCos;
+stageInfo.audit.modeAngleDeg(end+1,1) = acosd(min(1, max(-1, modeCos)));
+stageInfo.audit.du(end+1,1) = du;
+stageInfo.audit.forceNorm(end+1,1) = forceNorm;
+
+if mod(loop - 1, snapshotEvery) == 0
+    stageInfo.audit.snapshotIter(end+1,1) = loop;
+    stageInfo.audit.xPhysSnapshots(:,end+1) = xPhys(:);
+end
+end
+
+%% =======================================================================
+function q = localPercentile(values, percentile)
+values = sort(values(:));
+if isempty(values)
+    q = NaN;
+    return;
+end
+pos = 1 + (numel(values) - 1) * percentile / 100;
+lo = floor(pos);
+hi = ceil(pos);
+if lo == hi
+    q = values(lo);
+else
+    q = values(lo) + (pos - lo) * (values(hi) - values(lo));
+end
 end
 
 %% =======================================================================
