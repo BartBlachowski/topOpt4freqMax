@@ -9,9 +9,14 @@ Scope of this plan: the 2D beam problems of §3.1 (max ω₁), §3.2 (max ω₂)
 correct multiple-eigenfrequency (bimodality) path. 3D plate examples §3.4–3.6
 are explicitly out of scope.
 
-Status of this document: implementation plan, written 2026-07-30. It supersedes
-`OlhoffApproachExact.txt` (which targets Du & Olhoff 2007 and carries an
-ARCHIVE STATUS block). See §9.3 for what happens to that file.
+Status of this document: implementation plan, written 2026-07-30 and **executed
+the same day**. Phases 0–8 are complete; results, findings and the declared-rule
+verdicts are in [REPORT.md](REPORT.md), and the code is described in
+[README.md](README.md). Two plan assumptions were corrected by the execution and
+are recorded in REPORT.md §3: a *fixed* move limit (R1 as originally written)
+cannot converge at all, and the multiplicity tolerances of R3 were 4× too tight.
+It supersedes `OlhoffApproachExact.txt` (which targets Du & Olhoff 2007 and
+carries an ARCHIVE STATUS block). See §9.3 for what happens to that file.
 
 ---
 

@@ -1,7 +1,7 @@
-function [x, omega, tIter, nIter, mem_usage, nIterStage] = run_topopt_from_json(jsonInput)
+function [x, omega, tIter, nIter, mem_usage, nIterStage, telemetry] = run_topopt_from_json(jsonInput)
 %RUN_TOPOPT_FROM_JSON Run selected topology-optimization approach from JSON task file.
 %
-%   [x, omega, tIter, nIter, mem_usage, nIterStage] = run_topopt_from_json(jsonInput)
+%   [x, omega, tIter, nIter, mem_usage, nIterStage, telemetry] = run_topopt_from_json(jsonInput)
 %
 % Inputs:
 %   jsonInput : either path to JSON task file, or a decoded JSON struct.
@@ -14,6 +14,9 @@ function [x, omega, tIter, nIter, mem_usage, nIterStage] = run_topopt_from_json(
 %   mem_usage  : peak additional memory used during this call [MB]
 %   nIterStage : struct with .stage1 / .stage2 iteration counts (NaN when the
 %                selected approach has no two-stage breakdown, e.g. not Yuksel)
+%   telemetry  : reporting-only timing and stopping diagnostics
+
+    runnerWallTic = tic;
 
     ensureCompatHelpersOnPath();
 
@@ -114,6 +117,12 @@ function [x, omega, tIter, nIter, mem_usage, nIterStage] = run_topopt_from_json(
     if hasSemiHarmonicRhoSource
         semiHarmonicRhoSource = char(string(getFieldPath(cfg, {'optimization','semi_harmonic_rho_source'})));
     end
+    benchmarkDiagnosticsEnabled = true;
+    if hasFieldPath(cfg, {'benchmark','enable_diagnostics'})
+        benchmarkDiagnosticsEnabled = parseBool( ...
+            getFieldPath(cfg, {'benchmark','enable_diagnostics'}), ...
+            'benchmark.enable_diagnostics');
+    end
 
     % Radius conversion requested by task description.
     dx = L / nelx;
@@ -165,6 +174,11 @@ function [x, omega, tIter, nIter, mem_usage, nIterStage] = run_topopt_from_json(
     nIter = NaN;
     mem_usage = 0;
     nIterStage = struct('stage1', NaN, 'stage2', NaN);
+    telemetry = struct();
+    solverTiming = struct();
+    solverStopping = struct();
+    objectiveHistory = [];
+    objectiveFinal = NaN;
     Emin = E0 * EminRatio;
     freqIterOmega = [];
 
@@ -187,6 +201,7 @@ function [x, omega, tIter, nIter, mem_usage, nIterStage] = run_topopt_from_json(
     % Start each run with a fresh plotting session so repeated
     % run_topopt_from_json calls open separate figure windows.
     resetTopologyPlotSession();
+    wrapperInitializationTime = toc(runnerWallTic);
 
     switch lower(strtrim(approach))
         case 'olhoff'
@@ -216,7 +231,8 @@ function [x, omega, tIter, nIter, mem_usage, nIterStage] = run_topopt_from_json(
             cfgO.use_heaviside = useHeaviside;
             cfgO.beta_continuous = useHeaviside;  % smooth beta ramp when Heaviside is on
 
-            optsO = struct('doDiagnostic', true, 'diagnosticOnly', false, 'diagModes', 5);
+            optsO = struct('doDiagnostic', benchmarkDiagnosticsEnabled, ...
+                'diagnosticOnly', false, 'diagModes', 5);
             optsO.approach_name = approach;
             optsO.save_frq_iterations = postproc.saveFrequencyIterations;
             optsO.visualization_quality = postproc.visualizeQuality;
@@ -237,6 +253,9 @@ function [x, omega, tIter, nIter, mem_usage, nIterStage] = run_topopt_from_json(
             if isfield(diagnostics, 'iterations')
                 nIter = diagnostics.iterations;
             end
+            if isfield(diagnostics, 'timing'), solverTiming = diagnostics.timing; end
+            if isfield(diagnostics, 'stopping'), solverStopping = diagnostics.stopping; end
+            objectiveFinal = omega(1);
             if postproc.saveFrequencyIterations && isfield(diagnostics, 'freq_iter_omega')
                 freqIterOmega = diagnostics.freq_iter_omega;
             end
@@ -381,6 +400,12 @@ function [x, omega, tIter, nIter, mem_usage, nIterStage] = run_topopt_from_json(
             if postproc.saveFrequencyIterations && isfield(info, 'freq_iter_omega')
                 freqIterOmega = info.freq_iter_omega;
             end
+            if isfield(info, 'timing'), solverTiming = info.timing; end
+            if isfield(info, 'stopping'), solverStopping = info.stopping; end
+            if isfield(info, 'stage2') && isfield(info.stage2, 'c') && ~isempty(info.stage2.c)
+                objectiveHistory = info.stage2.c(:);
+                objectiveFinal = objectiveHistory(end);
+            end
 
         case 'ourapproach'
             addpath(fullfile(repoRoot, 'analysis', 'ourApproach', 'Matlab'));
@@ -411,7 +436,7 @@ function [x, omega, tIter, nIter, mem_usage, nIterStage] = run_topopt_from_json(
                     'optimization.harmonic_normalize');
             end
             if hasDebugSemiHarmonic
-                runCfg.debug_semi_harmonic = debugSemiHarmonic;
+                runCfg.debug_semi_harmonic = debugSemiHarmonic && benchmarkDiagnosticsEnabled;
             end
             if hasSemiHarmonicBaseline
                 runCfg.semi_harmonic_baseline = semiHarmonicBaseline;
@@ -433,20 +458,23 @@ function [x, omega, tIter, nIter, mem_usage, nIterStage] = run_topopt_from_json(
             end
             runCfg.optimizer = optimizerType;
 
+            [xOut, fOut, tOut, itOut, infoOur] = topopt_freq( ...
+                nelx, nely, volfrac, penal, rmin_phys, ft, L, H, runCfg);
             if postproc.saveFrequencyIterations
-                [xOut, fOut, tOut, itOut, infoOur] = topopt_freq( ...
-                    nelx, nely, volfrac, penal, rmin_phys, ft, L, H, runCfg);
                 if isstruct(infoOur) && isfield(infoOur, 'freq_iter_omega')
                     freqIterOmega = infoOur.freq_iter_omega;
                 end
-            else
-                [xOut, fOut, tOut, itOut] = topopt_freq( ...
-                    nelx, nely, volfrac, penal, rmin_phys, ft, L, H, runCfg);
             end
             x = xOut(:);
             omega = toVec3(2*pi*fOut(:)); % ourApproach runner reports Hz.
             tIter = tOut;
             nIter = itOut;
+            if isfield(infoOur, 'timing'), solverTiming = infoOur.timing; end
+            if isfield(infoOur, 'stopping'), solverStopping = infoOur.stopping; end
+            if isfield(infoOur, 'objective_history')
+                objectiveHistory = infoOur.objective_history(:);
+            end
+            if isfield(infoOur, 'last_obj'), objectiveFinal = infoOur.last_obj; end
 
         case {'elastic2d', 'elastc2d'}
             addpath(fullfile(repoRoot, 'analysis', 'elastic2D', 'Matlab'));
@@ -465,6 +493,7 @@ function [x, omega, tIter, nIter, mem_usage, nIterStage] = run_topopt_from_json(
                 ['Unknown optimization.approach "%s". Use "Olhoff", "OlhoffExact", ' ...
                  '"Yuksel", "ourApproach", "elastic2D", or "elastc2D".'], approach);
     end
+    runnerPostprocessingTic = tic;
 
     % --- Finalize memory measurement ---
     if nargout >= 5
@@ -599,6 +628,62 @@ function [x, omega, tIter, nIter, mem_usage, nIterStage] = run_topopt_from_json(
             warning('run_topopt_from_json:ModeVisualizationFailed', ...
                 'Reference mode visualization failed: %s', modeErr.message);
         end
+    end
+
+    runnerPostprocessingTime = toc(runnerPostprocessingTic);
+    loopTime = telemetryValue(solverTiming, 'loop_time', tIter * nIter);
+    if isfield(solverTiming, 'total_loop_time')
+        loopTime = solverTiming.total_loop_time;
+    end
+    totalWallTime = toc(runnerWallTic);
+    initializationTime = wrapperInitializationTime + ...
+        telemetryValue(solverTiming, 'initialization_time', 0);
+    postprocessingTime = runnerPostprocessingTime + ...
+        telemetryValue(solverTiming, 'postprocessing_time', 0);
+    % Attribute dispatch/configuration overhead not measured inside a solver
+    % to initialization so the three phases cover the complete runner call.
+    initializationTime = initializationTime + max(0, ...
+        totalWallTime - initializationTime - loopTime - postprocessingTime);
+    telemetry.timing = struct( ...
+        'initialization_time', initializationTime, ...
+        'optimization_loop_time', loopTime, ...
+        'postprocessing_time', postprocessingTime, ...
+        'total_wall_time', totalWallTime, ...
+        'average_iteration_time', tIter);
+    telemetry.stopping = struct( ...
+        'stop_reason', telemetryValue(solverStopping, 'stop_reason', 'N/A'), ...
+        'total_iterations', nIter, ...
+        'iter_stage1', nIterStage.stage1, ...
+        'iter_stage2', nIterStage.stage2, ...
+        'final_max_density_change', ...
+            telemetryValue(solverStopping, 'final_max_density_change', NaN), ...
+        'final_rms_density_change', ...
+            telemetryValue(solverStopping, 'final_rms_density_change', NaN), ...
+        'final_relative_objective_change', ...
+            telemetryValue(solverStopping, 'final_relative_objective_change', NaN), ...
+        'final_grayness', telemetryValue(solverStopping, 'final_grayness', ...
+            mean(4*x.*(1-x))), ...
+        'convergence_tolerance', ...
+            telemetryValue(solverStopping, 'convergence_tolerance', convTol));
+    telemetry.objective_final = objectiveFinal;
+    telemetry.objective_history = objectiveHistory;
+    telemetry.diagnostics_enabled = benchmarkDiagnosticsEnabled;
+    telemetry.yuksel = struct( ...
+        'stage1_max_iters', NaN, ...
+        'stage1_tolerance', telemetryValue(solverStopping, 'stage1_tolerance', NaN), ...
+        'stage2_tolerance', convTol);
+    if strcmpi(strtrim(approach), 'yuksel')
+        telemetry.yuksel.stage1_max_iters = stage1MaxIter;
+        telemetry.yuksel.stage2_tolerance = telemetryValue( ...
+            solverStopping, 'convergence_tolerance', convTol);
+    end
+end
+
+function value = telemetryValue(s, name, defaultValue)
+    if isstruct(s) && isfield(s, name) && ~isempty(s.(name))
+        value = s.(name);
+    else
+        value = defaultValue;
     end
 end
 

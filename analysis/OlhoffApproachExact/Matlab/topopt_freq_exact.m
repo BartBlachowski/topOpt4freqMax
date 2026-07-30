@@ -303,10 +303,10 @@ for out_it = 1:cfg.outer_max_iter
     % Predicted cluster increments (Eq. 19d) from the TRUE (unfiltered)
     % linearization -- see build_block for why the filtered one must not be used
     % here.
-    pred_dlam    = predict_dlam(sp.up, drho, lam(cl_up));
-    pred_dlam_lo = [];
+    pred_up = predict_cluster(sp.up, drho);      % predicted NEW cluster eigenvalues
+    pred_lo = [];
     if is_gap
-        pred_dlam_lo = predict_dlam(sp.lo, drho, lam(cl_lo));
+        pred_lo = predict_cluster(sp.lo, drho);
     end
 
     % ---- Fig. 1 step 4: trial update -----------------------------------
@@ -328,28 +328,46 @@ for out_it = 1:cfg.outer_max_iter
     % classical trust-region test.  Constants are Powell's textbook values, not
     % fitted to this problem.  Fig. 1 has no step control at all -- see the
     % header and PLAN_Olhoff2014_exact.md [R1].
+    % The objective of (19) is the LOWEST constrained eigenvalue, so the
+    % predicted increase is min(predicted new cluster eigenvalues) - lam_n.
+    % It is NOT a per-mode difference min(pred_new_i - lam_i): under cluster
+    % model CA the reference is lam_n for every member, so that expression is
+    % mu_2 - (lam_{n+1} - lam_n) for the second mode and turns negative as soon
+    % as the cluster has any spread.  That made pred_inc <= 0 -- and hence the
+    % ratio undefined -- on EVERY iteration with N >= 2, i.e. the ratio test
+    % switched itself off exactly when the multiple-eigenvalue path engaged.
     if is_gap
         obj_now  = lam(n) - lam(n-1);
         obj_new  = lam_t(n) - lam_t(n-1);
-        pred_inc = min(pred_dlam) - max(pred_dlam_lo);
+        pred_inc = (min(pred_up) - max(pred_lo)) - obj_now;
     else
         obj_now  = lam(n);
         obj_new  = lam_t(n);
-        pred_inc = min(pred_dlam);
+        pred_inc = min(pred_up) - obj_now;
     end
     act_inc = obj_new - obj_now;
-    if pred_inc > eps*max(1,abs(obj_now))
+
+    tiny = 1e-12 * max(1, abs(obj_now));
+    if pred_inc > tiny
         ratio = act_inc / pred_inc;
     else
-        ratio = NaN;             % nothing predicted: nothing to test
+        ratio = NaN;             % the model predicts no gain: ratio undefined
     end
 
-    fd_err = max(abs(sort(pred_dlam(:)) - sort(lam_t(cl_up) - lam(cl_up)))) ...
-             / max(abs(lam(n)), eps);
+    % FD audit: predicted vs realised cluster eigenvalues, both sorted.
+    fd_err = max(abs(pred_up(:) - lam_t(cl_up(:)))) / max(abs(lam(n)), eps);
 
     accepted = true;
-    if strcmpi(cfg.step_control, 'trust_region') && isfinite(ratio)
-        if ratio < cfg.tr_eta_lo
+    if strcmpi(cfg.step_control, 'trust_region')
+        if isnan(ratio)
+            % Undefined ratio must NOT mean "accept unconditionally" -- that is
+            % how an unmodelled step gets taken.  Fall back to the objective
+            % itself: keep the step only if it actually improved something.
+            if act_inc <= 0
+                accepted = false;
+                move_k   = max(cfg.move_min, cfg.tr_dec * move_k);
+            end
+        elseif ratio < cfg.tr_eta_lo
             accepted = false;
             move_k   = max(cfg.move_min, cfg.tr_dec * move_k);
         elseif ratio > cfg.tr_eta_hi && max(abs(drho)) >= 0.99*move_k
@@ -661,13 +679,16 @@ function s = def(s, f, v)
     if ~isfield(s, f) || isempty(s.(f)), s.(f) = v; end
 end
 
-function d = predict_dlam(blk, drho, lam_cl)
-% First-order predicted increments of a cluster, Eq. (12)/(19d), from the TRUE
-% (unfiltered) generalized gradients.
+function p = predict_cluster(blk, drho)
+% Predicted NEW eigenvalues of a cluster after the increment Delta_rho, i.e.
+% the eigenvalues of G = diag(L) + sum_e Delta_rho_e F_e, which is what the
+% sub-eigenvalue problem (12)/(19d) defines.  Built from the TRUE (unfiltered)
+% generalized gradients -- see build_block for why the filtered ones must not
+% be used for model-accuracy measurements.  Returned sorted ascending.
     Nb = numel(blk.L);
     F2 = reshape(blk.Fe_raw, numel(drho), Nb*Nb);
     G  = diag(blk.L(:)) + reshape(F2' * drho, Nb, Nb);
-    d  = sort(real(eig((G+G')/2))) - lam_cl(:);
+    p  = sort(real(eig((G+G')/2)));
 end
 
 function v0 = make_v0(nFree)

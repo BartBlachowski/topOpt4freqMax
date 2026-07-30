@@ -109,6 +109,33 @@ and a PASS/PARTIAL/FAIL verdict against the rule declared in the plan before the
 runs. Outputs (density, per-iteration history, plots, summary) land in
 `experiments/paper_examples/<case>/`.
 
+## Results
+
+See [REPORT.md](REPORT.md). Summary of the paper's §3.1 examples at 160×20:
+SS 148.78 vs 174.7 (−14.83 %, N = 2), CS 263.69 vs 288.7 (−8.66 %, N = 1),
+CC 411.77 vs 456.4 (−9.78 %, N = 2); all **PARTIAL** against the decision rule
+declared in the plan before the runs, all stopping at
+`trust_region_exhausted`. The Eq. (20) gap example is the closest: 834.68 vs
+810 (+3.05 %) at a coarse mesh in 60 iterations.
+
+**Do not quote the earlier figures** (SS 168.68 / CS 257.37 / CC 415.96): they
+were produced with the ratio-test defect described in REPORT.md §3.0, which
+disabled step control on every iteration with N ≥ 2. Correcting it made the
+multiplicity right and the frequencies worse, and exposed a premature
+`trust_region_exhausted` termination that is **not yet resolved**.
+
+Two findings that matter beyond this directory:
+
+* **A fixed move limit cannot both preserve the basin and converge.** At m ≥ 0.05
+  the SS beam exits its basin at iteration 12–13; at m ≤ 0.02 it is stable but
+  `‖Δρ‖∞` stays pinned at `m` forever, because an LP subproblem's optimum is
+  always a move-limit vertex. This explains the limit cycles every earlier
+  campaign reported. The solver uses a standard SLP trust region instead.
+* **A sensitivity filter makes a trust-region ratio test inconsistent** — it
+  floors at a constant (0.22 here) instead of → 1 as the step shrinks, because
+  filtered sensitivities are not a consistent gradient. The subproblem uses
+  filtered gradients; the ratio test and FD audit use unfiltered ones.
+
 ## Verified so far
 
 | test | result |

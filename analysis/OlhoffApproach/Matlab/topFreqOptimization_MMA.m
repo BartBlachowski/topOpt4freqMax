@@ -1,4 +1,5 @@
 function [omega_best, xPhys_best, diagnostics] = topFreqOptimization_MMA(cfg, varargin)
+solver_tic = tic;
 
 % ==============================================================
 % Frequency maximization via MMA (BOUND formulation)
@@ -218,6 +219,11 @@ end
 
 %% =================== OPT LOOP ================================
 iter_executed = 0;
+initialization_time = toc(solver_tic);
+stop_reason = 'max_iterations';
+final_max_density_change = NaN;
+final_rms_density_change = NaN;
+final_relative_objective_change = NaN;
 loop_tic = tic;
 for it = 1:maxiter
     iter_executed = it;
@@ -472,14 +478,19 @@ for it = 1:maxiter
     % convergence metrics
     if exist('x_prev','var')
         change_x = norm(x - x_prev)/sqrt(nEl);
+        change_x_max = max(abs(x - x_prev));
     else
         change_x = inf;
+        change_x_max = inf;
     end
     if exist('omega_prev','var')
         rel_change_obj = abs(omega_cur-omega_prev)/max(omega_prev,eps);
     else
         rel_change_obj = inf;
     end
+    final_max_density_change = change_x_max;
+    final_rms_density_change = change_x;
+    final_relative_objective_change = rel_change_obj;
     omega_hist = [omega_hist; omega_cur];
     dx_hist    = [dx_hist; change_x];
     if numel(omega_hist) > move_hist_len
@@ -517,11 +528,13 @@ for it = 1:maxiter
         polish_left = max(0, Npolish - (it - beta_interval*(numel(beta_list)-1)));
         if rel_change_obj < cfg.conv_tol && change_x < cfg.conv_tol && grayness < 0.05 && polish_left <= 0
             fprintf('Converged: rel dOmega=%.2e, dx=%.2e, gray=%.3f (polish satisfied)\n',rel_change_obj,change_x,grayness);
+            stop_reason = 'convergence_criteria';
             break;
         end
     else
         if rel_change_obj < cfg.conv_tol && change_x < cfg.conv_tol && grayness < 0.05
             fprintf('Converged early: rel dOmega=%.2e, dx=%.2e, gray=%.3f\n',rel_change_obj,change_x,grayness);
+            stop_reason = 'convergence_criteria';
             break;
         end
     end
@@ -557,6 +570,13 @@ end
 [lam_best,omega_vec_best,freq_vec_best] = evalModes(xPhys_best,opts.diagModes);
 omega_best = omega_vec_best(1);
 diagnostics.final = struct('lam',lam_best,'omega',omega_vec_best,'freq',freq_vec_best);
+diagnostics.stopping = struct( ...
+    'stop_reason', stop_reason, ...
+    'final_max_density_change', final_max_density_change, ...
+    'final_rms_density_change', final_rms_density_change, ...
+    'final_relative_objective_change', final_relative_objective_change, ...
+    'final_grayness', mean(4*xPhys_best.*(1-xPhys_best)), ...
+    'convergence_tolerance', cfg.conv_tol);
 omega2_best = NaN;
 if numel(omega_vec_best) >= 2, omega2_best = omega_vec_best(2); end
 plotTopology( ...
@@ -575,6 +595,12 @@ fprintf('Best design volume = %.4f (target %.4f)\n', mean(xPhys_best), volfrac);
 if abs(mean(xPhys_best)-volfrac) > 0.002
     warning('Volume constraint not tight: deviation %.4e', mean(xPhys_best)-volfrac);
 end
+solver_total_time = toc(solver_tic);
+diagnostics.timing = struct( ...
+    'initialization_time', initialization_time, ...
+    'loop_time', loop_time, ...
+    'postprocessing_time', max(0, solver_total_time-initialization_time-loop_time), ...
+    'total_time', solver_total_time);
 end
 
 

@@ -87,7 +87,12 @@ ok = ok && rel < 1e-9 && dd < 1e-7;
 
 %% ---------------------------------------------------------------- V-I6
 fprintf('\n V-I6  REQUIRED: unrestricted step is a box vertex that collapses omega_1\n');
+% step_control MUST be 'fixed' here: the point of the test is to TAKE the
+% unrestricted LP-vertex step.  Under the default trust region the ratio test
+% rejects it (which is the trust region working), rho never moves, and the test
+% would report no collapse while the vertex is still being produced.
 cfg = struct('support_type','CC','nelx',80,'nely',10,'move',Inf, ...
+             'step_control','fixed', ...
              'outer_max_iter',1,'verbose',false,'subproblem_solver','lp');
 [~, h] = topopt_freq_exact(cfg);
 w0 = h.omega(1,1);
@@ -100,7 +105,7 @@ fprintf('      (this MUST hold: it is the paper LP reduction of section 2.5)\n')
 ok = ok && good;
 
 %% ------------------------------------------ same step with the move limit
-fprintf('\n         control: identical setup with move = 0.05\n');
+fprintf('\n         control: identical setup with a fixed move limit of 0.05\n');
 cfg.move = 0.05;
 [~, h2] = topopt_freq_exact(cfg);
 fprintf('      omega_1: %.4f -> %.4f (%.1f %% of initial), fraction at a bound = %.4f\n', ...

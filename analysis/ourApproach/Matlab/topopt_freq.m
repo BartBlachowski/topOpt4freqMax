@@ -7,6 +7,7 @@
 % runCfg.load_cases is not provided.
 
 function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, penal, rmin, ft, L, H, varargin)
+    solver_tic = tic;
     xOut = [];
     fHz = NaN(3, 1);
     tIter = NaN;
@@ -373,8 +374,13 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
     % ------------------------------------------------------------------
     loop   = 0;
     change = 1;
+    rmsChange = NaN;
+    relativeObjectiveChange = NaN;
+    previousObjective = NaN;
+    objectiveHistory = NaN(maxIters, 1);
     dv = ones(nelx*nely, 1);
     dc = ones(nelx*nely, 1);
+    initialization_time = toc(solver_tic);
     loop_tic = tic;
 
     while change > convTol && loop < maxIters
@@ -590,6 +596,12 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
         % Current volume and change
         vol    = mean(xPhys);
         change = max(abs(x - xold));
+        rmsChange = sqrt(mean((x - xold).^2));
+        if isfinite(previousObjective)
+            relativeObjectiveChange = abs(obj - previousObjective) / max(abs(previousObjective), eps);
+        end
+        previousObjective = obj;
+        objectiveHistory(loop) = obj;
 
         localLogLoadCaseDiagnostics(debugLoadCases, loop, loadCases, caseDiag);
 
@@ -630,6 +642,7 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
     info.last_F = F;
     info.last_U = U;
     info.last_obj = obj;
+    info.objective_history = objectiveHistory(1:loop);
     info.last_obj_cases = objCases;
     info.load_case_names = {loadCases.name};
     info.last_vol = mean(xPhys);
@@ -678,6 +691,24 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
         xPhys, nelx, nely, ...
         formatTopologyTitle(approachName, volfrac, omega1_final, omega2_final), ...
         visualizeLive, visualizationQuality, true);
+    if change <= convTol
+        stopReason = 'density_change_tolerance';
+    else
+        stopReason = 'max_iterations';
+    end
+    solver_total_time = toc(solver_tic);
+    info.timing = struct( ...
+        'initialization_time', initialization_time, ...
+        'loop_time', loop_time, ...
+        'postprocessing_time', max(0, solver_total_time-initialization_time-loop_time), ...
+        'total_time', solver_total_time);
+    info.stopping = struct( ...
+        'stop_reason', stopReason, ...
+        'final_max_density_change', change, ...
+        'final_rms_density_change', rmsChange, ...
+        'final_relative_objective_change', relativeObjectiveChange, ...
+        'final_grayness', mean(4*xPhys.*(1-xPhys)), ...
+        'convergence_tolerance', convTol);
 
     xOut = xPhys(:);
 end

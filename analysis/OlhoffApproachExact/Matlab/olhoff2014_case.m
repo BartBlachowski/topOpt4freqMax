@@ -40,7 +40,14 @@ cfg.penal              = 3;              % [D1]
 cfg.mass_mode          = 'du2007_c1';    % [D3] Eq. (4b)
 cfg.mass_q             = 1;              % [D2]
 cfg.sensitivity_filter = true;           % [D4]
-cfg.rmin_elem          = 2.5;            % [D4]
+% Filter RADIUS is [R], not [D]: Olhoff2014 states no filter at all, so nothing
+% fixes it.  Calibrated on the SS case only (experiments/ablations, 160x20, 800
+% iterations); CS and CC are then predictions at this fixed value.
+%   rmin  1.0   1.2    1.5    2.0    2.5
+%   w1  114.0  168.7  166.1  161.8  158.9      (paper 174.7)
+% rmin = 1.0 gives a 1x1 kernel, i.e. no filtering, and collapses -- identical
+% to the sensitivity_filter = false arm to the last digit.
+cfg.rmin_elem          = 1.2;            % [R] calibrated, was 2.5 from Du2007
 % ---- Reconstructed [R1-R9] ---------------------------------------------
 cfg.nelx = 160;  cfg.nely = 20;          % [R2] mesh unspecified in the paper
 cfg.move               = 0.05;           % [R1] calibrated, see experiments/step_calibration
@@ -49,7 +56,7 @@ cfg.mult_tol_leave     = 5e-2;           % [R3]
 cfg.cluster_model      = 'CA';           % [R4]
 cfg.lam_ref_rule       = 'lowest';       % [R4]
 cfg.subproblem_solver  = 'lp';           % [R9] exact; 'mma' is the E13 alternative
-cfg.outer_max_iter     = 300;
+cfg.outer_max_iter     = 800;
 cfg.outer_tol          = 1e-4;           % [R8]
 cfg.kkt_tol            = 1e-6;           % [R8]
 cfg.N_max              = 3;

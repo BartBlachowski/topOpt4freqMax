@@ -1,4 +1,5 @@
 function [xPhys_stage2,U_stage2,info] = top99neo_inertial_freq(nelx,nely,volfrac,penal,rmin,ft,ftBC,eta,beta,move,maxit,stage1_maxit,bcType,nHistModes,runCfg)
+solver_tic = tic;
 %TOP99NEO_INERTIAL_FREQ  Fast surrogate frequency maximization via design-dependent inertial loads.
 %
 % Implements the two-stage method from Yuksel & Yilmaz (2025):
@@ -194,6 +195,7 @@ info.stage1.loadDof = lcDof;
 
 %% ================================ STAGE 1: standard compliance minimization
 [xPhys,U] = deal(x, zeros(nDof,1));
+initialization_time = toc(solver_tic);
 [xPhys,U,eta,penal,beta,info.stage1] = localComplianceLoop( ...
     x, xPhys, U, F_point, fixed, free, act, ...
     nelx, nely, nEl, nDof, cMat, Iar, Ke, Ke0, ...
@@ -261,6 +263,21 @@ info.timing.stage2_iterations = localOpt(info.stage2, 'iterations', NaN);
 info.timing.total_loop_time = info.timing.stage1_loop_time + info.timing.stage2_loop_time;
 info.timing.total_iterations = info.timing.stage1_iterations + info.timing.stage2_iterations;
 info.timing.t_iter = info.timing.total_loop_time / max(info.timing.total_iterations, 1);
+info.timing.initialization_time = initialization_time;
+solver_total_time = toc(solver_tic);
+info.timing.postprocessing_time = max(0, solver_total_time - ...
+    info.timing.initialization_time - info.timing.total_loop_time);
+info.timing.total_time = solver_total_time;
+info.stopping = struct( ...
+    'stop_reason', localOpt(info.stage2, 'stop_reason', 'N/A'), ...
+    'stage1_stop_reason', localOpt(info.stage1, 'stop_reason', 'N/A'), ...
+    'stage2_stop_reason', localOpt(info.stage2, 'stop_reason', 'N/A'), ...
+    'final_max_density_change', localLast(info.stage2.ch), ...
+    'final_rms_density_change', localLast(info.stage2.rms_ch), ...
+    'final_relative_objective_change', localRelativeLast(info.stage2.c), ...
+    'final_grayness', mean(4*xPhys_stage2.*(1-xPhys_stage2)), ...
+    'convergence_tolerance', stage2Tol, ...
+    'stage1_tolerance', stage1Tol);
 
 end
 
@@ -419,6 +436,7 @@ cnt  = @(v,vCnt,l) v+(l>=vCnt{1})*(v<vCnt{2})*(mod(l,vCnt{3})==0)*vCnt{4};
 
 loop = 0;
 loop_tic = tic;
+stageInfo.rms_ch = [];
 auditCollect = isfield(stageInfo, 'audit_collect') && stageInfo.audit_collect;
 auditSnapshotEvery = localOpt(stageInfo, 'audit_snapshot_every', 10);
 while loop < maxit
@@ -471,6 +489,7 @@ while loop < maxit
     % ---- OC update (robust bisection bracket + finite guards)
     xOldAudit = x;
     [x, ch, lambdaOC] = localOcUpdate(x, act, dc, dV0, move, mean(xPhys));
+    rmsCh = sqrt(mean((x - xOldAudit).^2));
 
     penalLog = penal;
     [penal,beta] = deal(cnt(penal,penalCnt,loop), cnt(beta,betaCnt,loop));
@@ -479,6 +498,7 @@ while loop < maxit
     stageInfo.c(end+1,1)  = cVal;
     stageInfo.v(end+1,1)  = mean(xPhys);
     stageInfo.ch(end+1,1) = ch;
+    stageInfo.rms_ch(end+1,1) = rmsCh;
     if auditCollect
         [stageInfo, ~] = localRecordAuditStep( ...
             stageInfo, loop, xOldAudit, x, xPhys, act, dc, dV0, ...
@@ -506,6 +526,11 @@ end
 stageInfo.iterations = loop;
 stageInfo.loop_time = toc(loop_tic);
 stageInfo.t_iter = stageInfo.loop_time / max(loop, 1);
+if loop > 1 && ch < tolX
+    stageInfo.stop_reason = 'density_change_tolerance';
+else
+    stageInfo.stop_reason = 'max_iterations';
+end
 if saveFrqIterations && isfield(stageInfo, 'freq_iter_omega') && ~isempty(stageInfo.freq_iter_omega)
     stageInfo.freq_iter_omega = stageInfo.freq_iter_omega(1:loop,:);
 end
@@ -532,6 +557,7 @@ cnt  = @(v,vCnt,l) v+(l>=vCnt{1})*(v<vCnt{2})*(mod(l,vCnt{3})==0)*vCnt{4};
 tolX = stage2Tol;
 loop = 0; U = U_est;
 loop_tic = tic;
+stageInfo.rms_ch = [];
 auditCollect = isfield(stageInfo, 'audit_collect') && stageInfo.audit_collect;
 auditSnapshotEvery = localOpt(stageInfo, 'audit_snapshot_every', 10);
 auditFreezeMode = isfield(stageInfo, 'audit_freeze_mode') && stageInfo.audit_freeze_mode;
@@ -635,6 +661,7 @@ while loop < maxit
     % ---- OC update (robust bisection bracket + finite guards)
     xOldAudit = x;
     [x, ch, lambdaOC] = localOcUpdate(x, act, dc, dV0, move, mean(xPhys));
+    rmsCh = sqrt(mean((x - xOldAudit).^2));
 
     penalLog = penal;
     [penal,beta] = deal(cnt(penal,penalCnt,loop), cnt(beta,betaCnt,loop));
@@ -643,6 +670,7 @@ while loop < maxit
     stageInfo.c(end+1,1)  = cVal;
     stageInfo.v(end+1,1)  = mean(xPhys);
     stageInfo.ch(end+1,1) = ch;
+    stageInfo.rms_ch(end+1,1) = rmsCh;
     if auditCollect
         [stageInfo, ~] = localRecordAuditStep( ...
             stageInfo, loop, xOldAudit, x, xPhys, act, dc, dV0, ...
@@ -670,6 +698,11 @@ end
 stageInfo.iterations = loop;
 stageInfo.loop_time = toc(loop_tic);
 stageInfo.t_iter = stageInfo.loop_time / max(loop, 1);
+if loop > 1 && ch < tolX
+    stageInfo.stop_reason = 'density_change_tolerance';
+else
+    stageInfo.stop_reason = 'max_iterations';
+end
 if saveFrqIterations && isfield(stageInfo, 'freq_iter_omega') && ~isempty(stageInfo.freq_iter_omega)
     stageInfo.freq_iter_omega = stageInfo.freq_iter_omega(1:loop,:);
 end
@@ -879,6 +912,22 @@ if isstruct(s) && isfield(s, name) && ~isempty(s.(name))
     v = s.(name);
 else
     v = defaultVal;
+end
+end
+
+function v = localLast(values)
+if isempty(values)
+    v = NaN;
+else
+    v = values(end);
+end
+end
+
+function v = localRelativeLast(values)
+if numel(values) < 2
+    v = NaN;
+else
+    v = abs(values(end) - values(end-1)) / max(abs(values(end-1)), eps);
 end
 end
 

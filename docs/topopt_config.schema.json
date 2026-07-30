@@ -9,6 +9,18 @@
 
   "properties": {
 
+    "benchmark": {
+      "type": "object",
+      "description": "Benchmark-only instrumentation controls; these do not alter the optimization algorithm.",
+      "additionalProperties": false,
+      "properties": {
+        "enable_diagnostics": {
+          "type": "boolean",
+          "description": "Enable development diagnostics during benchmark runs. Set false for performance measurements."
+        }
+      }
+    },
+
     "meta": {
       "type": "object",
       "description": "Human-readable metadata; not used by the solver.",
