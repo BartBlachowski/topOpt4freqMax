@@ -1,4 +1,4 @@
-function print_table1_paper_style(resolutions, groupLabels, tIter_all, nIter_all, tTotal_all, texPath)
+function print_table1_paper_style(resolutions, groupLabels, tIter_all, nIter_all, tTotal_all, texPath, nIterStage1_all, nIterStage2_all)
 % PRINT_TABLE1_PAPER_STYLE  Print the run-time comparison table with mesh
 % resolutions as rows and one column GROUP per method (each group holding
 % t_iter, n_iter, T (s) sub-columns), matching the paper's Table 1 layout:
@@ -7,7 +7,8 @@ function print_table1_paper_style(resolutions, groupLabels, tIter_all, nIter_all
 %   Mesh     t_iter n_iter T(s)   t_iter n_iter T(s)   t_iter n_iter T(s)
 %
 %   print_table1_paper_style(resolutions, groupLabels, tIter_all, ...
-%                             nIter_all, tTotal_all, texPath)
+%                             nIter_all, tTotal_all, texPath, ...
+%                             nIterStage1_all, nIterStage2_all)
 %
 % resolutions : [nRes x 2] (nelx, nely) per row
 % groupLabels : {1 x nMethods} method group names, e.g.
@@ -18,11 +19,37 @@ function print_table1_paper_style(resolutions, groupLabels, tIter_all, nIter_all
 % nIter_all   : [nRes x nMethods] number of iterations
 % tTotal_all  : [nRes x nMethods] total run time (s)
 % texPath     : (optional) if given, also write a booktabs LaTeX table there
+% nIterStage1_all, nIterStage2_all : (optional) [nRes x nMethods] two-stage
+%               iteration split (Yuksel). Where both are finite the n_iter
+%               cell is printed as "n_total (n_stage1 + n_stage2)"; NaN
+%               entries fall back to the plain total.
 
 nRes     = size(resolutions, 1);
 nGroups  = numel(groupLabels);
 
-colW = [8, 8, 9];      % widths for t_iter, n_iter, T (s)
+if nargin < 7 || isempty(nIterStage1_all)
+    nIterStage1_all = NaN(nRes, nGroups);
+end
+if nargin < 8 || isempty(nIterStage2_all)
+    nIterStage2_all = NaN(nRes, nGroups);
+end
+
+nIterStr_all = cell(nRes, nGroups);
+for r = 1:nRes
+    for g = 1:nGroups
+        if isnan(tTotal_all(r,g))
+            nIterStr_all{r,g} = 'N/A';
+        else
+            nIterStr_all{r,g} = formatIterCount(nIter_all(r,g), ...
+                nIterStage1_all(r,g), nIterStage2_all(r,g));
+        end
+    end
+end
+
+% The stage split widens the n_iter column; size it to the widest cell.
+nIterW = max([8, cellfun(@length, nIterStr_all(:))']);
+
+colW = [8, nIterW, 9];      % widths for t_iter, n_iter, T (s)
 gap  = '  ';
 groupGap = '   ';
 groupWidth = sum(colW) + 2*length(gap);
@@ -68,7 +95,7 @@ for r = 1:nRes
         else
             rowStr = [rowStr, groupGap, formatTriple( ...
                 sprintf('%.2f', tIter_all(r,g)), ...
-                sprintf('%d',   nIter_all(r,g)), ...
+                nIterStr_all{r,g}, ...
                 sprintf('%.1f', tTotal_all(r,g)), colW, gap)]; %#ok<AGROW>
         end
     end
@@ -78,8 +105,26 @@ fprintf('%s\n', fullSep);
 fprintf('\n');
 
 if nargin >= 6 && ~isempty(texPath)
-    writeLatexTable(texPath, resolutions, groupLabels, tIter_all, nIter_all, tTotal_all);
+    writeLatexTable(texPath, resolutions, groupLabels, tIter_all, nIterStr_all, tTotal_all);
     fprintf('Paper-style LaTeX table saved to: %s\n', texPath);
+end
+end
+
+function s = formatIterCount(nTotal, nStage1, nStage2)
+% Two-stage methods report "total (stage1 + stage2)"; single-stage methods
+% keep the bare total.
+if isnan(nTotal)
+    s = 'N/A';
+elseif isnan(nStage1) || isnan(nStage2)
+    s = sprintf('%d', nTotal);
+else
+    % A truncated stage 1 silently inflates stage 2 while leaving the total
+    % plausible, so the decomposition is asserted wherever it is printed.
+    assert(nStage1 + nStage2 == nTotal, ...
+        'print_table1_paper_style:StageSumMismatch', ...
+        'Stage 1 + Stage 2 (%d + %d = %d) must equal the total (%d).', ...
+        nStage1, nStage2, nStage1 + nStage2, nTotal);
+    s = sprintf('%d (%d + %d)', nTotal, nStage1, nStage2);
 end
 end
 
@@ -99,7 +144,7 @@ function s = formatTriple(a, b, c, colW, gap)
 s = sprintf('%*s%s%*s%s%*s', colW(1), a, gap, colW(2), b, gap, colW(3), c);
 end
 
-function writeLatexTable(texPath, resolutions, groupLabels, tIter_all, nIter_all, tTotal_all)
+function writeLatexTable(texPath, resolutions, groupLabels, tIter_all, nIterStr_all, tTotal_all)
 nRes    = size(resolutions, 1);
 nGroups = numel(groupLabels);
 
@@ -138,8 +183,8 @@ for r = 1:nRes
         if isnan(tTotal_all(r,g))
             rowStr = [rowStr, ' & N/A & N/A & N/A']; %#ok<AGROW>
         else
-            rowStr = [rowStr, sprintf(' & %.2f & %d & %.1f', ...
-                tIter_all(r,g), nIter_all(r,g), tTotal_all(r,g))]; %#ok<AGROW>
+            rowStr = [rowStr, sprintf(' & %.2f & %s & %.1f', ...
+                tIter_all(r,g), nIterStr_all{r,g}, tTotal_all(r,g))]; %#ok<AGROW>
         end
     end
     fprintf(fid, '%s \\\\\n', rowStr);

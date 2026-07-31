@@ -87,7 +87,7 @@
     "max_iters": 10000,
     "convergence_tol": 3e-3,
     "yuksel": {
-      "stage1_max_iters": 200,
+      "stage1_max_iters": 10000,
       "stage1_tol": 1e-2,
       "stage2_tol": 3e-3
     },

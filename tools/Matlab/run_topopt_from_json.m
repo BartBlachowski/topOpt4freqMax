@@ -330,7 +330,16 @@ function [x, omega, tIter, nIter, mem_usage, nIterStage, telemetry] = run_topopt
 
             eta = 0.5;
             beta = 1.0;
-            stage1MaxIter = min(maxiter, 200);
+            % Stage 1 runs to its own native convergence test (max element
+            % density change < stage1_tol).  maxiter is a safety budget only.
+            %
+            % The former default here was min(maxiter, 200).  That 200 does not
+            % belong to this method: Yuksel & Yilmaz (2025) p. 3206 applies a
+            % 200-iteration limit to the DYNAMIC comparison code, while the
+            % proposed method's static stages terminate on the 0.01
+            % max-density-change test of p. 3204 with no stated iteration limit.
+            % Capping stage 1 at 200 truncated it and inflated stage 2.
+            stage1MaxIter = maxiter;
             if hasFieldPath(cfg, {'optimization','yuksel','stage1_max_iters'})
                 stage1MaxIter = reqInt(cfg, {'optimization','yuksel','stage1_max_iters'}, ...
                     'optimization.yuksel.stage1_max_iters');
