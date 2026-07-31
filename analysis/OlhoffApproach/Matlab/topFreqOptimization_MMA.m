@@ -277,6 +277,7 @@ for it = 1:maxiter
 
     % --- eigensolve: use consistent lowest modes for objective + constraints
     optsSM.tol = 1e-8; optsSM.maxit = 400; optsSM.disp = 0;
+    optsSM.v0 = localDeterministicEigsStartVector(size(Kf,1));
     [V_low,D_low,flag_eigs] = eigs(Kf,Mf,J,'SM',optsSM);
     [lam_sorted, idx_sort] = sort(real(diag(D_low)));
     V_low = V_low(:,idx_sort);
@@ -706,6 +707,18 @@ function [cfg, legacyOpts] = legacyArgsToCfg(L,H,nelx,nely,volfrac,penal,rmin,ma
     end
 end
 
+function v0 = localDeterministicEigsStartVector(n)
+% Fixed start vector for EIGS.  Without one, EIGS draws its start vector from
+% the global random stream, so the eigenpairs -- and therefore the entire
+% design trajectory -- depend on stream state and on the order in which runs
+% execute within a session.  The performance benchmark requires bit-identical
+% repetition (examples/Performance/PLAN_two_table_redesign.md, section 6.1),
+% so draw the vector from a private stream and leave the global stream alone.
+    s  = RandStream('twister', 'Seed', 42);
+    v0 = randn(s, n, 1);
+    v0 = v0 / norm(v0);
+end
+
 function localEnsurePlotHelpersOnPath()
     if exist('plotTopology', 'file') == 2 && exist('formatTopologyTitle', 'file') == 2
         return;
@@ -902,7 +915,8 @@ function [lam,omega,freq] = evalEigen(xPhys, numModes, penal, E0, Emin, rho0, rh
     K = K+K'-diag(diag(K));
     M = M+M'-diag(diag(M));
     Kf = K(free,free); Mf = M(free,free);
-    [V,D] = eigs(Kf,Mf,numModes,'SM');
+    optsEig = struct('disp', 0, 'v0', localDeterministicEigsStartVector(size(Kf,1)));
+    [V,D] = eigs(Kf,Mf,numModes,'SM',optsEig);
     lam = sort(real(diag(D)));
     omega = sqrt(lam);
     freq = omega/(2*pi);

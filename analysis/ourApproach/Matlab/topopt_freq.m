@@ -253,7 +253,8 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
         M0f = M0(free, free);
         clear K0 sK0 M0 sM0 rhoPhys0;
 
-        [Phi_free, Lam] = eigs(K0f, M0f, 2, 'smallestabs');
+        baseEigOpts = struct('v0', localDeterministicEigsStartVector(size(K0f,1)));
+        [Phi_free, Lam] = eigs(K0f, M0f, 2, 'smallestabs', baseEigOpts);
         lam_vals = diag(Lam);
         [lam1, idx] = min(lam_vals);
         omegaLegacy = sqrt(max(lam1, 0));
@@ -667,7 +668,8 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
     Mf_final = M_final(free, free);
     clear K_final sK_final M_final sM_final rhoPhys_final;
     nReq = min(3, max(1, size(Kf_final, 1) - 1));
-    [~, Lam_final] = eigs(Kf_final, Mf_final, nReq, 'smallestabs');
+    finalEigOpts = struct('v0', localDeterministicEigsStartVector(size(Kf_final,1)));
+    [~, Lam_final] = eigs(Kf_final, Mf_final, nReq, 'smallestabs', finalEigOpts);
     lam_vals = sort(real(diag(Lam_final)), 'ascend');
     lam_vals = lam_vals(lam_vals > 0);
     fHz = NaN(3,1);
@@ -790,11 +792,12 @@ if nReq < 1
     return;
 end
 
+v0 = localDeterministicEigsStartVector(size(Kf,1));
 try
-    eigOpts = struct('disp', 0, 'maxit', 800, 'tol', 1e-8);
+    eigOpts = struct('disp', 0, 'maxit', 800, 'tol', 1e-8, 'v0', v0);
     [V, D] = eigs(Kf, Mf, nReq, 'smallestabs', eigOpts);
 catch
-    [V, D] = eigs(Kf, Mf, nReq, 'smallestabs');
+    [V, D] = eigs(Kf, Mf, nReq, 'smallestabs', struct('v0', v0));
 end
 
 lamVals = real(diag(D));
@@ -1109,7 +1112,8 @@ function omegas = localFirstNOmegasFromSubmatrices(Kf, Mf, nModes)
         return;
     end
     try
-        eigOpts = struct('disp', 0, 'maxit', 800, 'tol', 1e-8);
+        eigOpts = struct('disp', 0, 'maxit', 800, 'tol', 1e-8, ...
+            'v0', localDeterministicEigsStartVector(size(Kf,1)));
         Lam = eigs(Kf, Mf, nReq, 'smallestabs', eigOpts);
         lamVals = sort(real(diag(Lam)), 'ascend');
         lamVals = lamVals(lamVals > 0);
@@ -1565,6 +1569,18 @@ if isstruct(s) && isfield(s, name) && ~isempty(s.(name))
 else
     v = defaultVal;
 end
+end
+
+function v0 = localDeterministicEigsStartVector(n)
+% Fixed start vector for EIGS.  Without one, EIGS draws its start vector from
+% the global random stream, so the eigenpairs -- and therefore the entire
+% design trajectory -- depend on stream state and on the order in which runs
+% execute within a session.  The performance benchmark requires bit-identical
+% repetition (examples/Performance/PLAN_two_table_redesign.md, section 6.1),
+% so draw the vector from a private stream and leave the global stream alone.
+s  = RandStream('twister', 'Seed', 42);
+v0 = randn(s, n, 1);
+v0 = v0 / norm(v0);
 end
 
 function localEnsurePlotHelpersOnPath()

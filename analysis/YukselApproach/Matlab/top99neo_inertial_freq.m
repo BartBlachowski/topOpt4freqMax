@@ -392,7 +392,8 @@ try
     M = M + M' - spdiags(diag(M), 0, nDof, nDof);
 
     free = setdiff(1:nDof, fixed);
-    eigOpts = struct('disp', 0, 'maxit', 1000);
+    eigOpts = struct('disp', 0, 'maxit', 1000, ...
+        'v0', localDeterministicEigsStartVector(numel(free)));
     [phi, ~] = eigs(K(free,free), M(free,free), 1, 'sm', eigOpts);
     U = zeros(nDof,1);
     U(free) = real(phi(:,1));
@@ -894,7 +895,8 @@ try
     Mff = M(free, free);
     nReq = min(nModes, max(1, size(Kff,1)-1));
 
-    eigOpts = struct('disp', 0, 'maxit', 1000);
+    eigOpts = struct('disp', 0, 'maxit', 1000, ...
+        'v0', localDeterministicEigsStartVector(size(Kff,1)));
     lam = eigs(Kff, Mff, nReq, 'sm', eigOpts);
     lam = sort(real(diag(lam)), 'ascend');
     lam = lam(lam > 0);
@@ -929,6 +931,18 @@ if numel(values) < 2
 else
     v = abs(values(end) - values(end-1)) / max(abs(values(end-1)), eps);
 end
+end
+
+function v0 = localDeterministicEigsStartVector(n)
+% Fixed start vector for EIGS.  Without one, EIGS draws its start vector from
+% the global random stream, so the eigenpairs -- and therefore the entire
+% design trajectory -- depend on stream state and on the order in which runs
+% execute within a session.  The performance benchmark requires bit-identical
+% repetition (examples/Performance/PLAN_two_table_redesign.md, section 6.1),
+% so draw the vector from a private stream and leave the global stream alone.
+s  = RandStream('twister', 'Seed', 42);
+v0 = randn(s, n, 1);
+v0 = v0 / norm(v0);
 end
 
 function localEnsurePlotHelpersOnPath()
