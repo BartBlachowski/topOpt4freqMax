@@ -256,7 +256,8 @@ fprintf(['Iteration definitions: iter_total = all optimization iterations; iter_
 % -------------------------------------------------------------------------
 groupLabels = {'Olhoff--Du', 'Yuksel--Yilmaz', 'Proposed'};
 paperTexPath = fullfile(fileparts(mfilename('fullpath')), 'table1_paper_style.tex');
-print_table1_paper_style(resolutions, groupLabels, tIter_all, nIter_all, tTotal_all, paperTexPath);
+print_table1_paper_style(resolutions, groupLabels, tIter_all, nIter_all, tTotal_all, ...
+    paperTexPath, nIterStage1_all, nIterStage2_all);
 
 % -------------------------------------------------------------------------
 % Stopping diagnostics and explicit benchmark convergence parameters

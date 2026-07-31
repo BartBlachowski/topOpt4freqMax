@@ -25,6 +25,8 @@ end
 tIter_all  = NaN(nRes, nMethods);
 nIter_all  = NaN(nRes, nMethods);
 tTotal_all = NaN(nRes, nMethods);
+nIterStage1_all = NaN(nRes, nMethods);
+nIterStage2_all = NaN(nRes, nMethods);
 for r = 1:nRes
     for m = 1:nMethods
         mask = strcmp(T.Method, methods{m}) & strcmp(T.Mesh, meshes{r});
@@ -32,6 +34,8 @@ for r = 1:nRes
             tTotal_all(r, m) = T.RunTime_s(mask);
             tIter_all(r, m)  = T.RunTimePerIter_s(mask);
             nIter_all(r, m)  = T.Iterations(mask);
+            nIterStage1_all(r, m) = T.IterStage1(mask);
+            nIterStage2_all(r, m) = T.IterStage2(mask);
         end
     end
 end
@@ -44,7 +48,8 @@ groupLabels  = {'Olhoff--Du', 'Yuksel--Yilmaz', 'Proposed'};
 % Table 1 (paper style)
 % -------------------------------------------------------------------------
 paperTexPath = fullfile(thisDir, 'table1_paper_style.tex');
-print_table1_paper_style(resolutions, groupLabels, tIter_all, nIter_all, tTotal_all, paperTexPath);
+print_table1_paper_style(resolutions, groupLabels, tIter_all, nIter_all, tTotal_all, ...
+    paperTexPath, nIterStage1_all, nIterStage2_all);
 
 % -------------------------------------------------------------------------
 % Table 2: free fit -- both C and exp estimated by least squares.
