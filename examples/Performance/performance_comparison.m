@@ -84,7 +84,9 @@ finalRmsChange_all = NaN(nRes, nMethods);
 finalRelObjectiveChange_all = NaN(nRes, nMethods);
 finalGrayness_all = NaN(nRes, nMethods);
 convergenceTolerance_all = NaN(nRes, nMethods);
-runRecords = struct([]);
+runRecords = struct('method', {}, 'method_label', {}, 'mesh', {}, 'sample', {}, ...
+    'iterations', {}, 'timing', {}, 'stopping', {}, 'configuration', {}, ...
+    'results', {}, 'max_ram_mb', {});
 runRecordIndex = 0;
 
 % -------------------------------------------------------------------------
