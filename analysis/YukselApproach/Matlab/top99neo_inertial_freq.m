@@ -193,6 +193,25 @@ if saveFrqIterations
 end
 info.stage1.loadDof = lcDof;
 
+% Opt-in iteration history (plan section 5).  Seeded here rather than inside
+% the loops so both stages share one schema; each loop records into the
+% recorder it finds on its stageInfo.
+recordHistory = logical(localOpt(runCfg, 'record_history', false));
+if recordHistory
+    histMeta = struct( ...
+        'method', 'Yuksel', ...
+        'objective_definition', ['compliance F''U of the current stage; ' ...
+            'MINIMIZED. Stage 1 uses the unit point load, stage 2 the ' ...
+            'design-dependent inertial load, so the two stages do not share ' ...
+            'a common objective scale.'], ...
+        'objective_sign', -1, ...
+        'volfrac', volfrac);
+    histMeta.stage = 1;
+    info.stage1.history = topopt_history_init(stage1_maxit, histMeta);
+    histMeta.stage = 2;
+    info.stage2.history = topopt_history_init(maxit, histMeta);
+end
+
 %% ================================ STAGE 1: standard compliance minimization
 [xPhys,U] = deal(x, zeros(nDof,1));
 initialization_time = toc(solver_tic);
@@ -216,6 +235,9 @@ U_est = U;
 %% ================================ STAGE 2: inertial-load compliance loop
 % Reset continuation counters if desired (paper keeps p=3 constant in static parts; here we keep user input)
 [xPhys_stage2,U_stage2] = deal(xPhys, U);
+if recordHistory
+    info.stage2.history_xphys_prev = xPhys;
+end
 
 [xPhys_stage2,U_stage2,eta,penal,beta,info.stage2] = localInertialLoop( ...
     x, xPhys_stage2, U_est, fixed, free, act, ...
@@ -231,6 +253,16 @@ info.stage2.omegaFinal = localFirstNOmegas( ...
     xPhys_stage2, free, nEl, nDof, Iar, Ke, Me0, E0, Emin, penal, ...
     rho0, rho_min, dMass, xMassCut, tipMassDofs, tipMassVal, finalModes);
 info.stage2.omega1 = info.stage2.omegaFinal(1);
+if recordHistory
+    % Join the stages into one globally numbered history and mark the handoff.
+    % This method has no active continuation -- penalCnt and betaCnt both gate
+    % on v < 1 while penal = 3 and beta = 1 -- so the handoff is its only
+    % transition and therefore its k_cont.
+    info.history = topopt_history_concat(info.stage1.history, info.stage2.history);
+    info.history = topopt_history_mark(info.history, info.stage1.iterations, ...
+        'stage', 'stage 1 -> stage 2 (inertial load)');
+    info.history.k_cont = info.stage1.iterations;
+end
 if nHistModes > 0
     info.stage1.omegaHist = localModeHistory( ...
         info.stage1.xHist, free, nEl, nDof, Iar, Ke, Me0, E0, Emin, penal, ...
@@ -437,6 +469,9 @@ cnt  = @(v,vCnt,l) v+(l>=vCnt{1})*(v<vCnt{2})*(mod(l,vCnt{3})==0)*vCnt{4};
 
 loop = 0;
 loop_tic = tic;
+histStage = 1;
+recordHistory = isfield(stageInfo, 'history') && ~isempty(stageInfo.history);
+xPhysPrevHist = [];
 stageInfo.rms_ch = [];
 auditCollect = isfield(stageInfo, 'audit_collect') && stageInfo.audit_collect;
 auditSnapshotEvery = localOpt(stageInfo, 'audit_snapshot_every', 10);
@@ -500,6 +535,19 @@ while loop < maxit
     stageInfo.v(end+1,1)  = mean(xPhys);
     stageInfo.ch(end+1,1) = ch;
     stageInfo.rms_ch(end+1,1) = rmsCh;
+    if recordHistory
+        % omega1 stays NaN: this method eigensolves only at the end, and
+        % plan section 5 forbids adding a solve merely to fill a column.
+        histRec = struct('iter', loop, 'stage', histStage, 'stage_iter', loop, ...
+            'xPhys', xPhys, 'volfrac', volfrac, ...
+            'objective', cVal, 'elapsed_s', toc(loop_tic), ...
+            'x', x, 'xOld', xOldAudit, 'move_limit', move);
+        if ~isempty(xPhysPrevHist)
+            histRec.xPhysPrev = xPhysPrevHist;
+        end
+        stageInfo.history = topopt_history_record(stageInfo.history, histRec);
+        xPhysPrevHist = xPhys;
+    end
     if auditCollect
         [stageInfo, ~] = localRecordAuditStep( ...
             stageInfo, loop, xOldAudit, x, xPhys, act, dc, dV0, ...
@@ -532,6 +580,9 @@ if loop > 1 && ch < tolX
 else
     stageInfo.stop_reason = 'max_iterations';
 end
+if recordHistory
+    stageInfo.history = topopt_history_finish(stageInfo.history);
+end
 if saveFrqIterations && isfield(stageInfo, 'freq_iter_omega') && ~isempty(stageInfo.freq_iter_omega)
     stageInfo.freq_iter_omega = stageInfo.freq_iter_omega(1:loop,:);
 end
@@ -558,6 +609,15 @@ cnt  = @(v,vCnt,l) v+(l>=vCnt{1})*(v<vCnt{2})*(mod(l,vCnt{3})==0)*vCnt{4};
 tolX = stage2Tol;
 loop = 0; U = U_est;
 loop_tic = tic;
+histStage = 2;
+recordHistory = isfield(stageInfo, 'history') && ~isempty(stageInfo.history);
+% Seed with stage 1's final field so the first stage-2 increment is defined.
+% Without it the concatenated history carries a NaN d_inf at the handoff, which
+% a persistence-window acceptance test would have to special-case.
+xPhysPrevHist = [];
+if isfield(stageInfo, 'history_xphys_prev')
+    xPhysPrevHist = stageInfo.history_xphys_prev;
+end
 stageInfo.rms_ch = [];
 auditCollect = isfield(stageInfo, 'audit_collect') && stageInfo.audit_collect;
 auditSnapshotEvery = localOpt(stageInfo, 'audit_snapshot_every', 10);
@@ -672,6 +732,19 @@ while loop < maxit
     stageInfo.v(end+1,1)  = mean(xPhys);
     stageInfo.ch(end+1,1) = ch;
     stageInfo.rms_ch(end+1,1) = rmsCh;
+    if recordHistory
+        % omega1 stays NaN: this method eigensolves only at the end, and
+        % plan section 5 forbids adding a solve merely to fill a column.
+        histRec = struct('iter', loop, 'stage', histStage, 'stage_iter', loop, ...
+            'xPhys', xPhys, 'volfrac', volfrac, ...
+            'objective', cVal, 'elapsed_s', toc(loop_tic), ...
+            'x', x, 'xOld', xOldAudit, 'move_limit', move);
+        if ~isempty(xPhysPrevHist)
+            histRec.xPhysPrev = xPhysPrevHist;
+        end
+        stageInfo.history = topopt_history_record(stageInfo.history, histRec);
+        xPhysPrevHist = xPhys;
+    end
     if auditCollect
         [stageInfo, ~] = localRecordAuditStep( ...
             stageInfo, loop, xOldAudit, x, xPhys, act, dc, dV0, ...
@@ -703,6 +776,9 @@ if loop > 1 && ch < tolX
     stageInfo.stop_reason = 'density_change_tolerance';
 else
     stageInfo.stop_reason = 'max_iterations';
+end
+if recordHistory
+    stageInfo.history = topopt_history_finish(stageInfo.history);
 end
 if saveFrqIterations && isfield(stageInfo, 'freq_iter_omega') && ~isempty(stageInfo.freq_iter_omega)
     stageInfo.freq_iter_omega = stageInfo.freq_iter_omega(1:loop,:);

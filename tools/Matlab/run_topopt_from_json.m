@@ -123,6 +123,16 @@ function [x, omega, tIter, nIter, mem_usage, nIterStage, telemetry] = run_topopt
             getFieldPath(cfg, {'benchmark','enable_diagnostics'}), ...
             'benchmark.enable_diagnostics');
     end
+    % Opt-in per-iteration history (plan section 5).  Separate from
+    % enable_diagnostics: that flag gates development instrumentation, this one
+    % gates the benchmark's own lightweight schema, which must be available
+    % without turning on anything expensive.
+    recordHistory = false;
+    if hasFieldPath(cfg, {'benchmark','record_history'})
+        recordHistory = parseBool( ...
+            getFieldPath(cfg, {'benchmark','record_history'}), ...
+            'benchmark.record_history');
+    end
 
     % Radius conversion requested by task description.
     dx = L / nelx;
@@ -179,6 +189,7 @@ function [x, omega, tIter, nIter, mem_usage, nIterStage, telemetry] = run_topopt
     solverStopping = struct();
     objectiveHistory = [];
     objectiveFinal = NaN;
+    solverHistory = [];
     Emin = E0 * EminRatio;
     freqIterOmega = [];
 
@@ -228,6 +239,7 @@ function [x, omega, tIter, nIter, mem_usage, nIterStage, telemetry] = run_topopt
             cfgO.extraFixedDofs = extraFixedDofs;
             cfgO.pasS = pasS;
             cfgO.pasV = pasV;
+            cfgO.record_history = recordHistory;
             cfgO.use_heaviside = useHeaviside;
             cfgO.beta_continuous = useHeaviside;  % smooth beta ramp when Heaviside is on
 
@@ -246,6 +258,9 @@ function [x, omega, tIter, nIter, mem_usage, nIterStage, telemetry] = run_topopt
                 omega = toVec3(diagnostics.final.omega(:));
             elseif isfield(diagnostics, 'final') && isfield(diagnostics.final, 'freq')
                 omega = toVec3(2*pi*diagnostics.final.freq(:));
+            end
+            if isfield(diagnostics, 'history')
+                solverHistory = diagnostics.history;
             end
             if isfield(diagnostics, 't_iter')
                 tIter = diagnostics.t_iter;
@@ -327,6 +342,7 @@ function [x, omega, tIter, nIter, mem_usage, nIterStage, telemetry] = run_topopt
             runCfg.extraFixedDofs = extraFixedDofs;
             runCfg.pasS = pasS;
             runCfg.pasV = pasV;
+            runCfg.record_history = recordHistory;
 
             eta = 0.5;
             beta = 1.0;
@@ -409,6 +425,7 @@ function [x, omega, tIter, nIter, mem_usage, nIterStage, telemetry] = run_topopt
             if postproc.saveFrequencyIterations && isfield(info, 'freq_iter_omega')
                 freqIterOmega = info.freq_iter_omega;
             end
+            if isfield(info, 'history'), solverHistory = info.history; end
             if isfield(info, 'timing'), solverTiming = info.timing; end
             if isfield(info, 'stopping'), solverStopping = info.stopping; end
             if isfield(info, 'stage2') && isfield(info.stage2, 'c') && ~isempty(info.stage2.c)
@@ -439,6 +456,7 @@ function [x, omega, tIter, nIter, mem_usage, nIterStage, telemetry] = run_topopt
             runCfg.extraFixedDofs = extraFixedDofs;
             runCfg.pasS = pasS;
             runCfg.pasV = pasV;
+            runCfg.record_history = recordHistory;
             if hasFieldPath(cfg, {'optimization','harmonic_normalize'})
                 runCfg.harmonic_normalize = parseBool( ...
                     getFieldPath(cfg, {'optimization','harmonic_normalize'}), ...
@@ -478,6 +496,7 @@ function [x, omega, tIter, nIter, mem_usage, nIterStage, telemetry] = run_topopt
             omega = toVec3(2*pi*fOut(:)); % ourApproach runner reports Hz.
             tIter = tOut;
             nIter = itOut;
+            if isfield(infoOur, 'history'), solverHistory = infoOur.history; end
             if isfield(infoOur, 'timing'), solverTiming = infoOur.timing; end
             if isfield(infoOur, 'stopping'), solverStopping = infoOur.stopping; end
             if isfield(infoOur, 'objective_history')
@@ -676,6 +695,7 @@ function [x, omega, tIter, nIter, mem_usage, nIterStage, telemetry] = run_topopt
             telemetryValue(solverStopping, 'convergence_tolerance', convTol));
     telemetry.objective_final = objectiveFinal;
     telemetry.objective_history = objectiveHistory;
+    telemetry.history = solverHistory;
     telemetry.diagnostics_enabled = benchmarkDiagnosticsEnabled;
     telemetry.yuksel = struct( ...
         'stage1_max_iters', NaN, ...

@@ -184,6 +184,21 @@ if saveFrqIterations
     freqIterOmega = NaN(maxiter, 3);
 end
 
+% Opt-in iteration history (plan section 5).  Default off; when off the only
+% cost is the branch below.
+recordHistory = isfield(cfg, 'record_history') && ~isempty(cfg.record_history) ...
+    && logical(cfg.record_history);
+if recordHistory
+    history = topopt_history_init(maxiter, struct( ...
+        'method', 'Olhoff', ...
+        'objective_definition', ['-Eb plus grayness penalty, where Eb is the ' ...
+            'scaled bound variable; MINIMIZED, so lower is better'], ...
+        'objective_sign', -1, ...
+        'volfrac', volfrac));
+    historyTic = tic;
+    xPhysPrevHist = [];
+end
+
 %% --- diagnostic: uniform design --------------------------------
 if opts.doDiagnostic
     beta0 = 1; % initial projection slope
@@ -499,6 +514,27 @@ for it = 1:maxiter
         dx_hist(1) = [];
     end
 
+    if recordHistory
+        % omega_cur and grayness are already computed above; nothing here
+        % triggers an additional eigensolve.
+        histRec = struct('iter', it, 'stage', 1, 'stage_iter', it, ...
+            'xPhys', xPhys, 'volfrac', volfrac, ...
+            'objective', f0, 'elapsed_s', toc(historyTic), ...
+            ... % move_lim is the clamp normally applied; a rejected trial
+            ... % halves move and re-clamps, so the tighter of the two is the
+            ... % limit this iteration's update actually saw.
+            'omega1', omega_cur, 'move_limit', min(move_lim, move));
+        if ~isempty(xPhysPrevHist)
+            histRec.xPhysPrev = xPhysPrevHist;
+        end
+        if exist('x_prev','var')
+            histRec.x = x;
+            histRec.xOld = x_prev;
+        end
+        history = topopt_history_record(history, histRec);
+        xPhysPrevHist = xPhys;
+    end
+
     if use_heaviside && ~beta_continuous
         % TIME-BASED beta continuation: advance every beta_interval iterations
         % but keep at least Npolish iterations at max beta
@@ -508,6 +544,10 @@ for it = 1:maxiter
             safe_counter = Nsafe;  % enter safe mode after beta jump
             move = min(move, move_safe);
             fprintf('  -> Advancing beta to %d (iteration %d)\n', beta_list(beta_idx), it);
+            if recordHistory
+                history = topopt_history_mark(history, it, 'continuation', ...
+                    sprintf('beta -> %d (schedule)', beta_list(beta_idx)));
+            end
         end
 
         % Also advance if design is already discrete
@@ -517,6 +557,12 @@ for it = 1:maxiter
             move = min(move, move_safe);
             fprintf('  -> Advancing beta to %d (grayness=%.3f < %.3f)\n', ...
                 beta_list(beta_idx), grayness, gray_tol);
+            if recordHistory
+                % Grayness-triggered, which is why k_cont is recorded as an
+                % observed event rather than derived from the beta schedule.
+                history = topopt_history_mark(history, it, 'continuation', ...
+                    sprintf('beta -> %d (grayness %.3f)', beta_list(beta_idx), grayness));
+            end
         end
 
         if beta >= 16 && grayness > 0.15
@@ -565,6 +611,9 @@ diagnostics.loop_time = loop_time;
 diagnostics.t_iter = loop_time / max(iter_executed, 1);
 if saveFrqIterations
     diagnostics.freq_iter_omega = freqIterOmega(1:iter_executed,:);
+end
+if recordHistory
+    diagnostics.history = topopt_history_finish(history);
 end
 
 % --- final diagnostics on best design (use true smallest modes)

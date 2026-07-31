@@ -382,6 +382,19 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
     dv = ones(nelx*nely, 1);
     dc = ones(nelx*nely, 1);
     initialization_time = toc(solver_tic);
+
+    % Opt-in iteration history (plan section 5).  Default off.
+    recordHistory = logical(localOpt(runCfg, 'record_history', false));
+    if recordHistory
+        history = topopt_history_init(maxIters, struct( ...
+            'method', 'Proposed', ...
+            'objective_definition', ['sum_i u_i^T K u_i over load cases; ' ...
+                'MINIMIZED'], ...
+            'objective_sign', -1, ...
+            'volfrac', volfrac));
+        xPhysPrevHist = [];
+    end
+
     loop_tic = tic;
 
     while change > convTol && loop < maxIters
@@ -604,6 +617,20 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
         previousObjective = obj;
         objectiveHistory(loop) = obj;
 
+        if recordHistory
+            % omega1 is not evaluated per iteration by this method, so it
+            % stays NaN rather than triggering an extra eigensolve.
+            histRec = struct('iter', loop, 'stage', 1, 'stage_iter', loop, ...
+                'xPhys', xPhys, 'volfrac', volfrac, ...
+                'objective', obj, 'elapsed_s', toc(loop_tic), ...
+                'x', x, 'xOld', xold, 'move_limit', move);
+            if ~isempty(xPhysPrevHist)
+                histRec.xPhysPrev = xPhysPrevHist;
+            end
+            history = topopt_history_record(history, histRec);
+            xPhysPrevHist = xPhys;
+        end
+
         localLogLoadCaseDiagnostics(debugLoadCases, loop, loadCases, caseDiag);
 
         if visualizeLive
@@ -637,6 +664,9 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
     loop_time = toc(loop_tic);
     tIter = loop_time / max(loop, 1);
     nIter = loop;
+    if recordHistory
+        info.history = topopt_history_finish(history);
+    end
     if saveFrqIterations
         info.freq_iter_omega = info.freq_iter_omega(1:loop,:);
     end
