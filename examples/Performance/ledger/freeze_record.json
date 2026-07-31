@@ -84,13 +84,25 @@
     "section": "PLAN 4.2.3",
     "rule": "every iteration-indexed continuation schedule is declared here before the campaign, and k_cont is reported per row",
     "Olhoff": {
-      "beta_schedule": [1, 2, 4, 8, 16, 32, 64],
-      "beta_interval": 40,
-      "Npolish": 40,
-      "floor_iterations": 280,
-      "derivation": "beta reaches its final index at iteration beta_interval * (len(beta_schedule) - 1) = 240; the minimum polish requirement then clears at 280",
-      "grayness_trigger": "beta also advances early when grayness < gray_tol = 0.10, so grayness is causally in this method's acceptance path",
-      "observed_effect": "native iteration counts are flat at 343-374 across a 25x range of element counts"
+      "note": "This method has TWO beta continuation paths and the configuration selects between them. The benchmark configuration sets optimization.filter.heaviside, which the dispatcher maps to beta_continuous = true, so the CONTINUOUS path is live and the discrete schedule below is dead code. Corrected 2026-07-31 after the section 6.3 paired test exposed that the discrete constants were being cited for a path this configuration never takes.",
+      "active_path": "continuous",
+      "continuous": {
+        "law": "beta = betaMax^(it / T), clamped to [1, betaMax]",
+        "betaMax": 64,
+        "T": "min(300, max(1, floor(0.7 * maxiter)))",
+        "T_under_campaign_budget": 300,
+        "floor_iterations": 300,
+        "derivation": "beta saturates at iteration T; acceptance is not reachable before the projection has sharpened",
+        "budget_coupling": "maxiter parameterizes T and is therefore NOT a pure safety budget on this path. Below maxiter = 429 the clamp stops binding and T changes with the budget, so two runs differing only in budget are not comparable. This is what broke the first paired extension test."
+      },
+      "discrete_inactive": {
+        "beta_schedule": [1, 2, 4, 8, 16, 32, 64],
+        "beta_interval": 40,
+        "Npolish": 40,
+        "floor_iterations": 280,
+        "grayness_trigger": "on this path beta also advances early when grayness < gray_tol = 0.10"
+      },
+      "observed_effect": "native iteration counts are flat at 343-374 across a 25x range of element counts, consistent with a floor near 300"
     },
     "Yuksel": {"floor_iterations": 0, "note": "stage handoff is convergence-driven, not iteration-indexed"},
     "Proposed": {"floor_iterations": null, "note": "unavailable until the native configuration is frozen"}

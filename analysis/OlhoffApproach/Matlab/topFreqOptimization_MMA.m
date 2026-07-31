@@ -188,6 +188,16 @@ end
 % cost is the branch below.
 recordHistory = isfield(cfg, 'record_history') && ~isempty(cfg.record_history) ...
     && logical(cfg.record_history);
+
+% Extension mode (plan section 4.3 / 6.3).  Disables ONLY the final native
+% termination; the beta schedule, move adaptation and every other in-loop
+% decision stay active, so the extended run's prefix must match the native run
+% exactly up to the native stopping iteration.
+extendBeyondNativeStop = isfield(cfg, 'extend_beyond_native_stop') ...
+    && ~isempty(cfg.extend_beyond_native_stop) ...
+    && logical(cfg.extend_beyond_native_stop);
+nativeStopIter = NaN;
+xPhysAtNativeStop = [];
 if recordHistory
     history = topopt_history_init(maxiter, struct( ...
         'method', 'Olhoff', ...
@@ -198,6 +208,7 @@ if recordHistory
     historyTic = tic;
     xPhysPrevHist = [];
 end
+betaMaxMarked = false;
 
 %% --- diagnostic: uniform design --------------------------------
 if opts.doDiagnostic
@@ -253,6 +264,17 @@ for it = 1:maxiter
         if beta_continuous
             % Smooth exponential ramp: beta = betaMax^(it/T), clamped to [1, betaMax]
             beta = min(betaMax, max(1, betaMax^(it / beta_ramp_T)));
+            % A continuous ramp has no discrete transition to mark, but it still
+            % imposes a floor: acceptance is not reachable until the projection
+            % has sharpened, which happens when beta saturates.  Record that
+            % saturation as the continuation event so k_cont is meaningful on
+            % this path too (plan section 4.2.3).
+            if recordHistory && ~betaMaxMarked && beta >= betaMax
+                betaMaxMarked = true;
+                history = topopt_history_mark(history, it, 'continuation', ...
+                    sprintf('beta reached betaMax=%g (ramp T=%g complete)', ...
+                        betaMax, beta_ramp_T));
+            end
         else
             beta_target = beta_list(min(beta_idx, numel(beta_list)));
             beta = min(betaMax, beta_target);
@@ -576,13 +598,25 @@ for it = 1:maxiter
         if rel_change_obj < cfg.conv_tol && change_x < cfg.conv_tol && grayness < 0.05 && polish_left <= 0
             fprintf('Converged: rel dOmega=%.2e, dx=%.2e, gray=%.3f (polish satisfied)\n',rel_change_obj,change_x,grayness);
             stop_reason = 'convergence_criteria';
-            break;
+            if isnan(nativeStopIter)
+                nativeStopIter = it;
+                xPhysAtNativeStop = xPhys;   % checkpoint for the paired prefix test
+            end
+            if ~extendBeyondNativeStop
+                break;
+            end
         end
     else
         if rel_change_obj < cfg.conv_tol && change_x < cfg.conv_tol && grayness < 0.05
             fprintf('Converged early: rel dOmega=%.2e, dx=%.2e, gray=%.3f\n',rel_change_obj,change_x,grayness);
             stop_reason = 'convergence_criteria';
-            break;
+            if isnan(nativeStopIter)
+                nativeStopIter = it;
+                xPhysAtNativeStop = xPhys;
+            end
+            if ~extendBeyondNativeStop
+                break;
+            end
         end
     end
 
@@ -615,6 +649,10 @@ end
 if recordHistory
     diagnostics.history = topopt_history_finish(history);
 end
+diagnostics.extension = struct( ...
+    'extended', extendBeyondNativeStop, ...
+    'native_stop_iter', nativeStopIter, ...
+    'xPhys_at_native_stop', xPhysAtNativeStop);
 
 % --- final diagnostics on best design (use true smallest modes)
 [lam_best,omega_vec_best,freq_vec_best] = evalModes(xPhys_best,opts.diagModes);

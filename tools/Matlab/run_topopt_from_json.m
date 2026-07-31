@@ -133,6 +133,15 @@ function [x, omega, tIter, nIter, mem_usage, nIterStage, telemetry] = run_topopt
             getFieldPath(cfg, {'benchmark','record_history'}), ...
             'benchmark.record_history');
     end
+    % Extension mode (plan section 4.3).  Disables each method's FINAL native
+    % termination only; stage handoffs and continuation transitions stay
+    % active.  Used by the discovery pass and by the paired prefix test.
+    extendBeyondNativeStop = false;
+    if hasFieldPath(cfg, {'benchmark','extend_beyond_native_stop'})
+        extendBeyondNativeStop = parseBool( ...
+            getFieldPath(cfg, {'benchmark','extend_beyond_native_stop'}), ...
+            'benchmark.extend_beyond_native_stop');
+    end
 
     % Radius conversion requested by task description.
     dx = L / nelx;
@@ -190,6 +199,8 @@ function [x, omega, tIter, nIter, mem_usage, nIterStage, telemetry] = run_topopt
     objectiveHistory = [];
     objectiveFinal = NaN;
     solverHistory = [];
+    solverExtension = struct('extended', false, 'native_stop_iter', NaN, ...
+        'xPhys_at_native_stop', []);
     Emin = E0 * EminRatio;
     freqIterOmega = [];
 
@@ -240,6 +251,7 @@ function [x, omega, tIter, nIter, mem_usage, nIterStage, telemetry] = run_topopt
             cfgO.pasS = pasS;
             cfgO.pasV = pasV;
             cfgO.record_history = recordHistory;
+            cfgO.extend_beyond_native_stop = extendBeyondNativeStop;
             cfgO.use_heaviside = useHeaviside;
             cfgO.beta_continuous = useHeaviside;  % smooth beta ramp when Heaviside is on
 
@@ -261,6 +273,9 @@ function [x, omega, tIter, nIter, mem_usage, nIterStage, telemetry] = run_topopt
             end
             if isfield(diagnostics, 'history')
                 solverHistory = diagnostics.history;
+            end
+            if isfield(diagnostics, 'extension')
+                solverExtension = diagnostics.extension;
             end
             if isfield(diagnostics, 't_iter')
                 tIter = diagnostics.t_iter;
@@ -343,6 +358,7 @@ function [x, omega, tIter, nIter, mem_usage, nIterStage, telemetry] = run_topopt
             runCfg.pasS = pasS;
             runCfg.pasV = pasV;
             runCfg.record_history = recordHistory;
+            runCfg.extend_beyond_native_stop = extendBeyondNativeStop;
 
             eta = 0.5;
             beta = 1.0;
@@ -426,6 +442,20 @@ function [x, omega, tIter, nIter, mem_usage, nIterStage, telemetry] = run_topopt
                 freqIterOmega = info.freq_iter_omega;
             end
             if isfield(info, 'history'), solverHistory = info.history; end
+            if isfield(info, 'stage2') && isfield(info.stage2, 'native_stop_iter')
+                % Yuksel's extension mode applies to stage 2, so the native stop
+                % iteration is reported on the global count: stage 1 plus the
+                % stage-2 iteration at which its own rule first fired.
+                s2n = info.stage2.native_stop_iter;
+                if ~isnan(s2n)
+                    s2n = s2n + info.stage1.iterations;
+                end
+                solverExtension = struct('extended', ...
+                    isfield(info.stage2, 'extend_beyond_native_stop') && ...
+                        logical(info.stage2.extend_beyond_native_stop), ...
+                    'native_stop_iter', s2n, ...
+                    'xPhys_at_native_stop', info.stage2.xphys_at_native_stop);
+            end
             if isfield(info, 'timing'), solverTiming = info.timing; end
             if isfield(info, 'stopping'), solverStopping = info.stopping; end
             if isfield(info, 'stage2') && isfield(info.stage2, 'c') && ~isempty(info.stage2.c)
@@ -457,6 +487,7 @@ function [x, omega, tIter, nIter, mem_usage, nIterStage, telemetry] = run_topopt
             runCfg.pasS = pasS;
             runCfg.pasV = pasV;
             runCfg.record_history = recordHistory;
+            runCfg.extend_beyond_native_stop = extendBeyondNativeStop;
             if hasFieldPath(cfg, {'optimization','harmonic_normalize'})
                 runCfg.harmonic_normalize = parseBool( ...
                     getFieldPath(cfg, {'optimization','harmonic_normalize'}), ...
@@ -497,6 +528,7 @@ function [x, omega, tIter, nIter, mem_usage, nIterStage, telemetry] = run_topopt
             tIter = tOut;
             nIter = itOut;
             if isfield(infoOur, 'history'), solverHistory = infoOur.history; end
+            if isfield(infoOur, 'extension'), solverExtension = infoOur.extension; end
             if isfield(infoOur, 'timing'), solverTiming = infoOur.timing; end
             if isfield(infoOur, 'stopping'), solverStopping = infoOur.stopping; end
             if isfield(infoOur, 'objective_history')
@@ -696,6 +728,7 @@ function [x, omega, tIter, nIter, mem_usage, nIterStage, telemetry] = run_topopt
     telemetry.objective_final = objectiveFinal;
     telemetry.objective_history = objectiveHistory;
     telemetry.history = solverHistory;
+    telemetry.extension = solverExtension;
     telemetry.diagnostics_enabled = benchmarkDiagnosticsEnabled;
     telemetry.yuksel = struct( ...
         'stage1_max_iters', NaN, ...

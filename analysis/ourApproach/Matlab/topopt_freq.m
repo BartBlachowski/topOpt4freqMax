@@ -383,6 +383,13 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
     dc = ones(nelx*nely, 1);
     initialization_time = toc(solver_tic);
 
+    % Extension mode (plan section 4.3 / 6.3).  Disables ONLY the native
+    % convergence test in the while condition; the iteration budget still
+    % bounds the run.
+    extendBeyondNativeStop = logical(localOpt(runCfg, 'extend_beyond_native_stop', false));
+    nativeStopIter = NaN;
+    xPhysAtNativeStop = [];
+
     % Opt-in iteration history (plan section 5).  Default off.
     recordHistory = logical(localOpt(runCfg, 'record_history', false));
     if recordHistory
@@ -397,7 +404,7 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
 
     loop_tic = tic;
 
-    while change > convTol && loop < maxIters
+    while (change > convTol || extendBeyondNativeStop) && loop < maxIters
         loop = loop + 1;
         mmaConstraintPre = NaN;
         mmaConstraintPost = NaN;
@@ -617,6 +624,13 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
         previousObjective = obj;
         objectiveHistory(loop) = obj;
 
+        % Mirrors the while condition exactly: the native run exits at the top
+        % of the next iteration, so this is its last executed iteration.
+        if isnan(nativeStopIter) && change <= convTol
+            nativeStopIter = loop;
+            xPhysAtNativeStop = xPhys;   % checkpoint for the paired prefix test
+        end
+
         if recordHistory
             % omega1 is not evaluated per iteration by this method, so it
             % stays NaN rather than triggering an extra eigensolve.
@@ -667,6 +681,10 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
     if recordHistory
         info.history = topopt_history_finish(history);
     end
+    info.extension = struct( ...
+        'extended', extendBeyondNativeStop, ...
+        'native_stop_iter', nativeStopIter, ...
+        'xPhys_at_native_stop', xPhysAtNativeStop);
     if saveFrqIterations
         info.freq_iter_omega = info.freq_iter_omega(1:loop,:);
     end

@@ -379,12 +379,27 @@ algorithm behavior, not a benchmark tolerance — but it is declared in the ledg
 reported, not denied.
 
 The same clause has a second consequence. A continuation schedule indexed by iteration
-imposes a **floor** on `k*` that is independent of convergence. With a seven-entry `β`
-schedule advanced every 40 iterations and a 40-iteration minimum polish at maximum `β`, no
-run can be accepted before iteration 280 regardless of mesh or problem size; the observed
-Olhoff iteration counts are correspondingly flat at 343–374 across a 25× range of element
-counts, while the other two methods vary by an order of magnitude. Left unreported, that
-row measures two hard-coded constants rather than a convergence rate. Therefore:
+imposes a **floor** on `k*` that is independent of convergence.
+
+The Olhoff–Du implementation has *two* `β` continuation paths and the configuration selects
+between them, so the floor must be read from the live one:
+
+- **discrete** (`beta_continuous = false`): a seven-entry schedule advanced every 40
+  iterations with a 40-iteration minimum polish at maximum `β`, giving a floor of 280;
+- **continuous** (`beta_continuous = true`, which the benchmark configuration selects
+  because it sets `filter.heaviside`): `β = βmax^(it/T)` with
+  `T = min(300, 0.7·maxiter)`, so `β` saturates at iteration `T` — 300 under any campaign
+  budget above 429.
+
+Under the continuous path the discrete schedule's constants are dead code, and `maxiter`
+stops being a pure safety budget: it parameterizes `T`. Two runs of this method that differ
+only in their iteration budget are therefore *not* comparable if either budget falls below
+429, which is a trap for the paired extension test of §6.3 as well as for the campaign.
+
+Either way the floor is real and mesh-independent: the observed Olhoff iteration counts are
+flat at 343–374 across a 25× range of element counts, while the other two methods vary by an
+order of magnitude. Left unreported, that row measures a hard-coded constant rather than a
+convergence rate. Therefore:
 
 - every iteration-indexed schedule floor is declared in the ledger before the campaign;
 - the iteration `k_cont` at which the last mandatory continuation transition and any

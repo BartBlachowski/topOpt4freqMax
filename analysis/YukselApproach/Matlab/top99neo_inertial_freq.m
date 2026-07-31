@@ -196,6 +196,11 @@ info.stage1.loadDof = lcDof;
 % Opt-in iteration history (plan section 5).  Seeded here rather than inside
 % the loops so both stages share one schema; each loop records into the
 % recorder it finds on its stageInfo.
+% Extension mode applies to stage 2 only; stage 1's convergence test is the
+% handoff into stage 2 and stays active (plan section 4.3).
+info.stage2.extend_beyond_native_stop = ...
+    logical(localOpt(runCfg, 'extend_beyond_native_stop', false));
+
 recordHistory = logical(localOpt(runCfg, 'record_history', false));
 if recordHistory
     histMeta = struct( ...
@@ -610,6 +615,10 @@ tolX = stage2Tol;
 loop = 0; U = U_est;
 loop_tic = tic;
 histStage = 2;
+extendBeyondNativeStop = isfield(stageInfo, 'extend_beyond_native_stop') ...
+    && logical(stageInfo.extend_beyond_native_stop);
+stageInfo.native_stop_iter = NaN;
+stageInfo.xphys_at_native_stop = [];
 recordHistory = isfield(stageInfo, 'history') && ~isempty(stageInfo.history);
 % Seed with stage 1's final field so the first stage-2 increment is defined.
 % Without it the concatenated history carries a NaN d_inf at the handoff, which
@@ -767,7 +776,18 @@ while loop < maxit
             formatTopologyTitle(approachName, volfrac, NaN), ...
             true, 'regular', false);
     end
-    if loop > 1 && ch < tolX, break; end
+    if loop > 1 && ch < tolX
+        % Extension mode disables ONLY this final native termination.  Stage 1's
+        % identical test is left alone: it controls the handoff into this loop,
+        % which plan section 4.3 requires to stay active.
+        if isnan(stageInfo.native_stop_iter)
+            stageInfo.native_stop_iter = loop;
+            stageInfo.xphys_at_native_stop = xPhys;
+        end
+        if ~extendBeyondNativeStop
+            break;
+        end
+    end
 end
 stageInfo.iterations = loop;
 stageInfo.loop_time = toc(loop_tic);
