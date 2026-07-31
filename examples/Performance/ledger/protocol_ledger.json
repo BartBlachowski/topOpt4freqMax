@@ -1,0 +1,186 @@
+{
+  "schema_version": "1.0",
+  "created": "2026-07-31",
+  "governing_document": "examples/Performance/PLAN_two_table_redesign.md",
+  "purpose": "Protocol and provenance ledger required by PLAN section 2. One record per (method, source case). Every setting carries a provenance label: reported | inferred | unavailable.",
+  "provenance_vocabulary": {
+    "reported": "explicitly stated in the source; cite page/equation/table/figure",
+    "inferred": "derived from source material; record the inference formula and its uncertainty",
+    "unavailable": "neither reported nor defensibly inferable"
+  },
+  "shared_benchmark_note": "Yuksel2025 section 6.1 (p. 3205) states its simply supported beam benchmark is the problem of Du and Olhoff (2007), Huang et al. (2010) and Su and Liu (2016), and uses the same geometry, material and volume fraction as the Olhoff-Du beam examples (8 m x 1 m, vf 0.5, E0 = 1e7 Pa, nu = 0.3, rho0 = 1 kg/m3). The two source methods therefore address a compatible physical problem, which is the precondition PLAN section 4.1 places on the primary Table B.",
+
+  "methods": [
+
+    {
+      "method": "Yuksel",
+      "label": "YukselApproach",
+      "source": {
+        "citation": "H. Yuksel, C. Yilmaz, Efficient topology optimization for maximizing the first natural frequency using design-dependent inertial loads, Engineering Computations, Vol. 42 No. 9, 2025",
+        "file": "references/Yuksel2025_Efficient.pdf",
+        "article_id": "ec-03-2025-0278",
+        "pages_cited": "3203-3207"
+      },
+      "implementation": "analysis/YukselApproach/Matlab/top99neo_inertial_freq.m",
+      "cases": [
+        {
+          "case_id": "yuksel_ss_320x40",
+          "description": "Simply supported beam, maximize first natural frequency under a mass constraint (section 6.1)",
+          "settings": {
+            "geometry": {"value": "8 m x 1 m rectangular design domain", "provenance": "reported", "cite": "p. 3205, section 6.1"},
+            "boundary_conditions": {"value": "pinned-pinned, supports at mid-height of both vertical edges", "provenance": "reported", "cite": "p. 3205 Fig. 2a, Fig. 4a"},
+            "mesh": {"value": "320 x 40", "provenance": "reported", "cite": "p. 3205, section 6.1"},
+            "additional_meshes": {"value": "160 x 20 and 240 x 30 appear in the runtime study", "provenance": "reported", "cite": "p. 3207 Table 1"},
+            "element": {"value": "four-node square quadrilateral plane-stress elements, code base of Andreassen et al. (2011)", "provenance": "reported", "cite": "p. 3204, section 6"},
+            "material": {"value": "E0 = 1e7 Pa, nu = 0.3, rho0 = 1 kg/m3", "provenance": "reported", "cite": "p. 3205, section 6.1"},
+            "volume_fraction": {"value": 0.5, "provenance": "reported", "cite": "p. 3205, section 6.1"},
+            "stiffness_interpolation": {"value": "modified SIMP, p = 3", "provenance": "reported", "cite": "p. 3204, section 6"},
+            "mass_interpolation": {"value": "Equation (10) with d = 6", "provenance": "reported", "cite": "p. 3204, section 6"},
+            "mass_interpolation_cutoff": {"value": "x = 0.1 threshold in the implementation", "provenance": "unavailable", "note": "the cutoff is not stated in section 6; the solver uses xMassCut = 0.1"},
+            "void_bounds": {"value": "Emin = 1e-9 E0, rho_min = 1e-9 rho0", "provenance": "reported", "cite": "p. 3204, section 6"},
+            "initialization": {"value": "uniform, x_e = a (the volume fraction) for all e", "provenance": "reported", "cite": "p. 3204, section 6"},
+            "optimizer": {"value": "OC update (Andreassen et al. 2011 lineage)", "provenance": "inferred", "note": "section 6 cites the Andreassen et al. (2011) source code; OC is not named explicitly in section 6"},
+            "move_limit": {"value": 0.2, "provenance": "reported", "cite": "p. 3204, section 6 -- maximum density change for an individual element per iteration"},
+            "filter": {"value": "sensitivity filtering, radius 2.5", "provenance": "reported", "cite": "p. 3205, section 6.1"},
+            "stopping_test": {"value": "each successive static optimization terminates when the maximum change in element densities falls below 0.01", "provenance": "reported", "cite": "p. 3204, section 6"},
+            "iteration_limit": {"value": "none stated for the proposed method", "provenance": "unavailable", "note": "CRITICAL: the 200-iteration limit and the reduced 0.01 move limit stated on p. 3206 belong to the DYNAMIC comparison code, not to the proposed method. Importing them into the proposed method is the WP2 defect."},
+            "stage_structure": {"value": "two consecutive static problems; stage 1 unit point load at beam midspan, stage 2 design-dependent inertial load F = M(x) u_hat updated each iteration", "provenance": "reported", "cite": "pp. 3203-3206, Fig. 1, sections 4.1 and 6.1"},
+            "load_sensitivity": {"value": "dF/dx ignored within an iteration", "provenance": "inferred", "note": "implied by the flowchart's per-iteration load refresh; not stated as an explicit assumption"},
+            "mode_handling": {"value": "eigenvalue calculation only at the end of the optimization process", "provenance": "reported", "cite": "p. 3207 Table 1, note"},
+            "post_processing": {"value": "flowchart step: post-processing to obtain a solid-void design (Sigmund and Maute 2013)", "provenance": "unavailable", "note": "the flowchart names the step but defers the procedure to a citation; it is implemented in neither the MATLAB nor the Python solver, so the reported frequency is evaluated on the gray design. Table A must record this omission."},
+            "hardware": {"value": "4 processors, 16 cores each, 2.29 GHz, 128 GB RAM, 64-bit OS", "provenance": "reported", "cite": "p. 3204, section 6 and p. 3207 Table 1 caption"}
+          },
+          "reference_values": {
+            "omega1_stage1_320x40": {"value": 150.9, "unit": "rad/s", "provenance": "reported", "cite": "p. 3205 Fig. 4b"},
+            "omega1_stage2_320x40": {"value": 162.5, "unit": "rad/s", "provenance": "reported", "cite": "p. 3205 Fig. 4c"},
+            "omega1_dynamic_code_320x40": {"value": 170.4, "unit": "rad/s", "provenance": "reported", "cite": "p. 3206 Fig. 5", "note": "comparison method, not the proposed method"},
+            "runtime_total": {
+              "provenance": "reported",
+              "cite": "p. 3207 Table 1",
+              "unit": "s",
+              "note": "the parenthesized second term is the terminal eigenvalue calculation, excluded from the optimization loop",
+              "values": {"160x20": "104.4 + (43.1)", "240x30": "166.2 + (277.5)", "320x40": "252.2 + (1040.6)"}
+            },
+            "runtime_per_iteration": {
+              "provenance": "reported",
+              "cite": "p. 3207 Table 1",
+              "unit": "s/iteration",
+              "values": {"160x20": 0.4, "240x30": 0.8, "320x40": 1.4}
+            },
+            "max_ram": {"provenance": "reported", "cite": "p. 3207 Table 1", "unit": "MB", "values": {"160x20": 905, "240x30": 912, "320x40": 950}},
+            "iterations": {
+              "provenance": "inferred",
+              "formula": "n_iter = runtime_total_optimization / runtime_per_iteration, using the first term of the total only",
+              "point_estimates": {"160x20": 261, "240x30": 208, "320x40": 180},
+              "uncertainty_basis": "runtime_per_iteration is reported to one decimal place, so the true value lies in a half-open interval of width 0.1 s centred on the printed digit; runtime_total is reported to 0.1 s and its rounding is negligible by comparison",
+              "intervals": {"160x20": [232, 298], "240x30": [196, 222], "320x40": [174, 187]},
+              "inference_validation": {
+                "description": "The same formula applied to the Dynamic Code rows of Table 1 must recover the iteration count the text states independently.",
+                "text_value": 200,
+                "text_cite": "p. 3206 -- the optimization process is terminated after 200 iterations",
+                "recovered": {"160x20": "8767.8 / 43.8 = 200.2", "240x30": "55801.8 / 279.0 = 200.0", "320x40": "208604.1 / 1043.0 = 200.0"},
+                "verdict": "the inference recovers the known value on 3 of 3 control rows, which supports but does not prove its validity for the proposed-method rows"
+              },
+              "reporting_rule": "Table A must print these as intervals, never as exact integers, and must label the column inferred."
+            }
+          },
+          "known_gaps": [
+            "Reconstructed iteration counts exceed the inferred published counts and grow with mesh refinement while the published counts fall (see analysis/iteration_count_audit/REPORT.md). This discrepancy is reported, not tuned away.",
+            "The paper's post-processing step is not implemented; omega1 is reported on the gray design.",
+            "The benchmark configuration performance_comparison.json deviates from this ledger: filter radius 2.0 vs 2.5 reported, stage2_tol 3e-3 vs 1e-2 reported, Emin/rho_min 1e-6 vs 1e-9 reported, and a 200-iteration stage-1 cap that belongs to the dynamic code. Table A must not use those overrides."
+          ]
+        }
+      ]
+    },
+
+    {
+      "method": "Olhoff",
+      "label": "OlhoffApproach",
+      "source": {
+        "citation": "N. Olhoff, J. Du, Structural Topology Optimization with Respect to Eigenfrequencies of Vibration, in Topology Optimization in Structural and Continuum Mechanics, CISM Courses and Lectures, Springer 2014, pp. 275-297",
+        "file": "references/Olhoff2014_Structural.pdf",
+        "doi": "10.1007/978-3-7091-1643-2_11"
+      },
+      "implementation_benchmark": "analysis/OlhoffApproach/Matlab/topFreqOptimization_MMA.m",
+      "implementation_exact": "analysis/OlhoffApproachExact/",
+      "supporting_extraction": ["docs/olhoff_audit.md", "analysis/OlhoffApproachExact/PLAN_Olhoff2014_exact.md", "analysis/OlhoffApproachExact/REPORT.md"],
+      "cases": [
+        {
+          "case_id": "olhoff_ss_n1",
+          "description": "Simply supported beam, maximize the fundamental eigenfrequency (section 3.1, Fig. 3a)",
+          "settings": {
+            "objective": {"value": "maximize bound variable beta subject to beta <= omega_j^2", "provenance": "reported", "cite": "Eq. 9a-9c, section 2.3"},
+            "eigenvalue_constraints": {"value": "J constraints, Eq. 19b for the simple upper neighbour and 19c for multiple modes", "provenance": "reported", "cite": "Eq. 9b, 19b-19c"},
+            "volume_constraint": {"value": "single inequality, sum(rho_e V_e) - V* <= 0", "provenance": "reported", "cite": "Eq. 1d"},
+            "stiffness_interpolation": {"value": "SIMP, E_e = Emin + rho^p (E0 - Emin)", "provenance": "reported", "cite": "Eq. 5"},
+            "mass_interpolation": {"value": "linear, q = 1", "provenance": "reported", "cite": "Eq. 5"},
+            "design_variable_bounds": {"value": "0 <= rho_lower <= rho_e <= 1", "provenance": "reported", "cite": "Eq. 1e"},
+            "element": {"value": "2D plane-stress Q4, consistent mass", "provenance": "reported", "cite": "section 3.1, Eq. 1b"},
+            "boundary_conditions": {"value": "SS -- pin supports drawn at mid-height of both vertical edges", "provenance": "reported", "cite": "Fig. 2a"},
+            "support_node_resolution": {"value": "exact mid-height node", "provenance": "inferred", "note": "Fig. 2 draws a pin symbol at mid-height; the node-level placement is an implementation reading. For even nely it is off by half an element."},
+            "algorithm": {"value": "Fig. 1: eigensolve -> sensitivity -> inner loop over subproblem (19) -> update, outer stop on ||delta rho|| < eps", "provenance": "reported", "cite": "Fig. 1, section 2.5"},
+            "multiplicity_handling": {"value": "detect multiplicity N of omega_n; generalized gradients per Eq. 12/13", "provenance": "reported", "cite": "Fig. 1 step 1, section 2.4"},
+            "subproblem_solver": {"value": "MMA (Svanberg 1987); for N = 1 the subproblem reduces to a linear program", "provenance": "reported", "cite": "section 2.5, final paragraph"},
+            "move_limit": {"value": null, "provenance": "unavailable", "note": "Sequential linear programming is undefined without a move limit and the chapter states none. analysis/OlhoffApproachExact treats cfg.move as its single reconstructed parameter, calibrated against the paper's own Fig. 4 iteration history."},
+            "filter": {"value": null, "provenance": "unavailable", "note": "the chapter specifies no filter at all; the exact reimplementation calibrated rmin = 1.2 elements on the SS case only, so SS is partly in-sample and CS/CC are out-of-sample predictions"},
+            "penalization_continuation": {"value": null, "provenance": "unavailable"},
+            "initialization": {"value": "uniform rho = 0.5", "provenance": "reported", "cite": "Fig. 1 step 0"},
+            "stopping_test": {"value": "||delta rho|| < eps", "provenance": "reported", "cite": "Fig. 1 outer check", "note": "the value of eps is not stated"},
+            "iteration_limit": {"value": null, "provenance": "unavailable"}
+          },
+          "reference_values": {
+            "omega1_ss": {"value": 174.7, "unit": "rad/s", "provenance": "reported", "cite": "Fig. 3a", "unit_confirmation": "pending -- confirm against the chapter text before Table A is frozen"},
+            "omega1_cs": {"value": 288.7, "unit": "rad/s", "provenance": "reported", "cite": "Fig. 3b"},
+            "omega1_cc": {"value": 456.4, "unit": "rad/s", "provenance": "reported", "cite": "Fig. 3c"},
+            "omega_gap_23": {"value": 810, "unit": "rad/s", "provenance": "reported", "cite": "Fig. 7"},
+            "optimum_multiplicity": {"value": "bimodal, omega_1 = omega_2 (N = 2)", "provenance": "reported", "cite": "Figs. 3, 4"},
+            "iterations": {"value": null, "provenance": "unavailable", "note": "the chapter shows an iteration history in Fig. 4 but does not tabulate counts"},
+            "runtime": {"value": null, "provenance": "unavailable"}
+          },
+          "known_gaps": [
+            "The paper-exact reimplementation reaches PARTIAL on all three section 3.1 cases: SS -14.83 %, CS -8.66 %, CC -9.78 % (analysis/OlhoffApproachExact/REPORT.md). The forward model, inner loop, cluster basis and step control are individually ruled out as causes.",
+            "The published optima are bimodal with omega_1 = omega_2; the reimplementation settles at N = 1 (SS, CS) or N = 3 (CC).",
+            "The rmin used by the exact arm was calibrated on SS, so the SS number is partly in-sample and must not be quoted as an independent success."
+          ],
+          "benchmark_implementation_deviations": {
+            "note": "These are documented differences between analysis/OlhoffApproach (the implementation used by the performance benchmark) and the source. Per PLAN section 3.4 they must be resolved or reported before the Olhoff row is called paper-faithful. Source: docs/olhoff_audit.md.",
+            "extra": [
+              "grayness penalty added to the objective (not in Eq. 9a or 19a)",
+              "Heaviside projection with beta continuation (the chapter assumes crisp densities)",
+              "adaptive beta schedule with safe iterations after each jump",
+              "explicit move-limit clamp on top of the MMA asymptote move",
+              "guard that halves the move limit if a trial omega1 drops more than 1 %, costing one extra eigensolve per iteration",
+              "lambda_ref scaling of the bound variable"
+            ],
+            "different": [
+              "volume constraint enforced two-sided rather than as the single inequality of Eq. 1d",
+              "single MMA call per outer iteration instead of the inner loop of Fig. 1 step 3",
+              "outer convergence augmented with relative objective change and a grayness gate"
+            ],
+            "missing": [
+              "multiplicity detection of N and R (Fig. 1 step 1)",
+              "generalized gradients for multiple eigenvalues (Eq. 12/13)"
+            ]
+          }
+        }
+      ]
+    },
+
+    {
+      "method": "Proposed",
+      "label": "ProposedApproach",
+      "source": {
+        "citation": "manuscript in preparation",
+        "file": null,
+        "provenance": "unavailable"
+      },
+      "implementation": "analysis/ourApproach/Matlab/topopt_freq.m",
+      "freeze_status": "INCOMPLETE",
+      "blocking_note": "PLAN section 2 requires the Proposed method's native configuration to be written into and versioned with the ledger BEFORE Table A results are inspected, precisely so that its native settings cannot be selected retrospectively. No manuscript is present in the repository, so the native configuration cannot be cited to a source and has not been frozen here. WP0 does not exit for this method until the author supplies it. Until then no Table A row may be produced for the Proposed method.",
+      "cases": [],
+      "known_gaps": [
+        "PLAN section 3.5 additionally notes that a Proposed row in Table A is self-referential -- it compares the method to its own manuscript and can only show zero error. That is finding F11, which is out of scope for revision R2 and remains open."
+      ]
+    }
+  ]
+}

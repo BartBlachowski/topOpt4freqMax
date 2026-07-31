@@ -1,0 +1,135 @@
+{
+  "schema_version": "1.0",
+  "created": "2026-07-31",
+  "governing_document": "examples/Performance/PLAN_two_table_redesign.md",
+  "purpose": "The freeze record required by PLAN section 2.1. Every commitment the plan describes as frozen or preregistered lives here, and the ordering is made checkable by version control rather than by narrative. Cite this file's commit hash in the manuscript.",
+
+  "status": "PARTIAL -- see not_yet_frozen. WP0 does not exit until those entries are closed.",
+
+  "revision_policy": {
+    "rule": "A frozen value changes only by a new commit that states what changed, why, and what had already been observed at the time.",
+    "single_revision_permitted": ["thresholds.tau", "thresholds.epsilon_V", "common_budget.Nmax"],
+    "unpreregistered": "Any quantity found missing from this record after results are inspected is reported as an unpreregistered choice, not retrofitted."
+  },
+
+  "fidelity_verdict_rule": {
+    "section": "PLAN 3.5",
+    "assignment": "mechanical, from the thresholds below; no row is re-categorized by judgment after the fact",
+    "categories": {
+      "reproduced": "abs(signed relative omega1 error) <= 2 % AND topology agreement at or above topology_metric.agreement_threshold (or unavailable with a documented qualitative match) AND no CAP HIT AND no required setting marked unavailable",
+      "partially_reproduced": "abs(signed relative omega1 error) <= 10 % but topology agreement or iteration count disagrees materially, or a required setting is unavailable",
+      "not_reproduced": "anything else, including CAP HIT, or a result lying outside the interval of an inferred reference"
+    },
+    "also_reported": "rho_iter = iterations_ours / iterations_paper, with its interval when the reference is inferred",
+    "consequence": "the verdict fixes the permitted Table B speedup wording; see speedup_wording"
+  },
+
+  "speedup_wording": {
+    "section": "PLAN 4.5",
+    "reproduced": "X is N times faster than the Y method under this protocol",
+    "partially_reproduced": "as above, with the residual discrepancy and its direction stated in the same sentence",
+    "not_reproduced": "X is N times faster than THIS IMPLEMENTATION OF Y under this protocol, with rho_iter and its interval quoted in the same sentence",
+    "uncertainty": "every speedup combines timing dispersion (PLAN 4.4) with acceptance-index dispersion (PLAN 6.5); a speedup quoted without both is not reportable"
+  },
+
+  "acceptance_rule": {
+    "section": "PLAN 4.2",
+    "field": "element-wise physical density xPhys, not solver-internal design or optimizer variables",
+    "d_inf": "max over e of |xPhys_e(k) - xPhys_e(k-1)|",
+    "rV": "|V(xPhys(k)) - Vtarget| / Vtarget, with passive/solid/void regions treated identically in the declared volume functional",
+    "persistence_window_W": 10,
+    "conditions": [
+      "d_inf <= tau",
+      "rV <= epsilon_V",
+      "all required linear, eigenvalue and optimizer solves returned valid finite results",
+      "the method has entered its final native stage and completed every mandatory continuation transition",
+      "the common iteration cap was not hit"
+    ],
+    "k_star": "the end of the confirmation window, equivalent to an implementable online W-consecutive-iterations rule",
+    "censoring": "if no k* exists within the common budget, report right-censored (> Nmax, CAP HIT) and compute no speedup",
+    "certifies": "stationarity of the physical density field and volume feasibility only -- not optimality, not comparable design quality",
+    "grayness": "never a stationarity threshold; it may enter indirectly through a method's own grayness-triggered continuation, which is declared per method in continuation_floors"
+  },
+
+  "common_terminal_validation": {
+    "section": "PLAN 4.4.1",
+    "steps": [
+      "take xPhys at k*",
+      "binarize at a volume-preserving threshold, resolved per design by bisection so the binarized field has volume Vtarget",
+      "evaluate omega1 on both the raw and the binarized field using the common eigensolver configuration below"
+    ],
+    "reported": ["omega1 raw", "omega1 binarized"],
+    "rationale": "terminal grayness currently spans roughly 0.013 to 0.257 across methods; a frequency read off designs of such different discreteness cannot serve as the outcome-quality guard",
+    "inside_timing_boundary": true
+  },
+
+  "eigensolver_configuration": {
+    "section": "PLAN 2 and 6.1",
+    "start_vector_policy": {
+      "value": "fixed unit-norm vector drawn from a private RandStream('twister','Seed',42), independent of the global random stream",
+      "rationale": "MATLAB eigs draws its start vector from the global stream when none is supplied, making trajectories depend on stream state and on run order",
+      "implemented": ["analysis/OlhoffApproach/Matlab/topFreqOptimization_MMA.m", "analysis/YukselApproach/Matlab/top99neo_inertial_freq.m", "analysis/ourApproach/Matlab/topopt_freq.m"],
+      "evidence": "examples/Performance/determinism_validation.json"
+    },
+    "terminal_evaluation": {
+      "solver": "eigs",
+      "mode_count": 3,
+      "target": "smallestabs",
+      "tolerance": 1e-8,
+      "status": "PROPOSED -- confirm once against all three methods before Table B runs, since the solvers currently mix the 'SM' and 'smallestabs' sigma forms"
+    }
+  },
+
+  "continuation_floors": {
+    "section": "PLAN 4.2.3",
+    "rule": "every iteration-indexed continuation schedule is declared here before the campaign, and k_cont is reported per row",
+    "Olhoff": {
+      "beta_schedule": [1, 2, 4, 8, 16, 32, 64],
+      "beta_interval": 40,
+      "Npolish": 40,
+      "floor_iterations": 280,
+      "derivation": "beta reaches its final index at iteration beta_interval * (len(beta_schedule) - 1) = 240; the minimum polish requirement then clears at 280",
+      "grayness_trigger": "beta also advances early when grayness < gray_tol = 0.10, so grayness is causally in this method's acceptance path",
+      "observed_effect": "native iteration counts are flat at 343-374 across a 25x range of element counts"
+    },
+    "Yuksel": {"floor_iterations": 0, "note": "stage handoff is convergence-driven, not iteration-indexed"},
+    "Proposed": {"floor_iterations": null, "note": "unavailable until the native configuration is frozen"}
+  },
+
+  "timing_protocol": {
+    "section": "PLAN 4.4",
+    "primary_measure": "wall time from entry into method-specific initialization through the accepted update and one common terminal validation",
+    "excluded": ["configuration file parsing", "plotting", "table generation", "result-file I/O"],
+    "secondary_diagnostic": "optimization loop time",
+    "warm_up": "one untimed warm-up per method/mesh execution path",
+    "repetitions": 3,
+    "dispersion_statistic": "median with full min-max range; IQR is not meaningful at n = 3",
+    "run_order": "interleaved or randomized within each mesh block, valid only because section 6.1 determinism holds",
+    "outlier_rule": "no repetition is discarded except under a recorded machine failure: MATLAB crash, thermal throttling event logged by the OS, or a competing process observed on the otherwise idle machine. Every repetition is stored regardless.",
+    "acceptance_test_cost": "excluded by construction, since replays run a fixed iteration count; stated in the manuscript"
+  },
+
+  "thresholds": {
+    "W": {"value": 10, "status": "FROZEN"},
+    "tau": {"value": 0.003, "status": "WORKING VALUE, NOT FROZEN", "blocking": "requires the PLAN 4.2.1 calibration"},
+    "epsilon_V": {"value": 0.001, "status": "WORKING VALUE, NOT FROZEN", "blocking": "requires the PLAN 4.2.1 calibration; rV has never been logged, so no existing artifact supports any value"}
+  },
+
+  "determinism_bounds": {
+    "section": "PLAN 6.1, 6.3, 6.5",
+    "repetition": "bit-identical density field, frequencies, iteration counts, stage counts and objective history across repeated runs, differing global stream states, and reversed execution order",
+    "prefix_invariance": "bitwise where deterministic; otherwise max|delta xPhys| <= 1e-12",
+    "k_star_stability": "discovery pass repeated at least 3 times per method on the smallest mesh and one representative production mesh; k* and k_cont dispersion reported and propagated into every speedup interval"
+  },
+
+  "not_yet_frozen": [
+    {"item": "Proposed method native configuration", "blocking": "no manuscript in the repository; PLAN section 2 requires this before Table A results are inspected", "owner": "author"},
+    {"item": "tau and epsilon_V", "blocking": "PLAN 4.2.1 calibration pilot sweep with rV logging (WP4)"},
+    {"item": "common outer budget Nmax", "blocking": "PLAN 4.3 calibration run"},
+    {"item": "topology_metric: field metric, binarization threshold, agreement categories and threshold", "blocking": "PLAN 3.3; requires deciding per source whether a density field, a published image, or neither is available"},
+    {"item": "mesh_list for Tables B and C", "blocking": "follows the Nmax calibration"},
+    {"item": "threshold_sensitivity_grid around tau and epsilon_V", "blocking": "follows the threshold calibration"},
+    {"item": "terminal eigensolver configuration confirmation", "blocking": "one cross-method check"},
+    {"item": "Olhoff published frequency units", "blocking": "confirm rad/s against the chapter text"}
+  ]
+}

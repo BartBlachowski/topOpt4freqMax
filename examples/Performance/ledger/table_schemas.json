@@ -1,0 +1,106 @@
+{
+  "schema_version": "1.0",
+  "created": "2026-07-31",
+  "governing_document": "examples/Performance/PLAN_two_table_redesign.md",
+  "purpose": "Column definitions for Tables A, B and C. WP0 exits only when every planned column has a definition, a unit, a provenance rule and a source.",
+
+  "conventions": {
+    "missing_data": {
+      "not_applicable": "em dash. Used where a quantity has no meaning for that method, e.g. stage counts for a single-stage method. Never zero.",
+      "unavailable": "the literal token unavailable. Used where a quantity exists but the source does not report it and it cannot be inferred.",
+      "censored": "the token CAP HIT, with the bound, e.g. > Nmax. Never accompanied by a speedup."
+    },
+    "signed_error": {
+      "formula": "relative error [%] = 100 * (omega1_ours - omega1_paper) / omega1_paper",
+      "rule": "the sign is always shown; absolute error alone is not reportable"
+    },
+    "stage_counts": {
+      "rule": "Stage 1 + Stage 2 = Total is asserted and printed for every staged method in all three tables",
+      "single_stage": "em dash for both stage columns, never zero"
+    },
+    "deltas": {
+      "definition": "every delta is controlled minus native",
+      "rule": "relative deltas are archived alongside absolute deltas"
+    },
+    "frequency_units": {
+      "unit": "rad/s",
+      "rule": "the table states the unit and whether the source reports angular or cyclic frequency; a source reporting cyclic frequency is converted and the conversion is marked inferred"
+    },
+    "runtime_units": {"unit": "s"},
+    "iteration_commensurability": {
+      "rule": "iteration counts are commensurable only within a method. Cross-method comparison is on wall time only. This is stated in the caption of every table that prints an iteration column."
+    }
+  },
+
+  "table_A": {
+    "question": "Can each published method be reproduced from its source?",
+    "permitted_claim": "implementation fidelity only",
+    "columns": [
+      {"name": "Method", "definition": "method identifier", "unit": null, "provenance_rule": "n/a", "source": "campaign configuration"},
+      {"name": "Case / mesh", "definition": "source-paper case identifier and its native mesh", "unit": "elements", "provenance_rule": "reported from the source", "source": "protocol_ledger.json"},
+      {"name": "omega1 ours", "definition": "first natural frequency of our reproduction, on the design the source evaluates its published frequency on", "unit": "rad/s", "provenance_rule": "measured", "source": "campaign artifact"},
+      {"name": "omega1 paper", "definition": "the source's published first natural frequency", "unit": "rad/s", "provenance_rule": "reported or inferred; label required", "source": "protocol_ledger.json reference_values"},
+      {"name": "Signed relative error", "definition": "see conventions.signed_error", "unit": "%", "provenance_rule": "derived", "source": "computed"},
+      {"name": "Topology agreement", "definition": "preregistered field metric and solid-region IoU where a density field is available; documented digitization where only an image is available; otherwise unavailable", "unit": "dimensionless", "provenance_rule": "measured or unavailable", "source": "freeze_record.json topology_metric"},
+      {"name": "Native iterations ours", "definition": "iterations executed under the source's own protocol and stopping rule", "unit": "iterations", "provenance_rule": "measured", "source": "campaign artifact"},
+      {"name": "Published iterations", "definition": "the source's iteration count", "unit": "iterations", "provenance_rule": "reported, inferred with interval, or unavailable; label required", "source": "protocol_ledger.json reference_values.iterations"},
+      {"name": "rho_iter", "definition": "iteration-count fidelity ratio, iterations_ours / iterations_paper, with interval when the reference is inferred", "unit": "dimensionless", "provenance_rule": "derived; inherits the reference's provenance", "source": "computed, PLAN section 3.5"},
+      {"name": "Stage 1", "definition": "iterations in the method's first native stage", "unit": "iterations", "provenance_rule": "measured", "source": "campaign artifact"},
+      {"name": "Stage 2", "definition": "iterations in the method's second native stage", "unit": "iterations", "provenance_rule": "measured", "source": "campaign artifact"},
+      {"name": "Total", "definition": "Stage 1 + Stage 2, asserted equal to the reported total", "unit": "iterations", "provenance_rule": "derived", "source": "computed"},
+      {"name": "Native runtime ours", "definition": "locally measured wall time under the native protocol; descriptive only", "unit": "s", "provenance_rule": "measured", "source": "campaign artifact"},
+      {"name": "Provenance", "definition": "aggregate provenance marks for the row's reference values", "unit": null, "provenance_rule": "n/a", "source": "protocol_ledger.json"},
+      {"name": "Verdict", "definition": "fidelity verdict assigned mechanically by the frozen rule", "unit": null, "provenance_rule": "derived", "source": "freeze_record.json fidelity_verdict_rule"}
+    ],
+    "prohibited": [
+      "a source-paper runtime may not appear in this table, nor in any column that invites comparison with local controlled runtime"
+    ]
+  },
+
+  "table_B": {
+    "question": "Under identical external engineering requirements, how much computation does each implementation require?",
+    "permitted_claim": "controlled runtime and speedup, worded per the comparator's Table A verdict",
+    "columns": [
+      {"name": "Method", "definition": "method identifier", "unit": null, "provenance_rule": "n/a", "source": "campaign configuration"},
+      {"name": "Mesh", "definition": "common mesh", "unit": "elements", "provenance_rule": "n/a", "source": "freeze_record.json mesh_list"},
+      {"name": "omega1 raw", "definition": "first natural frequency at the accepted design, evaluated on the raw physical density field", "unit": "rad/s", "provenance_rule": "measured", "source": "common terminal validation"},
+      {"name": "omega1 binarized", "definition": "first natural frequency at the accepted design after volume-preserving binarization", "unit": "rad/s", "provenance_rule": "measured", "source": "common terminal validation, PLAN section 4.4.1"},
+      {"name": "Stage 1", "definition": "accepted iterations in the first native stage", "unit": "iterations", "provenance_rule": "measured", "source": "campaign artifact"},
+      {"name": "Stage 2", "definition": "accepted iterations in the second native stage", "unit": "iterations", "provenance_rule": "measured", "source": "campaign artifact"},
+      {"name": "k_cont", "definition": "iteration at which the last mandatory continuation transition and any minimum-polish requirement were cleared; the schedule floor below which acceptance is impossible", "unit": "iterations", "provenance_rule": "measured", "source": "iteration history, PLAN section 4.2.3"},
+      {"name": "Total k*", "definition": "accepted iteration, the end of the W-iteration confirmation window", "unit": "iterations", "provenance_rule": "measured", "source": "offline evaluator"},
+      {"name": "Runtime", "definition": "median wall time of the timed replays to k*, from entry into method-specific initialization through the accepted update and one common terminal validation", "unit": "s", "provenance_rule": "measured", "source": "timed replay"},
+      {"name": "Speedup", "definition": "ratio of runtimes within this campaign against the stated baseline", "unit": "dimensionless", "provenance_rule": "derived", "source": "computed", "note": "wording bound to the comparator's Table A verdict; uncertainty combines timing dispersion and k* dispersion"},
+      {"name": "d_inf", "definition": "max over elements of |xPhys(k) - xPhys(k-1)| at k*", "unit": "dimensionless density", "provenance_rule": "measured", "source": "iteration history"},
+      {"name": "rV", "definition": "|V(xPhys) - Vtarget| / Vtarget at k*", "unit": "dimensionless", "provenance_rule": "measured", "source": "iteration history"},
+      {"name": "Grayness", "definition": "mean of 4*x*(1-x) over the physical density field at k*; reported only, never a gate", "unit": "dimensionless", "provenance_rule": "measured", "source": "iteration history"},
+      {"name": "Acceptance", "definition": "accepted, or the censoring reason", "unit": null, "provenance_rule": "derived", "source": "offline evaluator"}
+    ],
+    "archived_not_printed": [
+      "RMS physical-density change", "native objective value", "mode information", "peak memory",
+      "optimization loop time", "move-limit-active fraction at k*", "every repetition-level timing", "k* dispersion"
+    ]
+  },
+
+  "table_C": {
+    "question": "How much does replacing the native protocol with the controlled protocol change each method?",
+    "permitted_claim": "within-method protocol sensitivity only; no cross-method ranking",
+    "columns": [
+      {"name": "Method", "definition": "method identifier", "unit": null, "provenance_rule": "n/a", "source": "campaign configuration"},
+      {"name": "Mesh", "definition": "mesh available to both arms", "unit": "elements", "provenance_rule": "n/a", "source": "freeze_record.json mesh_list"},
+      {"name": "Native Stage 1/2/Total", "definition": "iterations under the frozen source-native protocol on the common problem", "unit": "iterations", "provenance_rule": "measured", "source": "native arm"},
+      {"name": "Benchmark Stage 1/2/Total", "definition": "iterations under the Table B protocol and common acceptance rule", "unit": "iterations", "provenance_rule": "measured", "source": "controlled arm"},
+      {"name": "Native runtime", "definition": "locally measured wall time, native arm", "unit": "s", "provenance_rule": "measured", "source": "native arm"},
+      {"name": "Benchmark runtime", "definition": "locally measured wall time, controlled arm", "unit": "s", "provenance_rule": "measured", "source": "controlled arm"},
+      {"name": "Native omega1", "definition": "first natural frequency, native arm, common terminal evaluator", "unit": "rad/s", "provenance_rule": "measured", "source": "native arm"},
+      {"name": "Benchmark omega1", "definition": "first natural frequency, controlled arm, common terminal evaluator", "unit": "rad/s", "provenance_rule": "measured", "source": "controlled arm"},
+      {"name": "Delta iterations", "definition": "controlled minus native", "unit": "iterations", "provenance_rule": "derived", "source": "computed"},
+      {"name": "Delta runtime", "definition": "controlled minus native", "unit": "s", "provenance_rule": "derived", "source": "computed"},
+      {"name": "Delta omega1", "definition": "controlled minus native", "unit": "rad/s", "provenance_rule": "derived", "source": "computed"}
+    ],
+    "prohibited": [
+      "a paper runtime measured on other hardware is never an input to this table"
+    ],
+    "archived_not_printed": ["native and controlled grayness", "native and controlled volume residual", "relative deltas"]
+  }
+}
