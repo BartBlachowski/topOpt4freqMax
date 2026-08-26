@@ -1,0 +1,797 @@
+{
+  "schema_version": "3.2-candidate",
+  "status": "READY_AFTER_ENGINEERING_FIXES_DO_NOT_EXECUTE",
+  "created": "2026-08-26",
+  "scope": {
+    "methodology_documentation_only": true,
+    "performance_campaign_authorized": false,
+    "new_optimization_runs_authorized": false,
+    "parameter_sweeps_authorized": false,
+    "algorithm_changes_authorized": false,
+    "stale_results_may_select_parameters": false
+  },
+  "governing_documents": [
+    "BENCHMARK_FAIRNESS_AUDIT.md",
+    "BENCHMARK_PROTOCOL_R3.md"
+  ],
+  "audit_identity": {
+    "branch": "benchmark-methodology-r2",
+    "head": "cf290fc7f9daf9da27bc8224f9585a0e1657bff1",
+    "working_tree_clean": false,
+    "campaign_freeze_commit": null,
+    "stale_artifacts_prohibited_for_scientific_use": [
+      "examples/Performance/benchmark_results.json",
+      "examples/Performance/table1_performance.csv",
+      "examples/Performance/table1_complexity_fit.csv",
+      "examples/Performance/table1_paper_style.tex",
+      "examples/Performance/performance_log.txt"
+    ],
+    "stale_timing_capacity_planning_only": true,
+    "frozen_history_structural_feasibility_only": true
+  },
+  "problem": {
+    "geometry": {
+      "length_m": 8.0,
+      "height_m": 1.0,
+      "thickness_m": 1.0
+    },
+    "element": "plane_stress_Q4_2x2_gauss",
+    "mass_matrix": "consistent_Q4",
+    "material": {
+      "E0_Pa": 10000000.0,
+      "nu": 0.3,
+      "rho0_kg_m3": 1.0
+    },
+    "boundary_conditions": "ux_and_uy_fixed_at_both_midheight_end_nodes",
+    "boundary_dof_equality_assertion": true,
+    "volume_fraction": 0.5,
+    "initial_design": "uniform_0.5",
+    "target_mode": 1,
+    "passive_regions": [],
+    "concentrated_masses": []
+  },
+  "mesh_sets": {
+    "scaling": [
+      [160, 20],
+      [240, 30],
+      [320, 40],
+      [400, 50],
+      [480, 60]
+    ],
+    "native_and_harmonized": [
+      [160, 20],
+      [240, 30],
+      [320, 40]
+    ],
+    "full_oat": [
+      [240, 30]
+    ],
+    "filter_radius_replication": [
+      [320, 40]
+    ],
+    "element_count_definition": "nelx_times_nely"
+  },
+  "implementation_identity": {
+    "proposed": {
+      "path": "analysis/ourApproach/Matlab/topopt_freq.m",
+      "sha256_audited": "19399780d733380993668fabddaa1d3edbe85856809193b166a77cdccf171b82"
+    },
+    "yuksel": {
+      "path": "analysis/YukselApproach/Matlab/top99neo_inertial_freq.m",
+      "sha256_audited": "5afc3d16b4ed6af05793df461b541ed3b2ea62a6da8836f38301a9a3917e6ba2"
+    },
+    "repro2007": {
+      "path": "Matlab/reproduction2007/algo/olhoffOpt.m",
+      "sha256_audited": "4784ecf3f6b42d8af6f5a9695e2924bf1f4c924ebf9c76be9a858a2ef769e5de",
+      "inner_lp_path": "Matlab/reproduction2007/algo/innerLoopLP.m",
+      "inner_lp_sha256_audited": "7724753c02f84d6009c3998f758d5b3f9c5144ad39ca6f470584a2c99e089465",
+      "frozen_reproduction_must_be_preserved": true
+    },
+    "excluded": [
+      "Olhoff",
+      "OlhoffExact",
+      "analysis/OlhoffApproach*"
+    ]
+  },
+  "optimization": {
+    "proposed": {
+      "profile_id": "proposed_manuscript_ss_oc_a0_2026-07-14",
+      "provenance_status": "RESOLVED_PRE_R3_A0_A4_WITH_DISCLOSED_IMPLEMENTATION_LIMITATIONS",
+      "provenance_audit": "PROPOSED_NATIVE_PROFILE_AUDIT.md",
+      "source_commit": "d051985fd7a2314a4a458e7bfba18d956954eebf",
+      "source_config": "examples/Revision_v1/a4_ss_400x50_base.json",
+      "source_config_sha256": "c5e8949a318dd6ac657faf034ca85b2210d3a01976c37dab1602eec8ae341047",
+      "optimizer": "OC",
+      "objective": "compliance_under_frozen_reference_inertial_load",
+      "load": {
+        "type": "proposed_frozen_reference_inertial",
+        "formula": "F(x)=omega0^2*M(x)*Phi0",
+        "reference_design": "fully_solid",
+        "reference_refresh_interval": 0,
+        "mode": 1,
+        "factor": 1.0,
+        "eigenvector_normalization": "Phi0_transpose_M0_Phi0_equals_1",
+        "deterministic_phase": "largest_magnitude_free_DOF_positive",
+        "per_iteration_norm_rescaling": false,
+        "load_sensitivity": "omitted"
+      },
+      "stiffness_penalization": 3.0,
+      "mass_interpolation": {
+        "law": "rho_min_ratio+(1-rho_min_ratio)*x",
+        "exponent": 1.0,
+        "low_density_branch": "none"
+      },
+      "filter": {
+        "type": "density_weighted_sensitivity",
+        "radius": 2.0,
+        "units": "element",
+        "declared_boundary_in_source_config": "symmetric",
+        "effective_historical_operator": "truncated_centroid_stencil",
+        "implementation_declaration_mismatch_disclosed": true,
+        "heaviside_key_permitted": false
+      },
+      "move": 0.2,
+      "design_variable_lower_bound": 0.0,
+      "design_variable_upper_bound": 1.0,
+      "manuscript_design_lower_bound": 0.001,
+      "design_bound_mismatch_disclosed": true,
+      "native_tolerance": 0.001,
+      "native_tolerance_field": "raw_design_x",
+      "max_iterations": 2000,
+      "iteration_cap_role": "safety_budget_CAP_HIT_not_convergence",
+      "stiffness_floor_ratio": 1e-9,
+      "material_void_density_ratio": 1e-9,
+      "initial_design": "uniform_at_problem_volume_fraction",
+      "active_continuation": false,
+      "active_heaviside_projection": false,
+      "oc_update": {
+        "volume_enforcement": "lagrange_multiplier_bisection_equality",
+        "lambda_bracket": [0.0, 1e9],
+        "lambda_relative_tolerance": 0.001,
+        "lambda_max_bisections": 200
+      },
+      "prohibited_legacy_keys_or_entries": [
+        "semi_harmonic_rho_source",
+        "harmonic_normalize_true",
+        "inactive_heaviside",
+        "dead_mode_2_factor_0",
+        "mma_volume_projection"
+      ],
+      "decisive_provenance": [
+        {
+          "source": "paper/main.tex and paper/reviews/algorithms_comparison.tex",
+          "commit": "d051985fd7a2314a4a458e7bfba18d956954eebf",
+          "date": "2026-07-14",
+          "predates_r3": true,
+          "values": "OC; physical current-mass load; omitted load sensitivity; max raw design change tolerance 1e-3; linear mass; no MMA or continuation required"
+        },
+        {
+          "source": "examples/Revision_v1/A4_SPECIFICATION_V3.md and examples/Revision_v1/a4_ss_400x50_base.json",
+          "commit": "d051985fd7a2314a4a458e7bfba18d956954eebf",
+          "date": "2026-07-14",
+          "predates_r3": true,
+          "values": "OC; A0 solid frozen reference; one mode; floors 1e-9; linear mass; rmin 2 element; move 0.2; tolerance 1e-3; cap 2000; uniform start; no Heaviside"
+        }
+      ],
+      "rejected_or_limited_sources": [
+        {
+          "source": "examples/Performance/performance_comparison.json",
+          "commit": "76b2894e92eddf53ccd628bfdcee621e94d2c9f9",
+          "date": "2026-03-08",
+          "predates_r3": true,
+          "classification": "legacy_MMA_cross_code_experiment_not_native"
+        },
+        {
+          "source": "examples/Revision_v1/ss_beam.json",
+          "sha256": "0d575973bf62c14caeb4578168042aaae9a66e196f92ec93b9d982a555a2b47d",
+          "commit": "2fb35be568889ef225fc599c0535db57ff6c65e0",
+          "date": "2026-05-29",
+          "predates_r3": true,
+          "classification": "transitional_OC_profile_before_A0_load_reference_correction"
+        },
+        {
+          "source": "current_R3_branch_analysis/ourApproach/Matlab/topopt_freq.m",
+          "sha256": "19399780d733380993668fabddaa1d3edbe85856809193b166a77cdccf171b82",
+          "date": "2026-08-26 audit",
+          "predates_r3": false,
+          "classification": "engineering_blocker_obsolete_nodal_density_semi_harmonic_formula"
+        }
+      ]
+    },
+    "yuksel": {
+      "profile_id": "yuksel_published_ss_2025",
+      "provenance_status": "PUBLISHED_CASE_WITH_LOCAL_IMPLEMENTATION_DISCLOSURE",
+      "paper_sha256": "c2b4547947b4d4d82e17758c4ecd4c1879d5a24877720b08bf6b447b98851cf4",
+      "optimizer": "OC",
+      "penalization": 3.0,
+      "filter": {
+        "type": "sensitivity",
+        "radius": 2.5,
+        "units": "element",
+        "boundary": "symmetric",
+        "provenance": "published_simply_supported_320x40_case",
+        "local_generic_fallback_excluded": 8.75
+      },
+      "move": 0.2,
+      "stage1_tolerance": 0.01,
+      "stage2_tolerance": 0.01,
+      "stage1_max_iterations": 10000,
+      "stage2_max_iterations": 10000,
+      "stiffness_floor_ratio": 1e-9,
+      "material_void_density_ratio": 1e-9,
+      "mass_interpolation": {
+        "cutoff": 0.1,
+        "above_cutoff": "g(x)=x",
+        "at_or_below_cutoff": "g(x)=x^6"
+      },
+      "eta": 0.5,
+      "beta": 1.0,
+      "continuation_active": false
+    },
+    "repro2007": {
+      "profile_id": "olhoff_du_2007_repro_fig3a_best",
+      "provenance_status": "FROZEN_RECONSTRUCTED_BENCHMARK_SUPPORTED_NOT_PAPER_SPECIFIED",
+      "paper_sha256": "b4dc8153ddc505b54f05cb72afe4641ba40c79512e5d32be4ab9c1e1b0378bc4",
+      "provenance_sha256": "958c4b4fb420c2f692f6fa935711eb7883f00cdef5b4955fc4edd9bf983a7aaa",
+      "configuration_lineage": "fig3a_best",
+      "filter": {
+        "type": "top88_sensitivity_generalized_gradient",
+        "application": "diag",
+        "radius": 1.3,
+        "units": "element",
+        "paper_specified": false,
+        "physical_radius_formula_m": "1.3*(8/nelx)"
+      },
+      "move": 0.005,
+      "move_paper_specified": false,
+      "rho_min_design": 0.001,
+      "initial_design": 0.5,
+      "penalization": 3.0,
+      "mass_interpolation": "Du_Olhoff_eq_4_discontinuous",
+      "multiplicity_tolerance": 0.05,
+      "multiplicity_tolerance_paper_specified": false,
+      "multiplicity_budget": 4,
+      "inner_solver": "lp_eq_22",
+      "off_diagonal_coupling": false,
+      "outer_tolerance": 0.001,
+      "max_outer_iterations": 1600,
+      "threads": 1
+    },
+    "olhoff_exact": {
+      "included_in_r3": false,
+      "dispatch_prohibited": true
+    }
+  },
+  "native_stop": {
+    "proposed": {
+      "test": "max_abs_x_new_minus_x_old_lte_tolerance_after_finite_successful_update",
+      "field": "raw_design_x",
+      "tolerance": 0.001,
+      "budget": 2000,
+      "budget_role": "safety_cap_CAP_HIT_not_convergence"
+    },
+    "yuksel": {
+      "stage1": "after_at_least_two_iterations_max_active_abs_delta_x_lt_0.01_is_STAGE_HANDOFF",
+      "stage2": "after_at_least_two_iterations_max_active_abs_delta_x_lt_0.01_is_final_native_stop",
+      "stage1_budget": 10000,
+      "stage2_budget": 10000,
+      "stage1_is_convergence": false
+    },
+    "repro2007": {
+      "test": "successful_LP_and_max_abs_delta_rho_lt_0.001",
+      "failure_precedence_required": true,
+      "budget": 1600
+    },
+    "terminal_classes": [
+      "CONVERGED_NATIVE",
+      "STAGE_HANDOFF",
+      "CAP_HIT",
+      "SOLVER_FAILURE"
+    ]
+  },
+  "harmonized_stationarity": {
+    "experiment_name": "Harmonized stationarity and quality evaluation",
+    "question": "Under the same external diagnostics, what quality and stationarity evidence does each trajectory provide?",
+    "physical_density_d_infinity_max": 0.003,
+    "relative_volume_residual_max": 0.001,
+    "persistence_window": 10,
+    "final_native_stage_required": true,
+    "all_solves_successful_required": true,
+    "criterion_is_optimality": false,
+    "criterion_is_universal_convergence": false,
+    "statuses": [
+      "SATISFIED",
+      "NOT_SATISFIED_WITHIN_RECORDED_TRAJECTORY",
+      "CENSORED_BY_ITERATION_BUDGET",
+      "SOLVER_FAILURE",
+      "NOT_APPLICABLE"
+    ],
+    "status_definitions": {
+      "SATISFIED": "first_valid_10_iteration_window_exists_before_any_required_solve_failure",
+      "NOT_SATISFIED_WITHIN_RECORDED_TRAJECTORY": "valid_finite_record_ends_without_kstar_and_without_protocol_budget_censoring_the_intended_observation",
+      "CENSORED_BY_ITERATION_BUDGET": "declared_iteration_budget_ends_observation_before_kstar",
+      "SOLVER_FAILURE": "required_solve_or_update_fails_before_kstar",
+      "NOT_APPLICABLE": "trajectory_or_path_has_no_scientifically_valid_harmonized_criterion"
+    },
+    "classification_order": [
+      "if_protocol_says_criterion_not_applicable_then_NOT_APPLICABLE",
+      "else_scan_in_iteration_order_for_first_valid_kstar_or_required_solver_failure",
+      "if_kstar_occurs_first_then_SATISFIED",
+      "if_required_solver_failure_occurs_first_then_SOLVER_FAILURE",
+      "else_if_declared_budget_ends_intended_observation_then_CENSORED_BY_ITERATION_BUDGET",
+      "else_NOT_SATISFIED_WITHIN_RECORDED_TRAJECTORY"
+    ],
+    "olhoff_move_saturated_threshold_miss": "CENSORED_BY_ITERATION_BUDGET",
+    "existing_olhoff_240x30_evidence": {
+      "source": "frozen_fig3a_best_native_radius_history",
+      "d_infinity_at_move_saturation": 0.005,
+      "iteration_budget": 1600,
+      "conditional_r3_status": "CENSORED_BY_ITERATION_BUDGET",
+      "condition": "R3_history_replay_identity_confirmed",
+      "other_meshes_must_be_classified_from_own_trajectories": true
+    },
+    "valid_when_any_row_censored": [
+      "fixed_work_scaling",
+      "native_performance_with_native_stop_labels",
+      "common_quality_at_explicit_recorded_endpoints",
+      "stationarity_trajectory_diagnostics",
+      "pairwise_time_to_kstar_only_between_two_SATISFIED_rows_same_mesh_same_boundary"
+    ],
+    "prohibited_when_row_not_satisfied": [
+      "speedup_to_common_convergence",
+      "budget_endpoint_as_kstar",
+      "convergence_speed_ranking_from_unequal_horizons",
+      "aggregate_speed_ranking_that_silently_includes_censoring"
+    ]
+  },
+  "common_evaluation": {
+    "status": "IMPLEMENTATION_REQUIRED",
+    "neutrality_claimed": false,
+    "native_namespace": [
+      "objective_native",
+      "omega1_native",
+      "omega2_native",
+      "omega3_native"
+    ],
+    "shared_fe": {
+      "element": "plane_stress_Q4_2x2_gauss",
+      "mass_matrix": "consistent_Q4",
+      "supports": "same_four_midheight_fixed_dofs",
+      "mode_count": 3,
+      "eigensolver": "eigs_smallestabs",
+      "tolerance": 1e-8,
+      "start_vector": "private_deterministic_fixed_unit_norm",
+      "residual_finite_status_checks": true
+    },
+    "primary_model_id": "E1",
+    "primary_reason": "pre_existing_R2_common_model_and_numerically_regular_on_arbitrary_fields_not_neutrality_or_expected_winner",
+    "models": [
+      {
+        "id": "E1",
+        "name": "simp_linear_floor1e-6",
+        "density_input": "z",
+        "stiffness_ratio": "1e-6+(1-1e-6)*z^3",
+        "mass_ratio": "1e-6+(1-1e-6)*z",
+        "family_disclosure": "Proposed_like"
+      },
+      {
+        "id": "E2",
+        "name": "yuksel_piecewise_floor1e-9",
+        "density_input": "z",
+        "stiffness_ratio": "1e-9+(1-1e-9)*z^3",
+        "mass_ratio": "1e-9+(1-1e-9)*g(z)",
+        "mass_piecewise": {
+          "z_gt_0.1": "g(z)=z",
+          "z_lte_0.1": "g(z)=z^6"
+        },
+        "family_disclosure": "Yuksel_like"
+      },
+      {
+        "id": "E3",
+        "name": "olhoff_eq4_rhomin1e-3",
+        "density_mapping": "z3=max(z,1e-3)",
+        "stiffness_ratio": "z3^3",
+        "mass_ratio": "g(z3)",
+        "mass_piecewise": {
+          "z3_gt_0.1": "g(z3)=z3",
+          "z3_lte_0.1": "g(z3)=z3^6"
+        },
+        "family_disclosure": "reconstructed_Olhoff_like"
+      }
+    ],
+    "representations": {
+      "raw": {
+        "source": "raw_physical_density",
+        "column_pattern": "omega{1..3}_common_raw_E{1..3}",
+        "model_dependent_label_required": true
+      },
+      "binary": {
+        "source": "volume_preserving_binary_indicator",
+        "exact_target_solid_element_count": true,
+        "ordering": "raw_density_descending",
+        "tie_break": "stable_element_index",
+        "column_pattern": "omega{1..3}_common_binary_E{1..3}",
+        "separate_from_raw": true,
+        "may_interact_with_grayness": true,
+        "may_determine_ranking_alone": false
+      }
+    },
+    "evaluator_robust_ordering_rule": "every_claimed_pairwise_frequency_difference_must_have_same_sign_across_E1_E2_E3_else_report_model_dependence_and_no_single_raw_ranking",
+    "evaluator_robust_magnitude_or_tie_threshold": null,
+    "near_zero_differences_must_be_printed": true
+  },
+  "measurement": {
+    "claim": "controlled_serial_computational_comparison",
+    "thread_count": 1,
+    "matlab_target": "R2025b_Update_1_capture_at_freeze",
+    "single_host": true,
+    "startup_excluded": true,
+    "plotting_io_diagnostics_excluded": true,
+    "memory_separate_from_timing": true,
+    "not_claimed": [
+      "fastest_achievable_implementation",
+      "optimal_parallel_performance",
+      "best_practical_multicore_or_GPU_runtime"
+    ],
+    "supplementary_practical_runtime_required": false,
+    "supplementary_trigger": "only_if_paper_adds_parallel_or_best_hardware_runtime_claim",
+    "fixed_work": {
+      "paths": [
+        "proposed",
+        "yuksel_stage1",
+        "yuksel_stage2",
+        "repro2007_outer_lp"
+      ],
+      "windows": [
+        {
+          "id": "W1",
+          "first_iteration": 11,
+          "last_iteration": 110,
+          "measured_iterations": 100,
+          "role": "retained_early_window_straddles_known_repro_transition"
+        },
+        {
+          "id": "W2",
+          "first_iteration": 201,
+          "last_iteration": 300,
+          "measured_iterations": 100,
+          "role": "post_known_iteration_95_repro_multiplicity_transition"
+        }
+      ],
+      "window_selection_evidence": "frozen_fig3a_best_multiplicity_transition_iteration_95_not_new_timing_results",
+      "both_windows_same_invocation": true,
+      "warmup_invocations_per_path_mesh": 1,
+      "measured_repetitions_per_path_mesh": 10,
+      "native_stop_extension": "suppress_only_exit_and_execute_identical_kernel",
+      "yuksel_stage1_handoff_suppression_gate_required": true,
+      "yuksel_stage1_structural_feasibility": "handoff_test_is_at_loop_end_history_arrays_use_budget_and_continuation_is_inactive",
+      "failed_gate_action": "path_window_NOT_APPLICABLE_no_method_specific_replacement_window"
+    },
+    "native_full": {
+      "history_runs_per_method_mesh": 1,
+      "measured_repetitions_per_method_mesh": 3
+    },
+    "accepted_harmonized_endpoint": {
+      "measured_repetitions": 10,
+      "warmup_invocations": 1,
+      "only_if_status": "SATISFIED"
+    },
+    "primary_location": "median",
+    "dispersion": [
+      "MAD",
+      "CV",
+      "min",
+      "max"
+    ],
+    "memory": {
+      "measure": "fresh_process_OS_maximum_resident_set",
+      "repetitions": 3,
+      "empty_session_baseline": true
+    }
+  },
+  "yuksel_accounting": {
+    "time_identity": "T_Yuksel_total=T_stage1+T_stage2",
+    "iteration_identity": "iter_total=iter_stage1+iter_stage2",
+    "practical_method_level_time": "T_Yuksel_total",
+    "stage_specific_role": "diagnostic_and_scaling_only",
+    "stage2_speedup_as_method_speedup_prohibited": true
+  },
+  "sensitivity": {
+    "design": "one_factor_at_a_time_no_cartesian_product",
+    "center_results_may_replace_native_profile": false,
+    "full_oat_mesh": [240, 30],
+    "filter_replication_mesh": [320, 40],
+    "proposed": {
+      "filter_radius_element": [1.5, 2.0, 2.5],
+      "move": [0.1, 0.2, 0.3],
+      "native_tolerance": [0.0005, 0.001, 0.002],
+      "radius_metrics": [
+        "objective_native",
+        "omega1_to_omega3_native",
+        "all_common_raw_and_binary_models",
+        "volume",
+        "grayness",
+        "topology_connectivity_features",
+        "OC_bisection_status",
+        "volume_residual",
+        "active_move_fraction",
+        "native_and_harmonized_status",
+        "iteration_saturation"
+      ]
+    },
+    "yuksel": {
+      "filter_radius_element": [2.0, 2.5, 3.0],
+      "move": [0.1, 0.2, 0.3],
+      "both_stage_tolerances": [0.005, 0.01, 0.02],
+      "radius_metrics": [
+        "omega1_to_omega3_native",
+        "all_common_raw_and_binary_models",
+        "volume",
+        "grayness",
+        "topology_connectivity_features",
+        "iter_stage1_stage2_total",
+        "stage_handoff",
+        "moving_compliance_load_mode_change",
+        "OC_status",
+        "active_move_fraction",
+        "native_and_harmonized_status",
+        "iteration_saturation"
+      ],
+      "artificial_multiplicity_measure_prohibited": true
+    },
+    "repro2007": {
+      "filter_radius_element": [1.1, 1.3, 1.5],
+      "move": [0.0025, 0.005, 0.01],
+      "multiplicity_tolerance": [0.02, 0.05, 0.08],
+      "radius_metrics": [
+        "omega1",
+        "omega2",
+        "omega3",
+        "omega1_omega2_absolute_gap",
+        "omega1_omega2_relative_gap",
+        "N",
+        "last50_coalescence_persistence",
+        "all_common_raw_and_binary_models",
+        "topology_connectivity",
+        "volume",
+        "LP_status_each_iteration",
+        "failed_LP_count",
+        "move_saturation",
+        "native_and_harmonized_status",
+        "iteration_saturation"
+      ],
+      "actual_gap_authoritative_over_N": true
+    },
+    "common_stop_offline_grid": {
+      "d_infinity": [0.002, 0.003, 0.005],
+      "relative_volume_residual": [0.0005, 0.001, 0.002],
+      "optimization_reruns": 0
+    },
+    "universal_radius_inference": "prohibited_unless_evidence_independently_supports_it"
+  },
+  "regression": {
+    "model": "log(t_iter)=log(C)+p*log(N_e)",
+    "primary": "unweighted_OLS_on_five_mesh_medians_separately_for_each_path_and_window",
+    "report_each_fit": [
+      "C",
+      "p",
+      "R2",
+      "adjusted_R2",
+      "p_95pct_CI",
+      "n_mesh",
+      "residuals"
+    ],
+    "scaling_stability": {
+      "quantity": "Delta_p=p_W2-p_W1",
+      "report": [
+        "point_estimate",
+        "repetition_resampling_95pct_interval",
+        "per_mesh_W2_over_W1_ratios",
+        "residual_comparison"
+      ],
+      "acceptance_threshold": null,
+      "differing_regimes_must_be_reported_separately": true,
+      "averaging_across_regimes_prohibited": true
+    },
+    "mesh_removal_permitted": false,
+    "minimum_mesh_count_for_primary_claim": 5
+  },
+  "publication_tables": {
+    "A_controlled_serial_scaling": {
+      "row_unit": "method_stage_window",
+      "columns": [
+        "method_stage",
+        "window_id",
+        "radius_value_unit_operator",
+        "mesh_count",
+        "element_range",
+        "measured_iterations",
+        "repetitions",
+        "median_t_iter_by_mesh",
+        "MAD_CV_range",
+        "C",
+        "p",
+        "p_95CI",
+        "R2",
+        "adjusted_R2",
+        "residual_summary",
+        "component_shares",
+        "kernel_validity"
+      ],
+      "stability_columns": [
+        "Delta_p",
+        "Delta_p_95CI",
+        "W2_over_W1_by_mesh"
+      ]
+    },
+    "B_method_native_performance": {
+      "row_unit": "method_mesh",
+      "columns": [
+        "method",
+        "mesh",
+        "native_profile_id",
+        "provenance_status",
+        "objective_native_definition_direction",
+        "omega1_to_omega3_native",
+        "omega1_to_omega3_common_raw_E1_to_E3",
+        "omega1_to_omega3_common_binary_E1_to_E3",
+        "volume",
+        "grayness",
+        "topology_connectivity",
+        "iter_stage1",
+        "iter_stage2",
+        "iter_total",
+        "outer_inner",
+        "T_stage1",
+        "T_stage2",
+        "T_Yuksel_total",
+        "native_wall_median_range",
+        "peak_RSS",
+        "native_stop_class_reason",
+        "solver_status"
+      ],
+      "cross_method_speedup_prohibited": true
+    },
+    "C_harmonized_stationarity_quality": {
+      "row_unit": "method_mesh",
+      "columns": [
+        "native_endpoint_iteration_class",
+        "recorded_horizon",
+        "k_star",
+        "harmonized_criterion_status",
+        "censoring_reason_budget",
+        "endpoint_d_infinity_rV",
+        "omega1_to_omega3_common_raw_E1_to_E3",
+        "omega1_to_omega3_common_binary_E1_to_E3",
+        "grayness",
+        "optimization_time_to_kstar_if_satisfied",
+        "evaluator_time",
+        "combined_time",
+        "eligible_pairwise_speedup"
+      ],
+      "non_satisfied_speedup_cell": "em_dash_with_reason"
+    },
+    "D_robustness": {
+      "row_unit": "method_mesh_parameter_level",
+      "panels": [
+        "240x30_full_OAT",
+        "320x40_filter_radius_replication",
+        "E1_E2_E3_evaluator_dependence"
+      ],
+      "columns": [
+        "native_profile_and_fixed_settings_id",
+        "native_and_common_raw_binary_frequencies",
+        "eigengaps",
+        "volume",
+        "grayness",
+        "topology_connectivity_feature_metrics",
+        "iterations_stages",
+        "descriptive_wall_time",
+        "native_and_harmonized_status",
+        "solver_status",
+        "method_specific_diagnostics"
+      ]
+    }
+  },
+  "campaign_matrix": {
+    "fixed_work_timing": {
+      "path_mesh_cells": 20,
+      "warmup_invocations": 20,
+      "measured_invocations": 200,
+      "total_invocations": 220,
+      "measured_segments": 400
+    },
+    "fixed_work_memory_invocations": 60,
+    "native_full_optimization_runs": 36,
+    "harmonized_discovery_extension_runs_max": 6,
+    "harmonized_accepted_timing_runs_max": 99,
+    "filter_and_other_sensitivity": {
+      "oat_240x30_unique_conditions": 21,
+      "oat_240x30_reused_centers": 3,
+      "oat_240x30_new_runs": 18,
+      "filter_320x40_unique_conditions": 9,
+      "filter_320x40_reused_centers": 3,
+      "filter_320x40_new_runs": 6,
+      "total_new_sensitivity_runs": 24
+    },
+    "engineering_checks_approx": 12,
+    "optimization_or_path_invocations_upper_bound": 445,
+    "campaign_executions_and_checks_upper_bound": 457,
+    "external_evaluation_calls": {
+      "B_native_endpoints": 54,
+      "C_distinct_endpoints_max": 54,
+      "D_all_endpoints": 180,
+      "D_calls_reusable_from_B": 36,
+      "representations_per_endpoint": 2,
+      "models_per_representation": 3
+    }
+  },
+  "cost_estimate": {
+    "new_runs_executed_for_estimate": false,
+    "existing_evidence_only": true,
+    "serial_wall_clock_hours_range": [8, 14],
+    "plus_validation": true,
+    "not_a_performance_prediction": true,
+    "reduction_priority_if_excessive": [
+      "remove_or_reduce_60_run_memory_campaign_unless_memory_claim_retained",
+      "defer_non_radius_OAT_dimensions"
+    ],
+    "adversarial_fixes_not_reducible": [
+      "E1_E2_E3_evaluator_robustness",
+      "320x40_filter_replication",
+      "W2_scaling_window",
+      "censoring_and_speedup_safeguards"
+    ]
+  },
+  "methodological_blockers": [],
+  "methodological_resolutions": [
+    {
+      "id": "M1_PROPOSED_NATIVE_PROFILE",
+      "status": "CLOSED_WITH_DISCLOSED_LIMITATIONS",
+      "resolution": "PROPOSED_NATIVE_PROFILE_AUDIT.md selects the immutable pre-R3 A0/A4 OC SS profile at d051985; March MMA remains a named legacy profile",
+      "performance_may_break_tie": false,
+      "optimizer_conflict_may_be_hidden_in_numeric_OAT": false,
+      "remaining_limitations": [
+        "effective_design_lower_bound_0_vs_manuscript_1e-3",
+        "effective_truncated_filter_boundary_vs_declared_symmetric",
+        "current_R3_branch_requires_A0_load_profile_engineering_port_and_regression"
+      ]
+    }
+  ],
+  "proposed_pre_result_decision_rule": [
+    "explicit_current_manuscript_value",
+    "else_identified_frozen_pre_R3_experiment_or_protocol",
+    "else_implementation_default_demonstrably_predating_R3",
+    "if_legitimate_sources_conflict_authors_select_by_methodological_intent_in_dated_amendment_with_all_alternatives_and_nonperformance_rationale",
+    "if_no_defensible_selection_classify_sensitivity_required_or_remain_blocked",
+    "synchronize_all_three_deliverables_before_execution"
+  ],
+  "engineering_blockers": [
+    "proposed_A0_physical_load_and_resolved_profile_exact_implementation_regression",
+    "proposed_effective_design_bound_and_filter_operator_serialization_validation",
+    "repro_failure_precedence",
+    "W1_W2_fixed_work_instrumentation",
+    "prefix_and_kernel_invariance_through_iteration_300",
+    "yuksel_stage1_handoff_suppression_gate",
+    "callable_validated_E1_E2_E3_raw_binary_evaluator",
+    "single_thread_enforcement_all_methods",
+    "fail_closed_manifest_validator",
+    "exact_endpoint_replay_and_checksum",
+    "five_harmonized_statuses",
+    "topology_connectivity_and_method_specific_metrics",
+    "synchronized_table_writers_and_yuksel_sums",
+    "clean_freeze_commit_and_hash_inventory"
+  ],
+  "adversarial_disposition": {
+    "A1_common_evaluator": "RESOLVED",
+    "A2_olhoff_censoring": "RESOLVED",
+    "A3_native_filter_radii": "MITIGATED_WITH_DISCLOSED_LIMITATION",
+    "A4_single_sensitivity_mesh": "RESOLVED",
+    "binary_grayness_interaction": "RESOLVED",
+    "fixed_work_regime_bias": "RESOLVED",
+    "yuksel_stage2_as_total": "RESOLVED",
+    "single_thread_claim_scope": "RESOLVED",
+    "proposed_native_profile": "RESOLVED_WITH_DISCLOSED_LIMITATION"
+  },
+  "revision_rule": "No parameter, evaluator, window, status, or table semantic may change because of observed R3 ranking; any change requires a declared R3.x revision preserving what was already observed."
+}

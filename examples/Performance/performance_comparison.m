@@ -27,28 +27,88 @@ data.optimization.filter.radius       = 2;
 data.optimization.filter.radius_units = 'element';
 
 % -------------------------------------------------------------------------
+% Du-Olhoff 2007 clean-room reproduction: settings that CANNOT come from the
+% shared benchmark block.
+%
+% Four of the shared settings are not transferable to this solver, and using
+% them produces numbers that are wrong rather than merely different.  Every
+% override is scoped to this method alone; nothing here changes Yuksel or the
+% Proposed method.
+%
+%  1. move limit.  The shared `optimization.move_limit` is 0.2, which is an
+%     MMA/OC move limit.  In this solver the move limit is the trust region of
+%     a sequential LINEAR program, and 0.2 destroys the design: measured at
+%     160x20, r_min = 2 el, the run collapses to a disconnected island and
+%     omega_1 ends at 2.9 rad/s instead of ~160 (NOTES.md section 8c documents
+%     the same failure at move = 0.03).  The value used here, 0.005, is the
+%     documented `fig3a_best` reproduction value.
+%
+%  2. outer-iteration budget.  While the LP solves successfully this method is
+%     move-saturated: the step always travels the full move limit, so max|drho|
+%     stays at `move` and the native stop test does not fire.  With the shared
+%     max_iters = 10000 every mesh would run 10000 outer iterations.  The
+%     budget used here, 1600, is the documented `fig3a_best` value and is what
+%     produced the published reproduction.
+%
+%  3. void lower bound.  `void_material.rho_min` in the shared block is 1e-6,
+%     a void MATERIAL DENSITY floor.  This solver's rho_min is a different
+%     quantity: the DESIGN VARIABLE bound of Du & Olhoff (2007) eq. (7e), whose
+%     value is 1e-3.  At 1e-6 the (K,M) pencil goes singular to working
+%     precision (eigs reports RCOND = 1.6e-19); at 240x30 that produced
+%     spurious omega_1 = 0 modes from outer iteration 101, melted the design to
+%     volume 0.20, and ended the run on an infeasible LP that was misreported
+%     as convergence.  See DIAGNOSTIC_REPRO2007_BENCHMARK.md.
+%
+%  4. outer tolerance.  The shared `convergence_tol` is 3e-3; this method's
+%     documented outer tolerance is 1e-3.  Stated here rather than inherited,
+%     so that the stopping point is not set by a value chosen for other methods.
+%
+% All of them are listed explicitly below, so the task file rather than the
+% dispatcher is the record of what this method ran with.
+%
+% Reading the Olhoff column: while the LP succeeds, this method stops at its
+% outer-iteration budget rather than on a convergence test, so its iteration
+% count is a budget and t_iter and the scaling exponent are the meaningful
+% entries -- not iter_total or wall time.  A stop reason other than
+% `max_outer_iterations` means the LP failed and MUST be investigated, not
+% read as convergence.
+%
+% Filter radius is deliberately NOT overridden: r_min = 2 elements is the
+% benchmark's shared cross-resolution setting and the solver runs correctly at
+% it (verified at 240x30: 1600 iterations, volume 0.5, no LP failures).  It is,
+% however, not the radius that reproduces Fig. 3a (1.3 elements), so the
+% omega_1 reported here for Olhoff is a valid operating point of the method and
+% NOT the paper-reproduction figure.
+data.optimization.repro2007 = struct( ...
+    'support_type', 'SS', ...    % bc.supports are closest_point at mid-height
+    'move',         0.005, ...   % documented fig3a_best value
+    'max_outer',    1600, ...    % documented fig3a_best budget
+    'rho_min',      1e-3, ...    % paper eq. (7e); NOT void_material.rho_min
+    'tol_outer',    1e-3);       % documented fig3a_best value
+
+% -------------------------------------------------------------------------
 % Resolutions: those from Table 1 in the paper (160x20, 240x30, 320x40)
 % plus two additional ones (240x30 already in paper; 400x50 is new)
 % -------------------------------------------------------------------------
-
-resolutions = [
-    160,  20;
-    240,  30;
-    320,  40;
-    400,  50;
-    480,  60;
-    560,  70;
-    640,  80;
-    720,  90;
-    800,  100;
-];
 
 % resolutions = [
 %     160,  20;
 %     240,  30;
 %     320,  40;
 %     400,  50;
+%     480,  60;
+%     560,  70;
+%     640,  80;
+%     720,  90;
+%     800,  100;
 % ];
+
+resolutions = [
+    160,  20;
+    240,  30;
+    320,  40;
+    400,  50;
+];
 
 % resolutions = [
 %     600,  75;
@@ -57,10 +117,26 @@ resolutions = [
 
 nRes = size(resolutions, 1);
 
-% Methods to compare
-approaches   = {'Olhoff',          'Yuksel',         'OurApproach'       };
-methodLabels = {'OlhoffApproach',  'YukselApproach', 'ProposedApproach'  };
-nMethods     = numel(approaches);
+% Methods to compare.
+%
+% `approaches` is the method IDENTITY used for naming everywhere in the
+% results -- console tables, CSV, JSON, LaTeX.  `solverApproaches` is the
+% dispatch key handed to run_topopt_from_json.  The two are kept separate so
+% that the implementation behind a column can be changed without renaming the
+% column.
+%
+% The Olhoff column is now produced by the Du-Olhoff 2007 CLEAN-ROOM
+% REPRODUCTION (Eq. 22 LP route) at Matlab/reproduction2007/, replacing the
+% earlier analysis/OlhoffApproach/Matlab/topFreqOptimization_MMA.m call.  The
+% reported name is unchanged; only the solver behind it moved.  See
+% MIGRATION_REPRODUCTION2007_REPORT.md and Matlab/README.md.
+approaches       = {'Olhoff',            'Yuksel',         'OurApproach'      };
+solverApproaches = {'OlhoffDu2007Repro', 'Yuksel',         'OurApproach'      };
+methodLabels     = {'OlhoffApproach',    'YukselApproach', 'ProposedApproach' };
+nMethods         = numel(approaches);
+assert(numel(solverApproaches) == nMethods, ...
+    'performance_comparison:MethodTableMismatch', ...
+    'approaches, solverApproaches and methodLabels must be the same length.');
 
 nSamples = 1;
 
@@ -71,6 +147,8 @@ nIter_all  = NaN(nRes, nMethods);
 mem_all    = NaN(nRes, nMethods);
 nIterStage1_all = NaN(nRes, nMethods);
 nIterStage2_all = NaN(nRes, nMethods);
+nOuter_all = NaN(nRes, nMethods);
+nInner_all = NaN(nRes, nMethods);
 tInit_all  = NaN(nRes, nMethods);
 tLoop_all  = NaN(nRes, nMethods);
 tPost_all  = NaN(nRes, nMethods);
@@ -97,7 +175,7 @@ for r = 1:nRes
     data.domain.mesh.nely = resolutions(r, 2);
 
     for m = 1:nMethods
-        data.optimization.approach = approaches{m};
+        data.optimization.approach = solverApproaches{m};
 
         omega_s = NaN(1, nSamples);
         tIter_s = NaN(1, nSamples);
@@ -105,6 +183,8 @@ for r = 1:nRes
         mem_s   = NaN(1, nSamples);
         nIterStage1_s = NaN(1, nSamples);
         nIterStage2_s = NaN(1, nSamples);
+        nOuter_s = NaN(1, nSamples);
+        nInner_s = NaN(1, nSamples);
         tInit_s = NaN(1, nSamples);
         tLoop_s = NaN(1, nSamples);
         tPost_s = NaN(1, nSamples);
@@ -130,6 +210,10 @@ for r = 1:nRes
             mem_s(s)   = mem;
             nIterStage1_s(s) = nIterStage.stage1;
             nIterStage2_s(s) = nIterStage.stage2;
+            if isfield(telemetry, 'iterations')
+                nOuter_s(s) = telemetry.iterations.outer;
+                nInner_s(s) = telemetry.iterations.inner;
+            end
             tInit_s(s) = telemetry.timing.initialization_time;
             tLoop_s(s) = telemetry.timing.optimization_loop_time;
             tPost_s(s) = telemetry.timing.postprocessing_time;
@@ -160,6 +244,8 @@ for r = 1:nRes
         mem_all(r, m)   = mean(mem_s);
         nIterStage1_all(r, m) = round(mean(nIterStage1_s));
         nIterStage2_all(r, m) = round(mean(nIterStage2_s));
+        nOuter_all(r, m) = round(mean(nOuter_s));
+        nInner_all(r, m) = round(mean(nInner_s));
         tInit_all(r, m) = mean(tInit_s);
         tLoop_all(r, m) = mean(tLoop_s);
         tPost_all(r, m) = mean(tPost_s);
@@ -184,7 +270,7 @@ end
 % -------------------------------------------------------------------------
 % Print performance table (mirrors Table 1 from Yuksel et al.)
 % -------------------------------------------------------------------------
-sepWidth = 188;
+sepWidth = 210;
 sep = repmat('-', 1, sepWidth);
 
 fprintf('\n');
@@ -192,8 +278,9 @@ fprintf('Table 1. Run time comparison between methods for maximizing the first\n
 fprintf('natural frequency of a simply supported beam (8 m x 1 m, vf = 0.5).\n');
 fprintf('Results averaged over %d runs.\n', nSamples);
 fprintf('\n');
-fprintf('%-20s  %-9s  %10s  %10s  %10s  %9s  %9s  %10s  %10s  %12s  %12s  %12s  %12s\n', ...
-    'Method', 'Mesh', 'iter_total', 'stage1', 'stage2', 'S1 share', 'S2 share', ...
+fprintf('%-20s  %-9s  %10s  %8s  %10s  %10s  %10s  %9s  %9s  %10s  %10s  %12s  %12s  %12s  %12s\n', ...
+    'Method', 'Mesh', 'iter_total', 'outer', 'inner', 'stage1', 'stage2', ...
+    'S1 share', 'S2 share', ...
     'init (s)', 'loop (s)', 'post (s)', 'wall (s)', 's/iter', 'Max RAM MB');
 fprintf('%s\n', sep);
 
@@ -232,8 +319,22 @@ for r = 1:nRes
             stage2Str = sprintf('%d', nIterStage2_all(r,m));
             stage2ShareStr = sprintf('%.1f%%', stage2Share_all(r,m));
         end
-        fprintf('%-20s  %-9s  %10s  %10s  %10s  %9s  %9s  %10s  %10s  %12s  %12s  %12s  %12s\n', ...
-            methodLabels{m}, meshStr, nIterStr, stage1Str, stage2Str, ...
+        % Outer/inner split: only methods with a genuine two-level loop report
+        % it.  For the Olhoff column (Du-Olhoff 2007 reproduction) outer is the
+        % Fig. 1 outer loop and inner the total subproblem solves.
+        if isnan(nOuter_all(r,m))
+            outerStr = 'N/A';
+        else
+            outerStr = sprintf('%d', nOuter_all(r,m));
+        end
+        if isnan(nInner_all(r,m))
+            innerStr = 'N/A';
+        else
+            innerStr = sprintf('%d', nInner_all(r,m));
+        end
+        fprintf('%-20s  %-9s  %10s  %8s  %10s  %10s  %10s  %9s  %9s  %10s  %10s  %12s  %12s  %12s  %12s\n', ...
+            methodLabels{m}, meshStr, nIterStr, outerStr, innerStr, ...
+            stage1Str, stage2Str, ...
             stage1ShareStr, stage2ShareStr, initTimeStr, loopTimeStr, ...
             postTimeStr, wallTimeStr, iterStr, ramStr);
     end
@@ -247,8 +348,15 @@ fprintf('%s\n', sep);
 fprintf('\n');
 fprintf(['Timing definitions: init = configuration/solver setup; loop = timed optimization loops; ' ...
     'post = final modal analysis/reporting; wall = measured around run_topopt_from_json.\n']);
-fprintf(['Iteration definitions: iter_total = all optimization iterations; iter_stage1/stage2 apply ' ...
-    'only to Yuksel; shares are percentages of iter_total. N/A means not meaningful.\n\n']);
+fprintf(['Iteration definitions: iter_total = all optimization iterations; outer/inner apply only to ' ...
+    'methods with a two-level loop (Olhoff: Fig. 1 outer loop / subproblem (25) solves); ' ...
+    'iter_stage1/stage2 apply only to Yuksel; shares are percentages of iter_total. ' ...
+    'N/A means not meaningful.\n']);
+fprintf(['Olhoff column: produced by the Du-Olhoff 2007 clean-room reproduction (Eq. 22 LP route, ' ...
+    'Matlab/reproduction2007). It is move-saturated by construction, so it always stops at its ' ...
+    'outer-iteration budget (%d) rather than on a convergence test; read t_iter and scaling, not ' ...
+    'iter_total or wall time. Its move limit is %g, scoped to this method.\n\n'], ...
+    data.optimization.repro2007.max_outer, data.optimization.repro2007.move);
 
 % -------------------------------------------------------------------------
 % Print Table 1 in the paper's grouped-column layout (Mesh rows, one column
@@ -322,7 +430,8 @@ fprintf(fid, ['Method,Mesh,Iterations,IterStage1,IterStage2,RunTime_s,RunTimePer
     'initialization_time_s,optimization_loop_time_s,postprocessing_time_s,total_wall_time_s,' ...
     'stop_reason,' ...
     'final_max_density_change,final_rms_density_change,final_relative_objective_change,' ...
-    'final_grayness,convergence_tolerance_used\n']);
+    'final_grayness,convergence_tolerance_used,' ...
+    'outer_iterations,inner_iterations\n']);
 for r = 1:nRes
     meshStr = sprintf('%dx%d', resolutions(r,1), resolutions(r,2));
     for m = 1:nMethods
@@ -336,9 +445,19 @@ for r = 1:nRes
         else
             stage2Csv = sprintf('%d', nIterStage2_all(r,m));
         end
+        if isnan(nOuter_all(r,m))
+            outerCsv = '';
+        else
+            outerCsv = sprintf('%d', nOuter_all(r,m));
+        end
+        if isnan(nInner_all(r,m))
+            innerCsv = '';
+        else
+            innerCsv = sprintf('%d', nInner_all(r,m));
+        end
         fprintf(fid, ['%s,%s,%d,%s,%s,%.9g,%.9g,%.9g,%d,%s,%s,%s,%s,' ...
             '%.9g,%.9g,%.9g,%.9g,%s,' ...
-            '%s,%s,%s,%s,%s\n'], ...
+            '%s,%s,%s,%s,%s,%s,%s\n'], ...
             displayNames{m}, meshStr, nIter_all(r,m), stage1Csv, stage2Csv, ...
             tReconstructed_all(r,m), tIter_all(r,m), mem_all(r,m), ...
             nIter_all(r,m), stage1Csv, stage2Csv, ...
@@ -347,7 +466,7 @@ for r = 1:nRes
             stopReason_all{r,m}, ...
             csv_metric(finalMaxChange_all(r,m)), csv_metric(finalRmsChange_all(r,m)), ...
             csv_metric(finalRelObjectiveChange_all(r,m)), csv_metric(finalGrayness_all(r,m)), ...
-            csv_metric(convergenceTolerance_all(r,m)));
+            csv_metric(convergenceTolerance_all(r,m)), outerCsv, innerCsv);
     end
 end
 fclose(fid);
@@ -362,7 +481,9 @@ benchmarkResults.metadata = struct( ...
         'legacy_reconstructed_time is retained as average_iteration_time * iter_total.'], ...
     'na_representation', 'JSON null and CSV N/A mean not applicable or unavailable.', ...
     'iteration_fields', ['iter_total counts all optimization iterations; iter_stage1 and ' ...
-        'iter_stage2 are Yuksel stages and sum to iter_total; shares are percentages.'], ...
+        'iter_stage2 are Yuksel stages and sum to iter_total; shares are percentages; ' ...
+        'outer and inner apply only to methods with a two-level loop (Olhoff: Fig. 1 outer ' ...
+        'loop and subproblem (25) solves) and are null otherwise.'], ...
     'diagnostics_enabled', data.benchmark.enable_diagnostics, ...
     'yuksel_stage1_tolerance', data.optimization.yuksel.stage1_tol, ...
     'yuksel_stage1_iteration_cap', data.optimization.yuksel.stage1_max_iters);
@@ -374,12 +495,27 @@ benchmarkResults.metadata.field_definitions = struct( ...
     'iter_total', 'All executed optimization iterations.', ...
     'iter_stage1', 'Yuksel compliance-stage iterations; N/A for single-stage methods.', ...
     'iter_stage2', 'Yuksel inertial-stage iterations; N/A for single-stage methods.', ...
+    'outer', 'Outer-loop iterations for two-level methods; N/A otherwise.', ...
+    'inner', 'Total subproblem solves across all outer iterations; N/A otherwise.', ...
+    'inner_solver', 'Subproblem solver used for the inner loop, where applicable.', ...
     'final_max_density_change', 'Final maximum absolute design-density change.', ...
     'final_rms_density_change', 'Final RMS design-density change when available.', ...
     'final_relative_objective_change', ...
         'Final relative change in the convergence objective (frequency for Olhoff).', ...
     'final_grayness', 'Mean 4*x*(1-x) of the final physical density field.', ...
     'convergence_tolerance', 'Numerical convergence tolerance actually used; criteria are unchanged.');
+% Record which solver actually produced each named column.  The Olhoff column
+% is the Du-Olhoff 2007 clean-room reproduction, not analysis/OlhoffApproach;
+% without this the JSON would not say so.
+benchmarkResults.metadata.method_dispatch = struct();
+for m = 1:nMethods
+    benchmarkResults.metadata.method_dispatch.( ...
+        matlab.lang.makeValidName(approaches{m})) = solverApproaches{m};
+end
+benchmarkResults.metadata.olhoff_column_note = ['The Olhoff column is produced by ' ...
+    'Matlab/reproduction2007 (Du-Olhoff 2007 clean-room reproduction, Eq. 22 LP route). ' ...
+    'It is move-saturated by construction and always stops at its outer-iteration budget, ' ...
+    'so iter_total is a fixed budget rather than a convergence result.'];
 benchmarkResults.configuration = data;
 benchmarkResults.runs = runRecords;
 fid = fopen(jsonResultsPath, 'w');
@@ -448,12 +584,23 @@ function record = make_run_record(methodName, methodLabel, nelx, nely, sample, .
     record.method_label = methodLabel;
     record.mesh = struct('nelx', nelx, 'nely', nely, 'elements', nelx*nely);
     record.sample = sample;
+    outerIters = NaN;
+    innerIters = NaN;
+    innerSolver = 'N/A';
+    if isfield(telemetry, 'iterations')
+        outerIters  = telemetry.iterations.outer;
+        innerIters  = telemetry.iterations.inner;
+        innerSolver = telemetry.iterations.inner_solver;
+    end
     record.iterations = struct( ...
         'iter_total', nIter, ...
         'iter_stage1', nIterStage.stage1, ...
         'iter_stage2', nIterStage.stage2, ...
         'stage1_share_pct', stage1Share, ...
-        'stage2_share_pct', stage2Share);
+        'stage2_share_pct', stage2Share, ...
+        'outer', outerIters, ...
+        'inner', innerIters, ...
+        'inner_solver', innerSolver);
     record.timing = struct( ...
         'initialization_time_s', telemetry.timing.initialization_time, ...
         'optimization_loop_time_s', telemetry.timing.optimization_loop_time, ...

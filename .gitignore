@@ -76,3 +76,13 @@ codegen/
 *.bbl
 *.bst
 *.out
+
+# --- Du-Olhoff 2007 clean-room reproduction (Matlab/reproduction2007) ---
+# The frozen baselines are the migration regression gate and the paper figures
+# are inputs to the comparison plots, so they must be tracked despite the
+# blanket *.mat / *.log / *.png / *.txt rules above.  Run-time output under
+# Matlab/reproduction2007/results/ stays ignored.
+!Matlab/reproduction2007/baseline/*.mat
+!Matlab/reproduction2007/baseline/*.log
+!Matlab/reproduction2007/docs/figs/*.png
+!Matlab/reproduction2007/SOURCE_SHA256.txt

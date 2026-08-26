@@ -14,7 +14,9 @@ function [x, omega, tIter, nIter, mem_usage, nIterStage, telemetry] = run_topopt
 %   mem_usage  : peak additional memory used during this call [MB]
 %   nIterStage : struct with .stage1 / .stage2 iteration counts (NaN when the
 %                selected approach has no two-stage breakdown, e.g. not Yuksel)
-%   telemetry  : reporting-only timing and stopping diagnostics
+%   telemetry  : reporting-only timing and stopping diagnostics.  Includes
+%                telemetry.iterations with .total/.outer/.inner, where .outer
+%                and .inner are NaN for methods without a two-level loop.
 
     runnerWallTic = tic;
 
@@ -193,6 +195,11 @@ function [x, omega, tIter, nIter, mem_usage, nIterStage, telemetry] = run_topopt
     nIter = NaN;
     mem_usage = 0;
     nIterStage = struct('stage1', NaN, 'stage2', NaN);
+    % Outer/inner optimization-iteration split, for methods that have a genuine
+    % two-level loop (currently OlhoffDu2007Repro).  Separate from nIterStage,
+    % which is Yuksel's two-STAGE breakdown and means something different.
+    solverIterations = struct('outer', NaN, 'inner', NaN, ...
+        'inner_per_outer', NaN, 'inner_solver', 'N/A');
     telemetry = struct();
     solverTiming = struct();
     solverStopping = struct();
@@ -329,6 +336,132 @@ function [x, omega, tIter, nIter, mem_usage, nIterStage, telemetry] = run_topopt
                 omega = toVec3(histE.omega(ni, :)');
                 tIter = tTotal / ni;
             end
+
+        case {'olhoffdu2007repro', 'olhoff2007repro', 'reproduction2007'}
+            % Du-Olhoff 2007 clean-room benchmark reproduction (Eq. 22 LP route).
+            %
+            % This implementation lives at Matlab/reproduction2007/, OUTSIDE
+            % analysis/, so that no addpath(genpath(analysis)) sweep can reach
+            % it and shadow another approach.  Only its runner/ directory is
+            % added here; RUN_REPRO2007 installs the rest on an isolated path,
+            % asserts that every function resolves inside its own root, and
+            % restores the previous path on return.  See
+            % Matlab/reproduction2007/runner/repro2007_paths.m.
+            addpath(fullfile(repoRoot, 'Matlab', 'reproduction2007', 'runner'));
+
+            runCfg = struct();
+            runCfg.config        = 'fig3a_best';
+            runCfg.nelx          = nelx;
+            runCfg.nely          = nely;
+            runCfg.volfrac       = volfrac;
+            runCfg.penal         = penal;
+            runCfg.rmin_elem     = rmin_elem;   % this solver works in element units
+            runCfg.move          = move;
+            runCfg.max_outer     = maxiter;
+            runCfg.L             = L;
+            runCfg.H             = H;
+            runCfg.thickness     = thickness;
+            runCfg.E0            = E0;
+            runCfg.nu            = nu;
+            runCfg.rho_m         = rho0;   % material density -> cfg.rhom
+
+            % NOT INHERITED FROM THE SHARED BLOCK -- see
+            % DIAGNOSTIC_REPRO2007_BENCHMARK.md.
+            %
+            %   rho_min : void_material.rho_min is this benchmark's void
+            %       MATERIAL DENSITY floor (1e-6).  The reproduction's
+            %       cfg.rhomin is a different quantity -- the DESIGN VARIABLE
+            %       lower bound of Du & Olhoff (2007) eq. (7e), whose value is
+            %       1e-3.  Mapping one onto the other drove void elements to
+            %       rho^3 = 1e-18 stiffness and rho^6 = 1e-36 mass, made the
+            %       (K,M) pencil singular to working precision (eigs reported
+            %       RCOND = 1.6e-19), and produced spurious omega_1 = 0 modes
+            %       from outer iteration 101 onward at 240x30.
+            %
+            %   tol_outer : optimization.convergence_tol is the benchmark's
+            %       shared stopping tolerance (3e-3).  The reproduction's
+            %       documented outer tolerance is 1e-3.  Silently substituting
+            %       one for the other changes where this method stops.
+            %
+            % Both now come from the reproduction's own configuration, and are
+            % overridable only through the explicit optimization.repro2007
+            % block below, so that any deviation is visible in the task file.
+            % Boundary conditions.  This solver does NOT consume a DOF list: it
+            % builds the paper's Fig. 2 supports itself from bc/support/axial,
+            % because which idealization is used is one of the reproduction's
+            % findings (NOTES.md section 2) and must stay explicit.  A JSON that
+            % specifies its BCs as closest_point entries yields supportCode
+            % 'NONE'; rather than quietly defaulting to simply supported, demand
+            % that the caller name the case.
+            if any(strcmpi(supportCode, {'SS','CS','CC'}))
+                runCfg.support_type = supportCode;
+            elseif hasFieldPath(cfg, {'optimization','repro2007','support_type'})
+                runCfg.support_type = getFieldPath(cfg, ...
+                    {'optimization','repro2007','support_type'});
+            else
+                error('run_topopt_from_json:Repro2007UnsupportedBC', ...
+                    ['OlhoffDu2007Repro: boundary conditions are "%s".  This ' ...
+                     'implementation reproduces the Du & Olhoff (2007) Fig. 2 ' ...
+                     'beam and constructs its own supports; it cannot consume ' ...
+                     'an arbitrary fixed-DOF list.  Either use hinge/clamp ' ...
+                     'supports (SS/CS/CC), or state the case explicitly as ' ...
+                     'optimization.repro2007.support_type = "SS" | "CS" | "CC".'], ...
+                    supportCode);
+            end
+            runCfg.approach_name = approach;
+            runCfg.record_history = recordHistory;
+            if ~isempty(postproc.visualizeLive) && postproc.visualizeLive
+                runCfg.verbose = true;
+            end
+
+            % Optional block: everything the paper leaves unstated, exposed for
+            % the parametric study.  Absent keys keep the documented
+            % reproduction defaults -- none of them is silently invented here.
+            optionalKeys = { ...
+                'target_mode',  'target_mode'
+                'move',         'move'
+                'max_outer',    'max_outer'
+                'tol_outer',    'tol_outer'
+                'rho_min',      'rho_min'
+                'volfrac',      'volfrac'
+                'tol_mult',     'tol_mult'
+                'filter_mode',  'filter_mode'
+                'mass_interp',  'mass_interp'
+                'inner_solver', 'inner_solver'
+                'off_diag',     'off_diag'
+                'n_modes_max',  'n_modes_max'
+                'rmin_phys',    'rmin_phys'
+                'support',      'support'
+                'axial',        'axial'
+                'elem_type',    'elem_type'
+                'mass_type',    'mass_type'
+                'eig_solver',   'eig_solver'
+                'config',       'config'};
+            for oi = 1:size(optionalKeys, 1)
+                p = {'optimization', 'repro2007', optionalKeys{oi,1}};
+                if hasFieldPath(cfg, p)
+                    runCfg.(optionalKeys{oi,2}) = getFieldPath(cfg, p);
+                end
+            end
+
+            [xOut, omegaOut, tOut, itOut, infoR] = run_repro2007(runCfg);
+            x     = xOut(:);
+            omega = toVec3(omegaOut(:));   % already rad/s
+            tIter = tOut;
+            nIter = itOut;
+            if isfield(infoR, 'history'),  solverHistory = infoR.history;  end
+            if isfield(infoR, 'timing'),   solverTiming = infoR.timing;    end
+            if isfield(infoR, 'stopping'), solverStopping = infoR.stopping; end
+            if isfield(infoR, 'iterations')
+                % Outer/inner split.  Deliberately NOT folded into nIterStage:
+                % that field means Yuksel's two native stages, and overloading
+                % it would make "stage1" mean different things per method.
+                solverIterations = infoR.iterations;
+            end
+            if isfield(infoR, 'objective_history')
+                objectiveHistory = infoR.objective_history(:);
+            end
+            if isfield(infoR, 'last_obj'), objectiveFinal = infoR.last_obj; end
 
         case 'yuksel'
             addpath(fullfile(repoRoot, 'analysis', 'YukselApproach', 'Matlab'));
@@ -551,7 +684,8 @@ function [x, omega, tIter, nIter, mem_usage, nIterStage, telemetry] = run_topopt
         otherwise
             error('run_topopt_from_json:UnknownApproach', ...
                 ['Unknown optimization.approach "%s". Use "Olhoff", "OlhoffExact", ' ...
-                 '"Yuksel", "ourApproach", "elastic2D", or "elastc2D".'], approach);
+                 '"OlhoffDu2007Repro", "Yuksel", "ourApproach", "elastic2D", ' ...
+                 'or "elastc2D".'], approach);
     end
     runnerPostprocessingTic = tic;
 
@@ -725,6 +859,12 @@ function [x, omega, tIter, nIter, mem_usage, nIterStage, telemetry] = run_topopt
             mean(4*x.*(1-x))), ...
         'convergence_tolerance', ...
             telemetryValue(solverStopping, 'convergence_tolerance', convTol));
+    telemetry.iterations = struct( ...
+        'total', nIter, ...
+        'outer', telemetryValue(solverIterations, 'outer', NaN), ...
+        'inner', telemetryValue(solverIterations, 'inner', NaN), ...
+        'inner_per_outer', telemetryValue(solverIterations, 'inner_per_outer', NaN), ...
+        'inner_solver', telemetryValue(solverIterations, 'inner_solver', 'N/A'));
     telemetry.objective_final = objectiveFinal;
     telemetry.objective_history = objectiveHistory;
     telemetry.history = solverHistory;

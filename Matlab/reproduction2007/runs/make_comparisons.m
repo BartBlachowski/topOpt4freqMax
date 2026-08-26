@@ -1,0 +1,13 @@
+function make_comparisons(files, tags)
+%MAKE_COMPARISONS  Stacked topology comparisons against the paper's Fig. 3a.
+for i=1:numel(files)
+    if ~exist(files{i},'file'), fprintf('missing %s\n',files{i}); continue; end
+    S=load(files{i}); res=S.res; cfg=res.cfg;
+    lbl = sprintf('REPRO %dX%d RMIN=%.2f W1=%.1f W2=%.1f W3=%.1f GAP=%.1f%%', ...
+        cfg.nelx,cfg.nely,cfg.rminEl,res.omega(1),res.omega(2),res.omega(3), ...
+        100*(res.omega(2)-res.omega(1))/res.omega(1));
+    compareTopology(res.rho,cfg.nelx,cfg.nely,'docs/figs/paper_fig3a.png', ...
+        fullfile('results',[tags{i} '_vs_paper.png']),lbl, ...
+        'PAPER FIG 3A  W1=W2=174.7  W3=284.9');
+end
+end
