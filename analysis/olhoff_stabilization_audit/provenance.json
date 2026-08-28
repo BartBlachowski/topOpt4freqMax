@@ -1,0 +1,59 @@
+{
+  "schema_version": "1.0",
+  "audit_started_at": "2026-08-28T10:07:46+02:00",
+  "evidence_frozen_at": "2026-08-28T11:16:37+02:00",
+  "repository": {
+    "branch": "benchmark-methodology-r2",
+    "head": "cb6353feb941f12b2aaa927e622649e1ccc926f7",
+    "working_tree_clean_at_start": false,
+    "note": "All pre-existing modifications and untracked prior-audit artifacts were preserved. This audit wrote only analysis/olhoff_stabilization_audit/."
+  },
+  "environment": {
+    "matlab": "25.2.0.3042426 (R2025b) Update 1",
+    "computer": "MACA64",
+    "host": "Apple M1 Max, 10 cores, 64 GB RAM",
+    "optimization_threads_per_run": 1,
+    "offline_evaluator_threads_per_run": 1
+  },
+  "frozen_reproduction": {
+    "manifest": "Matlab/reproduction2007/SOURCE_SHA256.txt",
+    "manifest_sha256": "2721105545f48e5ad7ad8e710b7c106cdb2852fc9cbaac2e6ee0a751c98ec4cc",
+    "manifest_verification": {"matched":61,"mismatched":0,"missing":0},
+    "olhoffOpt_sha256": "4784ecf3f6b42d8af6f5a9695e2924bf1f4c924ebf9c76be9a858a2ef769e5de",
+    "innerLoopLP_sha256": "7724753c02f84d6009c3998f758d5b3f9c5144ad39ca6f470584a2c99e089465",
+    "repro2007_config_sha256": "3ae2a005d41f04a90ed4035cd1df43d0219c56f11e8b385bfb13548a0aa593ca",
+    "authoritative_sources_modified": false
+  },
+  "audit_implementation": {
+    "olhoffOptStabilized_sha256": "95240cf60f82b40f8e5e892b9eea9b20a8fd3744b5eca6fdfc8dde2698d82aec",
+    "s0_prefix_identity_test": "bit-identical through 20 updates against the frozen 240x30 trajectory",
+    "common_R3_evaluator_sha256": "22a1b974c251dbe7baa6499a5aca11e6bde68469b6d2e80fd4274c9447f31343",
+    "per_iteration_E1_verification": "all declared checkpoint spectra matched study_evaluate_design exactly; maximum absolute difference 0",
+    "preregistration_sha256": "fa1999019f01b040a81fd3dc5eac630ca534bea3a3f93d0306ca31bea77b3c94",
+    "holdout_candidate_freeze_sha256": "8e5dfa724d01807c62086f578ba10d9e4b5763aed659912a2f77223bf9344fae"
+  },
+  "run_artifacts_sha256": {
+    "development_s1_240x30": "e02bfcd1fcea3ca288627c06f0333171ba7bc338278a13a5f1bcb6589012cb77",
+    "development_s2_240x30": "10b4021928633d8a505f8d5f45a8c53ba45aa114297aad059356b182d4400b15",
+    "development_s3_240x30": "59d66d108e53be4d9e08d898e781a7ab8cd687572517caaae970858d59fda307",
+    "holdout_s1_160x20": "465dc3597db67a7f443a052d54ebf0d8cd846fb3ef8b68e23f2aa67e1df4fcc5",
+    "holdout_s1_320x40": "95a9d672abcdb220c598f0ad98d4214fd91e71e5b18f2ea6a46e441c146b330f",
+    "holdout_s1_400x50": "e1ecaf2e4e3b069a8a20fa0a781e2d079b76861955665b66cdab55f99e6a4104",
+    "holdout_s2_160x20": "de2828c59c0799570a8b475c1061d6d1c49ec7e020fcd7a4c0515d163f189ab9",
+    "holdout_s2_320x40": "62ffa864cc273013b0d1f7c795b1a66c62c5f102e36c0b94d29727deed1a67ec",
+    "holdout_s2_400x50": "d1e3bde18b85367f33800a388f9494d9fffffa95df3bf022483e87ceab8d3b89"
+  },
+  "deliverable_sha256": {
+    "selected_profile.json": "60fa944f4aecf34611de5413096d6a0de235eae05febbc4dd481bee5a26a67da",
+    "final_campaign_profile.json": "5d12bc0ae6a09d2f4df01fb38d7f483a7450b06cac67eceac30d3fab3618b610",
+    "stabilization_runs.csv": "bb388af5d785b50b99a214e222b4e47fbed790bf147e086f1a16feb2bc3aab3a",
+    "persistent_quality.csv": "83e71c636291a8e8289f04812f820baf52daa53c504b370722b0fce84c9207ec",
+    "modal_stability.csv": "cb2004e3d102bde17bdae05cd3c1e71f133b1a9321ba61d437e6cb1cff9dd216",
+    "topology_stability.csv": "3045ce827bbed3abddb5ccb78e5b55bc63e326bed65a7c2b1090ac00de9f173f",
+    "solver_health.csv": "d89f254d1add3288490c830fd3385e082d05feae321917052d4b3049673b90d0",
+    "baseline_late_dynamics.csv": "9ae5201c0fa37497aafa44635241f8a050606f3fd4eee7115d85564926c47c30",
+    "campaign_gate.json": "ff24ff08925be895400e0481825311b8d401bc3ae779f91b03cfa5f6ade865de"
+  },
+  "forbidden_optimization_meshes_run": [],
+  "nine_mesh_preflight": "configuration/schema/memory only; no optimization solve"
+}

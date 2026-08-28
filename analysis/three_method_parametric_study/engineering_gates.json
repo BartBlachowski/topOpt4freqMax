@@ -1,0 +1,26 @@
+{
+  "timestamp": "2026-08-27T13:43:30+02:00",
+  "matlab": "25.2.0.3042426 (R2025b) Update 1",
+  "thread_limit": 1,
+  "proposed_smoke": {
+    "finite": true,
+    "iterations": 2,
+    "deterministic_x_max_abs": 0,
+    "deterministic_omega_max_abs": 0,
+    "same_iteration_count": true,
+    "volume": 0.49982343613534669,
+    "stop_status": "N/A"
+  },
+  "proposed_rejects_initial_reference": true,
+  "proposed_rejects_load_sensitivity_variant": true,
+  "yuksel_smoke": {
+    "finite": true,
+    "stage1_iterations": 3,
+    "stage2_iterations": 3,
+    "total_iterations": 6,
+    "iteration_identity": true,
+    "time_identity_abs_error": 0,
+    "volume": 0.50003601125614927
+  },
+  "pass": true
+}

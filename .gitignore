@@ -86,3 +86,11 @@ codegen/
 !Matlab/reproduction2007/baseline/*.log
 !Matlab/reproduction2007/docs/figs/*.png
 !Matlab/reproduction2007/SOURCE_SHA256.txt
+
+# --- Olhoff benchmark-path equivalence proofs (examples/Performance/equivalence) ---
+# These .mat records ARE the admission evidence for every Olhoff timing row:
+# olhoff_equivalence_gate reads them to decide whether a mesh may enter a
+# performance table.  Ignoring them under the blanket *.mat rule would leave the
+# gate with nothing to read on a fresh clone.
+!examples/Performance/equivalence/*.mat
+!examples/Performance/equivalence/negative_controls/*.mat

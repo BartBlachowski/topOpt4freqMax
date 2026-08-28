@@ -1,0 +1,62 @@
+{
+  "schema_version": "1.0",
+  "frozen_after_development_mesh": "240x30",
+  "selection_policy": "Selected before inspecting 160x20, 320x40, or 400x50 hold-outs",
+  "trajectory_profile": {
+    "rmin_element_units": 1.3,
+    "move": 0.005,
+    "rhomin": 0.001,
+    "tolMult": 0.05,
+    "filterMode": "diag",
+    "innerSolver": "lp",
+    "maxOuter": 1600,
+    "support": "mid",
+    "axial": "both"
+  },
+  "selected_detector": {
+    "name": "H_balanced_v1",
+    "phase_period": 2,
+    "objective_block": 20,
+    "window": 40,
+    "persistence": 20,
+    "objective_block_drift_tol": 0.0001,
+    "objective_phase_recurrence_tol": 0.0001,
+    "rho_phase_rms_tol": 0.00125,
+    "topology_phase_turnover_tol": 0.0007,
+    "modal_window": 40,
+    "required_N": 2,
+    "gap_tol": 0.01,
+    "volume_tol_rel": 1e-8,
+    "require_lp_success": true,
+    "require_eigensolver_health": true,
+    "require_finite_state": true,
+    "require_no_recent_modal_event": true
+  },
+  "predeclared_sensitivity_detector": {
+    "name": "H_conservative_v1",
+    "phase_period": 2,
+    "objective_block": 30,
+    "window": 60,
+    "persistence": 25,
+    "objective_block_drift_tol": 0.00005,
+    "objective_phase_recurrence_tol": 0.00005,
+    "rho_phase_rms_tol": 0.00075,
+    "topology_phase_turnover_tol": 0.0003,
+    "modal_window": 60,
+    "required_N": 2,
+    "gap_tol": 0.01,
+    "volume_tol_rel": 1e-8,
+    "require_lp_success": true,
+    "require_eigensolver_health": true,
+    "require_finite_state": true,
+    "require_no_recent_modal_event": true
+  },
+  "development_result": {
+    "selected_first_fire": 812,
+    "sensitivity_first_fire": 867,
+    "lookahead_horizons": [50, 100, 200],
+    "retrospective_objective_accuracy_levels": [0.01, 0.005, 0.0025, 0.001],
+    "primary_stationarity_label_objective_tol": 0.001,
+    "primary_stationarity_label_topology_turnover_tol": 0.005
+  }
+}

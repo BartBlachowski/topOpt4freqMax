@@ -1,0 +1,60 @@
+{
+  "selection_rule_source": "study_preregistration.json",
+  "cost_metric": "loop_time_practical_s",
+  "quality_metric": "omega1_common_raw_E1_practical",
+  "authoritative_pass": {
+    "Olhoff": "stage_a",
+    "Yuksel": "stage_a_v2",
+    "Proposed": "stage_a_v2"
+  },
+  "selected": {
+    "Olhoff": {
+      "method": "Olhoff",
+      "run_id": "olhoff_move_00050",
+      "params": "move=0.005;rmin_el=1.3;lp;tolMult=0.05",
+      "n_iter_practical": "812",
+      "cost_loop_s": 78.208,
+      "quality_omega1_E1": 169.7538,
+      "quality_loss_vs_best_pct": 0.0,
+      "cost_scaled": 1.0,
+      "quality_scaled": 1.0,
+      "utopia_distance": 1.0,
+      "nondominated": true,
+      "robustness_stage_a": "CONVERGED_BIMODAL",
+      "selection_status": "SELECTED_PRIMARY",
+      "tie_break_applied": true
+    },
+    "Yuksel": {
+      "method": "Yuksel",
+      "run_id": "yuksel_move_010",
+      "params": "move=0.1;s1tol=0.01;s2tol=0.01;rmin_el=2.5",
+      "n_iter_practical": "320",
+      "cost_loop_s": 8.322,
+      "quality_omega1_E1": 159.4358,
+      "quality_loss_vs_best_pct": 0.0,
+      "cost_scaled": 0.2931,
+      "quality_scaled": 1.0,
+      "utopia_distance": 0.2931,
+      "nondominated": true,
+      "robustness_stage_a": "CONVERGED_NATIVE",
+      "selection_status": "SELECTED_PRIMARY",
+      "tie_break_applied": false
+    },
+    "Proposed": {
+      "method": "Proposed",
+      "run_id": "proposed_tol_00100",
+      "params": "move=0.2;tol=0.01;rmin_el=2.0;OC",
+      "n_iter_practical": "236",
+      "cost_loop_s": 6.877,
+      "quality_omega1_E1": 157.6392,
+      "quality_loss_vs_best_pct": 0.0,
+      "cost_scaled": 0.0,
+      "quality_scaled": 1.0,
+      "utopia_distance": 0.0,
+      "nondominated": true,
+      "robustness_stage_a": "CONVERGED_NATIVE",
+      "selection_status": "SELECTED_PRIMARY",
+      "tie_break_applied": false
+    }
+  }
+}

@@ -73,14 +73,22 @@ function [x, omega, tIter, nIter, info] = run_repro2007(runCfg)
 %     .config_meta       provenance of the named configuration
 %     .history           per-outer-iteration table, schema below (WP4)
 %     .timing            initialization_time / loop_time / postprocessing_time
-%     .stopping          stop_reason and final acceptance quantities
+%     .stopping          stop classification and final acceptance quantities.
+%                        `status` is the precedence-ordered verdict
+%                        SOLVER_FAILURE > CONVERGED > CAP_HIT > RUNNING;
+%                        `stop_reason` keeps the repository vocabulary; and the
+%                        raw native quantities the verdict came from
+%                        (native_stop_reason, native_break_taken, final_lp_flag,
+%                        final_inner_converged, lp_failure_iters) are preserved
+%                        beside it.  A failed subproblem is NEVER reported as
+%                        convergence -- see LOCALSTOPPING below.
 %     .objective_history maximized frequency per iteration [rad/s]
 %     .last_obj          final objective
 %     .path_identity     which implementation root executed (WP6 evidence)
 %     .log               OLHOFFOPT's own event log, verbatim
 %
 %   See also REPRO2007_CONFIG, REPRO2007_PATHS, REPRO2007_HISTORY,
-%            REPRO2007_REGRESSION, OLHOFFOPT.
+%            REPRO2007_LP_FLAGS, REPRO2007_REGRESSION, OLHOFFOPT.
 
 initTic = tic;
 
@@ -262,7 +270,7 @@ info.iterations = struct( ...
     'inner_per_outer', totalInner / max(nIter, 1), ...
     'inner_solver',    lower(char(cfg.innerSolver)));
 
-info.stopping = localStopping(res, cfg);
+info.stopping = repro2007_stopping(res, cfg);
 
 info.timing.postprocessing_time = toc(postTic);
 
@@ -272,7 +280,10 @@ if cfg.verbose
     fprintf('[%s] omega = %.4f / %.4f / %.4f rad/s   gap = %.4f%%   N = %d\n', ...
         approachName, omega(1), omega(2), omega(3), ...
         100*(omega(2)-omega(1))/omega(1), res.hist.N(end));
-    fprintf('[%s] stop  : %s\n', approachName, info.stopping.stop_reason);
+    fprintf('[%s] stop  : %s  [%s]  (native: %s, lp_flag %g, inner_converged %d)\n', ...
+        approachName, info.stopping.stop_reason, info.stopping.status, ...
+        info.stopping.native_stop_reason, info.stopping.final_lp_flag, ...
+        info.stopping.final_inner_converged);
     for i = 1:numel(res.log)
         fprintf('[%s] LOG: %s\n', approachName, res.log{i});
     end
@@ -347,46 +358,4 @@ if strcmpi(cfg.innerSolver, 'lp') && exist('linprog', 'file') ~= 2
          'is not available.  Set inner_solver = ''mma'' to use the paper''s ' ...
          'labelled alternative, noting that it does not converge once N >= 2.']);
 end
-end
-
-function s = localStopping(res, cfg)
-h = res.hist;
-n = numel(h.N);
-
-if n == 0
-    s = struct('stop_reason', 'no_iterations', ...
-        'final_max_density_change', NaN, 'final_rms_density_change', NaN, ...
-        'final_relative_objective_change', NaN, 'final_grayness', NaN, ...
-        'convergence_tolerance', cfg.tolOuter);
-    return
-end
-
-if h.dxOuter(end) < cfg.tolOuter
-    reason = 'outer_increment_below_tolerance';
-elseif n >= cfg.maxOuter
-    reason = 'max_outer_iterations';
-else
-    reason = 'terminated_early';
-end
-
-obj = sqrt(max(h.beta(:), 0));
-if n >= 2 && obj(end-1) ~= 0
-    relObj = abs(obj(end) - obj(end-1)) / abs(obj(end-1));
-else
-    relObj = NaN;
-end
-
-rho = res.rho(:);
-
-s = struct( ...
-    'stop_reason',                     reason, ...
-    'final_max_density_change',        h.dxOuter(end), ...
-    'final_rms_density_change',        NaN, ...  % see repro2007_history
-    'final_relative_objective_change', relObj, ...
-    'final_grayness',                  mean(4 * rho .* (1 - rho)), ...
-    'convergence_tolerance',           cfg.tolOuter, ...
-    'move_limit',                      cfg.move, ...
-    'final_multiplicity',              h.N(end), ...
-    'final_eigengap_rel',              (res.omega(2) - res.omega(1)) / res.omega(1), ...
-    'move_saturated_frac',             mean(abs(h.dxOuter - cfg.move) < 1e-12));
 end

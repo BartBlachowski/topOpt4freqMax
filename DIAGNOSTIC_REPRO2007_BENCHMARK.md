@@ -331,10 +331,23 @@ it were wrong and are now fixed:
   This is a stopping-label fix, not a configuration mapping, and was outside the
   instructed scope. `run_repro2007` still reports
   `outer_increment_below_tolerance` when the LP fails, even though
-  `inner_converged == false` and `lp_flag` are available to it. **Still open.**
+  `inner_converged == false` and `lp_flag` are available to it.
+  **RESOLVED 2026-08-27** — see `OLHOFF_BENCHMARK_EQUIVALENCE_REPORT.md`. The
+  classification moved out of `run_repro2007` into
+  `Matlab/reproduction2007/runner/repro2007_stopping.m`, which applies the
+  `BENCHMARK_PROTOCOL_R3.md` §4 precedence
+  `SOLVER_FAILURE > CONVERGED > CAP_HIT > RUNNING`. A failed subproblem now
+  reports `status = SOLVER_FAILURE` and `stop_reason =
+  solver_failure_subproblem`; the raw native record it was derived from
+  (`native_stop_reason`, `native_break_taken`, `final_lp_flag`,
+  `final_inner_converged`, `lp_failure_iters`) is preserved beside it and
+  forwarded through `telemetry.stopping`. Runs that did not fail report exactly
+  what they always reported.
 - **`innerLoopLP`'s failure-to-zero return and its unguarded `1/lamref`
   normalization** (follow-on 3). These are inside the byte-identical frozen
   files. **Still open, and still requiring an explicit provenance decision.**
+  The wrapper fix above makes the failure visible and un-admittable; it does not
+  and cannot make the frozen solver take a different step.
 
 Both remain latent. The configuration fix removes the trigger observed here; it
 does not remove the failure modes themselves.

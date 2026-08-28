@@ -1,0 +1,71 @@
+{
+  "schema_version": "1.0",
+  "status": "VALIDATED_PRACTICAL_STABILIZATION",
+  "profile_id": "olhoff_fig3a_s1_native_bimodal_p100_move005_0025_fixed1600_v1",
+  "method": "Du-Olhoff 2007 faithful reproduction with audit-side causal move continuation",
+  "base_factory": "repro2007_config('fig3a_best')",
+  "normalized_configuration": {
+    "move_initial": 0.005,
+    "move_stabilized": 0.0025,
+    "rmin_element_widths": 1.3,
+    "tol_mult": 0.05,
+    "rho_min": 0.001,
+    "inner_solver": "lp",
+    "filter_mode": "diag",
+    "off_diagonal": false,
+    "threads": 1,
+    "max_outer": 1600
+  },
+  "stabilization_trigger": {
+    "id": "native_bimodal_persistence_v1",
+    "condition": "N == 2 && gap12 <= 0.01",
+    "persistence_consecutive_iterations": 100,
+    "counter_resets_on_false": true,
+    "effective_action": "move 0.005 -> 0.0025 on the triggering update",
+    "uses_future_information": false,
+    "is_termination": false
+  },
+  "termination_and_work_semantics": {
+    "type": "FIXED_TOTAL_OUTER_WORK",
+    "outer_iterations": 1600,
+    "native_convergence_claim": false,
+    "trigger_convergence_claim": false,
+    "successful_row_status": "VALID_STABILIZED_STATE_AT_FIXED_WORK",
+    "failure_precedence": ["SOLVER_FAILURE", "VALID_STABILIZED_STATE_AT_FIXED_WORK", "CAP_HIT", "RUNNING"],
+    "note": "The 1600 budget is the frozen observation/work horizon. It is not inferred from a stopping statistic."
+  },
+  "validation_meshes": ["160x20", "240x30", "320x40", "400x50"],
+  "validation_summary": {
+    "persistent_raw_E1_1pct_baseline": [459, 219, 1150, 1104],
+    "persistent_raw_E1_1pct_selected": [186, 234, 234, 246],
+    "delta_k_persistent_1pct": [273, -15, 916, 858],
+    "persistent_raw_E1_0p5pct_baseline": [843, 294, 1150, 1510],
+    "persistent_raw_E1_0p5pct_selected": [730, 417, 1162, 1534],
+    "delta_k_persistent_0p5pct": [113, -123, -12, -24],
+    "persistent_gap_1pct_baseline": [1504, 106, 1548, 1511],
+    "persistent_gap_1pct_selected": [145, 106, 103, 961],
+    "terminal_raw_E1_loss_fraction": [0.00004724, 0.00081748, -0.0008433, 0.004408],
+    "maximum_terminal_raw_E1_E2_E3_loss_fraction": 0.004408,
+    "maximum_terminal_binary_E1_E2_E3_loss_fraction": 0.01085,
+    "terminal_N": [2, 2, 2, 2],
+    "terminal_connected_raw_and_binary": true,
+    "lp_failures": 0,
+    "nonfinite_iterations": 0,
+    "inherited_pretrigger_volume_event": "400x50 has the same one-iteration 1.295e-4 volume residual at k=157 as S0; it predates the k=257 trigger and returns to machine-zero residual"
+  },
+  "basin_assessment": {
+    "classification": "SAME_INTENDED_BIMODAL_CONNECTED_QUALITY_BASIN_NOT_IDENTICAL_POINT",
+    "maximum_terminal_binary_turnover_vs_baseline": 0.0465,
+    "maximum_terminal_density_rms_vs_baseline": 0.1702,
+    "caveat": "Continuation changes the path and late state. Native omega3 differs by several percent on the larger meshes, so byte-identical reproduction is not claimed."
+  },
+  "stopping_assessment": {
+    "simple_native_stopping_rule_identified": false,
+    "reason": "max density change remains at move=0.0025 and no independent stationary condition generalizes",
+    "permitted_semantics": "fixed 1600-outer work only"
+  },
+  "rejected_candidates": [
+    {"id":"S2","reason":"400x50 terminal binary E1 loss 14.6% and binary E2/E3 loss 97.3%; stronger continuation does not preserve evaluator-robust binary quality"},
+    {"id":"S3","reason":"LP SOLVER_FAILURE at outer iteration 1316; last saved binary E1 loss 54.3%"}
+  ]
+}

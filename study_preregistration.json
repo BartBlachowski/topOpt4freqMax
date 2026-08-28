@@ -1,0 +1,47 @@
+{
+  "study": "three_method_parametric_study",
+  "preregistered_before_stage_a_results": true,
+  "calibration_mesh": [240, 30],
+  "holdout_meshes": [[160, 20], [320, 40], [400, 50]],
+  "forbidden_meshes": [[480, 60], [560, 70], [640, 80], [720, 90], [800, 100]],
+  "stage_a": {
+    "olhoff": {"move": [0.005, 0.0075, 0.01, 0.015, 0.02, 0.025, 0.03], "rmin_element": 1.3},
+    "yuksel": {
+      "baseline": {"move": 0.2, "stage1_tol": 0.01, "stage2_tol": 0.01},
+      "one_factor_levels": {"move": [0.1, 0.2, 0.3], "both_stage_tolerances": [0.005, 0.01, 0.02]},
+      "stage_specific_diagnostic_levels": [[0.005, 0.01], [0.02, 0.01], [0.01, 0.005], [0.01, 0.02]]
+    },
+    "proposed": {
+      "baseline": {"optimizer": "OC", "move": 0.2, "tol": 0.001},
+      "one_factor_levels": {"move": [0.1, 0.2, 0.3], "tol": [0.0005, 0.001, 0.002]}
+    }
+  },
+  "selection_rule": {
+    "timing_metric": "optimization_loop_time",
+    "quality_metric": "common_raw_E1_omega1_with_E2_E3_sensitivity_disclosed",
+    "eligibility": [
+      "finite successful optimizer and eigensolver",
+      "volume residual within 1e-3",
+      "support-to-support connected thresholded topology",
+      "no false convergence under declared look-ahead",
+      "Olhoff additionally requires persistent N=2 and relative gap12 <= 0.01"
+    ],
+    "dominance": "within each method no greater cost no worse quality and no worse robustness with at least one strict improvement",
+    "knee": "eligible nondominated point with the smallest normalized Euclidean distance to the cost-quality utopia point after min-max scaling within method",
+    "tie_break": "if normalized distance differs by <=0.02 choose the simpler and more conservative profile",
+    "holdout_retuning": false
+  },
+  "robustness_classes": {
+    "ROBUST": "all four meshes eligible with no solver failure false convergence cap hit or connectivity failure",
+    "MOSTLY_ROBUST": "all meshes solver-healthy and connected with at most one quality or convergence degradation that does not invalidate method identity",
+    "RESOLUTION_SENSITIVE": "one or more meshes loses convergence validity modal validity connectivity or materially degrades quality",
+    "FAILED": "any repeated solver failure or no scientifically valid profile on at least two meshes"
+  },
+  "anti_bias": {
+    "target_iteration_count": null,
+    "target_method_ordering": null,
+    "runtime_only_selection_prohibited": true,
+    "quality_only_selection_prohibited": true,
+    "failed_runs_retained": true
+  }
+}

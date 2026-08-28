@@ -1,0 +1,21 @@
+{
+  "schema_version": "1.0",
+  "frozen_before_holdout_execution": true,
+  "frozen_at": "2026-08-28T10:34:43+02:00",
+  "trigger": {
+    "id": "native_bimodal_persistence_v1",
+    "condition": "N == 2 && gap12 <= 0.01",
+    "persistence": 100,
+    "counter_reset_on_false": true,
+    "counter_reset_after_reduction": true,
+    "termination": false
+  },
+  "candidates": [
+    {"profile_id":"S1_native_bimodal_p100_move_005_0025","short_id":"S1","move_sequence":[0.005,0.0025],"max_outer":1600},
+    {"profile_id":"S2_native_bimodal_p100_move_005_0025_00125","short_id":"S2","move_sequence":[0.005,0.0025,0.00125],"max_outer":1600}
+  ],
+  "holdout_meshes": ["160x20","320x40","400x50"],
+  "per_mesh_changes_allowed": false,
+  "rejected": {"short_id":"S3","status":"SOLVER_FAILURE","failure_iteration":1316},
+  "selection_note": "S1 and S2 were not ranked by tiny terminal differences; they are the simplest and the single stronger healthy continuation. No candidate may be added after hold-out inspection."
+}

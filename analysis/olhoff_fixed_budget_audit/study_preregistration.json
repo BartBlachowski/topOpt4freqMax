@@ -1,0 +1,93 @@
+{
+  "schema_version": "1.0",
+  "audit_id": "olhoff_fixed_budget_quality_audit_2026-08-28",
+  "frozen_before_checkpoint_inspection": true,
+  "scientific_question": "At a fixed budget of 200 outer iterations, how much of the useful spectral and topological result of the faithful Du-Olhoff trajectory has been obtained relative to its own k=1600 late-run reference?",
+  "interpretation_guardrails": {
+    "k200_is": "predeclared fixed computational budget",
+    "k200_is_not": "claim of native convergence",
+    "k1600_is": "terminal late-run reference state",
+    "k1600_is_not": "converged solution unless independently established",
+    "native_objective_cross_method_use": "forbidden"
+  },
+  "profile": {
+    "factory": "repro2007_config('fig3a_best')",
+    "move": 0.005,
+    "rmin_element_widths": 1.3,
+    "tol_mult": 0.05,
+    "rho_min": 0.001,
+    "inner_solver": "lp",
+    "filter_mode": "diag",
+    "off_diagonal_constraints": false,
+    "retuning": false
+  },
+  "meshes": [
+    {"nelx": 160, "nely": 20},
+    {"nelx": 240, "nely": 30},
+    {"nelx": 320, "nely": 40},
+    {"nelx": 400, "nely": 50}
+  ],
+  "predeclared_checkpoints": [50, 100, 150, 200, 250, 300, 400, 600, 800, 1200, 1600],
+  "reference_iteration": 1600,
+  "common_evaluators": ["E1", "E2", "E3"],
+  "representations": ["raw", "volume_preserving_binary"],
+  "primary_quality_metric": "common E1 raw omega1 relative loss versus the same mesh at k=1600",
+  "quality_loss_bands_fraction": [0.005, 0.01, 0.025],
+  "quality_crossing_rule": {
+    "first_crossing": "earliest observed outer iteration with signed relative loss <= band",
+    "persistent_crossing": "earliest observed outer iteration from which signed relative loss never exceeds the band through k=1600",
+    "evaluation_grid": "every stored iteration for raw E1 omega1 when feasible; otherwise all evaluated checkpoints, explicitly labelled",
+    "negative_loss": "retained and reported without clipping"
+  },
+  "modal_rules": {
+    "gap_definition": "(omega2-omega1)/omega1",
+    "thresholds_fraction": [0.05, 0.02, 0.01],
+    "threshold_entry": "condition is gap12 <= threshold",
+    "multiplicity_entry": "condition is detected multiplicity N == 2",
+    "persistent_entry": "earliest iteration from which the condition remains true through k=1600",
+    "k200_classification": {
+      "BIMODAL_ESTABLISHED": "at k=200, N==2 and gap12<=0.01, and both conditions remain true at every subsequent observed iteration through k=1600",
+      "BIMODAL_TRANSIENT": "at k=200, N==2 and gap12<=0.01, but either condition later fails before or at k=1600",
+      "BIMODAL_NOT_YET_ESTABLISHED": "at k=200, N!=2 or gap12>0.01"
+    }
+  },
+  "health_rule": {
+    "finite_numerics_required": true,
+    "successful_lp_required": true,
+    "maximum_absolute_volume_residual": 1e-6,
+    "raw_05_left_right_connectivity_required": true,
+    "binary_left_right_connectivity_required": true
+  },
+  "adequacy_rule": {
+    "acceptable_modal_state": "BIMODAL_ESTABLISHED",
+    "STRICTLY_ADEQUATE": "healthy, both representations connected, acceptable modal state, and common E1 raw omega1 loss <= 0.005",
+    "PRACTICALLY_ADEQUATE": "healthy, both representations connected, acceptable modal state, and common E1 raw omega1 loss <= 0.01",
+    "COARSELY_ADEQUATE": "healthy, both representations connected, and common E1 raw omega1 loss <= 0.025",
+    "INADEQUATE": "common E1 raw omega1 loss > 0.025, or health/volume/connectivity failure, or the intended spectral state is materially missed",
+    "disclosure": "E2, E3, and binary losses are always reported but do not silently replace the preregistered primary E1-raw rule"
+  },
+  "cross_resolution_rule": {
+    "declared_criterion": "PRACTICALLY_ADEQUATE (the 1.0% band), with all stricter/coarser results also disclosed",
+    "ROBUST_PRACTICAL_BUDGET": "k=200 is PRACTICALLY_ADEQUATE on all four meshes",
+    "RESOLUTION_SENSITIVE_BUDGET": "k=200 is PRACTICALLY_ADEQUATE on at least one but not all four meshes",
+    "INSUFFICIENT_BUDGET": "k=200 is PRACTICALLY_ADEQUATE on none of the four meshes"
+  },
+  "design_distance": {
+    "density_rms": "sqrt(mean((rho(k)-rho(1600))^2))",
+    "binary_topology_turnover": "mean(xb(k) != xb(1600)) using exact-count volume-preserving binaries",
+    "same_phase_reference": "when a period-two signature is material, additionally compare k with the latest k<=1600 having the same iteration parity"
+  },
+  "cost": {
+    "cumulative_loop_time": "cumulative sum of measured per-iteration eigensolve, gradient, and LP-inner telemetry",
+    "mean_time_per_iteration": "measured cumulative loop time divided by checkpoint iteration",
+    "window_time_per_iteration": "mean measured loop time over the trailing min(50,k) iterations",
+    "eigensolve_share": "cumulative measured eigensolve time divided by cumulative measured loop time"
+  },
+  "forbidden": [
+    "modify authoritative numerical implementation",
+    "retune move, tolOuter, rmin, or tolMult",
+    "create another convergence detector",
+    "run 480x60, 560x70, 640x80, 720x90, or 800x100",
+    "call k=200 or k=1600 converged without independent evidence"
+  ]
+}

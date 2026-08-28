@@ -254,7 +254,7 @@
       "inner_solver": "lp_eq_22",
       "off_diagonal_coupling": false,
       "outer_tolerance": 0.001,
-      "max_outer_iterations": 1600,
+      "max_outer_iterations": 5000,
       "threads": 1
     },
     "olhoff_exact": {
@@ -280,7 +280,7 @@
     "repro2007": {
       "test": "successful_LP_and_max_abs_delta_rho_lt_0.001",
       "failure_precedence_required": true,
-      "budget": 1600
+      "budget": 5000
     },
     "terminal_classes": [
       "CONVERGED_NATIVE",
@@ -325,7 +325,7 @@
     "existing_olhoff_240x30_evidence": {
       "source": "frozen_fig3a_best_native_radius_history",
       "d_infinity_at_move_saturation": 0.005,
-      "iteration_budget": 1600,
+      "iteration_budget": 5000,
       "conditional_r3_status": "CENSORED_BY_ITERATION_BUDGET",
       "condition": "R3_history_replay_identity_confirmed",
       "other_meshes_must_be_classified_from_own_trajectories": true

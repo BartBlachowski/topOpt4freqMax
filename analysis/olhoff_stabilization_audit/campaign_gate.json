@@ -1,0 +1,21 @@
+{
+  "schema_version": "1.0",
+  "generated_without_optimization_solves": true,
+  "profile_id": "olhoff_fig3a_s1_native_bimodal_p100_move005_0025_fixed1600_v1",
+  "nine_mesh_configuration_generation": true,
+  "memory_estimates_under_8gb": true,
+  "result_schema": true,
+  "timing_telemetry": true,
+  "common_evaluator_compatibility": true,
+  "frozen_manifest_verified": {
+    "matched": 61,
+    "mismatched": 0,
+    "missing": 0
+  },
+  "selected_profile_cross_resolution_validated": true,
+  "yuksel_profile_ready": true,
+  "proposed_profile_ready": true,
+  "legacy_performance_comparison_note": "The existing default Olhoff dispatcher is not the selected profile; the ultimate campaign must consume final_campaign_profile.json and the stabilization runner.",
+  "pass": true,
+  "final_decision": "FINAL NINE-RESOLUTION CAMPAIGN: GO"
+}

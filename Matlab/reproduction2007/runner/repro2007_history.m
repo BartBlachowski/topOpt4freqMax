@@ -56,9 +56,9 @@ function H = repro2007_history(res)
 %                       the MMA route.
 %     cum_inner         running total
 %     inner_converged   the subproblem's own convergence status
-%     lp_flag           linprog exit flag where the LP route ran, recovered
-%                       from res.log for failed solves and 1 for successful
-%                       ones; NaN for the MMA route
+%     lp_flag           linprog exit flag where the LP route ran, reconstructed
+%                       by REPRO2007_LP_FLAGS from hist.innerConv and res.log;
+%                       NaN for the MMA route
 %     degen_hits        times the (25d) subeigenvalue matrix was degenerate,
 %                       where the gradients are not uniquely defined
 %
@@ -79,7 +79,7 @@ function H = repro2007_history(res)
 %   info.stopping.final_grayness and are what the performance comparison
 %   actually reads.  See MIGRATION_REPRODUCTION2007_REPORT.md.
 %
-%   See also RUN_REPRO2007, TOPOPT_HISTORY_INIT.
+%   See also RUN_REPRO2007, REPRO2007_LP_FLAGS, TOPOPT_HISTORY_INIT.
 
 h = res.hist;
 cfg = res.cfg;
@@ -125,7 +125,7 @@ H.n_inner         = h.nInner(:).';
 H.cum_inner       = h.cumInner(:).';
 H.inner_converged = logical(h.innerConv(:).');
 H.degen_hits      = h.degen(:).';
-H.lp_flag         = localLpFlags(res, n);
+H.lp_flag         = repro2007_lp_flags(res, n);
 
 % ---- runtime ------------------------------------------------------------
 H.t_eig   = h.tEig(:).';
@@ -193,35 +193,5 @@ if size(A, 1) >= k
     r = A(k, :);
 else
     r = NaN(1, n);
-end
-end
-
-function flags = localLpFlags(res, n)
-%LOCALLPFLAGS  Recover the linprog exit flag per iteration.
-%
-%   OLHOFFOPT stores the subproblem's boolean convergence status in
-%   hist.innerConv and writes the numeric flag into res.log only when the solve
-%   fails.  Both are therefore needed to reconstruct the per-iteration flag,
-%   and neither requires modifying the imported solver.
-
-if ~strcmpi(res.cfg.innerSolver, 'lp')
-    flags = NaN(1, n);
-    return
-end
-
-conv = logical(res.hist.innerConv(:).');
-flags = NaN(1, n);
-flags(conv) = 1;                 % innerLoopLP sets conv = (flag == 1)
-
-for i = 1:numel(res.log)
-    tok = regexp(res.log{i}, ...
-        '^iter (\d+): LP inner solve failed \(flag=(-?\d+)\)', 'tokens', 'once');
-    if isempty(tok)
-        continue
-    end
-    k = str2double(tok{1});
-    if k >= 1 && k <= n
-        flags(k) = str2double(tok{2});
-    end
 end
 end

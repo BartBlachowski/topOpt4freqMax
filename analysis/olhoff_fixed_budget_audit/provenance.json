@@ -1,0 +1,97 @@
+{
+  "schema_version": "1.0",
+  "captured_at": "2026-08-28T09:23:11+02:00",
+  "timezone": "Europe/Warsaw (CEST)",
+  "repository": {
+    "branch": "benchmark-methodology-r2",
+    "head": "cb6353feb941f12b2aaa927e622649e1ccc926f7",
+    "working_tree_at_audit_start": {
+      "clean": false,
+      "note": "The tree was already dirty. All pre-existing changes were preserved; this audit added only analysis/olhoff_fixed_budget_audit/.",
+      "modified": [
+        ".gitignore",
+        "DIAGNOSTIC_REPRO2007_BENCHMARK.md",
+        "Matlab/reproduction2007/runner/repro2007_history.m",
+        "Matlab/reproduction2007/runner/run_repro2007.m",
+        "analysis/ourApproach/Matlab/topopt_freq.m",
+        "examples/Performance/benchmark_protocol_r3.json",
+        "examples/Performance/benchmark_results.json",
+        "examples/Performance/performance_comparison.m",
+        "examples/Performance/table1_paper_style.tex",
+        "tools/Matlab/run_topopt_from_json.m"
+      ],
+      "preexisting_untracked_roots": [
+        "Matlab/reproduction2007/runner/repro2007_lp_flags.m",
+        "Matlab/reproduction2007/runner/repro2007_stopping.m",
+        "OLHOFF_BENCHMARK_EQUIVALENCE_REPORT.md",
+        "OLHOFF_NATIVE_CONVERGENCE_DETECTOR.md",
+        "OLHOFF_PRACTICAL_CONVERGENCE_AUDIT.md",
+        "THREE_METHOD_PARAMETRIC_STUDY.md",
+        "analysis/olhoff_native_convergence/",
+        "analysis/olhoff_practical_convergence_audit/",
+        "analysis/three_method_parametric_study/",
+        "examples/Performance/diagnostic_yuksel_table1/",
+        "examples/Performance/equivalence/",
+        "examples/Performance/olhoff_benchmark_path_hash.m",
+        "examples/Performance/olhoff_equivalence_gate.m",
+        "examples/Performance/olhoff_equivalence_report.m",
+        "examples/Performance/olhoff_preflight.m",
+        "examples/Performance/performance_benchmark_profile.m",
+        "examples/Performance/repro2007_direct_cfg.m",
+        "examples/Performance/repro2007_normalized_config.m",
+        "examples/Performance/repro2007_tree_hash.m",
+        "examples/Performance/sha256_hex.m",
+        "examples/Performance/verify_repro2007_benchmark_equivalence.m",
+        "study_preregistration.json"
+      ]
+    }
+  },
+  "environment": {
+    "matlab_version": "25.2.0.3042426 (R2025b) Update 1",
+    "matlab_computer": "MACA64",
+    "optimization_trajectory_threads": 1,
+    "offline_evaluator_threads": 1,
+    "thread_evidence": "res.cfg.threads == 1 in all four saved trajectories; audit scripts call maxNumCompThreads(1)"
+  },
+  "frozen_reproduction_integrity": {
+    "manifest": "Matlab/reproduction2007/SOURCE_SHA256.txt",
+    "manifest_sha256": "2721105545f48e5ad7ad8e710b7c106cdb2852fc9cbaac2e6ee0a751c98ec4cc",
+    "verification_result": {"matched": 61, "mismatched": 0, "missing": 0},
+    "migration_mapping": {
+      "CLAUDE.md": "SOURCE_CLAUDE.md",
+      "results/*": "baseline/*",
+      "everything_else": "unchanged relative path"
+    },
+    "r3_reproduction_tree_hash": "d0fcc873310aeea504a84bc6b93f484b073ceecc06685cf304e1df73f82a8747",
+    "key_numerical_source_sha256": {
+      "Matlab/reproduction2007/algo/olhoffOpt.m": "4784ecf3f6b42d8af6f5a9695e2924bf1f4c924ebf9c76be9a858a2ef769e5de",
+      "Matlab/reproduction2007/algo/innerLoopLP.m": "7724753c02f84d6009c3998f758d5b3f9c5144ad39ca6f470584a2c99e089465",
+      "Matlab/reproduction2007/runner/repro2007_config.m": "3ae2a005d41f04a90ed4035cd1df43d0219c56f11e8b385bfb13548a0aa593ca",
+      "analysis/three_method_parametric_study/study_evaluate_design.m": "22a1b974c251dbe7baa6499a5aca11e6bde68469b6d2e80fd4274c9447f31343"
+    },
+    "authoritative_numerical_sources_modified_by_this_audit": false
+  },
+  "trajectory_sources": [
+    {"mesh":"160x20","path":"analysis/olhoff_native_convergence/results/development_160x20.mat","sha256":"d8e6863fd8d6952e2898afc06bb5aff67d29dd19e0cc51c19ee86bedf75bd94c","n_outer":1600,"snapshot_stride":1,"identity_to_240_baseline":"not_applicable"},
+    {"mesh":"240x30","path":"analysis/olhoff_native_convergence/results/development_240x30.mat","sha256":"f19667d44f6f255ed953a9afe17bc82ebb1d5d94bf0378939eec5a077108476f","n_outer":1600,"snapshot_stride":1,"identity_to_240_baseline":true},
+    {"mesh":"320x40","path":"analysis/olhoff_native_convergence/results/development_320x40.mat","sha256":"3d965ba04d8335e02416f437aa8a7f19956e192bf29e45a6d9ea3cd7f0893f77","n_outer":1600,"snapshot_stride":1,"identity_to_240_baseline":"not_applicable"},
+    {"mesh":"400x50","path":"analysis/olhoff_native_convergence/results/development_400x50.mat","sha256":"09142950b91b15ac2d170da657ca95ef987d7bcde3c62fbfa0b5c01e5bf2e054","n_outer":1600,"snapshot_stride":1,"identity_to_240_baseline":"not_applicable"}
+  ],
+  "offline_e1_extraction_verification": {
+    "definition": "Direct extraction of common raw E1 from study_evaluate_design.m",
+    "check": "All three E1 frequencies compared at every preregistered checkpoint on all four meshes",
+    "maximum_absolute_difference": 0.0,
+    "fallback_sm_count": 0
+  },
+  "analysis_file_sha256": {
+    "study_preregistration.json": "90a61794627f718a89d356a4676818b874c293d3715eaefc900c3fcc51f82420",
+    "run_checkpoint_audit.m": "84e9e0bde5dd91c45fc677d5bbe25b1d54b68a6df0f976a8d800eb446a9714da",
+    "run_e1_trajectory.m": "b8fef8dfbb3616fcc11098c642f20749224d19e94b766a26c25d004c8b67a20e",
+    "build_outputs.m": "5659c915f4571d91d81041d2d0918ea66ec5dade7566d4b69d74e903e2f7a254",
+    "checkpoint_metrics.csv": "287f34df52e76b47f95b345f7aed235ca1f73024e0eaa211e8b9d93d3e513262",
+    "budget_adequacy.csv": "2cf26190edf55a3117dd2c58a9c6dd50623e9f9e245a3a630c66760c7559d88f",
+    "modal_establishment.csv": "78a0b4e12db6382dfeacec3ed592b3f071fa5ea7b4b1dba99e6b4dc134eeafaa",
+    "minimum_quality_budget.csv": "06520a45df0f07f49ffcb66cf03222dc9c33ddd1aafd8790552d487d211958b5",
+    "quality_budget_curves.csv": "e3abf878929ab4e7d30793e468c36409a46c562eaae95e2a4d7c386db5d66177"
+  }
+}

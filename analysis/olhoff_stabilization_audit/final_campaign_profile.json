@@ -1,0 +1,28 @@
+{
+  "schema_version": "1.0",
+  "campaign_id": "ultimate_nine_resolution_performance_scaling_v1",
+  "mesh_sequence": [[160,20],[240,30],[320,40],[400,50],[480,60],[560,70],[640,80],[720,90],[800,100]],
+  "threads_per_run": 1,
+  "profiles": {
+    "Olhoff": {
+      "profile_id": "olhoff_fig3a_s1_native_bimodal_p100_move005_0025_fixed1600_v1",
+      "work_semantics": "fixed 1600 outer iterations with causal S1 move stabilization; NOT NATIVE CONVERGENCE",
+      "runner": "analysis/olhoff_stabilization_audit/run_stabilization_case.m",
+      "successful_status": "VALID_STABILIZED_STATE_AT_FIXED_WORK",
+      "fit_rule": "include only solver-healthy fixed-work rows; fit measured loop and per-iteration timing; do not label endpoints converged"
+    },
+    "Yuksel": {
+      "profile_id": "yuksel_practical_move01_tol001",
+      "work_semantics": "native two-stage practical profile; stage counts and times reported separately and in total",
+      "cross_resolution_status": "ROBUST"
+    },
+    "Proposed": {
+      "profile_id": "proposed_practical_move02_tol001",
+      "work_semantics": "native practical max-density-change profile",
+      "cross_resolution_status": "ROBUST"
+    }
+  },
+  "status_precedence": ["SOLVER_FAILURE", "VALID_STABILIZED_STATE_AT_FIXED_WORK", "CAP_HIT", "RUNNING"],
+  "cross_method_guardrail": "Olhoff fixed-work timing and native-stopped Yuksel/Proposed timing must remain semantically labelled; no convergence-speed claim may be inferred from Olhoff's 1600 endpoint",
+  "source_of_truth": "selected_profile.json plus frozen three-method selected profiles"
+}

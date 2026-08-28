@@ -1,0 +1,111 @@
+{
+  "schema_version": "1.0",
+  "audit_id": "final_pre_campaign_olhoff_stabilization_audit_2026-08-28",
+  "phase_0_frozen_at": "2026-08-28T10:07:46+02:00",
+  "scope": "one bounded late-stage stabilization investigation",
+  "baseline": {
+    "factory": "repro2007_config('fig3a_best')",
+    "move": 0.005,
+    "rmin_element_widths": 1.3,
+    "tol_mult": 0.05,
+    "rho_min": 0.001,
+    "inner_solver": "lp",
+    "filter_mode": "diag",
+    "off_diagonal": false,
+    "max_outer": 1600
+  },
+  "baseline_diagnosis": {
+    "meshes": ["160x20", "240x30", "320x40", "400x50"],
+    "quality_metric": "signed common raw-E1 omega1 loss relative to each baseline x_1600",
+    "quality_bands_fraction": [0.025, 0.01, 0.005],
+    "exit": "transition from loss <= band at x_(k-1) to loss > band at x_k",
+    "persistent_entry": "earliest k after which the condition remains true through baseline k=1600",
+    "event_window": {"before_iterations": 10, "after_iterations": 10},
+    "strongly_moving_element_threshold": 0.0049,
+    "direction_reversal_density_threshold": 0.0001,
+    "active_bound_distance": 0.01,
+    "period_two_window": 200,
+    "hypothesis_classification": {
+      "STABILIZATION_HYPOTHESIS_SUPPORTED": "post-entry exits on the mesh coincide repeatedly with move-saturated/reversing update events while the trajectory later returns to the same high-quality N=2 basin without a persistent topology/connectivity or solver failure",
+      "STABILIZATION_HYPOTHESIS_PLAUSIBLE": "the trajectory leaves and revisits a high-quality N=2 basin and update aggressiveness is a credible contributor, but event association is mixed or sparse",
+      "STABILIZATION_HYPOTHESIS_NOT_SUPPORTED": "exits are primarily explained by basin/topology/solver changes, or no recurrent high-quality basin is observed"
+    }
+  },
+  "experiment_gate": {
+    "required_to_proceed": "hypothesis is SUPPORTED or PLAUSIBLE on at least three of four meshes",
+    "if_not_met": "do not run a continuation experiment",
+    "observed_before_candidate_freeze": "met: SUPPORTED on 320x40 and 400x50; PLAUSIBLE on 160x20 and 240x30"
+  },
+  "candidate_family_ceiling": [
+    "S0: 0.005 throughout",
+    "S1: 0.005 -> 0.0025",
+    "S2: 0.005 -> 0.0025 -> 0.00125",
+    "S3: 0.005 -> 0.0025 -> 0.00125 -> 0.000625"
+  ],
+  "stage_a": {
+    "mesh": "240x30",
+    "candidate_trigger": {
+      "id": "native_bimodal_persistence_v1",
+      "condition": "detected N == 2 AND native gap12 <= 0.01",
+      "persistence_consecutive_iterations": 100,
+      "counter_reset": "reset to zero whenever condition is false and immediately after each move reduction",
+      "reduction_effect": "when the counter reaches 100 on the current pre-update native state, apply the next move limit to that same outer update",
+      "additional_stability_condition": "none",
+      "causal": true,
+      "termination": false,
+      "rationale": "one hundred consecutive native bimodal states guards against the documented transient entries while remaining a single simple resolution-independent condition; no common evaluator or future state is used"
+    },
+    "development_profiles": {
+      "S0": [0.005],
+      "S1": [0.005, 0.0025],
+      "S2": [0.005, 0.0025, 0.00125],
+      "S3": [0.005, 0.0025, 0.00125, 0.000625]
+    },
+    "outer_iteration_cap": 1600,
+    "cap_semantics": "observation cap only; neither trigger nor cap is convergence",
+    "maximum_holdout_candidates": 2,
+    "selection_rule": "eliminate candidates with solver/connectivity/modal failure, material raw/binary quality loss, or trivial freezing; otherwise prefer the simplest candidate that materially advances persistent quality without tiny-difference ranking"
+  },
+  "stage_b": {
+    "holdout_meshes": ["160x20", "320x40", "400x50"],
+    "definitions_frozen_before_holdout": true,
+    "frozen_at": "2026-08-28T10:34:43+02:00",
+    "selected_candidates": [
+      {
+        "id": "S1_native_bimodal_p100_move_005_0025",
+        "move_sequence": [0.005, 0.0025],
+        "development_trigger_iterations": [206],
+        "development_status": "CAP_HIT_CLEAN",
+        "selection_reason": "simplest healthy stabilization; persistent high raw and late binary quality"
+      },
+      {
+        "id": "S2_native_bimodal_p100_move_005_0025_00125",
+        "move_sequence": [0.005, 0.0025, 0.00125],
+        "development_trigger_iterations": [206, 306],
+        "development_status": "CAP_HIT_CLEAN",
+        "selection_reason": "bounded stronger stabilization retained to test excursion-prone hold-outs; healthy and high-quality on calibration"
+      }
+    ],
+    "rejected_development_candidate": {
+      "id": "S3_native_bimodal_p100_move_005_0025_00125_000625",
+      "reason": "SOLVER_FAILURE at outer iteration 1316; no hold-out authorization"
+    },
+    "per_resolution_retuning": false
+  },
+  "primary_success": {
+    "metric": "baseline persistent crossing minus stabilized persistent crossing",
+    "bands_fraction": [0.025, 0.01, 0.005],
+    "reference": "same-mesh baseline x_1600 common-evaluator state",
+    "required": "materially earlier persistent quality on multiple meshes while retaining N=2, persistent gap<=1%, raw/binary quality, connectivity, volume, and solver health"
+  },
+  "guardrails": [
+    "stabilization trigger is not termination",
+    "no target of 200 iterations",
+    "no move above 0.005",
+    "no future information in trigger",
+    "no authoritative numerical-source modification",
+    "no Yuksel or Proposed modification",
+    "no nine-resolution optimization campaign",
+    "no candidate family beyond the bounded S0-S3 ceiling"
+  ]
+}

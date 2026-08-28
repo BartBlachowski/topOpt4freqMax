@@ -1,0 +1,75 @@
+{
+  "wp": "WP0 -- freeze current state",
+  "recorded": "2026-08-27",
+  "purpose": "State of the repository before the Olhoff benchmark-path equivalence work began. Recorded so that any later question about what the harness was built against has an answer that does not depend on memory.",
+  "branch": "benchmark-methodology-r2",
+  "head": "cb6353feb941f12b2aaa927e622649e1ccc926f7",
+  "head_subject": "pre-R3",
+  "working_tree_at_freeze": "clean (git status --porcelain empty; no modified, no untracked)",
+  "unrelated_changes_preserved": "none existed -- the working tree was clean at freeze, so no unrelated change could be disturbed.",
+  "frozen_tree": {
+    "path": "Matlab/reproduction2007/",
+    "manifest": "Matlab/reproduction2007/SOURCE_SHA256.txt",
+    "manifest_entries": 61,
+    "verified_matching": 61,
+    "mismatches": [],
+    "verdict": "MATCHES MIGRATION PROVENANCE MANIFEST",
+    "layout_mapping_applied": {
+      "CLAUDE.md": "SOURCE_CLAUDE.md",
+      "results/*": "baseline/*"
+    }
+  },
+  "modification_policy": {
+    "frozen_numerical_source_not_modified": [
+      "algo/",
+      "fem/",
+      "filter/",
+      "mma/",
+      "runs/",
+      "setpaths.m",
+      "top88.m"
+    ],
+    "modified_in_this_task": [
+      "Matlab/reproduction2007/runner/run_repro2007.m  (stop classification delegated; docs)",
+      "Matlab/reproduction2007/runner/repro2007_history.m  (lp_flag reconstruction delegated)",
+      "tools/Matlab/run_topopt_from_json.m  (telemetry: solver_config + native stop fields)",
+      "examples/Performance/performance_comparison.m  (profile extracted; admission preflight)"
+    ],
+    "added_in_this_task": [
+      "Matlab/reproduction2007/runner/repro2007_lp_flags.m",
+      "Matlab/reproduction2007/runner/repro2007_stopping.m",
+      "examples/Performance/sha256_hex.m",
+      "examples/Performance/repro2007_tree_hash.m",
+      "examples/Performance/repro2007_normalized_config.m",
+      "examples/Performance/repro2007_direct_cfg.m",
+      "examples/Performance/performance_benchmark_profile.m",
+      "examples/Performance/olhoff_benchmark_path_hash.m",
+      "examples/Performance/olhoff_equivalence_gate.m",
+      "examples/Performance/olhoff_equivalence_report.m",
+      "examples/Performance/verify_repro2007_benchmark_equivalence.m"
+    ],
+    "note": "Everything under Matlab/reproduction2007/runner/ is integration code written for this repository and is excluded from SOURCE_SHA256.txt by construction -- see PROVENANCE.md, 'Import integrity'. The 61 manifest entries remain byte-identical."
+  },
+  "suspicious_row_under_investigation": {
+    "source": "examples/Performance/benchmark_results.json (generated 2026-08-26 12:47, post rho_min fix)",
+    "method": "Olhoff",
+    "mesh": "400x50",
+    "iter_total": 627,
+    "stop_reason": "outer_increment_below_tolerance",
+    "final_max_density_change": 0,
+    "convergence_tolerance": 0.001,
+    "objective_final": 168.0505425773065,
+    "final_frequencies_rad_s": [
+      168.0505425773065,
+      168.69256037018073,
+      187.20519158552935
+    ],
+    "topology_checksum": "n=20000;sum=9999.9999999999982",
+    "other_meshes": {
+      "160x20": 1600,
+      "240x30": 1600,
+      "320x40": 1600
+    },
+    "prior_observation": "objective_final equals omega_1 exactly for this row and for no other Olhoff row. innerLoopLP sets st.beta = ctx.lam(1) on failure, so sqrt(beta) collapses onto omega_1 precisely when the LP fails -- a fingerprint, not yet a proof."
+  }
+}
