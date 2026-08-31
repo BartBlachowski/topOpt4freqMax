@@ -27,31 +27,36 @@ assert(localHistoryEqual(rp.hist,rd.hist),'Non-timing history differs between ca
 assert(isequal(rp.trigger_iterations,rd.trigger_iterations));
 Xs=rp.rho_snapshots;
 
-% A fresh capped-prefix check at the difficult k=252 anchor. Historical
-% Phase-2B capped checks cover 45 additional points through k=2200.
-kPrefix=252; cp=cfg;cp.maxOuter=kPrefix;
-t=tic; rr=olhoffOptStabilized(cp,policy);prefixWall=toc(t);
-assert(rr.nOuter==kPrefix&&strcmp(rr.status,'CAP_HIT'));
-prefixDensityIdentical=isequal(rr.rho,Xd(:,kPrefix+1));
-prefixSingleIdentical=isequal(rr.rho_snapshots(:,end),Xs(:,kPrefix+1));
-prefixCastIdentity=isequal(single(rr.rho),rr.rho_snapshots(:,end));
-prefixHistoryIdentical=localHistoryPrefix(rr.hist,rp.hist,kPrefix);
-assert(prefixDensityIdentical&&prefixSingleIdentical&&prefixCastIdentity&&prefixHistoryIdentical);
-
-T=table([0;kPrefix;H],[true;prefixDensityIdentical;isequal(rp.rho,Xd(:,end))], ...
-    [true;prefixSingleIdentical;isequal(rp.rho_snapshots(:,end),single(Xd(:,end)))], ...
-    [true;prefixCastIdentity;isequal(single(rp.rho),rp.rho_snapshots(:,end))], ...
-    [true;prefixHistoryIdentical;localHistoryEqual(rp.hist,rd.hist)], ...
-    ["INITIAL";string(rr.status);string(rp.status)], ...
-    'VariableNames',{'k','double_density_identical','single_snapshot_identical', ...
-    'cast_identity','nontiming_history_identical','native_status'});
+% Strategically selected capped prefixes exercise the early trajectory,
+% rho=.1 parking, mid trajectory, all three primary-q endpoint regions,
+% reference establishment, and the late/reference cap.  Each capped run is
+% compared with the lossless full-run column, not merely with a float32 image.
+prefixK=[80 100 252 400 453 552 2100 3200];
+prefixRole=["rho_0p1_parking";"early";"difficult_anchor";"mid"; ...
+    "near_q_0p995_enter";"near_q_0p995_cert";"reference_establishment";"late_B_ref"];
+nr=numel(prefixK);densityId=false(nr,1);singleId=false(nr,1);castId=false(nr,1);
+historyId=false(nr,1);outerId=false(nr,1);status=strings(nr,1);prefixWall=zeros(nr,1);
+for ii=1:nr
+    kPrefix=prefixK(ii);cp=cfg;cp.maxOuter=kPrefix;
+    t=tic;rr=olhoffOptStabilized(cp,policy);prefixWall(ii)=toc(t);
+    outerId(ii)=rr.nOuter==kPrefix;status(ii)=string(rr.status);
+    densityId(ii)=isequal(rr.rho,Xd(:,kPrefix+1));
+    singleId(ii)=isequal(rr.rho_snapshots(:,end),Xs(:,kPrefix+1));
+    castId(ii)=isequal(single(rr.rho),rr.rho_snapshots(:,end));
+    historyId(ii)=localHistoryPrefix(rr.hist,rp.hist,kPrefix);
+    assert(outerId(ii)&&strcmp(rr.status,'CAP_HIT')&&densityId(ii)&&singleId(ii)&&castId(ii)&&historyId(ii));
+end
+T=table(prefixK(:),prefixRole,densityId,singleId,castId,historyId,outerId,status,prefixWall, ...
+    'VariableNames',{'k','trajectory_role','double_density_identical','single_snapshot_identical', ...
+    'cast_identity','objective_frequency_history_identical','outer_count_identical','native_status','wall_seconds'});
 writetable(T,fullfile(outDir,'PREFIX_DETERMINISM.csv'));
 
 rdScientific=rmfield(rd,{'mdl'});rdScientific.hist=rmfield(rdScientific.hist,{'tEig','tGrad','tInner'}); %#ok<NASGU>
 rpScientific=rmfield(rp,{'mdl'});rpScientific.hist=rmfield(rpScientific.hist,{'tEig','tGrad','tInner'}); %#ok<NASGU>
 save(fullfile(rawDir,'capture_96x12_H3200.mat'),'Xd','Xs','cfg','policy', ...
     'rdScientific','rpScientific','captureWall','protectedWall','prefixWall','-v7.3');
-fprintf('CAPTURE_PASS capture=%.1fs protected=%.1fs prefix=%.1fs\n',captureWall,protectedWall,prefixWall);
+fprintf('CAPTURE_PASS capture=%.1fs protected=%.1fs prefixes_total=%.1fs\n', ...
+    captureWall,protectedWall,sum(prefixWall));
 
 function ok=localHistoryEqual(a,b)
 fields=setdiff(fieldnames(a),{'tEig','tGrad','tInner'});ok=true;

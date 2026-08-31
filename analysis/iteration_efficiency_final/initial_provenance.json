@@ -1,0 +1,14 @@
+{
+  "schema_version": "iteration_efficiency_final_provenance_v1",
+  "captured_at": "2026-08-31T11:01:46+02:00",
+  "branch": "benchmark-methodology-r2",
+  "starting_head": "d4df2137e68851f91cff5e75de1ee4a99a6a7625",
+  "working_tree_clean": false,
+  "pre_existing_changes_preserved": true,
+  "pre_existing_change_scope": [
+    ".gitignore",
+    "analysis/iteration_efficiency_phase2i_precision_qualification/"
+  ],
+  "production_campaign_run": false,
+  "note": "Recorded before final-harness edits. Exact initial git status is retained in the integration report."
+}

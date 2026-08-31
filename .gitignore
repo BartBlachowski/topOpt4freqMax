@@ -94,3 +94,11 @@ codegen/
 # gate with nothing to read on a fresh clone.
 !examples/Performance/equivalence/*.mat
 !examples/Performance/equivalence/negative_controls/*.mat
+
+# Phase 2I qualification evidence is an audit deliverable, not disposable run
+# output.  Keep the CSV decision tables, checksum manifest, and the minimum raw
+# records needed to reproduce the negative precision ruling on a fresh clone.
+!analysis/iteration_efficiency_phase2i_precision_qualification/*.csv
+!analysis/iteration_efficiency_phase2i_precision_qualification/SHA256SUMS.txt
+!analysis/iteration_efficiency_phase2i_precision_qualification/raw/*.csv
+!analysis/iteration_efficiency_phase2i_precision_qualification/raw/*.mat

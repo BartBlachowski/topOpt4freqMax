@@ -1,0 +1,9 @@
+k,trajectory_role,double_density_identical,single_snapshot_identical,cast_identity,objective_frequency_history_identical,outer_count_identical,native_status,wall_seconds
+80,rho_0p1_parking,1,1,1,1,1,CAP_HIT,1.14480633333333
+100,early,1,1,1,1,1,CAP_HIT,1.47190770833333
+252,difficult_anchor,1,1,1,1,1,CAP_HIT,3.63729991666667
+400,mid,1,1,1,1,1,CAP_HIT,5.62879316666667
+453,near_q_0p995_enter,1,1,1,1,1,CAP_HIT,6.22944620833333
+552,near_q_0p995_cert,1,1,1,1,1,CAP_HIT,7.74456245833333
+2100,reference_establishment,1,1,1,1,1,CAP_HIT,29.1311134583333
+3200,late_B_ref,1,1,1,1,1,CAP_HIT,44.8305555

@@ -38,10 +38,16 @@ switch method
         cfg.void_material = struct('E_min_ratio', 1.0e-9, 'rho_min', 1.0e-9);
         cfg.optimization = common_optimization('Yuksel', params, 0.2, 1000, 0.01, 2.5);
         cfg.optimization.optimizer = 'OC';
+        % stage1_budget_independent defaults false, so the effective Stage-1
+        % budget is unchanged for every existing caller.  Only a fixed-horizon
+        % timing replay, whose max_iters is a Stage-2 horizon rather than a
+        % global budget, sets it true.
         cfg.optimization.yuksel = struct( ...
             'stage1_max_iters', round(opt(params, 'stage1_max_iters', 1000)), ...
             'stage1_tol', opt(params, 'stage1_tol', 0.01), ...
-            'stage2_tol', opt(params, 'stage2_tol', 0.01));
+            'stage2_tol', opt(params, 'stage2_tol', 0.01), ...
+            'stage1_budget_independent', ...
+                logical(opt(params, 'stage1_budget_independent', false)));
 
     case 'proposed'
         cfg.void_material = struct('E_min_ratio', 1.0e-9, 'rho_min', 1.0e-9);

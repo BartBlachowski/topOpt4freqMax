@@ -1,0 +1,62 @@
+{
+  "schema_version": "iteration_efficiency_production_manifest_v1",
+  "experiment_id": "final_iteration_efficiency_candidate_c",
+  "production_authorized": false,
+  "production_meshes": [[160,20],[240,30],[320,40],[400,50],[480,60],[560,70],[640,80],[720,90],[800,100]],
+  "volume_fraction": 0.5,
+  "principal_methods": ["Proposed","Yuksel","Olhoff-LP"],
+  "optional_secondary_method": "Olhoff-MMA",
+  "olhoff_selector_values": ["lp","mma","both"],
+  "scientific_contract": {
+    "id": "iteration_efficiency_candidate_c_refreeze_2026-08-31",
+    "source": "analysis/iteration_efficiency_phase2a/iteration_efficiency_contract.json",
+    "sha256": "cc900b4ad4cae18b0bcd9b7a559f51e04e5167db587f64180b371d3c399bf95b"
+  },
+  "common_evaluator": {
+    "id": "candidate_c_adaptive_structural_mode_v1",
+    "candidate": "C",
+    "source": "analysis/three_method_parametric_study/study_evaluate_design.m",
+    "sha256": "e14a21efe0bb2d9b9d7f3187b4c3f671ec089f6ff96773074b8f3b56cacd79e9",
+    "design": "actual_gray",
+    "mass_models": ["E1_linear_with_floor","E2_eq4a","E3_eq4a_effective_density_floor"],
+    "classifier": "voidKE<0.5 AND voidSE<0.5 AND densityParticipation>0.5",
+    "ipr_role": "diagnostic_only",
+    "adaptive_schedule": [3,6,12,24,48],
+    "scientific_mode_ceiling": null,
+    "failure": "STRUCTURAL_MODE_NOT_FOUND"
+  },
+  "reference": {"B_ref":3200,"P":100,"L_ref":500,"epsilon_ref":0.001,"cap_fallback":false},
+  "persistence": {"P_primary":100,"P_sensitivity":[50,200],"q":[0.98,0.99,0.995]},
+  "measurement": {"formula":"B_meas = min(max(B0, b_ref + P - 1), B_ref)","B0":{"Proposed":900,"Yuksel":2000,"Olhoff-LP":3200,"Olhoff-MMA":3200}},
+  "trajectory": {"authoritative_dtype":"double","state_indexing":"initial_state_0_then_post_update_1_to_N","olhoff_float32_allowed":false},
+  "methods": [
+    {
+      "id":"Proposed","variant":"proposed","role":"principal","source":"analysis/ourApproach/Matlab/topopt_freq.m","sha256":"6d9ea66fcc27f63b7380708b5735552b5d9f2885d3e65714af572daccdae72b2","move":0.2,"convergence_tolerance":0.01,"filter_radius_elements":2.0,"max_native_iterations":3200
+    },
+    {
+      "id":"Yuksel","variant":"yuksel","role":"principal","source":"analysis/YukselApproach/Matlab/top99neo_inertial_freq.m","sha256":"5afc3d16b4ed6af05793df461b541ed3b2ea62a6da8836f38301a9a3917e6ba2","move":0.1,"stage1_tolerance":0.01,"stage2_tolerance":0.01,"stage1_max_iterations":2000,"filter_radius_elements":2.5,"max_stage2_iterations":3200
+    },
+    {
+      "id":"Olhoff-LP","variant":"lp","role":"principal","source":"analysis/olhoff_stabilization_audit/olhoffOptStabilized.m","sha256":"10132a39e13667aec4933f8c93eb1e5dbc3475fb44bf89dcffdd2b2264d99cf2","profile":"S1","move_sequence":[0.005,0.0025],"filter_radius_elements_base_mesh":1.3,"filter_radius_units":"element","authoritative_trajectory_flag":true,"lp_calls_per_outer":1,"backend_iterations":"record_if_exposed"
+    },
+    {
+      "id":"Olhoff-MMA","variant":"mma","role":"secondary_paper_native_uncontrolled_vs_lp","source":"Matlab/reproduction2007/algo/olhoffOpt.m","sha256":"d34f62b97e32194367c1a2d7edcfeae4d1d0fbd737e06a70c0eb7eb34146c1af","move":0.01,"rmin_physical":0.06,"effective_rmin_rule":"rminPhys/(b/nely)","tol_mult":0.05,"off_diagonal_coupling":true,"inner_solver":"mma","lp_fallback":false,"max_inner":300,"tol_inner":0.01,"min_inner":5
+    }
+  ],
+  "topology": {"implementation":"analysis/iteration_efficiency_phase2a/+ie2a/topology_metrics.m","sha256":"ebe14f1591c95f069aaf3dcbdad7795394b380ba4cea6847df8f1ce6afa0c9dd","projection":"exact_count","aggregate_detached_area":"diagnostic_only","renderer":"tools/Matlab/renderTopologyDensity.m"},
+  "timing": {"threads":1,"warmups":1,"replays":3,"fixed_horizon":true,"excluded":["common_evaluator","topology","persistence","rendering","figure_export","trajectory_disk_io","nonintrinsic_diagnostics"]},
+  "scaling": {"model":"y=C*n^p","report":["C","p","R2_log","common_support","leave_one_out"]},
+  "fairness_note": "Olhoff LP uses move about 0.005 (then 0.0025 under S1); Olhoff MMA uses audited paper-native move 0.010. The optional comparison is labelled paper-native, not move-controlled."
+  ,"pinned_components": [
+    {"path":"Matlab/reproduction2007/algo/innerLoopLP.m","sha256":"bfd16bcd925785d278a6025332237722f2b9cde8328e4019e1af050e2eb71c55"},
+    {"path":"Matlab/reproduction2007/algo/innerLoop.m","sha256":"75fcb7641c6059dc310c9ca9a63a2add677ab54bcc67e1450c68d4c8fdf3aaed"},
+    {"path":"Matlab/reproduction2007/algo/genGrad.m","sha256":"13f2ab8541b2f626e340a592b99730ee4cba101e4f978a214dd7227adaeb5208"},
+    {"path":"Matlab/reproduction2007/mma/mmasub.m","sha256":"54c1680036e6effdb70bc32524b0c11c366cebed64d5a508c82553e871ff7660"},
+    {"path":"Matlab/reproduction2007/mma/subsolv.m","sha256":"130033335ac5a21f31437a196bf8f37c5b97880a00e93cf2962a8a54bac2b98a"},
+    {"path":"analysis/iteration_efficiency_phase2a/+ie2a/reference_phase.m","sha256":"95344d79f0cb11e2906e4031074e050ae3a12214ca99c59cb48f1f75e4610fe7"},
+    {"path":"analysis/iteration_efficiency_phase2a/+ie2a/measurement_budget.m","sha256":"7000ec109cd8f25a00ab1178d0c0320ccde49cb5ee2bf6777c490c261114d145"},
+    {"path":"analysis/iteration_efficiency_phase2a/+ie2a/scan_persistence.m","sha256":"aa025056403500b3e500ea32d7c020097897e26ebebe033f90ece63e856e2a27"},
+    {"path":"analysis/iteration_efficiency_phase2a/+ie2a/account_iterations.m","sha256":"16f996d3adc3494dd890e392277cab8a193a43644b26402c2426b9206f3f2e13"},
+    {"path":"analysis/iteration_efficiency_phase2a/+ie2a/classify_status.m","sha256":"62ec8fcd92a153722ef9f4165a8a5429781cb43f3d6f5f4b40d334a78fb5a9ac"}
+  ]
+}

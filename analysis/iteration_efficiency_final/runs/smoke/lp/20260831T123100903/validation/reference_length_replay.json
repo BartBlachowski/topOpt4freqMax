@@ -1,0 +1,94 @@
+{
+  "pass": true,
+  "mesh": "96x12",
+  "B_ref": 3200,
+  "trajectory_dtype": "double",
+  "stored_terminal_equals_authoritative_optimizer_state": true,
+  "checkpoints": [
+    80,
+    252,
+    453,
+    552,
+    2100,
+    3200
+  ],
+  "exact_count_binary_identity": true,
+  "hard_gate_identity": true,
+  "reference_status": "PASS",
+  "b_ref": 2100,
+  "B0": 3200,
+  "B_meas": 3200,
+  "tail_truncated": false,
+  "Q_ref": [
+    162.66009037577615,
+    162.99775696552064,
+    162.99775664939455
+  ],
+  "endpoints": [
+    {
+      "q": 0.98,
+      "P": 50,
+      "k_enter": 229,
+      "k_cert": 278,
+      "status": "PASS"
+    },
+    {
+      "q": 0.99,
+      "P": 50,
+      "k_enter": 309,
+      "k_cert": 358,
+      "status": "PASS"
+    },
+    {
+      "q": 0.995,
+      "P": 50,
+      "k_enter": 453,
+      "k_cert": 502,
+      "status": "PASS"
+    },
+    {
+      "q": 0.98,
+      "P": 100,
+      "k_enter": 229,
+      "k_cert": 328,
+      "status": "PASS"
+    },
+    {
+      "q": 0.99,
+      "P": 100,
+      "k_enter": 309,
+      "k_cert": 408,
+      "status": "PASS"
+    },
+    {
+      "q": 0.995,
+      "P": 100,
+      "k_enter": 453,
+      "k_cert": 552,
+      "status": "PASS"
+    },
+    {
+      "q": 0.98,
+      "P": 200,
+      "k_enter": 229,
+      "k_cert": 428,
+      "status": "PASS"
+    },
+    {
+      "q": 0.99,
+      "P": 200,
+      "k_enter": 309,
+      "k_cert": 508,
+      "status": "PASS"
+    },
+    {
+      "q": 0.995,
+      "P": 200,
+      "k_enter": 453,
+      "k_cert": 652,
+      "status": "PASS"
+    }
+  ],
+  "maximum_selected_ordinal": 4,
+  "maximum_escalation_count": 1
+}

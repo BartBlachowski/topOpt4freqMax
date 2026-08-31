@@ -17,8 +17,20 @@ hist=struct('omega',[],'N',[],'beta',[],'nInner',[],'dxOuter',[],'vol',[], ...
     'tEig',[],'tGrad',[],'tInner',[],'degen',[],'multJ',[],'innerConv',[], ...
     'cumInner',[],'moveLimit',[],'policyStage',[],'trigger',[],'gap12',[], ...
     'dRms',[],'moveBoundFraction',[],'stronglyMovingFraction',[],'lpFlag',[], ...
-    'finiteOk',[],'volumeResidual',[]);
-snapshots=NaN(NE,cfg.maxOuter+1,'single'); snapshots(:,1)=single(rho);
+    'finiteOk',[],'volumeResidual',[],'lpBackendIterations',[]);
+captureTrajectory=~isfield(cfg,'captureTrajectory')||logical(cfg.captureTrajectory);
+authoritativeTrajectory=isfield(cfg,'authoritativeTrajectory')&&logical(cfg.authoritativeTrajectory);
+if captureTrajectory
+    if authoritativeTrajectory
+        % New authoritative iteration-efficiency trajectories are lossless.
+        snapshots=NaN(NE,cfg.maxOuter+1);snapshots(:,1)=rho;
+    else
+        % Preserve the historical audit runner's storage behavior.
+        snapshots=NaN(NE,cfg.maxOuter+1,'single');snapshots(:,1)=single(rho);
+    end
+else
+    snapshots=zeros(NE,0);
+end
 stage=1; counter=0; status='RUNNING'; failureIteration=NaN; log={};
 
 for outer=1:cfg.maxOuter
@@ -62,7 +74,10 @@ for outer=1:cfg.maxOuter
         log{end+1}=sprintf('iter %d: LP failure flag=%d conv=%d',outer,st.lpFlag,st.conv); %#ok<AGROW>
         break
     end
-    rho=min(1,max(cfg.rhomin,rho+drho)); snapshots(:,outer+1)=single(rho);
+    rho=min(1,max(cfg.rhomin,rho+drho));
+    if captureTrajectory
+        if authoritativeTrajectory,snapshots(:,outer+1)=rho;else,snapshots(:,outer+1)=single(rho);end
+    end
     dx=max(abs(drho)); cumInner=cumInner+st.nInner;
     hist.omega(:,outer)=w;hist.N(outer)=N;hist.beta(outer)=st.beta;
     hist.nInner(outer)=st.nInner;hist.dxOuter(outer)=dx;hist.vol(outer)=mean(rho);
@@ -74,10 +89,11 @@ for outer=1:cfg.maxOuter
     hist.moveBoundFraction(outer)=mean(abs(abs(drho)-currentMove)<1e-12);
     hist.stronglyMovingFraction(outer)=mean(abs(drho)>0.98*currentMove);
     hist.lpFlag(outer)=st.lpFlag;hist.finiteOk(outer)=all(isfinite(rho))&&all(isfinite(w))&&isfinite(st.beta);
+    hist.lpBackendIterations(outer)=st.lpIterations;
     hist.volumeResidual(outer)=mean(rho)-cfg.volfrac;
 end
 
-nDone=numel(hist.N); snapshots=snapshots(:,1:nDone+1);
+nDone=numel(hist.N);if captureTrajectory,snapshots=snapshots(:,1:nDone+1);end
 if strcmp(status,'RUNNING'),status='CAP_HIT';end
 if ~strcmp(status,'SOLVER_FAILURE')
     [K,M]=assemble2D(mdl,rho,cfg.p,cfg.massInterp); [w,Phi,lam]=eigSolve(K,M,Jcalc,cfg.solver);

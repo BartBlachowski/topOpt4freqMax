@@ -23,6 +23,8 @@ modal=rows('MODAL_SELECTION_EQUIVALENCE.csv');hard=rows('HARD_GATE_EQUIVALENCE.c
 qual=rows('QUALITY_EQUIVALENCE.csv');persist=rows('PERSISTENCE_EQUIVALENCE.csv')
 rep=rows('raw/REPRESENTATION_ERROR.csv');prod=rows('PRODUCTION_SCALE_RISK_CHECK.csv')
 cm=rows('CLASSIFIER_MARGIN_SUMMARY.csv');cmm={r['evaluator']:r for r in cm}
+prefix=rows('PREFIX_DETERMINISM.csv');difficult=rows('DIFFICULT_CASE_MODAL_EQUIVALENCE.csv')
+reference={r['quantity']:r for r in rows('REFERENCE_EQUIVALENCE.csv')}
 old=rows('../iteration_efficiency_phase2b_recheck/EVALUATOR_ERROR_SUMMARY.csv')
 oldm={r['evaluator']:r for r in old}
 
@@ -46,6 +48,12 @@ q_cross={q:next(i(r['n_state_crossing_differences']) for r in persist if r['q']=
 raw_max=max(f(em[e]['maximum_relative_omega_error']) for e in ('E1','E2','E3'))
 raw_abs=max(f(em[e]['maximum_absolute_omega_error']) for e in ('E1','E2','E3'))
 formal_rel=1.12e-7;formal_abs=8.18e-6;band_ratio=raw_max/.005
+bref_d=i(reference['b_ref']['double']);bref_s=i(reference['b_ref']['single'])
+bmeas_d=i(reference['B_meas']['double']);bmeas_s=i(reference['B_meas']['single'])
+primary_by_q={r['q']:r for r in persist if r['P']=='100'}
+difficult_cases=len({r['case_id'] for r in difficult})
+difficult_max_ordinal=max(i(r['selected_ordinal_double']) for r in difficult)
+supporting_pairs=difficult_cases+len(prod)
 
 # Relevant-mode classifier margin distribution from all selected and rejected
 # lower modes, without post-hoc state removal.
@@ -70,15 +78,18 @@ for e in ('E1','E2','E3'):
           'median_absolute_margin':pct(50),'maximum_all_mode_voidKE_perturbation':cmm[e]['maximum_all_mode_voidKE_perturbation'],
           'maximum_all_mode_voidSE_perturbation':cmm[e]['maximum_all_mode_voidSE_perturbation'],
           'maximum_all_mode_densityParticipation_perturbation':cmm[e]['maximum_all_mode_densityParticipation_perturbation'],
-          'relevant_classifier_mismatch_count':cmm[e]['states_with_relevant_classifier_mismatch']})
+          'relevant_classifier_mismatch_count':sum(
+              r['evaluator']==e and truth(r['relevant_classifier_mismatch']) for r in modal)})
 write_csv('CLASSIFIER_MARGIN_SUMMARY.csv',margin_rows,list(margin_rows[0]))
 min_margin=min(float(r['minimum_absolute_margin']) for r in margin_rows)
 
-primary_p=[r for r in persist if r['P']=='100']
+primary_p=[primary_by_q[q] for q in ('0.98','0.99','0.995')]
 endpoint=[]
 for representation in ('double','single'):
     for r in primary_p:
-        endpoint.append({'mesh':'96x12','route':'lp','representation':representation,'b_ref':2100,'B_meas':3200,
+        endpoint.append({'mesh':'96x12','route':'lp','representation':representation,
+          'b_ref':bref_d if representation=='double' else bref_s,
+          'B_meas':bmeas_d if representation=='double' else bmeas_s,
           'q':r['q'],'P':100,'k_enter':r['k_enter_'+representation],'k_cert':r['k_cert_'+representation],
           'status':r['status_'+representation],'selected_frequency_max_rel_error_E1':em['E1']['maximum_relative_omega_error'],
           'selected_frequency_max_rel_error_E2':em['E2']['maximum_relative_omega_error'],
@@ -88,26 +99,26 @@ for representation in ('double','single'):
 write_csv('DECISION_ENDPOINTS.csv',endpoint,list(endpoint[0]))
 
 criteria=[
- ('Q1','Correct same-state double/single pairing','PASS','3,200 capture pairs plus same-run difficult/final pairs'),
- ('Q2','Prefix/checkpoint determinism','PASS','all 3,201 full-repeat columns, fresh k=252 cap, historical 45 caps'),
+ ('Q1','Correct same-state double/single pairing','PASS',f'3,200 capture pairs plus {supporting_pairs} same-run difficult/final pairs'),
+ ('Q2','Prefix/checkpoint determinism','PASS',f'all 3,201 full-repeat columns plus {len(prefix)} strategic lossless capped checks'),
  ('Q3','Candidate-C implementation/hash','PASS',init['binding_identities']['evaluator_sha256']),
  ('Q4','No selected ordinal mismatch','PASS',f'{ord_mismatch} mismatches'),
  ('Q5','No binding classifier mismatch','PASS',f'{class_mismatch} relevant mismatches'),
  ('Q6','E1/E2/E3 within documented bound','PASS',f'raw max {raw_max:.12g}; bound {formal_rel:.3g}'),
  ('Q7','Complete hard-gate identity','FAIL',f'{hard_mismatch} mismatches at k={hard_states}'),
  ('Q8','Every binary difference explained/nonpropagating','PASS',f'{binary_states} states explained by float32-created cutoff ties; 0 unexplained'),
- ('Q9','Same b_ref','PASS','2100 / 2100'),('Q10','Same B_meas','PASS','3200 / 3200'),
- ('Q11','Same k_enter at P=100','PASS','229,309,453 identical'),
- ('Q12','Same k_cert at P=100','PASS','328,408,552 identical'),
+ ('Q9','Same b_ref','PASS',f'{bref_d} / {bref_s}'),('Q10','Same B_meas','PASS',f'{bmeas_d} / {bmeas_s}'),
+ ('Q11','Same k_enter at P=100','PASS',','.join(r['k_enter_double'] for r in primary_p)+' identical'),
+ ('Q12','Same k_cert at P=100','PASS',','.join(r['k_cert_double'] for r in primary_p)+' identical'),
  ('Q13','Same final status','PASS','PASS at every q'),
- ('Q14','No contradictory production-scale evidence','PASS','8 available production meshes; final paired decisions identical'),
+ ('Q14','No contradictory production-scale evidence','PASS',f'{len(prod)} available production meshes; all-state exposure census and final paired decisions'),
  ('Q15','Independent replay supports result','PASS','SciPy/Python reproduces spectra, gate flips, reference and persistence'),
  ('Q16','No optimizer/methodology drift','PASS','protected hashes unchanged'),
 ]
 dec=[]
 for q,label,result,evidence in criteria:
     dec.append({'criterion':q,'description':label,'disposition':result,'mesh':'96x12','route':'lp','representation':'paired',
-      'b_ref_double':2100,'b_ref_single':2100,'B_meas_double':3200,'B_meas_single':3200,
+      'b_ref_double':bref_d,'b_ref_single':bref_s,'B_meas_double':bmeas_d,'B_meas_single':bmeas_s,
       'modal_selection_mismatch_count':ord_mismatch,'hard_gate_mismatch_count':hard_mismatch,
       'Q_crossing_mismatch_count':sum(q_cross.values()),'evidence':evidence})
 write_csv('DECISION_EQUIVALENCE.csv',dec,list(dec[0]))
@@ -118,10 +129,17 @@ negative={
  'evaluator_sha256':init['binding_identities']['evaluator_sha256'],'contract_sha256':init['binding_identities']['contract_sha256'],
  'olhoff_variant':'lp','route':'lp','representation_test':'double(x) versus double(single(x)) on same optimizer states',
  'input_provenance_sha256':init['starting_hashes'],'numerical_bound':{'relative_omega':formal_rel,'absolute_omega':formal_abs,
-  'derivation':'two-times the all-state observed maximum, rounded upward','raw_maximum_relative_omega':raw_max},
- 'results':{'b_ref':{'double':2100,'single':2100,'identical':True},'B_meas':{'double':3200,'single':3200,'identical':True},
-  'k_enter':{'double':[229,309,453],'single':[229,309,453],'identical':True},
-  'k_cert':{'double':[328,408,552],'single':[328,408,552],'identical':True},
+  'derivation':'two-times the no-exclusion all-state observed maximum, rounded upward',
+  'safety_factor_justification':'A transparent 2x reporting envelope; qualification does not depend on tuning it because Q7 independently fails.',
+  'raw_maximum_relative_omega':raw_max},
+ 'results':{'b_ref':{'double':bref_d,'single':bref_s,'identical':bref_d==bref_s},
+  'B_meas':{'double':bmeas_d,'single':bmeas_s,'identical':bmeas_d==bmeas_s},
+  'k_enter':{'double':[i(r['k_enter_double']) for r in primary_p],
+             'single':[i(r['k_enter_single']) for r in primary_p],
+             'identical':all(truth(r['k_enter_identical']) for r in primary_p)},
+  'k_cert':{'double':[i(r['k_cert_double']) for r in primary_p],
+            'single':[i(r['k_cert_single']) for r in primary_p],
+            'identical':all(truth(r['k_cert_identical']) for r in primary_p)},
   'hard_gate':{'mismatch_count':hard_mismatch,'mismatch_states':hard_states,'pass':False},
   'modal_selection':{'mismatch_count':ord_mismatch,'pass':True},
   'production_scale_check':{'pass':True,'meshes':8},'independent_replay':{'pass':ind['pass']}},
@@ -207,11 +225,16 @@ retuning.
   `{float(em['E3']['maximum_relative_omega_error']):.12g}`.
 - Formal evidence bound: relative omega `1.12e-7`, absolute omega `8.18e-6`; raw maximum is
   `{band_ratio:.6g}` of the q=.995 0.5% band.
+- The 2x safety factor is a transparent conservative reporting envelope over the
+  no-exclusion raw maximum; it was not tuned to rescue qualification, which independently
+  fails Q7.
 - Binary differences: `{binary_states}` states / `{binary_entries}` entries, all explained
   by float32 cutoff ties; hard-gate mismatches: `{hard_mismatch}` at `{hard_states}`.
-- `b_ref`: 2100/2100; `B_meas`: 3200/3200.
-- P=100 `(k_enter,k_cert)`: q=.98 `(229,328)`; q=.99 `(309,408)`;
-  q=.995 `(453,552)`, identical for double and single.
+- `b_ref`: {bref_d}/{bref_s}; `B_meas`: {bmeas_d}/{bmeas_s}.
+- P=100 endpoints are identical for all q; see `PERSISTENCE_EQUIVALENCE.csv` for the
+  machine-derived values.
+- Explicit difficult-case coverage reaches selected ordinal {difficult_max_ordinal},
+  including the >12-mode and maximum-ordinal-18 Phase-2G cases.
 - Production-scale offline evidence: eight available meshes, up to `{max_atrisk}` at-risk
   elements in one state; no final-pair modal/classifier/hard-gate mismatch. This does not
   override the binding 96×12 hard-gate failure.
@@ -226,8 +249,8 @@ retuning.
 6. Frozen methodology modified? **NO**.
 7. Principal route tested: **Olhoff-LP**.
 8. Same-state pairing mechanism: exact double optimizer state `x_d` and `double(single(x_d))`; protected runner cast checked across all columns.
-9. Prefix determinism result: **PASS** (full repeat plus fresh k=252 and historical 45 caps).
-10. Number of paired states: **3,200 binding**, plus 10 new supporting difficult/production final pairs and 236 historical paired states.
+9. Prefix determinism result: **PASS** (full repeat plus {len(prefix)} strategic lossless capped checks; historical 45 float32-prefix checks remain supporting evidence).
+10. Number of paired states: **3,200 binding**, plus {supporting_pairs} new supporting difficult/production final pairs and 236 historical paired states.
 11. Meshes represented: 24×4, 96×12, and production 160×20 through 720×90 (800×100 unavailable).
 12. Maximum density absolute error: `{max_dx:.12g}`.
 13. rho≈0.1 crossing count: `{cross01}` on the binding trajectory.
@@ -254,16 +277,16 @@ retuning.
 34. q=.98 crossing differences: `{q_cross['0.98']}`.
 35. q=.99 crossing differences: `{q_cross['0.99']}`.
 36. q=.995 crossing differences: `{q_cross['0.995']}`.
-37. b_ref double: `2100`.
-38. b_ref single: `2100`.
-39. B_meas double: `3200`.
-40. B_meas single: `3200`.
-41. k_enter .98 double/single: `229 / 229`.
-42. k_cert .98 double/single: `328 / 328`.
-43. k_enter .99 double/single: `309 / 309`.
-44. k_cert .99 double/single: `408 / 408`.
-45. k_enter .995 double/single: `453 / 453`.
-46. k_cert .995 double/single: `552 / 552`.
+37. b_ref double: `{bref_d}`.
+38. b_ref single: `{bref_s}`.
+39. B_meas double: `{bmeas_d}`.
+40. B_meas single: `{bmeas_s}`.
+41. k_enter .98 double/single: `{primary_by_q['0.98']['k_enter_double']} / {primary_by_q['0.98']['k_enter_single']}`.
+42. k_cert .98 double/single: `{primary_by_q['0.98']['k_cert_double']} / {primary_by_q['0.98']['k_cert_single']}`.
+43. k_enter .99 double/single: `{primary_by_q['0.99']['k_enter_double']} / {primary_by_q['0.99']['k_enter_single']}`.
+44. k_cert .99 double/single: `{primary_by_q['0.99']['k_cert_double']} / {primary_by_q['0.99']['k_cert_single']}`.
+45. k_enter .995 double/single: `{primary_by_q['0.995']['k_enter_double']} / {primary_by_q['0.995']['k_enter_single']}`.
+46. k_cert .995 double/single: `{primary_by_q['0.995']['k_cert_double']} / {primary_by_q['0.995']['k_cert_single']}`.
 47. Status identity: **PASS / PASS for all q**.
 48. P=50 sensitivity result: identical endpoints for all q.
 49. P=200 sensitivity result: identical endpoints for all q.
@@ -303,6 +326,7 @@ prov={'schema_version':'phase2i_qualification_provenance_v1','generated_at_utc':
 for p in sorted(HERE.iterdir()):
     if p.is_file() and p.name not in {'qualification_provenance.json','SHA256SUMS.txt'}:prov['output_hashes'][p.name]=sha(p)
 (HERE/'qualification_provenance.json').write_text(json.dumps(prov,indent=2)+'\n')
-files=sorted(p for p in HERE.rglob('*') if p.is_file() and p.name!='SHA256SUMS.txt')
+files=sorted(p for p in HERE.rglob('*') if p.is_file() and p.name!='SHA256SUMS.txt'
+             and '__pycache__' not in p.parts and p.suffix!='.pyc')
 (HERE/'SHA256SUMS.txt').write_text(''.join(f'{sha(p)}  {p.relative_to(HERE)}\n' for p in files))
 print(json.dumps({'verdict':'FAIL','hard_gate_mismatches':hard_mismatch,'files_hashed':len(files)},indent=2))

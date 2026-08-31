@@ -1,0 +1,12 @@
+{
+  "proposed_design_bit_identical": true,
+  "proposed_design_maxabs_diff": 0,
+  "proposed_omega_bit_identical": true,
+  "proposed_iterations_identical": true,
+  "proposed_stage_counts_identical": true,
+  "yuksel_design_bit_identical": true,
+  "yuksel_design_maxabs_diff": 0,
+  "yuksel_omega_bit_identical": true,
+  "yuksel_iterations_identical": true,
+  "yuksel_stage_counts_identical": true
+}

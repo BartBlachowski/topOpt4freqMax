@@ -7,7 +7,7 @@ and all hard-gate-mismatch states.
 
 - Selected-ordinal mismatches versus MATLAB: **0**.
 - Maximum Python/MATLAB selected-frequency relative difference:
-  **7.898e-12**.
+  **8.021e-12**.
 - Full 3,200-state hard gates match MATLAB for both representations.
 - Independently reproduced hard-gate mismatch states: **[41, 45, 48, 99]**.
 - Independently reproduced `b_ref`: **2100 / 2100**.

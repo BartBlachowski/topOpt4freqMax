@@ -1,0 +1,7 @@
+quantity,double,single,identical
+reference_status,PASS,PASS,true
+b_ref,2100,2100,true
+B_meas,3200,3200,true
+Q_ref_E1,162.6601,162.6601,NUMERIC
+Q_ref_E2,162.9978,162.9978,NUMERIC
+Q_ref_E3,162.9978,162.9978,NUMERIC

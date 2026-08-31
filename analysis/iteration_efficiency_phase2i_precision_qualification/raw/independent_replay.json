@@ -18,7 +18,7 @@
   ],
   "spectral_rows": 84,
   "spectral_ordinal_mismatches": 0,
-  "maximum_python_matlab_relative_omega_difference": 7.897914878819029e-12,
+  "maximum_python_matlab_relative_omega_difference": 8.020706378604015e-12,
   "hard_gate_matlab_identity_double": true,
   "hard_gate_matlab_identity_single": true,
   "hard_gate_representation_mismatch_states": [

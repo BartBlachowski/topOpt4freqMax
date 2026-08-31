@@ -1,0 +1,17 @@
+criterion,description,disposition,mesh,route,representation,b_ref_double,b_ref_single,B_meas_double,B_meas_single,modal_selection_mismatch_count,hard_gate_mismatch_count,Q_crossing_mismatch_count,evidence
+Q1,Correct same-state double/single pairing,PASS,96x12,lp,paired,2100,2100,3200,3200,0,4,0,"3,200 capture pairs plus 12 same-run difficult/final pairs"
+Q2,Prefix/checkpoint determinism,PASS,96x12,lp,paired,2100,2100,3200,3200,0,4,0,"all 3,201 full-repeat columns plus 8 strategic lossless capped checks"
+Q3,Candidate-C implementation/hash,PASS,96x12,lp,paired,2100,2100,3200,3200,0,4,0,e14a21efe0bb2d9b9d7f3187b4c3f671ec089f6ff96773074b8f3b56cacd79e9
+Q4,No selected ordinal mismatch,PASS,96x12,lp,paired,2100,2100,3200,3200,0,4,0,0 mismatches
+Q5,No binding classifier mismatch,PASS,96x12,lp,paired,2100,2100,3200,3200,0,4,0,0 relevant mismatches
+Q6,E1/E2/E3 within documented bound,PASS,96x12,lp,paired,2100,2100,3200,3200,0,4,0,raw max 5.59553986329e-08; bound 1.12e-07
+Q7,Complete hard-gate identity,FAIL,96x12,lp,paired,2100,2100,3200,3200,0,4,0,"4 mismatches at k=[41, 45, 48, 99]"
+Q8,Every binary difference explained/nonpropagating,PASS,96x12,lp,paired,2100,2100,3200,3200,0,4,0,95 states explained by float32-created cutoff ties; 0 unexplained
+Q9,Same b_ref,PASS,96x12,lp,paired,2100,2100,3200,3200,0,4,0,2100 / 2100
+Q10,Same B_meas,PASS,96x12,lp,paired,2100,2100,3200,3200,0,4,0,3200 / 3200
+Q11,Same k_enter at P=100,PASS,96x12,lp,paired,2100,2100,3200,3200,0,4,0,"229,309,453 identical"
+Q12,Same k_cert at P=100,PASS,96x12,lp,paired,2100,2100,3200,3200,0,4,0,"328,408,552 identical"
+Q13,Same final status,PASS,96x12,lp,paired,2100,2100,3200,3200,0,4,0,PASS at every q
+Q14,No contradictory production-scale evidence,PASS,96x12,lp,paired,2100,2100,3200,3200,0,4,0,8 available production meshes; all-state exposure census and final paired decisions
+Q15,Independent replay supports result,PASS,96x12,lp,paired,2100,2100,3200,3200,0,4,0,"SciPy/Python reproduces spectra, gate flips, reference and persistence"
+Q16,No optimizer/methodology drift,PASS,96x12,lp,paired,2100,2100,3200,3200,0,4,0,protected hashes unchanged

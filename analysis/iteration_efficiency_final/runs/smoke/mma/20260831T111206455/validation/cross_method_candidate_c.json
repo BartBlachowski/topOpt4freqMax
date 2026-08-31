@@ -1,0 +1,253 @@
+[
+  {
+    "method": "Proposed",
+    "method_variant": "proposed",
+    "label": "Proposed",
+    "states": 3,
+    "trajectory_dtype": "double",
+    "evaluator_pass": true,
+    "selected_ordinals": [
+      [
+        1,
+        1,
+        1
+      ],
+      [
+        1,
+        1,
+        1
+      ],
+      [
+        1,
+        1,
+        1
+      ]
+    ],
+    "escalation_count": [
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0
+      ]
+    ],
+    "Q": [
+      [
+        73.145478830027983,
+        73.144992772136959,
+        73.144992285577942
+      ],
+      [
+        77.4783106892154,
+        77.4780874265487,
+        77.478087203061378
+      ],
+      [
+        74.841099865882086,
+        74.840646419202685,
+        74.840645965280714
+      ]
+    ],
+    "topology_pass": [
+      false,
+      false,
+      false
+    ],
+    "volume_pass": [
+      true,
+      true,
+      true
+    ],
+    "hard_gate_pass": [
+      false,
+      false,
+      false
+    ],
+    "native": {
+      "total_updates": 3
+    }
+  },
+  {
+    "method": "Yuksel",
+    "method_variant": "yuksel",
+    "label": "Yuksel",
+    "states": 3,
+    "trajectory_dtype": "double",
+    "evaluator_pass": true,
+    "selected_ordinals": [
+      [
+        1,
+        1,
+        1
+      ],
+      [
+        1,
+        1,
+        1
+      ],
+      [
+        1,
+        1,
+        1
+      ]
+    ],
+    "escalation_count": [
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0
+      ]
+    ],
+    "Q": [
+      [
+        73.7663123707475,
+        73.765867502857077,
+        73.765867057511755
+      ],
+      [
+        77.72535051727381,
+        77.725106246355168,
+        77.725106001842519
+      ],
+      [
+        76.519707736733281,
+        76.5193358888228,
+        76.5193355166005
+      ]
+    ],
+    "topology_pass": [
+      false,
+      false,
+      false
+    ],
+    "volume_pass": [
+      true,
+      true,
+      true
+    ],
+    "hard_gate_pass": [
+      false,
+      false,
+      false
+    ],
+    "native": {
+      "stage1_updates": 3,
+      "stage2_updates": 3,
+      "total_updates": 6
+    }
+  },
+  {
+    "method": "Olhoff",
+    "method_variant": "mma",
+    "label": "Olhoff-MMA",
+    "states": 3,
+    "trajectory_dtype": "double",
+    "evaluator_pass": true,
+    "selected_ordinals": [
+      [
+        1,
+        1,
+        1
+      ],
+      [
+        1,
+        1,
+        1
+      ],
+      [
+        1,
+        1,
+        1
+      ]
+    ],
+    "escalation_count": [
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0
+      ]
+    ],
+    "Q": [
+      [
+        73.796368442050763,
+        73.796155453527,
+        73.796155240328687
+      ],
+      [
+        74.470859964440876,
+        74.470651027996226,
+        74.470650818843566
+      ],
+      [
+        75.063670663415465,
+        75.063464114407353,
+        75.063463907644419
+      ]
+    ],
+    "topology_pass": [
+      false,
+      false,
+      false
+    ],
+    "volume_pass": [
+      true,
+      true,
+      true
+    ],
+    "hard_gate_pass": [
+      false,
+      false,
+      false
+    ],
+    "native": {
+      "outer_updates": 3,
+      "inner_iterations": [
+        70,
+        46,
+        63
+      ],
+      "inner_converged": [
+        true,
+        true,
+        true
+      ],
+      "inner_cap_hit": [
+        false,
+        false,
+        false
+      ],
+      "lp_calls": 0,
+      "failed_lp_calls": 0,
+      "lp_backend_iterations": null
+    }
+  }
+]

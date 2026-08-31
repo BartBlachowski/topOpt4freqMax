@@ -1,0 +1,9 @@
+{
+  "requested": "both",
+  "executed_variants": [
+    "lp",
+    "mma"
+  ],
+  "lp_executed": true,
+  "mma_executed": true
+}

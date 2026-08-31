@@ -532,7 +532,23 @@ function [x, omega, tIter, nIter, mem_usage, nIterStage, telemetry] = run_topopt
                 error('run_topopt_from_json:InvalidYukselStage1MaxIters', ...
                     'optimization.yuksel.stage1_max_iters must be >= 1.');
             end
-            stage1MaxIter = min(stage1MaxIter, maxiter);
+            % A Stage-2 horizon must not silently truncate Stage 1.  maxiter is
+            % the Stage-2 cap; clamping the Stage-1 budget with it makes a short
+            % Stage-2 horizon (a fixed-horizon timing replay, say) hand a
+            % DIFFERENT, unconverged design to Stage 2 -- the same truncation the
+            % comment above records as already removed once.  The clamp is kept
+            % as the default so every existing caller is byte-identical, and is
+            % lifted only when a caller explicitly declares the Stage-1 budget
+            % independent.
+            stage1BudgetIndependent = false;
+            if hasFieldPath(cfg, {'optimization','yuksel','stage1_budget_independent'})
+                stage1BudgetIndependent = parseBool( ...
+                    getFieldPath(cfg, {'optimization','yuksel','stage1_budget_independent'}), ...
+                    'optimization.yuksel.stage1_budget_independent');
+            end
+            if ~stage1BudgetIndependent
+                stage1MaxIter = min(stage1MaxIter, maxiter);
+            end
 
             nHistModes = 0;
             if hasFieldPath(cfg, {'optimization','yuksel','mode_history_modes'})

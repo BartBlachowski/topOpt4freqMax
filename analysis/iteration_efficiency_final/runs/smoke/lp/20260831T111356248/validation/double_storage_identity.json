@@ -1,0 +1,11 @@
+{
+  "pass": true,
+  "mesh": "96x12",
+  "checkpoint": 252,
+  "trajectory_dtype": "double",
+  "stored_post_update_equals_authoritative_checkpoint": true,
+  "exact_count_binary_identity": true,
+  "hard_gate_identity": true,
+  "hard_gate_pass": true,
+  "output_directory": "/Users/piotrek/Programming/topOpt4freqMax/analysis/iteration_efficiency_final/runs/smoke/lp/20260831T111356248"
+}

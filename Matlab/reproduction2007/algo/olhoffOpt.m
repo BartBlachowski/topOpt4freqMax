@@ -27,9 +27,20 @@ Jcalc = n + Nmax;
 
 hist = struct('omega',[],'N',[],'beta',[],'nInner',[],'dxOuter',[], ...
               'vol',[],'tEig',[],'tGrad',[],'tInner',[],'degen',[],'multJ',[], ...
-              'innerConv',[],'cumInner',[]);
+              'innerConv',[],'cumInner',[],'lpFlag',[],'lpBackendIterations',[], ...
+              'innerDxHist',{{}},'innerRelHist',{{}});
 log = {};
 cumInner = 0;
+captureTrajectory = isfield(cfg,'captureTrajectory') && logical(cfg.captureTrajectory);
+captureInnerHistories = isfield(cfg,'captureInnerHistories') && logical(cfg.captureInnerHistories);
+if captureTrajectory
+    rhoSnapshots = NaN(NE,cfg.maxOuter+1); rhoSnapshots(:,1)=rho;
+else
+    rhoSnapshots = zeros(NE,0);
+end
+status = 'RUNNING';
+nativeStopIteration = NaN;
+extendBeyondNativeStop = isfield(cfg,'extendBeyondNativeStop') && logical(cfg.extendBeyondNativeStop);
 
 if cfg.verbose
     fprintf('%4s %9s %9s %9s %4s %9s %6s %6s %8s %9s %7s\n', ...
@@ -121,6 +132,13 @@ for outer = 1:cfg.maxOuter
     hist.tInner(outer)   = tInner;
     hist.degen(outer)    = st.degenHits;
     hist.multJ(outer)    = multJ;
+    if isfield(st,'lpFlag'),hist.lpFlag(outer)=st.lpFlag;else,hist.lpFlag(outer)=NaN;end
+    if isfield(st,'lpIterations'),hist.lpBackendIterations(outer)=st.lpIterations;else,hist.lpBackendIterations(outer)=NaN;end
+    if captureInnerHistories
+        hist.innerDxHist{outer}=st.dxHist;
+        hist.innerRelHist{outer}=st.relHist;
+    end
+    if captureTrajectory,rhoSnapshots(:,outer+1)=rho;end
 
     if cfg.verbose
         fprintf('%4d %9.2f %9.2f %9.2f %4d %9.2f %6d %6d %8.4f %9.3f %7s\n', ...
@@ -130,10 +148,19 @@ for outer = 1:cfg.maxOuter
     end
 
     if dxOuter < cfg.tolOuter
-        log{end+1} = sprintf('converged at outer iteration %d (max|drho| = %.3e)',outer,dxOuter); %#ok<AGROW>
-        break
+        if isnan(nativeStopIteration)
+            nativeStopIteration=outer;
+            log{end+1} = sprintf('native convergence at outer iteration %d (max|drho| = %.3e)',outer,dxOuter); %#ok<AGROW>
+        end
+        if ~extendBeyondNativeStop
+            status = 'CONVERGED';
+            break
+        end
     end
 end
+
+if strcmp(status,'RUNNING'),status='CAP_HIT';end
+if captureTrajectory,rhoSnapshots=rhoSnapshots(:,1:numel(hist.N)+1);end
 
 % ---- final analysis -----------------------------------------------------
 [K,M] = assemble2D(mdl, rho, cfg.p, cfg.massInterp);
@@ -142,7 +169,10 @@ T = classifyModes(mdl, M, Phi, w);
 
 res = struct('cfg',cfg,'rho',rho,'omega',w,'lambda',lam,'hist',hist, ...
              'modeTable',T,'log',{log},'nOuter',numel(hist.N), ...
-             'wallclock',toc(t0),'mdl',mdl);
+             'wallclock',toc(t0),'mdl',mdl,'rho_snapshots',rhoSnapshots, ...
+             'status',status,'native_stop_iteration',nativeStopIteration, ...
+             'extended_beyond_native_stop',extendBeyondNativeStop, ...
+             'trajectory_dtype',class(rhoSnapshots));
 end
 
 function s = stringYesNo(tf)

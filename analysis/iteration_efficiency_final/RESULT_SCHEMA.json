@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "iteration_efficiency_result_v1",
+  "title": "Authoritative per-method/mesh/q/P iteration-efficiency result",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version","method","method_variant","mesh","nelx","nely","element_count","q","P","B0","B_ref","b_ref","B_meas","tail_truncated","k_enter","k_cert","status","censoring_reason","E1","E2","E3","Q","topology_pass","volume_pass","hard_gate_pass","native_iterations","yuksel_stage1_iterations","yuksel_stage2_iterations","yuksel_total_iterations","olhoff_outer_updates","olhoff_lp_calls","olhoff_lp_backend_iterations","olhoff_failed_lp_calls","olhoff_mma_total_inner_iterations","olhoff_mma_mean_inner_iterations","olhoff_mma_median_inner_iterations","olhoff_mma_p95_inner_iterations","olhoff_mma_max_inner_iterations","olhoff_mma_cap_hit_count","olhoff_mma_cap_hit_fraction","olhoff_mma_converged_inner_count","olhoff_mma_converged_inner_fraction","native_total_time","native_total_time_to_enter","native_total_time_to_cert","mean_native_iteration_time","trajectory_dtype","evaluator_id","contract_hash","source_hashes","provenance_hash","error_identifier","error_message"],
+  "properties": {
+    "schema_version":{"const":"iteration_efficiency_result_v1"},
+    "method":{"enum":["Proposed","Yuksel","Olhoff"]},
+    "method_variant":{"enum":["proposed","yuksel","lp","mma"]},
+    "mesh":{"type":"string"},"nelx":{"type":"integer","minimum":1},"nely":{"type":"integer","minimum":1},"element_count":{"type":"integer","minimum":1},
+    "q":{"type":"number"},"P":{"type":"integer"},"B0":{"type":"integer"},"B_ref":{"type":"integer","const":3200},
+    "b_ref":{"type":["integer","null"]},"B_meas":{"type":["integer","null"]},"tail_truncated":{"type":["boolean","null"]},
+    "k_enter":{"type":["integer","null"]},"k_cert":{"type":["integer","null"]},"status":{"type":"string"},"censoring_reason":{"type":["string","null"]},
+    "E1":{"type":["number","null"]},"E2":{"type":["number","null"]},"E3":{"type":["number","null"]},"Q":{"type":["number","null"]},
+    "topology_pass":{"type":["boolean","null"]},"volume_pass":{"type":["boolean","null"]},"hard_gate_pass":{"type":["boolean","null"]},
+    "native_iterations":{"type":["integer","null"]},"yuksel_stage1_iterations":{"type":["integer","null"]},"yuksel_stage2_iterations":{"type":["integer","null"]},"yuksel_total_iterations":{"type":["integer","null"]},
+    "olhoff_outer_updates":{"type":["integer","null"]},"olhoff_lp_calls":{"type":["integer","null"]},"olhoff_lp_backend_iterations":{"type":["integer","null"]},"olhoff_failed_lp_calls":{"type":["integer","null"]},
+    "olhoff_mma_total_inner_iterations":{"type":["integer","null"]},"olhoff_mma_mean_inner_iterations":{"type":["number","null"]},"olhoff_mma_median_inner_iterations":{"type":["number","null"]},"olhoff_mma_p95_inner_iterations":{"type":["number","null"]},"olhoff_mma_max_inner_iterations":{"type":["number","null"]},"olhoff_mma_cap_hit_count":{"type":["integer","null"]},"olhoff_mma_cap_hit_fraction":{"type":["number","null"]},"olhoff_mma_converged_inner_count":{"type":["integer","null"]},"olhoff_mma_converged_inner_fraction":{"type":["number","null"]},
+    "native_total_time":{"type":["number","null"]},"native_total_time_to_enter":{"type":["number","null"]},"native_total_time_to_cert":{"type":["number","null"]},"mean_native_iteration_time":{"type":["number","null"]},
+    "trajectory_dtype":{"const":"double"},"evaluator_id":{"const":"candidate_c_adaptive_structural_mode_v1"},"contract_hash":{"type":"string","pattern":"^[0-9a-f]{64}$"},"source_hashes":{"type":"object"},"provenance_hash":{"type":["string","null"]},
+    "error_identifier":{"type":["string","null"],"description":"MATLAB exception identifier for a RUN_ERROR cell; empty otherwise"},
+    "error_message":{"type":["string","null"],"description":"Exception message for a RUN_ERROR cell; empty otherwise"}
+  }
+}

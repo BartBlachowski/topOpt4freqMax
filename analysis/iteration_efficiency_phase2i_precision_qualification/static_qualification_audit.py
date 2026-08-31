@@ -14,10 +14,29 @@ pairer=(REPO/'analysis/iteration_efficiency_phase2b_precision/+ie2b/capture_pref
 common=(REPO/'analysis/iteration_efficiency_phase2a/+ie2a/evaluate_common.m').read_text()
 contract=REPO/'analysis/iteration_efficiency_phase2a/iteration_efficiency_contract.json'
 freeze=REPO/'analysis/iteration_efficiency_phase2h_c_refreeze/PHASE2H_FREEZE_RECORD.md'
+contract_data=json.loads(contract.read_text())
+expected={
+    'contract':'cc900b4ad4cae18b0bcd9b7a559f51e04e5167db587f64180b371d3c399bf95b',
+    'evaluator':'e14a21efe0bb2d9b9d7f3187b4c3f671ec089f6ff96773074b8f3b56cacd79e9',
+    'normative_manifest':'ceb55dd650f9751d499c19da316571a7ab0c34b3ef2d943b657a817575194f2d',
+    'freeze':'b05d71b716a78f55f1bcd5d39fc76694d712a067bca5633dbafe4dd99bb84119',
+}
 
-checks['contract_hash']=sha(contract)=='cc900b4ad4cae18b0bcd9b7a559f51e04e5167db587f64180b371d3c399bf95b'
-checks['evaluator_hash']=sha(REPO/'analysis/three_method_parametric_study/study_evaluate_design.m')=='e14a21efe0bb2d9b9d7f3187b4c3f671ec089f6ff96773074b8f3b56cacd79e9'
-checks['freeze_hash']=sha(freeze)=='b05d71b716a78f55f1bcd5d39fc76694d712a067bca5633dbafe4dd99bb84119'
+checks['contract_hash']=sha(contract)==expected['contract']
+checks['evaluator_hash']=sha(REPO/'analysis/three_method_parametric_study/study_evaluate_design.m')==expected['evaluator']
+checks['freeze_hash']=sha(freeze)==expected['freeze']
+norm_lines=''.join(f"{d['sha256']}  {d['path']}\n" for d in contract_data['normative_documents'])
+norm_manifest=hashlib.sha256(norm_lines.encode()).hexdigest()
+checks['normative_manifest_hash']=norm_manifest==expected['normative_manifest']
+checks['all_normative_file_hashes']=all(
+    (REPO/d['path']).is_file() and sha(REPO/d['path'])==d['sha256']
+    for d in contract_data['normative_documents'])
+native_expected={
+    'analysis/olhoff_stabilization_audit/olhoffOptStabilized.m':'95240cf60f82b40f8e5e892b9eea9b20a8fd3744b5eca6fdfc8dde2698d82aec',
+    'Matlab/reproduction2007/algo/innerLoopLP.m':'7724753c02f84d6009c3998f758d5b3f9c5144ad39ca6f470584a2c99e089465',
+    'analysis/OlhoffApproach/Matlab/topFreqOptimization_MMA.m':'22d4e04e4afde4e3f88b81f88a71a03a0fd0b6b313b022692dbddd48469fbe5e',
+}
+checks['native_source_hashes']=all(sha(REPO/p)==digest for p,digest in native_expected.items())
 checks['snapshot_is_2d']= "snapshots(:,outer+1)=single(rho)" in protected and "rho_snapshots',snapshots" in protected
 checks['initial_and_postupdate_indexing']= "snapshots(:,1)=single(rho)" in protected and "baseline.rho_snapshots(:,k+1)" in pairer
 checks['res_rho_uncast_double']= "'rho',rho" in protected and "rho=cfg.rho0*ones" in protected

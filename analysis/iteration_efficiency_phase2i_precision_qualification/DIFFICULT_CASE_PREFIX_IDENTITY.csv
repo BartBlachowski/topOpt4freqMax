@@ -1,0 +1,5 @@
+case_id,mesh,k,prefix_identical,cast_identity,native_status,wall_seconds
+k252_anchor,160x20,252,1,1,CAP_HIT,12.92777325
+k594_disagreement,240x30,594,1,1,CAP_HIT,56.46277725
+gt12_ordinal13,480x60,194,1,1,CAP_HIT,100.866233583333
+max_ordinal18,720x90,411,1,1,CAP_HIT,625.194505541667

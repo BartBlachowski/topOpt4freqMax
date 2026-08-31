@@ -1,0 +1,80 @@
+{
+  "schema_version": "iteration_efficiency_final_tests_v1",
+  "pass": true,
+  "test_count": 14,
+  "passed": 14,
+  "production_campaign_run": false,
+  "matlab_version": "25.2.0.3042426 (R2025b) Update 1",
+  "results": [
+    {
+      "names": "testManifestAndPreflight",
+      "passed": true,
+      "messages": "PASS"
+    },
+    {
+      "names": "testCandidateAnchors",
+      "passed": true,
+      "messages": "PASS"
+    },
+    {
+      "names": "testTopologyReferencePersistence",
+      "passed": true,
+      "messages": "PASS"
+    },
+    {
+      "names": "testAccounting",
+      "passed": true,
+      "messages": "PASS"
+    },
+    {
+      "names": "testResultSchema",
+      "passed": true,
+      "messages": "PASS"
+    },
+    {
+      "names": "testTimingFirewall",
+      "passed": true,
+      "messages": "PASS"
+    },
+    {
+      "names": "testSelectorEvidence",
+      "passed": true,
+      "messages": "PASS"
+    },
+    {
+      "names": "testDoubleStorageEvidence",
+      "passed": true,
+      "messages": "PASS"
+    },
+    {
+      "names": "testScalingAndRendering",
+      "passed": true,
+      "messages": "PASS"
+    },
+    {
+      "names": "testStaleAndProductionLocks",
+      "passed": true,
+      "messages": "PASS"
+    },
+    {
+      "names": "testOutputIsolation",
+      "passed": true,
+      "messages": "PASS"
+    },
+    {
+      "names": "testB1YukselTimingWorkIdentity",
+      "passed": true,
+      "messages": "PASS"
+    },
+    {
+      "names": "testB2CommonSupport",
+      "passed": true,
+      "messages": "PASS"
+    },
+    {
+      "names": "testB3FailureContainment",
+      "passed": true,
+      "messages": "PASS"
+    }
+  ]
+}

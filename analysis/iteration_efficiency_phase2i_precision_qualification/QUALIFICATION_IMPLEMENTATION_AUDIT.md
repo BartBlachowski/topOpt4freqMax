@@ -1,6 +1,6 @@
 # Phase 2I qualification implementation audit
 
-Status before numerical execution: **PASS**. Machine-readable evidence is in
+Status after completeness re-audit: **PASS**. Machine-readable evidence is in
 `raw/static_audit.json`.
 
 ## Pairing and indexing
@@ -30,9 +30,16 @@ Status before numerical execution: **PASS**. Machine-readable evidence is in
 
 ## Static integrity result
 
-All static checks pass. Contract, evaluator, freeze, and normative identities match the
-Phase-2H freeze. The historical independent Candidate-C pair audit contains 708
+All static checks pass. Contract, evaluator, freeze, normative-manifest, every normative
+document, and protected native-source identities match the Phase-2H freeze. The historical independent Candidate-C pair audit contains 708
 evaluator/state records and is retained as supporting, not endpoint, evidence.
+
+The completion audit repaired three qualification-harness omissions without changing any
+scientific code: normative-manifest verification is now fail-closed; eight strategic
+lossless capped prefixes replace the single fresh capped check; and explicit paired
+replays now cover the Phase-2G ordinal-13 and maximum-ordinal-18 cases. All repaired checks
+pass. MATLAB reported `25.2.0.3042426 (R2025b) Update 1` for the completion replays; the
+immutable initial capture retains the original pre-run version record.
 
 No frozen evaluator, contract, normative methodology, native optimizer, or historical
 audit directory was modified.

@@ -62,10 +62,15 @@ for s = 1:N
 end
 
 opts = optimoptions('linprog','Display','none','Algorithm','dual-simplex-highs');
-[x, ~, flag] = linprog(f, A, b, Aeq, beq, lb, ub, opts);
+[x, ~, flag, output] = linprog(f, A, b, Aeq, beq, lb, ub, opts);
+
+lpIterations = NaN;
+if isstruct(output) && isfield(output,'iterations') && ~isempty(output.iterations)
+    lpIterations = double(output.iterations);
+end
 
 st = struct('nInner',1,'degenHits',0,'conv',flag==1,'dxHist',[],'relHist',[], ...
-            'lpFlag',flag);
+            'lpFlag',flag,'lpIterations',lpIterations);
 if flag ~= 1 || isempty(x)
     % infeasible / failed: take no step and let the caller log it
     drho = zeros(NE,1);

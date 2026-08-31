@@ -1,0 +1,28 @@
+{
+  "schema_version": "iteration_efficiency_run_manifest_v1",
+  "run_mode": "smoke",
+  "olhoff_variant": "lp",
+  "output_directory": "/Users/piotrek/Programming/topOpt4freqMax/analysis/iteration_efficiency_final/runs/smoke/lp/20260831T112122364",
+  "started_at": "31-Aug-2026 11:21:22",
+  "production_campaign": false,
+  "preflight": {
+    "pass": true,
+    "checks": {
+      "manifest_exists": true,
+      "schema_exists": true,
+      "meshes": true,
+      "candidate": true,
+      "evaluator_hash": true,
+      "topology_hash": true,
+      "method_source_hashes": true,
+      "pinned_component_hashes": true,
+      "contract_hash": true,
+      "contract_semantics": true,
+      "double_policy": true,
+      "selector": true,
+      "no_self_authorization": true,
+      "production_authorization": true
+    },
+    "details": {}
+  }
+}

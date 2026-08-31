@@ -6,7 +6,11 @@ addpath(fullfile(repo,'analysis','iteration_efficiency_phase2b_recheck'), ...
     fullfile(repo,'Matlab','reproduction2007','runner'));
 guard=repro2007_paths(); %#ok<NASGU>
 maxNumCompThreads(1);
-meshes=[160 20;240 30];ks=[252 594];labels=["k252_anchor";"k594_disagreement"];
+% Include the two named anchors plus the first observed >12-mode case and the
+% Phase-2G maximum-ordinal-18 case.  The latter two close the explicit WP7
+% adaptive-search precision obligation.
+meshes=[160 20;240 30;480 60;720 90];ks=[252 594 194 411];
+labels=["k252_anchor";"k594_disagreement";"gt12_ordinal13";"max_ordinal18"];
 pairs=struct([]);rows={};
 for i=1:size(meshes,1)
     nx=meshes(i,1);ny=meshes(i,2);k=ks(i);

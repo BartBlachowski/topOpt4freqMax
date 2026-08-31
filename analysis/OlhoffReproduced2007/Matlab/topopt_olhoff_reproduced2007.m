@@ -12,9 +12,27 @@ function [rho, omega, info] = topopt_olhoff_reproduced2007( ...
 %   permitted material mass, placed on both translational DOFs of that node.
 %
 %   RUNCFG is optional. Recognized fields are verbose, tol_mult, tol_outer,
-%   threads, tip_mass_fraction, mass_interp, filter_mode, rho_min, and
-%   n_modes_max. The frozen reproduction tree is only read and is installed
-%   with its fail-closed path guard for the duration of this call.
+%   threads, tip_mass_fraction, mass_interp, filter_mode, rho_min,
+%   n_modes_max, optimizer, off_diag, max_inner, tol_inner, and min_inner.
+%   The frozen reproduction tree is only read and is installed with its
+%   fail-closed path guard for the duration of this call.
+%
+%   OPTIMIZER selects the Step 3 inner solver of the reproduction:
+%
+%     'lp'   DEFAULT.  The Du--Olhoff Eq. (22) LP route after Krog & Olhoff
+%            (1999): one LINPROG solve per outer iteration.  The vanishing
+%            off-diagonal conditions f_sk'drho = 0 are imposed exactly, so
+%            OFF_DIAG is necessarily false on this route.
+%     'mma'  The paper-literal MMA inner loop on problem (25) -- the labelled
+%            baseline of the clean-room study, which NOTES.md 7 records as
+%            non-convergent once N >= 2.  Up to MAX_INNER MMA sub-iterates
+%            per outer iteration.  OFF_DIAG defaults to true here (the full
+%            Eq. (25d) coupling); setting it false routes the Eq. (22)
+%            equalities through MMA instead, which the frozen INNERLOOPLP
+%            header documents as ill-conditioned (empty feasible interior).
+%
+%   Both routes call the frozen INNERLOOPLP / INNERLOOP unmodified, so the
+%   LP results of this function are unchanged by the added switch.
 
 if nargin < 1 || isempty(nelx), nelx = 320; end
 if nargin < 2 || isempty(nely), nely = 40; end
@@ -71,8 +89,10 @@ cfg.massInterp = char(string(localOpt(runCfg, 'mass_interp', cfg.massInterp)));
 cfg.filterMode = char(string(localOpt(runCfg, 'filter_mode', cfg.filterMode)));
 cfg.rhomin = double(localOpt(runCfg, 'rho_min', cfg.rhomin));
 cfg.Nmax = double(localOpt(runCfg, 'n_modes_max', cfg.Nmax));
-cfg.innerSolver = 'lp';
-cfg.offDiag = false;
+[cfg, route] = localOptimizer(cfg, runCfg);
+cfg.maxInner = double(localOpt(runCfg, 'max_inner', cfg.maxInner));
+cfg.tolInner = double(localOpt(runCfg, 'tol_inner', cfg.tolInner));
+cfg.minInner = double(localOpt(runCfg, 'min_inner', cfg.minInner));
 cfg.name = 'yuksel_problem_surface';
 
 [cfg, problem] = localProblem(cfg, bcType, runCfg);
@@ -95,19 +115,20 @@ cumInner = 0;
 failureIterations = [];
 eventLog = {};
 hist = struct('omega',[],'N',[],'beta',[],'nInner',[],'cumInner',[], ...
-    'innerConv',[],'lpFlag',[],'dxOuter',[],'vol',[],'tEig',[], ...
-    'tGrad',[],'tInner',[],'degen',[],'multJ',[]);
+    'innerConv',[],'lpFlag',[],'lpBackendIterations',[],'dxOuter',[], ...
+    'vol',[],'tEig',[],'tGrad',[],'tInner',[],'degen',[],'multJ',[]);
 
 if cfg.verbose
     fprintf('[OlhoffReproduced2007] %s, %dx%d, LxH=%gx%g, rmin=%g, move=%g\n', ...
         problem.label, cfg.nelx, cfg.nely, cfg.a, cfg.b, cfg.rminEl, cfg.move);
+    fprintf('[OlhoffReproduced2007] inner solver: %s\n', route.description);
     if mdl.tipMassValue > 0
         fprintf('[OlhoffReproduced2007] point mass = %g on each right-mid translational DOF\n', ...
             mdl.tipMassValue);
     end
     fprintf('%4s %10s %10s %10s %3s %10s %7s %7s %8s %8s %8s\n', ...
         'it','omega1','omega2','omega3','N','sqrt(beta)', ...
-        'inner','conv','maxdrho','volume','LP');
+        'inner','conv','maxdrho','volume',route.flagHeader);
 end
 
 for outer = 1:cfg.maxOuter
@@ -165,12 +186,36 @@ for outer = 1:cfg.maxOuter
         'rho',rho,'rhomin',cfg.rhomin,'volfrac',cfg.volfrac, ...
         'move',cfg.move,'maxInner',cfg.maxInner,'tolInner',cfg.tolInner, ...
         'minInner',cfg.minInner,'offDiag',cfg.offDiag);
-    [drho,st] = innerLoopLP(ctx);
+    if strcmpi(cfg.innerSolver,'lp')
+        [drho,st] = innerLoopLP(ctx);
+    else
+        [drho,st] = innerLoop(ctx);
+    end
     tInner = toc(innerTic);
-    if ~st.conv || st.lpFlag ~= 1 || any(~isfinite(drho))
+    if isfield(st,'lpFlag'), lpFlag = st.lpFlag; else, lpFlag = NaN; end
+    if isfield(st,'lpIterations')
+        lpIterations = st.lpIterations;
+    else
+        lpIterations = NaN;
+    end
+    if strcmpi(cfg.innerSolver,'lp')
+        if ~st.conv || lpFlag ~= 1 || any(~isfinite(drho))
+            failureIterations(end+1) = outer; %#ok<AGROW>
+            eventLog{end+1} = sprintf('iter %d: LP solve failed (flag=%d)', ...
+                outer, lpFlag); %#ok<AGROW>
+        end
+    elseif any(~isfinite(drho))
         failureIterations(end+1) = outer; %#ok<AGROW>
-        eventLog{end+1} = sprintf('iter %d: LP solve failed (flag=%d)', ...
-            outer, st.lpFlag); %#ok<AGROW>
+        eventLog{end+1} = sprintf( ...
+            'iter %d: MMA inner loop returned a nonfinite increment', ...
+            outer); %#ok<AGROW>
+    elseif ~st.conv
+        % Reaching the sub-iterate cap is the documented behaviour of the
+        % paper-literal route, not a solver breakdown: it is logged and left
+        % out of INFO.failureIterations so that STATUS keeps its meaning.
+        eventLog{end+1} = sprintf( ...
+            'iter %d: MMA inner loop hit the %d sub-iterate cap without reaching tolInner=%g', ...
+            outer, cfg.maxInner, cfg.tolInner); %#ok<AGROW>
     end
 
     % Preserve the imported OLHOFFOPT update semantics: the returned increment
@@ -186,7 +231,8 @@ for outer = 1:cfg.maxOuter
     hist.nInner(outer) = st.nInner;
     hist.cumInner(outer) = cumInner;
     hist.innerConv(outer) = st.conv;
-    hist.lpFlag(outer) = st.lpFlag;
+    hist.lpFlag(outer) = lpFlag;
+    hist.lpBackendIterations(outer) = lpIterations;
     hist.dxOuter(outer) = dxOuter;
     hist.vol(outer) = mean(rho);
     hist.tEig(outer) = tEig;
@@ -196,9 +242,10 @@ for outer = 1:cfg.maxOuter
     hist.multJ(outer) = multJ;
 
     if cfg.verbose
-        fprintf('%4d %10.3f %10.3f %10.3f %3d %10.3f %7d %7s %8.4f %8.4f %8d\n', ...
+        fprintf('%4d %10.3f %10.3f %10.3f %3d %10.3f %7d %7s %8.4f %8.4f %8s\n', ...
             outer, w(1), w(2), w(min(3,end)), N, sqrt(max(st.beta,0)), ...
-            st.nInner, localYesNo(st.conv), dxOuter, mean(rho), st.lpFlag);
+            st.nInner, localYesNo(st.conv), dxOuter, mean(rho), ...
+            localFlagText(lpFlag));
     end
     if dxOuter < cfg.tolOuter
         eventLog{end+1} = sprintf( ...
@@ -224,6 +271,8 @@ end
 info = struct();
 info.cfg = cfg;
 info.problem = problem;
+info.route = route;
+info.optimizer = route.id;
 info.history = hist;
 info.modeTable = modeTable;
 info.lambda = lambda;
@@ -235,10 +284,62 @@ info.failureIterations = failureIterations;
 info.log = eventLog;
 info.model = mdl;
 info.source = struct( ...
-    'method','Du--Olhoff 2007 clean-room reproduction, Eq. (22) LP route', ...
+    'method',sprintf( ...
+        'Du--Olhoff 2007 clean-room reproduction, %s route', route.label), ...
     'reproductionRoot',identity.root, ...
     'baselineConfiguration',sourceMeta.name, ...
     'extension','local cantilever boundary and constant nondesign point mass only');
+end
+
+function [cfg, route] = localOptimizer(cfg, runCfg)
+% Select the Step 3 inner solver of the frozen reproduction.  The choice is
+% carried in cfg.innerSolver exactly as OLHOFFOPT carries it, so the two
+% entry points stay interchangeable.
+requested = localOpt(runCfg, 'optimizer', 'lp');
+key = lower(regexprep(char(string(requested)), '[-_ ]', ''));
+offDiagGiven = isfield(runCfg,'off_diag') && ~isempty(runCfg.off_diag);
+switch key
+    case {'lp','linprog','krogolhoff','eq22'}
+        cfg.innerSolver = 'lp';
+        % INNERLOOPLP always imposes f_sk'drho = 0 (Eq. 22); there is no
+        % coupled variant of it, so an explicit request for one is refused
+        % rather than silently ignored.
+        if offDiagGiven && logical(runCfg.off_diag)
+            error('topopt_olhoff_reproduced2007:LpOffDiag', ...
+                ['off_diag=true is not available on the LP route: Eq. (22) is ' ...
+                 'built into innerLoopLP.  Use optimizer="mma" for the full ' ...
+                 'Eq. (25d) coupling.']);
+        end
+        cfg.offDiag = false;
+        route = struct('id','lp','label','Eq. (22) LP','flagHeader','LP', ...
+            'description',['Eq. (22) LP route (Krog & Olhoff 1999), one ' ...
+                           'linprog solve per outer iteration']);
+    case {'mma','paper','papermma','eq25','eq25d'}
+        cfg.innerSolver = 'mma';
+        cfg.offDiag = logical(localOpt(runCfg, 'off_diag', true));
+        if cfg.offDiag
+            route = struct('id','mma','label','Eq. (25d) MMA', ...
+                'flagHeader','-', ...
+                'description',['paper-literal MMA inner loop on problem (25) ' ...
+                               'with the full Eq. (25d) coupling']);
+        else
+            route = struct('id','mma','label','Eq. (22) MMA', ...
+                'flagHeader','-', ...
+                'description',['MMA inner loop with the Eq. (22) off-diagonal ' ...
+                               'conditions imposed as inequality pairs']);
+        end
+    otherwise
+        error('topopt_olhoff_reproduced2007:Optimizer', ...
+            'Unsupported optimizer "%s". Use lp or mma.', char(string(requested)));
+end
+end
+
+function value = localFlagText(flag)
+if isnan(flag)
+    value = '-';
+else
+    value = sprintf('%d', flag);
+end
 end
 
 function [cfg, problem] = localProblem(cfg, bcType, runCfg)
@@ -293,6 +394,15 @@ end
 if problem.tipMassFraction < 0
     error('topopt_olhoff_reproduced2007:TipMass', ...
         'tip_mass_fraction must be nonnegative.');
+end
+if cfg.maxInner < 1 || cfg.minInner < 1 || cfg.minInner > cfg.maxInner
+    error('topopt_olhoff_reproduced2007:InnerBudget', ...
+        'Require 1 <= min_inner <= max_inner (got %g and %g).', ...
+        cfg.minInner, cfg.maxInner);
+end
+if cfg.tolInner <= 0
+    error('topopt_olhoff_reproduced2007:InnerTolerance', ...
+        'tol_inner must be positive.');
 end
 end
 

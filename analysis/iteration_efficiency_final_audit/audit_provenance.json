@@ -1,0 +1,92 @@
+{
+  "schema_version": "iteration_efficiency_final_preproduction_audit_v1",
+  "audit_type": "independent_final_pre_production_audit",
+  "audited_at": "2026-08-31",
+  "branch": "benchmark-methodology-r2",
+  "head": "d4df2137e68851f91cff5e75de1ee4a99a6a7625",
+  "working_tree_clean": false,
+  "working_tree_entries_at_start": 47,
+  "working_tree_tracked_modified_at_start": 22,
+  "working_tree_untracked_at_start": 25,
+  "working_tree_unchanged_by_audit_except_audit_directory": true,
+  "matlab": "R2025b",
+  "platform": "darwin 25.5.0 arm64",
+  "threads": 1,
+  "repository_modified_by_audit": false,
+  "production_campaign_run": false,
+  "production_authorization_issued": false,
+  "verdict": "NOT_AUTHORIZED",
+  "integration_manifest_integrity": {
+    "sha256sums_checked": 36,
+    "sha256sums_ok": 36,
+    "manifest_pinned_hashes_recomputed": 17,
+    "manifest_pinned_hashes_matched": 17
+  },
+  "native_optimizer_modified": true,
+  "native_optimizer_behavior_neutral": true,
+  "neutrality_evidence": {
+    "case": "96x12, 40 outer updates, S1 policy, single thread",
+    "comparisons": ["pre_integration_HEAD", "instrumented_capture_on", "instrumented_capture_off"],
+    "final_density_bit_identical": true,
+    "final_density_max_abs_difference": 0.0,
+    "omega_bit_identical": true,
+    "lambda_bit_identical": true,
+    "hist_dxOuter_beta_lpFlag_nInner_N_policyStage_moveLimit_bit_identical": true,
+    "authoritative_snapshot_class": "double",
+    "historical_snapshot_class": "single",
+    "historical_single_max_representation_error": 2.6226e-08,
+    "stored_terminal_equals_optimizer_state": true
+  },
+  "lp_backend_iterations_genuine": {
+    "case": "160x20, 120 outer updates",
+    "unique_values": [1,2,3,4,5,6,8,10,11,12,13],
+    "sum": 322,
+    "lp_calls": 120,
+    "degenerate_all_ones": false
+  },
+  "anchors_reproduced": {
+    "b_ref": 2100,
+    "Q_ref": [162.6600903758, 162.9977569655, 162.9977566494],
+    "B_meas": 3200,
+    "requested_end": 2199,
+    "tail_truncated": false,
+    "endpoints_P100": {"0.98": [229,328], "0.99": [309,408], "0.995": [453,552]},
+    "endpoints_P50": {"0.98": [229,278], "0.99": [309,358], "0.995": [453,502]},
+    "endpoints_P200": {"0.98": [229,428], "0.99": [309,508], "0.995": [453,652]},
+    "no_lookahead_verified": true,
+    "bref_tail_truncation_stable": true,
+    "candidate_c_480x60_k194_ordinals": [1,7,13],
+    "candidate_c_480x60_k194_schedule": [3,6,12,24],
+    "candidate_c_480x60_k194_escalations": 3,
+    "maximum_verified_ordinal": 13,
+    "adaptive_search_failures": 0
+  },
+  "route_identity": {
+    "proposed": "PASS",
+    "yuksel": "PASS",
+    "olhoff_lp": "PASS",
+    "olhoff_mma": "PASS",
+    "selector_lp_mma_both": "PASS",
+    "principal_secondary_separation": "PASS",
+    "mma_zero_lp_calls_verified": true,
+    "mma_effective_rmin_post_call": 1.2,
+    "mma_inner_iterations_observed": [108,102,108,101]
+  },
+  "negative_controls": {"executed": 19, "passed": 19},
+  "cost_estimate": {
+    "principal_optimization_runs": 702,
+    "principal_native_hours": 67,
+    "principal_offline_evaluation_hours": 54,
+    "principal_total_hours": 120,
+    "principal_storage_gb": [80, 110],
+    "mma_over_lp_per_outer_cost_ratio_160x20": 68.2,
+    "mma_nine_mesh_hours_order": 1000,
+    "mma_three_coarse_mesh_hours": [150, 200]
+  },
+  "findings": {"critical": 1, "major": 2, "moderate": 4, "minor": 3},
+  "blockers": ["B-1 yuksel timing replay stage-1 clamp", "B-2 scaling common-support label unenforced", "B-3 cell failure aborts campaign"],
+  "audit_artifacts_written_to_repository": [
+    "analysis/iteration_efficiency_final_audit/"
+  ],
+  "production_code_modified_by_audit": false
+}

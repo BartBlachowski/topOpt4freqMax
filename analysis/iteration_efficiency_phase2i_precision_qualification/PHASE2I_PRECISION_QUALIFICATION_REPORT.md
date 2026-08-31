@@ -20,11 +20,16 @@ retuning.
   `5.59482294612e-08`.
 - Formal evidence bound: relative omega `1.12e-7`, absolute omega `8.18e-6`; raw maximum is
   `1.11911e-05` of the q=.995 0.5% band.
+- The 2x safety factor is a transparent conservative reporting envelope over the
+  no-exclusion raw maximum; it was not tuned to rescue qualification, which independently
+  fails Q7.
 - Binary differences: `95` states / `232` entries, all explained
   by float32 cutoff ties; hard-gate mismatches: `4` at `[41, 45, 48, 99]`.
 - `b_ref`: 2100/2100; `B_meas`: 3200/3200.
-- P=100 `(k_enter,k_cert)`: q=.98 `(229,328)`; q=.99 `(309,408)`;
-  q=.995 `(453,552)`, identical for double and single.
+- P=100 endpoints are identical for all q; see `PERSISTENCE_EQUIVALENCE.csv` for the
+  machine-derived values.
+- Explicit difficult-case coverage reaches selected ordinal 18,
+  including the >12-mode and maximum-ordinal-18 Phase-2G cases.
 - Production-scale offline evidence: eight available meshes, up to `12477` at-risk
   elements in one state; no final-pair modal/classifier/hard-gate mismatch. This does not
   override the binding 96×12 hard-gate failure.
@@ -39,8 +44,8 @@ retuning.
 6. Frozen methodology modified? **NO**.
 7. Principal route tested: **Olhoff-LP**.
 8. Same-state pairing mechanism: exact double optimizer state `x_d` and `double(single(x_d))`; protected runner cast checked across all columns.
-9. Prefix determinism result: **PASS** (full repeat plus fresh k=252 and historical 45 caps).
-10. Number of paired states: **3,200 binding**, plus 10 new supporting difficult/production final pairs and 236 historical paired states.
+9. Prefix determinism result: **PASS** (full repeat plus 8 strategic lossless capped checks; historical 45 float32-prefix checks remain supporting evidence).
+10. Number of paired states: **3,200 binding**, plus 12 new supporting difficult/production final pairs and 236 historical paired states.
 11. Meshes represented: 24×4, 96×12, and production 160×20 through 720×90 (800×100 unavailable).
 12. Maximum density absolute error: `2.98019426914e-08`.
 13. rho≈0.1 crossing count: `19517` on the binding trajectory.

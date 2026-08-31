@@ -28,7 +28,8 @@
   "numerical_bound": {
     "relative_omega": 1.12e-07,
     "absolute_omega": 8.18e-06,
-    "derivation": "two-times the all-state observed maximum, rounded upward",
+    "derivation": "two-times the no-exclusion all-state observed maximum, rounded upward",
+    "safety_factor_justification": "A transparent 2x reporting envelope; qualification does not depend on tuning it because Q7 independently fails.",
     "raw_maximum_relative_omega": 5.59553986328579e-08
   },
   "results": {

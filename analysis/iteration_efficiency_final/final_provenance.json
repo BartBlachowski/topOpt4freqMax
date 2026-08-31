@@ -1,0 +1,33 @@
+{
+  "schema_version": "iteration_efficiency_final_provenance_v1",
+  "captured_at": "2026-08-31T11:30:00+02:00",
+  "branch": "benchmark-methodology-r2",
+  "starting_head": "d4df2137e68851f91cff5e75de1ee4a99a6a7625",
+  "final_head": "d4df2137e68851f91cff5e75de1ee4a99a6a7625",
+  "commits_created": 0,
+  "pre_existing_changes_preserved": true,
+  "integration_root": "analysis/iteration_efficiency_final",
+  "entry_point": "analysis/iteration_efficiency_final/iteration_efficiency_final.m",
+  "production_campaign_run": false,
+  "production_authorization_embedded": false,
+  "matlab": "R2025b Update 1",
+  "tests": {"passed": 11, "failed": 0},
+  "successful_smoke_outputs": {
+    "lp": "analysis/iteration_efficiency_final/runs/smoke/lp/20260831T112122364",
+    "mma": "analysis/iteration_efficiency_final/runs/smoke/mma/20260831T111206455",
+    "both": "analysis/iteration_efficiency_final/runs/smoke/both/20260831T111248805",
+    "double_identity": "analysis/iteration_efficiency_final/runs/smoke/lp/20260831T113326752"
+  },
+  "source_hashes": {
+    "candidate_c": "e14a21efe0bb2d9b9d7f3187b4c3f671ec089f6ff96773074b8f3b56cacd79e9",
+    "topology_gate": "ebe14f1591c95f069aaf3dcbdad7795394b380ba4cea6847df8f1ce6afa0c9dd",
+    "olhoff_lp_runner": "10132a39e13667aec4933f8c93eb1e5dbc3475fb44bf89dcffdd2b2264d99cf2",
+    "olhoff_mma_runner": "d34f62b97e32194367c1a2d7edcfeae4d1d0fbd737e06a70c0eb7eb34146c1af"
+  },
+  "native_optimizer_mathematics_changed": false,
+  "native_source_instrumentation_changes": [
+    "Olhoff stabilized runner gained an explicit lossless-double authoritative path and backend iteration telemetry; historical default single storage is preserved.",
+    "Olhoff base runner gained optional double trajectory/status/inner-history capture and protocol-controlled extension beyond native stop.",
+    "LP backend output.iterations is retained when the installed solver exposes it."
+  ]
+}

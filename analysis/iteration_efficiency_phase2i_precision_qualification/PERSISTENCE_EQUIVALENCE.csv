@@ -1,0 +1,10 @@
+q,P,k_enter_double,k_enter_single,k_enter_identical,k_cert_double,k_cert_single,k_cert_identical,status_double,status_single,status_identical,n_state_crossing_differences
+0.98,50,229,229,1,278,278,1,PASS,PASS,1,0
+0.99,50,309,309,1,358,358,1,PASS,PASS,1,0
+0.995,50,453,453,1,502,502,1,PASS,PASS,1,0
+0.98,100,229,229,1,328,328,1,PASS,PASS,1,0
+0.99,100,309,309,1,408,408,1,PASS,PASS,1,0
+0.995,100,453,453,1,552,552,1,PASS,PASS,1,0
+0.98,200,229,229,1,428,428,1,PASS,PASS,1,0
+0.99,200,309,309,1,508,508,1,PASS,PASS,1,0
+0.995,200,453,453,1,652,652,1,PASS,PASS,1,0
