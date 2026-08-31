@@ -1,0 +1,346 @@
+{
+ "phase": "2E delta audit (independent)",
+ "classification": "READ_ONLY_INDEPENDENT_DELTA_AUDIT / NO_OPTIMIZATION / NO_REFREEZE",
+ "captured_at": "2026-08-30T14:28:42.775761+02:00",
+ "branch": "benchmark-methodology-r2",
+ "head": "632e9b01811845709de33f93051fd853373ed5e1",
+ "git_status": [
+  "M examples/Performance/performance_comparison.m",
+  " M tools/Matlab/run_topopt_from_json.m",
+  " M tools/Matlab/topopt_history_record.m",
+  "?? analysis/iteration_efficiency_evaluator_discontinuity_audit/",
+  "?? analysis/iteration_efficiency_methodology_audit/",
+  "?? analysis/iteration_efficiency_methodology_delta_audit/",
+  "?? analysis/iteration_efficiency_methodology_final_recheck/",
+  "?? analysis/iteration_efficiency_phase2a/",
+  "?? analysis/iteration_efficiency_phase2b_precision/",
+  "?? analysis/iteration_efficiency_phase2b_recheck/",
+  "?? analysis/iteration_efficiency_phase2d_delta_audit/",
+  "?? analysis/iteration_efficiency_phase2d_evaluator_amendment/",
+  "?? analysis/iteration_efficiency_study_design/",
+  "?? analysis/performance_campaign_forensic_audit/",
+  "?? analysis/performance_campaign_targeted_replays/",
+  "?? examples/Performance/WP0A_VISUALIZATION_FIX.md",
+  "?? examples/Performance/final_campaign/",
+  "?? examples/Performance/test_shared_topology_renderer.m",
+  "?? tools/Matlab/renderTopologyDensity.m"
+ ],
+ "protected_numerical_sources": {
+  "analysis/ourApproach/Matlab/topopt_freq.m": {
+   "expected_phase2a": "6d9ea66fcc27f63b7380708b5735552b5d9f2885d3e65714af572daccdae72b2",
+   "observed": "6d9ea66fcc27f63b7380708b5735552b5d9f2885d3e65714af572daccdae72b2",
+   "match": true
+  },
+  "analysis/YukselApproach/Matlab/top99neo_inertial_freq.m": {
+   "expected_phase2a": "5afc3d16b4ed6af05793df461b541ed3b2ea62a6da8836f38301a9a3917e6ba2",
+   "observed": "5afc3d16b4ed6af05793df461b541ed3b2ea62a6da8836f38301a9a3917e6ba2",
+   "match": true
+  },
+  "analysis/olhoff_stabilization_audit/olhoffOptStabilized.m": {
+   "expected_phase2a": "95240cf60f82b40f8e5e892b9eea9b20a8fd3744b5eca6fdfc8dde2698d82aec",
+   "observed": "95240cf60f82b40f8e5e892b9eea9b20a8fd3744b5eca6fdfc8dde2698d82aec",
+   "match": true
+  },
+  "analysis/olhoff_stabilization_audit/run_stabilization_case.m": {
+   "expected_phase2a": "d309737192a40499ebba928ee845bd99846eaa1abc7ebaa42efd701ddfd33316",
+   "observed": "d309737192a40499ebba928ee845bd99846eaa1abc7ebaa42efd701ddfd33316",
+   "match": true
+  },
+  "Matlab/reproduction2007/algo/innerLoopLP.m": {
+   "expected_phase2a": "7724753c02f84d6009c3998f758d5b3f9c5144ad39ca6f470584a2c99e089465",
+   "observed": "7724753c02f84d6009c3998f758d5b3f9c5144ad39ca6f470584a2c99e089465",
+   "match": true
+  },
+  "analysis/three_method_parametric_study/study_evaluate_design.m": {
+   "expected_phase2a": "22a1b974c251dbe7baa6499a5aca11e6bde68469b6d2e80fd4274c9447f31343",
+   "observed": "22a1b974c251dbe7baa6499a5aca11e6bde68469b6d2e80fd4274c9447f31343",
+   "match": true
+  }
+ },
+ "profile_sources": {
+  "analysis/three_method_parametric_study/results/profile_freeze_manifest.json": {
+   "expected_phase2a": "b55e31d87d18e90e8c0b8d278bd4111d494610b62f253194ea16cfcf78252eca",
+   "observed": "b55e31d87d18e90e8c0b8d278bd4111d494610b62f253194ea16cfcf78252eca",
+   "match": true
+  },
+  "analysis/olhoff_stabilization_audit/selected_profile.json": {
+   "expected_phase2a": "60fa944f4aecf34611de5413096d6a0de235eae05febbc4dd481bee5a26a67da",
+   "observed": "60fa944f4aecf34611de5413096d6a0de235eae05febbc4dd481bee5a26a67da",
+   "match": true
+  },
+  "analysis/olhoff_stabilization_audit/final_campaign_profile.json": {
+   "expected_phase2a": "5d12bc0ae6a09d2f4df01fb38d7f483a7450b06cac67eceac30d3fab3618b610",
+   "observed": "5d12bc0ae6a09d2f4df01fb38d7f483a7450b06cac67eceac30d3fab3618b610",
+   "match": true
+  }
+ },
+ "audit_records": {
+  "analysis/iteration_efficiency_methodology_audit/INDEPENDENT_METHODOLOGY_AUDIT.md": {
+   "expected_phase2a": "ce40a1f8656d32fb5c0e4cf22a3076d5360af058019bd3f000b434815a25dc34",
+   "observed": "ce40a1f8656d32fb5c0e4cf22a3076d5360af058019bd3f000b434815a25dc34",
+   "match": true
+  },
+  "analysis/iteration_efficiency_methodology_delta_audit/DELTA_AUDIT_REPORT.md": {
+   "expected_phase2a": "b5b73e163be3af2fe33faa5f78ca16c9bec52b631e63f2f2557f5cb959cf253e",
+   "observed": "b5b73e163be3af2fe33faa5f78ca16c9bec52b631e63f2f2557f5cb959cf253e",
+   "match": true
+  },
+  "analysis/iteration_efficiency_methodology_final_recheck/FINAL_RECHECK.md": {
+   "expected_phase2a": "acc0707b77469422ecdbf3fffe23a8c3e4b2c1595110d98f2b8d57e9a72eb7d6",
+   "observed": "acc0707b77469422ecdbf3fffe23a8c3e4b2c1595110d98f2b8d57e9a72eb7d6",
+   "match": true
+  },
+  "analysis/iteration_efficiency_methodology_final_recheck/METHODOLOGY_FREEZE_RECORD.md": {
+   "expected_phase2a": "01ff97cc3dc580968904362be5c1250b1dd979839686ce95d0ad591a92dba826",
+   "observed": "01ff97cc3dc580968904362be5c1250b1dd979839686ce95d0ad591a92dba826",
+   "match": true
+  },
+  "analysis/iteration_efficiency_methodology_final_recheck/N1_N4_VERIFICATION.csv": {
+   "expected_phase2a": "94a3d7bc90343e88545d710fdf88658c3ae7f37a1786e1eda371d546df614f6f",
+   "observed": "94a3d7bc90343e88545d710fdf88658c3ae7f37a1786e1eda371d546df614f6f",
+   "match": true
+  },
+  "analysis/iteration_efficiency_methodology_final_recheck/PHASE2_FINAL_READINESS.md": {
+   "expected_phase2a": "a8add97f0bc6b12492725518931b44bbb42ed5a8d7ee1225d042c6e870a2103b",
+   "observed": "a8add97f0bc6b12492725518931b44bbb42ed5a8d7ee1225d042c6e870a2103b",
+   "match": true
+  }
+ },
+ "protected_mismatches": [],
+ "phase2d_declared_unchanged": {
+  "Matlab/reproduction2007/fem/massScale.m": {
+   "declared": "90ba72c3df056ed0e705bfcfb763c1ef631f48891d626b18c180d6702d683a63",
+   "observed": "90ba72c3df056ed0e705bfcfb763c1ef631f48891d626b18c180d6702d683a63",
+   "match": true
+  },
+  "Matlab/reproduction2007/algo/defaultCfg.m": {
+   "declared": "aed41860a2dac6a06e1c51cc96cf7436a65bcd9d60ecdf7af2d2a3552ea456e0",
+   "observed": "aed41860a2dac6a06e1c51cc96cf7436a65bcd9d60ecdf7af2d2a3552ea456e0",
+   "match": true
+  },
+  "analysis/OlhoffApproachExact/Matlab/mass_interp.m": {
+   "declared": "90f9fb21a6e44fa294b8c54bd5bb45ab3cc0901de42752a7003d38c14ea592d9",
+   "observed": "90f9fb21a6e44fa294b8c54bd5bb45ab3cc0901de42752a7003d38c14ea592d9",
+   "match": true
+  },
+  "analysis/YukselApproach/Matlab/top99neo_inertial_freq.m": {
+   "declared": "5afc3d16b4ed6af05793df461b541ed3b2ea62a6da8836f38301a9a3917e6ba2",
+   "observed": "5afc3d16b4ed6af05793df461b541ed3b2ea62a6da8836f38301a9a3917e6ba2",
+   "match": true
+  },
+  "analysis/ourApproach/Matlab/topopt_freq.m": {
+   "declared": "6d9ea66fcc27f63b7380708b5735552b5d9f2885d3e65714af572daccdae72b2",
+   "observed": "6d9ea66fcc27f63b7380708b5735552b5d9f2885d3e65714af572daccdae72b2",
+   "match": true
+  },
+  "analysis/olhoff_stabilization_audit/olhoffOptStabilized.m": {
+   "declared": "95240cf60f82b40f8e5e892b9eea9b20a8fd3744b5eca6fdfc8dde2698d82aec",
+   "observed": "95240cf60f82b40f8e5e892b9eea9b20a8fd3744b5eca6fdfc8dde2698d82aec",
+   "match": true
+  },
+  "analysis/three_method_parametric_study/study_evaluate_design.m": {
+   "declared": "22a1b974c251dbe7baa6499a5aca11e6bde68469b6d2e80fd4274c9447f31343",
+   "observed": "22a1b974c251dbe7baa6499a5aca11e6bde68469b6d2e80fd4274c9447f31343",
+   "match": true
+  },
+  "analysis/iteration_efficiency_phase2a/iteration_efficiency_contract.json": {
+   "declared": "46318e6c7e74fdfe9cc643afeef93bbd6edfc5a894e89269be9cc04f0f27697c",
+   "observed": "46318e6c7e74fdfe9cc643afeef93bbd6edfc5a894e89269be9cc04f0f27697c",
+   "match": true
+  },
+  "analysis/iteration_efficiency_phase2a/+ie2a/production_preflight.m": {
+   "declared": "868cdaab197a00500f861a6a5687918e1b089c87c6d580e011d1e8abc51321b3",
+   "observed": "868cdaab197a00500f861a6a5687918e1b089c87c6d580e011d1e8abc51321b3",
+   "match": true
+  }
+ },
+ "phase2d_declared_mismatches": [],
+ "other_files": {
+  "Matlab/reproduction2007/fem/massScale.m": "90ba72c3df056ed0e705bfcfb763c1ef631f48891d626b18c180d6702d683a63",
+  "Matlab/reproduction2007/algo/defaultCfg.m": "aed41860a2dac6a06e1c51cc96cf7436a65bcd9d60ecdf7af2d2a3552ea456e0",
+  "analysis/OlhoffApproachExact/Matlab/mass_interp.m": "90f9fb21a6e44fa294b8c54bd5bb45ab3cc0901de42752a7003d38c14ea592d9",
+  "analysis/iteration_efficiency_phase2a/iteration_efficiency_contract.json": "46318e6c7e74fdfe9cc643afeef93bbd6edfc5a894e89269be9cc04f0f27697c",
+  "analysis/iteration_efficiency_phase2a/implementation_provenance.json": "1ff3b8ac0e1df495fa8440d1723b6841557cda298fe510e90916b3cce3b3ea9d",
+  "analysis/iteration_efficiency_phase2a/+ie2a/production_preflight.m": "868cdaab197a00500f861a6a5687918e1b089c87c6d580e011d1e8abc51321b3",
+  "analysis/iteration_efficiency_phase2a/+ie2a/frozen_contract_sha256.m": "3c4a918f8c4e98a8fb56fd089f33d5749eefc7bb59f21d2195225990bac801df",
+  "analysis/iteration_efficiency_phase2a/+ie2a/reference_phase.m": "35da55e2ea5cd75d0c13231ab26b10f5b389b5894d02de1ebbddec574f5d5532",
+  "analysis/iteration_efficiency_phase2a/+ie2a/scan_persistence.m": "aa025056403500b3e500ea32d7c020097897e26ebebe033f90ece63e856e2a27",
+  "analysis/iteration_efficiency_phase2a/+ie2a/measurement_budget.m": "7000ec109cd8f25a00ab1178d0c0320ccde49cb5ee2bf6777c490c261114d145",
+  "analysis/iteration_efficiency_phase2a/+ie2a/topology_metrics.m": "ebe14f1591c95f069aaf3dcbdad7795394b380ba4cea6847df8f1ce6afa0c9dd",
+  "analysis/iteration_efficiency_phase2a/+ie2a/quality_effort.m": "49392455b227044ec8df7cb266ee83f00c1786f4a21f458696ed14de495ac5b1",
+  "analysis/iteration_efficiency_phase2a/+ie2a/evaluate_common.m": "3937bd68e80eae5ed89ff9c73d57bb024390e56bcf72e12799b34e225f117a6e",
+  "analysis/iteration_efficiency_phase2d_evaluator_amendment/+ie2d/study_evaluate_design_eq4a.m": "bfc98f7fa4a4a1a6d54e64b98f9fcff71ab66ffc4e63a0fc21da99350c72d74b",
+  "analysis/iteration_efficiency_study_design/QUALITY_EFFORT_SPEC.md": "02da8b592239cd22af4609e302aae7a2fc77d9a47d0451812b4d1ad135ca3fa2",
+  "analysis/iteration_efficiency_study_design/ITERATION_EFFICIENCY_PROTOCOL_DRAFT.md": "14979ab7fedcbd0e4e4249cd4ddc9443bfc2f3f20da948e1927ae1c28ae72604",
+  "analysis/iteration_efficiency_methodology_final_recheck/METHODOLOGY_FREEZE_RECORD.md": "01ff97cc3dc580968904362be5c1250b1dd979839686ce95d0ad591a92dba826",
+  "references/Du2007_Topological.pdf": "b4dc8153ddc505b54f05cb72afe4641ba40c79512e5d32be4ab9c1e1b0378bc4"
+ },
+ "phase2d_package": {
+  "analysis/iteration_efficiency_phase2d_evaluator_amendment/AMENDED_EVALUATOR_DEFINITION.md": "eb708648c0dfa6ef5f81ee308984f6ab726a8355bd51ccfdc464fb3cd796e5b3",
+  "analysis/iteration_efficiency_phase2d_evaluator_amendment/AMENDED_OLHOFF_TRAJECTORY_EVALUATION.csv": "274189cf02b7f5756e2ad9f88c5c1f0326f73f77991b152508f7fab79553033f",
+  "analysis/iteration_efficiency_phase2d_evaluator_amendment/AMENDED_REFERENCE_PERSISTENCE.csv": "018a5178cb9817f5661bc7d485765772007eea8ae4620be7c1b18b3f9b1c0b88",
+  "analysis/iteration_efficiency_phase2d_evaluator_amendment/AMENDMENT_SCOPE_LEDGER.csv": "4d1dade31155d439a36cbfabfc147d69c830f5a1e4a31bd6a4b99ad6cec65ff2",
+  "analysis/iteration_efficiency_phase2d_evaluator_amendment/BINDING_EVALUATOR_ANALYSIS.csv": "49acc1a901ea132e5ced557db0bbd3e51d2c87385a72b72885e1db867ddaa6d5",
+  "analysis/iteration_efficiency_phase2d_evaluator_amendment/DELTA_AUDIT_REQUEST.md": "542ad176482911aa372702c5a07fff6e3b0d4334379bbb827007b2033a782be0",
+  "analysis/iteration_efficiency_phase2d_evaluator_amendment/EQ4A_DOUBLE_ULP_STABILITY.csv": "c4c37cdab9def86259f66b2dc15e5d1a7d1d4342f50adc540ae95dc6d3715bdb",
+  "analysis/iteration_efficiency_phase2d_evaluator_amendment/EQ4A_SINGLE_ROUNDING_STABILITY.csv": "0fdce4a7dcc6a2a0451606cdecad2d6bcafed871b4f1882c6c885ecb6d59366e",
+  "analysis/iteration_efficiency_phase2d_evaluator_amendment/EVALUATOR_UNIT_TESTS.md": "e0826065d3329a9fe6f23d8a967b823223cb522b8ba0a9c88780e5d2e81d775a",
+  "analysis/iteration_efficiency_phase2d_evaluator_amendment/NORMATIVE_CHANGE_LEDGER.csv": "510ddb904ff5b9596acb30c01c916fd7b73c739e1409602f1dea1ca90ee1bf07",
+  "analysis/iteration_efficiency_phase2d_evaluator_amendment/NUMERICAL_MARGIN_ANALYSIS.csv": "6274c7f09f7ed588a0c475c7515f46743bf0a8361ba913769467d871041a61e9",
+  "analysis/iteration_efficiency_phase2d_evaluator_amendment/OLD_DEFECT_REPRODUCTION.csv": "b821d482f9f0c77855494a3eb69add4f534a934ef55e10095eef4184e4682b66",
+  "analysis/iteration_efficiency_phase2d_evaluator_amendment/PHASE2A_IMPLEMENTATION_IMPACT.md": "938ef452a93152208318d520e1d459b4c8a0931ee1b8f7d3b17dcd210a063f10",
+  "analysis/iteration_efficiency_phase2d_evaluator_amendment/PHASE2B_CASE_REEVALUATION.csv": "80872f9f9e5ddda3f4d6dbe69e9f844759f6590d602ef1dc629301d76e45a6d3",
+  "analysis/iteration_efficiency_phase2d_evaluator_amendment/PHASE2D_AMENDMENT_REPORT.md": "6c16459febb4e3654e4ff4cd387478d76fe2569959530877b07a3fb142e1f304",
+  "analysis/iteration_efficiency_phase2d_evaluator_amendment/RETROSPECTIVE_ARTIFACT_CLASSIFICATION.csv": "87d8b3213471e5cad1caef33d9894fb6d24a0e24a92607269c69bce663b4932e",
+  "analysis/iteration_efficiency_phase2d_evaluator_amendment/SHA256SUMS.txt": "f2c6a21e96b500b93d34d927ddee4fcb95605f25c6651ab99c067952c2cd7c5f",
+  "analysis/iteration_efficiency_phase2d_evaluator_amendment/amendment_provenance.json": "b7645ea0057c1d47f7ff8f30978780d652e5506cb56d482ec8565037f28562d1",
+  "analysis/iteration_efficiency_phase2d_evaluator_amendment/+ie2d/study_evaluate_design_eq4a.m": "bfc98f7fa4a4a1a6d54e64b98f9fcff71ab66ffc4e63a0fc21da99350c72d74b",
+  "analysis/iteration_efficiency_phase2d_evaluator_amendment/scripts/traj.log": "126e1440301d24fd0f9682cec8e1b1beb87a4ff8c84e7dc527b58cefb3fc7af1",
+  "analysis/iteration_efficiency_phase2d_evaluator_amendment/scripts/traj.m": "86a1ad2e2498d3a8bad3fdcfbd2f15f963f38ed79345857d13f105e6da19c7b7",
+  "analysis/iteration_efficiency_phase2d_evaluator_amendment/scripts/traj.mat": "a9d7f8a2b887fe7050681abf8945dda699d88c950628f7a2c25a837d27e9320b",
+  "analysis/iteration_efficiency_phase2d_evaluator_amendment/scripts/validate.log": "c1195d3b2ef47f1dc1c0afd51045387a3288fbc83d71c632aeeda78057ddf3a7",
+  "analysis/iteration_efficiency_phase2d_evaluator_amendment/scripts/validate.m": "a4d705992d8da17c407941d91627869e817da3c85d24a500459d53e17f9836a1",
+  "analysis/iteration_efficiency_phase2d_evaluator_amendment/scripts/wp4_7.mat": "ca57736a7e13996c556413cf85f05ada8008258e3f406d915f1b5a2c41eef6a9",
+  "analysis/iteration_efficiency_phase2d_evaluator_amendment/preamendment_copies/ITERATION_EFFICIENCY_PROTOCOL_DRAFT.md": "3e397e0b685bf078c6b4cd0a803b07075d4bd8ca99e65b59e8dd9be99c1728df",
+  "analysis/iteration_efficiency_phase2d_evaluator_amendment/preamendment_copies/QUALITY_EFFORT_SPEC.md": "b7b1d8c3bbe854704b4155da2f440a1ee74dac1731a339ca151d85e57afdd7ee",
+  "analysis/iteration_efficiency_phase2d_evaluator_amendment/preamendment_copies/study_evaluate_design.m.PREAMENDMENT": "22a1b974c251dbe7baa6499a5aca11e6bde68469b6d2e80fd4274c9447f31343"
+ },
+ "phase2d_sha256sums_selfcheck": {
+  "AMENDED_EVALUATOR_DEFINITION.md": {
+   "declared": "eb708648c0dfa6ef5f81ee308984f6ab726a8355bd51ccfdc464fb3cd796e5b3",
+   "observed": "eb708648c0dfa6ef5f81ee308984f6ab726a8355bd51ccfdc464fb3cd796e5b3",
+   "match": true
+  },
+  "AMENDED_OLHOFF_TRAJECTORY_EVALUATION.csv": {
+   "declared": "274189cf02b7f5756e2ad9f88c5c1f0326f73f77991b152508f7fab79553033f",
+   "observed": "274189cf02b7f5756e2ad9f88c5c1f0326f73f77991b152508f7fab79553033f",
+   "match": true
+  },
+  "AMENDED_REFERENCE_PERSISTENCE.csv": {
+   "declared": "018a5178cb9817f5661bc7d485765772007eea8ae4620be7c1b18b3f9b1c0b88",
+   "observed": "018a5178cb9817f5661bc7d485765772007eea8ae4620be7c1b18b3f9b1c0b88",
+   "match": true
+  },
+  "AMENDMENT_SCOPE_LEDGER.csv": {
+   "declared": "4d1dade31155d439a36cbfabfc147d69c830f5a1e4a31bd6a4b99ad6cec65ff2",
+   "observed": "4d1dade31155d439a36cbfabfc147d69c830f5a1e4a31bd6a4b99ad6cec65ff2",
+   "match": true
+  },
+  "BINDING_EVALUATOR_ANALYSIS.csv": {
+   "declared": "49acc1a901ea132e5ced557db0bbd3e51d2c87385a72b72885e1db867ddaa6d5",
+   "observed": "49acc1a901ea132e5ced557db0bbd3e51d2c87385a72b72885e1db867ddaa6d5",
+   "match": true
+  },
+  "DELTA_AUDIT_REQUEST.md": {
+   "declared": "542ad176482911aa372702c5a07fff6e3b0d4334379bbb827007b2033a782be0",
+   "observed": "542ad176482911aa372702c5a07fff6e3b0d4334379bbb827007b2033a782be0",
+   "match": true
+  },
+  "EQ4A_DOUBLE_ULP_STABILITY.csv": {
+   "declared": "c4c37cdab9def86259f66b2dc15e5d1a7d1d4342f50adc540ae95dc6d3715bdb",
+   "observed": "c4c37cdab9def86259f66b2dc15e5d1a7d1d4342f50adc540ae95dc6d3715bdb",
+   "match": true
+  },
+  "EQ4A_SINGLE_ROUNDING_STABILITY.csv": {
+   "declared": "0fdce4a7dcc6a2a0451606cdecad2d6bcafed871b4f1882c6c885ecb6d59366e",
+   "observed": "0fdce4a7dcc6a2a0451606cdecad2d6bcafed871b4f1882c6c885ecb6d59366e",
+   "match": true
+  },
+  "EVALUATOR_UNIT_TESTS.md": {
+   "declared": "e0826065d3329a9fe6f23d8a967b823223cb522b8ba0a9c88780e5d2e81d775a",
+   "observed": "e0826065d3329a9fe6f23d8a967b823223cb522b8ba0a9c88780e5d2e81d775a",
+   "match": true
+  },
+  "NORMATIVE_CHANGE_LEDGER.csv": {
+   "declared": "510ddb904ff5b9596acb30c01c916fd7b73c739e1409602f1dea1ca90ee1bf07",
+   "observed": "510ddb904ff5b9596acb30c01c916fd7b73c739e1409602f1dea1ca90ee1bf07",
+   "match": true
+  },
+  "NUMERICAL_MARGIN_ANALYSIS.csv": {
+   "declared": "6274c7f09f7ed588a0c475c7515f46743bf0a8361ba913769467d871041a61e9",
+   "observed": "6274c7f09f7ed588a0c475c7515f46743bf0a8361ba913769467d871041a61e9",
+   "match": true
+  },
+  "OLD_DEFECT_REPRODUCTION.csv": {
+   "declared": "b821d482f9f0c77855494a3eb69add4f534a934ef55e10095eef4184e4682b66",
+   "observed": "b821d482f9f0c77855494a3eb69add4f534a934ef55e10095eef4184e4682b66",
+   "match": true
+  },
+  "PHASE2A_IMPLEMENTATION_IMPACT.md": {
+   "declared": "938ef452a93152208318d520e1d459b4c8a0931ee1b8f7d3b17dcd210a063f10",
+   "observed": "938ef452a93152208318d520e1d459b4c8a0931ee1b8f7d3b17dcd210a063f10",
+   "match": true
+  },
+  "PHASE2B_CASE_REEVALUATION.csv": {
+   "declared": "80872f9f9e5ddda3f4d6dbe69e9f844759f6590d602ef1dc629301d76e45a6d3",
+   "observed": "80872f9f9e5ddda3f4d6dbe69e9f844759f6590d602ef1dc629301d76e45a6d3",
+   "match": true
+  },
+  "PHASE2D_AMENDMENT_REPORT.md": {
+   "declared": "6c16459febb4e3654e4ff4cd387478d76fe2569959530877b07a3fb142e1f304",
+   "observed": "6c16459febb4e3654e4ff4cd387478d76fe2569959530877b07a3fb142e1f304",
+   "match": true
+  },
+  "RETROSPECTIVE_ARTIFACT_CLASSIFICATION.csv": {
+   "declared": "87d8b3213471e5cad1caef33d9894fb6d24a0e24a92607269c69bce663b4932e",
+   "observed": "87d8b3213471e5cad1caef33d9894fb6d24a0e24a92607269c69bce663b4932e",
+   "match": true
+  },
+  "amendment_provenance.json": {
+   "declared": "b7645ea0057c1d47f7ff8f30978780d652e5506cb56d482ec8565037f28562d1",
+   "observed": "b7645ea0057c1d47f7ff8f30978780d652e5506cb56d482ec8565037f28562d1",
+   "match": true
+  },
+  "+ie2d/study_evaluate_design_eq4a.m": {
+   "declared": "bfc98f7fa4a4a1a6d54e64b98f9fcff71ab66ffc4e63a0fc21da99350c72d74b",
+   "observed": "bfc98f7fa4a4a1a6d54e64b98f9fcff71ab66ffc4e63a0fc21da99350c72d74b",
+   "match": true
+  },
+  "preamendment_copies/ITERATION_EFFICIENCY_PROTOCOL_DRAFT.md": {
+   "declared": "3e397e0b685bf078c6b4cd0a803b07075d4bd8ca99e65b59e8dd9be99c1728df",
+   "observed": "3e397e0b685bf078c6b4cd0a803b07075d4bd8ca99e65b59e8dd9be99c1728df",
+   "match": true
+  },
+  "preamendment_copies/QUALITY_EFFORT_SPEC.md": {
+   "declared": "b7b1d8c3bbe854704b4155da2f440a1ee74dac1731a339ca151d85e57afdd7ee",
+   "observed": "b7b1d8c3bbe854704b4155da2f440a1ee74dac1731a339ca151d85e57afdd7ee",
+   "match": true
+  },
+  "preamendment_copies/study_evaluate_design.m.PREAMENDMENT": {
+   "declared": "22a1b974c251dbe7baa6499a5aca11e6bde68469b6d2e80fd4274c9447f31343",
+   "observed": "22a1b974c251dbe7baa6499a5aca11e6bde68469b6d2e80fd4274c9447f31343",
+   "match": true
+  },
+  "scripts/traj.log": {
+   "declared": "126e1440301d24fd0f9682cec8e1b1beb87a4ff8c84e7dc527b58cefb3fc7af1",
+   "observed": "126e1440301d24fd0f9682cec8e1b1beb87a4ff8c84e7dc527b58cefb3fc7af1",
+   "match": true
+  },
+  "scripts/traj.m": {
+   "declared": "86a1ad2e2498d3a8bad3fdcfbd2f15f963f38ed79345857d13f105e6da19c7b7",
+   "observed": "86a1ad2e2498d3a8bad3fdcfbd2f15f963f38ed79345857d13f105e6da19c7b7",
+   "match": true
+  },
+  "scripts/traj.mat": {
+   "declared": "a9d7f8a2b887fe7050681abf8945dda699d88c950628f7a2c25a837d27e9320b",
+   "observed": "a9d7f8a2b887fe7050681abf8945dda699d88c950628f7a2c25a837d27e9320b",
+   "match": true
+  },
+  "scripts/validate.log": {
+   "declared": "c1195d3b2ef47f1dc1c0afd51045387a3288fbc83d71c632aeeda78057ddf3a7",
+   "observed": "c1195d3b2ef47f1dc1c0afd51045387a3288fbc83d71c632aeeda78057ddf3a7",
+   "match": true
+  },
+  "scripts/validate.m": {
+   "declared": "a4d705992d8da17c407941d91627869e817da3c85d24a500459d53e17f9836a1",
+   "observed": "a4d705992d8da17c407941d91627869e817da3c85d24a500459d53e17f9836a1",
+   "match": true
+  },
+  "scripts/wp4_7.mat": {
+   "declared": "ca57736a7e13996c556413cf85f05ada8008258e3f406d915f1b5a2c41eef6a9",
+   "observed": "ca57736a7e13996c556413cf85f05ada8008258e3f406d915f1b5a2c41eef6a9",
+   "match": true
+  }
+ },
+ "phase2d_sha256sums_mismatches": []
+}

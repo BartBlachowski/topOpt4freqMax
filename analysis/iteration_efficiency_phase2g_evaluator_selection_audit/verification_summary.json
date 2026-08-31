@@ -1,0 +1,10 @@
+{
+  "anchors": 40,
+  "mode_identity_transitions": 0,
+  "precision": {
+    "records": 708,
+    "ordinal_changes": 0,
+    "hard_gate_changes": 0,
+    "max_selected_omega_relative_change": 5.595979430137435e-08
+  }
+}

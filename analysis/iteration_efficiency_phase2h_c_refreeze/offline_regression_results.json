@@ -1,0 +1,69 @@
+{
+  "schema_version": "phase2h_offline_regression_v1",
+  "source": "stored Phase-2F/2G evidence only",
+  "pass": true,
+  "checks": {
+    "adaptive_counts": true,
+    "hard_gate_threshold_plateau_0p48_to_0p56": true,
+    "k594_voidke_only_differs_E2": true,
+    "k594_voidke_only_differs_E3": true,
+    "k594_disagreement_rejected": true,
+    "D_k833_severe_anchor": true
+  },
+  "adaptive": {
+    "records": 16536,
+    "max_ordinal": 18,
+    "gt3": 244,
+    "gt6": 69,
+    "gt10": 6,
+    "gt12": 5,
+    "unresolved": 0
+  },
+  "k594_negative_control": {
+    "E2": {
+      "voidke_only_ordinal": 3,
+      "unanimous_ordinal": 4,
+      "voidke_only_omega": 166.75320434570312,
+      "unanimous_omega": 169.85848999023438,
+      "rejected_mode_voidKE": 0.40748295187950134,
+      "rejected_mode_voidSE": 0.995976448059082,
+      "rejected_mode_densityParticipation": 0.09832284599542618
+    },
+    "E3": {
+      "voidke_only_ordinal": 3,
+      "unanimous_ordinal": 4,
+      "voidke_only_omega": 165.88760375976562,
+      "unanimous_omega": 169.856201171875,
+      "rejected_mode_voidKE": 0.40778425335884094,
+      "rejected_mode_voidSE": 0.9971441030502319,
+      "rejected_mode_densityParticipation": 0.09728719294071198
+    }
+  },
+  "D_k833": {
+    "mesh": "400x50",
+    "state": "833",
+    "mode_ordinal": "1",
+    "binary_omega": "4.672712513392596",
+    "binary_voidKE": "6.561849290820585e-09",
+    "binary_voidSE": "0.9999994715206489",
+    "binary_density_participation": "0.9999999934381513",
+    "binary_IPR": "0.19815620213258692",
+    "gray_structural_omega": "170.9314703183971",
+    "gray_structural_ordinal": "1",
+    "binary_exact_solid_count": "10000",
+    "binary_volume": "0.5",
+    "cut_density": "0.44350001215934753",
+    "cut_gap": "0.0",
+    "cut_ties": "2",
+    "support_connectivity": "True",
+    "n_components": "11",
+    "detached_components": "10",
+    "hard_gate_pass": "True",
+    "component_sizes_elements": "9985;1;6;1;1;1;1;1;1;1;1",
+    "required_spanning_component_KE_share": "2.82395657582568e-10",
+    "detached_solid_components_KE_share": "0.9999999931557549",
+    "interpretation": "PROJECTION_CREATED_DETACHED_SOLID_ISLAND_MECHANISM_NOT_VOID_LOCALIZED_NOT_EIGENSOLVER_ERROR"
+  },
+  "production_results": false,
+  "optimizer_run": false
+}

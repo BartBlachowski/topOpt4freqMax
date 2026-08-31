@@ -1,0 +1,48 @@
+{
+  "captured_before_any_targeted_replay": true,
+  "captured_at": "2026-08-28T21:52:53+02:00",
+  "branch": "benchmark-methodology-r2",
+  "HEAD": "632e9b01811845709de33f93051fd853373ed5e1",
+  "working_tree_status": [
+    "?? analysis/performance_campaign_forensic_audit/",
+    "?? examples/Performance/final_campaign/"
+  ],
+  "matlab_version": "25.2.0.2998904 (R2025b)",
+  "computer": "MACA64",
+  "threads_per_run": 1,
+  "target_cases": [
+    "Olhoff 640x80",
+    "Yuksel 800x100",
+    "Proposed 160x20"
+  ],
+  "diagnostic_executions": {
+    "Olhoff_640x80": 1,
+    "Yuksel_800x100": 1,
+    "Proposed_160x20": 2
+  },
+  "source_hashes_sha256": {
+    "analysis/olhoff_stabilization_audit/final_campaign_profile.json": "5d12bc0ae6a09d2f4df01fb38d7f483a7450b06cac67eceac30d3fab3618b610",
+    "analysis/olhoff_stabilization_audit/selected_profile.json": "60fa944f4aecf34611de5413096d6a0de235eae05febbc4dd481bee5a26a67da",
+    "analysis/three_method_parametric_study/results/profile_freeze_manifest.json": "b55e31d87d18e90e8c0b8d278bd4111d494610b62f253194ea16cfcf78252eca",
+    "examples/Performance/final_campaign_config.m": "bd3e74673315da907e2e5d5b06ba1a8b94ce372977342bde04de8be30fe6a65c",
+    "examples/Performance/final_campaign_run_case.m": "6c6266529a3c5be1a64e8fd18ef8d0c75f529d72bd8707c5151c07689d3d6f6f",
+    "analysis/three_method_parametric_study/study_base_config.m": "020d16ddfa4a114a1160c056cc6a47d8f8c0003ebac0fed1a28e6017fef40d01",
+    "analysis/three_method_parametric_study/study_evaluate_design.m": "22a1b974c251dbe7baa6499a5aca11e6bde68469b6d2e80fd4274c9447f31343",
+    "analysis/olhoff_stabilization_audit/run_stabilization_case.m": "d309737192a40499ebba928ee845bd99846eaa1abc7ebaa42efd701ddfd33316",
+    "analysis/olhoff_stabilization_audit/olhoffOptStabilized.m": "95240cf60f82b40f8e5e892b9eea9b20a8fd3744b5eca6fdfc8dde2698d82aec",
+    "Matlab/reproduction2007/algo/innerLoopLP.m": "7724753c02f84d6009c3998f758d5b3f9c5144ad39ca6f470584a2c99e089465",
+    "Matlab/reproduction2007/fem/eigSolve.m": "b0784ceeb15fafe164ba138b963c3ab4dc5a466fc2953c79786809edd16159cd",
+    "tools/Matlab/run_topopt_from_json.m": "7b89f42d86ef6d7974fa68565a8c0e83068fa580ca65e123380fba6c50bfbc56",
+    "tools/Matlab/topopt_history_init.m": "76d13d57c66a2afbb200bbaf23d34d15d4a004e27bad4115b4d1f10ca2560aab",
+    "tools/Matlab/topopt_history_record.m": "e5af5674624472bbe63a85a981d75d7c827b25648c39d3c5e87438e789b6c27b",
+    "analysis/YukselApproach/Matlab/top99neo_inertial_freq.m": "5afc3d16b4ed6af05793df461b541ed3b2ea62a6da8836f38301a9a3917e6ba2",
+    "analysis/ourApproach/Matlab/topopt_freq.m": "6d9ea66fcc27f63b7380708b5735552b5d9f2885d3e65714af572daccdae72b2"
+  },
+  "original_target_evidence_hashes_sha256": {
+    "examples/Performance/final_campaign/benchmark_results.json": "b402ded1b7e082dac4ba8ca95f108d4d9b43b588d77b5a14495d13a5828e3a67",
+    "examples/Performance/final_campaign/common_evaluators.csv": "690aed5d3632edba78e253c7cc1f2fffbbba9e9e314aad3b84c3cd5c2a5e5dfa",
+    "examples/Performance/final_campaign/table1_performance.csv": "5ee3c1b06f5a5b7e1a0d1286e27253e64752caa81a369b6832ddee7252c2a8d4",
+    "examples/Performance/final_campaign/raw/olhoff/s1_640x80.mat": "4ab824ba0f331d4d9cb25c03b71d339a48d5a9e5a5c1ab1ddae2b5ce1ce34ef4",
+    "analysis/performance_campaign_forensic_audit/PERFORMANCE_CAMPAIGN_FORENSIC_AUDIT.md": "457551134ff2deb2baf7389f7bc9166004b7d1eaa3924e1baf4e59397ca685bb"
+  }
+}

@@ -1,0 +1,638 @@
+{
+ "phase": "2E delta audit (independent)",
+ "classification": "READ_ONLY_INDEPENDENT_DELTA_AUDIT / NO_OPTIMIZATION / NO_REFREEZE",
+ "captured_at": "2026-08-30T16:37:23.323633+02:00",
+ "branch": "benchmark-methodology-r2",
+ "head": "632e9b01811845709de33f93051fd853373ed5e1",
+ "git_status": [
+  "M examples/Performance/performance_comparison.m",
+  " M tools/Matlab/run_topopt_from_json.m",
+  " M tools/Matlab/topopt_history_record.m",
+  "?? analysis/iteration_efficiency_evaluator_discontinuity_audit/",
+  "?? analysis/iteration_efficiency_methodology_audit/",
+  "?? analysis/iteration_efficiency_methodology_delta_audit/",
+  "?? analysis/iteration_efficiency_methodology_final_recheck/",
+  "?? analysis/iteration_efficiency_phase2a/",
+  "?? analysis/iteration_efficiency_phase2b_precision/",
+  "?? analysis/iteration_efficiency_phase2b_recheck/",
+  "?? analysis/iteration_efficiency_phase2d_delta_audit/",
+  "?? analysis/iteration_efficiency_phase2d_evaluator_amendment/",
+  "?? analysis/iteration_efficiency_phase2f_evaluator_redesign/",
+  "?? analysis/iteration_efficiency_study_design/",
+  "?? analysis/performance_campaign_forensic_audit/",
+  "?? analysis/performance_campaign_targeted_replays/",
+  "?? examples/Performance/WP0A_VISUALIZATION_FIX.md",
+  "?? examples/Performance/final_campaign/",
+  "?? examples/Performance/test_shared_topology_renderer.m",
+  "?? tools/Matlab/renderTopologyDensity.m"
+ ],
+ "protected_numerical_sources": {
+  "analysis/ourApproach/Matlab/topopt_freq.m": {
+   "expected_phase2a": "6d9ea66fcc27f63b7380708b5735552b5d9f2885d3e65714af572daccdae72b2",
+   "observed": "6d9ea66fcc27f63b7380708b5735552b5d9f2885d3e65714af572daccdae72b2",
+   "match": true
+  },
+  "analysis/YukselApproach/Matlab/top99neo_inertial_freq.m": {
+   "expected_phase2a": "5afc3d16b4ed6af05793df461b541ed3b2ea62a6da8836f38301a9a3917e6ba2",
+   "observed": "5afc3d16b4ed6af05793df461b541ed3b2ea62a6da8836f38301a9a3917e6ba2",
+   "match": true
+  },
+  "analysis/olhoff_stabilization_audit/olhoffOptStabilized.m": {
+   "expected_phase2a": "95240cf60f82b40f8e5e892b9eea9b20a8fd3744b5eca6fdfc8dde2698d82aec",
+   "observed": "95240cf60f82b40f8e5e892b9eea9b20a8fd3744b5eca6fdfc8dde2698d82aec",
+   "match": true
+  },
+  "analysis/olhoff_stabilization_audit/run_stabilization_case.m": {
+   "expected_phase2a": "d309737192a40499ebba928ee845bd99846eaa1abc7ebaa42efd701ddfd33316",
+   "observed": "d309737192a40499ebba928ee845bd99846eaa1abc7ebaa42efd701ddfd33316",
+   "match": true
+  },
+  "Matlab/reproduction2007/algo/innerLoopLP.m": {
+   "expected_phase2a": "7724753c02f84d6009c3998f758d5b3f9c5144ad39ca6f470584a2c99e089465",
+   "observed": "7724753c02f84d6009c3998f758d5b3f9c5144ad39ca6f470584a2c99e089465",
+   "match": true
+  },
+  "analysis/three_method_parametric_study/study_evaluate_design.m": {
+   "expected_phase2a": "22a1b974c251dbe7baa6499a5aca11e6bde68469b6d2e80fd4274c9447f31343",
+   "observed": "22a1b974c251dbe7baa6499a5aca11e6bde68469b6d2e80fd4274c9447f31343",
+   "match": true
+  }
+ },
+ "profile_sources": {
+  "analysis/three_method_parametric_study/results/profile_freeze_manifest.json": {
+   "expected_phase2a": "b55e31d87d18e90e8c0b8d278bd4111d494610b62f253194ea16cfcf78252eca",
+   "observed": "b55e31d87d18e90e8c0b8d278bd4111d494610b62f253194ea16cfcf78252eca",
+   "match": true
+  },
+  "analysis/olhoff_stabilization_audit/selected_profile.json": {
+   "expected_phase2a": "60fa944f4aecf34611de5413096d6a0de235eae05febbc4dd481bee5a26a67da",
+   "observed": "60fa944f4aecf34611de5413096d6a0de235eae05febbc4dd481bee5a26a67da",
+   "match": true
+  },
+  "analysis/olhoff_stabilization_audit/final_campaign_profile.json": {
+   "expected_phase2a": "5d12bc0ae6a09d2f4df01fb38d7f483a7450b06cac67eceac30d3fab3618b610",
+   "observed": "5d12bc0ae6a09d2f4df01fb38d7f483a7450b06cac67eceac30d3fab3618b610",
+   "match": true
+  }
+ },
+ "audit_records": {
+  "analysis/iteration_efficiency_methodology_audit/INDEPENDENT_METHODOLOGY_AUDIT.md": {
+   "expected_phase2a": "ce40a1f8656d32fb5c0e4cf22a3076d5360af058019bd3f000b434815a25dc34",
+   "observed": "ce40a1f8656d32fb5c0e4cf22a3076d5360af058019bd3f000b434815a25dc34",
+   "match": true
+  },
+  "analysis/iteration_efficiency_methodology_delta_audit/DELTA_AUDIT_REPORT.md": {
+   "expected_phase2a": "b5b73e163be3af2fe33faa5f78ca16c9bec52b631e63f2f2557f5cb959cf253e",
+   "observed": "b5b73e163be3af2fe33faa5f78ca16c9bec52b631e63f2f2557f5cb959cf253e",
+   "match": true
+  },
+  "analysis/iteration_efficiency_methodology_final_recheck/FINAL_RECHECK.md": {
+   "expected_phase2a": "acc0707b77469422ecdbf3fffe23a8c3e4b2c1595110d98f2b8d57e9a72eb7d6",
+   "observed": "acc0707b77469422ecdbf3fffe23a8c3e4b2c1595110d98f2b8d57e9a72eb7d6",
+   "match": true
+  },
+  "analysis/iteration_efficiency_methodology_final_recheck/METHODOLOGY_FREEZE_RECORD.md": {
+   "expected_phase2a": "01ff97cc3dc580968904362be5c1250b1dd979839686ce95d0ad591a92dba826",
+   "observed": "01ff97cc3dc580968904362be5c1250b1dd979839686ce95d0ad591a92dba826",
+   "match": true
+  },
+  "analysis/iteration_efficiency_methodology_final_recheck/N1_N4_VERIFICATION.csv": {
+   "expected_phase2a": "94a3d7bc90343e88545d710fdf88658c3ae7f37a1786e1eda371d546df614f6f",
+   "observed": "94a3d7bc90343e88545d710fdf88658c3ae7f37a1786e1eda371d546df614f6f",
+   "match": true
+  },
+  "analysis/iteration_efficiency_methodology_final_recheck/PHASE2_FINAL_READINESS.md": {
+   "expected_phase2a": "a8add97f0bc6b12492725518931b44bbb42ed5a8d7ee1225d042c6e870a2103b",
+   "observed": "a8add97f0bc6b12492725518931b44bbb42ed5a8d7ee1225d042c6e870a2103b",
+   "match": true
+  }
+ },
+ "protected_mismatches": [],
+ "phase2d_declared_unchanged": {
+  "Matlab/reproduction2007/fem/massScale.m": {
+   "declared": "90ba72c3df056ed0e705bfcfb763c1ef631f48891d626b18c180d6702d683a63",
+   "observed": "90ba72c3df056ed0e705bfcfb763c1ef631f48891d626b18c180d6702d683a63",
+   "match": true
+  },
+  "Matlab/reproduction2007/algo/defaultCfg.m": {
+   "declared": "aed41860a2dac6a06e1c51cc96cf7436a65bcd9d60ecdf7af2d2a3552ea456e0",
+   "observed": "aed41860a2dac6a06e1c51cc96cf7436a65bcd9d60ecdf7af2d2a3552ea456e0",
+   "match": true
+  },
+  "analysis/OlhoffApproachExact/Matlab/mass_interp.m": {
+   "declared": "90f9fb21a6e44fa294b8c54bd5bb45ab3cc0901de42752a7003d38c14ea592d9",
+   "observed": "90f9fb21a6e44fa294b8c54bd5bb45ab3cc0901de42752a7003d38c14ea592d9",
+   "match": true
+  },
+  "analysis/YukselApproach/Matlab/top99neo_inertial_freq.m": {
+   "declared": "5afc3d16b4ed6af05793df461b541ed3b2ea62a6da8836f38301a9a3917e6ba2",
+   "observed": "5afc3d16b4ed6af05793df461b541ed3b2ea62a6da8836f38301a9a3917e6ba2",
+   "match": true
+  },
+  "analysis/ourApproach/Matlab/topopt_freq.m": {
+   "declared": "6d9ea66fcc27f63b7380708b5735552b5d9f2885d3e65714af572daccdae72b2",
+   "observed": "6d9ea66fcc27f63b7380708b5735552b5d9f2885d3e65714af572daccdae72b2",
+   "match": true
+  },
+  "analysis/olhoff_stabilization_audit/olhoffOptStabilized.m": {
+   "declared": "95240cf60f82b40f8e5e892b9eea9b20a8fd3744b5eca6fdfc8dde2698d82aec",
+   "observed": "95240cf60f82b40f8e5e892b9eea9b20a8fd3744b5eca6fdfc8dde2698d82aec",
+   "match": true
+  },
+  "analysis/three_method_parametric_study/study_evaluate_design.m": {
+   "declared": "22a1b974c251dbe7baa6499a5aca11e6bde68469b6d2e80fd4274c9447f31343",
+   "observed": "22a1b974c251dbe7baa6499a5aca11e6bde68469b6d2e80fd4274c9447f31343",
+   "match": true
+  },
+  "analysis/iteration_efficiency_phase2a/iteration_efficiency_contract.json": {
+   "declared": "46318e6c7e74fdfe9cc643afeef93bbd6edfc5a894e89269be9cc04f0f27697c",
+   "observed": "46318e6c7e74fdfe9cc643afeef93bbd6edfc5a894e89269be9cc04f0f27697c",
+   "match": true
+  },
+  "analysis/iteration_efficiency_phase2a/+ie2a/production_preflight.m": {
+   "declared": "868cdaab197a00500f861a6a5687918e1b089c87c6d580e011d1e8abc51321b3",
+   "observed": "868cdaab197a00500f861a6a5687918e1b089c87c6d580e011d1e8abc51321b3",
+   "match": true
+  }
+ },
+ "phase2d_declared_mismatches": [],
+ "other_files": {
+  "examples/Performance/final_campaign/raw/olhoff/s1_160x20.mat": "5b51166a43e06ebe828337583bd26dd4ef4e8aed474b814f518d4bc056a19a54",
+  "examples/Performance/final_campaign/raw/olhoff/s1_240x30.mat": "7823050512662e6c189b617011ab5ffe922d3c2174fff655e9f684692a9cff00",
+  "examples/Performance/final_campaign/raw/olhoff/s1_320x40.mat": "3e5ea06c80f2cfd5c0686dd34ebd6fac356da82f5dd8627bbd2ec7fb8de7af79",
+  "examples/Performance/final_campaign/raw/olhoff/s1_400x50.mat": "e525138d6f5e93757db944445672b692deb5716062d92f7b9d1a5a9f37481f6f",
+  "examples/Performance/final_campaign/raw/olhoff/s1_480x60.mat": "e8a09d1a2d17987ca5522945310b10509ab469f4fde93aa95ee4c10ca0d2295c",
+  "examples/Performance/final_campaign/raw/olhoff/s1_560x70.mat": "5b75a7e6165797f9e2f9976848036cbb07378ea1e7d7e155271dc0c49472039d",
+  "examples/Performance/final_campaign/raw/olhoff/s1_640x80.mat": "e329a9506ceb1e32ed95cd3f09676168fdbf8d4193ac0fa7efebc26adc771cb3",
+  "examples/Performance/final_campaign/raw/olhoff/s1_720x90.mat": "9c9427d08374b66d9d0a388535515724a8d78a7ac52a747fa53c1ddd7779f903",
+  "analysis/iteration_efficiency_phase2d_delta_audit/PHASE2D_DELTA_AUDIT.md": "4c87d63ba65c2b759e8b20bffed6f82d6328ac5ea7c0c2fd2374f15985567e3c",
+  "analysis/iteration_efficiency_phase2d_delta_audit/FINDINGS.csv": "625c9044a7e6da77f6347e2a2e70bc69aefe29e643123fb88583abb8a72aac9f",
+  "analysis/iteration_efficiency_phase2d_delta_audit/SHA256SUMS.txt": "15bb3cde5460e668e6c9a965de697cdee0b0e10f85b2dab106434ffc58f2d169",
+  "analysis/iteration_efficiency_phase2d_delta_audit/audit_provenance.json": "dbc848e1fd9d691cfce0728c42121bf157268a05ca3b4944db2c0b1cf2873f27",
+  "analysis/iteration_efficiency_phase2a/+ie2a/exact_count_binary.m": "80643f681bc1c2ebbc4801ec34aa131de514dffb8d06cf1d904bfc583c37b97d",
+  "Matlab/reproduction2007/fem/massScale.m": "90ba72c3df056ed0e705bfcfb763c1ef631f48891d626b18c180d6702d683a63",
+  "Matlab/reproduction2007/algo/defaultCfg.m": "aed41860a2dac6a06e1c51cc96cf7436a65bcd9d60ecdf7af2d2a3552ea456e0",
+  "analysis/OlhoffApproachExact/Matlab/mass_interp.m": "90f9fb21a6e44fa294b8c54bd5bb45ab3cc0901de42752a7003d38c14ea592d9",
+  "analysis/iteration_efficiency_phase2a/iteration_efficiency_contract.json": "46318e6c7e74fdfe9cc643afeef93bbd6edfc5a894e89269be9cc04f0f27697c",
+  "analysis/iteration_efficiency_phase2a/implementation_provenance.json": "1ff3b8ac0e1df495fa8440d1723b6841557cda298fe510e90916b3cce3b3ea9d",
+  "analysis/iteration_efficiency_phase2a/+ie2a/production_preflight.m": "868cdaab197a00500f861a6a5687918e1b089c87c6d580e011d1e8abc51321b3",
+  "analysis/iteration_efficiency_phase2a/+ie2a/frozen_contract_sha256.m": "3c4a918f8c4e98a8fb56fd089f33d5749eefc7bb59f21d2195225990bac801df",
+  "analysis/iteration_efficiency_phase2a/+ie2a/reference_phase.m": "35da55e2ea5cd75d0c13231ab26b10f5b389b5894d02de1ebbddec574f5d5532",
+  "analysis/iteration_efficiency_phase2a/+ie2a/scan_persistence.m": "aa025056403500b3e500ea32d7c020097897e26ebebe033f90ece63e856e2a27",
+  "analysis/iteration_efficiency_phase2a/+ie2a/measurement_budget.m": "7000ec109cd8f25a00ab1178d0c0320ccde49cb5ee2bf6777c490c261114d145",
+  "analysis/iteration_efficiency_phase2a/+ie2a/topology_metrics.m": "ebe14f1591c95f069aaf3dcbdad7795394b380ba4cea6847df8f1ce6afa0c9dd",
+  "analysis/iteration_efficiency_phase2a/+ie2a/quality_effort.m": "49392455b227044ec8df7cb266ee83f00c1786f4a21f458696ed14de495ac5b1",
+  "analysis/iteration_efficiency_phase2a/+ie2a/evaluate_common.m": "3937bd68e80eae5ed89ff9c73d57bb024390e56bcf72e12799b34e225f117a6e",
+  "analysis/iteration_efficiency_phase2d_evaluator_amendment/+ie2d/study_evaluate_design_eq4a.m": "bfc98f7fa4a4a1a6d54e64b98f9fcff71ab66ffc4e63a0fc21da99350c72d74b",
+  "analysis/iteration_efficiency_study_design/QUALITY_EFFORT_SPEC.md": "02da8b592239cd22af4609e302aae7a2fc77d9a47d0451812b4d1ad135ca3fa2",
+  "analysis/iteration_efficiency_study_design/ITERATION_EFFICIENCY_PROTOCOL_DRAFT.md": "14979ab7fedcbd0e4e4249cd4ddc9443bfc2f3f20da948e1927ae1c28ae72604",
+  "analysis/iteration_efficiency_methodology_final_recheck/METHODOLOGY_FREEZE_RECORD.md": "01ff97cc3dc580968904362be5c1250b1dd979839686ce95d0ad591a92dba826",
+  "references/Du2007_Topological.pdf": "b4dc8153ddc505b54f05cb72afe4641ba40c79512e5d32be4ab9c1e1b0378bc4"
+ },
+ "phase2e_sha256sums_selfcheck": {
+  "BINDING_EVALUATOR_RECHECK.csv": {
+   "declared": "fadcccb0e2743b1339e212959f292bc7e5899c2607ad29f7ab34f5cd7c9935a0",
+   "observed": "fadcccb0e2743b1339e212959f292bc7e5899c2607ad29f7ab34f5cd7c9935a0",
+   "match": true
+  },
+  "COLLATERAL_DRIFT_AUDIT.md": {
+   "declared": "d910c11c58c5bae4f6f1999b1ac27b9ddf7601b148ec67e35f056b279434ea70",
+   "observed": "d910c11c58c5bae4f6f1999b1ac27b9ddf7601b148ec67e35f056b279434ea70",
+   "match": true
+  },
+  "DOUBLE_ULP_INDEPENDENT_REPRODUCTION.csv": {
+   "declared": "818ecb2867b4dc1fc0078f7cfb860e89f5f4cb82f20827244317f36bb8687bde",
+   "observed": "818ecb2867b4dc1fc0078f7cfb860e89f5f4cb82f20827244317f36bb8687bde",
+   "match": true
+  },
+  "EQ4A_INDEPENDENT_STABILITY.csv": {
+   "declared": "98cc90bb3f1e91e97fdcc0c164c81cc1ce8608ee12a55b5f349e05d1d5ffa2c3",
+   "observed": "98cc90bb3f1e91e97fdcc0c164c81cc1ce8608ee12a55b5f349e05d1d5ffa2c3",
+   "match": true
+  },
+  "FINDINGS.csv": {
+   "declared": "625c9044a7e6da77f6347e2a2e70bc69aefe29e643123fb88583abb8a72aac9f",
+   "observed": "625c9044a7e6da77f6347e2a2e70bc69aefe29e643123fb88583abb8a72aac9f",
+   "match": true
+  },
+  "HARD_GATE_RECHECK.csv": {
+   "declared": "219b9953e0aecd6aea13f914ec26c66d524f1813546869bd55606b85f96130d1",
+   "observed": "219b9953e0aecd6aea13f914ec26c66d524f1813546869bd55606b85f96130d1",
+   "match": true
+  },
+  "IMPLEMENTATION_DELTA_AUDIT.md": {
+   "declared": "3e6c40c37aa971c071bc00336d9bd40eefbec8b0ab92c3d1ae671ac85474aa12",
+   "observed": "3e6c40c37aa971c071bc00336d9bd40eefbec8b0ab92c3d1ae671ac85474aa12",
+   "match": true
+  },
+  "MATHEMATICAL_VERIFICATION.md": {
+   "declared": "db851352f874378e1cb22047675c423e7f5e074356b32b5d479225750baf211b",
+   "observed": "db851352f874378e1cb22047675c423e7f5e074356b32b5d479225750baf211b",
+   "match": true
+  },
+  "NEUTRALITY_AUDIT.md": {
+   "declared": "f805410b58ecd26f1d5763a3d136c085607eb9a408bbcc752abf7d790aef7653",
+   "observed": "f805410b58ecd26f1d5763a3d136c085607eb9a408bbcc752abf7d790aef7653",
+   "match": true
+  },
+  "NUMERICAL_SCALE_ASSESSMENT.md": {
+   "declared": "fd29c0b76b40e56d5b25ec52879e012aa1dfe54a08ad9dd305d058acff24253b",
+   "observed": "fd29c0b76b40e56d5b25ec52879e012aa1dfe54a08ad9dd305d058acff24253b",
+   "match": true
+  },
+  "OLD_DEFECT_INDEPENDENT_REPRODUCTION.csv": {
+   "declared": "770b75f2369b6b28d3f990bf76ab0f53d87c1753021908e1e677a76b2655a2c4",
+   "observed": "770b75f2369b6b28d3f990bf76ab0f53d87c1753021908e1e677a76b2655a2c4",
+   "match": true
+  },
+  "PHASE2B_HISTORICAL_RULING.md": {
+   "declared": "349ac2192ffd1cd462ed74ac195dac9fa7945aa9404939c32f8f71355002ac59",
+   "observed": "349ac2192ffd1cd462ed74ac195dac9fa7945aa9404939c32f8f71355002ac59",
+   "match": true
+  },
+  "PHASE2D_DELTA_AUDIT.md": {
+   "declared": "4c87d63ba65c2b759e8b20bffed6f82d6328ac5ea7c0c2fd2374f15985567e3c",
+   "observed": "4c87d63ba65c2b759e8b20bffed6f82d6328ac5ea7c0c2fd2374f15985567e3c",
+   "match": true
+  },
+  "POST_AUDIT_ACTION_PLAN.md": {
+   "declared": "7cb3b959b66019923cfebbff2c90a96af2853d0f206ff6120bea234ef6d58ac0",
+   "observed": "7cb3b959b66019923cfebbff2c90a96af2853d0f206ff6120bea234ef6d58ac0",
+   "match": true
+  },
+  "PRECISION_REQUALIFICATION_REQUIREMENTS.md": {
+   "declared": "1048bf6d9fbf1c509e111e2d98b442ad3cdf9333ed2b683b8773b7450e5bbc2e",
+   "observed": "1048bf6d9fbf1c509e111e2d98b442ad3cdf9333ed2b683b8773b7450e5bbc2e",
+   "match": true
+  },
+  "REFERENCE_PERSISTENCE_EVIDENCE_AUDIT.md": {
+   "declared": "3b5957666b9c3af5da8b3afca70326cc0ec4ea54ca0734ef3f9c4704d08d5ec3",
+   "observed": "3b5957666b9c3af5da8b3afca70326cc0ec4ea54ca0734ef3f9c4704d08d5ec3",
+   "match": true
+  },
+  "REFERENCE_PERSISTENCE_RULING.md": {
+   "declared": "1f82037f411a655a796dca47ed19bad18e172471a71b10e99fcdb40a60849f3a",
+   "observed": "1f82037f411a655a796dca47ed19bad18e172471a71b10e99fcdb40a60849f3a",
+   "match": true
+  },
+  "REFREEZE_IMPLEMENTATION_OBLIGATIONS.md": {
+   "declared": "af724a17b683a6e40eaadbf22bdc6a36a161d6c902ae293513a0df83349feab3",
+   "observed": "af724a17b683a6e40eaadbf22bdc6a36a161d6c902ae293513a0df83349feab3",
+   "match": true
+  },
+  "REMEDY_FEASIBILITY_PROBE.csv": {
+   "declared": "3027b5678f7ffd358f0bdcb2a5b224905cda9ec0eacd7829860628e27bf1302c",
+   "observed": "3027b5678f7ffd358f0bdcb2a5b224905cda9ec0eacd7829860628e27bf1302c",
+   "match": true
+  },
+  "RETROSPECTIVE_RESULT_CLASSIFICATION.csv": {
+   "declared": "730dfca9eb76c076737d3327d08cd54af0e4bb90a295b64d82dfe39915298cd7",
+   "observed": "730dfca9eb76c076737d3327d08cd54af0e4bb90a295b64d82dfe39915298cd7",
+   "match": true
+  },
+  "SOURCE_PROVENANCE_VERIFICATION.md": {
+   "declared": "936efa9f95162677af2bcbef21519f89a82a420507da69bf85fa8460ba1a3cf8",
+   "observed": "936efa9f95162677af2bcbef21519f89a82a420507da69bf85fa8460ba1a3cf8",
+   "match": true
+  },
+  "SPURIOUS_MODE_CHECK.csv": {
+   "declared": "6f3730f4040bb19ae538336990d81f96fca25041b6a27c99c4a2592c446d2cd6",
+   "observed": "6f3730f4040bb19ae538336990d81f96fca25041b6a27c99c4a2592c446d2cd6",
+   "match": true
+  },
+  "SPURIOUS_MODE_OTHER_MESHES.csv": {
+   "declared": "6daf50e6ca51a44b85a7bed74b4a1c1cbaf89356e20bfae42cd8d3911e9ea45c",
+   "observed": "6daf50e6ca51a44b85a7bed74b4a1c1cbaf89356e20bfae42cd8d3911e9ea45c",
+   "match": true
+  },
+  "SPURIOUS_MODE_TRAJECTORY_SCAN.csv": {
+   "declared": "715e32ab416cacb17f1fcb85c7a104e18d537bbcd2932710eecb15a2fb335ebe",
+   "observed": "715e32ab416cacb17f1fcb85c7a104e18d537bbcd2932710eecb15a2fb335ebe",
+   "match": true
+  },
+  "WP0_INTEGRITY_post.json": {
+   "declared": "6934145ead5d046c1b662926f1c7a12f67d9f7d4efa1544211adaf48322ac4f5",
+   "observed": "6934145ead5d046c1b662926f1c7a12f67d9f7d4efa1544211adaf48322ac4f5",
+   "match": true
+  },
+  "WP0_INTEGRITY_pre.json": {
+   "declared": "40a5ed4539a9de04e125dbd97da27c95f09a1f0f91796dc21bc7404d5f14923d",
+   "observed": "40a5ed4539a9de04e125dbd97da27c95f09a1f0f91796dc21bc7404d5f14923d",
+   "match": true
+  },
+  "WP12_ACCEPTANCE_MARGINS.csv": {
+   "declared": "2024cd9072987fa78db871652aa8097f40f44a3cdfa94870988ff34499118f0b",
+   "observed": "2024cd9072987fa78db871652aa8097f40f44a3cdfa94870988ff34499118f0b",
+   "match": true
+  },
+  "WP12_BREF_BLOCK_MARGINS.csv": {
+   "declared": "6ff5825883ad6df696c764ecd9d2b89e977fd76bf9da7d60ac6922c56c5081e2",
+   "observed": "6ff5825883ad6df696c764ecd9d2b89e977fd76bf9da7d60ac6922c56c5081e2",
+   "match": true
+  },
+  "WP12_CRITICAL_PERTURBATION.csv": {
+   "declared": "50b7fa7b055fed1981e00c167486fe3be381ed707ef0ce68fa409ba82d4e904c",
+   "observed": "50b7fa7b055fed1981e00c167486fe3be381ed707ef0ce68fa409ba82d4e904c",
+   "match": true
+  },
+  "WP12_DENSITY_EVIDENCE_SCAN.csv": {
+   "declared": "34cd7f03f6a4bc9bbcf11137fc5dbcb4ab8196964966b5e5c3d3cdf93c91ca55",
+   "observed": "34cd7f03f6a4bc9bbcf11137fc5dbcb4ab8196964966b5e5c3d3cdf93c91ca55",
+   "match": true
+  },
+  "WP18_NORMATIVE_DOC_HASHES.csv": {
+   "declared": "d0e088861f1aa304045ed4362321ebd635569a39ee93c05d3a71f3d691079b6b",
+   "observed": "d0e088861f1aa304045ed4362321ebd635569a39ee93c05d3a71f3d691079b6b",
+   "match": true
+  },
+  "WP7C_TRAJECTORY_160x20_INDEPENDENT.csv": {
+   "declared": "db8a795702a94fedfc4325ce761d15de8fdf77c4de8c576a37ba11d404e86f32",
+   "observed": "db8a795702a94fedfc4325ce761d15de8fdf77c4de8c576a37ba11d404e86f32",
+   "match": true
+  },
+  "audit_provenance.json": {
+   "declared": "dbc848e1fd9d691cfce0728c42121bf157268a05ca3b4944db2c0b1cf2873f27",
+   "observed": "dbc848e1fd9d691cfce0728c42121bf157268a05ca3b4944db2c0b1cf2873f27",
+   "match": true
+  },
+  "scripts/__pycache__/audit_evaluator.cpython-313.pyc": {
+   "declared": "d270bd1250374397574f225b7315fcb9bebe5b5f7c1e3d28a000fce9780c79d6",
+   "observed": "d270bd1250374397574f225b7315fcb9bebe5b5f7c1e3d28a000fce9780c79d6",
+   "match": true
+  },
+  "scripts/__pycache__/frozen_engines.cpython-313.pyc": {
+   "declared": "12052c699936e72a397d77c68e46c87a46ad49c718388105de7bf1cf70e6aa86",
+   "observed": "12052c699936e72a397d77c68e46c87a46ad49c718388105de7bf1cf70e6aa86",
+   "match": true
+  },
+  "scripts/audit_evaluator.py": {
+   "declared": "05d34f50cec80f1480dbeaf765a93aa6ba53165f17cb01663069b0dbb227a70f",
+   "observed": "05d34f50cec80f1480dbeaf765a93aa6ba53165f17cb01663069b0dbb227a70f",
+   "match": true
+  },
+  "scripts/du2007_section22.txt": {
+   "declared": "7283da8619b4f29cc2ef4064f86cb30202e16499bce6dcb8a38b3cc6dd46b5b2",
+   "observed": "7283da8619b4f29cc2ef4064f86cb30202e16499bce6dcb8a38b3cc6dd46b5b2",
+   "match": true
+  },
+  "scripts/frozen_engines.py": {
+   "declared": "4f17f5b2e389eb4a6c97c73213e42dc8a161396475f7492eb711c0becdc12f27",
+   "observed": "4f17f5b2e389eb4a6c97c73213e42dc8a161396475f7492eb711c0becdc12f27",
+   "match": true
+  },
+  "scripts/generality.log": {
+   "declared": "ee55f9857dd6895c70f5f622084297314035dfe1f80f732855ed7e70863cda94",
+   "observed": "ee55f9857dd6895c70f5f622084297314035dfe1f80f732855ed7e70863cda94",
+   "match": true
+  },
+  "scripts/wp0_hashes.py": {
+   "declared": "d881fea89303ed5d764cf7a9f680e68747dcbe6cc1ed7d77e635e57ab412124f",
+   "observed": "d881fea89303ed5d764cf7a9f680e68747dcbe6cc1ed7d77e635e57ab412124f",
+   "match": true
+  },
+  "scripts/wp10_hardgate.py": {
+   "declared": "17c928f51e0f638c37d814da8d37aa6d1b2cbf15ed7c5a36c4fd24f5a80791cd",
+   "observed": "17c928f51e0f638c37d814da8d37aa6d1b2cbf15ed7c5a36c4fd24f5a80791cd",
+   "match": true
+  },
+  "scripts/wp12_evidence_scan.py": {
+   "declared": "6f323009dfbf865e8e237a2afd7473495889c02a39816b6e25288dd03e65fca8",
+   "observed": "6f323009dfbf865e8e237a2afd7473495889c02a39816b6e25288dd03e65fca8",
+   "match": true
+  },
+  "scripts/wp12_margins.py": {
+   "declared": "b8fccd672a9017495b3e2b8f2dc2ff8205e13381e3cfd60108a68c729e891a6b",
+   "observed": "b8fccd672a9017495b3e2b8f2dc2ff8205e13381e3cfd60108a68c729e891a6b",
+   "match": true
+  },
+  "scripts/wp24_remedy_probe.py": {
+   "declared": "a423a787a5e59753a26056e91f105e84f93e5f4a0a264569920ce392ede144fa",
+   "observed": "a423a787a5e59753a26056e91f105e84f93e5f4a0a264569920ce392ede144fa",
+   "match": true
+  },
+  "scripts/wp24_remedy_probe_fast.py": {
+   "declared": "280a55be7796639b4da0c5b322b784ce632fe1cc5b11e0edde8f06e0109cba86",
+   "observed": "280a55be7796639b4da0c5b322b784ce632fe1cc5b11e0edde8f06e0109cba86",
+   "match": true
+  },
+  "scripts/wp2_math.py": {
+   "declared": "531d0824eaa13687a893701094f1f8ae1369f56a0aa339ab0842be5404a30f64",
+   "observed": "531d0824eaa13687a893701094f1f8ae1369f56a0aa339ab0842be5404a30f64",
+   "match": true
+  },
+  "scripts/wp6_7_8_paired.py": {
+   "declared": "6704de6c23e7fcc38b1a83a1aaacdc70ebd662033a61b537dfddb245d120e7c6",
+   "observed": "6704de6c23e7fcc38b1a83a1aaacdc70ebd662033a61b537dfddb245d120e7c6",
+   "match": true
+  },
+  "scripts/wp7c.log": {
+   "declared": "96bdff3ab086834055fd0849e0753c561c36c380b097c88faed7f8b8bb6d9a61",
+   "observed": "96bdff3ab086834055fd0849e0753c561c36c380b097c88faed7f8b8bb6d9a61",
+   "match": true
+  },
+  "scripts/wp7c_arrays.npy": {
+   "declared": "a77343016f8b0e7cb3cbc22b48291642b17b1bc6224c6456cf2d74bdbcd21581",
+   "observed": "a77343016f8b0e7cb3cbc22b48291642b17b1bc6224c6456cf2d74bdbcd21581",
+   "match": true
+  },
+  "scripts/wp7c_traj160x20.py": {
+   "declared": "4bbb1b95aa72b59b7a9f5627514726d4377cca648a1eb08ee95d7c092c9f258e",
+   "observed": "4bbb1b95aa72b59b7a9f5627514726d4377cca648a1eb08ee95d7c092c9f258e",
+   "match": true
+  },
+  "scripts/wp9_binding.py": {
+   "declared": "dc3af4fc47e6b06c5892c293092b4453ee12ceca8e126809d98e6d0bb7173d6a",
+   "observed": "dc3af4fc47e6b06c5892c293092b4453ee12ceca8e126809d98e6d0bb7173d6a",
+   "match": true
+  },
+  "scripts/wp_spurious.py": {
+   "declared": "baae7b35b2bad3a1b5adbe304f67d5cd7427ca330843bb7c5d51c6c4833c2258",
+   "observed": "baae7b35b2bad3a1b5adbe304f67d5cd7427ca330843bb7c5d51c6c4833c2258",
+   "match": true
+  },
+  "scripts/wp_spurious2.py": {
+   "declared": "051fd10d65c02d0feaac94c81b2da86b60023be1bccd05cfdab6f40788d70f05",
+   "observed": "051fd10d65c02d0feaac94c81b2da86b60023be1bccd05cfdab6f40788d70f05",
+   "match": true
+  },
+  "scripts/wp_spurious3.py": {
+   "declared": "c29afac8d89b6299a8733f7cb9964811935ccc08fbb479845bee2b3d4ac1326e",
+   "observed": "c29afac8d89b6299a8733f7cb9964811935ccc08fbb479845bee2b3d4ac1326e",
+   "match": true
+  },
+  "scripts/wp_spurious_generality.py": {
+   "declared": "d4f2efcef26ea9c4631b052c82dbc5f1200ae1e19b2349c0ff178c5c1b84a58c",
+   "observed": "d4f2efcef26ea9c4631b052c82dbc5f1200ae1e19b2349c0ff178c5c1b84a58c",
+   "match": true
+  }
+ },
+ "phase2e_sha256sums_mismatches": [],
+ "phase2d_package": {
+  "analysis/iteration_efficiency_phase2d_evaluator_amendment/AMENDED_EVALUATOR_DEFINITION.md": "eb708648c0dfa6ef5f81ee308984f6ab726a8355bd51ccfdc464fb3cd796e5b3",
+  "analysis/iteration_efficiency_phase2d_evaluator_amendment/AMENDED_OLHOFF_TRAJECTORY_EVALUATION.csv": "274189cf02b7f5756e2ad9f88c5c1f0326f73f77991b152508f7fab79553033f",
+  "analysis/iteration_efficiency_phase2d_evaluator_amendment/AMENDED_REFERENCE_PERSISTENCE.csv": "018a5178cb9817f5661bc7d485765772007eea8ae4620be7c1b18b3f9b1c0b88",
+  "analysis/iteration_efficiency_phase2d_evaluator_amendment/AMENDMENT_SCOPE_LEDGER.csv": "4d1dade31155d439a36cbfabfc147d69c830f5a1e4a31bd6a4b99ad6cec65ff2",
+  "analysis/iteration_efficiency_phase2d_evaluator_amendment/BINDING_EVALUATOR_ANALYSIS.csv": "49acc1a901ea132e5ced557db0bbd3e51d2c87385a72b72885e1db867ddaa6d5",
+  "analysis/iteration_efficiency_phase2d_evaluator_amendment/DELTA_AUDIT_REQUEST.md": "542ad176482911aa372702c5a07fff6e3b0d4334379bbb827007b2033a782be0",
+  "analysis/iteration_efficiency_phase2d_evaluator_amendment/EQ4A_DOUBLE_ULP_STABILITY.csv": "c4c37cdab9def86259f66b2dc15e5d1a7d1d4342f50adc540ae95dc6d3715bdb",
+  "analysis/iteration_efficiency_phase2d_evaluator_amendment/EQ4A_SINGLE_ROUNDING_STABILITY.csv": "0fdce4a7dcc6a2a0451606cdecad2d6bcafed871b4f1882c6c885ecb6d59366e",
+  "analysis/iteration_efficiency_phase2d_evaluator_amendment/EVALUATOR_UNIT_TESTS.md": "e0826065d3329a9fe6f23d8a967b823223cb522b8ba0a9c88780e5d2e81d775a",
+  "analysis/iteration_efficiency_phase2d_evaluator_amendment/NORMATIVE_CHANGE_LEDGER.csv": "510ddb904ff5b9596acb30c01c916fd7b73c739e1409602f1dea1ca90ee1bf07",
+  "analysis/iteration_efficiency_phase2d_evaluator_amendment/NUMERICAL_MARGIN_ANALYSIS.csv": "6274c7f09f7ed588a0c475c7515f46743bf0a8361ba913769467d871041a61e9",
+  "analysis/iteration_efficiency_phase2d_evaluator_amendment/OLD_DEFECT_REPRODUCTION.csv": "b821d482f9f0c77855494a3eb69add4f534a934ef55e10095eef4184e4682b66",
+  "analysis/iteration_efficiency_phase2d_evaluator_amendment/PHASE2A_IMPLEMENTATION_IMPACT.md": "938ef452a93152208318d520e1d459b4c8a0931ee1b8f7d3b17dcd210a063f10",
+  "analysis/iteration_efficiency_phase2d_evaluator_amendment/PHASE2B_CASE_REEVALUATION.csv": "80872f9f9e5ddda3f4d6dbe69e9f844759f6590d602ef1dc629301d76e45a6d3",
+  "analysis/iteration_efficiency_phase2d_evaluator_amendment/PHASE2D_AMENDMENT_REPORT.md": "6c16459febb4e3654e4ff4cd387478d76fe2569959530877b07a3fb142e1f304",
+  "analysis/iteration_efficiency_phase2d_evaluator_amendment/RETROSPECTIVE_ARTIFACT_CLASSIFICATION.csv": "87d8b3213471e5cad1caef33d9894fb6d24a0e24a92607269c69bce663b4932e",
+  "analysis/iteration_efficiency_phase2d_evaluator_amendment/SHA256SUMS.txt": "f2c6a21e96b500b93d34d927ddee4fcb95605f25c6651ab99c067952c2cd7c5f",
+  "analysis/iteration_efficiency_phase2d_evaluator_amendment/amendment_provenance.json": "b7645ea0057c1d47f7ff8f30978780d652e5506cb56d482ec8565037f28562d1",
+  "analysis/iteration_efficiency_phase2d_evaluator_amendment/+ie2d/study_evaluate_design_eq4a.m": "bfc98f7fa4a4a1a6d54e64b98f9fcff71ab66ffc4e63a0fc21da99350c72d74b",
+  "analysis/iteration_efficiency_phase2d_evaluator_amendment/scripts/traj.log": "126e1440301d24fd0f9682cec8e1b1beb87a4ff8c84e7dc527b58cefb3fc7af1",
+  "analysis/iteration_efficiency_phase2d_evaluator_amendment/scripts/traj.m": "86a1ad2e2498d3a8bad3fdcfbd2f15f963f38ed79345857d13f105e6da19c7b7",
+  "analysis/iteration_efficiency_phase2d_evaluator_amendment/scripts/traj.mat": "a9d7f8a2b887fe7050681abf8945dda699d88c950628f7a2c25a837d27e9320b",
+  "analysis/iteration_efficiency_phase2d_evaluator_amendment/scripts/validate.log": "c1195d3b2ef47f1dc1c0afd51045387a3288fbc83d71c632aeeda78057ddf3a7",
+  "analysis/iteration_efficiency_phase2d_evaluator_amendment/scripts/validate.m": "a4d705992d8da17c407941d91627869e817da3c85d24a500459d53e17f9836a1",
+  "analysis/iteration_efficiency_phase2d_evaluator_amendment/scripts/wp4_7.mat": "ca57736a7e13996c556413cf85f05ada8008258e3f406d915f1b5a2c41eef6a9",
+  "analysis/iteration_efficiency_phase2d_evaluator_amendment/preamendment_copies/ITERATION_EFFICIENCY_PROTOCOL_DRAFT.md": "3e397e0b685bf078c6b4cd0a803b07075d4bd8ca99e65b59e8dd9be99c1728df",
+  "analysis/iteration_efficiency_phase2d_evaluator_amendment/preamendment_copies/QUALITY_EFFORT_SPEC.md": "b7b1d8c3bbe854704b4155da2f440a1ee74dac1731a339ca151d85e57afdd7ee",
+  "analysis/iteration_efficiency_phase2d_evaluator_amendment/preamendment_copies/study_evaluate_design.m.PREAMENDMENT": "22a1b974c251dbe7baa6499a5aca11e6bde68469b6d2e80fd4274c9447f31343"
+ },
+ "phase2d_sha256sums_selfcheck": {
+  "AMENDED_EVALUATOR_DEFINITION.md": {
+   "declared": "eb708648c0dfa6ef5f81ee308984f6ab726a8355bd51ccfdc464fb3cd796e5b3",
+   "observed": "eb708648c0dfa6ef5f81ee308984f6ab726a8355bd51ccfdc464fb3cd796e5b3",
+   "match": true
+  },
+  "AMENDED_OLHOFF_TRAJECTORY_EVALUATION.csv": {
+   "declared": "274189cf02b7f5756e2ad9f88c5c1f0326f73f77991b152508f7fab79553033f",
+   "observed": "274189cf02b7f5756e2ad9f88c5c1f0326f73f77991b152508f7fab79553033f",
+   "match": true
+  },
+  "AMENDED_REFERENCE_PERSISTENCE.csv": {
+   "declared": "018a5178cb9817f5661bc7d485765772007eea8ae4620be7c1b18b3f9b1c0b88",
+   "observed": "018a5178cb9817f5661bc7d485765772007eea8ae4620be7c1b18b3f9b1c0b88",
+   "match": true
+  },
+  "AMENDMENT_SCOPE_LEDGER.csv": {
+   "declared": "4d1dade31155d439a36cbfabfc147d69c830f5a1e4a31bd6a4b99ad6cec65ff2",
+   "observed": "4d1dade31155d439a36cbfabfc147d69c830f5a1e4a31bd6a4b99ad6cec65ff2",
+   "match": true
+  },
+  "BINDING_EVALUATOR_ANALYSIS.csv": {
+   "declared": "49acc1a901ea132e5ced557db0bbd3e51d2c87385a72b72885e1db867ddaa6d5",
+   "observed": "49acc1a901ea132e5ced557db0bbd3e51d2c87385a72b72885e1db867ddaa6d5",
+   "match": true
+  },
+  "DELTA_AUDIT_REQUEST.md": {
+   "declared": "542ad176482911aa372702c5a07fff6e3b0d4334379bbb827007b2033a782be0",
+   "observed": "542ad176482911aa372702c5a07fff6e3b0d4334379bbb827007b2033a782be0",
+   "match": true
+  },
+  "EQ4A_DOUBLE_ULP_STABILITY.csv": {
+   "declared": "c4c37cdab9def86259f66b2dc15e5d1a7d1d4342f50adc540ae95dc6d3715bdb",
+   "observed": "c4c37cdab9def86259f66b2dc15e5d1a7d1d4342f50adc540ae95dc6d3715bdb",
+   "match": true
+  },
+  "EQ4A_SINGLE_ROUNDING_STABILITY.csv": {
+   "declared": "0fdce4a7dcc6a2a0451606cdecad2d6bcafed871b4f1882c6c885ecb6d59366e",
+   "observed": "0fdce4a7dcc6a2a0451606cdecad2d6bcafed871b4f1882c6c885ecb6d59366e",
+   "match": true
+  },
+  "EVALUATOR_UNIT_TESTS.md": {
+   "declared": "e0826065d3329a9fe6f23d8a967b823223cb522b8ba0a9c88780e5d2e81d775a",
+   "observed": "e0826065d3329a9fe6f23d8a967b823223cb522b8ba0a9c88780e5d2e81d775a",
+   "match": true
+  },
+  "NORMATIVE_CHANGE_LEDGER.csv": {
+   "declared": "510ddb904ff5b9596acb30c01c916fd7b73c739e1409602f1dea1ca90ee1bf07",
+   "observed": "510ddb904ff5b9596acb30c01c916fd7b73c739e1409602f1dea1ca90ee1bf07",
+   "match": true
+  },
+  "NUMERICAL_MARGIN_ANALYSIS.csv": {
+   "declared": "6274c7f09f7ed588a0c475c7515f46743bf0a8361ba913769467d871041a61e9",
+   "observed": "6274c7f09f7ed588a0c475c7515f46743bf0a8361ba913769467d871041a61e9",
+   "match": true
+  },
+  "OLD_DEFECT_REPRODUCTION.csv": {
+   "declared": "b821d482f9f0c77855494a3eb69add4f534a934ef55e10095eef4184e4682b66",
+   "observed": "b821d482f9f0c77855494a3eb69add4f534a934ef55e10095eef4184e4682b66",
+   "match": true
+  },
+  "PHASE2A_IMPLEMENTATION_IMPACT.md": {
+   "declared": "938ef452a93152208318d520e1d459b4c8a0931ee1b8f7d3b17dcd210a063f10",
+   "observed": "938ef452a93152208318d520e1d459b4c8a0931ee1b8f7d3b17dcd210a063f10",
+   "match": true
+  },
+  "PHASE2B_CASE_REEVALUATION.csv": {
+   "declared": "80872f9f9e5ddda3f4d6dbe69e9f844759f6590d602ef1dc629301d76e45a6d3",
+   "observed": "80872f9f9e5ddda3f4d6dbe69e9f844759f6590d602ef1dc629301d76e45a6d3",
+   "match": true
+  },
+  "PHASE2D_AMENDMENT_REPORT.md": {
+   "declared": "6c16459febb4e3654e4ff4cd387478d76fe2569959530877b07a3fb142e1f304",
+   "observed": "6c16459febb4e3654e4ff4cd387478d76fe2569959530877b07a3fb142e1f304",
+   "match": true
+  },
+  "RETROSPECTIVE_ARTIFACT_CLASSIFICATION.csv": {
+   "declared": "87d8b3213471e5cad1caef33d9894fb6d24a0e24a92607269c69bce663b4932e",
+   "observed": "87d8b3213471e5cad1caef33d9894fb6d24a0e24a92607269c69bce663b4932e",
+   "match": true
+  },
+  "amendment_provenance.json": {
+   "declared": "b7645ea0057c1d47f7ff8f30978780d652e5506cb56d482ec8565037f28562d1",
+   "observed": "b7645ea0057c1d47f7ff8f30978780d652e5506cb56d482ec8565037f28562d1",
+   "match": true
+  },
+  "+ie2d/study_evaluate_design_eq4a.m": {
+   "declared": "bfc98f7fa4a4a1a6d54e64b98f9fcff71ab66ffc4e63a0fc21da99350c72d74b",
+   "observed": "bfc98f7fa4a4a1a6d54e64b98f9fcff71ab66ffc4e63a0fc21da99350c72d74b",
+   "match": true
+  },
+  "preamendment_copies/ITERATION_EFFICIENCY_PROTOCOL_DRAFT.md": {
+   "declared": "3e397e0b685bf078c6b4cd0a803b07075d4bd8ca99e65b59e8dd9be99c1728df",
+   "observed": "3e397e0b685bf078c6b4cd0a803b07075d4bd8ca99e65b59e8dd9be99c1728df",
+   "match": true
+  },
+  "preamendment_copies/QUALITY_EFFORT_SPEC.md": {
+   "declared": "b7b1d8c3bbe854704b4155da2f440a1ee74dac1731a339ca151d85e57afdd7ee",
+   "observed": "b7b1d8c3bbe854704b4155da2f440a1ee74dac1731a339ca151d85e57afdd7ee",
+   "match": true
+  },
+  "preamendment_copies/study_evaluate_design.m.PREAMENDMENT": {
+   "declared": "22a1b974c251dbe7baa6499a5aca11e6bde68469b6d2e80fd4274c9447f31343",
+   "observed": "22a1b974c251dbe7baa6499a5aca11e6bde68469b6d2e80fd4274c9447f31343",
+   "match": true
+  },
+  "scripts/traj.log": {
+   "declared": "126e1440301d24fd0f9682cec8e1b1beb87a4ff8c84e7dc527b58cefb3fc7af1",
+   "observed": "126e1440301d24fd0f9682cec8e1b1beb87a4ff8c84e7dc527b58cefb3fc7af1",
+   "match": true
+  },
+  "scripts/traj.m": {
+   "declared": "86a1ad2e2498d3a8bad3fdcfbd2f15f963f38ed79345857d13f105e6da19c7b7",
+   "observed": "86a1ad2e2498d3a8bad3fdcfbd2f15f963f38ed79345857d13f105e6da19c7b7",
+   "match": true
+  },
+  "scripts/traj.mat": {
+   "declared": "a9d7f8a2b887fe7050681abf8945dda699d88c950628f7a2c25a837d27e9320b",
+   "observed": "a9d7f8a2b887fe7050681abf8945dda699d88c950628f7a2c25a837d27e9320b",
+   "match": true
+  },
+  "scripts/validate.log": {
+   "declared": "c1195d3b2ef47f1dc1c0afd51045387a3288fbc83d71c632aeeda78057ddf3a7",
+   "observed": "c1195d3b2ef47f1dc1c0afd51045387a3288fbc83d71c632aeeda78057ddf3a7",
+   "match": true
+  },
+  "scripts/validate.m": {
+   "declared": "a4d705992d8da17c407941d91627869e817da3c85d24a500459d53e17f9836a1",
+   "observed": "a4d705992d8da17c407941d91627869e817da3c85d24a500459d53e17f9836a1",
+   "match": true
+  },
+  "scripts/wp4_7.mat": {
+   "declared": "ca57736a7e13996c556413cf85f05ada8008258e3f406d915f1b5a2c41eef6a9",
+   "observed": "ca57736a7e13996c556413cf85f05ada8008258e3f406d915f1b5a2c41eef6a9",
+   "match": true
+  }
+ },
+ "phase2d_sha256sums_mismatches": []
+}

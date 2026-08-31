@@ -1,0 +1,69 @@
+{
+  "schema_version": "phase2i_qualification_provenance_v1",
+  "generated_at_utc": "2026-08-30T23:51:57.764398Z",
+  "branch": "benchmark-methodology-r2",
+  "head": "632e9b01811845709de33f93051fd853373ed5e1",
+  "contract_sha256": "cc900b4ad4cae18b0bcd9b7a559f51e04e5167db587f64180b371d3c399bf95b",
+  "evaluator_sha256": "e14a21efe0bb2d9b9d7f3187b4c3f671ec089f6ff96773074b8f3b56cacd79e9",
+  "normative_manifest_sha256": "ceb55dd650f9751d499c19da316571a7ab0c34b3ef2d943b657a817575194f2d",
+  "freeze_record_sha256": "b05d71b716a78f55f1bcd5d39fc76694d712a067bca5633dbafe4dd99bb84119",
+  "native_optimizer_integrity": {
+    "analysis/olhoff_stabilization_audit/olhoffOptStabilized.m": {
+      "initial": "95240cf60f82b40f8e5e892b9eea9b20a8fd3744b5eca6fdfc8dde2698d82aec",
+      "final": "95240cf60f82b40f8e5e892b9eea9b20a8fd3744b5eca6fdfc8dde2698d82aec",
+      "unchanged": true
+    },
+    "Matlab/reproduction2007/algo/innerLoopLP.m": {
+      "initial": "7724753c02f84d6009c3998f758d5b3f9c5144ad39ca6f470584a2c99e089465",
+      "final": "7724753c02f84d6009c3998f758d5b3f9c5144ad39ca6f470584a2c99e089465",
+      "unchanged": true
+    },
+    "analysis/OlhoffApproach/Matlab/topFreqOptimization_MMA.m": {
+      "initial": "22d4e04e4afde4e3f88b81f88a71a03a0fd0b6b313b022692dbddd48469fbe5e",
+      "final": "22d4e04e4afde4e3f88b81f88a71a03a0fd0b6b313b022692dbddd48469fbe5e",
+      "unchanged": true
+    }
+  },
+  "methodology_modified": false,
+  "native_optimizer_modified": false,
+  "production_campaign_run": false,
+  "principal_route": "lp",
+  "binding_pair_states": 3200,
+  "verdict": "FAIL_HARD_GATE_IDENTITY",
+  "negative_artifact": "negative_precision_qualification.json",
+  "pass_artifact_installed": false,
+  "output_hashes": {
+    "BINARY_DIFFERENCE_ANALYSIS.csv": "1d3fb4c3825839be2b2010d3fb8ae7e12b586961d69d5acf8a0552d04b25e2e7",
+    "CLASSIFIER_MARGIN_SUMMARY.csv": "fb3cb031e0eb8b98dd0a84e6fd550313e7bf410eb58b01b593825f7880b22948",
+    "DECISION_ENDPOINTS.csv": "2d295c4a632ae017d5e2411069f0502ed2fe28f8c1ff4f725434d1716a771bd4",
+    "DECISION_EQUIVALENCE.csv": "0f280ea6f38431139f1f9aeeacc5de1e748ffe5b0fcba7e8b1758b998b4d9c68",
+    "DIFFICULT_CASE_MODAL_EQUIVALENCE.csv": "3ab447cba2a4d5d03a2a59c49065899afa0d62a0352126e0a1551f6d28b9c7f4",
+    "DIFFICULT_CASE_PREFIX_IDENTITY.csv": "55647362f7aa7062eacc29bc58757ba3e3b189afe37a5e826611a4687a35fb09",
+    "HARD_GATE_EQUIVALENCE.csv": "aecfe5ba8730b5f7f846cb1eaa363899a950e8e122822d1b7e679921a91a703d",
+    "HISTORICAL_PHASE2B_COMPARISON.md": "73b59cfaa9c0d7fd394019ec4d906d80a825cd576d9cec3cc67c2869cfac8ca2",
+    "INDEPENDENT_REPLAY_REPORT.md": "96af439fed2651dcd89edce27dcbf75b7f8c0f144163b100273fd2fe4558d00d",
+    "INITIAL_PROVENANCE.md": "126cbe94c9139ed8df12dc7bb90953115e82fe2bb8c2a3764fdec10d63f63b96",
+    "MODAL_SELECTION_EQUIVALENCE.csv": "acf0b0d37c68930f4c83639d3f1f69ea486671417357243f504eacd81eeff5f8",
+    "PERSISTENCE_EQUIVALENCE.csv": "3f67d8403cc4475253c100cdb9512dbd072ab789cca5a471b25ac7bb3bc69055",
+    "PHASE2I_PRECISION_QUALIFICATION_REPORT.md": "6f590ac1b95cc3f82d295bdb1c20110804164471e77875d7a77a3ef904e532b8",
+    "PRECISION_ERROR_SUMMARY.csv": "c6d69b0c5f90fad9c12ffc5c24dc341232d3eae7656c8a4026c1ef0351893ab2",
+    "PREFIX_DETERMINISM.csv": "4a658bc98811da85c1062be46490c6ea5f4a3121c7a6f133fd0129b0bf42ed65",
+    "PREFLIGHT_AFTER_PHASE2I.md": "869e95575975fb7171d797bcc47a3097ae7a15885f1db6dac7972228d81817ef",
+    "PRODUCTION_SCALE_RISK_CHECK.csv": "187a70f1468b64528760b956d384049a2f9d657e91d6073decc6041e3e3c0b87",
+    "QUALIFICATION_IMPLEMENTATION_AUDIT.md": "64507c03180d91dffa86437c9cd998603178ca32223116ab20cb2b39f4ba38ef",
+    "QUALITY_EQUIVALENCE.csv": "26a7224453aa650cbd2379e7896b9b02daf8cef0db87e0095b86dc54dcf0db19",
+    "REFERENCE_EQUIVALENCE.csv": "606ec39106fe1e713c7cf3f0392c948e3f8dcb1326a94be84e9a705f50a20f1b",
+    "capture_initial_provenance.py": "7e58f341f01925a62658c13e0f96872716c2531d82abab15f5ba4bb8d365f616",
+    "finalize_phase2i.py": "919ce70ee71918d873fe650c2720dd821cf0531f591e84f8eccb6e5efec8851a",
+    "independent_replay.py": "126b74324875b85a75ea142e4033e1c0b2483cba80ff4b735b0cc7d59ea9f622",
+    "initial_provenance.json": "0195820eef1393166d1bd6a359145ce29bb8316dae98b7219666bd6855c2abce",
+    "negative_precision_qualification.json": "c434980018934616cd8470b753fc9c7c92edf45e285141576528c149e6bec027",
+    "olhoffOptStabilizedDoubleCapture.m": "8a841849ea2d8c4dae31515c3cac5b244658a06802a383d7030a6d81dd02ed64",
+    "run_phase2i_capture.m": "341602e0ec82cdd574b11b92c32ab0b35a91df5d395b916eb8e21cade318d021",
+    "run_phase2i_difficult_pairs.m": "f07f602f0ceed93859a5dc4ae87296b6b0af5c2975a6d7ea164dbd3b1a0dd858",
+    "run_phase2i_evaluate.m": "6f0b6d48cc4e68d2628df85ff4ee774190ad1bf0d6cd68b91c9bbf34c331ab1b",
+    "run_phase2i_preflight.m": "c7fd59b128c66fcdeff3527b1e3bc746d8f97b9017c7a0d56f92a7b02f1f4799",
+    "run_phase2i_topology_detail.m": "26bb4329f41109c8086330672f706d8b761fed0f25fe977177c29da22c5ad75d",
+    "static_qualification_audit.py": "d8cd0dfb6dd43491fb37dc06905b19068fcd51dcd518fde97fbbc65118c0980a"
+  }
+}

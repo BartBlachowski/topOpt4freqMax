@@ -1,0 +1,293 @@
+{
+  "phase": "2G independent common-evaluator selection audit",
+  "classification": "READ_ONLY_AUDIT_NO_OPTIMIZATION_NO_REFREEZE_NO_PRODUCTION",
+  "captured_at": "2026-08-30T21:27:42.937084+02:00",
+  "branch": "benchmark-methodology-r2",
+  "head": "632e9b01811845709de33f93051fd853373ed5e1",
+  "git_status": [
+    "M examples/Performance/performance_comparison.m",
+    " M tools/Matlab/run_topopt_from_json.m",
+    " M tools/Matlab/topopt_history_record.m",
+    "?? analysis/OlhoffReproduced2007/",
+    "?? analysis/iteration_efficiency_evaluator_discontinuity_audit/",
+    "?? analysis/iteration_efficiency_methodology_audit/",
+    "?? analysis/iteration_efficiency_methodology_delta_audit/",
+    "?? analysis/iteration_efficiency_methodology_final_recheck/",
+    "?? analysis/iteration_efficiency_phase2a/",
+    "?? analysis/iteration_efficiency_phase2b_precision/",
+    "?? analysis/iteration_efficiency_phase2b_recheck/",
+    "?? analysis/iteration_efficiency_phase2d_delta_audit/",
+    "?? analysis/iteration_efficiency_phase2d_evaluator_amendment/",
+    "?? analysis/iteration_efficiency_phase2f_evaluator_redesign/",
+    "?? analysis/iteration_efficiency_phase2g_evaluator_selection_audit/",
+    "?? analysis/iteration_efficiency_study_design/",
+    "?? analysis/olhoff_nested_mma_route_audit/",
+    "?? analysis/performance_campaign_forensic_audit/",
+    "?? analysis/performance_campaign_targeted_replays/",
+    "?? examples/Performance/WP0A_VISUALIZATION_FIX.md",
+    "?? examples/Performance/final_campaign/",
+    "?? examples/Performance/test_shared_topology_renderer.m",
+    "?? tools/Matlab/renderTopologyDensity.m"
+  ],
+  "environment": {
+    "python": "3.13.2 (v3.13.2:4f8bb3947cf, Feb  4 2025, 11:51:10) [Clang 15.0.0 (clang-1500.3.9.4)]",
+    "platform": "macOS-26.5.1-arm64-arm-64bit-Mach-O",
+    "numpy": "2.3.4",
+    "scipy": "1.16.3",
+    "h5py": "3.16.0",
+    "matlab": "25.2.0.2998904 (R2025b), release 2025b, maca64"
+  },
+  "phase2f_completion": {
+    "survey_archive_present": true,
+    "survey_log_tail": [
+      "  720x90   E2/eq4    stride=10 states=  160 maxmodes=12 escalations=0 [8569s]",
+      "  720x90   E2/eq4a   stride=10 states=  160 maxmodes=12 escalations=0 [9067s]",
+      "  720x90   E3/eq4a   stride=10 states=  160 maxmodes=24 escalations=1 [9565s]",
+      "  720x90   gate+descriptors  states=160 [9571s]",
+      "total 9571s ; arrays 295"
+    ]
+  },
+  "protected_source_checks": [
+    {
+      "group": "protected_numerical_sources",
+      "path": "analysis/ourApproach/Matlab/topopt_freq.m",
+      "expected": "6d9ea66fcc27f63b7380708b5735552b5d9f2885d3e65714af572daccdae72b2",
+      "actual": "6d9ea66fcc27f63b7380708b5735552b5d9f2885d3e65714af572daccdae72b2",
+      "match": true
+    },
+    {
+      "group": "protected_numerical_sources",
+      "path": "analysis/YukselApproach/Matlab/top99neo_inertial_freq.m",
+      "expected": "5afc3d16b4ed6af05793df461b541ed3b2ea62a6da8836f38301a9a3917e6ba2",
+      "actual": "5afc3d16b4ed6af05793df461b541ed3b2ea62a6da8836f38301a9a3917e6ba2",
+      "match": true
+    },
+    {
+      "group": "protected_numerical_sources",
+      "path": "analysis/olhoff_stabilization_audit/olhoffOptStabilized.m",
+      "expected": "95240cf60f82b40f8e5e892b9eea9b20a8fd3744b5eca6fdfc8dde2698d82aec",
+      "actual": "95240cf60f82b40f8e5e892b9eea9b20a8fd3744b5eca6fdfc8dde2698d82aec",
+      "match": true
+    },
+    {
+      "group": "protected_numerical_sources",
+      "path": "analysis/olhoff_stabilization_audit/run_stabilization_case.m",
+      "expected": "d309737192a40499ebba928ee845bd99846eaa1abc7ebaa42efd701ddfd33316",
+      "actual": "d309737192a40499ebba928ee845bd99846eaa1abc7ebaa42efd701ddfd33316",
+      "match": true
+    },
+    {
+      "group": "protected_numerical_sources",
+      "path": "Matlab/reproduction2007/algo/innerLoopLP.m",
+      "expected": "7724753c02f84d6009c3998f758d5b3f9c5144ad39ca6f470584a2c99e089465",
+      "actual": "7724753c02f84d6009c3998f758d5b3f9c5144ad39ca6f470584a2c99e089465",
+      "match": true
+    },
+    {
+      "group": "protected_numerical_sources",
+      "path": "analysis/three_method_parametric_study/study_evaluate_design.m",
+      "expected": "22a1b974c251dbe7baa6499a5aca11e6bde68469b6d2e80fd4274c9447f31343",
+      "actual": "22a1b974c251dbe7baa6499a5aca11e6bde68469b6d2e80fd4274c9447f31343",
+      "match": true
+    },
+    {
+      "group": "profile_sources",
+      "path": "analysis/three_method_parametric_study/results/profile_freeze_manifest.json",
+      "expected": "b55e31d87d18e90e8c0b8d278bd4111d494610b62f253194ea16cfcf78252eca",
+      "actual": "b55e31d87d18e90e8c0b8d278bd4111d494610b62f253194ea16cfcf78252eca",
+      "match": true
+    },
+    {
+      "group": "profile_sources",
+      "path": "analysis/olhoff_stabilization_audit/selected_profile.json",
+      "expected": "60fa944f4aecf34611de5413096d6a0de235eae05febbc4dd481bee5a26a67da",
+      "actual": "60fa944f4aecf34611de5413096d6a0de235eae05febbc4dd481bee5a26a67da",
+      "match": true
+    },
+    {
+      "group": "profile_sources",
+      "path": "analysis/olhoff_stabilization_audit/final_campaign_profile.json",
+      "expected": "5d12bc0ae6a09d2f4df01fb38d7f483a7450b06cac67eceac30d3fab3618b610",
+      "actual": "5d12bc0ae6a09d2f4df01fb38d7f483a7450b06cac67eceac30d3fab3618b610",
+      "match": true
+    },
+    {
+      "group": "audit_records",
+      "path": "analysis/iteration_efficiency_methodology_audit/INDEPENDENT_METHODOLOGY_AUDIT.md",
+      "expected": "ce40a1f8656d32fb5c0e4cf22a3076d5360af058019bd3f000b434815a25dc34",
+      "actual": "ce40a1f8656d32fb5c0e4cf22a3076d5360af058019bd3f000b434815a25dc34",
+      "match": true
+    },
+    {
+      "group": "audit_records",
+      "path": "analysis/iteration_efficiency_methodology_delta_audit/DELTA_AUDIT_REPORT.md",
+      "expected": "b5b73e163be3af2fe33faa5f78ca16c9bec52b631e63f2f2557f5cb959cf253e",
+      "actual": "b5b73e163be3af2fe33faa5f78ca16c9bec52b631e63f2f2557f5cb959cf253e",
+      "match": true
+    },
+    {
+      "group": "audit_records",
+      "path": "analysis/iteration_efficiency_methodology_final_recheck/FINAL_RECHECK.md",
+      "expected": "acc0707b77469422ecdbf3fffe23a8c3e4b2c1595110d98f2b8d57e9a72eb7d6",
+      "actual": "acc0707b77469422ecdbf3fffe23a8c3e4b2c1595110d98f2b8d57e9a72eb7d6",
+      "match": true
+    },
+    {
+      "group": "audit_records",
+      "path": "analysis/iteration_efficiency_methodology_final_recheck/METHODOLOGY_FREEZE_RECORD.md",
+      "expected": "01ff97cc3dc580968904362be5c1250b1dd979839686ce95d0ad591a92dba826",
+      "actual": "01ff97cc3dc580968904362be5c1250b1dd979839686ce95d0ad591a92dba826",
+      "match": true
+    },
+    {
+      "group": "audit_records",
+      "path": "analysis/iteration_efficiency_methodology_final_recheck/N1_N4_VERIFICATION.csv",
+      "expected": "94a3d7bc90343e88545d710fdf88658c3ae7f37a1786e1eda371d546df614f6f",
+      "actual": "94a3d7bc90343e88545d710fdf88658c3ae7f37a1786e1eda371d546df614f6f",
+      "match": true
+    },
+    {
+      "group": "audit_records",
+      "path": "analysis/iteration_efficiency_methodology_final_recheck/PHASE2_FINAL_READINESS.md",
+      "expected": "a8add97f0bc6b12492725518931b44bbb42ed5a8d7ee1225d042c6e870a2103b",
+      "actual": "a8add97f0bc6b12492725518931b44bbb42ed5a8d7ee1225d042c6e870a2103b",
+      "match": true
+    },
+    {
+      "group": "phase2d_declared_unchanged",
+      "path": "Matlab/reproduction2007/fem/massScale.m",
+      "expected": "90ba72c3df056ed0e705bfcfb763c1ef631f48891d626b18c180d6702d683a63",
+      "actual": "90ba72c3df056ed0e705bfcfb763c1ef631f48891d626b18c180d6702d683a63",
+      "match": true
+    },
+    {
+      "group": "phase2d_declared_unchanged",
+      "path": "Matlab/reproduction2007/algo/defaultCfg.m",
+      "expected": "aed41860a2dac6a06e1c51cc96cf7436a65bcd9d60ecdf7af2d2a3552ea456e0",
+      "actual": "aed41860a2dac6a06e1c51cc96cf7436a65bcd9d60ecdf7af2d2a3552ea456e0",
+      "match": true
+    },
+    {
+      "group": "phase2d_declared_unchanged",
+      "path": "analysis/OlhoffApproachExact/Matlab/mass_interp.m",
+      "expected": "90f9fb21a6e44fa294b8c54bd5bb45ab3cc0901de42752a7003d38c14ea592d9",
+      "actual": "90f9fb21a6e44fa294b8c54bd5bb45ab3cc0901de42752a7003d38c14ea592d9",
+      "match": true
+    },
+    {
+      "group": "phase2d_declared_unchanged",
+      "path": "analysis/YukselApproach/Matlab/top99neo_inertial_freq.m",
+      "expected": "5afc3d16b4ed6af05793df461b541ed3b2ea62a6da8836f38301a9a3917e6ba2",
+      "actual": "5afc3d16b4ed6af05793df461b541ed3b2ea62a6da8836f38301a9a3917e6ba2",
+      "match": true
+    },
+    {
+      "group": "phase2d_declared_unchanged",
+      "path": "analysis/ourApproach/Matlab/topopt_freq.m",
+      "expected": "6d9ea66fcc27f63b7380708b5735552b5d9f2885d3e65714af572daccdae72b2",
+      "actual": "6d9ea66fcc27f63b7380708b5735552b5d9f2885d3e65714af572daccdae72b2",
+      "match": true
+    },
+    {
+      "group": "phase2d_declared_unchanged",
+      "path": "analysis/olhoff_stabilization_audit/olhoffOptStabilized.m",
+      "expected": "95240cf60f82b40f8e5e892b9eea9b20a8fd3744b5eca6fdfc8dde2698d82aec",
+      "actual": "95240cf60f82b40f8e5e892b9eea9b20a8fd3744b5eca6fdfc8dde2698d82aec",
+      "match": true
+    },
+    {
+      "group": "phase2d_declared_unchanged",
+      "path": "analysis/three_method_parametric_study/study_evaluate_design.m",
+      "expected": "22a1b974c251dbe7baa6499a5aca11e6bde68469b6d2e80fd4274c9447f31343",
+      "actual": "22a1b974c251dbe7baa6499a5aca11e6bde68469b6d2e80fd4274c9447f31343",
+      "match": true
+    },
+    {
+      "group": "phase2d_declared_unchanged",
+      "path": "analysis/iteration_efficiency_phase2a/iteration_efficiency_contract.json",
+      "expected": "46318e6c7e74fdfe9cc643afeef93bbd6edfc5a894e89269be9cc04f0f27697c",
+      "actual": "46318e6c7e74fdfe9cc643afeef93bbd6edfc5a894e89269be9cc04f0f27697c",
+      "match": true
+    },
+    {
+      "group": "phase2d_declared_unchanged",
+      "path": "analysis/iteration_efficiency_phase2a/+ie2a/production_preflight.m",
+      "expected": "868cdaab197a00500f861a6a5687918e1b089c87c6d580e011d1e8abc51321b3",
+      "actual": "868cdaab197a00500f861a6a5687918e1b089c87c6d580e011d1e8abc51321b3",
+      "match": true
+    }
+  ],
+  "protected_mismatch_count": 0,
+  "evidence_hashes": {
+    "analysis/iteration_efficiency_phase2f_evaluator_redesign/scripts/survey.npz": "95329cdd0bef325cb3f3b47a91fb92e77bdf793bd909edbb11a8a4cd440b8209",
+    "analysis/iteration_efficiency_phase2f_evaluator_redesign/scripts/gate_full.npz": "6745fa1a1ea0c7c1cd7528f292d37d11dda8bd0dc1ffef736968bb42e15f852f",
+    "analysis/iteration_efficiency_phase2f_evaluator_redesign/GRAY_VS_BINARY_QUALITY.csv": "cf9ea671cef57abd5d3af076887c9412c3ea97dfb71003690f61b1d4b75d5059",
+    "analysis/iteration_efficiency_phase2f_evaluator_redesign/BINARY_PROJECTION_STABILITY.csv": "c18618a7a57c93cdd72a0337ce34bb81f74da2fe985adfc25aab4bc343d51ede",
+    "analysis/iteration_efficiency_phase2f_evaluator_redesign/K252_MODAL_REPRODUCTION.csv": "18e7e24084bc221b52b66f8bd1f82cd7ffefc4b189801f305eed3aae1bcfcd2a",
+    "analysis/iteration_efficiency_phase2f_evaluator_redesign/WP0_INTEGRITY_pre.json": "7813c83fb1247b5ac63633c797495b24f5386dacb62c23a4e4a6a46ba3cfe08d",
+    "analysis/iteration_efficiency_phase2f_evaluator_redesign/scripts/modal_engine.py": "f358da1bece5c5110deaef20e9121d95578b0d4b52995e1ba04deba7e02eb387",
+    "analysis/iteration_efficiency_phase2f_evaluator_redesign/scripts/wp4_survey.py": "ae19b80179d1f13db39b2e3e273413e3664d7de73f8c5b68e036233fffef5c28",
+    "analysis/iteration_efficiency_phase2f_evaluator_redesign/scripts/wp11_12_binary.py": "54e2d2e291924d5781c57106ebea8ae4354588349818f9de5ac7809381b4d43d",
+    "analysis/three_method_parametric_study/study_evaluate_design.m": "22a1b974c251dbe7baa6499a5aca11e6bde68469b6d2e80fd4274c9447f31343",
+    "analysis/iteration_efficiency_phase2a/iteration_efficiency_contract.json": "46318e6c7e74fdfe9cc643afeef93bbd6edfc5a894e89269be9cc04f0f27697c"
+  },
+  "captured_at_final": "2026-08-30T21:28:21.391463+02:00",
+  "branch_final": "benchmark-methodology-r2",
+  "head_final": "632e9b01811845709de33f93051fd853373ed5e1",
+  "git_status_final": [
+    "M examples/Performance/performance_comparison.m",
+    " M tools/Matlab/run_topopt_from_json.m",
+    " M tools/Matlab/topopt_history_record.m",
+    "?? analysis/OlhoffReproduced2007/",
+    "?? analysis/iteration_efficiency_evaluator_discontinuity_audit/",
+    "?? analysis/iteration_efficiency_methodology_audit/",
+    "?? analysis/iteration_efficiency_methodology_delta_audit/",
+    "?? analysis/iteration_efficiency_methodology_final_recheck/",
+    "?? analysis/iteration_efficiency_phase2a/",
+    "?? analysis/iteration_efficiency_phase2b_precision/",
+    "?? analysis/iteration_efficiency_phase2b_recheck/",
+    "?? analysis/iteration_efficiency_phase2d_delta_audit/",
+    "?? analysis/iteration_efficiency_phase2d_evaluator_amendment/",
+    "?? analysis/iteration_efficiency_phase2f_evaluator_redesign/",
+    "?? analysis/iteration_efficiency_phase2g_evaluator_selection_audit/",
+    "?? analysis/iteration_efficiency_study_design/",
+    "?? analysis/olhoff_nested_mma_route_audit/",
+    "?? analysis/performance_campaign_forensic_audit/",
+    "?? analysis/performance_campaign_targeted_replays/",
+    "?? examples/Performance/WP0A_VISUALIZATION_FIX.md",
+    "?? examples/Performance/final_campaign/",
+    "?? examples/Performance/test_shared_topology_renderer.m",
+    "?? tools/Matlab/renderTopologyDensity.m"
+  ],
+  "phase2f_all_evidence_hashes_file": "PHASE2F_EVIDENCE_HASHES.csv",
+  "phase2f_all_evidence_file_count": 56,
+  "phase2f_completed_survey": {
+    "archive_bytes": 15475386,
+    "archive_sha256": "95329cdd0bef325cb3f3b47a91fb92e77bdf793bd909edbb11a8a4cd440b8209",
+    "log_last_line": "total 9571s ; arrays 295"
+  },
+  "additional_evidence_hashes": {
+    "analysis/iteration_efficiency_phase2d_delta_audit/OLD_DEFECT_INDEPENDENT_REPRODUCTION.csv": "770b75f2369b6b28d3f990bf76ab0f53d87c1753021908e1e677a76b2655a2c4",
+    "analysis/iteration_efficiency_phase2d_delta_audit/EQ4A_INDEPENDENT_STABILITY.csv": "98cc90bb3f1e91e97fdcc0c164c81cc1ce8608ee12a55b5f349e05d1d5ffa2c3",
+    "analysis/iteration_efficiency_phase2d_delta_audit/BINDING_EVALUATOR_RECHECK.csv": "fadcccb0e2743b1339e212959f292bc7e5899c2607ad29f7ab34f5cd7c9935a0",
+    "analysis/iteration_efficiency_study_design/QUALITY_EFFORT_SPEC.md": "02da8b592239cd22af4609e302aae7a2fc77d9a47d0451812b4d1ad135ca3fa2",
+    "analysis/iteration_efficiency_study_design/ITERATION_EFFICIENCY_PROTOCOL_DRAFT.md": "14979ab7fedcbd0e4e4249cd4ddc9443bfc2f3f20da948e1927ae1c28ae72604",
+    "analysis/olhoff_nested_mma_route_audit/OLHOFF_NESTED_MMA_ROUTE_AUDIT.md": "b8621a77c8979b18475e3b686536b779c1b4959a091e23986be20ceef742dd31",
+    "analysis/iteration_efficiency_phase2b_precision/qualification_runs/gray_full_24x4_h200_paired_states.mat": "60f9343d60907581fb64f2647a857017d83d72e40277d43741f97f03220f02ee",
+    "analysis/iteration_efficiency_phase2b_precision/qualification_runs/s1_transition_96x12_h320_paired_states.mat": "31dbce8174e3987a89e0d882366884bc722ff74957258677c0a269fa1a9403f2",
+    "examples/Performance/final_campaign/raw/olhoff/s1_160x20.mat": "5b51166a43e06ebe828337583bd26dd4ef4e8aed474b814f518d4bc056a19a54",
+    "examples/Performance/final_campaign/raw/olhoff/s1_240x30.mat": "7823050512662e6c189b617011ab5ffe922d3c2174fff655e9f684692a9cff00",
+    "examples/Performance/final_campaign/raw/olhoff/s1_320x40.mat": "3e5ea06c80f2cfd5c0686dd34ebd6fac356da82f5dd8627bbd2ec7fb8de7af79",
+    "examples/Performance/final_campaign/raw/olhoff/s1_400x50.mat": "e525138d6f5e93757db944445672b692deb5716062d92f7b9d1a5a9f37481f6f",
+    "examples/Performance/final_campaign/raw/olhoff/s1_480x60.mat": "e8a09d1a2d17987ca5522945310b10509ab469f4fde93aa95ee4c10ca0d2295c",
+    "examples/Performance/final_campaign/raw/olhoff/s1_560x70.mat": "5b75a7e6165797f9e2f9976848036cbb07378ea1e7d7e155271dc0c49472039d",
+    "examples/Performance/final_campaign/raw/olhoff/s1_640x80.mat": "e329a9506ceb1e32ed95cd3f09676168fdbf8d4193ac0fa7efebc26adc771cb3",
+    "examples/Performance/final_campaign/raw/olhoff/s1_720x90.mat": "9c9427d08374b66d9d0a388535515724a8d78a7ac52a747fa53c1ddd7779f903",
+    "examples/Performance/final_campaign/raw/olhoff/s1_800x100.mat": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "write_boundary": {
+    "allowed": "analysis/iteration_efficiency_phase2g_evaluator_selection_audit/ only",
+    "audit_created_paths_outside_allowed": [],
+    "note": "Phase-2F survey completion occurred independently while this audit waited; Phase-2G did not write it."
+  }
+}

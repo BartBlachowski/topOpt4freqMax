@@ -1,0 +1,150 @@
+{
+ "audit": "Olhoff nested-MMA route audit",
+ "classification": "READ_ONLY_FORENSIC_AUDIT / NO_OPTIMIZATION / NO_METHOD_SWITCH / NO_PRODUCTION",
+ "captured_at": "2026-08-30T17:46:45.079254+02:00",
+ "branch": "benchmark-methodology-r2",
+ "head": "632e9b01811845709de33f93051fd853373ed5e1",
+ "git_status": [
+  "M examples/Performance/performance_comparison.m",
+  " M tools/Matlab/run_topopt_from_json.m",
+  " M tools/Matlab/topopt_history_record.m",
+  "?? analysis/OlhoffReproduced2007/",
+  "?? analysis/iteration_efficiency_evaluator_discontinuity_audit/",
+  "?? analysis/iteration_efficiency_methodology_audit/",
+  "?? analysis/iteration_efficiency_methodology_delta_audit/",
+  "?? analysis/iteration_efficiency_methodology_final_recheck/",
+  "?? analysis/iteration_efficiency_phase2a/",
+  "?? analysis/iteration_efficiency_phase2b_precision/",
+  "?? analysis/iteration_efficiency_phase2b_recheck/",
+  "?? analysis/iteration_efficiency_phase2d_delta_audit/",
+  "?? analysis/iteration_efficiency_phase2d_evaluator_amendment/",
+  "?? analysis/iteration_efficiency_phase2f_evaluator_redesign/",
+  "?? analysis/iteration_efficiency_study_design/",
+  "?? analysis/olhoff_nested_mma_route_audit/",
+  "?? analysis/performance_campaign_forensic_audit/",
+  "?? analysis/performance_campaign_targeted_replays/",
+  "?? examples/Performance/WP0A_VISUALIZATION_FIX.md",
+  "?? examples/Performance/final_campaign/",
+  "?? examples/Performance/test_shared_topology_renderer.m",
+  "?? tools/Matlab/renderTopologyDensity.m"
+ ],
+ "primary_evidence": {
+  "path": "/Volumes/HP911Pro/Combobulating/Olhoff/results/BASE_mma_160x20.log",
+  "sha256": "2df8b9e8c0461c5589b4244c57568eabc3286587cd3b3e8ac0ab16a67a0cb9af",
+  "note": "external volume, not in the repository; ONLY artifact of this run - no .mat exists"
+ },
+ "corroborating_evidence": {
+  "/Volumes/HP911Pro/Combobulating/Olhoff/results/fm_mma_diag.mat": "6066ff5651374a822faea0e6ffa958b826f2b700e2b4d78d985daa1675149881",
+  "/Volumes/HP911Pro/Combobulating/Olhoff/results/lprmin1.2.mat": "b65ad13653e318e8c1401f5a9444a5632d6d37ef1e7d50ca0d7bb052297503bd",
+  "/Volumes/HP911Pro/Combobulating/Olhoff/results/fm_lp_diag.mat": "e166b8d7c060d3ac7767056b29774b913a6eb50a5a9d151e123690f62976c225",
+  "/Volumes/HP911Pro/Combobulating/Olhoff/results/lp240_rmin1.3.mat": "7f452b3f09268404bcdd4d83b0ebec36576e563e132b790798aecdf58e7c303c",
+  "/Volumes/HP911Pro/Combobulating/Olhoff/results/lprmin1.1.mat": "2d4f45a29a9a9e7ef23dc3416b8ae1d3cb02e52a198abbcb53de6687f7eacafa",
+  "/Volumes/HP911Pro/Combobulating/Olhoff/results/lprmin2.5.mat": "351ef288717773c7ecb5ef00c519b77f2a98dcc64e751d90495c70766b4261c7",
+  "/Volumes/HP911Pro/Combobulating/Olhoff/results/FIG4_definitive.mat": "6188febf91c8d3f843a2aab734d84059751337f3f878c5f8a62ed991466d7133"
+ },
+ "source_under_audit": {
+  "Matlab/reproduction2007/algo/olhoffOpt.m": "4784ecf3f6b42d8af6f5a9695e2924bf1f4c924ebf9c76be9a858a2ef769e5de",
+  "Matlab/reproduction2007/algo/innerLoop.m": "75fcb7641c6059dc310c9ca9a63a2add677ab54bcc67e1450c68d4c8fdf3aaed",
+  "Matlab/reproduction2007/algo/innerLoopLP.m": "7724753c02f84d6009c3998f758d5b3f9c5144ad39ca6f470584a2c99e089465",
+  "Matlab/reproduction2007/algo/deltaLambda.m": "3f0e46ced3e6126fdb07ebf9ed8201c35d21bc32c0de5803a4650c369e2dc4d2",
+  "Matlab/reproduction2007/algo/genGrad.m": "13f2ab8541b2f626e340a592b99730ee4cba101e4f978a214dd7227adaeb5208",
+  "Matlab/reproduction2007/algo/defaultCfg.m": "aed41860a2dac6a06e1c51cc96cf7436a65bcd9d60ecdf7af2d2a3552ea456e0",
+  "Matlab/reproduction2007/filter/prepFilter.m": "18ceb629c567fafcd90830c4eed3a4809fc2dda682d54cef1176b82bd6d47e1a",
+  "Matlab/reproduction2007/filter/applyFilter.m": "461ec7c7950b4d08e20c04d348d9d95674d3e42f1f167b05d3804c94abe057a7",
+  "Matlab/reproduction2007/fem/massScale.m": "90ba72c3df056ed0e705bfcfb763c1ef631f48891d626b18c180d6702d683a63",
+  "Matlab/reproduction2007/fem/eigSolve.m": "b0784ceeb15fafe164ba138b963c3ab4dc5a466fc2953c79786809edd16159cd",
+  "Matlab/reproduction2007/fem/assemble2D.m": "7b2f1e10228d57237d962689909297351c879c9b613f311500f23dd37bd00878",
+  "Matlab/reproduction2007/fem/model2D.m": "3cc19e1c52023225a1350d1c3e7623a9df68b01f52a74c82ddd4aac377ac6560",
+  "Matlab/reproduction2007/mma/mmasub.m": "54c1680036e6effdb70bc32524b0c11c366cebed64d5a508c82553e871ff7660",
+  "Matlab/reproduction2007/mma/subsolv.m": "130033335ac5a21f31437a196bf8f37c5b97880a00e93cf2962a8a54bac2b98a",
+  "Matlab/reproduction2007/runs/run_case.m": "cf65fd1becceecb3bdd262af706d81ebd7814d5df9641508c1f31bf261906db5",
+  "Matlab/reproduction2007/OLHOFFEXACT_FAILURE_POSTMORTEM.md": "e6bd1ddbe46d6f2d7fcb32cbc65991cb6e062c2f351075ab426e50db3db331e7",
+  "analysis/olhoff_stabilization_audit/olhoffOptStabilized.m": "95240cf60f82b40f8e5e892b9eea9b20a8fd3744b5eca6fdfc8dde2698d82aec"
+ },
+ "external_vs_repo_source_tree": "byte-identical: 46/46 .m files under algo/fem/filter/mma/runs, plus setpaths.m and top88.m",
+ "protected_numerical_sources_verified": {
+  "analysis/ourApproach/Matlab/topopt_freq.m": {
+   "expected": "6d9ea66fcc27f63b7380708b5735552b5d9f2885d3e65714af572daccdae72b2",
+   "observed": "6d9ea66fcc27f63b7380708b5735552b5d9f2885d3e65714af572daccdae72b2",
+   "match": true
+  },
+  "analysis/YukselApproach/Matlab/top99neo_inertial_freq.m": {
+   "expected": "5afc3d16b4ed6af05793df461b541ed3b2ea62a6da8836f38301a9a3917e6ba2",
+   "observed": "5afc3d16b4ed6af05793df461b541ed3b2ea62a6da8836f38301a9a3917e6ba2",
+   "match": true
+  },
+  "analysis/olhoff_stabilization_audit/olhoffOptStabilized.m": {
+   "expected": "95240cf60f82b40f8e5e892b9eea9b20a8fd3744b5eca6fdfc8dde2698d82aec",
+   "observed": "95240cf60f82b40f8e5e892b9eea9b20a8fd3744b5eca6fdfc8dde2698d82aec",
+   "match": true
+  },
+  "analysis/olhoff_stabilization_audit/run_stabilization_case.m": {
+   "expected": "d309737192a40499ebba928ee845bd99846eaa1abc7ebaa42efd701ddfd33316",
+   "observed": "d309737192a40499ebba928ee845bd99846eaa1abc7ebaa42efd701ddfd33316",
+   "match": true
+  },
+  "Matlab/reproduction2007/algo/innerLoopLP.m": {
+   "expected": "7724753c02f84d6009c3998f758d5b3f9c5144ad39ca6f470584a2c99e089465",
+   "observed": "7724753c02f84d6009c3998f758d5b3f9c5144ad39ca6f470584a2c99e089465",
+   "match": true
+  },
+  "analysis/three_method_parametric_study/study_evaluate_design.m": {
+   "expected": "22a1b974c251dbe7baa6499a5aca11e6bde68469b6d2e80fd4274c9447f31343",
+   "observed": "22a1b974c251dbe7baa6499a5aca11e6bde68469b6d2e80fd4274c9447f31343",
+   "match": true
+  }
+ },
+ "log_parse": {
+  "rows": 752,
+  "declared_maxOuter": 800,
+  "missing_iterations": 0,
+  "duplicate_iterations": 0,
+  "cumInner_arithmetic_consistent": true,
+  "termination": "MATLAB session death (WindowServer event port death) at log lines 791-792; no convergence line, no run_case summary, no .mat"
+ },
+ "key_measurements": {
+  "effective_filter_radius_elements": 1.2,
+  "log_header_rminEl_stale_value": 3,
+  "outer_iterations": 752,
+  "first_N2": 56,
+  "persistent_N2_from": 231,
+  "N_transitions": 29,
+  "N2_to_N1_returns": 14,
+  "inner_mean_N1": 93.4,
+  "inner_mean_N2": 147.8,
+  "inner_median_N2": 111,
+  "inner_p95_N2": 300,
+  "cumulative_inner": 107373,
+  "cap_hits": 114,
+  "cap_hit_fraction": 0.1516,
+  "converged_fraction": 0.8484,
+  "mannwhitney_N1_lt_N2_p": 1.135e-10,
+  "inner_ratio_N2_over_N1": 1.581,
+  "caphit_vs_converged_delta_omega1_p": 0.5147,
+  "max_omega1": 169.19,
+  "max_omega1_at_outer": 482,
+  "terminal_omega1": 168.75,
+  "terminal_omega2": 172.76,
+  "terminal_rel_gap": 0.023763,
+  "terminal_maxdrho": 0.0099,
+  "tolOuter": 0.001,
+  "outers_gap_below_1pct": 2,
+  "outers_gap_below_0p5pct": 0,
+  "LP_matched_omega1": 168.24,
+  "LP_matched_rel_gap": 0.00217,
+  "LP_wallclock_1600_outer_s": 70.7,
+  "MMA_wallclock_400_outer_s": 7121.7,
+  "per_outer_cost_ratio_MMA_over_LP": 400,
+  "prefix_identity_with_fm_mma_diag_outers": 400
+ },
+ "optimizer_runs": 0,
+ "algorithm_modified": false,
+ "methodology_modified": false,
+ "contract_modified": false,
+ "campaign_started": false,
+ "production_authorization_token_set": false,
+ "verdict": "NESTED MMA SHOULD REMAIN SECONDARY; LP REMAINS PRINCIPAL ROUTE",
+ "methodology_status": "NOT YET UPDATED",
+ "production_status": "BLOCKED",
+ "protected_mismatches": []
+}

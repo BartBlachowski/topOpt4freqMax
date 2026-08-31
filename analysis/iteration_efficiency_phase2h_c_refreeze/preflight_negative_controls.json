@@ -1,0 +1,65 @@
+{
+  "schema_version": "phase2h_preflight_negative_controls_v1",
+  "pass": true,
+  "cases": [
+    {
+      "name": "old_evaluator",
+      "rejected": true,
+      "reason": "evaluator hash"
+    },
+    {
+      "name": "old_contract",
+      "rejected": true,
+      "reason": "contract hash"
+    },
+    {
+      "name": "wrong_candidate",
+      "rejected": true,
+      "reason": "candidate"
+    },
+    {
+      "name": "wrong_classifier",
+      "rejected": true,
+      "reason": "classifier"
+    },
+    {
+      "name": "wrong_scope",
+      "rejected": true,
+      "reason": "scope"
+    },
+    {
+      "name": "wrong_variant",
+      "rejected": true,
+      "reason": "Olhoff variant"
+    },
+    {
+      "name": "pass_false",
+      "rejected": true,
+      "reason": "pass"
+    }
+  ],
+  "missing_qualifications_block_preflight": true,
+  "preflight_checks": {
+    "contract_hash": true,
+    "contract_semantics": true,
+    "mesh_sequence": true,
+    "profile_bindings": true,
+    "evaluator_hash": true,
+    "candidate_c_identity": true,
+    "phase2h_freeze_record": true,
+    "topology_rule": true,
+    "budget_engine": true,
+    "output_isolation": true,
+    "timing": true,
+    "instrumentation": true,
+    "candidate_c_precision": false,
+    "candidate_c_cross_method": false,
+    "candidate_c_reference_length": false,
+    "olhoff_variant_policy": true,
+    "table_pipeline": true,
+    "figure_pipeline": true,
+    "production_driver": true,
+    "negative_controls": true,
+    "authorization": true
+  }
+}

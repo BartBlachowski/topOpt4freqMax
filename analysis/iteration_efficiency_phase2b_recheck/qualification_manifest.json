@@ -1,0 +1,145 @@
+{
+ "phase": "2B-R",
+ "decision_date": "2026-08-30",
+ "scope": "new_olhoff_trajectory",
+ "pass": false,
+ "verdict": "OLHOFF SINGLE-PRECISION TRAJECTORY NOT QUALIFIED",
+ "governing_spec": "PHASE2B_V3_SPEC.md",
+ "branch": "benchmark-methodology-r2",
+ "head": "632e9b01811845709de33f93051fd853373ed5e1",
+ "environment": {
+  "matlab_version": "25.2.0.2998904 (R2025b)",
+  "matlab_release": "R2025b",
+  "computer": "MACA64",
+  "platform": "Darwin PMS.local 25.5.0 Darwin Kernel Version 25.5.0: Mon Apr 27 20:38:56 PDT 2026; root:xnu-12377.121.6~2/RELEASE_ARM64_T6000 arm64",
+  "default_maxNumCompThreads": 10,
+  "runner_threads_forced": 1,
+  "note": "olhoffOptStabilized calls maxNumCompThreads(cfg.threads) with cfg.threads=1 for every qualification run"
+ },
+ "contract_sha256": "46318e6c7e74fdfe9cc643afeef93bbd6edfc5a894e89269be9cc04f0f27697c",
+ "protected_source_hashes": {
+  "analysis/ourApproach/Matlab/topopt_freq.m": "6d9ea66fcc27f63b7380708b5735552b5d9f2885d3e65714af572daccdae72b2",
+  "analysis/YukselApproach/Matlab/top99neo_inertial_freq.m": "5afc3d16b4ed6af05793df461b541ed3b2ea62a6da8836f38301a9a3917e6ba2",
+  "analysis/olhoff_stabilization_audit/olhoffOptStabilized.m": "95240cf60f82b40f8e5e892b9eea9b20a8fd3744b5eca6fdfc8dde2698d82aec",
+  "analysis/olhoff_stabilization_audit/run_stabilization_case.m": "d309737192a40499ebba928ee845bd99846eaa1abc7ebaa42efd701ddfd33316",
+  "Matlab/reproduction2007/algo/innerLoopLP.m": "7724753c02f84d6009c3998f758d5b3f9c5144ad39ca6f470584a2c99e089465",
+  "analysis/three_method_parametric_study/study_evaluate_design.m": "22a1b974c251dbe7baa6499a5aca11e6bde68469b6d2e80fd4274c9447f31343"
+ },
+ "protected_hashes_all_match_phase2a_record": true,
+ "test_scope": {
+  "qualification_mesh": "96x12",
+  "domain_aspect": "8:1",
+  "nely_even": true,
+  "a_sig_elements": 1.44,
+  "a_sig_regime_vs_production": "STRICTER_THAN_PRODUCTION",
+  "horizon_accepted_updates": 3200,
+  "frozen_horizon_for_production": 1600,
+  "departure_from_production_scale": "mesh reduced from 160x20..800x100 to 96x12; horizon extended from the frozen 1600 to 3200 so that the frozen reference procedure (b_ref >= P+L_ref = 600) could be exercised at all",
+  "genuine_paired_intermediate_states": 45,
+  "genuine_paired_frozen_endpoint_states": 8,
+  "prefix_bit_identical": "45/45",
+  "cast_identity": "45/45",
+  "wps_exercised": [
+   "WP0",
+   "WP1",
+   "WP2",
+   "WP2B",
+   "WP3",
+   "WP3A",
+   "WP3P",
+   "WP4",
+   "WP5",
+   "WP6",
+   "WP7",
+   "WP8",
+   "WP8B",
+   "WP9",
+   "WP10",
+   "WP11",
+   "WP12",
+   "WP13",
+   "WP14",
+   "WP15",
+   "WP16",
+   "WP16B"
+  ],
+  "wps_not_exercised": [
+   "WP17 preflight integration (qualification did not pass)"
+  ]
+ },
+ "numerical_bounds": {
+  "E1_max_relative_error": 1.17818096429803e-10,
+  "E2_max_relative_error": 0.0226523752184772,
+  "E3_max_relative_error": 0.0226523756440782,
+  "robust_quality_max_perturbation": 0.00237400770573948,
+  "min_classification_margin": {
+   "q_0.980": 8.67243299600418e-05,
+   "q_0.990": 2.58930321271889e-05,
+   "q_0.995": 5.77298119674996e-06
+  },
+  "documented_bound_claimable_for_E2_E3": "none below 2.3e-2",
+  "frozen_acceptance_bands": {
+   "q_0.980": 0.02,
+   "q_0.990": 0.01,
+   "q_0.995": 0.005
+  }
+ },
+ "decision_equivalence": {
+  "reference_status": "identical (PASS/PASS)",
+  "b_ref": {
+   "double": 2200,
+   "single": 2100,
+   "identical": false
+  },
+  "B_meas": {
+   "double": 3200,
+   "single": 3200,
+   "identical": true,
+   "note": "insensitive because Olhoff B0 = B_ref = 3200 saturates the formula"
+  },
+  "k_enter": {
+   "q_0.980": [
+    233,
+    232
+   ],
+   "q_0.990": [
+    315,
+    309
+   ],
+   "q_0.995": [
+    609,
+    524
+   ],
+   "identical": false
+  },
+  "k_cert": {
+   "q_0.980": [
+    332,
+    331
+   ],
+   "q_0.990": [
+    414,
+    408
+   ],
+   "q_0.995": [
+    708,
+    623
+   ],
+   "identical": false
+  },
+  "acceptance_flips_states": {
+   "q_0.980": 3,
+   "q_0.990": 3,
+   "q_0.995": 29
+  },
+  "volume_pass_topology_pass_hard_gate_pass": "identical 45/45",
+  "final_status": "identical (PASS)",
+  "STRICT_BINARY_IDENTITY": "FAIL (44/45)",
+  "FROZEN_DECISION_EQUIVALENCE": "FAIL"
+ },
+ "root_cause": "E2/E3 mass law g(x)=x^6 for x<=0.1 else x is discontinuous by 1e5 at x=0.1; move-limit arithmetic parks densities on 0.099999999999999644729 whose float32 image 0.10000000149011611938 exceeds 0.1, flipping the branch. 255/255 at-risk elements flipped in genuine paired evidence.",
+ "preflight_artifact_created": false,
+ "production_preflight_modified": false,
+ "production_authorization_token_set": false,
+ "production_campaign_started": false
+}

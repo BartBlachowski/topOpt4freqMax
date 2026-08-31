@@ -1,0 +1,126 @@
+{
+  "audit_type": "offline forensic audit; no optimization campaign rerun",
+  "generated_at": "2026-08-28T21:09:29+02:00",
+  "branch": "benchmark-methodology-r2",
+  "HEAD": "632e9b01811845709de33f93051fd853373ed5e1",
+  "working_tree_status_before_analysis": [
+    "?? examples/Performance/final_campaign/"
+  ],
+  "working_tree_status_at_generation": [
+    "?? analysis/performance_campaign_forensic_audit/",
+    "?? examples/Performance/final_campaign/"
+  ],
+  "matlab_version": "25.2.0.2998904 (R2025b)",
+  "computer": "MACA64",
+  "threads_per_run": 1,
+  "campaign_id": "ultimate_nine_resolution_performance_scaling_v1",
+  "profile_ids": {
+    "Olhoff": "olhoff_fig3a_s1_native_bimodal_p100_move005_0025_fixed1600_v1",
+    "Yuksel": "yuksel_practical_move01_tol001",
+    "Proposed": "proposed_practical_move02_tol001"
+  },
+  "configuration_hashes_from_preflight": {
+    "Olhoff": [
+      "6a543d6e846192d005fe79f1a8e2f5b0b22bd1437630d02afa870c012d662680",
+      "04a14dc9f3d62515f81e2c56a10d8dcf3e13b1299f63a0fa6a5a5b9e5da4f9cd",
+      "512a6aa1635c660edc75e1510f42f08af3e25a444043f600063022db81d5ad63",
+      "e1a35ab177f286595e566ff631994716094f39cc13b3f7321bded574bf040c6e",
+      "cf71d9898a18302b74c583d7ddd2a25744a91c40315ce69478354717c13aa72f",
+      "85a9c3fa8881df8b82bea57b36fbd5d5475ec9cef9e63b157d8b5641a91cfeba",
+      "3f19d2e2c6ad6e136330be339dcce0a3ce59eea0184bd9079fef6c6750e0f37e",
+      "6e0ad7ae409889ef08e63d70371d2ac57a85e4289fe9458c7c3a51b1bd76f8a5",
+      "cd8c3e142ae636359b4107f4df361b381955eed9d3b2ad34136d8dfd2a73fe8b"
+    ],
+    "Yuksel": [
+      "8d95ddf0fb1db81b8fbfd0d50b9f418ff52d0b7b02594800a3b14fbcb110d295",
+      "7929da34120ca77824425be7996704c241da12ee7575768fb474bcf04e0e51cf",
+      "392ba4e5bdd03a90fce97f33135d998e8fcb99a08af1b3ba6184473ab1b4f5a2",
+      "cae7aa5a7294172db4270f15fb14e9065bffc0b99a8a29535a77f761452e2cb3",
+      "8c064b61fddb57897378329436875c193fa2fb1f79fee2b97a67030e056bbdab",
+      "73c6c71f165dbf67bd38f6602d10c869a24fdf799c88a3f0722665ba3b926ddd",
+      "23a170affe2a387982ea59feb141fe077bc4afb7886c283f5c9e859f565417aa",
+      "260ffedcd69fbb509e631bf5b639739d3c0e5da8467870086174598869102205",
+      "8b0a60eccd5c4d7b86cd3c11c680315f1540d164c62026351fecddbbe6885860"
+    ],
+    "Proposed": [
+      "e2058f5812319e745c357a4f921f04762c2e7a4b018136e0c89db411f49283b6",
+      "4bd2a29a4e251b5084433bc1b39c0eaa85f5cac5b03c42591f1d46a2618850d5",
+      "9935263bd58d8af04eeade7b1b6fa78a0303ea253765529c9d8e2f1995cedfdb",
+      "02679e66a999617003443befa71873d65eea4273676968681aa20c359cb27d9e",
+      "92e862564fd3a9b1aefc67df7b05a1ed837dcbe38473381ac2d7db4b86ff884e",
+      "c23c0bdbbf31abca8a3525b6885624319147d65d6aeaf682615e52ff85f1f9aa",
+      "081f11bc3c623db1ad37046cc84cd513f71366bfd53a88abb796003d5e2d4ad0",
+      "ca2e5842de018d153ec889a8487b41642d6ed76820ea28a0004ba1125dca77f0",
+      "6faed9e1cf1605c91284b37b21d8af0da4472e47dbd8706f2c3fa0a8de2f8f92"
+    ]
+  },
+  "campaign_configuration_and_execution_file_hashes_sha256": {
+    "analysis/olhoff_stabilization_audit/final_campaign_profile.json": "5d12bc0ae6a09d2f4df01fb38d7f483a7450b06cac67eceac30d3fab3618b610",
+    "analysis/olhoff_stabilization_audit/selected_profile.json": "60fa944f4aecf34611de5413096d6a0de235eae05febbc4dd481bee5a26a67da",
+    "analysis/three_method_parametric_study/results/profile_freeze_manifest.json": "b55e31d87d18e90e8c0b8d278bd4111d494610b62f253194ea16cfcf78252eca",
+    "examples/Performance/final_campaign_config.m": "bd3e74673315da907e2e5d5b06ba1a8b94ce372977342bde04de8be30fe6a65c",
+    "examples/Performance/final_campaign_preflight.m": "d7883aeee339345a69504160be6e48a2ae0feb3a8d1a69815ede8a7f0d0a28eb",
+    "examples/Performance/final_campaign_run_case.m": "6c6266529a3c5be1a64e8fd18ef8d0c75f529d72bd8707c5151c07689d3d6f6f",
+    "examples/Performance/performance_comparison.m": "7b72c0c2d81f73e3ce600492556659ad177fa41ce7ce07c01f675fac8698155f",
+    "analysis/three_method_parametric_study/study_base_config.m": "020d16ddfa4a114a1160c056cc6a47d8f8c0003ebac0fed1a28e6017fef40d01",
+    "analysis/three_method_parametric_study/study_evaluate_design.m": "22a1b974c251dbe7baa6499a5aca11e6bde68469b6d2e80fd4274c9447f31343",
+    "analysis/olhoff_stabilization_audit/run_stabilization_case.m": "d309737192a40499ebba928ee845bd99846eaa1abc7ebaa42efd701ddfd33316",
+    "analysis/olhoff_stabilization_audit/olhoffOptStabilized.m": "95240cf60f82b40f8e5e892b9eea9b20a8fd3744b5eca6fdfc8dde2698d82aec",
+    "Matlab/reproduction2007/algo/innerLoopLP.m": "7724753c02f84d6009c3998f758d5b3f9c5144ad39ca6f470584a2c99e089465",
+    "tools/Matlab/run_topopt_from_json.m": "7b89f42d86ef6d7974fa68565a8c0e83068fa580ca65e123380fba6c50bfbc56",
+    "analysis/YukselApproach/Matlab/top99neo_inertial_freq.m": "5afc3d16b4ed6af05793df461b541ed3b2ea62a6da8836f38301a9a3917e6ba2",
+    "analysis/ourApproach/Matlab/topopt_freq.m": "6d9ea66fcc27f63b7380708b5735552b5d9f2885d3e65714af572daccdae72b2"
+  },
+  "audit_script_hashes_sha256": {
+    "analysis/performance_campaign_forensic_audit/build_audit.py": "ebf1c9de59a9496e0e76cb2b72412d4cb690a6df19f1484e55424564ed673fb9",
+    "analysis/performance_campaign_forensic_audit/extract_olhoff_evidence.m": "f6485fad6d67baae02d226f3e5c1347fb767ed3145b6b33e6952f44e0ee97560"
+  },
+  "frozen_artifact_hashes_sha256": {
+    "examples/Performance/final_campaign/benchmark_results.json": "b402ded1b7e082dac4ba8ca95f108d4d9b43b588d77b5a14495d13a5828e3a67",
+    "examples/Performance/final_campaign/campaign_gate.json": "1bb4db08073f00bbf708d5b74116da36ddb41443903e37690de4727de790e199",
+    "examples/Performance/final_campaign/common_evaluators.csv": "690aed5d3632edba78e253c7cc1f2fffbbba9e9e314aad3b84c3cd5c2a5e5dfa",
+    "examples/Performance/final_campaign/raw/olhoff/s1_160x20.mat": "7d9b2b14af91781fb66f21141f333fd0d9f99103497da9e18e587b6936d449dd",
+    "examples/Performance/final_campaign/raw/olhoff/s1_240x30.mat": "c8c296a3e85d6a31b3f1e43b4d73279c67f530a41f068c9eefeeb06143f0002f",
+    "examples/Performance/final_campaign/raw/olhoff/s1_320x40.mat": "1acb986d6d0ece3b8cdcc19c1a5533436dc9b08bad2b07c653d69b67beee3b2b",
+    "examples/Performance/final_campaign/raw/olhoff/s1_400x50.mat": "9e1a13e786b93f99e66a3cebb5d573b5451ced798789c41f6caba0a8ac09702e",
+    "examples/Performance/final_campaign/raw/olhoff/s1_480x60.mat": "d9cd0b48b82463703efe8404056757f82cb7adb132460a01711f0aefc81c6825",
+    "examples/Performance/final_campaign/raw/olhoff/s1_560x70.mat": "9ea430ab6d302173acfa236e2b0d6db0856b6b23cc130122ec72688f8d1a4aa1",
+    "examples/Performance/final_campaign/raw/olhoff/s1_640x80.mat": "4ab824ba0f331d4d9cb25c03b71d339a48d5a9e5a5c1ab1ddae2b5ce1ce34ef4",
+    "examples/Performance/final_campaign/raw/olhoff/s1_720x90.mat": "c1d9dc8dc8ef7a544d13eeba27985ceb0f307f63d51665560fe9de17fbc964b9",
+    "examples/Performance/final_campaign/raw/olhoff/s1_800x100.mat": "1426bb6a31dbbb53522cea91786e7ca600577277818211cc9ce35ca04bedfd8d",
+    "examples/Performance/final_campaign/table1_complexity_fit.csv": "77fe95d3409e742ce76ffc1cfbedf28082fb495a8324636102c0475c7a2337e1",
+    "examples/Performance/final_campaign/table1_complexity_fit.png": "c6e1fe1791620388800e97cca7693e646ad01ab89b0b706c78e424dc8b9cd3c5",
+    "examples/Performance/final_campaign/table1_complexity_fit_fixedexp.csv": "d54938303b892cd3040fbc79a8b574dde43bc5593708454c8d2d7ae0db545f70",
+    "examples/Performance/final_campaign/table1_complexity_fit_fixedexp.png": "216456ab6940facf0446adc6bb69b5d64c453f6f99b92ad54cd16d377161c9a1",
+    "examples/Performance/final_campaign/table1_complexity_fit_fixedexp_linear.png": "d70eced85d201d0630606edd853d96e4bf39c3266ebfb2b7e090af7c6d6908b5",
+    "examples/Performance/final_campaign/table1_complexity_fit_linear.png": "cc822bb9c0d74c161f3a2adafdb5c5e5d83208cd275c87ca64bf44fd24da7ba2",
+    "examples/Performance/final_campaign/table1_paper_style.tex": "8b03f65c4a53b4ea4a8ba6e77c9d06afb9a59356aabf542519798d29afedf84d",
+    "examples/Performance/final_campaign/table1_performance.csv": "5ee3c1b06f5a5b7e1a0d1286e27253e64752caa81a369b6832ddee7252c2a8d4",
+    "examples/Performance/final_campaign/warmup/raw/olhoff/s1_48x6.mat": "1b8c790565055b9230411d7959b90813a76539c93d864def16fc81f19b47bc31"
+  },
+  "frozen_artifact_count": 21,
+  "independently_revalidated_status_counts": {
+    "Olhoff": {
+      "VALID_STABILIZED_STATE_AT_FIXED_WORK": 6,
+      "SOLVER_FAILURE": 3
+    },
+    "Yuksel": {
+      "NATIVE_CONVERGED": 7,
+      "CAP_HIT": 2
+    },
+    "Proposed": {
+      "NATIVE_CONVERGED": 9
+    }
+  },
+  "censored_count": 5,
+  "evidence_limitations": [
+    "Yuksel and Proposed final density fields and histories were not retained.",
+    "Olhoff failed-attempt modal state/lamref were not directly logged (they are reconstructable with native-equivalent common E3); conditioning and linprog output remain unavailable.",
+    "Memory has one peak-RSS-delta sample per case."
+  ],
+  "frozen_evidence_unchanged_after_generation": true,
+  "working_tree_status_after_generation": [
+    "?? analysis/performance_campaign_forensic_audit/",
+    "?? examples/Performance/final_campaign/"
+  ]
+}

@@ -1197,45 +1197,17 @@ function saveTopologySnapshot(x, nelx, nely, approachName, jsonSource, omega1, v
         omega2 = NaN;
     end
 
-    nameRaw  = char(string(approachName));
-    nameDisplay = strrep(nameRaw, '_', ' ');
-    nameSafe = regexprep(nameRaw, '[^\w\-]', '_');
-    baseName = fullfile(folder, sprintf('%s_%dx%d', nameSafe, nelx, nely));
-
-    % Build a visible figure so the renderer is fully active before saving.
-    fig = figure('Color', 'white', 'Visible', 'on');
-    theme("light");
-    ax  = axes('Parent', fig);
-    img = buildTopologyDisplayImage(x, nelx, nely, visualizationQuality, true);
-    imagesc(ax, 1 - img, 'Interpolation', 'nearest');
-    axis(ax, 'equal'); axis(ax, 'tight');
-    set(ax, 'YDir', 'normal');
-    set(ax, 'XColor', 'none', 'YColor', 'none');  % hide ticks/lines; keep title visible
-    colormap(ax, gray(256));
-    clim(ax, [0 1]);
-
-    if isfinite(omega1)
-        titleStr = sprintf('%s  |  %dx%d  |  \\omega_{1} = %.2f rad/s', ...
-            nameDisplay, nelx, nely, omega1);
-        if isfinite(omega2)
-            titleStr = sprintf('%s  |  \\omega_{2} = %.2f rad/s', ...
-                titleStr, omega2);
-        end
-    else
-        titleStr = sprintf('%s  |  %dx%d', nameDisplay, nelx, nely);
-    end
-    title(ax, titleStr, 'Interpreter', 'tex', 'FontSize', 10);
-
-    drawnow;   % flush renderer so both PNG and FIG capture the full content
-
-    % PNG: export full figure (title included).
-    exportgraphics(fig, [baseName '.png'], 'Resolution', 160, 'BackgroundColor', 'white');
-
-    % FIG: save while the figure is visible so the file is self-contained.
-    savefig(fig, [baseName '.fig']);
-
-    close(fig);
-    fprintf('Saved topology image: %s  (.png / .fig)\n', baseName);
+    opts = struct( ...
+        'ApproachName', approachName, ...
+        'OutputDir', folder, ...
+        'Omega1', omega1, ...
+        'Omega2', omega2, ...
+        'VisualizationQuality', visualizationQuality, ...
+        'ResultStatus', 'DISPATCHED_FINAL_RESULT', ...
+        'Admissible', true, ...
+        'StateKind', 'final', ...
+        'OverlayPolicy', 'none');
+    renderTopologyDensity(x, nelx, nely, opts);
 end
 
 function saveReferenceModeVisualizationsFromCache( ...

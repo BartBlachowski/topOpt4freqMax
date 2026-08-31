@@ -1,0 +1,27 @@
+{
+  "phase": "2B",
+  "date": "2026-08-30",
+  "branch": "benchmark-methodology-r2",
+  "head": "632e9b01811845709de33f93051fd853373ed5e1",
+  "starting_status_summary": "dirty worktree containing preserved WP0A, Phase-2A, methodology/audit, and frozen campaign artifacts",
+  "phase2a_contract_sha256": "46318e6c7e74fdfe9cc643afeef93bbd6edfc5a894e89269be9cc04f0f27697c",
+  "protected": [
+    {"path":"analysis/iteration_efficiency_methodology_final_recheck/METHODOLOGY_FREEZE_RECORD.md","sha256":"01ff97cc3dc580968904362be5c1250b1dd979839686ce95d0ad591a92dba826"},
+    {"path":"analysis/iteration_efficiency_methodology_final_recheck/FINAL_RECHECK.md","sha256":"acc0707b77469422ecdbf3fffe23a8c3e4b2c1595110d98f2b8d57e9a72eb7d6"},
+    {"path":"analysis/iteration_efficiency_methodology_final_recheck/PHASE2_FINAL_READINESS.md","sha256":"a8add97f0bc6b12492725518931b44bbb42ed5a8d7ee1225d042c6e870a2103b"},
+    {"path":"analysis/iteration_efficiency_phase2a/iteration_efficiency_contract.json","sha256":"46318e6c7e74fdfe9cc643afeef93bbd6edfc5a894e89269be9cc04f0f27697c"},
+    {"path":"analysis/iteration_efficiency_phase2a/PHASE2A_IMPLEMENTATION_REPORT.md","sha256":"7faec7aa624707da063ff49ab30b9b2dd926feec0f46f43c6bbe860c5a34581a"},
+    {"path":"analysis/iteration_efficiency_phase2a/implementation_provenance.json","sha256":"1ff3b8ac0e1df495fa8440d1723b6841557cda298fe510e90916b3cce3b3ea9d"},
+    {"path":"analysis/olhoff_stabilization_audit/olhoffOptStabilized.m","sha256":"95240cf60f82b40f8e5e892b9eea9b20a8fd3744b5eca6fdfc8dde2698d82aec"},
+    {"path":"Matlab/reproduction2007/algo/innerLoopLP.m","sha256":"7724753c02f84d6009c3998f758d5b3f9c5144ad39ca6f470584a2c99e089465"},
+    {"path":"analysis/three_method_parametric_study/study_evaluate_design.m","sha256":"22a1b974c251dbe7baa6499a5aca11e6bde68469b6d2e80fd4274c9447f31343"},
+    {"path":"analysis/iteration_efficiency_phase2a/+ie2a/exact_count_binary.m","sha256":"80643f681bc1c2ebbc4801ec34aa131de514dffb8d06cf1d904bfc583c37b97d"},
+    {"path":"analysis/iteration_efficiency_phase2a/+ie2a/topology_metrics.m","sha256":"ebe14f1591c95f069aaf3dcbdad7795394b380ba4cea6847df8f1ce6afa0c9dd"},
+    {"path":"analysis/iteration_efficiency_phase2a/+ie2a/reference_phase.m","sha256":"35da55e2ea5cd75d0c13231ab26b10f5b389b5894d02de1ebbddec574f5d5532"},
+    {"path":"analysis/iteration_efficiency_phase2a/+ie2a/measurement_budget.m","sha256":"7000ec109cd8f25a00ab1178d0c0320ccde49cb5ee2bf6777c490c261114d145"},
+    {"path":"analysis/iteration_efficiency_phase2a/+ie2a/scan_persistence.m","sha256":"aa025056403500b3e500ea32d7c020097897e26ebebe033f90ece63e856e2a27"},
+    {"path":"analysis/iteration_efficiency_phase2a/+ie2a/analyze_trajectory.m","sha256":"416195eabfa22f6a0f4f688cbc96fe2203af75028c0f19d518e0ec7e0d7975cf"},
+    {"path":"analysis/iteration_efficiency_phase2a/+ie2a/production_preflight.m","sha256":"868cdaab197a00500f861a6a5687918e1b089c87c6d580e011d1e8abc51321b3"}
+  ],
+  "production_campaign_executed": false
+}

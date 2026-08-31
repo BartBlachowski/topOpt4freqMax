@@ -1,0 +1,96 @@
+{
+  "schema_version": "candidate_c_precision_qualification_v1",
+  "qualification_id": "phase2i_olhoff_lp_candidate_c_float32_v1",
+  "scope": "precision",
+  "candidate": "C",
+  "classifier_version": "candidate_c_unanimous_v1",
+  "evaluator_sha256": "e14a21efe0bb2d9b9d7f3187b4c3f671ec089f6ff96773074b8f3b56cacd79e9",
+  "contract_sha256": "cc900b4ad4cae18b0bcd9b7a559f51e04e5167db587f64180b371d3c399bf95b",
+  "olhoff_variant": "lp",
+  "route": "lp",
+  "representation_test": "double(x) versus double(single(x)) on same optimizer states",
+  "input_provenance_sha256": {
+    "analysis/iteration_efficiency_phase2a/iteration_efficiency_contract.json": "cc900b4ad4cae18b0bcd9b7a559f51e04e5167db587f64180b371d3c399bf95b",
+    "analysis/three_method_parametric_study/study_evaluate_design.m": "e14a21efe0bb2d9b9d7f3187b4c3f671ec089f6ff96773074b8f3b56cacd79e9",
+    "analysis/iteration_efficiency_phase2h_c_refreeze/PHASE2H_FREEZE_RECORD.md": "b05d71b716a78f55f1bcd5d39fc76694d712a067bca5633dbafe4dd99bb84119",
+    "analysis/iteration_efficiency_phase2h_c_refreeze/implementation_provenance.json": "f96ddcb4232871b03cbfdbd44c54aff8d77d17d1ebf6c21a66d35a95dc3fceea",
+    "analysis/olhoff_stabilization_audit/olhoffOptStabilized.m": "95240cf60f82b40f8e5e892b9eea9b20a8fd3744b5eca6fdfc8dde2698d82aec",
+    "Matlab/reproduction2007/algo/innerLoopLP.m": "7724753c02f84d6009c3998f758d5b3f9c5144ad39ca6f470584a2c99e089465",
+    "analysis/OlhoffApproach/Matlab/topFreqOptimization_MMA.m": "22d4e04e4afde4e3f88b81f88a71a03a0fd0b6b313b022692dbddd48469fbe5e",
+    "analysis/iteration_efficiency_phase2b_recheck/PHASE2B_RECHECK_REPORT.md": "1b8b536c597819c18e84e7f01860d3bbbc0565a5e5a128a6479ede0076466e17",
+    "analysis/iteration_efficiency_phase2b_recheck/qualification_manifest.json": "afcaa15ef2b7c37e15714e75490190d8f22642910470b02b9f6b988199c2a303",
+    "analysis/iteration_efficiency_phase2b_recheck/qualification_runs/probe_96x12_H3200.mat": "2dc38dcd71e26c0fa0ebd9babffbd483ff9b4022c4cf08ee2b916b1c0a0bfd40",
+    "analysis/iteration_efficiency_phase2b_recheck/qualification_runs/resolve_96x12.mat": "1f119b65d9c46cd8d4988b8f5b357dfb4aefe568f845c4aedf3dee0f96c643fd",
+    "analysis/iteration_efficiency_phase2f_evaluator_redesign/scripts/survey.npz": "95329cdd0bef325cb3f3b47a91fb92e77bdf793bd909edbb11a8a4cd440b8209",
+    "analysis/iteration_efficiency_phase2g_evaluator_selection_audit/PRECISION_PAIR_AUDIT.csv": "d79e66fe4501da078542f94de3daf4c0f12976f78a2be6a8d2b1d173a04a7ef0",
+    "analysis/three_method_parametric_study/results/profile_freeze_manifest.json": "b55e31d87d18e90e8c0b8d278bd4111d494610b62f253194ea16cfcf78252eca"
+  },
+  "numerical_bound": {
+    "relative_omega": 1.12e-07,
+    "absolute_omega": 8.18e-06,
+    "derivation": "two-times the all-state observed maximum, rounded upward",
+    "raw_maximum_relative_omega": 5.59553986328579e-08
+  },
+  "results": {
+    "b_ref": {
+      "double": 2100,
+      "single": 2100,
+      "identical": true
+    },
+    "B_meas": {
+      "double": 3200,
+      "single": 3200,
+      "identical": true
+    },
+    "k_enter": {
+      "double": [
+        229,
+        309,
+        453
+      ],
+      "single": [
+        229,
+        309,
+        453
+      ],
+      "identical": true
+    },
+    "k_cert": {
+      "double": [
+        328,
+        408,
+        552
+      ],
+      "single": [
+        328,
+        408,
+        552
+      ],
+      "identical": true
+    },
+    "hard_gate": {
+      "mismatch_count": 4,
+      "mismatch_states": [
+        41,
+        45,
+        48,
+        99
+      ],
+      "pass": false
+    },
+    "modal_selection": {
+      "mismatch_count": 0,
+      "pass": true
+    },
+    "production_scale_check": {
+      "pass": true,
+      "meshes": 8
+    },
+    "independent_replay": {
+      "pass": true
+    }
+  },
+  "pass": false,
+  "failure_reason": "COMPLETE_HARD_GATE_DECISION_IDENTITY_FAILED_Q7",
+  "installed_preflight_path": false
+}

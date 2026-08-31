@@ -1,0 +1,69 @@
+{
+  "classification": "IMPLEMENTATION_VALIDATION_ONLY_NOT_NEW_SCIENTIFIC_RESULTS",
+  "meshes": [
+    {
+      "mesh": "160x20",
+      "replay_scope": "final_state_only",
+      "states_replayed": 1,
+      "passing_states": 1,
+      "final_pass": true
+    },
+    {
+      "mesh": "240x30",
+      "replay_scope": "final_state_only",
+      "states_replayed": 1,
+      "passing_states": 1,
+      "final_pass": true
+    },
+    {
+      "mesh": "320x40",
+      "replay_scope": "final_state_only",
+      "states_replayed": 1,
+      "passing_states": 1,
+      "final_pass": true
+    },
+    {
+      "mesh": "400x50",
+      "replay_scope": "final_state_only",
+      "states_replayed": 1,
+      "passing_states": 1,
+      "final_pass": true
+    },
+    {
+      "mesh": "480x60",
+      "replay_scope": "final_state_only",
+      "states_replayed": 1,
+      "passing_states": 1,
+      "final_pass": true
+    },
+    {
+      "mesh": "560x70",
+      "replay_scope": "final_state_only",
+      "states_replayed": 1,
+      "passing_states": 1,
+      "final_pass": true
+    },
+    {
+      "mesh": "640x80",
+      "replay_scope": "exhaustive",
+      "states_replayed": 1067,
+      "passing_states": 1014,
+      "final_pass": true,
+      "aggregate_detached_median_elements": 64,
+      "aggregate_detached_p95_elements": 147,
+      "aggregate_detached_max_elements": 674,
+      "aggregate_detached_max_solid_percent": 2.633
+    },
+    {
+      "mesh": "720x90",
+      "replay_scope": "final_state_only",
+      "states_replayed": 1,
+      "passing_states": 1,
+      "final_pass": true
+    },
+    {
+      "mesh": "800x100",
+      "status": "RUN_ERROR / N/A / UNVERIFIABLE_AT_PRESENT"
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "schema_version": "phase2i_static_audit_v1",
+  "checks": {
+    "contract_hash": true,
+    "evaluator_hash": true,
+    "freeze_hash": true,
+    "snapshot_is_2d": true,
+    "initial_and_postupdate_indexing": true,
+    "res_rho_uncast_double": true,
+    "same_run_pair": true,
+    "prefix_only_for_identity": true,
+    "candidate_c_invoked": true,
+    "eq4a_invoked": true,
+    "adaptive_search_invoked": true,
+    "unanimous_classifier_invoked": true,
+    "strict_thresholds": true,
+    "old_eq4_excluded": true,
+    "capture_line_count_equal": true,
+    "capture_diff_only_declared_lines": true,
+    "historical_candidate_c_pair_records": true
+  },
+  "pass": true,
+  "capture_differing_zero_based_lines": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    20,
+    64
+  ],
+  "historical_candidate_c_pair_records": 708
+}

@@ -1,0 +1,91 @@
+{
+  "meta": {
+    "name": "three-method study proposed 160x20",
+    "campaign_id": "ultimate_nine_resolution_performance_scaling_v1",
+    "profile_id": "proposed_practical_move02_tol001",
+    "work_semantics": "native practical max-density-change profile",
+    "threads_per_run": 1
+  },
+  "benchmark": {
+    "extend_beyond_native_stop": false
+  },
+  "domain": {
+    "shape": "rectangular",
+    "size": {
+      "length": 8,
+      "height": 1
+    },
+    "thickness": 1,
+    "mesh": {
+      "nelx": 160,
+      "nely": 20
+    },
+    "load_cases": {
+      "name": "proposed_mode1",
+      "factor": 1,
+      "loads": {
+        "type": "semi_harmonic",
+        "mode": 1,
+        "factor": 1
+      }
+    }
+  },
+  "material": {
+    "model": "plane_stress_isotropic",
+    "E": 1.0E+7,
+    "nu": 0.3,
+    "rho": 1
+  },
+  "bc": {
+    "supports": [
+      {
+        "type": "closest_point",
+        "location": [
+          0,
+          0.5
+        ],
+        "dofs": [
+          "ux",
+          "uy"
+        ]
+      },
+      {
+        "type": "closest_point",
+        "location": [
+          8,
+          0.5
+        ],
+        "dofs": [
+          "ux",
+          "uy"
+        ]
+      }
+    ]
+  },
+  "postprocessing": {},
+  "void_material": {
+    "E_min_ratio": 1E-9,
+    "rho_min": 1E-9
+  },
+  "optimization": {
+    "approach": "ourApproach",
+    "optimizer": "OC",
+    "objective": "compliance",
+    "interpolation": "SIMP",
+    "volume_fraction": 0.5,
+    "penalization": 3,
+    "filter": {
+      "type": "sensitivity",
+      "heaviside": false,
+      "radius": 2,
+      "radius_units": "element",
+      "boundary_condition": "symmetric"
+    },
+    "move_limit": 0.2,
+    "max_iters": 2000,
+    "convergence_tol": 0.01,
+    "semi_harmonic_baseline": "solid",
+    "semi_harmonic_load_sensitivity": false,
+    "harmonic_normalize": false
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "phase": "2A",
+  "captured_at": "2026-08-30T00:00:00+02:00",
+  "starting_branch": "benchmark-methodology-r2",
+  "starting_head": "632e9b01811845709de33f93051fd853373ed5e1",
+  "starting_status": [
+    "M examples/Performance/performance_comparison.m",
+    "M tools/Matlab/run_topopt_from_json.m",
+    "?? analysis/iteration_efficiency_methodology_audit/",
+    "?? analysis/iteration_efficiency_methodology_delta_audit/",
+    "?? analysis/iteration_efficiency_methodology_final_recheck/",
+    "?? analysis/iteration_efficiency_study_design/",
+    "?? analysis/performance_campaign_forensic_audit/",
+    "?? analysis/performance_campaign_targeted_replays/",
+    "?? examples/Performance/WP0A_VISUALIZATION_FIX.md",
+    "?? examples/Performance/final_campaign/",
+    "?? examples/Performance/test_shared_topology_renderer.m",
+    "?? tools/Matlab/renderTopologyDensity.m"
+  ],
+  "contract_sha256": "46318e6c7e74fdfe9cc643afeef93bbd6edfc5a894e89269be9cc04f0f27697c",
+  "audit_records": [
+    {"path":"analysis/iteration_efficiency_methodology_audit/INDEPENDENT_METHODOLOGY_AUDIT.md","sha256":"ce40a1f8656d32fb5c0e4cf22a3076d5360af058019bd3f000b434815a25dc34"},
+    {"path":"analysis/iteration_efficiency_methodology_delta_audit/DELTA_AUDIT_REPORT.md","sha256":"b5b73e163be3af2fe33faa5f78ca16c9bec52b631e63f2f2557f5cb959cf253e"},
+    {"path":"analysis/iteration_efficiency_methodology_final_recheck/FINAL_RECHECK.md","sha256":"acc0707b77469422ecdbf3fffe23a8c3e4b2c1595110d98f2b8d57e9a72eb7d6"},
+    {"path":"analysis/iteration_efficiency_methodology_final_recheck/METHODOLOGY_FREEZE_RECORD.md","sha256":"01ff97cc3dc580968904362be5c1250b1dd979839686ce95d0ad591a92dba826"},
+    {"path":"analysis/iteration_efficiency_methodology_final_recheck/N1_N4_VERIFICATION.csv","sha256":"94a3d7bc90343e88545d710fdf88658c3ae7f37a1786e1eda371d546df614f6f"},
+    {"path":"analysis/iteration_efficiency_methodology_final_recheck/PHASE2_FINAL_READINESS.md","sha256":"a8add97f0bc6b12492725518931b44bbb42ed5a8d7ee1225d042c6e870a2103b"}
+  ],
+  "protected_numerical_sources": [
+    {"path":"analysis/ourApproach/Matlab/topopt_freq.m","sha256":"6d9ea66fcc27f63b7380708b5735552b5d9f2885d3e65714af572daccdae72b2"},
+    {"path":"analysis/YukselApproach/Matlab/top99neo_inertial_freq.m","sha256":"5afc3d16b4ed6af05793df461b541ed3b2ea62a6da8836f38301a9a3917e6ba2"},
+    {"path":"analysis/olhoff_stabilization_audit/olhoffOptStabilized.m","sha256":"95240cf60f82b40f8e5e892b9eea9b20a8fd3744b5eca6fdfc8dde2698d82aec"},
+    {"path":"analysis/olhoff_stabilization_audit/run_stabilization_case.m","sha256":"d309737192a40499ebba928ee845bd99846eaa1abc7ebaa42efd701ddfd33316"},
+    {"path":"Matlab/reproduction2007/algo/innerLoopLP.m","sha256":"7724753c02f84d6009c3998f758d5b3f9c5144ad39ca6f470584a2c99e089465"},
+    {"path":"analysis/three_method_parametric_study/study_evaluate_design.m","sha256":"22a1b974c251dbe7baa6499a5aca11e6bde68469b6d2e80fd4274c9447f31343"}
+  ],
+  "profile_sources": [
+    {"path":"analysis/three_method_parametric_study/results/profile_freeze_manifest.json","sha256":"b55e31d87d18e90e8c0b8d278bd4111d494610b62f253194ea16cfcf78252eca"},
+    {"path":"analysis/olhoff_stabilization_audit/selected_profile.json","sha256":"60fa944f4aecf34611de5413096d6a0de235eae05febbc4dd481bee5a26a67da"},
+    {"path":"analysis/olhoff_stabilization_audit/final_campaign_profile.json","sha256":"5d12bc0ae6a09d2f4df01fb38d7f483a7450b06cac67eceac30d3fab3618b610"}
+  ],
+  "infrastructure_observer": {
+    "path": "tools/Matlab/topopt_history_record.m",
+    "starting_sha256": "e5af5674624472bbe63a85a981d75d7c827b25648c39d3c5e87438e789b6c27b",
+    "classification": "non-numerical opt-in observation hook"
+  },
+  "production_campaign_executed": false
+}

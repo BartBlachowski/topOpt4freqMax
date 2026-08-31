@@ -1,0 +1,95 @@
+{
+  "pass": false,
+  "checks": {
+    "contract_hash": true,
+    "contract_semantics": true,
+    "mesh_sequence": true,
+    "profile_bindings": true,
+    "evaluator_hash": true,
+    "candidate_c_identity": true,
+    "phase2h_freeze_record": true,
+    "topology_rule": true,
+    "budget_engine": true,
+    "output_isolation": true,
+    "timing": true,
+    "instrumentation": true,
+    "candidate_c_precision": false,
+    "candidate_c_cross_method": false,
+    "candidate_c_reference_length": false,
+    "olhoff_variant_policy": true,
+    "table_pipeline": true,
+    "figure_pipeline": true,
+    "production_driver": true,
+    "negative_controls": true,
+    "authorization": true
+  },
+  "details": {
+    "candidate_c_precision": {
+      "pass": false,
+      "kind": "precision",
+      "path": "/Users/piotrek/Programming/topOpt4freqMax/analysis/iteration_efficiency_phase2a/validation_outputs/candidate_c_precision_qualification.json",
+      "errors": [
+        "artifact missing"
+      ]
+    },
+    "candidate_c_cross_method": {
+      "pass": false,
+      "kind": "cross_method",
+      "path": "/Users/piotrek/Programming/topOpt4freqMax/analysis/iteration_efficiency_phase2a/validation_outputs/candidate_c_cross_method_qualification.json",
+      "errors": [
+        "artifact missing"
+      ]
+    },
+    "candidate_c_reference_length": {
+      "pass": false,
+      "kind": "reference_length",
+      "path": "/Users/piotrek/Programming/topOpt4freqMax/analysis/iteration_efficiency_phase2a/validation_outputs/candidate_c_reference_length_qualification.json",
+      "errors": [
+        "artifact missing"
+      ]
+    },
+    "negative_controls": [
+      {
+        "control": "P changed",
+        "rejected": true,
+        "error_id": "ie2a:ContractViolation"
+      },
+      {
+        "control": "mesh removed",
+        "rejected": true,
+        "error_id": "ie2a:ContractViolation"
+      },
+      {
+        "control": "E1 only",
+        "rejected": true,
+        "error_id": "ie2a:ContractViolation"
+      },
+      {
+        "control": "aggregate veto",
+        "rejected": true,
+        "error_id": "ie2a:ContractViolation"
+      },
+      {
+        "control": "B_meas reverts to B0",
+        "rejected": true,
+        "error_id": "ie2a:ContractViolation"
+      },
+      {
+        "control": "B_ref changed",
+        "rejected": true,
+        "error_id": "ie2a:ContractViolation"
+      },
+      {
+        "control": "quality levels changed",
+        "rejected": true,
+        "error_id": "ie2a:ContractViolation"
+      },
+      {
+        "control": "method profile changed",
+        "rejected": true,
+        "error_id": "ie2a:ContractViolation"
+      }
+    ]
+  },
+  "production_authorized": false
+}

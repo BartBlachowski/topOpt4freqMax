@@ -1,0 +1,184 @@
+{
+ "phase": "2B-R",
+ "captured_at": "2026-08-30T11:22:26.431072+02:00",
+ "branch": "benchmark-methodology-r2",
+ "head": "632e9b01811845709de33f93051fd853373ed5e1",
+ "git_status": [
+  "M examples/Performance/performance_comparison.m",
+  " M tools/Matlab/run_topopt_from_json.m",
+  " M tools/Matlab/topopt_history_record.m",
+  "?? analysis/iteration_efficiency_methodology_audit/",
+  "?? analysis/iteration_efficiency_methodology_delta_audit/",
+  "?? analysis/iteration_efficiency_methodology_final_recheck/",
+  "?? analysis/iteration_efficiency_phase2a/",
+  "?? analysis/iteration_efficiency_phase2b_precision/",
+  "?? analysis/iteration_efficiency_phase2b_recheck/",
+  "?? analysis/iteration_efficiency_study_design/",
+  "?? analysis/performance_campaign_forensic_audit/",
+  "?? analysis/performance_campaign_targeted_replays/",
+  "?? examples/Performance/WP0A_VISUALIZATION_FIX.md",
+  "?? examples/Performance/final_campaign/",
+  "?? examples/Performance/test_shared_topology_renderer.m",
+  "?? tools/Matlab/renderTopologyDensity.m"
+ ],
+ "environment": {
+  "matlab_version": "25.2.0.2998904 (R2025b)",
+  "matlab_release": "R2025b",
+  "computer": "MACA64",
+  "platform": "Darwin PMS.local 25.5.0 Darwin Kernel Version 25.5.0: Mon Apr 27 20:38:56 PDT 2026; root:xnu-12377.121.6~2/RELEASE_ARM64_T6000 arm64",
+  "default_maxNumCompThreads": 10,
+  "runner_threads_forced": 1,
+  "note": "olhoffOptStabilized calls maxNumCompThreads(cfg.threads) with cfg.threads=1 for every qualification run"
+ },
+ "phase2a_hash_verification": {
+  "protected_numerical_sources": [
+   {
+    "path": "analysis/ourApproach/Matlab/topopt_freq.m",
+    "recorded_sha256": "6d9ea66fcc27f63b7380708b5735552b5d9f2885d3e65714af572daccdae72b2",
+    "current_sha256": "6d9ea66fcc27f63b7380708b5735552b5d9f2885d3e65714af572daccdae72b2",
+    "match": true
+   },
+   {
+    "path": "analysis/YukselApproach/Matlab/top99neo_inertial_freq.m",
+    "recorded_sha256": "5afc3d16b4ed6af05793df461b541ed3b2ea62a6da8836f38301a9a3917e6ba2",
+    "current_sha256": "5afc3d16b4ed6af05793df461b541ed3b2ea62a6da8836f38301a9a3917e6ba2",
+    "match": true
+   },
+   {
+    "path": "analysis/olhoff_stabilization_audit/olhoffOptStabilized.m",
+    "recorded_sha256": "95240cf60f82b40f8e5e892b9eea9b20a8fd3744b5eca6fdfc8dde2698d82aec",
+    "current_sha256": "95240cf60f82b40f8e5e892b9eea9b20a8fd3744b5eca6fdfc8dde2698d82aec",
+    "match": true
+   },
+   {
+    "path": "analysis/olhoff_stabilization_audit/run_stabilization_case.m",
+    "recorded_sha256": "d309737192a40499ebba928ee845bd99846eaa1abc7ebaa42efd701ddfd33316",
+    "current_sha256": "d309737192a40499ebba928ee845bd99846eaa1abc7ebaa42efd701ddfd33316",
+    "match": true
+   },
+   {
+    "path": "Matlab/reproduction2007/algo/innerLoopLP.m",
+    "recorded_sha256": "7724753c02f84d6009c3998f758d5b3f9c5144ad39ca6f470584a2c99e089465",
+    "current_sha256": "7724753c02f84d6009c3998f758d5b3f9c5144ad39ca6f470584a2c99e089465",
+    "match": true
+   },
+   {
+    "path": "analysis/three_method_parametric_study/study_evaluate_design.m",
+    "recorded_sha256": "22a1b974c251dbe7baa6499a5aca11e6bde68469b6d2e80fd4274c9447f31343",
+    "current_sha256": "22a1b974c251dbe7baa6499a5aca11e6bde68469b6d2e80fd4274c9447f31343",
+    "match": true
+   }
+  ],
+  "profile_sources": [
+   {
+    "path": "analysis/three_method_parametric_study/results/profile_freeze_manifest.json",
+    "recorded_sha256": "b55e31d87d18e90e8c0b8d278bd4111d494610b62f253194ea16cfcf78252eca",
+    "current_sha256": "b55e31d87d18e90e8c0b8d278bd4111d494610b62f253194ea16cfcf78252eca",
+    "match": true
+   },
+   {
+    "path": "analysis/olhoff_stabilization_audit/selected_profile.json",
+    "recorded_sha256": "60fa944f4aecf34611de5413096d6a0de235eae05febbc4dd481bee5a26a67da",
+    "current_sha256": "60fa944f4aecf34611de5413096d6a0de235eae05febbc4dd481bee5a26a67da",
+    "match": true
+   },
+   {
+    "path": "analysis/olhoff_stabilization_audit/final_campaign_profile.json",
+    "recorded_sha256": "5d12bc0ae6a09d2f4df01fb38d7f483a7450b06cac67eceac30d3fab3618b610",
+    "current_sha256": "5d12bc0ae6a09d2f4df01fb38d7f483a7450b06cac67eceac30d3fab3618b610",
+    "match": true
+   }
+  ],
+  "audit_records": [
+   {
+    "path": "analysis/iteration_efficiency_methodology_audit/INDEPENDENT_METHODOLOGY_AUDIT.md",
+    "recorded_sha256": "ce40a1f8656d32fb5c0e4cf22a3076d5360af058019bd3f000b434815a25dc34",
+    "current_sha256": "ce40a1f8656d32fb5c0e4cf22a3076d5360af058019bd3f000b434815a25dc34",
+    "match": true
+   },
+   {
+    "path": "analysis/iteration_efficiency_methodology_delta_audit/DELTA_AUDIT_REPORT.md",
+    "recorded_sha256": "b5b73e163be3af2fe33faa5f78ca16c9bec52b631e63f2f2557f5cb959cf253e",
+    "current_sha256": "b5b73e163be3af2fe33faa5f78ca16c9bec52b631e63f2f2557f5cb959cf253e",
+    "match": true
+   },
+   {
+    "path": "analysis/iteration_efficiency_methodology_final_recheck/FINAL_RECHECK.md",
+    "recorded_sha256": "acc0707b77469422ecdbf3fffe23a8c3e4b2c1595110d98f2b8d57e9a72eb7d6",
+    "current_sha256": "acc0707b77469422ecdbf3fffe23a8c3e4b2c1595110d98f2b8d57e9a72eb7d6",
+    "match": true
+   },
+   {
+    "path": "analysis/iteration_efficiency_methodology_final_recheck/METHODOLOGY_FREEZE_RECORD.md",
+    "recorded_sha256": "01ff97cc3dc580968904362be5c1250b1dd979839686ce95d0ad591a92dba826",
+    "current_sha256": "01ff97cc3dc580968904362be5c1250b1dd979839686ce95d0ad591a92dba826",
+    "match": true
+   },
+   {
+    "path": "analysis/iteration_efficiency_methodology_final_recheck/N1_N4_VERIFICATION.csv",
+    "recorded_sha256": "94a3d7bc90343e88545d710fdf88658c3ae7f37a1786e1eda371d546df614f6f",
+    "current_sha256": "94a3d7bc90343e88545d710fdf88658c3ae7f37a1786e1eda371d546df614f6f",
+    "match": true
+   },
+   {
+    "path": "analysis/iteration_efficiency_methodology_final_recheck/PHASE2_FINAL_READINESS.md",
+    "recorded_sha256": "a8add97f0bc6b12492725518931b44bbb42ed5a8d7ee1225d042c6e870a2103b",
+    "current_sha256": "a8add97f0bc6b12492725518931b44bbb42ed5a8d7ee1225d042c6e870a2103b",
+    "match": true
+   }
+  ]
+ },
+ "phase2a_hash_verification_all_match": true,
+ "additional_hashes": {
+  "analysis/iteration_efficiency_phase2a/iteration_efficiency_contract.json": "46318e6c7e74fdfe9cc643afeef93bbd6edfc5a894e89269be9cc04f0f27697c",
+  "analysis/iteration_efficiency_study_design/IMPLEMENTATION_REQUIREMENTS.md": "bf6a1b0f87bcb9a52b118c9ab81bbf249cccfee24e91050d93abca840c0b1a32",
+  "analysis/iteration_efficiency_phase2a/+ie2a/production_preflight.m": "868cdaab197a00500f861a6a5687918e1b089c87c6d580e011d1e8abc51321b3",
+  "analysis/iteration_efficiency_phase2a/+ie2a/reference_phase.m": "35da55e2ea5cd75d0c13231ab26b10f5b389b5894d02de1ebbddec574f5d5532",
+  "analysis/iteration_efficiency_phase2a/+ie2a/scan_persistence.m": "aa025056403500b3e500ea32d7c020097897e26ebebe033f90ece63e856e2a27",
+  "analysis/iteration_efficiency_phase2a/+ie2a/exact_count_binary.m": "80643f681bc1c2ebbc4801ec34aa131de514dffb8d06cf1d904bfc583c37b97d",
+  "analysis/iteration_efficiency_phase2a/+ie2a/topology_metrics.m": "ebe14f1591c95f069aaf3dcbdad7795394b380ba4cea6847df8f1ce6afa0c9dd",
+  "analysis/iteration_efficiency_phase2a/+ie2a/evaluate_common.m": "3937bd68e80eae5ed89ff9c73d57bb024390e56bcf72e12799b34e225f117a6e",
+  "analysis/iteration_efficiency_phase2a/+ie2a/analyze_trajectory.m": "416195eabfa22f6a0f4f688cbc96fe2203af75028c0f19d518e0ec7e0d7975cf",
+  "analysis/iteration_efficiency_phase2a/+ie2a/measurement_budget.m": "7000ec109cd8f25a00ab1178d0c0320ccde49cb5ee2bf6777c490c261114d145",
+  "tools/Matlab/topopt_history_record.m": "568f94bbd2f5044bd6654744ddf45b56a2febd19c98c91e224127a7b35742b4d"
+ },
+ "frozen_olhoff_artifacts": {
+  "examples/Performance/final_campaign/raw/olhoff/s1_160x20.mat": {
+   "sha256": "5b51166a43e06ebe828337583bd26dd4ef4e8aed474b814f518d4bc056a19a54",
+   "bytes": 2989776
+  },
+  "examples/Performance/final_campaign/raw/olhoff/s1_240x30.mat": {
+   "sha256": "7823050512662e6c189b617011ab5ffe922d3c2174fff655e9f684692a9cff00",
+   "bytes": 3273582
+  },
+  "examples/Performance/final_campaign/raw/olhoff/s1_320x40.mat": {
+   "sha256": "3e5ea06c80f2cfd5c0686dd34ebd6fac356da82f5dd8627bbd2ec7fb8de7af79",
+   "bytes": 9259265
+  },
+  "examples/Performance/final_campaign/raw/olhoff/s1_400x50.mat": {
+   "sha256": "e525138d6f5e93757db944445672b692deb5716062d92f7b9d1a5a9f37481f6f",
+   "bytes": 12228261
+  },
+  "examples/Performance/final_campaign/raw/olhoff/s1_480x60.mat": {
+   "sha256": "e8a09d1a2d17987ca5522945310b10509ab469f4fde93aa95ee4c10ca0d2295c",
+   "bytes": 7580361
+  },
+  "examples/Performance/final_campaign/raw/olhoff/s1_560x70.mat": {
+   "sha256": "5b75a7e6165797f9e2f9976848036cbb07378ea1e7d7e155271dc0c49472039d",
+   "bytes": 10944438
+  },
+  "examples/Performance/final_campaign/raw/olhoff/s1_640x80.mat": {
+   "sha256": "e329a9506ceb1e32ed95cd3f09676168fdbf8d4193ac0fa7efebc26adc771cb3",
+   "bytes": 23259909
+  },
+  "examples/Performance/final_campaign/raw/olhoff/s1_720x90.mat": {
+   "sha256": "9c9427d08374b66d9d0a388535515724a8d78a7ac52a747fa53c1ddd7779f903",
+   "bytes": 34712634
+  },
+  "examples/Performance/final_campaign/raw/olhoff/s1_800x100.mat": {
+   "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "bytes": 0
+  }
+ },
+ "contract_sha256_matches_phase2a_record": true
+}

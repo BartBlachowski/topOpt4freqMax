@@ -1,0 +1,154 @@
+{
+  "schema_version": "phase2i_independent_replay_v1",
+  "representative_states": [
+    1,
+    41,
+    45,
+    48,
+    80,
+    99,
+    230,
+    252,
+    307,
+    376,
+    438,
+    2100,
+    2200,
+    3200
+  ],
+  "spectral_rows": 84,
+  "spectral_ordinal_mismatches": 0,
+  "maximum_python_matlab_relative_omega_difference": 7.897914878819029e-12,
+  "hard_gate_matlab_identity_double": true,
+  "hard_gate_matlab_identity_single": true,
+  "hard_gate_representation_mismatch_states": [
+    41,
+    45,
+    48,
+    99
+  ],
+  "binary_difference_states": 95,
+  "binary_differing_elements": 232,
+  "reference": {
+    "b_ref_double": 2100,
+    "b_ref_single": 2100,
+    "Q_ref_double": [
+      162.66009037577615,
+      162.99775696552064,
+      162.99775664939455
+    ],
+    "Q_ref_single": [
+      162.66009036272771,
+      162.99775695525867,
+      162.99775663945448
+    ]
+  },
+  "persistence": {
+    "50": {
+      "double": [
+        [
+          229,
+          278
+        ],
+        [
+          309,
+          358
+        ],
+        [
+          453,
+          502
+        ]
+      ],
+      "single": [
+        [
+          229,
+          278
+        ],
+        [
+          309,
+          358
+        ],
+        [
+          453,
+          502
+        ]
+      ],
+      "crossing_differences": [
+        0,
+        0,
+        0
+      ]
+    },
+    "100": {
+      "double": [
+        [
+          229,
+          328
+        ],
+        [
+          309,
+          408
+        ],
+        [
+          453,
+          552
+        ]
+      ],
+      "single": [
+        [
+          229,
+          328
+        ],
+        [
+          309,
+          408
+        ],
+        [
+          453,
+          552
+        ]
+      ],
+      "crossing_differences": [
+        0,
+        0,
+        0
+      ]
+    },
+    "200": {
+      "double": [
+        [
+          229,
+          428
+        ],
+        [
+          309,
+          508
+        ],
+        [
+          453,
+          652
+        ]
+      ],
+      "single": [
+        [
+          229,
+          428
+        ],
+        [
+          309,
+          508
+        ],
+        [
+          453,
+          652
+        ]
+      ],
+      "crossing_differences": [
+        0,
+        0,
+        0
+      ]
+    }
+  },
+  "pass": true
+}

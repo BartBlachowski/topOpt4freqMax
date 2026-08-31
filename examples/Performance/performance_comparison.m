@@ -588,6 +588,59 @@ for r = 1:nRes
                 display_method_name(approaches{m}), methodLabels{m}, ...
                 resolutions(r,1), resolutions(r,2), s, ...
                 x, omega, tIter, nIter, mem, nIterStage, telemetry, totalWallTime);
+
+            % ---- FINAL TOPOLOGY EXPORT, outside every timing boundary ------
+            % The solver-side and caller-side timers have both stopped before
+            % this point.  In particular, Olhoff uses a separate runner and
+            % therefore never reaches run_topopt_from_json's snapshot helper.
+            % Render every reportable method through the same public helper so
+            % orientation, extent, density scale, figure size, naming and
+            % overlay policy cannot drift by method.  The helper also refuses
+            % failed/unavailable records, but keep the admission decision
+            % explicit here for auditability.
+            if isFinalCampaign
+                plotCfg = finalCampaignConfigs{r, m};
+                plotAdmissible = caseOut.ok;
+            else
+                plotCfg = data;
+                % The legacy Olhoff work-budget endpoint is admissible after
+                % the preflight above even though its historical status text
+                % can be CAP_HIT. Explicit failure statuses are still refused
+                % by renderTopologyDensity.
+                plotAdmissible = ok_s(s);
+            end
+            try
+                plotQuality = 'regular';
+                plotApproachName = approaches{m};
+                if isfield(plotCfg, 'postprocessing') && ...
+                        isfield(plotCfg.postprocessing, 'visualize_quality')
+                    plotQuality = plotCfg.postprocessing.visualize_quality;
+                end
+                if isfield(plotCfg, 'optimization') && ...
+                        isfield(plotCfg.optimization, 'approach')
+                    % Match run_topopt_from_json's established
+                    % <configured-approach>_<mesh> basename convention.
+                    plotApproachName = plotCfg.optimization.approach;
+                end
+                omega2Plot = NaN;
+                if numel(omega) >= 2; omega2Plot = omega(2); end
+                plotOpts = struct( ...
+                    'ApproachName', plotApproachName, ...
+                    'OutputDir', outputDir, ...
+                    'Omega1', omega(1), ...
+                    'Omega2', omega2Plot, ...
+                    'VisualizationQuality', plotQuality, ...
+                    'ResultStatus', status_s{s}, ...
+                    'Admissible', plotAdmissible, ...
+                    'StateKind', 'final', ...
+                    ... % Existing Proposed/Yuksel final-image policy.
+                    'OverlayPolicy', 'none');
+                renderTopologyDensity(x, resolutions(r,1), resolutions(r,2), plotOpts);
+            catch plotErr
+                warning('performance_comparison:TopologyExportFailed', ...
+                    'Final topology export failed for %s %dx%d: %s', ...
+                    methodLabels{m}, resolutions(r,1), resolutions(r,2), plotErr.message);
+            end
         end
 
         omega_all(r, m) = mean(omega_s);

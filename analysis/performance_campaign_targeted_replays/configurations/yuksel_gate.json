@@ -1,0 +1,387 @@
+{
+  "method": "Yuksel",
+  "mesh": "800x100",
+  "nelx": 800,
+  "nely": 100,
+  "original_profile_id": "yuksel_practical_move01_tol001",
+  "replay_profile_id": "yuksel_practical_move01_tol001",
+  "original": {
+    "meta": {
+      "name": "three-method study yuksel 800x100",
+      "campaign_id": "ultimate_nine_resolution_performance_scaling_v1",
+      "profile_id": "yuksel_practical_move01_tol001",
+      "work_semantics": "native two-stage practical profile; stage counts and times reported separately and in total",
+      "threads_per_run": 1
+    },
+    "benchmark": {
+      "enable_diagnostics": false,
+      "record_history": false,
+      "extend_beyond_native_stop": false
+    },
+    "domain": {
+      "shape": "rectangular",
+      "size": {
+        "length": 8,
+        "height": 1
+      },
+      "thickness": 1,
+      "mesh": {
+        "nelx": 800,
+        "nely": 100
+      }
+    },
+    "material": {
+      "model": "plane_stress_isotropic",
+      "E": 1.0E+7,
+      "nu": 0.3,
+      "rho": 1
+    },
+    "bc": {
+      "supports": [
+        {
+          "type": "closest_point",
+          "location": [
+            0,
+            0.5
+          ],
+          "dofs": [
+            "ux",
+            "uy"
+          ]
+        },
+        {
+          "type": "closest_point",
+          "location": [
+            8,
+            0.5
+          ],
+          "dofs": [
+            "ux",
+            "uy"
+          ]
+        }
+      ]
+    },
+    "postprocessing": {
+      "visualize_live": false,
+      "visualize_quality": "regular",
+      "visualize_modes": {
+        "enabled": false,
+        "count": 3
+      },
+      "visualize_topology_modes": {
+        "enabled": false,
+        "count": 3
+      },
+      "write_correlation_table": false,
+      "save_snapshot_image": false,
+      "save_final_image": false,
+      "save_frequency_iterations": false
+    },
+    "void_material": {
+      "E_min_ratio": 1E-9,
+      "rho_min": 1E-9
+    },
+    "optimization": {
+      "approach": "Yuksel",
+      "optimizer": "OC",
+      "objective": "compliance",
+      "interpolation": "SIMP",
+      "volume_fraction": 0.5,
+      "penalization": 3,
+      "filter": {
+        "type": "sensitivity",
+        "heaviside": false,
+        "radius": 2.5,
+        "radius_units": "element",
+        "boundary_condition": "symmetric"
+      },
+      "move_limit": 0.1,
+      "max_iters": 1000,
+      "convergence_tol": 0.01,
+      "yuksel": {
+        "stage1_max_iters": 1000,
+        "stage1_tol": 0.01,
+        "stage2_tol": 0.01
+      }
+    }
+  },
+  "replay": {
+    "meta": {
+      "name": "three-method study yuksel 800x100",
+      "campaign_id": "ultimate_nine_resolution_performance_scaling_v1",
+      "profile_id": "yuksel_practical_move01_tol001",
+      "work_semantics": "native two-stage practical profile; stage counts and times reported separately and in total",
+      "threads_per_run": 1
+    },
+    "benchmark": {
+      "enable_diagnostics": false,
+      "record_history": true,
+      "extend_beyond_native_stop": false
+    },
+    "domain": {
+      "shape": "rectangular",
+      "size": {
+        "length": 8,
+        "height": 1
+      },
+      "thickness": 1,
+      "mesh": {
+        "nelx": 800,
+        "nely": 100
+      }
+    },
+    "material": {
+      "model": "plane_stress_isotropic",
+      "E": 1.0E+7,
+      "nu": 0.3,
+      "rho": 1
+    },
+    "bc": {
+      "supports": [
+        {
+          "type": "closest_point",
+          "location": [
+            0,
+            0.5
+          ],
+          "dofs": [
+            "ux",
+            "uy"
+          ]
+        },
+        {
+          "type": "closest_point",
+          "location": [
+            8,
+            0.5
+          ],
+          "dofs": [
+            "ux",
+            "uy"
+          ]
+        }
+      ]
+    },
+    "postprocessing": {
+      "visualize_live": false,
+      "visualize_quality": "regular",
+      "visualize_modes": {
+        "enabled": false,
+        "count": 3
+      },
+      "visualize_topology_modes": {
+        "enabled": false,
+        "count": 3
+      },
+      "write_correlation_table": false,
+      "save_snapshot_image": false,
+      "save_final_image": false,
+      "save_frequency_iterations": false
+    },
+    "void_material": {
+      "E_min_ratio": 1E-9,
+      "rho_min": 1E-9
+    },
+    "optimization": {
+      "approach": "Yuksel",
+      "optimizer": "OC",
+      "objective": "compliance",
+      "interpolation": "SIMP",
+      "volume_fraction": 0.5,
+      "penalization": 3,
+      "filter": {
+        "type": "sensitivity",
+        "heaviside": false,
+        "radius": 2.5,
+        "radius_units": "element",
+        "boundary_condition": "symmetric"
+      },
+      "move_limit": 0.1,
+      "max_iters": 1000,
+      "convergence_tol": 0.01,
+      "yuksel": {
+        "stage1_max_iters": 1000,
+        "stage1_tol": 0.01,
+        "stage2_tol": 0.01
+      }
+    }
+  },
+  "normalized_original": {
+    "meta": {
+      "name": "three-method study yuksel 800x100",
+      "campaign_id": "ultimate_nine_resolution_performance_scaling_v1",
+      "profile_id": "yuksel_practical_move01_tol001",
+      "work_semantics": "native two-stage practical profile; stage counts and times reported separately and in total",
+      "threads_per_run": 1
+    },
+    "benchmark": {
+      "extend_beyond_native_stop": false
+    },
+    "domain": {
+      "shape": "rectangular",
+      "size": {
+        "length": 8,
+        "height": 1
+      },
+      "thickness": 1,
+      "mesh": {
+        "nelx": 800,
+        "nely": 100
+      }
+    },
+    "material": {
+      "model": "plane_stress_isotropic",
+      "E": 1.0E+7,
+      "nu": 0.3,
+      "rho": 1
+    },
+    "bc": {
+      "supports": [
+        {
+          "type": "closest_point",
+          "location": [
+            0,
+            0.5
+          ],
+          "dofs": [
+            "ux",
+            "uy"
+          ]
+        },
+        {
+          "type": "closest_point",
+          "location": [
+            8,
+            0.5
+          ],
+          "dofs": [
+            "ux",
+            "uy"
+          ]
+        }
+      ]
+    },
+    "postprocessing": {},
+    "void_material": {
+      "E_min_ratio": 1E-9,
+      "rho_min": 1E-9
+    },
+    "optimization": {
+      "approach": "Yuksel",
+      "optimizer": "OC",
+      "objective": "compliance",
+      "interpolation": "SIMP",
+      "volume_fraction": 0.5,
+      "penalization": 3,
+      "filter": {
+        "type": "sensitivity",
+        "heaviside": false,
+        "radius": 2.5,
+        "radius_units": "element",
+        "boundary_condition": "symmetric"
+      },
+      "move_limit": 0.1,
+      "max_iters": 1000,
+      "convergence_tol": 0.01,
+      "yuksel": {
+        "stage1_max_iters": 1000,
+        "stage1_tol": 0.01,
+        "stage2_tol": 0.01
+      }
+    }
+  },
+  "normalized_replay": {
+    "meta": {
+      "name": "three-method study yuksel 800x100",
+      "campaign_id": "ultimate_nine_resolution_performance_scaling_v1",
+      "profile_id": "yuksel_practical_move01_tol001",
+      "work_semantics": "native two-stage practical profile; stage counts and times reported separately and in total",
+      "threads_per_run": 1
+    },
+    "benchmark": {
+      "extend_beyond_native_stop": false
+    },
+    "domain": {
+      "shape": "rectangular",
+      "size": {
+        "length": 8,
+        "height": 1
+      },
+      "thickness": 1,
+      "mesh": {
+        "nelx": 800,
+        "nely": 100
+      }
+    },
+    "material": {
+      "model": "plane_stress_isotropic",
+      "E": 1.0E+7,
+      "nu": 0.3,
+      "rho": 1
+    },
+    "bc": {
+      "supports": [
+        {
+          "type": "closest_point",
+          "location": [
+            0,
+            0.5
+          ],
+          "dofs": [
+            "ux",
+            "uy"
+          ]
+        },
+        {
+          "type": "closest_point",
+          "location": [
+            8,
+            0.5
+          ],
+          "dofs": [
+            "ux",
+            "uy"
+          ]
+        }
+      ]
+    },
+    "postprocessing": {},
+    "void_material": {
+      "E_min_ratio": 1E-9,
+      "rho_min": 1E-9
+    },
+    "optimization": {
+      "approach": "Yuksel",
+      "optimizer": "OC",
+      "objective": "compliance",
+      "interpolation": "SIMP",
+      "volume_fraction": 0.5,
+      "penalization": 3,
+      "filter": {
+        "type": "sensitivity",
+        "heaviside": false,
+        "radius": 2.5,
+        "radius_units": "element",
+        "boundary_condition": "symmetric"
+      },
+      "move_limit": 0.1,
+      "max_iters": 1000,
+      "convergence_tol": 0.01,
+      "yuksel": {
+        "stage1_max_iters": 1000,
+        "stage1_tol": 0.01,
+        "stage2_tol": 0.01
+      }
+    }
+  },
+  "diagnostic_only_differences": {
+    "record_history": true,
+    "native_spectral_history": false,
+    "extra_scalar_telemetry": true,
+    "density_snapshot_stride": 10,
+    "failed_attempt_retention": false
+  },
+  "numerical_config_identical": true,
+  "pass": true
+}

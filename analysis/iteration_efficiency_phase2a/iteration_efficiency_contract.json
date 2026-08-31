@@ -1,0 +1,213 @@
+{
+  "schema_version": "2H.1",
+  "contract_id": "iteration_efficiency_candidate_c_refreeze_2026-08-31",
+  "methodology_decision": "C EVALUATOR IMPLEMENTED AND REFROZEN - QUALIFICATION REQUIRED BEFORE PRODUCTION",
+  "production_authorized": false,
+  "production_meshes": [[160,20],[240,30],[320,40],[400,50],[480,60],[560,70],[640,80],[720,90],[800,100]],
+  "domain": {
+    "length": 8.0,
+    "height": 1.0,
+    "volume_fraction": 0.5,
+    "supports": "both_translational_dofs_at_both_midheight_end_nodes",
+    "even_nely_required": true
+  },
+  "methods": [
+    {
+      "id": "Proposed",
+      "profile_id": "proposed_practical_move02_tol001",
+      "profile_manifest_key": "proposed_practical",
+      "source": "analysis/ourApproach/Matlab/topopt_freq.m",
+      "source_sha256": "6d9ea66fcc27f63b7380708b5735552b5d9f2885d3e65714af572daccdae72b2",
+      "native_iteration": "OC_update",
+      "B0": 900,
+      "method_gate": "TRUE",
+      "profile_parameters": {"optimizer":"OC","move":0.2,"tolerance":0.01,"rmin_element":2.0,"semi_harmonic_baseline":"solid","reference_refresh_interval":0}
+    },
+    {
+      "id": "Yuksel",
+      "profile_id": "yuksel_practical_move01_tol001",
+      "profile_manifest_key": "yuksel_practical",
+      "source": "analysis/YukselApproach/Matlab/top99neo_inertial_freq.m",
+      "source_sha256": "5afc3d16b4ed6af05793df461b541ed3b2ea62a6da8836f38301a9a3917e6ba2",
+      "native_iteration": "qualified_chronological_Stage1_plus_Stage2_updates",
+      "acceptance_eligible_iteration": "Stage2_update",
+      "B0": 2000,
+      "B0_stage1": 2000,
+      "method_gate": "Stage2",
+      "stage1_handoff": "x_equals_xPhys_continuous_design",
+      "profile_parameters": {"optimizer":"OC","move":0.1,"stage1_tolerance":0.01,"stage2_tolerance":0.01,"rmin_element":2.5}
+    },
+    {
+      "id": "Olhoff",
+      "profile_id": "olhoff_fig3a_s1_native_bimodal_p100_move005_0025_fixed1600_v1",
+      "source": "analysis/olhoff_stabilization_audit/olhoffOptStabilized.m",
+      "source_sha256": "95240cf60f82b40f8e5e892b9eea9b20a8fd3744b5eca6fdfc8dde2698d82aec",
+      "lp_source": "Matlab/reproduction2007/algo/innerLoopLP.m",
+      "lp_source_sha256": "7724753c02f84d6009c3998f758d5b3f9c5144ad39ca6f470584a2c99e089465",
+      "native_iteration": "successful_outer_update",
+      "B0": 3200,
+      "method_gate": "policyStage_equals_2_AND_N_equals_2_AND_gap12_le_0.01",
+      "profile_parameters": {"move_initial":0.005,"move_stabilized":0.0025,"rmin_element":1.3,"rho_min":0.001,"persistence":100,"gap_threshold":0.01},
+      "nInner_semantics": "one_linprog_call_not_solver_iterations",
+      "solver_iteration_policy": "genuine_output_only_else_NA"
+      ,"route_policy": {"selector_values":["lp","mma","both"],"principal":"lp","secondary":"mma","separate_rows":true,"mma_qualification_required":true}
+    }
+  ],
+  "reference": {
+    "trajectory_separate_from_measurement": true,
+    "B_ref": 3200,
+    "P": 100,
+    "L_ref": 500,
+    "epsilon_ref": 0.001,
+    "block_endpoints": "b_equals_t_times_P_starting_when_F_at_b_minus_L_ref_exists",
+    "minimum_admissible_b_ref": 600,
+    "floor_definition": "F_e_b_equals_cumulative_best_minimum_over_base_valid_P_windows",
+    "gain_definition": "g_e_b_equals_F_e_b_minus_F_e_b_minus_L_ref_divided_by_F_e_b",
+    "freeze_definition": "first_block_endpoint_all_E1_E2_E3_gain_le_epsilon_ref",
+    "Q_ref_definition": "Q_ref_e_equals_F_e_at_b_ref",
+    "cap_fallback": false,
+    "failure_statuses": ["STRUCTURAL_MODE_NOT_FOUND","REFERENCE_NOT_ESTABLISHED","REFERENCE_SOLVER_TERMINATION"]
+  },
+  "measurement_budget": {
+    "formula": "B_meas = min(max(B0, b_ref + P - 1), B_ref)",
+    "progress_triggered_extension": false,
+    "certification_tail_truncated_definition": "b_ref + P - 1 > B_ref",
+    "tail_truncation_at_P100_bref3200": 99,
+    "unreached_remains_possible": true
+  },
+  "quality": {
+    "levels": [0.98,0.99,0.995],
+    "co_primary": true,
+    "source": "analysis/three_method_parametric_study/study_evaluate_design.m",
+    "source_sha256": "e14a21efe0bb2d9b9d7f3187b4c3f671ec089f6ff96773074b8f3b56cacd79e9",
+    "candidate": "C",
+    "design_field": "actual_gray",
+    "classifier_version": "candidate_c_unanimous_v1",
+    "mode_selection": {
+      "definition": "lowest_frequency_mode_passing_all_three_strict_tests",
+      "void_region": "evaluator_specific_rho_eff_le_0.1",
+      "voidKE_max_strict": 0.5,
+      "voidSE_max_strict": 0.5,
+      "densityParticipation_min_strict": 0.5,
+      "logic": "ALL_THREE_UNANIMOUS",
+      "IPR_role": "diagnostic_nonbinding",
+      "initial_modes": 3,
+      "escalation_factor": 2,
+      "scientific_mode_ceiling": false,
+      "failure_status": "STRUCTURAL_MODE_NOT_FOUND"
+    },
+    "evaluators": [
+      {"id":"E1","role":"co_equal_primary_neutral_posthoc","identity":"Candidate C E1 actual-gray","stiffness":"1e7*(1e-6+(1-1e-6)*x^3)","mass":"1e-6+(1-1e-6)*x"},
+      {"id":"E2","role":"co_equal_primary_neutral_posthoc","identity":"Candidate C E2 actual-gray","stiffness":"1e7*(1e-9+(1-1e-9)*x^3)","mass":"1e-9+(1-1e-9)*g(x), g=1e5*x^6 at x<=0.1 else x"},
+      {"id":"E3","role":"co_equal_primary_neutral_posthoc","identity":"Candidate C E3 actual-gray with evaluator clamp","stiffness":"1e7*max(x,1e-3)^3","mass":"g(max(x,1e-3)), g=1e5*x^6 at x<=0.1 else x"}
+    ],
+    "E2_E3_shared_mass_law": "Olhoff_Eq4a_piecewise_1e5_x6_below_or_at_0.1_else_x",
+    "binary_projection_role": "endpoint_manufacturability_topology_diagnostic_excluded_from_Q_reference_persistence_status",
+    "ratio_definition": "r_e(k)=Q_e(k)/Q_ref_e",
+    "robust_definition": "r_all(k)=min(r_E1,r_E2,r_E3)",
+    "spectral_pass_definition": "r_all(k)>=q",
+    "best_observed_definition": "Q_BO_e_j=max_method(Q_ref_e_method_j)",
+    "absolute_A": "A_NOT_INSTANTIATED"
+  },
+  "topology": {
+    "projection": "exact_count_round_VfNe_decreasing_density_increasing_global_index_tiebreak",
+    "connectivity": "four_neighbor_component_intersects_incident_Q4_footprints_of_both_support_nodes",
+    "A_element_coarsest": 0.0025,
+    "A_sig": 0.01,
+    "a_sig_by_mesh": [4,9,16,25,36,49,64,81,100],
+    "hard_gate": "C_required_equals_1_AND_each_detached_component_area_lt_A_sig",
+    "aggregate_detached_area_role": "diagnostic_only",
+    "n_islands_all_role": "diagnostic_only",
+    "LCC_role": "diagnostic_only",
+    "raw_volume_relative_tolerance": 0.001,
+    "OAT_physical_patch_scales": [1,4,9],
+    "T0_role": "known_strict_diagnostic",
+    "F8_exhaustive_640x80": {"passing_states":1014,"aggregate_detached_median_elements":64,"aggregate_detached_p95_elements":147,"aggregate_detached_max_elements":674,"aggregate_detached_max_solid_percent":2.633}
+  },
+  "persistence": {
+    "P": 100,
+    "OAT_P": [50,200],
+    "k_enter_definition": "minimum_a_ge_1_all_Aq_true_on_a_through_a_plus_P_minus_1",
+    "k_cert_definition": "k_enter_plus_P_minus_1",
+    "k_enter_semantics": "retrospective_maturation_location",
+    "k_cert_semantics": "prospective_certification_location",
+    "instantaneous_crossing_role": "diagnostic_only"
+  },
+  "trajectory_storage": {
+    "new_trajectories": "lossless_double_return_equivalent_fields",
+    "single_precision_permission": "only_after_no_solve_or_short_run_validation_proves_identical_gate_decisions_k_enter_k_cert_and_documented_E1_E2_E3_bound",
+    "historical_olhoff_single_precision": "historical_evidence_only_not_automatic_authorization_for_new_trajectories",
+    "reference_measurement_prefix": "bit_identical_at_every_shared_count",
+    "observer_inside_common_evaluator": false
+  },
+  "frozen_prior_evidence": {
+    "role": "context_only_not_new_iteration_efficiency_results",
+    "complete_method_triples": 8,
+    "olhoff_over_proposed_percent_range": [6.2,8.5],
+    "olhoff_over_yuksel_percent_range": [5.9,7.7],
+    "olhoff_800x100": "RUN_ERROR / E1 N/A / UNVERIFIABLE_AT_PRESENT"
+  },
+  "statuses": {
+    "precedence": ["PASS","PASS_WITH_LATER_SOLVER_TERMINATION","STRUCTURAL_MODE_NOT_FOUND","REFERENCE_SOLVER_TERMINATION","REFERENCE_NOT_ESTABLISHED","SOLVER_TERMINATION","INVALID_TOPOLOGY","QUALITY_NOT_REACHED","PERSISTENT_NONACCEPTANCE","OTHER"],
+    "additional_execution_classes": ["RUN_ERROR","EVIDENCE_UNAVAILABLE","UNVERIFIABLE_AT_PRESENT","FINGERPRINT_MISMATCH","CAP_CENSORED"],
+    "fit_eligible": ["PASS","PASS_WITH_LATER_SOLVER_TERMINATION"],
+    "known_olhoff_backend_subclass": "GENERIC_LP_ITERATION_LIMIT_ONLY: dual-simplex-highs returned exit flag 0 in the recorded MATLAB version",
+    "olhoff_800x100_existing_evidence": "RUN_ERROR / E1 N/A / UNVERIFIABLE_AT_PRESENT",
+    "display_all_rows": true
+  },
+  "timing": {
+    "threads": 1,
+    "serial": true,
+    "discarded_warmup_per_method": 1,
+    "repetitions": 3,
+    "summary": ["median","range","MAD"],
+    "components": ["T_init","T_loop_to_enter","T_loop_to_cert","T_native_finalize","T_result_to_enter","T_result_to_cert","T_gate_offline","T_observer_after_cert","T_reference"],
+    "T_reference_separate": true,
+    "excluded_from_endpoint_time": ["common_evaluators","topology_gate","persistence_scan","images","trajectory_IO","observer_after_cert"],
+    "endpoint_strategy": "clean_fixed_horizon_replays_after_offline_endpoint_freeze",
+    "no_mixing_policy": true
+  },
+  "scaling": {
+    "model": "y=C*Ne^p",
+    "fit_space": "unit_weight_OLS_log_y_on_log_Ne",
+    "primary": "k_enter",
+    "k_cert_role": "secondary_descriptive_with_plus_P_minus_1_caveat",
+    "minimum_valid_meshes": 3,
+    "fit_positive_finite_certified_only": true,
+    "common_support_companion_required": true,
+    "cross_method_comparison_outside_common_support": false,
+    "report": ["C","p","R2_log","n_valid","Ne_min","Ne_max","included_meshes","p_LOO_min","p_LOO_max","exclusions"],
+    "weakly_identified": ["R2_log<0.80","LOO_range_spans_zero","LOO_width>abs(p)"],
+    "fit_line_observed_range_only": true,
+    "required_wording": "empirical scaling over the tested mesh range"
+  },
+  "topology_rendering": {
+    "shared_renderer": "tools/Matlab/renderTopologyDensity.m",
+    "visualization_quality": "regular",
+    "raw_and_binary": true,
+    "domain_extent": [0,8,0,1],
+    "overlay_policy": "supports",
+    "manual_state_selection": false
+  },
+  "phase2h_refreeze": {
+    "freeze_record": "analysis/iteration_efficiency_phase2h_c_refreeze/PHASE2H_FREEZE_RECORD.md",
+    "precision_qualification": {"required":true,"schema":"candidate_c_precision_qualification_v1","path":"analysis/iteration_efficiency_phase2a/validation_outputs/candidate_c_precision_qualification.json","status":"NOT_EXECUTED"},
+    "cross_method_qualification": {"required":true,"schema":"candidate_c_cross_method_qualification_v1","path":"analysis/iteration_efficiency_phase2a/validation_outputs/candidate_c_cross_method_qualification.json","status":"NOT_EXECUTED"},
+    "reference_length_qualification": {"required":true,"schema":"candidate_c_reference_length_qualification_v1","path":"analysis/iteration_efficiency_phase2a/validation_outputs/candidate_c_reference_length_qualification.json","status":"NOT_EXECUTED"},
+    "production_status": "BLOCKED"
+  },
+  "normative_documents": [
+    {"path":"analysis/iteration_efficiency_study_design/ITERATION_EFFICIENCY_PROTOCOL_DRAFT.md","sha256":"a95bf2e7829af8a4f04c0e91333f7816c44d67f10161d6209b349d1a4df05cd6"},
+    {"path":"analysis/iteration_efficiency_study_design/ACCEPTANCE_GATE_SPEC.md","sha256":"d76556452294286f94a8a536ef57fc841870391b596640bd0c2023832d265ec7"},
+    {"path":"analysis/iteration_efficiency_study_design/REFERENCE_QUALITY_SPEC.md","sha256":"498daf4d22419e62e1abb8263f85664411bc3ebacdaa00b88fad7f86bfc5bce8"},
+    {"path":"analysis/iteration_efficiency_study_design/QUALITY_EFFORT_SPEC.md","sha256":"cacfb4de668d50eb5dbcf51b7db58be26906bdcf7bee0697f40f301983b03b62"},
+    {"path":"analysis/iteration_efficiency_study_design/TOPOLOGY_SANITY_SPEC.md","sha256":"1fb3001885b604a042748e787767e83224b93344f424e4890c47772d6522dfde"},
+    {"path":"analysis/iteration_efficiency_study_design/ITERATION_ACCOUNTING_SPEC.md","sha256":"9094075470ae57a3a15673c4cfaf0ac8c12a0c1aff4bae4fca40725923f51d2b"},
+    {"path":"analysis/iteration_efficiency_study_design/TIMING_SPEC.md","sha256":"34e1ef5934ae1771bdaa9dd9a2bdb88694418eb3b0857d7a20698ea683902fab"},
+    {"path":"analysis/iteration_efficiency_study_design/SCALING_AND_FIGURE_SPEC.md","sha256":"0356c5ced72a5f6493f6d3a4e105def166434dcb4daf1e37932ae00307ac9b10"},
+    {"path":"analysis/iteration_efficiency_study_design/PROPOSED_TABLE_LAYOUTS.md","sha256":"2606cae0b1b18c515ecd147b3b065a1a9ba25fc35c3dfedaad2f7df411f0101a"},
+    {"path":"analysis/iteration_efficiency_study_design/IMPLEMENTATION_REQUIREMENTS.md","sha256":"5e6f85126d2ba4e0e686e7edd1328d44bfed54fea37657f29412d0ae6d30cf22"},
+    {"path":"analysis/iteration_efficiency_study_design/FAIRNESS_RISK_REGISTER.md","sha256":"8364c5f3bfc6b4441681fed660982ee8a3729f969c7ed5633656f460f373bcf3"},
+    {"path":"analysis/iteration_efficiency_study_design/EVIDENCE_AVAILABILITY_MATRIX.csv","sha256":"7338d55001de2a26ca1705079301a3dd5c2d922d9d11a9cda2662436572c5ed3"}
+  ]
+}

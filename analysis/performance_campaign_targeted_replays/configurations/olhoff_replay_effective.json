@@ -1,0 +1,69 @@
+{
+  "meta": {
+    "name": "final campaign Olhoff 640x80",
+    "campaign_id": "ultimate_nine_resolution_performance_scaling_v1",
+    "profile_id": "olhoff_fig3a_s1_native_bimodal_p100_move005_0025_fixed1600_v1",
+    "work_semantics": "fixed 1600 outer iterations with causal S1 move stabilization; NOT NATIVE CONVERGENCE",
+    "threads_per_run": 1
+  },
+  "benchmark": {
+    "enable_diagnostics": false,
+    "record_history": false,
+    "extend_beyond_native_stop": false
+  },
+  "domain": {
+    "shape": "rectangular",
+    "size": {
+      "length": 8,
+      "height": 1
+    },
+    "thickness": 1,
+    "mesh": {
+      "nelx": 640,
+      "nely": 80
+    }
+  },
+  "optimization": {
+    "approach": "OlhoffStabilizedS1",
+    "optimizer": "LP",
+    "objective": "first_eigenfrequency",
+    "interpolation": "SIMP",
+    "volume_fraction": 0.5,
+    "filter": {
+      "type": "sensitivity",
+      "radius": 1.3,
+      "radius_units": "element",
+      "mode": "diag"
+    },
+    "move_limit": 0.005,
+    "max_iters": 1600,
+    "convergence_tol": null,
+    "rho_min": 0.001,
+    "tol_mult": 0.05,
+    "inner_solver": "lp",
+    "off_diagonal": false,
+    "stabilization": {
+      "profile_id": "olhoff_fig3a_s1_native_bimodal_p100_move005_0025_fixed1600_v1",
+      "base_factory": "repro2007_config('fig3a_best')",
+      "runner": "analysis/olhoff_stabilization_audit/run_stabilization_case.m",
+      "policy_id": "S1",
+      "trigger_id": "native_bimodal_persistence_v1",
+      "condition": "N == 2 && gap12 <= 0.01",
+      "gap_threshold": 0.01,
+      "persistence": 100,
+      "move_initial": 0.005,
+      "move_stabilized": 0.0025,
+      "rmin_element": 1.3,
+      "max_iters_expected": 1600,
+      "successful_status": "VALID_STABILIZED_STATE_AT_FIXED_WORK",
+      "work_semantics": "fixed 1600 outer iterations with causal S1 move stabilization; NOT NATIVE CONVERGENCE",
+      "native_convergence_claim": false,
+      "output_dir": "/Users/piotrek/Programming/topOpt4freqMax/analysis/performance_campaign_targeted_replays/raw/olhoff"
+    }
+  },
+  "postprocessing": {
+    "visualize_live": false,
+    "save_final_image": false,
+    "save_snapshot_image": false
+  }
+}

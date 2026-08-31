@@ -1,0 +1,59 @@
+{
+ "log_path": "/Volumes/HP911Pro/Combobulating/Olhoff/results/BASE_mma_160x20.log",
+ "log_sha256": "2df8b9e8c0461c5589b4244c57568eabc3286587cd3b3e8ac0ab16a67a0cb9af",
+ "n_lines": 793,
+ "n_rows": 752,
+ "first_outer": 1,
+ "last_outer": 752,
+ "declared_maxOuter": 800,
+ "missing": [],
+ "duplicates": [],
+ "noise_lines": [
+  {
+   "line": 791,
+   "text": "2026-08-25 15:52:22.944 MATLAB_maca64[75100:315954] HIToolbox: received notification of WindowServer event port death."
+  },
+  {
+   "line": 792,
+   "text": "2026-08-25 15:52:22.944 MATLAB_maca64[75100:315954] port matched the WindowServer port created in BindCGSToRunLoop"
+  }
+ ],
+ "config": {
+  "a": "8",
+  "b": "1",
+  "t": "1",
+  "E": "10000000",
+  "nu": "0.3000",
+  "rhom": "1",
+  "nelx": "160",
+  "nely": "20",
+  "bc": "'a'",
+  "support": "'mid'",
+  "axial": "'both'",
+  "elemType": "'Q4'",
+  "massType": "'consistent'",
+  "p": "3",
+  "massInterp": "'4'",
+  "rhomin": "1.0000e-03",
+  "rho0": "0.5000",
+  "volfrac": "0.5000",
+  "n": "1",
+  "Nmax": "4",
+  "rminEl": "3",
+  "rminPhys": "0.0600",
+  "tolMult": "0.0500",
+  "move": "0.0100",
+  "offDiag": "1",
+  "innerSolver": "'mma'",
+  "filterMode": "'diag'",
+  "maxInner": "300",
+  "tolInner": "0.0100",
+  "minInner": "5",
+  "maxOuter": "800",
+  "tolOuter": "1.0000e-03",
+  "solver": "'eigs'",
+  "threads": "1",
+  "verbose": "1",
+  "name": "'BASE_mma_160x20'"
+ }
+}

@@ -76,6 +76,19 @@ H.mode_index(k) = localGet(rec, 'mode_index', NaN);
 H.mac(k)        = localGet(rec, 'mac', NaN);
 
 H.n = k;
+
+% Optional observation-only Phase-2A hook.  With no root-appdata observer
+% installed (the normal and historical path), this cannot alter REC or H.
+% The callback receives copies of the post-update record and recorder index;
+% it has no return value and therefore no route back into the optimizer.
+observerKey = 'topopt_iteration_observer_v1';
+if isappdata(0, observerKey)
+    observer = getappdata(0, observerKey);
+    assert(isstruct(observer) && isfield(observer,'callback') && ...
+        isa(observer.callback,'function_handle'), ...
+        'topopt_history_record:InvalidObserver', 'Installed observer is invalid.');
+    observer.callback(rec, k, observer);
+end
 end
 
 function v = localGet(rec, name, defaultValue)

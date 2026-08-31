@@ -1,0 +1,69 @@
+{
+ "phase": "2D",
+ "classification": "OFFLINE_AMENDMENT_VALIDATION / NO_NEW_OPTIMIZATION",
+ "captured_at": "2026-08-30T14:14:10.140392+02:00",
+ "branch": "benchmark-methodology-r2",
+ "head": "632e9b01811845709de33f93051fd853373ed5e1",
+ "git_status": [
+  "M examples/Performance/performance_comparison.m",
+  " M tools/Matlab/run_topopt_from_json.m",
+  " M tools/Matlab/topopt_history_record.m",
+  "?? analysis/iteration_efficiency_evaluator_discontinuity_audit/",
+  "?? analysis/iteration_efficiency_methodology_audit/",
+  "?? analysis/iteration_efficiency_methodology_delta_audit/",
+  "?? analysis/iteration_efficiency_methodology_final_recheck/",
+  "?? analysis/iteration_efficiency_phase2a/",
+  "?? analysis/iteration_efficiency_phase2b_precision/",
+  "?? analysis/iteration_efficiency_phase2b_recheck/",
+  "?? analysis/iteration_efficiency_phase2d_evaluator_amendment/",
+  "?? analysis/iteration_efficiency_study_design/",
+  "?? analysis/performance_campaign_forensic_audit/",
+  "?? analysis/performance_campaign_targeted_replays/",
+  "?? examples/Performance/WP0A_VISUALIZATION_FIX.md",
+  "?? examples/Performance/final_campaign/",
+  "?? examples/Performance/test_shared_topology_renderer.m",
+  "?? tools/Matlab/renderTopologyDensity.m"
+ ],
+ "environment": {
+  "matlab": "25.2.0.2998904 (R2025b)",
+  "computer": "MACA64",
+  "threads_forced": 1
+ },
+ "amendment": "Du & Olhoff (2007) Eq. (4) -> Eq. (4a) (c0=1e5) in the E2/E3 low-density mass branch of the COMMON POST-HOC EVALUATOR ONLY",
+ "source": "references/Du2007_Topological.pdf section 2.2",
+ "amended_evaluator_implementation": "analysis/iteration_efficiency_phase2d_evaluator_amendment/+ie2d/study_evaluate_design_eq4a.m",
+ "amended_evaluator_sha256": "bfc98f7fa4a4a1a6d54e64b98f9fcff71ab66ffc4e63a0fc21da99350c72d74b",
+ "unchanged_file_hashes": {
+  "Matlab/reproduction2007/fem/massScale.m": "90ba72c3df056ed0e705bfcfb763c1ef631f48891d626b18c180d6702d683a63",
+  "Matlab/reproduction2007/algo/defaultCfg.m": "aed41860a2dac6a06e1c51cc96cf7436a65bcd9d60ecdf7af2d2a3552ea456e0",
+  "analysis/OlhoffApproachExact/Matlab/mass_interp.m": "90f9fb21a6e44fa294b8c54bd5bb45ab3cc0901de42752a7003d38c14ea592d9",
+  "analysis/YukselApproach/Matlab/top99neo_inertial_freq.m": "5afc3d16b4ed6af05793df461b541ed3b2ea62a6da8836f38301a9a3917e6ba2",
+  "analysis/ourApproach/Matlab/topopt_freq.m": "6d9ea66fcc27f63b7380708b5735552b5d9f2885d3e65714af572daccdae72b2",
+  "analysis/olhoff_stabilization_audit/olhoffOptStabilized.m": "95240cf60f82b40f8e5e892b9eea9b20a8fd3744b5eca6fdfc8dde2698d82aec",
+  "analysis/three_method_parametric_study/study_evaluate_design.m": "22a1b974c251dbe7baa6499a5aca11e6bde68469b6d2e80fd4274c9447f31343",
+  "analysis/iteration_efficiency_phase2a/iteration_efficiency_contract.json": "46318e6c7e74fdfe9cc643afeef93bbd6edfc5a894e89269be9cc04f0f27697c",
+  "analysis/iteration_efficiency_phase2a/+ie2a/production_preflight.m": "868cdaab197a00500f861a6a5687918e1b089c87c6d580e011d1e8abc51321b3"
+ },
+ "amended_normative_documents": {
+  "analysis/iteration_efficiency_study_design/QUALITY_EFFORT_SPEC.md": {
+   "pre": "b7b1d8c3bbe854704b4155da2f440a1ee74dac1731a339ca151d85e57afdd7ee",
+   "post": "02da8b592239cd22af4609e302aae7a2fc77d9a47d0451812b4d1ad135ca3fa2"
+  },
+  "analysis/iteration_efficiency_study_design/ITERATION_EFFICIENCY_PROTOCOL_DRAFT.md": {
+   "pre": "3e397e0b685bf078c6b4cd0a803b07075d4bd8ca99e65b59e8dd9be99c1728df",
+   "post": "14979ab7fedcbd0e4e4249cd4ddc9443bfc2f3f20da948e1927ae1c28ae72604"
+  }
+ },
+ "phase2a_protected_hashes_all_match": true,
+ "phase2a_hash_mismatches": [],
+ "optimizer_runs": 0,
+ "native_optimizer_modified": false,
+ "contract_modified": false,
+ "frozen_evaluator_modified": false,
+ "production_preflight_modified": false,
+ "production_authorization_token_set": false,
+ "production_campaign_started": false,
+ "self_refreeze": false,
+ "verdict": "PHASE 2D AMENDMENT VALIDATED - READY FOR INDEPENDENT EVALUATOR-AMENDMENT DELTA AUDIT",
+ "production_status": "BLOCKED"
+}
