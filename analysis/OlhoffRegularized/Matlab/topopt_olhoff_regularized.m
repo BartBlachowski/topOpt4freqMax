@@ -1,0 +1,701 @@
+function [rho, omega, info] = topopt_olhoff_regularized( ...
+    nelx, nely, volfrac, penal, rmin, move, bcType, runCfg)
+%TOPOPT_OLHOFF_REGULARIZED Globalized Olhoff/Olhoff-inspired optimizer.
+%
+%   This implementation is deliberately separate from OlhoffReproduced2007.
+%   FORMULATION='olhoff' retains the incremental multiple-eigenvalue model:
+%     OPTIMIZER='lp'  uses the Eq. (16)/(22) equality-constrained LP;
+%     OPTIMIZER='mma' uses the full sub-eigenvalue problem through nested MMA.
+%   FORMULATION='ks' uses a smooth KS lower aggregate and solves its local
+%   model by LP or nested MMA.  The KS route is Olhoff-inspired, not a literal
+%   implementation of Olhoff and Du (2014).
+%
+%   Every route shares an outer trust-region acceptance test based on a trial
+%   eigensolve.  A small trust radius alone is never accepted as convergence:
+%   the scaled predicted-improvement slope must also be small.
+
+if nargin < 1 || isempty(nelx), nelx = 160; end
+if nargin < 2 || isempty(nely), nely = 20; end
+if nargin < 3 || isempty(volfrac), volfrac = 0.5; end
+if nargin < 4 || isempty(penal), penal = 3; end
+if nargin < 5 || isempty(rmin), rmin = 1.3; end
+if nargin < 6 || isempty(move), move = 0.005; end
+if nargin < 7 || isempty(bcType), bcType = "simply"; end
+if nargin < 8 || isempty(runCfg), runCfg = struct(); end
+if ~isstruct(runCfg) || ~isscalar(runCfg)
+    error('topopt_olhoff_regularized:RunCfg','runCfg must be a scalar struct.');
+end
+
+validateattributes(nelx,{'numeric'},{'scalar','integer','positive'});
+validateattributes(nely,{'numeric'},{'scalar','integer','positive'});
+validateattributes(volfrac,{'numeric'},{'scalar','>',0,'<=',1});
+validateattributes(penal,{'numeric'},{'scalar','positive'});
+validateattributes(rmin,{'numeric'},{'scalar','positive'});
+validateattributes(move,{'numeric'},{'scalar','>',0,'<=',1});
+
+% Install the frozen FE, filter, modal-gradient, LP and MMA primitives without
+% leaving their colliding function names on the caller's path.
+thisDir = fileparts(mfilename('fullpath'));
+repo = fileparts(fileparts(fileparts(thisDir)));
+runnerDir = fullfile(repo,'Matlab','reproduction2007','runner');
+oldPath = path();
+pathCleanup = onCleanup(@()path(oldPath));
+addpath(runnerDir);
+guard = repro2007_paths(); %#ok<NASGU>
+identity = repro2007_assert_identity(false);
+
+[cfg, sourceMeta] = repro2007_config('fig3a_best');
+cfg.nelx = double(nelx);
+cfg.nely = double(nely);
+cfg.volfrac = double(volfrac);
+cfg.rho0 = double(volfrac);
+cfg.p = double(penal);
+cfg.rminEl = double(rmin);
+cfg.rminPhys = [];
+cfg.move = double(move);
+cfg.verbose = logical(localOpt(runCfg,'verbose',true));
+cfg.tolMult = double(localOpt(runCfg,'tol_mult',0.05));
+cfg.threads = double(localOpt(runCfg,'threads',1));
+% Regularized defaults must be continuous/differentiable enough for a trial
+% acceptance test. Eq. (4b) is C1; the historical Eq. (4) law is discontinuous
+% at rho=0.1 and is therefore available only by explicit request.
+cfg.massInterp = char(string(localOpt(runCfg,'mass_interp','4b')));
+cfg.filterMode = char(string(localOpt(runCfg,'filter_mode','density')));
+cfg.rhomin = double(localOpt(runCfg,'rho_min',cfg.rhomin));
+cfg.Nmax = double(localOpt(runCfg,'n_modes_max',cfg.Nmax));
+cfg.maxOuter = double(localOpt(runCfg,'max_outer_iterations',1000));
+cfg.maxInner = double(localOpt(runCfg,'max_inner_iterations',500));
+cfg.tolInner = double(localOpt(runCfg,'tol_inner',cfg.tolInner));
+cfg.minInner = double(localOpt(runCfg,'min_inner',cfg.minInner));
+cfg.name = 'olhoff_regularized';
+
+reg = localRegularization(runCfg,cfg.move,cfg.Nmax);
+[route,cfg] = localRoute(runCfg,cfg);
+[cfg,problem] = localProblem(cfg,bcType,runCfg);
+localValidate(cfg,problem,reg,route);
+
+threadsBefore = maxNumCompThreads();
+threadCleanup = onCleanup(@()maxNumCompThreads(threadsBefore));
+maxNumCompThreads(cfg.threads);
+
+totalTic = tic;
+mdl = localModel(cfg,problem);
+NE = mdl.nele;
+flt = prepFilter(cfg.nelx,cfg.nely,cfg.rminEl);
+x = cfg.rho0*ones(NE,1);
+rho = localPhysicalDensity(flt,x,cfg.filterMode);
+volumeWeights = localVolumeWeights(flt,NE,cfg.filterMode);
+n = cfg.n;
+Jcalc = n + cfg.Nmax;
+trust = cfg.move;
+acceptedUpdates = 0;
+totalTrials = 0;
+totalInner = 0;
+convergenceCount = 0;
+slowProgressCount = 0;
+status = 'RUNNING';
+stopReason = '';
+eventLog = {};
+ksReference = NaN;
+
+captureTrajectory = logical(localOpt(runCfg,'capture_trajectory',false));
+if captureTrajectory
+    rhoSnapshots = NaN(NE,cfg.maxOuter+1);
+    rhoSnapshots(:,1) = rho;
+else
+    rhoSnapshots = zeros(NE,0);
+end
+
+hist = localEmptyHistory();
+
+if cfg.verbose
+    fprintf('[OlhoffRegularized] %s, %dx%d, LxH=%gx%g, rmin=%g\n', ...
+        problem.label,cfg.nelx,cfg.nely,cfg.a,cfg.b,cfg.rminEl);
+    fprintf('[OlhoffRegularized] %s; max outer=%d, max inner=%d, max trials=%d\n', ...
+        route.description,cfg.maxOuter,cfg.maxInner,reg.maxTrialSteps);
+    fprintf('%4s %9s %9s %9s %3s %8s %6s %6s %7s %9s %9s %8s\n', ...
+        'it','omega1','omega2','omega3','N','trust','trial','inner','accept','ratio','maxdrho','station');
+end
+
+for outer = 1:cfg.maxOuter
+    [w,Phi,lam,~] = localModes(mdl,rho,cfg,Jcalc);
+    if isnan(ksReference),ksReference = lam(n);end
+    N = localMultiplicity(w,n,cfg.Nmax,cfg.tolMult);
+    J = n+N;
+    multJ = (J+1<=Jcalc) && abs(w(J+1)-w(J))/w(J)<cfg.tolMult;
+
+    if strcmp(route.formulation,'olhoff')
+        [F,fJJ] = localOlhoffGradients(mdl,flt,rho,cfg,Phi,lam,n,N,J);
+        objectiveBefore = lam(n);
+        ksWeights = NaN(reg.ksModes,1);
+        ksModesUsed = 0;
+        ksGradient = [];
+    else
+        [objectiveBefore,ksGradient,ksWeights,ksModesUsed] = ...
+            localKsData(mdl,flt,rho,cfg,Phi,lam,ksReference,reg);
+        F = []; fJJ = [];
+    end
+
+    accepted = false;
+    innerOK = false;
+    ratio = -Inf;
+    predicted = NaN;
+    actual = NaN;
+    predSlope = Inf;
+    dxInf = 0;
+    dxRms = 0;
+    trialUsed = 0;
+    innerUsed = 0;
+    trustUsed = trust;
+    objectiveAfter = objectiveBefore;
+    wAfter = w;
+    rhoAfter = rho;
+
+    for trial = 1:reg.maxTrialSteps
+        trialUsed = trial;
+        totalTrials = totalTrials+1;
+        trustUsed = trust;
+        ctx = struct('F',F,'fJJ',fJJ,'lam',lam(n:n+N-1),'lamJ',lam(J), ...
+            'rho',x,'rhomin',cfg.rhomin,'volfrac',cfg.volfrac, ...
+            'currentVolume',sum(rho),'volumeWeights',volumeWeights, ...
+            'move',trust,'maxInner',cfg.maxInner,'tolInner',cfg.tolInner, ...
+            'minInner',cfg.minInner,'offDiag',cfg.offDiag);
+
+        if strcmp(route.formulation,'olhoff')
+            if strcmp(route.optimizer,'lp')
+                [drho,st] = localOlhoffLp(ctx);
+            else
+                [drho,st] = localOlhoffMma(ctx);
+            end
+            predicted = st.beta-objectiveBefore;
+        else
+            if strcmp(route.optimizer,'lp')
+                [drho,st] = localKsLp(ctx,ksGradient,objectiveBefore);
+            else
+                [drho,st] = localKsMma(ctx,ksGradient,objectiveBefore);
+            end
+            predicted = st.predictedImprovement;
+        end
+
+        innerUsed = innerUsed+st.nInner;
+        totalInner = totalInner+st.nInner;
+        innerOK = logical(st.conv) && all(isfinite(drho));
+        if isfield(st,'lpFlag'),innerOK=innerOK && st.lpFlag==1;end
+        if ~innerOK
+            eventLog{end+1}=sprintf('outer %d trial %d: inner solve rejected',outer,trial); %#ok<AGROW>
+            trust=max(reg.moveMin,reg.shrinkFactor*trust);
+            continue
+        end
+
+        xTrial = min(1,max(cfg.rhomin,x+drho));
+        rhoTrial = localPhysicalDensity(flt,xTrial,cfg.filterMode);
+        [wTrial,~,lamTrial] = localModes(mdl,rhoTrial,cfg,Jcalc);
+        if strcmp(route.formulation,'olhoff')
+            objectiveTrial = lamTrial(n);
+        else
+            objectiveTrial = localKsValue(lamTrial,ksReference,reg.ksKappa,reg.ksModes);
+        end
+        actual = objectiveTrial-objectiveBefore;
+        predScale = max(abs(objectiveBefore),1);
+        predSlope = max(predicted,0)/(predScale*max(trust,eps));
+        if predicted>reg.predictionFloor*predScale
+            ratio = actual/predicted;
+        elseif abs(actual)<=reg.objectiveTol*predScale
+            ratio = 0;
+        else
+            ratio = sign(actual)*Inf;
+        end
+
+        if predicted>0 && actual>=0 && ratio>=reg.acceptRatio
+            accepted = true;
+            xAfter = xTrial;
+            rhoAfter = rhoTrial;
+            objectiveAfter = objectiveTrial;
+            wAfter = wTrial;
+            dx = rhoAfter-rho;
+            dxInf = max(abs(dx));
+            dxRms = sqrt(mean(dx.^2));
+            if ratio>=reg.growRatio && dxInf>=0.8*trust
+                trust=min(reg.moveMax,reg.growFactor*trust);
+            elseif ratio<reg.keepRatio
+                trust=max(reg.moveMin,reg.shrinkFactor*trust);
+            end
+            break
+        end
+
+        trust=max(reg.moveMin,reg.shrinkFactor*trust);
+    end
+
+    if accepted
+        x = xAfter;
+        rho = rhoAfter;
+        acceptedUpdates = acceptedUpdates+1;
+        if captureTrajectory,rhoSnapshots(:,acceptedUpdates+1)=rho;end
+        relObjective = abs(actual)/max(abs(objectiveBefore),1);
+        if relObjective<=reg.progressTol
+            slowProgressCount=slowProgressCount+1;
+        else
+            slowProgressCount=0;
+        end
+        if slowProgressCount>=reg.progressPersistence
+            oldTrust=trust;
+            trust=max(reg.moveMin,reg.progressShrinkFactor*trust);
+            slowProgressCount=0;
+            if trust<oldTrust
+                eventLog{end+1}=sprintf( ...
+                    'outer %d: slow-progress trust contraction %.3e -> %.3e', ...
+                    outer,oldTrust,trust); %#ok<AGROW>
+            end
+        end
+        stationarityOK = predSlope<=reg.stationarityTol;
+        if dxInf<=reg.densityTol && dxRms<=reg.rmsDensityTol && ...
+                relObjective<=reg.objectiveTol && stationarityOK
+            convergenceCount=convergenceCount+1;
+        else
+            convergenceCount=0;
+        end
+    else
+        relObjective=0;
+        slowProgressCount=0;
+        stationarityOK = predSlope<=reg.stationarityTol;
+        if trust<=reg.moveMin*(1+1e-12) && stationarityOK
+            convergenceCount=convergenceCount+1;
+        else
+            convergenceCount=0;
+        end
+    end
+
+    hist = localRecord(hist,outer,wAfter,N,multJ,trustUsed,trust,trialUsed, ...
+        innerUsed,innerOK,accepted,ratio,predicted,actual,predSlope,dxInf,dxRms, ...
+        mean(rho),objectiveAfter,relObjective,stationarityOK,convergenceCount, ...
+        slowProgressCount,ksModesUsed,ksWeights);
+
+    if cfg.verbose
+        fprintf('%4d %9.3f %9.3f %9.3f %3d %8.2e %6d %6d %7s %9.3g %9.2e %8.2e\n', ...
+            outer,wAfter(1),wAfter(2),wAfter(min(3,end)),N,trustUsed,trialUsed, ...
+            innerUsed,localYesNo(accepted),ratio,dxInf,predSlope);
+    end
+
+    if convergenceCount>=reg.persistence
+        status='CONVERGED';
+        stopReason='persistent_stationarity_and_state_change';
+        eventLog{end+1}=sprintf('converged at outer %d after %d accepted updates', ...
+            outer,acceptedUpdates); %#ok<AGROW>
+        break
+    end
+    if ~accepted && trust<=reg.moveMin*(1+1e-12) && ~stationarityOK
+        status='GLOBALIZATION_STALLED';
+        stopReason='minimum_trust_radius_without_stationarity';
+        eventLog{end+1}=sprintf('stalled at outer %d: trust minimum with scaled predicted slope %.3e', ...
+            outer,predSlope); %#ok<AGROW>
+        break
+    end
+end
+
+if strcmp(status,'RUNNING')
+    status='CAP_HIT';
+    stopReason='maximum_outer_iterations';
+end
+
+[omega,~,lambda,~] = localModes(mdl,rho,cfg,Jcalc);
+nOuter=numel(hist.outerIteration);
+if captureTrajectory,rhoSnapshots=rhoSnapshots(:,1:acceptedUpdates+1);end
+
+info=struct();
+info.status=status;
+info.stop_reason=stopReason;
+info.route=route;
+info.formulation=route.formulation;
+info.optimizer=route.optimizer;
+info.cfg=cfg;
+info.regularization=reg;
+info.problem=problem;
+info.history=hist;
+info.nOuter=nOuter;
+info.iterations=struct('outer',nOuter,'accepted_updates',acceptedUpdates, ...
+    'trial_total',totalTrials,'rejected_trials',totalTrials-acceptedUpdates, ...
+    'inner_total',totalInner,'inner_per_outer',hist.innerIterations, ...
+    'max_outer_iterations',cfg.maxOuter,'max_inner_iterations',cfg.maxInner, ...
+    'max_trial_steps',reg.maxTrialSteps);
+info.lambda=lambda;
+info.model=mdl;
+info.design=x;
+info.rho_snapshots=rhoSnapshots;
+info.wallclock=toc(totalTic);
+info.log=eventLog;
+info.source=struct('method','OlhoffRegularized','reproductionRoot',identity.root, ...
+    'baselineConfiguration',sourceMeta.name,'historical_reproduction',false, ...
+    'qualification',route.qualification);
+clear threadCleanup guard pathCleanup
+end
+
+function reg=localRegularization(o,initialMove,Nmax)
+reg=struct();
+reg.maxTrialSteps=double(localOpt(o,'max_trial_steps',8));
+reg.moveMin=double(localOpt(o,'move_min',1e-7));
+reg.moveMax=double(localOpt(o,'move_max',initialMove));
+reg.acceptRatio=double(localOpt(o,'accept_ratio',0.10));
+reg.keepRatio=double(localOpt(o,'keep_ratio',0.25));
+reg.growRatio=double(localOpt(o,'grow_ratio',0.75));
+reg.shrinkFactor=double(localOpt(o,'shrink_factor',0.5));
+reg.growFactor=double(localOpt(o,'grow_factor',1.25));
+reg.stationarityTol=double(localOpt(o,'stationarity_tol',2e-2));
+reg.densityTol=double(localOpt(o,'density_tol',1e-4));
+reg.rmsDensityTol=double(localOpt(o,'rms_density_tol',1e-5));
+reg.objectiveTol=double(localOpt(o,'objective_tol',1e-5));
+reg.persistence=double(localOpt(o,'persistence',20));
+reg.progressTol=double(localOpt(o,'progress_tolerance',1e-4));
+reg.progressPersistence=double(localOpt(o,'progress_persistence',20));
+reg.progressShrinkFactor=double(localOpt(o,'progress_shrink_factor',0.5));
+reg.predictionFloor=double(localOpt(o,'prediction_floor',1e-12));
+reg.ksKappa=double(localOpt(o,'ks_kappa',30));
+reg.ksModes=double(localOpt(o,'ks_modes',min(3,Nmax+1)));
+end
+
+function [route,cfg]=localRoute(o,cfg)
+optimizer=lower(char(string(localOpt(o,'optimizer','lp'))));
+formulation=lower(char(string(localOpt(o,'formulation','olhoff'))));
+if ~ismember(optimizer,{'lp','mma'})
+    error('topopt_olhoff_regularized:Optimizer','optimizer must be lp or mma.');
+end
+if ~ismember(formulation,{'olhoff','ks'})
+    error('topopt_olhoff_regularized:Formulation','formulation must be olhoff or ks.');
+end
+cfg.innerSolver=optimizer;
+cfg.offDiag=strcmp(optimizer,'mma') && strcmp(formulation,'olhoff');
+if strcmp(formulation,'olhoff') && strcmp(optimizer,'lp')
+    label='Olhoff Eq. (16)/(22) LP with trust-region globalization';
+    qualification='globalized Olhoff formulation; not the fixed-step historical reproduction';
+elseif strcmp(formulation,'olhoff')
+    label='Olhoff full sub-eigenvalue nested MMA with trust-region globalization';
+    qualification='globalized Olhoff formulation; inner MMA convergence remains mandatory';
+elseif strcmp(optimizer,'lp')
+    label='KS-regularized sequential LP with trust-region globalization';
+    qualification='Olhoff-inspired KS regularization; not paper-literal';
+else
+    label='KS-regularized nested MMA with trust-region globalization';
+    qualification='Olhoff-inspired KS regularization; not paper-literal';
+end
+route=struct('id',[formulation '_' optimizer],'optimizer',optimizer, ...
+    'formulation',formulation,'description',label,'qualification',qualification);
+end
+
+function localValidate(cfg,problem,reg,route)
+validateattributes(cfg.maxOuter,{'numeric'},{'scalar','integer','positive'});
+validateattributes(cfg.maxInner,{'numeric'},{'scalar','integer','positive'});
+validateattributes(reg.maxTrialSteps,{'numeric'},{'scalar','integer','positive'});
+validateattributes(reg.persistence,{'numeric'},{'scalar','integer','positive'});
+validateattributes(reg.progressPersistence,{'numeric'},{'scalar','integer','positive'});
+validateattributes(reg.moveMin,{'numeric'},{'scalar','positive','<=',cfg.move});
+validateattributes(reg.moveMax,{'numeric'},{'scalar','>=',cfg.move,'<=',1});
+validateattributes(reg.acceptRatio,{'numeric'},{'scalar','>=',0,'<',1});
+validateattributes(reg.keepRatio,{'numeric'},{'scalar','>=',reg.acceptRatio,'<',1});
+validateattributes(reg.growRatio,{'numeric'},{'scalar','>',reg.keepRatio,'<=',1});
+validateattributes(reg.shrinkFactor,{'numeric'},{'scalar','>',0,'<',1});
+validateattributes(reg.growFactor,{'numeric'},{'scalar','>',1});
+validateattributes(reg.progressShrinkFactor,{'numeric'},{'scalar','>',0,'<',1});
+validateattributes(reg.ksModes,{'numeric'},{'scalar','integer','positive','<=',cfg.n+cfg.Nmax});
+if ~ismember(lower(cfg.filterMode),{'density','diag','all','none'})
+    error('topopt_olhoff_regularized:FilterMode', ...
+        'filter_mode must be density, diag, all, or none.');
+end
+if cfg.minInner<1 || cfg.minInner>cfg.maxInner
+    error('topopt_olhoff_regularized:InnerBudget','Require 1 <= min_inner <= max_inner_iterations.');
+end
+if ~strcmp(problem.id,'cantilever') && mod(cfg.nely,2)~=0
+    error('topopt_olhoff_regularized:MidSupport','Mid-height support requires an even nely.');
+end
+if strcmp(route.formulation,'olhoff') && strcmp(route.optimizer,'lp') && cfg.offDiag
+    error('topopt_olhoff_regularized:LpOffDiag','The Eq. (16)/(22) LP route requires offDiag=false.');
+end
+if strcmpi(cfg.massInterp,'4')
+    warning('topopt_olhoff_regularized:DiscontinuousMassLaw', ...
+        ['mass_interp="4" is discontinuous at rho=0.1 and can invalidate ' ...
+         'arbitrarily small trial-step predictions. Use 4b for regular convergence.']);
+end
+end
+
+function N=localMultiplicity(w,n,Nmax,tol)
+N=1;
+while n+N<=n+Nmax-1 && abs(w(n+N)-w(n))/w(n)<tol,N=N+1;end
+end
+
+function [w,Phi,lam,M]=localModes(mdl,rho,cfg,Jcalc)
+[K,M]=localAssemble(mdl,rho,cfg.p,cfg.massInterp);
+[w,Phi,lam]=eigSolve(K,M,Jcalc,cfg.solver);
+end
+
+function [F,fJJ]=localOlhoffGradients(mdl,flt,rho,cfg,Phi,lam,n,N,J)
+idx=n:n+N-1;
+F=genGrad(mdl,rho,cfg.p,cfg.massInterp,Phi,mean(lam(idx)),idx);
+FJ=genGrad(mdl,rho,cfg.p,cfg.massInterp,Phi,lam(J),J);
+fJJ=FJ(:,1,1);
+switch lower(cfg.filterMode)
+    case 'density'
+        for s=1:N
+            for k=s:N
+                v=localMapGradient(flt,F(:,s,k));F(:,s,k)=v;F(:,k,s)=v;
+            end
+        end
+        fJJ=localMapGradient(flt,fJJ);
+    case 'diag'
+        for j=1:N,F(:,j,j)=applyFilter(flt,rho,F(:,j,j));end
+    case 'all'
+        for s=1:N
+            for k=s:N
+                v=applyFilter(flt,rho,F(:,s,k));F(:,s,k)=v;F(:,k,s)=v;
+            end
+        end
+        fJJ=applyFilter(flt,rho,fJJ);
+    case 'none'
+    otherwise,error('topopt_olhoff_regularized:FilterMode','Unknown filter_mode %s.',cfg.filterMode)
+end
+if strcmpi(cfg.filterMode,'diag'),fJJ=applyFilter(flt,rho,fJJ);end
+end
+
+function [value,g,weights,q]=localKsData(mdl,flt,rho,cfg,Phi,lam,ref,reg)
+q=min(reg.ksModes,numel(lam));
+[value,weights]=localKsValue(lam,ref,reg.ksKappa,q);
+g=zeros(mdl.nele,1);
+for j=1:q
+    Fj=genGrad(mdl,rho,cfg.p,cfg.massInterp,Phi,lam(j),j);
+    gj=Fj(:,1,1);
+    if strcmpi(cfg.filterMode,'density')
+        gj=localMapGradient(flt,gj);
+    elseif ~strcmpi(cfg.filterMode,'none')
+        gj=applyFilter(flt,rho,gj);
+    end
+    g=g+weights(j)*gj;
+end
+end
+
+function [value,weights]=localKsValue(lam,ref,kappa,q)
+q=min(q,numel(lam));
+a=-kappa*lam(1:q)/ref;
+amax=max(a);
+e=exp(a-amax);
+weights=e/sum(e);
+value=-ref/kappa*(amax+log(sum(e)));
+end
+
+function [drho,st]=localOlhoffLp(ctx)
+% Generalized Eq. (16)/(22) LP. volumeWeights makes the same routine valid
+% for direct densities and for chain-rule-consistent filtered densities.
+NE=numel(ctx.rho);N=numel(ctx.lam);lamref=ctx.lam(1);nvar=NE+1;
+lo=max(ctx.rhomin-ctx.rho,-ctx.move);hi=min(1-ctx.rho,ctx.move);
+lb=[lo;0];ub=[hi;5];f=zeros(nvar,1);f(end)=-1;
+A=zeros(N+2,nvar);b=zeros(N+2,1);
+for j=1:N
+    A(j,1:NE)=-ctx.F(:,j,j).'/lamref;A(j,nvar)=1;b(j)=ctx.lam(j)/lamref;
+end
+A(N+1,1:NE)=-ctx.fJJ.'/lamref;A(N+1,nvar)=1;b(N+1)=ctx.lamJ/lamref;
+A(N+2,1:NE)=ctx.volumeWeights.';
+b(N+2)=ctx.volfrac*NE-ctx.currentVolume;
+npair=N*(N-1)/2;Aeq=zeros(npair,nvar);beq=zeros(npair,1);r=0;
+for s=1:N
+    for k=s+1:N,r=r+1;Aeq(r,1:NE)=ctx.F(:,s,k).'/lamref;end
+end
+opts=optimoptions('linprog','Display','none','Algorithm','dual-simplex-highs');
+[z,~,flag,output]=linprog(f,A,b,Aeq,beq,lb,ub,opts);
+iters=NaN;if isstruct(output)&&isfield(output,'iterations'),iters=double(output.iterations);end
+if flag~=1||isempty(z),drho=zeros(NE,1);beta=ctx.lam(1);else,drho=z(1:NE);beta=z(end)*lamref;end
+st=struct('nInner',1,'degenHits',0,'conv',flag==1,'lpFlag',flag, ...
+    'lpIterations',iters,'beta',beta,'dxHist',[],'relHist',[]);
+end
+
+function [drho,st]=localOlhoffMma(ctx)
+% Nested MMA form of the Olhoff incremental problem with a generalized
+% linear volume map. It mirrors the frozen INNERLOOP except for that map.
+NE=numel(ctx.rho);N=numel(ctx.lam);lamref=ctx.lam(1);Vtot=ctx.volfrac*NE;
+nvar=NE+1;lo=max(ctx.rhomin-ctx.rho,-ctx.move);hi=min(1-ctx.rho,ctx.move);
+xmin=[lo;0];xmax=[hi;5];x=[zeros(NE,1);1];xold1=x;xold2=x;low=xmin;upp=xmax;
+if ctx.offDiag,m=N+2;else,m=N+2+N*(N-1);end
+a0=1;aMMA=zeros(m,1);cMMA=1000*ones(m,1);dMMA=zeros(m,1);
+st=struct('nInner',0,'degenHits',0,'conv',false,'dxHist',[],'relHist',[]);
+for it=1:ctx.maxInner
+    drho=x(1:NE);bs=x(end);
+    if ctx.offDiag
+        [dlam,ddlam,~,degen]=deltaLambda(ctx.F,drho);
+    else
+        ddlam=zeros(NE,N);dlam=zeros(N,1);degen=false;
+        for j=1:N,ddlam(:,j)=ctx.F(:,j,j);dlam(j)=ctx.F(:,j,j).'*drho;end
+    end
+    st.degenHits=st.degenHits+degen;
+    fval=zeros(m,1);dfdx=zeros(m,nvar);
+    for j=1:N
+        fval(j)=bs-(ctx.lam(j)+dlam(j))/lamref;
+        dfdx(j,1:NE)=-ddlam(:,j).'/lamref;dfdx(j,nvar)=1;
+    end
+    fval(N+1)=bs-(ctx.lamJ+ctx.fJJ.'*drho)/lamref;
+    dfdx(N+1,1:NE)=-ctx.fJJ.'/lamref;dfdx(N+1,nvar)=1;
+    fval(N+2)=(ctx.currentVolume+ctx.volumeWeights.'*drho-Vtot)/Vtot;
+    dfdx(N+2,1:NE)=ctx.volumeWeights.'/Vtot;
+    if ~ctx.offDiag
+        r=N+2;
+        for s=1:N
+            for k=s+1:N
+                g=ctx.F(:,s,k).'*drho/lamref;gs=ctx.F(:,s,k).'/lamref;
+                r=r+1;fval(r)=g;dfdx(r,1:NE)=gs;
+                r=r+1;fval(r)=-g;dfdx(r,1:NE)=-gs;
+            end
+        end
+    end
+    f0val=-bs;df0dx=zeros(nvar,1);df0dx(nvar)=-1;
+    [xmma,~,~,~,~,~,~,~,~,low,upp]=mmasub(m,nvar,it,x,xmin,xmax,xold1,xold2, ...
+        f0val,df0dx,fval,dfdx,low,upp,a0,aMMA,cMMA,dMMA);
+    dx=max(abs(xmma(1:NE)-x(1:NE)));st.dxHist(end+1)=dx;
+    st.relHist(end+1)=dx/max(max(abs(xmma(1:NE))),1e-12);
+    xold2=xold1;xold1=x;x=xmma;st.nInner=it;
+    if it>=ctx.minInner&&st.relHist(end)<ctx.tolInner,st.conv=true;break,end
+end
+drho=x(1:NE);st.beta=x(end)*lamref;
+end
+
+function [drho,st]=localKsLp(ctx,g,obj0)
+NE=numel(ctx.rho);
+lo=max(ctx.rhomin-ctx.rho,-ctx.move);
+hi=min(1-ctx.rho,ctx.move);
+scale=max(max(abs(g)),1e-16);
+f=-g/scale;
+A=ctx.volumeWeights.';b=ctx.volfrac*NE-ctx.currentVolume;
+opts=optimoptions('linprog','Display','none','Algorithm','dual-simplex-highs');
+[drho,~,flag,output]=linprog(f,A,b,[],[],lo,hi,opts);
+if flag~=1 || isempty(drho),drho=zeros(NE,1);end
+iters=NaN;if isstruct(output)&&isfield(output,'iterations'),iters=double(output.iterations);end
+pred=g.'*drho;
+st=struct('nInner',1,'conv',flag==1,'lpFlag',flag,'lpIterations',iters, ...
+    'predictedImprovement',pred,'beta',obj0+pred,'degenHits',0);
+end
+
+function [drho,st]=localKsMma(ctx,g,obj0)
+% Express the linearized KS ascent as the same bound-variable problem used
+% by the Olhoff N=1 inner MMA route.  A deliberately inactive upper-mode
+% constraint keeps INNERLOOP's scaling and convergence reconstruction intact.
+kctx=ctx;
+kctx.F=reshape(g,[],1,1);
+kctx.fJJ=zeros(size(g));
+kctx.lam=obj0;
+kctx.lamJ=5*obj0;
+kctx.offDiag=false;
+[drho,st]=localOlhoffMma(kctx);
+st.predictedImprovement=g.'*drho;
+st.beta=obj0+st.predictedImprovement;
+end
+
+function h=localEmptyHistory()
+h=struct('outerIteration',[],'omega',[],'N',[],'multJ',[],'trustUsed',[], ...
+    'trustNext',[],'trialCount',[],'innerIterations',[],'innerConverged',[], ...
+    'accepted',[],'acceptanceRatio',[],'predictedImprovement',[], ...
+    'actualImprovement',[],'predictedSlope',[],'densityChangeInf',[], ...
+    'densityChangeRms',[],'volume',[],'objective',[],'relativeObjectiveChange',[], ...
+    'stationarityPass',[],'convergenceCount',[],'slowProgressCount',[], ...
+    'ksModesUsed',[],'ksWeights',{{}});
+end
+
+function h=localRecord(h,k,w,N,multJ,trustUsed,trustNext,trials,inner,innerOK,accepted, ...
+        ratio,pred,actual,predSlope,dxInf,dxRms,vol,obj,relObj,stationarity,count,slowCount,q,weights)
+h.outerIteration(k)=k;h.omega(:,k)=w;h.N(k)=N;h.multJ(k)=multJ;
+h.trustUsed(k)=trustUsed;h.trustNext(k)=trustNext;h.trialCount(k)=trials;
+h.innerIterations(k)=inner;h.innerConverged(k)=innerOK;h.accepted(k)=accepted;
+h.acceptanceRatio(k)=ratio;h.predictedImprovement(k)=pred;h.actualImprovement(k)=actual;
+h.predictedSlope(k)=predSlope;h.densityChangeInf(k)=dxInf;h.densityChangeRms(k)=dxRms;
+h.volume(k)=vol;h.objective(k)=obj;h.relativeObjectiveChange(k)=relObj;
+h.stationarityPass(k)=stationarity;h.convergenceCount(k)=count;h.ksModesUsed(k)=q;
+h.slowProgressCount(k)=slowCount;
+h.ksWeights{k}=weights;
+end
+
+function [cfg,problem]=localProblem(cfg,bcType,o)
+key=lower(regexprep(char(string(bcType)),'[-_ ]',''));
+switch key
+    case {'simply','simplysupported','ss'}
+        cfg.a=8;cfg.b=1;cfg.bc='a';cfg.support='mid';cfg.axial='both';
+        label='simply supported beam';tipMassFraction=0;
+    case {'fixedpinned','clampedsimply','cs'}
+        cfg.a=8;cfg.b=1;cfg.bc='b';cfg.support='mid';cfg.axial='both';
+        label='fixed--pinned beam';tipMassFraction=0;
+    case {'cantilever','cf'}
+        cfg.a=15;cfg.b=10;cfg.bc='cantilever';cfg.support='face';cfg.axial='one';
+        label='cantilever with right-mid-edge concentrated mass';
+        tipMassFraction=double(localOpt(o,'tip_mass_fraction',0.20));
+    otherwise
+        error('topopt_olhoff_regularized:BoundaryCondition','Unsupported bcType %s.',char(string(bcType)));
+end
+problem=struct('id',key,'label',label,'length',cfg.a,'height',cfg.b, ...
+    'tipMassFraction',tipMassFraction);
+end
+
+function mdl=localModel(cfg,problem)
+nelx=cfg.nelx;nely=cfg.nely;dx=cfg.a/nelx;dy=cfg.b/nely;
+nele=nelx*nely;nnode=(nelx+1)*(nely+1);ndof=2*nnode;
+nodenrs=reshape(1:nnode,1+nely,1+nelx);
+edofVec=reshape(2*nodenrs(1:end-1,1:end-1)+1,nele,1);
+edofMat=repmat(edofVec,1,8)+repmat([0 1 2*nely+[2 3 0 1] -2 -1],nele,1);
+iK=reshape(kron(edofMat,ones(8,1))',64*nele,1);
+jK=reshape(kron(edofMat,ones(1,8))',64*nele,1);
+[ely,elx]=ndgrid(1:nely,1:nelx);cx=(elx(:)-.5)*dx;cy=(ely(:)-.5)*dy;
+[K0,M0]=elemMats2D(dx,dy,cfg.E,cfg.nu,cfg.rhom,cfg.t,cfg.elemType,cfg.massType);
+leftCol=1;rightCol=nelx+1;rowMid=round(nely/2)+1;
+dofsOf=@(nodes,comp)2*nodes(:)-2+comp;
+clampFace=@(col)reshape([dofsOf(nodenrs(:,col),1);dofsOf(nodenrs(:,col),2)],[],1);
+switch problem.id
+    case {'simply','simplysupported','ss'}
+        leftMid=nodenrs(rowMid,leftCol);rightMid=nodenrs(rowMid,rightCol);
+        fixed=[dofsOf(leftMid,1);dofsOf(leftMid,2);dofsOf(rightMid,1);dofsOf(rightMid,2)];
+    case {'fixedpinned','clampedsimply','cs'}
+        rightMid=nodenrs(rowMid,rightCol);
+        fixed=[clampFace(leftCol);dofsOf(rightMid,1);dofsOf(rightMid,2)];
+    case 'cantilever'
+        fixed=clampFace(leftCol);
+end
+fixed=unique(fixed(:));free=setdiff((1:ndof)',fixed);
+tipMassDofs=zeros(0,1);tipMassValue=0;
+if problem.tipMassFraction>0
+    tipNode=nodenrs(rowMid,rightCol);tipMassDofs=[dofsOf(tipNode,1);dofsOf(tipNode,2)];
+    permittedMass=cfg.volfrac*cfg.a*cfg.b*cfg.t*cfg.rhom;
+    tipMassValue=problem.tipMassFraction*permittedMass;
+end
+mdl=struct('cfg',cfg,'nelx',nelx,'nely',nely,'dx',dx,'dy',dy,'nele',nele, ...
+    'nnode',nnode,'ndof',ndof,'nodenrs',nodenrs,'edofMat',edofMat,'iK',iK, ...
+    'jK',jK,'K0',K0,'M0',M0,'free',free,'fixed',fixed,'cx',cx,'cy',cy, ...
+    'Ve',dx*dy*cfg.t,'tipMassDofs',tipMassDofs,'tipMassValue',tipMassValue);
+end
+
+function [K,M]=localAssemble(mdl,rho,p,massInterp)
+[K,M]=assemble2D(mdl,rho,p,massInterp);
+if mdl.tipMassValue<=0,return,end
+[isFree,reduced]=ismember(mdl.tipMassDofs,mdl.free);
+if ~all(isFree),error('topopt_olhoff_regularized:ConstrainedTipMass','Tip mass DOF is constrained.');end
+nFree=numel(mdl.free);
+M=M+sparse(reduced,reduced,mdl.tipMassValue*ones(numel(reduced),1),nFree,nFree);
+M=(M+M')/2;
+end
+
+function rho=localPhysicalDensity(flt,x,filterMode)
+if strcmpi(filterMode,'density')
+    rho=(flt.H*x(:))./flt.Hs;
+else
+    rho=x(:);
+end
+end
+
+function gDesign=localMapGradient(flt,gPhysical)
+% Chain rule for rhoPhysical = diag(1./Hs)*H*xDesign.
+gDesign=flt.H'*(gPhysical(:)./flt.Hs);
+end
+
+function weights=localVolumeWeights(flt,NE,filterMode)
+if strcmpi(filterMode,'density')
+    weights=flt.H'*(ones(NE,1)./flt.Hs);
+else
+    weights=ones(NE,1);
+end
+end
+
+function value=localOpt(s,name,defaultValue)
+if isfield(s,name)&&~isempty(s.(name)),value=s.(name);else,value=defaultValue;end
+end
+
+function s=localYesNo(tf)
+if tf,s='yes';else,s='no';end
+end

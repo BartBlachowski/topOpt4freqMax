@@ -1,0 +1,421 @@
+{
+  "status": "SMOKE_INTEGRATION_PASS",
+  "scientific_results": false,
+  "records": [
+    {
+      "method": "Proposed",
+      "method_variant": "proposed",
+      "label": "Proposed",
+      "states": 3,
+      "trajectory_dtype": "double",
+      "evaluator_pass": true,
+      "selected_ordinals": [
+        [
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1
+        ]
+      ],
+      "escalation_count": [
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0
+        ]
+      ],
+      "Q": [
+        [
+          88.3977205215305,
+          88.397302120848664,
+          88.397301701775433
+        ],
+        [
+          110.86255277283604,
+          110.86193051214475,
+          110.86192988589995
+        ],
+        [
+          127.7268343825489,
+          128.22820075105042,
+          128.22820025444992
+        ]
+      ],
+      "topology_pass": [
+        false,
+        true,
+        true
+      ],
+      "volume_pass": [
+        true,
+        true,
+        true
+      ],
+      "hard_gate_pass": [
+        false,
+        true,
+        true
+      ],
+      "native": {
+        "total_updates": 3
+      }
+    },
+    {
+      "method": "Yuksel",
+      "method_variant": "yuksel",
+      "label": "Yuksel",
+      "states": 3,
+      "trajectory_dtype": "double",
+      "evaluator_pass": true,
+      "selected_ordinals": [
+        [
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1
+        ]
+      ],
+      "escalation_count": [
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0
+        ]
+      ],
+      "Q": [
+        [
+          88.727353676365937,
+          88.726994849981267,
+          88.726994490847176
+        ],
+        [
+          100.66559286230475,
+          100.66515393547165,
+          100.66515349615187
+        ],
+        [
+          111.96571134516557,
+          111.96518982141005,
+          111.96518929601568
+        ]
+      ],
+      "topology_pass": [
+        false,
+        false,
+        true
+      ],
+      "volume_pass": [
+        true,
+        true,
+        true
+      ],
+      "hard_gate_pass": [
+        false,
+        false,
+        true
+      ],
+      "native": {
+        "stage1_updates": 3,
+        "stage2_updates": 3,
+        "total_updates": 6
+      }
+    },
+    {
+      "method": "Olhoff",
+      "method_variant": "lp",
+      "label": "Olhoff-LP",
+      "states": 3,
+      "trajectory_dtype": "double",
+      "evaluator_pass": true,
+      "selected_ordinals": [
+        [
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1
+        ]
+      ],
+      "escalation_count": [
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0
+        ]
+      ],
+      "Q": [
+        [
+          69.164586370599253,
+          69.164385508726014,
+          69.164385307779312
+        ],
+        [
+          69.932372116445677,
+          69.932175245665135,
+          69.93217504749768
+        ],
+        [
+          70.70170955649229,
+          70.70151653544518,
+          70.701516342742664
+        ]
+      ],
+      "topology_pass": [
+        false,
+        false,
+        false
+      ],
+      "volume_pass": [
+        true,
+        true,
+        true
+      ],
+      "hard_gate_pass": [
+        false,
+        false,
+        false
+      ],
+      "native": {
+        "outer_updates": 3,
+        "lp_calls": 3,
+        "failed_lp_calls": 0,
+        "lp_backend_iterations": 3,
+        "lp_backend_iterations_observed": true
+      }
+    }
+  ],
+  "selector": {
+    "requested": "lp",
+    "executed_variants": [
+      "lp"
+    ],
+    "lp_executed": true,
+    "mma_executed": false
+  },
+  "maximum_selected_ordinal": 1,
+  "adaptive_search_failures": 0,
+  "reference_length": {
+    "pass": true,
+    "mesh": "96x12",
+    "B_ref": 3200,
+    "trajectory_dtype": "double",
+    "stored_terminal_equals_authoritative_optimizer_state": true,
+    "checkpoints": [
+      80,
+      252,
+      453,
+      552,
+      2100,
+      3200
+    ],
+    "exact_count_binary_identity": true,
+    "hard_gate_identity": true,
+    "reference_status": "PASS",
+    "b_ref": 2100,
+    "B0": 3200,
+    "B_meas": 3200,
+    "tail_truncated": false,
+    "Q_ref": [
+      162.66009037577615,
+      162.99775696552064,
+      162.99775664939455
+    ],
+    "endpoints": [
+      {
+        "q": 0.98,
+        "P": 50,
+        "k_enter": 229,
+        "k_cert": 278,
+        "status": "PASS"
+      },
+      {
+        "q": 0.99,
+        "P": 50,
+        "k_enter": 309,
+        "k_cert": 358,
+        "status": "PASS"
+      },
+      {
+        "q": 0.995,
+        "P": 50,
+        "k_enter": 453,
+        "k_cert": 502,
+        "status": "PASS"
+      },
+      {
+        "q": 0.98,
+        "P": 100,
+        "k_enter": 229,
+        "k_cert": 328,
+        "status": "PASS"
+      },
+      {
+        "q": 0.99,
+        "P": 100,
+        "k_enter": 309,
+        "k_cert": 408,
+        "status": "PASS"
+      },
+      {
+        "q": 0.995,
+        "P": 100,
+        "k_enter": 453,
+        "k_cert": 552,
+        "status": "PASS"
+      },
+      {
+        "q": 0.98,
+        "P": 200,
+        "k_enter": 229,
+        "k_cert": 428,
+        "status": "PASS"
+      },
+      {
+        "q": 0.99,
+        "P": 200,
+        "k_enter": 309,
+        "k_cert": 508,
+        "status": "PASS"
+      },
+      {
+        "q": 0.995,
+        "P": 200,
+        "k_enter": 453,
+        "k_cert": 652,
+        "status": "PASS"
+      }
+    ],
+    "maximum_selected_ordinal": 4,
+    "maximum_escalation_count": 1
+  },
+  "scaling_validation": {
+    "pass": true,
+    "scientific_results": false,
+    "fit_count": 30,
+    "C_reported": true,
+    "p_reported": true,
+    "common_support_enforced": true,
+    "common_support_n": 4,
+    "leave_one_out": true
+  },
+  "topology_artifacts": {
+    "png_path": "/Users/piotrek/Programming/topOpt4freqMax/analysis/iteration_efficiency_final/runs/smoke/lp/20260831T162308265/topologies/accepted_q0p99_160x20.png",
+    "pdf_path": "/Users/piotrek/Programming/topOpt4freqMax/analysis/iteration_efficiency_final/runs/smoke/lp/20260831T162308265/topologies/accepted_q0p99_160x20.pdf",
+    "fig_path": "/Users/piotrek/Programming/topOpt4freqMax/analysis/iteration_efficiency_final/runs/smoke/lp/20260831T162308265/topologies/accepted_q0p99_160x20.fig",
+    "cells": [
+      {
+        "skipped": false,
+        "skip_reason": "",
+        "result_status": "PASS",
+        "state_kind": "accepted_state",
+        "base_path": "/Users/piotrek/Programming/topOpt4freqMax/analysis/iteration_efficiency_final/Proposed-proposed_160x20",
+        "png_path": "",
+        "fig_path": ""
+      },
+      {
+        "skipped": false,
+        "skip_reason": "",
+        "result_status": "PASS",
+        "state_kind": "accepted_state",
+        "base_path": "/Users/piotrek/Programming/topOpt4freqMax/analysis/iteration_efficiency_final/Proposed-proposed_160x20",
+        "png_path": "",
+        "fig_path": ""
+      },
+      {
+        "skipped": false,
+        "skip_reason": "",
+        "result_status": "PASS",
+        "state_kind": "accepted_state",
+        "base_path": "/Users/piotrek/Programming/topOpt4freqMax/analysis/iteration_efficiency_final/Yuksel-yuksel_160x20",
+        "png_path": "",
+        "fig_path": ""
+      },
+      {
+        "skipped": false,
+        "skip_reason": "",
+        "result_status": "PASS",
+        "state_kind": "accepted_state",
+        "base_path": "/Users/piotrek/Programming/topOpt4freqMax/analysis/iteration_efficiency_final/Yuksel-yuksel_160x20",
+        "png_path": "",
+        "fig_path": ""
+      },
+      {
+        "skipped": true,
+        "skip_reason": "No final/accepted topology for status \"SMOKE_UNAVAILABLE\".",
+        "result_status": "SMOKE_UNAVAILABLE",
+        "state_kind": "",
+        "base_path": "",
+        "png_path": "",
+        "fig_path": ""
+      },
+      {
+        "skipped": true,
+        "skip_reason": "No final/accepted topology for status \"SMOKE_UNAVAILABLE\".",
+        "result_status": "SMOKE_UNAVAILABLE",
+        "state_kind": "",
+        "base_path": "",
+        "png_path": "",
+        "fig_path": ""
+      }
+    ],
+    "renderer": "tools/Matlab/renderTopologyDensity.m"
+  },
+  "output_directory": "/Users/piotrek/Programming/topOpt4freqMax/analysis/iteration_efficiency_final/runs/smoke/lp/20260831T162308265",
+  "production_campaign_run": false
+}

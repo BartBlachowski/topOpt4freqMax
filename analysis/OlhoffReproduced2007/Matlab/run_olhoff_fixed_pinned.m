@@ -9,7 +9,7 @@ nelx = 160;
 nely = 20;
 volfrac = 0.5;
 penal = 3;
-rmin = 1.3;
+rmin = 1.5;
 
 % Inner-loop optimizer (step 3 of the Du--Olhoff Fig. 1 loop):
 %   "lp"  -- Eq. (22) LP route after Krog & Olhoff (1999); one linprog solve
@@ -22,14 +22,14 @@ rmin = 1.3;
 %            max_inner = 300 MMA sub-iterates per outer iteration, so the
 %            iteration cap set below is far more expensive on that route.
 % Set the variable before running to override without editing this file:
-%   optimizer = "mma"; run_olhoff_fixed_pinned
+   optimizer = "lp"; 
 if ~exist('optimizer','var') || isempty(optimizer)
     optimizer = "mma";
 end
 
 % Olhoff reproduction-specific optimization controls.
-move = 0.02;
-maxit = 400;
+move = 0.005;
+maxit = 10000;
 bcType = "fixedPinned";
 runCfg = struct('verbose',true,'tol_mult',0.05, ...
     'optimizer',optimizer,'max_inner',500);
