@@ -1,0 +1,318 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{booktabs}
+\usepackage{microtype}
+\usepackage[colorlinks=true,linkcolor=blue,urlcolor=blue]{hyperref}
+
+\newcommand{\nnz}{\operatorname{nnz}}
+\newcommand{\epsm}{\varepsilon_{\mathrm{machine}}}
+
+\title{Complexity of Eigensolvers versus Linear Solvers\\
+       \large Dense and Sparse Cases Based on Trefethen and Bau}
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+This report compares the arithmetic complexity of linear-system solvers and
+eigenvalue solvers using the discussion and operation counts in Trefethen and
+Bau's \emph{Numerical Linear Algebra}.  For dense matrices, a direct linear
+solve and a complete eigenvalue computation are both cubic in the matrix order,
+although their leading constants and outputs differ.  For sparse matrices,
+Krylov linear solvers and partial eigensolvers have a similar
+matrix--vector-product-dominated complexity structure.  This similarity is
+conditional: it does not imply equal iteration counts, equal elapsed time, or a
+universal common complexity exponent.
+\end{abstract}
+
+\noindent
+All citations below refer to the printed pagination of the book.  In the local
+scan
+\path|docs/Bau_Numerical_linear_Algebra_BOOK.pdf|, the PDF page number is the
+printed page number plus~10.  The matrix order is denoted by $m$.
+
+\section{Dense direct algorithms}
+
+For one dense general system $Ax=b$, Gaussian elimination computes an LU
+factorization in approximately
+\begin{equation}
+  \frac{2}{3}m^3
+\end{equation}
+flops.  Forward and backward substitution then require approximately $m^2$
+flops each.  Thus the leading cost of one solve is $2m^3/3$; subsequent
+right-hand sides cost approximately $2m^2$ each once the factors have been
+formed \cite[pp.~151--152, especially (20.8)]{trefethenbau}.  For a Hermitian
+positive-definite matrix, Cholesky factorization costs approximately $m^3/3$
+flops \cite[p.~175]{trefethenbau}.
+
+The book describes a general-purpose dense eigensolver as a two-phase process.
+A general matrix is first reduced to upper-Hessenberg form, and an iterative QR
+phase then reduces the Hessenberg matrix to Schur form.  The first phase and the
+complete computation both require $O(m^3)$ work
+\cite[pp.~193--194]{trefethenbau}.  More precisely, Hessenberg reduction costs
+approximately $10m^3/3$ flops \cite[p.~199, (26.1)]{trefethenbau}.
+
+For a Hermitian matrix, Phase~1 is a reduction to tridiagonal form costing
+approximately
+\begin{equation}
+  \frac{4}{3}m^3
+\end{equation}
+flops \cite[p.~200, (26.2)]{trefethenbau}.  If only eigenvalues are required,
+the structured QR phase costs $O(m^2)$ and is therefore lower order
+\cite[p.~194]{trefethenbau}.  For a real symmetric matrix, the resulting
+eigenvalue-only algorithm is quoted as requiring approximately $4m^3/3$ flops
+\cite[p.~223]{trefethenbau}.
+
+The principal dense comparison is consequently
+\begin{equation}
+  \boxed{\text{dense direct linear solve}=\Theta(m^3),\qquad
+         \text{dense complete eigensolve}=\Theta(m^3).}
+\end{equation}
+The exponents agree, but the leading constants do not.  Comparing the book's
+counts, a real symmetric eigenvalue-only computation is approximately twice
+the leading cost of an LU solve and four times the factorization cost of a
+Cholesky solve.  These ratios are deductions from the quoted operation counts,
+not separate claims made by the authors.
+
+Computing eigenvectors changes the comparison materially.  For a real
+symmetric problem, the book gives approximately $9m^3$ flops for the QR
+algorithm when eigenvectors are accumulated.  Divide-and-conquer reduces this
+to approximately $4m^3$, and numerical deflation often reduces the observed
+combined count to about $8m^3/3$ \cite[p.~232]{trefethenbau}.  A statement about
+the cost of ``an eigensolve'' must therefore specify whether only eigenvalues or
+also eigenvectors are required.
+
+Although an eigenvalue algorithm is iterative in principle, its dependence on
+the target machine precision is weak.  The book notes a dependence as weak as
+$\log\lvert\log\epsm\rvert$ for superlinear convergence and states that, in
+practice, eigenvalue computation differs from linear-system solution by a
+small constant factor, typically closer to one than to ten
+\cite[p.~193 and Exercise~25.2]{trefethenbau}.
+
+\section{Sparse matrices and matrix--vector products}
+
+Let
+\begin{equation}
+  s=\nnz(A)
+\end{equation}
+be the number of stored nonzero entries.  If a sparse matrix has an average of
+$\nu$ nonzeros per row, then $s\simeq \nu m$.  The book states that a sparse
+matrix--vector product can be evaluated in
+\begin{equation}
+  O(\nu m)=O(s)
+\end{equation}
+operations instead of the $O(m^2)$ operations required for an unstructured
+dense matrix \cite[pp.~244--245]{trefethenbau}.  Krylov methods exploit a matrix
+through precisely this $x\mapsto Ax$ ``black box.''
+
+The same section places linear and eigenvalue algorithms in parallel:
+conjugate gradients (CG) and Lanczos apply to Hermitian problems, whereas
+GMRES and Arnoldi apply to non-Hermitian problems
+\cite[pp.~245--246]{trefethenbau}.  This common Krylov framework is the basis
+for saying that sparse iterative linear solvers and sparse partial eigensolvers
+have a similar complexity structure.
+
+\subsection{Meaning of the iteration counts}
+
+Define
+\begin{itemize}
+  \item $k_{\mathrm{lin}}$ as the number of iterations required by an
+        iterative linear solver, such as CG or GMRES, to solve $Ax=b$ to a
+        prescribed tolerance;
+  \item $k_{\mathrm{eig}}$ as the number of iterations required by an
+        iterative eigensolver, such as Lanczos or Arnoldi, to approximate the
+        requested eigenpair or eigenpairs to a prescribed tolerance.
+\end{itemize}
+
+These counts are not generally known in advance.  The book explains that CG
+can converge rapidly when the eigenvalues are favorably clustered away from
+the origin, whereas Lanczos can find selected eigenvalues rapidly when they are
+well separated from the remainder of the spectrum.  Both convergence questions
+are connected with polynomial approximation, and both may be affected strongly
+by preconditioning \cite[p.~246]{trefethenbau}.
+
+\subsection{Sparse iterative linear solve}
+
+A CG iteration contains one multiplication by $A$ and several vector
+operations.  The book gives approximately $2m^2$ flops per iteration for a
+dense unstructured matrix, but only $O(m)$ per iteration when sparsity or other
+structure makes the matrix--vector product linear-time
+\cite[p.~295]{trefethenbau}.  In terms of the number of nonzeros, the leading
+model is
+\begin{equation}
+  C_{\mathrm{linear}}=O\!\left(k_{\mathrm{lin}}s\right).
+  \label{eq:linear-sparse}
+\end{equation}
+
+\subsection{Sparse partial eigensolve}
+
+Each Lanczos step consists of a matrix--vector multiplication, an inner
+product, and a small number of vector operations.  The book emphasizes that
+when sparsity makes matrix--vector multiplication cheap, Lanczos can be used
+for matrices with dimensions in the tens or hundreds of thousands
+\cite[p.~278]{trefethenbau}.  For a small number of desired eigenpairs, the
+leading model is therefore
+\begin{equation}
+  C_{\mathrm{eigen}}=O\!\left(k_{\mathrm{eig}}s\right),
+  \label{eq:eigen-sparse}
+\end{equation}
+apart from the relatively small projected tridiagonal eigenproblems and any
+reorthogonalization that is required.
+
+For nonsymmetric matrices, Arnoldi also requires sparse matrix--vector
+products, but at iteration $j$ it orthogonalizes the new vector against the
+previous $j$ basis vectors; see Algorithm~33.1
+\cite[pp.~252--253]{trefethenbau}.  The algorithm therefore implies the model
+\begin{equation}
+  C_{\mathrm{Arnoldi}}
+  =O\!\left(k_{\mathrm{eig}}s+k_{\mathrm{eig}}^2m\right),
+  \qquad
+  \text{storage}=O(k_{\mathrm{eig}}m).
+  \label{eq:arnoldi}
+\end{equation}
+The $k_{\mathrm{eig}}^2m$ and storage terms in
+\eqref{eq:arnoldi} are deductions from the displayed Arnoldi algorithm, not
+operation-count formulas explicitly printed in the book.  Restarting changes
+these costs and may also change convergence.
+
+\section{Do sparse linear and eigen solvers have the same exponent?}
+
+Equations~\eqref{eq:linear-sparse} and \eqref{eq:eigen-sparse} show that the
+two methods have the same \emph{per-iteration} dependence on sparsity.  They do
+not automatically have the same total exponent because their iteration counts
+may scale differently with $m$.
+
+For example, suppose that the number of nonzeros satisfies
+\begin{equation}
+  s=O(m^\alpha),
+\end{equation}
+and the iteration counts satisfy
+\begin{equation}
+  k_{\mathrm{lin}}=O(m^{\beta_{\mathrm{lin}}}),
+  \qquad
+  k_{\mathrm{eig}}=O(m^{\beta_{\mathrm{eig}}}).
+\end{equation}
+Ignoring Arnoldi orthogonalization, the resulting complexities are
+\begin{align}
+  C_{\mathrm{linear}}&=O(m^{\alpha+\beta_{\mathrm{lin}}}),\\
+  C_{\mathrm{eigen}}&=O(m^{\alpha+\beta_{\mathrm{eig}}}).
+\end{align}
+The exponents agree only if
+$\beta_{\mathrm{lin}}=\beta_{\mathrm{eig}}$.
+
+For the common case of $O(1)$ nonzeros per row, $s=O(m)$ and $\alpha=1$.
+If both iteration counts remain bounded independently of $m$, then
+\begin{equation}
+  C_{\mathrm{linear}}=O(m),
+  \qquad
+  C_{\mathrm{eigen}}=O(m).
+\end{equation}
+In this restricted situation both solvers have exponent one.  If either
+iteration count grows with the problem size, its growth must be included in
+the exponent.
+
+The claim also depends on comparing like outputs.  Equations
+\eqref{eq:linear-sparse} and \eqref{eq:eigen-sparse} compare one linear-system
+solution with a \emph{small number} of selected eigenpairs.  Computing the
+complete spectrum, and especially all eigenvectors, is a different task and
+cannot generally be assigned the partial Krylov cost $O(k_{\mathrm{eig}}s)$.
+
+\section{Equal asymptotic complexity does not imply equal runtime}
+
+Even when both methods have the same exponent, their elapsed times need not be
+similar.  A more informative model is
+\begin{align}
+  T_{\mathrm{linear}}
+    &\simeq c_{\mathrm{linear}}k_{\mathrm{lin}}s,\\
+  T_{\mathrm{eigen}}
+    &\simeq c_{\mathrm{eigen}}k_{\mathrm{eig}}s
+      +T_{\mathrm{orth}}+T_{\mathrm{projected}},
+\end{align}
+where the constants and additional terms include such effects as
+\begin{itemize}
+  \item different iteration counts and convergence tolerances;
+  \item the number of requested eigenpairs;
+  \item orthogonalization, reorthogonalization, restarts, and convergence
+        checks in an eigensolver;
+  \item the setup and application costs of a preconditioner;
+  \item memory traffic, data layout, parallelism, and implementation quality;
+  \item factorization costs when shift-and-invert is used.
+\end{itemize}
+
+For example, $20m$ and $200m$ are both $O(m)$, but the second expression is ten
+times larger for every $m$.  Big-$O$ notation describes growth with problem
+size; it suppresses precisely the constants and lower-order terms that often
+control observed runtime.
+
+\section{Sparse direct methods and fill-in}
+
+Sparsity does not automatically reduce a direct factorization to $O(s)$ work.
+The book warns that Gaussian and Householder transformations manipulate matrix
+entries and generally destroy sparsity.  It mentions nested dissection and
+minimum-degree reordering as sparse direct techniques but explicitly does not
+develop them \cite[p.~245]{trefethenbau}.  It also observes that Gaussian
+elimination and Cholesky factorization introduce fill-in, so a factor of a
+sparse matrix will usually not remain very sparse
+\cite[p.~316]{trefethenbau}.
+
+The book consequently does not provide one universal exponent for sparse
+direct LU, sparse Cholesky, or a sparse direct eigensolver.  Such an exponent
+depends on the sparsity graph, ordering, fill-in, and problem dimension.
+Incomplete Cholesky and incomplete LU are presented as ways to retain selected
+sparsity and construct useful preconditioners rather than exact factorizations
+\cite[p.~316]{trefethenbau}.
+
+Shift-and-invert deserves special mention.  In this approach an eigensolver
+repeatedly applies an operator such as $(A-\sigma I)^{-1}$, so an inner linear
+solve or factor application occurs inside each eigenvalue iteration.  Its cost
+cannot be represented by a bare sparse matrix--vector product unless the cost
+of that inner solve is included.  This observation is consistent with the
+book's comparison of power, inverse, and Rayleigh-quotient iterations
+\cite[p.~209]{trefethenbau}.
+
+\section{Conclusion}
+
+The broad unqualified statement
+\begin{quote}
+``For sparse matrices, linear solvers and eigensolvers have the same
+asymptotic complexity''
+\end{quote}
+is not supported by the book because it omits the algorithm, required output,
+iteration-count scaling, orthogonalization, preconditioning, and fill-in.
+
+A defensible book-based statement is:
+\begin{quote}
+For sparse matrices, Krylov iterative methods for solving one linear system
+and for computing a small number of eigenpairs often have a similar
+asymptotic complexity structure: both are dominated by a problem-dependent
+number of sparse matrix--vector products.
+\end{quote}
+Equivalently,
+\begin{equation}
+  \boxed{
+  C_{\mathrm{linear}}=O(k_{\mathrm{lin}}\nnz(A)),\qquad
+  C_{\mathrm{eigen}}=O(k_{\mathrm{eig}}\nnz(A))
+  }
+\end{equation}
+for CG/Lanczos-type comparisons and a small number of eigenpairs.  Thus the
+per-iteration exponents are similar; the total exponents and computational
+times are not necessarily similar.
+
+\begin{thebibliography}{1}
+
+\bibitem{trefethenbau}
+Lloyd N. Trefethen and David Bau III,
+\newblock \emph{Numerical Linear Algebra},
+\newblock Society for Industrial and Applied Mathematics, 1997.
+
+\end{thebibliography}
+
+\end{document}

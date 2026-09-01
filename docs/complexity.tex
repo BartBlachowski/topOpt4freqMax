@@ -1,0 +1,172 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{booktabs}
+\usepackage{microtype}
+\usepackage[colorlinks=true,linkcolor=blue,urlcolor=blue]{hyperref}
+
+\newcommand{\epsm}{\varepsilon_{\mathrm{machine}}}
+
+\title{Eigenvalue Solvers versus Linear Solvers\\
+       \large A Comparison Based on Trefethen \& Bau,
+       \emph{Numerical Linear Algebra} (SIAM, 1997)}
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\noindent
+All page numbers refer to the printed pagination of the book. In the scanned
+file \path|docs/Bau_Numerical_linear_Algebra_BOOK.pdf|, the PDF page
+number is the printed page number plus~10.
+
+\bigskip
+
+\noindent
+Here is what the book actually says when it puts the two side by side. The
+comparison runs along five axes.
+
+\section{The fundamental difference: finite vs.\ iterative}
+
+This is the book's headline point, made twice --- Lecture~25 (p.~192) and again
+in the Appendix (pp.~323--324).
+
+The system $Ax = b$ is solvable by a \emph{finite} algorithm. Gaussian
+elimination would produce the exact answer in a fixed, known number of steps if
+arithmetic were exact. Eigenvalues cannot be: any polynomial rootfinding problem
+\emph{is} an eigenvalue problem (via the companion matrix, eq.~25.3), and
+Abel/Galois says degree $\geq 5$ roots have no closed form. Hence:
+
+\begin{quote}
+``Any eigenvalue solver must be iterative.'' (p.~192)
+\end{quote}
+
+The Appendix makes this the dividing line of the whole field: Gaussian
+elimination is the one premier example where ``operation counts, machine
+architectures, and rounding errors --- that's all you have to understand.''
+Eigenvalue problems, like everything else with a nonlinearity in it, need a
+theory of \emph{convergence} on top.
+
+Trefethen's framing (Figure~32.1, p.~247): a direct linear solver ``makes no
+progress at all until $O(m^3)$ operations are completed''; an iterative method
+converges geometrically toward $\epsm$.
+
+\section{Cost: the gap is a small constant, not an order}
+
+Despite being ``unsolvable in principle,'' eigenvalues are barely more
+expensive. From p.~193: in practice the eigenvalue computation ``differs from
+the solution of linear systems by only a small constant factor, typically closer
+to 1 than 10.'' The $\varepsilon$-dependence of the iteration is only
+$\log\!\left(\lvert \log \epsm \rvert\right)$ (Exercise~25.2).
+
+Leading-term flop counts, all from the book:
+
+\begin{center}
+\begin{tabular}{@{}llc@{}}
+\toprule
+\textbf{Task} & \textbf{Work} & \textbf{Reference} \\
+\midrule
+Cholesky factorization (SPD solve)   & $\sim m^3/3$    & (23.4), p.~176 \\
+Gaussian elimination / LU solve      & $\sim 2m^3/3$   & (20.4), p.~152 \\
+Householder QR (square)              & $\sim 4m^3/3$   & (10.9), p.~75  \\
+Tridiagonal reduction (hermitian)    & $\sim 4m^3/3$   & (26.2), p.~200 \\
+Hessenberg reduction (general)       & $\sim 10m^3/3$  & (26.1), p.~199 \\
+Symmetric eigenvalues only           & $\sim 4m^3/3$   & p.~223 \\
+Symmetric eigenvalues $+$ vectors, QR algorithm
+                                     & $\sim 9m^3$     & p.~232 \\
+Symmetric eigenvalues $+$ vectors, divide \& conquer
+                                     & $\sim 4m^3$, often $\sim 8m^3/3$ & p.~232 \\
+Matrix--matrix product (for scale)   & $2m^3$          & p.~223 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+So the direct comparison the book invites: symmetric eigenvalues cost
+$4\times$ a Cholesky, $2\times$ an LU, and exactly the same as a Householder
+QR --- and are ``two-thirds the cost of computing the product of a pair of
+$m \times m$ matrices'' (p.~223), which the authors call ``not a bad result at
+all.''
+
+The cost of \emph{eigenvectors} is where the two genuinely diverge: $9m^3$ vs
+$2m^3/3$ is more than an order of magnitude.
+
+\section{The structural inversion: which phase dominates}
+
+This is the most interesting asymmetry, p.~194. For a linear solve, all the work
+is in the finite factorization; the triangular back-substitutions are $O(m^2)$,
+negligible.
+
+For a symmetric eigenproblem it is the same shape but for the opposite reason:
+Phase~1 (reduction to tridiagonal) is finite and $O(m^3)$; Phase~2 (the formally
+infinite QR iteration) is $O(m)$ iterations $\times$ $O(m)$ flops $= O(m^2)$.
+The book calls this paradoxical:
+
+\begin{quote}
+``the `infinite' part of the algorithm is in practice not merely as fast as the
+`finite' part, but an order of magnitude faster.''
+\end{quote}
+
+Practical consequence: a symmetric eigensolve is dominated by a finite, direct,
+factorization-like step, exactly as a linear solve is. The iteration is
+asymptotically free. Note also that Phase~1 is not optional --- skipping it
+makes each Phase-2 step $O(m^3)$ and the total $O(m^4)$.
+
+\section{Conditioning: the eigenvalue problem is better behaved (if symmetric)}
+
+Here the comparison reverses in the eigensolver's favor.
+
+\begin{itemize}
+  \item \textbf{Linear system.} The condition number is
+        $\kappa(A) = \lVert A \rVert \, \lVert A^{-1} \rVert$
+        (Theorem~12.2, p.~95). You ``must always expect to lose
+        $\log_{10} \kappa(A)$ digits.'' Ill-conditioning is unbounded and
+        routine.
+
+  \item \textbf{Symmetric/normal eigenvalues.}
+        $\lvert \tilde{\lambda}_j - \lambda_k \rvert \leq \lVert \delta A \rVert_2$
+        (eq.~26.4, Exercise~26.3b, p.~201). The absolute condition number is
+        $1$. Combined with backward stability of tridiagonal reduction
+        (Thm.~26.1) and QR (Thm.~29.1), computed eigenvalues satisfy
+        $\lvert \tilde{\lambda}_j - \lambda_j \rvert
+         = O(\epsm) \cdot \lVert A \rVert$ --- no $\kappa(A)$ anywhere.
+
+  \item \textbf{Nonsymmetric eigenvalues.} The advantage evaporates.
+        Bauer--Fike gives disks of radius
+        $\kappa(V) \lVert \delta A \rVert_2$ --- the condition number of the
+        \emph{eigenvector} matrix enters, and the book spends Exercise~26.1 on
+        pseudospectra because that bound can be badly pessimistic or badly
+        violated in effect.
+\end{itemize}
+
+\section{Large and sparse: the two converge}
+
+In Part~VI the distinction largely dissolves (pp.~244--248). Both problem
+classes are attacked by Krylov methods through the same $x \mapsto Ax$ black
+box, at $O(\nu m)$ per matrix-vector product instead of $O(m^2)$. Both are
+governed by the same cost decomposition --- \emph{number of steps} $\times$
+\emph{work per step} --- where dense direct algorithms sit at $O(m)$ steps
+$\times$ $O(m^2)$, and ``the ideal iterative method reduces the number of steps
+from $m$ to $O(1)$ and the work per step from $O(m^2)$ to $O(m)$.''
+
+The paired algorithms are explicitly analogous (p.~246): CG solves an SPD system
+fast when eigenvalues are clustered away from the origin; Lanczos finds
+eigenvalues fast when those eigenvalues are well separated from the rest of the
+spectrum. In both cases convergence is a question of approximation theory ---
+polynomial approximation on the spectrum --- not of the problem type.
+
+\bigskip
+
+\noindent
+\textbf{Caveat.} None of this covers shift-invert generalized eigensolves such
+as \path|eigsh(K, M, sigma=...)|, where each Lanczos step contains a sparse
+solve against $K - \sigma M$. There the eigensolver's cost is literally a
+multiple of a linear solver's, and the book's clean separation does not apply.
+That is \path|docs/ARPACK.pdf| territory.
+
+\end{document}

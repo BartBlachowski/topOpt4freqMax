@@ -74,59 +74,9 @@ become more aggressive than the runner configuration. A larger ceiling must be
 requested explicitly.
 
 Convergence requires persistent agreement of density change, objective change,
-and a first-order **stationarity certificate**. Reaching the minimum trust
+and a scaled predicted-improvement stationarity test. Reaching the minimum trust
 radius is not itself convergence. The terminal statuses are `CONVERGED`,
 `CAP_HIT`, and `GLOBALIZATION_STALLED`.
-
-### The stationarity certificate
-
-Density change, RMS density change and relative objective change are all
-step-size proxies: the move-limit controller can drive every one of them to zero
-without the design being anywhere near stationary. The certificate is the only
-part of the stopping test that cannot be satisfied that way, so it is specified
-independently of the controller:
-
-* it is evaluated at a **fixed reference radius** `certificate_radius`
-  (default `move_max`), never at the current trust radius or move ceiling;
-* its eigenvalue cluster is **self-consistent with its own prediction**, not
-  the step model's deliberately loose `tol_mult`. It is seeded at the exact
-  multiplicity (`certificate_mult_tol`, default `1e-6`) — because the
-  directional derivative of the ordered `lambda_n` is the smallest eigenvalue of
-  the sub-eigenvalue matrix over the *exactly* degenerate cluster, and folding a
-  strictly separated mode into that cluster understates criticality — and then
-  **grown while the model's own predicted gain would carry `lambda_n` past the
-  first excluded eigenvalue**, because such a model is not a model of the
-  *ordered* `lambda_n` over a step of that size. The fixed point introduces no
-  new constant and collapses to the exact multiplicity whenever the gaps are
-  large compared with the attainable gain. `info.history.certificateN`,
-  `certificateNextGap` and `certificateGrown` record it;
-* it is defined on the physical objective `lambda_n` for every formulation, so
-  the KS routes are certified against the eigenfrequency and not against their
-  own smooth aggregate.
-
-`certificateSlope * certificate_radius` is the local model's best **relative**
-gain in `lambda_n` for one step of the reference radius. The only threshold
-consistent with the objective tolerance the same test declares is therefore
-
-```matlab
-stationarity_tol = objective_tol / certificate_radius     % 1e-5/5e-3 = 2e-3
-```
-
-which is the default. `stationarity_tol` may only be set **tighter**; a looser
-request is clamped (with a warning) for both the convergence declaration and the
-move-ceiling controller. Those two must use the same number: a controller
-allowed to contract at a looser tolerance collapses the ceiling onto `move_min`
-without the stopping test ever becoming satisfiable, which ends in a guaranteed
-`GLOBALIZATION_STALLED`.
-
-For an exactly degenerate cluster of size >= 2 the certificate uses the
-Eq. (22) equality-restricted LP, whose feasible set is contained in the true
-one, so its value is then a lower bound on the true criticality. It is combined
-with the route's own model slope by `max()`, and the unrestricted check lives in
-`audit/` (see `AUDIT_REPORT.md`).
-
-Read `AUDIT_REPORT.md` before citing any `CONVERGED` status from this
-implementation.
 
 Accurate late-stage steps are handled by a persistent move-limit continuation,
 separate from rejection-driven trust contraction.  Normal trust adaptation may
@@ -158,17 +108,6 @@ scaled-stationarity passes. The fixed--pinned runner deliberately uses 1600 oute
 iterations as diagnostic headroom; a smaller production cap should be frozen only
 after observing a validated natural convergence iteration.
 
-## Audit
-
-`AUDIT_REPORT.md` records an independent audit of this implementation: an
-end-to-end trace of the `olhoff`/`mma` route, a mathematical audit of the
-stopping test, an independent fixed-design stationarity certificate with
-physical fixed-step verification, and the scientific runs at 160x20, 240x30 and
-320x40. Audit-only scripts and results are isolated under `audit/`. Five
-corrections came out of it (runner route override; certificate radius, cluster
-and threshold; the self-consistency of that cluster; contraction/convergence
-tolerance split); the before/after evidence is in the report.
-
 The most important telemetry is available under:
 
 ```matlab
@@ -180,12 +119,6 @@ info.history.acceptanceRatio
 info.history.predictedImprovement
 info.history.actualImprovement
 info.history.predictedSlope
-info.history.certificateSlope
-info.history.stationarityMeasure
-info.history.certificateN
-info.history.certificateRelativeGain
-info.history.certificateNextGap
-info.history.certificateGrown
 info.history.densityChangeInf
 info.history.densityChangeRms
 info.history.innerConverged

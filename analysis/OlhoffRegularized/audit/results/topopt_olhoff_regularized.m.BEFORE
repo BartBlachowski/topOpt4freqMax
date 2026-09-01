@@ -11,14 +11,8 @@ function [rho, omega, info] = topopt_olhoff_regularized( ...
 %   implementation of Olhoff and Du (2014).
 %
 %   Every route shares an outer trust-region acceptance test based on a trial
-%   eigensolve.  A small trust radius alone is never accepted as convergence.
-%   Convergence additionally requires a first-order stationarity CERTIFICATE
-%   that is evaluated at a fixed reference radius (the configured move ceiling)
-%   with the exact eigenvalue multiplicity, so that neither trust adaptation nor
-%   move-ceiling continuation can satisfy the stopping test by shrinking the
-%   optimizer's own steps.  Its threshold is objective_tol/certificate_radius,
-%   the only value consistent with the objective tolerance the same test
-%   declares.  See LOCALCERTIFICATE.
+%   eigensolve.  A small trust radius alone is never accepted as convergence:
+%   the scaled predicted-improvement slope must also be small.
 %   Accurate late-stage steps enter finer move-limit stages only after a
 %   cumulative-progress window, a single-step spike guard, windowed
 %   stationarity, and an accepted-update dwell test all pass.  The resulting
@@ -106,7 +100,6 @@ convergenceCount = 0;
 slowProgressCount = 0;
 acceptedSinceMoveContraction = 0;
 moveContractions = 0;
-negativePredictions = 0;
 progressObjectives = zeros(1,0);
 progressSlopes = zeros(1,0);
 status = 'RUNNING';
@@ -129,9 +122,9 @@ if cfg.verbose
         problem.label,cfg.nelx,cfg.nely,cfg.a,cfg.b,cfg.rminEl);
     fprintf('[OlhoffRegularized] %s; max outer=%d, max inner=%d, max trials=%d\n', ...
         route.description,cfg.maxOuter,cfg.maxInner,reg.maxTrialSteps);
-    fprintf('%4s %9s %9s %9s %3s %8s %8s %6s %6s %7s %9s %9s %8s %8s\n', ...
+    fprintf('%4s %9s %9s %9s %3s %8s %8s %6s %6s %7s %9s %9s %8s\n', ...
         'it','omega1','omega2','omega3','N','trust','ceiling','trial','inner', ...
-        'accept','ratio','maxdrho','station','cert');
+        'accept','ratio','maxdrho','station');
 end
 
 for outer = 1:cfg.maxOuter
@@ -152,9 +145,6 @@ for outer = 1:cfg.maxOuter
             localKsData(mdl,flt,rho,cfg,Phi,lam,ksReference,reg);
         F = []; fJJ = [];
     end
-
-    [certSlope,certInfo] = localCertificate(mdl,flt,rho,x,cfg,reg,Phi,lam,w,n, ...
-        Jcalc,volumeWeights);
 
     accepted = false;
     innerOK = false;
@@ -218,23 +208,7 @@ for outer = 1:cfg.maxOuter
         end
         actual = objectiveTrial-objectiveBefore;
         predScale = max(abs(objectiveBefore),1);
-        % drho = 0 with beta = lambda_n is feasible for problem (25), so a
-        % SOLVED subproblem cannot return predicted < 0; a negative value means
-        % the local solve failed (mmasub penalises its constraints rather than
-        % enforcing them, so its beta is neither guaranteed feasible nor
-        % optimal).  Clipping that to zero reports it as PERFECT STATIONARITY --
-        % the worst available reading of a failed model, and one that turns an
-        % honest globalization stall into a false CONVERGED.  Fail closed
-        % instead: an unusable model is not evidence of stationarity.
-        if predicted<0
-            negativePredictions = negativePredictions+1;
-            eventLog{end+1}=sprintf(['outer %d trial %d: local model returned ' ...
-                'predicted=%.3e < 0; stationarity measure set to Inf'], ...
-                outer,trial,predicted); %#ok<AGROW>
-            predSlope = Inf;
-        else
-            predSlope = predicted/(predScale*max(trust,eps));
-        end
+        predSlope = max(predicted,0)/(predScale*max(trust,eps));
         if predicted>reg.predictionFloor*predScale
             ratio = actual/predicted;
         elseif abs(actual)<=reg.objectiveTol*predScale
@@ -263,16 +237,6 @@ for outer = 1:cfg.maxOuter
         trust=max(reg.moveMin,reg.shrinkFactor*trust);
     end
 
-    % The stationarity measure actually used for every decision.  certSlope is
-    % the controller-independent, self-consistently clustered certificate on
-    % lambda_n (LOCALCERTIFICATE); predSlope is the route's own model slope,
-    % retained because it is +Inf when every local solve failed, which must
-    % block convergence.  max() can only make the tests harder, never easier.
-    % Both are evaluated at the design entering this outer iteration, so the
-    % design a CONVERGED run finally reports carries one further accepted step;
-    % over the required persistence that step is bounded by the same tolerances.
-    statMeasure = max(certSlope,predSlope);
-
     windowCumulativeProgress = NaN;
     windowMaxStepProgress = NaN;
     progressWindowReady = false;
@@ -289,14 +253,14 @@ for outer = 1:cfg.maxOuter
         else
             slowProgressCount=0;
         end
-        stationarityOK = statMeasure<=reg.convergenceStationarityTol;
+        stationarityOK = predSlope<=reg.stationarityTol;
         acceptedSinceMoveContraction=acceptedSinceMoveContraction+1;
         if isempty(progressObjectives)
             progressObjectives=[objectiveBefore objectiveAfter];
         else
             progressObjectives(end+1)=objectiveAfter; %#ok<AGROW>
         end
-        progressSlopes(end+1)=statMeasure; %#ok<AGROW>
+        progressSlopes(end+1)=predSlope; %#ok<AGROW>
         if numel(progressObjectives)>reg.progressWindow+1
             progressObjectives=progressObjectives(end-reg.progressWindow:end);
         end
@@ -341,7 +305,7 @@ for outer = 1:cfg.maxOuter
     else
         relObjective=0;
         slowProgressCount=0;
-        stationarityOK = statMeasure<=reg.convergenceStationarityTol;
+        stationarityOK = predSlope<=reg.stationarityTol;
         if trust<=reg.moveMin*(1+1e-12) && stationarityOK
             convergenceCount=convergenceCount+1;
         else
@@ -351,18 +315,16 @@ for outer = 1:cfg.maxOuter
 
     hist = localRecord(hist,outer,wAfter,N,multJ,trustUsed,trust, ...
         moveCeilingUsed,moveCeiling,trialUsed, ...
-        innerUsed,innerOK,accepted,ratio,predicted,actual,predSlope, ...
-        certSlope,statMeasure,certInfo,dxInf,dxRms, ...
+        innerUsed,innerOK,accepted,ratio,predicted,actual,predSlope,dxInf,dxRms, ...
         mean(rho),objectiveAfter,relObjective,stationarityOK,convergenceCount, ...
         slowProgressCount,acceptedSinceMoveContraction,windowCumulativeProgress, ...
         windowMaxStepProgress,progressWindowReady,progressStationarityPass, ...
         moveContracted,ksModesUsed,ksWeights);
 
     if cfg.verbose
-        fprintf('%4d %9.3f %9.3f %9.3f %3d %8.2e %8.2e %6d %6d %7s %9.3g %9.2e %8.2e %8.2e\n', ...
+        fprintf('%4d %9.3f %9.3f %9.3f %3d %8.2e %8.2e %6d %6d %7s %9.3g %9.2e %8.2e\n', ...
             outer,wAfter(1),wAfter(2),wAfter(min(3,end)),N,trustUsed, ...
-            moveCeilingUsed,trialUsed,innerUsed,localYesNo(accepted),ratio,dxInf, ...
-            predSlope,certSlope);
+            moveCeilingUsed,trialUsed,innerUsed,localYesNo(accepted),ratio,dxInf,predSlope);
     end
 
     if convergenceCount>=reg.persistence
@@ -375,9 +337,8 @@ for outer = 1:cfg.maxOuter
     if ~accepted && trust<=reg.moveMin*(1+1e-12) && ~stationarityOK
         status='GLOBALIZATION_STALLED';
         stopReason='minimum_trust_radius_without_stationarity';
-        eventLog{end+1}=sprintf(['stalled at outer %d: trust minimum with stationarity ' ...
-            'measure %.3e (route slope %.3e, certificate %.3e, tolerance %.3e)'], ...
-            outer,statMeasure,predSlope,certSlope,reg.convergenceStationarityTol); %#ok<AGROW>
+        eventLog{end+1}=sprintf('stalled at outer %d: trust minimum with scaled predicted slope %.3e', ...
+            outer,predSlope); %#ok<AGROW>
         break
     end
 end
@@ -406,7 +367,6 @@ info.iterations=struct('outer',nOuter,'accepted_updates',acceptedUpdates, ...
     'trial_total',totalTrials,'rejected_trials',totalTrials-acceptedUpdates, ...
     'inner_total',totalInner,'inner_per_outer',hist.innerIterations, ...
     'move_ceiling_contractions',moveContractions, ...
-    'negative_predictions',negativePredictions, ...
     'max_outer_iterations',cfg.maxOuter,'max_inner_iterations',cfg.maxInner, ...
     'max_trial_steps',reg.maxTrialSteps);
 info.lambda=lambda;
@@ -431,36 +391,10 @@ reg.keepRatio=double(localOpt(o,'keep_ratio',0.25));
 reg.growRatio=double(localOpt(o,'grow_ratio',0.75));
 reg.shrinkFactor=double(localOpt(o,'shrink_factor',0.5));
 reg.growFactor=double(localOpt(o,'grow_factor',1.25));
+reg.stationarityTol=double(localOpt(o,'stationarity_tol',2e-2));
 reg.densityTol=double(localOpt(o,'density_tol',1e-4));
 reg.rmsDensityTol=double(localOpt(o,'rms_density_tol',1e-5));
 reg.objectiveTol=double(localOpt(o,'objective_tol',1e-5));
-% Reference radius of the stationarity certificate.  It is the CONFIGURED move
-% ceiling, never the current trust radius, so that neither trust adaptation nor
-% move-ceiling continuation can move the certificate.
-reg.certRadius=double(localOpt(o,'certificate_radius',reg.moveMax));
-% Multiplicity tolerance of the CERTIFICATE.  The directional derivative of the
-% ordered lambda_n is the smallest eigenvalue of the sub-eigenvalue matrix over
-% the EXACTLY degenerate cluster only; folding a strictly separated mode into
-% the cluster adds constraints that are not present in the limit t->0 and so
-% UNDERSTATES criticality.  cfg.tolMult remains the (deliberately loose) step
-% model's clustering tolerance; this is not the same number.
-reg.certificateMultTol=double(localOpt(o,'certificate_mult_tol',1e-6));
-% predSlope*certRadius is exactly the local model's best RELATIVE objective gain
-% for one step of the reference radius, so the only internally consistent
-% stationarity threshold is objective_tol/certRadius: "no feasible step within
-% the configured move limit improves lambda_n by more than objective_tol".
-reg.requestedStationarityTol=double(localOpt(o,'stationarity_tol',reg.objectiveTol/reg.certRadius));
-reg.stationarityTol=reg.requestedStationarityTol;
-% Neither the convergence declaration nor the move-ceiling contraction may use a
-% tolerance above the consistent bound, whatever the caller asked for; a caller
-% may only make the test HARDER.  The two MUST be the same number: a controller
-% allowed to contract at a looser tolerance than convergence requires collapses
-% the move ceiling onto move_min without the stopping test ever becoming
-% satisfiable, which ends in a guaranteed GLOBALIZATION_STALLED (observed at
-% 240x30 with stationarity_tol = 2e-2 against a convergence bound of 2e-3; see
-% AUDIT_REPORT.md, defect CV-4).
-reg.convergenceStationarityTol=min(reg.stationarityTol,reg.objectiveTol/reg.certRadius);
-reg.stationarityTol=reg.convergenceStationarityTol;
 reg.persistence=double(localOpt(o,'persistence',20));
 reg.progressTol=double(localOpt(o,'progress_tolerance',1e-4));
 legacyProgressWindow=localOpt(o,'progress_persistence',10);
@@ -523,19 +457,6 @@ validateattributes(reg.growRatio,{'numeric'},{'scalar','>',reg.keepRatio,'<=',1}
 validateattributes(reg.shrinkFactor,{'numeric'},{'scalar','>',0,'<',1});
 validateattributes(reg.growFactor,{'numeric'},{'scalar','>',1});
 validateattributes(reg.progressShrinkFactor,{'numeric'},{'scalar','>',0,'<',1});
-validateattributes(reg.certRadius,{'numeric'},{'scalar','positive','<=',1});
-validateattributes(reg.certificateMultTol,{'numeric'},{'scalar','nonnegative','<',1});
-validateattributes(reg.convergenceStationarityTol,{'numeric'},{'scalar','positive'});
-if reg.requestedStationarityTol>reg.objectiveTol/reg.certRadius*(1+1e-12)
-    warning('topopt_olhoff_regularized:LooseStationarityTolerance', ...
-        ['stationarity_tol=%g admits a step of the reference radius that gains ' ...
-         '%g in relative objective, above objective_tol=%g.  Both the ' ...
-         'convergence test and the move-ceiling controller use the consistent ' ...
-         'bound %g instead.  Raise objective_tol if a looser certificate is ' ...
-         'really intended.'], ...
-        reg.requestedStationarityTol,reg.requestedStationarityTol*reg.certRadius, ...
-        reg.objectiveTol,reg.convergenceStationarityTol);
-end
 validateattributes(reg.ksModes,{'numeric'},{'scalar','integer','positive','<=',cfg.n+cfg.Nmax});
 if ~ismember(lower(cfg.filterMode),{'density','diag','all','none'})
     error('topopt_olhoff_regularized:FilterMode', ...
@@ -572,11 +493,6 @@ idx=n:n+N-1;
 F=genGrad(mdl,rho,cfg.p,cfg.massInterp,Phi,mean(lam(idx)),idx);
 FJ=genGrad(mdl,rho,cfg.p,cfg.massInterp,Phi,lam(J),J);
 fJJ=FJ(:,1,1);
-[F,fJJ]=localFilterGradients(flt,rho,cfg,F,fJJ);
-end
-
-function [F,fJJ]=localFilterGradients(flt,rho,cfg,F,fJJ)
-N=size(F,2);
 switch lower(cfg.filterMode)
     case 'density'
         for s=1:N
@@ -598,89 +514,6 @@ switch lower(cfg.filterMode)
     otherwise,error('topopt_olhoff_regularized:FilterMode','Unknown filter_mode %s.',cfg.filterMode)
 end
 if strcmpi(cfg.filterMode,'diag'),fJJ=applyFilter(flt,rho,fJJ);end
-end
-
-function [slope,ci]=localCertificate(mdl,flt,rho,x,cfg,reg,Phi,lam,w,n,Jcalc,volumeWeights)
-%LOCALCERTIFICATE  Controller-independent first-order stationarity certificate
-%   for the PHYSICAL objective lambda_n.
-%
-%   Three properties distinguish it from the route's own predicted slope:
-%
-%   1. It is evaluated at the FIXED reference radius reg.certRadius (the
-%      configured move ceiling), never at the current trust radius or the
-%      current move ceiling.  Neither trust adaptation nor move-ceiling
-%      continuation can therefore move it.  Without this, the controller can
-%      satisfy the stopping test by shrinking its own steps.
-%   2. It uses the EXACT multiplicity (reg.certificateMultTol), not the step
-%      model's deliberately loose clustering tolerance cfg.tolMult.  The
-%      directional derivative of the ordered lambda_n as t -> 0 is the smallest
-%      eigenvalue of the sub-eigenvalue matrix over the exactly degenerate
-%      cluster; a strictly separated mode folded into that cluster contributes
-%      constraints that do not exist in the limit and UNDERSTATES criticality.
-%   3. It is defined on lambda_n for every formulation, so the KS routes are
-%      certified against the physical objective and not against their own
-%      smooth aggregate.
-%
-%   slope = max(beta - lambda_n, 0) / (|lambda_n| * certRadius) is dimensionless
-%   and, in the linear regime, independent of certRadius.  slope*certRadius is
-%   the model's best RELATIVE gain in lambda_n for one step of that radius.
-%
-%   LIMITATION, stated on the record: for an exactly degenerate cluster of size
-%   >= 2 this uses the Eq. (22) equality-restricted LP, whose feasible set is
-%   contained in the true one, so the value is then a LOWER bound on the true
-%   criticality.  It is combined with the route's own slope by max() at the call
-%   site, and the independent audit under audit/ carries the unrestricted check.
-%   SELF-CONSISTENT CLUSTER.  The certificate is a FINITE-step statement --
-%   "no feasible step of the reference radius gains more than objective_tol" --
-%   so the cluster must be valid over that step, not only as t -> 0.  A model
-%   that predicts lambda_n rising past lambda_{n+Nc} is not a model of the
-%   ORDERED lambda_n over that step, because mode n+Nc would become the minimum
-%   and its coupling to the cluster is then first-order.  The cluster is
-%   therefore grown until the model's own prediction stays below the first
-%   EXCLUDED eigenvalue.  This is a fixed point, not a tuned tolerance: it adds
-%   no constant, and it collapses to the exact multiplicity whenever the gaps
-%   are large compared with the attainable gain.  certificate_mult_tol only
-%   seeds the iteration.
-%
-%   Without it a strictly-exact seed over-reports whenever a pair is nearly but
-%   not exactly degenerate: measured on the fixed--pinned 160x20 problem
-%   (gap 3.9e-6 relative, lambda gap 0.53) the N = 1 certificate predicted a
-%   gain of 60 -- 113x the gap it is supposed to respect -- against 2.3 for the
-%   self-consistent N = 2 model.  See AUDIT_REPORT.md, defect CV-1b.
-Nc=1;
-while n+Nc<=n+cfg.Nmax-1 && abs(w(n+Nc)-w(n))/w(n)<reg.certificateMultTol,Nc=Nc+1;end
-scale=max(abs(lam(n)),1);
-grown=0;
-while true
-    Jc=min(n+Nc,Jcalc);
-    idx=n:n+Nc-1;
-    F=genGrad(mdl,rho,cfg.p,cfg.massInterp,Phi,mean(lam(idx)),idx);
-    FJ=genGrad(mdl,rho,cfg.p,cfg.massInterp,Phi,lam(Jc),Jc);
-    fJJ=FJ(:,1,1);
-    [F,fJJ]=localFilterGradients(flt,rho,cfg,F,fJJ);
-    ctx=struct('F',F,'fJJ',fJJ,'lam',lam(idx),'lamJ',lam(Jc),'rho',x, ...
-        'rhomin',cfg.rhomin,'volfrac',cfg.volfrac, ...
-        'currentVolume',min(sum(rho),cfg.volfrac*mdl.nele), ...
-        'volumeWeights',volumeWeights,'move',reg.certRadius, ...
-        'maxInner',cfg.maxInner,'tolInner',cfg.tolInner,'minInner',cfg.minInner, ...
-        'offDiag',false);
-    [~,st]=localOlhoffLp(ctx);
-    if st.lpFlag~=1
-        predicted=Inf;slope=Inf;   % fail closed: an unsolved certificate is not a pass
-        break
-    end
-    predicted=st.beta-lam(n);
-    slope=max(predicted,0)/(scale*reg.certRadius);
-    if Nc<cfg.Nmax && n+Nc<=Jcalc && (lam(n+Nc)-lam(n))<max(predicted,0)
-        Nc=Nc+1;grown=grown+1;continue
-    end
-    break
-end
-nextGap=Inf;
-if n+Nc<=Jcalc,nextGap=(lam(n+Nc)-lam(n))/scale;end
-ci=struct('N',Nc,'J',Jc,'predicted',predicted,'radius',reg.certRadius, ...
-    'lpFlag',st.lpFlag,'relativeGainAtRadius',max(predicted,0)/scale, ...
-    'grown',grown,'nextGapRelative',nextGap);
 end
 
 function [value,g,weights,q]=localKsData(mdl,flt,rho,cfg,Phi,lam,ref,reg)
@@ -819,9 +652,6 @@ h=struct('outerIteration',[],'omega',[],'N',[],'multJ',[],'trustUsed',[], ...
     'accepted',[],'acceptanceRatio',[],'predictedImprovement',[], ...
     'actualImprovement',[],'predictedSlope',[],'densityChangeInf',[], ...
     'densityChangeRms',[],'volume',[],'objective',[],'relativeObjectiveChange',[], ...
-    'certificateSlope',[],'stationarityMeasure',[],'certificateN',[], ...
-    'certificateRelativeGain',[],'certificateLpFlag',[], ...
-    'certificateNextGap',[],'certificateGrown',[], ...
     'stationarityPass',[],'convergenceCount',[],'slowProgressCount',[], ...
     'acceptedSinceMoveContraction',[],'windowCumulativeProgress',[], ...
     'windowMaxStepProgress',[],'progressWindowReady',[], ...
@@ -831,8 +661,7 @@ end
 
 function h=localRecord(h,k,w,N,multJ,trustUsed,trustNext,moveCeilingUsed, ...
         moveCeilingNext,trials,inner,innerOK,accepted,ratio,pred,actual,predSlope, ...
-        certSlope,statMeasure,certInfo,dxInf,dxRms,vol,obj,relObj,stationarity,count, ...
-        slowCount,acceptedSinceContraction, ...
+        dxInf,dxRms,vol,obj,relObj,stationarity,count,slowCount,acceptedSinceContraction, ...
         cumulativeProgress,maxStepProgress,windowReady,windowStationarity,contracted,q,weights)
 h.outerIteration(k)=k;h.omega(:,k)=w;h.N(k)=N;h.multJ(k)=multJ;
 h.trustUsed(k)=trustUsed;h.trustNext(k)=trustNext;
@@ -840,13 +669,7 @@ h.moveCeilingUsed(k)=moveCeilingUsed;h.moveCeilingNext(k)=moveCeilingNext;
 h.trialCount(k)=trials;
 h.innerIterations(k)=inner;h.innerConverged(k)=innerOK;h.accepted(k)=accepted;
 h.acceptanceRatio(k)=ratio;h.predictedImprovement(k)=pred;h.actualImprovement(k)=actual;
-h.predictedSlope(k)=predSlope;h.certificateSlope(k)=certSlope;
-h.stationarityMeasure(k)=statMeasure;h.certificateN(k)=certInfo.N;
-h.certificateRelativeGain(k)=certInfo.relativeGainAtRadius;
-h.certificateLpFlag(k)=certInfo.lpFlag;
-h.certificateNextGap(k)=certInfo.nextGapRelative;
-h.certificateGrown(k)=certInfo.grown;
-h.densityChangeInf(k)=dxInf;h.densityChangeRms(k)=dxRms;
+h.predictedSlope(k)=predSlope;h.densityChangeInf(k)=dxInf;h.densityChangeRms(k)=dxRms;
 h.volume(k)=vol;h.objective(k)=obj;h.relativeObjectiveChange(k)=relObj;
 h.stationarityPass(k)=stationarity;h.convergenceCount(k)=count;h.ksModesUsed(k)=q;
 h.slowProgressCount(k)=slowCount;
