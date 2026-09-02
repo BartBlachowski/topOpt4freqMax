@@ -77,6 +77,7 @@ cfg.maxOuter = double(localOpt(runCfg,'max_outer_iterations',1000));
 cfg.maxInner = double(localOpt(runCfg,'max_inner_iterations',500));
 cfg.tolInner = double(localOpt(runCfg,'tol_inner',cfg.tolInner));
 cfg.minInner = double(localOpt(runCfg,'min_inner',cfg.minInner));
+cfg.clusterLambda = char(string(localOpt(runCfg,'cluster_lambda','mean')));
 cfg.name = 'olhoff_regularized';
 
 reg = localRegularization(runCfg,cfg.move,cfg.Nmax);
@@ -537,6 +538,10 @@ if reg.requestedStationarityTol>reg.objectiveTol/reg.certRadius*(1+1e-12)
         reg.objectiveTol,reg.convergenceStationarityTol);
 end
 validateattributes(reg.ksModes,{'numeric'},{'scalar','integer','positive','<=',cfg.n+cfg.Nmax});
+if ~ismember(lower(cfg.clusterLambda),{'mean','per_mode'})
+    error('topopt_olhoff_regularized:ClusterLambda', ...
+        'cluster_lambda must be mean or per_mode.');
+end
 if ~ismember(lower(cfg.filterMode),{'density','diag','all','none'})
     error('topopt_olhoff_regularized:FilterMode', ...
         'filter_mode must be density, diag, all, or none.');
@@ -568,8 +573,30 @@ function [w,Phi,lam,M]=localModes(mdl,rho,cfg,Jcalc)
 end
 
 function [F,fJJ]=localOlhoffGradients(mdl,flt,rho,cfg,Phi,lam,n,N,J)
+%   Eq. (19) needs ONE common lamTilde for the cluster because a pair f_sk with
+%   s ~= k is shared between two modes and cannot carry two different values.
+%   The DIAGONAL terms f_jj carry no such requirement: each belongs to one mode
+%   and its own lambda_j is the correct value.  For a genuine degeneracy the two
+%   readings coincide.  They diverge exactly when the cluster is not degenerate
+%   -- which is the regime cfg.tolMult = 0.05 admits, and where the cluster mean
+%   puts the wrong eigenvalue in the mass term of f_jj.
+%
+%   cluster_lambda = 'mean'     Eq. (19) read literally           [DEFAULT]
+%                  = 'per_mode' lam(j) on the diagonal, cluster mean off it
+%
+%   See AUDIT_REPORT.md sec. 9.3: under 'mean' the nested-MMA route parks at a
+%   mode gap just under tol_mult and never coalesces, while the KS route -- which
+%   builds every gradient per mode -- reaches the LP optimum with the same
+%   optimizer.  'per_mode' is a deliberate, disclosed deviation from the literal
+%   Eq. (19) and is NOT the paper's model; it is off by default.
 idx=n:n+N-1;
 F=genGrad(mdl,rho,cfg.p,cfg.massInterp,Phi,mean(lam(idx)),idx);
+if strcmpi(cfg.clusterLambda,'per_mode')
+    for j=1:N
+        Fj=genGrad(mdl,rho,cfg.p,cfg.massInterp,Phi,lam(idx(j)),idx(j));
+        F(:,j,j)=Fj(:,1,1);
+    end
+end
 FJ=genGrad(mdl,rho,cfg.p,cfg.massInterp,Phi,lam(J),J);
 fJJ=FJ(:,1,1);
 [F,fJJ]=localFilterGradients(flt,rho,cfg,F,fJJ);

@@ -23,6 +23,9 @@ fprintf('%-26s %-26s %10s %10s %10s\n','A','B','mean|dRho|','max|dRho|','corr');
 for i=1:numel(R)
     for j=i+1:numel(R)
         if R{i}.meta.nelx~=R{j}.meta.nelx||R{i}.meta.nely~=R{j}.meta.nely,continue,end
+        % never compare across boundary conditions: a different problem is not
+        % a different basin of the same problem.
+        if ~strcmpi(R{i}.meta.bcType,R{j}.meta.bcType),continue,end
         a=R{i}.rho(:);b=R{j}.rho(:);d=a-b;
         c=corr(a,b);
         fprintf('%-26s %-26s %10.4f %10.4f %10.5f\n',keep{i},keep{j},mean(abs(d)),max(abs(d)),c);

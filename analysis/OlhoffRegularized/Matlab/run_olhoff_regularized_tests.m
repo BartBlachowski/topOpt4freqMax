@@ -230,6 +230,28 @@ for i=1:size(routes,1)
 end
 nPass=nPass+1;
 
+%   ... and cluster_lambda must dispatch, be validated, and actually change the
+%   DIAGONAL generalized gradients when the cluster is not degenerate.
+rcCl=struct('verbose',false,'formulation','olhoff','optimizer','lp', ...
+    'max_outer_iterations',2,'max_trial_steps',2,'tol_mult',3.0);
+rcCl.cluster_lambda='mean';     [~,wMean,iMean]=topopt_olhoff_regularized(16,2,.5,3,1.3,.005,'simply',rcCl);
+rcCl.cluster_lambda='per_mode'; [~,wPer ,iPer ]=topopt_olhoff_regularized(16,2,.5,3,1.3,.005,'simply',rcCl);
+assert(iMean.history.N(1)>1&&iPer.history.N(1)>1,'The forced cluster did not form.');
+assert(abs(wMean(1)-wPer(1))>1e-9, ...
+    'cluster_lambda=per_mode did not change the diagonal gradients (%.9f vs %.9f).', ...
+    wMean(1),wPer(1));
+assert(strcmpi(iMean.cfg.clusterLambda,'mean')&&strcmpi(iPer.cfg.clusterLambda,'per_mode'), ...
+    'cluster_lambda was not recorded in cfg.');
+threw=false;
+try
+    topopt_olhoff_regularized(16,2,.5,3,1.3,.005,'simply', ...
+        struct('verbose',false,'cluster_lambda','bogus','max_outer_iterations',1));
+catch ME
+    threw=strcmp(ME.identifier,'topopt_olhoff_regularized:ClusterLambda');
+end
+assert(threw,'An invalid cluster_lambda was not rejected.');
+nPass=nPass+1;
+
 %% 10. cantilever concentrated-mass path -------------------------------------
 rcCant=struct('verbose',false,'formulation','olhoff','optimizer','lp', ...
     'max_outer_iterations',1,'max_inner_iterations',10,'max_trial_steps',2);
