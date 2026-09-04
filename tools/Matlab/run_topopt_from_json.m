@@ -226,8 +226,19 @@ function [x, omega, tIter, nIter, mem_usage, nIterStage, telemetry] = run_topopt
     Emin = E0 * EminRatio;
     freqIterOmega = [];
 
-    % --- Memory sampling setup (only when 5th output requested) ---
-    if nargout >= 5
+    % --- Memory sampling setup ---------------------------------------
+    % Historically gated on nargout >= 5 alone.  The sampler forks `ps` at
+    % 10 Hz for the whole solve, which lands INSIDE the timed optimization
+    % loop, so a benchmark that does not report memory should not pay for it.
+    % benchmark.measure_memory = false switches it off explicitly; omitting the
+    % key preserves the historical behaviour exactly.
+    measureMemory = nargout >= 5;
+    if hasFieldPath(cfg, {'benchmark','measure_memory'})
+        measureMemory = measureMemory && parseBool( ...
+            getFieldPath(cfg, {'benchmark','measure_memory'}), ...
+            'benchmark.measure_memory');
+    end
+    if measureMemory
         baselineRSS = getCurrentRSS_KB();
         setappdata(0, 'topopt_peakRSS_KB', baselineRSS);  % shared mutable store
         samplerTimer = timer('ExecutionMode', 'fixedRate', ...
@@ -725,11 +736,15 @@ function [x, omega, tIter, nIter, mem_usage, nIterStage, telemetry] = run_topopt
     runnerPostprocessingTic = tic;
 
     % --- Finalize memory measurement ---
-    if nargout >= 5
+    if measureMemory
         sampleRSS();   % one last sample
         stopAndDeleteTimer(samplerTimer);
         peakRSS = getappdata(0, 'topopt_peakRSS_KB');
         mem_usage = max(0, peakRSS - baselineRSS) / 1024;  % KB -> MB
+    elseif nargout >= 5
+        % Asked for the output, told not to measure: NaN, never 0.  Zero would
+        % read as "this method used no memory", which is false.
+        mem_usage = NaN;
     end
 
     if isempty(x)
@@ -884,7 +899,16 @@ function [x, omega, tIter, nIter, mem_usage, nIterStage, telemetry] = run_topopt
         ... % eigenproblems", which for these methods is the opposite of true.
         'eigensolve_time', telemetryValue(solverTiming, 'eigensolve_time', NaN), ...
         'gradient_time', telemetryValue(solverTiming, 'gradient_time', NaN), ...
-        'subproblem_time', telemetryValue(solverTiming, 'subproblem_time', NaN));
+        'subproblem_time', telemetryValue(solverTiming, 'subproblem_time', NaN), ...
+        ... % Stage-1 reference eigenanalysis, for methods that perform ONE of
+        ... % them up front and then hold the result fixed.  It is a SOLVE
+        ... % count, never an optimization-iteration count, and it is a
+        ... % sub-interval of initialization_time, so a consumer must not add
+        ... % it to the three phase times.  NaN/0 where the method has none.
+        'stage1_reference_eigen_time', ...
+            telemetryValue(solverTiming, 'stage1_reference_eigen_time', NaN), ...
+        'stage1_reference_eigen_solves', ...
+            telemetryValue(solverTiming, 'stage1_reference_eigen_solves', 0));
     telemetry.stopping = struct( ...
         'stop_reason', telemetryValue(solverStopping, 'stop_reason', 'N/A'), ...
         'total_iterations', nIter, ...

@@ -15,6 +15,13 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
     tIter = NaN;
     nIter = NaN;
     info = struct();
+    % BENCHMARK TIMING INSTRUMENTATION ONLY.  Defaulted here so every caller
+    % sees the fields whether or not this run has a semi_harmonic load; NaN
+    % rather than 0, because "no reference eigenanalysis was performed" and
+    % "it took no time" are different statements.
+    info.stage1_reference_eigen_time = NaN;
+    info.stage1_reference_eigen_solves = 0;
+    info.stage1_reference_eigen_modes = 0;
 
     if nargin < 8
         nelx = 240; nely = 30; volfrac = 0.4; penal = 3.0;
@@ -288,6 +295,13 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
         end
 
         if hasSemiHarmonicLoads
+            % BENCHMARK TIMING INSTRUMENTATION ONLY.  This block is the
+            % method's Stage 1: the ONE reference eigenanalysis whose result is
+            % then held fixed for the whole SIMP solve.  The conference
+            % benchmark reports it as a separate stage rather than folding it
+            % into an iteration count, so it is timed where it happens.  The
+            % timer records; nothing reads it back inside the solver.
+            tStage1Eigen = tic;
             % The authoritative Proposed load freezes only the solid-reference
             % eigenpair.  The mass matrix remains design dependent in the loop:
             %   F_semi(x) = omega0_k^2 * M(x) * Phi0_k.
@@ -321,6 +335,12 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
                 semiHarmonicBaseVec(:, k) = semiHarmonicPhi0(:, k);
             end
             clear K0 sK0 sM0 rhoPhys0;
+            % BENCHMARK TIMING INSTRUMENTATION ONLY (see tStage1Eigen above).
+            % One reference eigenanalysis, however many modes it returns: this
+            % is a SOLVE count, not an optimization iteration count.
+            info.stage1_reference_eigen_time = toc(tStage1Eigen);
+            info.stage1_reference_eigen_solves = 1;
+            info.stage1_reference_eigen_modes = maxSemiHarmonicMode;
             fprintf('[Load cases] semi_harmonic baseline cached up to mode %d.\n', maxSemiHarmonicMode);
         end
     end
@@ -750,7 +770,14 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
         'initialization_time', initialization_time, ...
         'loop_time', loop_time, ...
         'postprocessing_time', max(0, solver_total_time-initialization_time-loop_time), ...
-        'total_time', solver_total_time);
+        'total_time', solver_total_time, ...
+        ... % BENCHMARK TIMING INSTRUMENTATION ONLY.  The Stage-1 reference
+        ... % eigenanalysis is a sub-interval of initialization_time; it is
+        ... % surfaced separately so the benchmark can report the one solve
+        ... % without inventing an iteration for it.
+        'stage1_reference_eigen_time', info.stage1_reference_eigen_time, ...
+        'stage1_reference_eigen_solves', info.stage1_reference_eigen_solves, ...
+        'stage1_reference_eigen_modes', info.stage1_reference_eigen_modes);
     info.stopping = struct( ...
         'stop_reason', stopReason, ...
         'final_max_density_change', change, ...

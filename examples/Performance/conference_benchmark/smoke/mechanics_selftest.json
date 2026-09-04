@@ -1,0 +1,51 @@
+{
+  "generated": "2026-09-04T14:13:01+02:00",
+  "scientific_evidence": false,
+  "performance_campaign": false,
+  "note": "MECHANICS ONLY. Sub-160x20 or no solve. Not citable as a result.",
+  "tests": [
+    {
+      "id": "T1",
+      "name": "a raising solver yields RUN_ERROR, not a crash",
+      "pass": true,
+      "detail": "status=RUN_ERROR ok=0 note=run_topopt_from_json:UnsupportedOurFilter: Unsupported optimization.filter.type \"no_such_filter\" for ourApproach. | warm-up or overridden budget; NOT a benchmark observation"
+    },
+    {
+      "id": "T2",
+      "name": "dispatch gate refuses a shadowing superseded implementation",
+      "pass": true,
+      "detail": "refused=1, guard then resolves correctly=1 | The Du-Olhoff reconstruction did NOT resolve to the imported conference implementation:"
+    },
+    {
+      "id": "T3",
+      "name": "all three methods produce the same record field set",
+      "pass": true,
+      "detail": "22 fields, struct array built=1. "
+    },
+    {
+      "id": "T4",
+      "name": "timing-accounting identity passes and TIMING_ACCOUNTING_FAIL fires",
+      "pass": true,
+      "detail": "consistent: residual 0.000e+00, fail=0 | inconsistent: residual -4.000e-01, fail=1"
+    },
+    {
+      "id": "T5",
+      "name": "no memory column in the exported tables",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "id": "T6",
+      "name": "the frozen Olhoff configuration rejects an odd nely",
+      "pass": true,
+      "detail": "The simply-supported idealization pins the supports at MID HEIGHT, which requires an even nely (got 21)."
+    },
+    {
+      "id": "T7",
+      "name": "preflight refuses a mesh above 160x20 without acknowledgement",
+      "pass": true,
+      "detail": "check present=1, refused=1, overall preflight pass=0"
+    }
+  ],
+  "pass": true
+}

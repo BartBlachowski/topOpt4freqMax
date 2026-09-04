@@ -1,0 +1,93 @@
+{
+  "generated": "2026-09-04T14:03:11+02:00",
+  "mesh": [
+    160,
+    20
+  ],
+  "source_repository": "/Users/piotrek/Programming/Matlab/Olhoff",
+  "note": "Bitwise comparison of the final density field. Run A is the audited source tree, run B the import under the same configuration, run C the import under the benchmark configuration (diag = false).",
+  "A": {
+    "implementation": "/Users/piotrek/Programming/Matlab/Olhoff/algo/olhoffOpt.m",
+    "config_name": "TMA_160x20",
+    "diag": true,
+    "nOuter": 91,
+    "omega1": 169.49522702153845,
+    "omega2": 171.95999591815919,
+    "omega3": 357.77656854269514,
+    "volume": 0.49999900877797954,
+    "cum_inner": 2241,
+    "final_move": 0.01,
+    "wall_s": 124.08416045833333,
+    "rho_sha256": "22aa4447bc5f2855271f44f0661536f4ad6c86c5711cedcfe51ea6d97d0ff18b",
+    "omega_sha256": "725c89fb23f49e39bf83f0da928d7b373ae6683ace176f0f6ccf65a921a0f41f",
+    "converged": true
+  },
+  "B": {
+    "implementation": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffM4Reconstruction/+frozen/algo/olhoffOpt.m",
+    "config_name": "TMA_160x20",
+    "diag": true,
+    "nOuter": 91,
+    "omega1": 169.49522702153845,
+    "omega2": 171.95999591815919,
+    "omega3": 357.77656854269514,
+    "volume": 0.49999900877797954,
+    "cum_inner": 2241,
+    "final_move": 0.01,
+    "wall_s": 125.61796041666666,
+    "rho_sha256": "22aa4447bc5f2855271f44f0661536f4ad6c86c5711cedcfe51ea6d97d0ff18b",
+    "omega_sha256": "725c89fb23f49e39bf83f0da928d7b373ae6683ace176f0f6ccf65a921a0f41f",
+    "converged": true
+  },
+  "C": {
+    "implementation": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffM4Reconstruction/+frozen/algo/olhoffOpt.m",
+    "config_name": "OLHOFF_M4_160x20",
+    "diag": false,
+    "nOuter": 91,
+    "omega1": 169.49522702153845,
+    "omega2": 171.95999591815919,
+    "omega3": 357.77656854269514,
+    "volume": 0.49999900877797954,
+    "cum_inner": 2241,
+    "final_move": 0.01,
+    "wall_s": 120.79159279166667,
+    "rho_sha256": "22aa4447bc5f2855271f44f0661536f4ad6c86c5711cedcfe51ea6d97d0ff18b",
+    "omega_sha256": "725c89fb23f49e39bf83f0da928d7b373ae6683ace176f0f6ccf65a921a0f41f",
+    "converged": true
+  },
+  "A_vs_B": {
+    "rho_bitwise": true,
+    "omega_bitwise": true,
+    "nOuter_equal": true,
+    "max_abs_rho_difference": 0,
+    "history_identical": true,
+    "bitwise_identical": true
+  },
+  "B_vs_C": {
+    "rho_bitwise": true,
+    "omega_bitwise": true,
+    "nOuter_equal": true,
+    "max_abs_rho_difference": 0,
+    "history_identical": true,
+    "bitwise_identical": true
+  },
+  "A_vs_C": {
+    "rho_bitwise": true,
+    "omega_bitwise": true,
+    "nOuter_equal": true,
+    "max_abs_rho_difference": 0,
+    "history_identical": true,
+    "bitwise_identical": true
+  },
+  "pass": true,
+  "audited_vs_benchmark_config_differences": [
+    "diag",
+    "mmasubPath",
+    "name"
+  ],
+  "expected_differences": [
+    "diag",
+    "name",
+    "mmasubPath"
+  ],
+  "only_expected_differences": true
+}

@@ -1,3 +1,22 @@
+<!-- ===================================================================
+     SUPERSEDED -- NOT CURRENT AUTHORIZATION
+     ===================================================================
+     This document authorized the R3 / "final campaign" era benchmark, whose
+     Olhoff column dispatched the SUPERSEDED fixed-1600-outer-iteration
+     stabilization profile (analysis/olhoff_stabilization_audit).  It is
+     preserved verbatim below as historical evidence and must NOT be read as
+     authorization for the conference benchmark.
+
+     The current authorization is
+         examples/Performance/CONFERENCE_BENCHMARK_PREFLIGHT.md
+     and the current driver is
+         examples/Performance/performance_comparison.m
+     with the previous driver preserved at
+         examples/Performance/legacy_r3/performance_comparison_r3.m
+
+     Only this banner was added; everything below is unchanged.
+     ================================================================== -->
+
 # Final manual-run preflight for `performance_comparison.m`
 
 ## Verdict first

@@ -1,0 +1,16 @@
+function txt = olhoffm4_caveat()
+%OLHOFFM4_CAVEAT  The caveat that must travel with every Du-Olhoff number.
+%
+%   Required by the conference benchmark methodology.  It is written into the
+%   benchmark metadata, the generated benchmark notes, and the LaTeX table
+%   caption, and it is short enough to paste onto a slide.
+%
+%   It QUALIFIES the measured values.  It does not remove them from the table.
+
+txt = ['Du-Olhoff timings and iteration counts refer to the frozen ' ...
+       'reconstruction used in this study. Some continuation and ' ...
+       'inner-solver details are not uniquely specified by the original ' ...
+       'publication; therefore these values should be interpreted as ' ...
+       'representative measurements of this reconstruction rather than ' ...
+       'exact historical implementation timings.'];
+end

@@ -1,0 +1,264 @@
+function res = olhoffOpt(cfg)
+%OLHOFFOPT  Du & Olhoff (2007) sec. 3.5 -- maximization of the n-th
+%   eigenfrequency, problem (25).  Main loop of Fig. 1.
+%
+%   Every unstated quantity is taken from cfg and echoed into res.cfg so that
+%   each figure is traceable to a config (CLAUDE.md sec.4 and sec.8).
+
+maxNumCompThreads(cfg.threads);
+t0 = tic;
+
+if ~isfield(cfg,'mmaVariant'), cfg.mmaVariant = 'published'; end
+if ~isfield(cfg,'outerNorm'),  cfg.outerNorm  = 'l2';        end
+if ~isfield(cfg,'innerVar'),   cfg.innerVar   = 'drho';      end
+if ~isfield(cfg,'moveFamily'), cfg.moveFamily = 'S0';        end
+if ~isfield(cfg,'outerGuard'), cfg.outerGuard = 'none';      end
+cfg.mmasubPath = useMMA(cfg.mmaVariant);   % recorded: which mmasub ran
+
+mdl = model2D(cfg);
+NE  = mdl.nele;
+rho = cfg.rho0*ones(NE,1);
+
+% Filter radius. The paper never states it. It is specified physically where
+% possible so that it is MESH-INDEPENDENT: rminEl must scale with the element
+% size or a mesh refinement silently changes the filter as well.
+if isfield(cfg,'rminPhys') && ~isempty(cfg.rminPhys) && cfg.rminPhys > 0
+    dyEl = cfg.b/cfg.nely;
+    cfg.rminEl = cfg.rminPhys/dyEl;
+end
+flt = prepFilter(cfg.nelx, cfg.nely, cfg.rminEl);
+
+n     = cfg.n;
+Nmax  = cfg.Nmax;
+Jcalc = n + Nmax;
+
+hist = struct('omega',[],'N',[],'beta',[],'nInner',[],'dxOuter',[], ...
+              'vol',[],'tEig',[],'tGrad',[],'tInner',[],'degen',[],'multJ',[], ...
+              'innerConv',[],'cumInner',[],'dxNorm2',[],'move',[],'gap12',[], ...
+              'volErr',[],'dBeta',[],'stage',[]);
+log = {};
+cumInner = 0;
+% Optional per-iteration diagnostic record (WP2B of the residual-discrepancy
+% audit).  PURELY ADDITIVE and default OFF: when cfg.diag is absent or false
+% nothing below this flag executes and the trajectory is bit-identical.
+wantDiag = isfield(cfg,'diag') && ~isempty(cfg.diag) && cfg.diag;
+dg = struct('drho',{{}},'dlamPred',{{}},'lam',{{}},'N',[],'gap',[], ...
+            'fdiag',[],'foff',[],'Vrot',[],'lamTild',[],'beta',[]);
+mmaState = [];   % persistent MMA solver state (innerVar = 'rho' only)
+multState = [];  % multiplicity-rule state (algo/multRule.m); unused by 'binary'
+mvState  = [];   % step/move controller state (algo/moveControl.m)
+lamPrev  = [];   % previous lambda_n, for the S3 realized-gain measure
+
+if cfg.verbose
+    fprintf('%4s %9s %9s %9s %4s %9s %6s %6s %8s %9s %8s %9s %7s\n', ...
+            'it','omega1','omega2','omega3','N','sqrt(beta)', ...
+            'inner','cumIn','maxdrho','|drho|2','move','vol','conv');
+end
+
+for outer = 1:cfg.maxOuter
+    % ---- step 1: FE analysis + multiplicity detection -------------------
+    te = tic;
+    [K,M] = assemble2D(mdl, rho, cfg.p, cfg.massInterp);
+    [w, Phi, lam] = eigSolve(K, M, Jcalc, cfg.solver);
+    tEig = toc(te);
+
+    % Multiplicity treatment.  algo/multRule.m holds the rule and its A/B/C
+    % evidence classification; cfg.multRule = 'binary' (default) is the frozen
+    % memoryless test and reproduces the previous trajectory bitwise.
+    [N, multState] = multRule(cfg, w, n, Jcalc, multState);
+    if N >= Nmax
+        log{end+1} = sprintf('iter %d: detected N=%d >= Nmax=%d, J may be truncated',outer,N,Nmax); %#ok<AGROW>
+    end
+    J = n + N;
+    multJ = (J+1 <= Jcalc) && abs(w(J+1)-w(J))/w(J) < cfg.tolMult;
+    if multJ
+        % (25b) assumes omega_J simple.  No procedure defined -- log only.
+        log{end+1} = sprintf('iter %d: omega_J (J=%d) is itself multiple -- (25b) undefined',outer,J); %#ok<AGROW>
+    end
+
+    % ---- step 2: generalized gradients ----------------------------------
+    tg = tic;
+    idx     = n:(n+N-1);
+    % Sec. 3.5.1: "In the second step of the main loop, we set lambda~ = omega_n^2"
+    % -- the FIRST eigenvalue of the cluster, NOT the cluster mean.  (Identical
+    % at exact degeneracy; differs by up to tolMult at the detection threshold.)
+    lamTild = lam(n);
+    F       = genGrad(mdl, rho, cfg.p, cfg.massInterp, Phi, lamTild, idx);
+    % Diagonal-offset ('subspace') form: the subeigenvalue problem keeps the
+    % actual separation lam(j)-lam(n), so the diagonal blocks must use each
+    % mode's OWN eigenvalue -- which is eq. (24) verbatim, f_jj with lambda_j.
+    % The off-diagonals keep (19)'s lambda-tilde.  At exact degeneracy the two
+    % coincide and the whole thing collapses onto (25d) as printed.
+    useOff = isfield(cfg,'multRule') && strcmpi(cfg.multRule,'subspace');
+    if useOff
+        for j = 1:N
+            Gj = genGrad(mdl, rho, cfg.p, cfg.massInterp, Phi, lam(idx(j)), idx(j));
+            F(:,j,j) = Gj(:,1,1);
+        end
+        dOff = lam(idx) - lam(idx(1));
+    else
+        dOff = [];
+    end
+    FJ      = genGrad(mdl, rho, cfg.p, cfg.massInterp, Phi, lam(J), J);
+    fJJ     = FJ(:,1,1);
+
+    % ---- filtering (Sigmund 1997, applied to the sensitivities) ---------
+    switch lower(cfg.filterMode)
+        case 'diag'      % filter only the f_jj (and f_JJ)
+            for j = 1:N
+                F(:,j,j) = applyFilter(flt, rho, F(:,j,j));
+            end
+        case 'all'       % filter every f_sk, including off-diagonals
+            for s = 1:N
+                for k = s:N
+                    v = applyFilter(flt, rho, F(:,s,k));
+                    F(:,s,k) = v;  F(:,k,s) = v;
+                end
+            end
+        case 'none'
+        otherwise
+            error('olhoffOpt:filterMode','unknown filterMode %s',cfg.filterMode);
+    end
+    fJJ = applyFilter(flt, rho, fJJ);
+    tGrad = toc(tg);
+
+    % ---- step/move control (algo/moveControl.m; see its header for the
+    % A/B/C evidence classification -- NONE of this is specified by the paper)
+    if ~isempty(lamPrev)
+        mvState.lastRealized = lam(n) - lamPrev;
+    elseif ~isempty(mvState)
+        mvState.lastRealized = NaN;
+    end
+    [mvNow, mvState] = moveControl(cfg, outer, hist, mvState);
+    lamPrev = lam(n);
+
+    % ---- step 3: inner loop ---------------------------------------------
+    ti = tic;
+    ctx = struct('F',F,'fJJ',fJJ,'lam',lam(idx),'lamJ',lam(J), ...
+                 'rho',rho,'rhomin',cfg.rhomin,'volfrac',cfg.volfrac, ...
+                 'move',mvNow,'maxInner',cfg.maxInner, ...
+                 'tolInner',cfg.tolInner,'minInner',cfg.minInner, ...
+                 'offDiag',cfg.offDiag,'dOff',dOff);
+    if strcmpi(cfg.innerSolver,'lp')
+        [drho, st] = innerLoopLP(ctx);
+        if ~st.conv
+            log{end+1} = sprintf('iter %d: LP inner solve failed (flag=%d)',outer,st.lpFlag); %#ok<AGROW>
+        end
+    elseif strcmpi(cfg.innerVar,'rho')
+        [drho, st, mmaState] = innerLoopRho(ctx, mmaState);
+    else
+        [drho, st] = innerLoop(ctx);
+    end
+    tInner = toc(ti);
+
+    % ---- step 4: update --------------------------------------------------
+    rho = min(1, max(cfg.rhomin, rho + drho));
+    dxOuter = max(abs(drho));
+    dxNorm2 = norm(drho);
+
+    if wantDiag
+        dg.drho{end+1}  = drho;
+        dg.lam{end+1}   = lam(1:min(Jcalc,numel(lam)));
+        dg.N(end+1)     = N;
+        dg.gap(end+1)   = (w(2)-w(1))/w(1);
+        dg.lamTild(end+1)= lamTild;
+        dg.beta(end+1)  = st.beta;
+        % predicted increments along the realized step, and the scale of the
+        % (25d) matrix entries.  Pure post-hoc evaluation: nothing feeds back.
+        dg.dlamPred{end+1} = deltaLambda(F, drho, dOff);
+        A = zeros(N);
+        for s_ = 1:N, for k_ = 1:N, A(s_,k_) = F(:,s_,k_).'*drho; end, end
+        dg.fdiag(end+1) = max(abs(diag(A)));
+        if N>=2, dg.foff(end+1) = max(abs(A(~eye(N))));
+        else,    dg.foff(end+1) = 0; end
+        if outer>1 && ~isempty(dg.drho{end-1})
+            u = dg.drho{end-1}; v = drho;
+            dg.Vrot(end+1) = (u.'*v)/max(norm(u)*norm(v),1e-300);
+        else
+            dg.Vrot(end+1) = NaN;
+        end
+    end
+    hist.omega(:,outer)  = w(1:min(Jcalc,numel(w)));
+    hist.N(outer)        = N;
+    hist.beta(outer)     = st.beta;
+    hist.nInner(outer)   = st.nInner;
+    cumInner             = cumInner + st.nInner;
+    hist.cumInner(outer) = cumInner;
+    hist.innerConv(outer)= st.conv;
+    hist.dxOuter(outer)  = dxOuter;
+    hist.vol(outer)      = mean(rho);
+    hist.tEig(outer)     = tEig;
+    hist.tGrad(outer)    = tGrad;
+    hist.tInner(outer)   = tInner;
+    hist.degen(outer)    = st.degenHits;
+    hist.multJ(outer)    = multJ;
+    hist.dxNorm2(outer)  = dxNorm2;
+    hist.move(outer)     = mvNow;
+    hist.gap12(outer)    = (w(2)-w(1))/w(1);
+    hist.volErr(outer)   = mean(rho) - cfg.volfrac;
+    if outer > 1, hist.dBeta(outer) = st.beta - hist.beta(outer-1);
+    else,         hist.dBeta(outer) = NaN; end
+    if isfield(mvState,'stage'), hist.stage(outer) = mvState.stage;
+    else,                        hist.stage(outer) = 1; end
+
+    if cfg.verbose
+        fprintf('%4d %9.2f %9.2f %9.2f %4d %9.2f %6d %6d %8.4f %9.4f %8.4f %9.3f %7s\n', ...
+                outer, w(1), w(2), w(min(3,end)), N, sqrt(max(st.beta,0)), ...
+                st.nInner, cumInner, dxOuter, dxNorm2, mvNow, mean(rho), ...
+                stringYesNo(st.conv));
+    end
+
+    % Fig. 1 tests "||drho|| < eps" -- a vector NORM, read here as the
+    % Euclidean norm (the natural reading of the unqualified symbol).  The
+    % max-norm is kept as a labelled alternative.  epsilon itself is unstated
+    % (CLAUDE.md sec.4) and is a per-run recorded parameter.
+    switch lower(cfg.outerNorm)
+        case 'l2',  convOuter = dxNorm2 < cfg.tolOuter;
+        case 'max', convOuter = dxOuter < cfg.tolOuter;
+        otherwise,  error('olhoffOpt:outerNorm','unknown outerNorm %s',cfg.outerNorm);
+    end
+    % Guard on WHEN that test may be believed.  The paper places no bound on
+    % drho other than the box (25f), so ||drho|| -> 0 genuinely means the design
+    % has stopped moving.  This reconstruction adds a move ladder, and then
+    % ||drho||_inf <= mv_k: on an iteration where mv_k differs from mv_{k-1} a
+    % scheduled reduction of the move limit mechanically reduces the measured
+    % step, with no change in the design's behaviour.  The criterion is
+    % uninterpretable there.  ('none' = legacy, bitwise-identical trajectories.)
+    switch lower(cfg.outerGuard)
+        case 'none'
+            % legacy: evaluate every iteration
+        case 'settledmove'
+            moveSettled = outer >= 2 && hist.move(outer) == hist.move(outer-1);
+            if convOuter && ~moveSettled
+                log{end+1} = sprintf(['iter %d: ||drho|| below eps but the move limit ' ...
+                    'just changed (%.6g -> %.6g); convergence NOT asserted'], ...
+                    outer, mvPrevForLog(hist,outer), hist.move(outer)); %#ok<AGROW>
+            end
+            convOuter = convOuter && moveSettled;
+        otherwise
+            error('olhoffOpt:outerGuard','unknown outerGuard %s',cfg.outerGuard);
+    end
+    if convOuter
+        log{end+1} = sprintf('converged at outer iteration %d (||drho||_2 = %.3e, max|drho| = %.3e)',outer,dxNorm2,dxOuter); %#ok<AGROW>
+        break
+    end
+end
+
+% ---- final analysis -----------------------------------------------------
+[K,M] = assemble2D(mdl, rho, cfg.p, cfg.massInterp);
+[w, Phi, lam] = eigSolve(K, M, Jcalc, cfg.solver);
+T = classifyModes(mdl, M, Phi, w);
+
+res = struct('cfg',cfg,'rho',rho,'omega',w,'lambda',lam,'hist',hist, ...
+             'modeTable',T,'log',{log},'nOuter',numel(hist.N), ...
+             'wallclock',toc(t0),'mdl',mdl);
+if wantDiag, res.diag = dg; end
+end
+
+function s = stringYesNo(tf)
+if tf, s = 'yes'; else, s = 'NO'; end
+end
+
+function m = mvPrevForLog(hist, outer)
+if outer >= 2, m = hist.move(outer-1); else, m = NaN; end
+end

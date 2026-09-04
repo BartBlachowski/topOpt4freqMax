@@ -1,0 +1,6255 @@
+{
+  "schema": "conference_performance_benchmark_results/1",
+  "generated": "2026-09-04T14:13:01+02:00",
+  "run_label": "smoke",
+  "scientific_evidence": false,
+  "performance_campaign": false,
+  "caveats": {
+    "table_caption": "Count/time columns represent method-native computational stages and are not mathematically identical across methods. Total wall time is the common performance quantity.",
+    "olhoff": "Du-Olhoff timings and iteration counts refer to the frozen reconstruction used in this study. Some continuation and inner-solver details are not uniquely specified by the original publication; therefore these values should be interpreted as representative measurements of this reconstruction rather than exact historical implementation timings.",
+    "olhoff_label": "The Olhoff column is labelled \"Du-Olhoff reconstruction (M4)\" and must not be labelled \"Olhoff 2007\".",
+    "memory": "Reliable, method-independent peak-memory measurement was not available in the MATLAB environment; memory was omitted rather than reported with inconsistent semantics.",
+    "olhoff_iteration_counts": "The outer iteration count of the Du-Olhoff reconstruction depends on a move-limit continuation schedule that the original publication does not specify. The frozen schedule used here is documented; a different admissible schedule changes the count without changing the physics.",
+    "scaling": "Scaling exponents may be fitted only to complete campaign data and never to smoke or preflight runs. For the Du-Olhoff reconstruction the source audit records that its outer iteration count is an artifact of the continuation trigger, so a fitted exponent for that method describes this reconstruction, not the published method."
+  },
+  "timing_schema": {
+    "schema_version": "conference_benchmark_timing/1",
+    "common": {
+      "total_wall_time_s": "Caller-side tic/toc around the solve and nothing else. CSV/JSON/MAT writing, plotting, table formatting, LaTeX generation, the common E1/E2/E3 evaluator and topology rendering are all outside it.",
+      "overhead_time_s": "Whatever the solve spends outside the two named stages: configuration dispatch, model build, filter preparation, the final modal analysis and result assembly. It exists so that no microsecond has to be forced into a named stage.",
+      "identity": "total_wall_time_s = time1 + time2 + overhead_time_s",
+      "timing_accounting_residual_s": "total_wall_time_s minus (time1 + time2 + overhead_time_s).",
+      "timing_accounting_fail": "TIMING_ACCOUNTING_FAIL: set when the residual exceeds the predeclared tolerance recorded alongside it.",
+      "independent_crosscheck_residual_s": "A SECOND, independent measurement of the same interval: the caller-side total minus the solver's own self-reported wall time. Unlike the identity above it is not an algebraic tautology, so it detects a mis-nested timer.",
+      "threads": "All runs are single-threaded (maxNumCompThreads(1)).",
+      "memory": "NOT MEASURED and NOT REPORTED. Reliable, method-independent peak-memory measurement was not available in the MATLAB environment; memory was omitted rather than reported with inconsistent semantics."
+    },
+    "methods": {
+      "Proposed": {
+        "architecture": "one reference eigenanalysis, then a SIMP topology optimization",
+        "count1": {
+          "name": "eigenanalysis_solves",
+          "value": "always 1",
+          "meaning": "The number of reference eigenanalyses performed. This is a SOLVE count. It is NOT an optimization iteration and must not be read as one."
+        },
+        "count2": {
+          "name": "simp_iterations",
+          "meaning": "SIMP topology-optimization iterations."
+        },
+        "time1": {
+          "name": "stage1_eigenanalysis_and_preparation_s",
+          "boundary": "solver initialization: mesh and element matrices, boundary conditions, filter preparation, and the single reference eigenanalysis. stage1_reference_eigen_time_s isolates the eigenanalysis alone and is a SUB-INTERVAL of this."
+        },
+        "time2": {
+          "name": "stage2_simp_time_s",
+          "boundary": "the SIMP optimization loop only."
+        }
+      },
+      "Yuksel": {
+        "architecture": "two sequential optimization stages",
+        "count1": {
+          "name": "stage1_iterations",
+          "meaning": "Stage-1 optimization iterations."
+        },
+        "count2": {
+          "name": "stage2_iterations",
+          "meaning": "Stage-2 optimization iterations."
+        },
+        "time1": {
+          "name": "stage1_time_s",
+          "boundary": "the Stage-1 loop only."
+        },
+        "time2": {
+          "name": "stage2_time_s",
+          "boundary": "the Stage-2 loop only; disjoint from Stage 1."
+        },
+        "assertions": [
+          "N_total = N1 + N2",
+          "T1 + T2 = optimization_loop_time (non-overlapping timers)"
+        ]
+      },
+      "DuOlhoffReconstructionM4": {
+        "label": "Du-Olhoff reconstruction (M4)",
+        "architecture": "NESTED: an outer loop, each of whose iterations contains a complete MMA sub-optimization.",
+        "count1": {
+          "name": "outer_iterations",
+          "meaning": "Fig. 1 outer iterations."
+        },
+        "count2": {
+          "name": "inner_mma_iterations_total",
+          "meaning": "cumulative nested MMA sub-iterations over the whole run."
+        },
+        "time1": {
+          "name": "outer_time_excluding_inner_s",
+          "boundary": "every computational region of an outer iteration EXCEPT the nested MMA solve: FE assembly, the eigenproblem, modal processing, generalized-gradient sensitivities, sensitivity filtering, local subproblem construction, the step controller, the design update, bookkeeping and the convergence test. Measured as sum(t_outer) - sum(t_inner) from per-iteration timers, so the nested solve cannot be double-counted."
+        },
+        "time2": {
+          "name": "inner_mma_time_total_s",
+          "boundary": "the nested MMA loop, and only that."
+        },
+        "derived": [
+          "inner_iterations_per_outer_mean",
+          "inner_time_per_outer_mean_s",
+          "inner_time_per_inner_iteration_mean_s",
+          "inner_time_share_pct"
+        ],
+        "prohibited": "N_outer + N_inner must NEVER be reported as a generic iteration count: the two are different objects.",
+        "caveat": "Du-Olhoff timings and iteration counts refer to the frozen reconstruction used in this study. Some continuation and inner-solver details are not uniquely specified by the original publication; therefore these values should be interpreted as representative measurements of this reconstruction rather than exact historical implementation timings."
+      }
+    },
+    "cross_method_warning": "Count and time columns represent method-native computational stages and are not mathematically identical across methods. Total wall time is the common performance quantity."
+  },
+  "memory": {
+    "measured": false,
+    "reported": false,
+    "reason": "Reliable, method-independent peak-memory measurement was not available in the MATLAB environment; memory was omitted rather than reported with inconsistent semantics."
+  },
+  "scaling": {
+    "fitted": false,
+    "reason": "this run is not a complete performance campaign; a scaling exponent must not be fitted to smoke or preflight data",
+    "model": "T(Ne) = C * Ne^p",
+    "methods": []
+  },
+  "runs": [
+    {
+      "accounting": {
+        "total_wall_time_s": 0.26333325,
+        "component_sum_s": 0.26333325,
+        "timing_accounting_residual_s": 0,
+        "timing_accounting_relative_residual": 0,
+        "timing_accounting_tolerance_s": 1E-6,
+        "timing_accounting_tolerance_rel": 1E-9,
+        "timing_accounting_fail": false,
+        "independent_crosscheck_residual_s": 0.00091275000000001771,
+        "independent_crosscheck_relative": 0.00346614033738625,
+        "independent_crosscheck_tolerance_rel": 0.05,
+        "independent_crosscheck_fail": false
+      },
+      "caveat": "",
+      "counts": {
+        "count1_name": "eigenanalysis_solves",
+        "count1": 1,
+        "count2_name": "simp_iterations",
+        "count2": 6,
+        "stage1_solves": 1,
+        "stage2_iterations": 6,
+        "iterations_total_generic": 6
+      },
+      "error": "",
+      "evaluator": {
+        "evaluator_candidate": "C",
+        "density_representation": "ACTUAL_GRAY",
+        "modal_classifier_version": "candidate_c_unanimous_v1",
+        "volume": 0.49985643893677256,
+        "volume_residual": -0.00014356106322743756,
+        "minimum_density": 0.0986709949254319,
+        "maximum_density": 0.97206566760904389,
+        "mean_density": 0.49985643893677256,
+        "std_density": 0.22777576814691095,
+        "grayness": 0.79333741201713837,
+        "gray_fraction_01_09": 0.9,
+        "connectivity_raw_05": {
+          "n_components": 4,
+          "left_right_connected": false,
+          "largest_component_fraction": 0.475,
+          "solid_fraction": 0.33333333333333331
+        },
+        "binary_solid_count": 120,
+        "binary_volume": 0.5,
+        "connectivity_binary": {
+          "n_components": 4,
+          "left_right_connected": false,
+          "largest_component_fraction": 0.48333333333333334,
+          "solid_fraction": 0.5
+        },
+        "binary_role": "ENDPOINT_MANUFACTURABILITY_TOPOLOGY_DIAGNOSTIC_EXCLUDED_FROM_Q",
+        "modal_raw_E1": {
+          "model": "E1",
+          "classifier": "UNANIMOUS_ALL_THREE",
+          "rho_void_threshold": 0.1,
+          "voidKE_threshold": 0.5,
+          "voidSE_threshold": 0.5,
+          "densityParticipation_threshold": 0.5,
+          "IPR_role": "NONBINDING_QA",
+          "status": "PASS",
+          "solver_status": "PASS",
+          "failure_reason": "",
+          "modes_requested_final": 3,
+          "escalation_count": 0,
+          "batch_schedule": 3,
+          "lambda": [
+            13467.254321333121,
+            49341.663447205879,
+            232420.68315721428
+          ],
+          "omega": [
+            116.04849986679328,
+            222.12983466253667,
+            482.10028329924705
+          ],
+          "eigenpair_residual": [
+            4.7066142040813151E-12,
+            1.0979450864445888E-12,
+            3.945331697193596E-13
+          ],
+          "eigenpair_valid": [
+            true,
+            true,
+            true
+          ],
+          "diagnostic_finite": [
+            true,
+            true,
+            true
+          ],
+          "voidKE": [
+            0.0063286454587005367,
+            0.00027150485207190711,
+            0.0048704458196691886
+          ],
+          "voidSE": [
+            1.4402462355408691E-5,
+            0.037586915681837432,
+            0.00018273459369476703
+          ],
+          "densityParticipation": [
+            0.66879617170512662,
+            0.61471146399868415,
+            0.63528250238500172
+          ],
+          "IPR": [
+            0.0081849417590865968,
+            0.0073325642290961992,
+            0.0061206901219443737
+          ],
+          "kinetic_energy_total": [
+            0.99999999999999967,
+            0.99999999999999956,
+            0.99999999999999978
+          ],
+          "strain_energy_total": [
+            13467.254321332708,
+            49341.663447198531,
+            232420.68315721623
+          ],
+          "condition_margins": [
+            [
+              0.49367135454129946,
+              0.4999855975376446,
+              0.16879617170512662
+            ],
+            [
+              0.49972849514792811,
+              0.46241308431816258,
+              0.11471146399868415
+            ],
+            [
+              0.49512955418033083,
+              0.49981726540630522,
+              0.13528250238500172
+            ]
+          ],
+          "minimum_margin": [
+            0.16879617170512662,
+            0.11471146399868415,
+            0.13528250238500172
+          ],
+          "valid_structural": [
+            true,
+            true,
+            true
+          ],
+          "selected_ordinal": 1,
+          "selected_lambda": 13467.254321333121,
+          "selected_omega": 116.04849986679328,
+          "selected_voidKE": 0.0063286454587005367,
+          "selected_voidSE": 1.4402462355408691E-5,
+          "selected_densityParticipation": 0.66879617170512662,
+          "selected_IPR": 0.0081849417590865968,
+          "selected_condition_margins": [
+            0.49367135454129946,
+            0.4999855975376446,
+            0.16879617170512662
+          ],
+          "selected_minimum_margin": 0.16879617170512662,
+          "matrix_free_dofs": null,
+          "technical_mode_limit": null
+        },
+        "omega_raw_E1": [
+          116.04849986679328,
+          222.12983466253667,
+          482.10028329924705
+        ],
+        "selected_ordinal_raw_E1": 1,
+        "selected_lambda_raw_E1": 13467.254321333121,
+        "selected_omega_raw_E1": 116.04849986679328,
+        "status_raw_E1": "PASS",
+        "binary_diagnostic_E1": {
+          "model": "",
+          "classifier": "UNANIMOUS_ALL_THREE",
+          "rho_void_threshold": 0.1,
+          "voidKE_threshold": 0.5,
+          "voidSE_threshold": 0.5,
+          "densityParticipation_threshold": 0.5,
+          "IPR_role": "NONBINDING_QA",
+          "status": "PASS",
+          "solver_status": "NOT_RUN",
+          "failure_reason": "",
+          "modes_requested_final": 0,
+          "escalation_count": 0,
+          "batch_schedule": [],
+          "lambda": [
+            2.3852810035739798,
+            7.4053594839131769,
+            9.2671840883200431,
+            81.125379763097229,
+            209.91525023760144,
+            218.43196151312719
+          ],
+          "omega": [
+            1.5444354967346419,
+            2.721279016182129,
+            3.044205001033939,
+            9.00696284899062,
+            14.488452306495731,
+            14.779443883757169
+          ],
+          "eigenpair_residual": [
+            4.6205478568196427E-8,
+            1.4172046039995251E-8,
+            1.2408730342927556E-8,
+            2.8922850840070632E-9,
+            1.4846149297986532E-9,
+            1.3861286836311692E-9
+          ],
+          "eigenpair_valid": [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ],
+          "diagnostic_finite": [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ],
+          "voidKE": [
+            8.5947063966026377E-7,
+            8.1849592547721637E-7,
+            1.0722335134669089E-6,
+            3.8327823636028359E-7,
+            3.1027536296645279E-7,
+            3.8445035522773804E-7
+          ],
+          "voidSE": [
+            0.99905893217777075,
+            0.999969330702182,
+            0.99987834375057572,
+            0.9999906171997639,
+            0.99996741794094435,
+            0.9999776450637039
+          ],
+          "densityParticipation": [
+            0.99999914052936023,
+            0.99999918150407452,
+            0.99999892776648669,
+            0.99999961672176374,
+            0.99999968972463726,
+            0.99999961554964467
+          ],
+          "IPR": [
+            0.0085982888347808061,
+            0.00862071700119358,
+            0.014222594771099474,
+            0.008614872329060743,
+            0.0086207027520729725,
+            0.014419941702287338
+          ],
+          "kinetic_energy_total": [
+            1.0000000000000004,
+            1.0000000000000004,
+            1,
+            0.99999999999999978,
+            1,
+            1
+          ],
+          "strain_energy_total": [
+            2.3852809380565922,
+            7.4053594263360676,
+            9.26718404156305,
+            81.125379706619867,
+            209.91525017120475,
+            218.43196146344837
+          ],
+          "condition_margins": [
+            [
+              0.49999914052936034,
+              -0.49905893217777075,
+              0.49999914052936023
+            ],
+            [
+              0.49999918150407452,
+              -0.49996933070218197,
+              0.49999918150407452
+            ],
+            [
+              0.49999892776648652,
+              -0.49987834375057572,
+              0.49999892776648669
+            ],
+            [
+              0.49999961672176363,
+              -0.4999906171997639,
+              0.49999961672176374
+            ],
+            [
+              0.49999968972463704,
+              -0.49996741794094435,
+              0.49999968972463726
+            ],
+            [
+              0.49999961554964478,
+              -0.4999776450637039,
+              0.49999961554964467
+            ]
+          ],
+          "minimum_margin": [
+            -0.49905893217777075,
+            -0.49996933070218197,
+            -0.49987834375057572,
+            -0.4999906171997639,
+            -0.49996741794094435,
+            -0.4999776450637039
+          ],
+          "valid_structural": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          "selected_ordinal": null,
+          "selected_lambda": null,
+          "selected_omega": null,
+          "selected_voidKE": null,
+          "selected_voidSE": null,
+          "selected_densityParticipation": null,
+          "selected_IPR": null,
+          "selected_condition_margins": [
+            null,
+            null,
+            null
+          ],
+          "selected_minimum_margin": null,
+          "matrix_free_dofs": null,
+          "technical_mode_limit": null,
+          "role": "ENDPOINT_MANUFACTURABILITY_TOPOLOGY_DIAGNOSTIC_EXCLUDED_FROM_Q"
+        },
+        "omega_binary_E1": [
+          1.5444354967346419,
+          2.721279016182129,
+          3.044205001033939,
+          9.00696284899062,
+          14.488452306495731,
+          14.779443883757169
+        ],
+        "modal_raw_E2": {
+          "model": "E2",
+          "classifier": "UNANIMOUS_ALL_THREE",
+          "rho_void_threshold": 0.1,
+          "voidKE_threshold": 0.5,
+          "voidSE_threshold": 0.5,
+          "densityParticipation_threshold": 0.5,
+          "IPR_role": "NONBINDING_QA",
+          "status": "PASS",
+          "solver_status": "PASS",
+          "failure_reason": "",
+          "modes_requested_final": 3,
+          "escalation_count": 0,
+          "batch_schedule": 3,
+          "lambda": [
+            13472.684070357353,
+            49334.65620899362,
+            232492.128223196
+          ],
+          "omega": [
+            116.07189181863691,
+            222.11406125906035,
+            482.17437532825818
+          ],
+          "eigenpair_residual": [
+            4.8810569054858065E-12,
+            1.022705805383886E-12,
+            4.4315504195113674E-13
+          ],
+          "eigenpair_valid": [
+            true,
+            true,
+            true
+          ],
+          "diagnostic_finite": [
+            true,
+            true,
+            true
+          ],
+          "voidKE": [
+            0.0059205911135941924,
+            0.00025396485269542,
+            0.0045404502012581531
+          ],
+          "voidSE": [
+            1.4060737946487911E-5,
+            0.037557411664353446,
+            0.00016777026204085915
+          ],
+          "densityParticipation": [
+            0.669026649267493,
+            0.61472293722779481,
+            0.63546115933627845
+          ],
+          "IPR": [
+            0.00819008601368117,
+            0.0073329000279950046,
+            0.0061238711710432311
+          ],
+          "kinetic_energy_total": [
+            1.0000000000000007,
+            0.99999999999999956,
+            1.0000000000000007
+          ],
+          "strain_energy_total": [
+            13472.684070363277,
+            49334.656209003631,
+            232492.128223204
+          ],
+          "condition_margins": [
+            [
+              0.49407940888640578,
+              0.49998593926205354,
+              0.169026649267493
+            ],
+            [
+              0.49974603514730459,
+              0.46244258833564655,
+              0.11472293722779481
+            ],
+            [
+              0.49545954979874185,
+              0.49983222973795916,
+              0.13546115933627845
+            ]
+          ],
+          "minimum_margin": [
+            0.169026649267493,
+            0.11472293722779481,
+            0.13546115933627845
+          ],
+          "valid_structural": [
+            true,
+            true,
+            true
+          ],
+          "selected_ordinal": 1,
+          "selected_lambda": 13472.684070357353,
+          "selected_omega": 116.07189181863691,
+          "selected_voidKE": 0.0059205911135941924,
+          "selected_voidSE": 1.4060737946487911E-5,
+          "selected_densityParticipation": 0.669026649267493,
+          "selected_IPR": 0.00819008601368117,
+          "selected_condition_margins": [
+            0.49407940888640578,
+            0.49998593926205354,
+            0.169026649267493
+          ],
+          "selected_minimum_margin": 0.169026649267493,
+          "matrix_free_dofs": null,
+          "technical_mode_limit": null
+        },
+        "omega_raw_E2": [
+          116.07189181863691,
+          222.11406125906035,
+          482.17437532825818
+        ],
+        "selected_ordinal_raw_E2": 1,
+        "selected_lambda_raw_E2": 13472.684070357353,
+        "selected_omega_raw_E2": 116.07189181863691,
+        "status_raw_E2": "PASS",
+        "binary_diagnostic_E2": {
+          "model": "",
+          "classifier": "UNANIMOUS_ALL_THREE",
+          "rho_void_threshold": 0.1,
+          "voidKE_threshold": 0.5,
+          "voidSE_threshold": 0.5,
+          "densityParticipation_threshold": 0.5,
+          "IPR_role": "NONBINDING_QA",
+          "status": "PASS",
+          "solver_status": "NOT_RUN",
+          "failure_reason": "",
+          "modes_requested_final": 0,
+          "escalation_count": 0,
+          "batch_schedule": [],
+          "lambda": [
+            0.0023875579606951825,
+            0.0074056494985687933,
+            0.0092683388642378246,
+            0.081126227358205488,
+            0.20992218689790068,
+            0.21843694212005416
+          ],
+          "omega": [
+            0.048862643816060369,
+            0.086056083448927609,
+            0.096272212316108247,
+            0.28482666195109874,
+            0.4581726605744833,
+            0.46737238057041214
+          ],
+          "eigenpair_residual": [
+            4.6541246460686658E-5,
+            1.3524346345230276E-5,
+            1.0485829076309869E-5,
+            3.0599066355816662E-6,
+            1.4311057528679634E-6,
+            1.3549256984145976E-6
+          ],
+          "eigenpair_valid": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          "diagnostic_finite": [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ],
+          "voidKE": [
+            8.5964352996708271E-10,
+            8.1849357077014973E-10,
+            1.0723407882061509E-9,
+            3.8329410058246387E-10,
+            3.1035447569068366E-10,
+            3.8452740355258048E-10
+          ],
+          "voidSE": [
+            0.99999973512111551,
+            0.99999742036015,
+            0.9999999600891033,
+            0.99999974164439376,
+            0.99999999542109963,
+            0.99999999756100844
+          ],
+          "densityParticipation": [
+            0.99999999914035653,
+            0.99999999918150639,
+            0.99999999892765912,
+            0.99999999961670594,
+            0.99999999968964559,
+            0.99999999961547248
+          ],
+          "IPR": [
+            0.0085982567271730963,
+            0.0086207309585225878,
+            0.014224534970080072,
+            0.0086148771517763484,
+            0.008620689649872176,
+            0.014423963130362852
+          ],
+          "kinetic_energy_total": [
+            1,
+            1.0000000000000004,
+            0.99999999999999978,
+            1.0000000000000004,
+            0.99999999999999967,
+            1
+          ],
+          "strain_energy_total": [
+            0.0023875283956026031,
+            0.0074056114787777539,
+            0.0092683197942826957,
+            0.081126191176025625,
+            0.20992215297041644,
+            0.21843691974446922
+          ],
+          "condition_margins": [
+            [
+              0.49999999914035648,
+              -0.49999973512111551,
+              0.49999999914035653
+            ],
+            [
+              0.49999999918150645,
+              -0.49999742036015005,
+              0.49999999918150639
+            ],
+            [
+              0.49999999892765923,
+              -0.4999999600891033,
+              0.49999999892765912
+            ],
+            [
+              0.49999999961670588,
+              -0.49999974164439376,
+              0.49999999961670594
+            ],
+            [
+              0.49999999968964554,
+              -0.49999999542109963,
+              0.49999999968964559
+            ],
+            [
+              0.49999999961547259,
+              -0.49999999756100844,
+              0.49999999961547248
+            ]
+          ],
+          "minimum_margin": [
+            -0.49999973512111551,
+            -0.49999742036015005,
+            -0.4999999600891033,
+            -0.49999974164439376,
+            -0.49999999542109963,
+            -0.49999999756100844
+          ],
+          "valid_structural": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          "selected_ordinal": null,
+          "selected_lambda": null,
+          "selected_omega": null,
+          "selected_voidKE": null,
+          "selected_voidSE": null,
+          "selected_densityParticipation": null,
+          "selected_IPR": null,
+          "selected_condition_margins": [
+            null,
+            null,
+            null
+          ],
+          "selected_minimum_margin": null,
+          "matrix_free_dofs": null,
+          "technical_mode_limit": null,
+          "role": "ENDPOINT_MANUFACTURABILITY_TOPOLOGY_DIAGNOSTIC_EXCLUDED_FROM_Q"
+        },
+        "omega_binary_E2": [
+          0.048862643816060369,
+          0.086056083448927609,
+          0.096272212316108247,
+          0.28482666195109874,
+          0.4581726605744833,
+          0.46737238057041214
+        ],
+        "modal_raw_E3": {
+          "model": "E3",
+          "classifier": "UNANIMOUS_ALL_THREE",
+          "rho_void_threshold": 0.1,
+          "voidKE_threshold": 0.5,
+          "voidSE_threshold": 0.5,
+          "densityParticipation_threshold": 0.5,
+          "IPR_role": "NONBINDING_QA",
+          "status": "PASS",
+          "solver_status": "PASS",
+          "failure_reason": "",
+          "modes_requested_final": 3,
+          "escalation_count": 0,
+          "batch_schedule": 3,
+          "lambda": [
+            13472.683983314273,
+            49334.648326412105,
+            232492.12652949122
+          ],
+          "omega": [
+            116.07189144368361,
+            222.11404351461459,
+            482.17437357193842
+          ],
+          "eigenpair_residual": [
+            4.8615169540845976E-12,
+            1.0745234976386703E-12,
+            3.9592089596437841E-13
+          ],
+          "eigenpair_valid": [
+            true,
+            true,
+            true
+          ],
+          "diagnostic_finite": [
+            true,
+            true,
+            true
+          ],
+          "voidKE": [
+            0.0059205911155463028,
+            0.00025396489880534696,
+            0.0045404505132166737
+          ],
+          "voidSE": [
+            1.406072927362379E-5,
+            0.037557385662410583,
+            0.00016777042543465438
+          ],
+          "densityParticipation": [
+            0.66902665000209627,
+            0.61472294007354811,
+            0.63546115894234212
+          ],
+          "IPR": [
+            0.0081900860604567326,
+            0.007332900114994309,
+            0.0061238711633366675
+          ],
+          "kinetic_energy_total": [
+            1,
+            0.99999999999999989,
+            1
+          ],
+          "strain_energy_total": [
+            13472.683983301096,
+            49334.648326405542,
+            232492.12652949337
+          ],
+          "condition_margins": [
+            [
+              0.49407940888445367,
+              0.49998593927072638,
+              0.16902665000209627
+            ],
+            [
+              0.49974603510119464,
+              0.46244261433758943,
+              0.11472294007354811
+            ],
+            [
+              0.49545954948678333,
+              0.49983222957456536,
+              0.13546115894234212
+            ]
+          ],
+          "minimum_margin": [
+            0.16902665000209627,
+            0.11472294007354811,
+            0.13546115894234212
+          ],
+          "valid_structural": [
+            true,
+            true,
+            true
+          ],
+          "selected_ordinal": 1,
+          "selected_lambda": 13472.683983314273,
+          "selected_omega": 116.07189144368361,
+          "selected_voidKE": 0.0059205911155463028,
+          "selected_voidSE": 1.406072927362379E-5,
+          "selected_densityParticipation": 0.66902665000209627,
+          "selected_IPR": 0.0081900860604567326,
+          "selected_condition_margins": [
+            0.49407940888445367,
+            0.49998593927072638,
+            0.16902665000209627
+          ],
+          "selected_minimum_margin": 0.16902665000209627,
+          "matrix_free_dofs": null,
+          "technical_mode_limit": null
+        },
+        "omega_raw_E3": [
+          116.07189144368361,
+          222.11404351461459,
+          482.17437357193842
+        ],
+        "selected_ordinal_raw_E3": 1,
+        "selected_lambda_raw_E3": 13472.683983314273,
+        "selected_omega_raw_E3": 116.07189144368361,
+        "status_raw_E3": "PASS",
+        "binary_diagnostic_E3": {
+          "model": "",
+          "classifier": "UNANIMOUS_ALL_THREE",
+          "rho_void_threshold": 0.1,
+          "voidKE_threshold": 0.5,
+          "voidSE_threshold": 0.5,
+          "densityParticipation_threshold": 0.5,
+          "IPR_role": "NONBINDING_QA",
+          "status": "PASS",
+          "solver_status": "NOT_RUN",
+          "failure_reason": "",
+          "modes_requested_final": 0,
+          "escalation_count": 0,
+          "batch_schedule": [],
+          "lambda": [
+            0.0023875579627474211,
+            0.0074056495046296734,
+            0.0092683388741756235,
+            0.081126227389297423,
+            0.20992218696304404,
+            0.2184369422040347
+          ],
+          "omega": [
+            0.048862643837060446,
+            0.086056083484142329,
+            0.096272212367721266,
+            0.28482666200567919,
+            0.45817266064557371,
+            0.46737238066025544
+          ],
+          "eigenpair_residual": [
+            4.8601754527123376E-5,
+            1.4443638243134461E-5,
+            1.1001001261800882E-5,
+            3.4000518824262757E-6,
+            1.7366836550479839E-6,
+            1.444128616137387E-6
+          ],
+          "eigenpair_valid": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          "diagnostic_finite": [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ],
+          "voidKE": [
+            8.5964353069548009E-14,
+            8.18493571405336E-14,
+            1.0723407892697823E-13,
+            3.8329410064049048E-14,
+            3.1035447574451564E-14,
+            3.8452740360705824E-14
+          ],
+          "voidSE": [
+            0.99999970160860618,
+            0.99999765680506247,
+            0.99999998328357154,
+            0.99999977699489029,
+            0.99999999266171069,
+            0.99999999068896361
+          ],
+          "densityParticipation": [
+            0.99999999999991407,
+            0.99999999999991851,
+            0.99999999999989286,
+            0.9999999999999617,
+            0.99999999999996925,
+            0.9999999999999617
+          ],
+          "IPR": [
+            0.0085982567419567134,
+            0.0086207309726332084,
+            0.014224535000596046,
+            0.0086148771584032471,
+            0.00862068965522258,
+            0.014423963141480554
+          ],
+          "kinetic_energy_total": [
+            1,
+            1,
+            0.99999999999999978,
+            0.99999999999999933,
+            1,
+            1.0000000000000004
+          ],
+          "strain_energy_total": [
+            0.0023875284776669324,
+            0.0074056097338153232,
+            0.0092683195892467388,
+            0.081126188339265826,
+            0.20992215361481731,
+            0.21843692132956427
+          ],
+          "condition_margins": [
+            [
+              0.499999999999914,
+              -0.49999970160860618,
+              0.49999999999991407
+            ],
+            [
+              0.49999999999991818,
+              -0.49999765680506247,
+              0.49999999999991851
+            ],
+            [
+              0.49999999999989275,
+              -0.49999998328357154,
+              0.49999999999989286
+            ],
+            [
+              0.4999999999999617,
+              -0.49999977699489029,
+              0.4999999999999617
+            ],
+            [
+              0.49999999999996897,
+              -0.49999999266171069,
+              0.49999999999996925
+            ],
+            [
+              0.49999999999996153,
+              -0.49999999068896361,
+              0.4999999999999617
+            ]
+          ],
+          "minimum_margin": [
+            -0.49999970160860618,
+            -0.49999765680506247,
+            -0.49999998328357154,
+            -0.49999977699489029,
+            -0.49999999266171069,
+            -0.49999999068896361
+          ],
+          "valid_structural": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          "selected_ordinal": null,
+          "selected_lambda": null,
+          "selected_omega": null,
+          "selected_voidKE": null,
+          "selected_voidSE": null,
+          "selected_densityParticipation": null,
+          "selected_IPR": null,
+          "selected_condition_margins": [
+            null,
+            null,
+            null
+          ],
+          "selected_minimum_margin": null,
+          "matrix_free_dofs": null,
+          "technical_mode_limit": null,
+          "role": "ENDPOINT_MANUFACTURABILITY_TOPOLOGY_DIAGNOSTIC_EXCLUDED_FROM_Q"
+        },
+        "omega_binary_E3": [
+          0.048862643837060446,
+          0.086056083484142329,
+          0.096272212367721266,
+          0.28482666200567919,
+          0.45817266064557371,
+          0.46737238066025544
+        ],
+        "status": "PASS"
+      },
+      "is_warmup": false,
+      "label": "smoke",
+      "mesh": [
+        40,
+        6
+      ],
+      "method": "Proposed",
+      "method_key": "proposed",
+      "method_label": "Proposed",
+      "n_elements": 240,
+      "ok": false,
+      "omega": [
+        116.0481250364107,
+        222.11210989223974,
+        482.09852295998871
+      ],
+      "omega1_native": 116.0481250364107,
+      "overridden": true,
+      "profile_id": "proposed_practical_move02_tol001",
+      "resolved_implementation": [],
+      "scientific_observation": false,
+      "solver_log": [],
+      "status": "CAP_HIT",
+      "status_note": "iteration cap reached (max_iterations); NOT convergence | warm-up or overridden budget; NOT a benchmark observation",
+      "stopping": {
+        "stop_reason": "max_iterations",
+        "iterations_total": 6,
+        "iter_stage1": null,
+        "iter_stage2": null,
+        "final_max_density_change": 0.11501201052765847,
+        "final_rms_density_change": 0.056696220833530611,
+        "final_relative_objective_change": 0.038936663712345061,
+        "final_grayness": 0.79333741201713837,
+        "convergence_tolerance": 0.01,
+        "volume": 0.49985643893677256
+      },
+      "times": {
+        "time1_name": "stage1_eigenanalysis_and_preparation_s",
+        "time1": 0.12571662500000003,
+        "time2_name": "stage2_simp_time_s",
+        "time2": 0.023212541666666666,
+        "stage1_time_s": 0.12571662500000003,
+        "stage1_reference_eigen_time_s": 0.008280125,
+        "stage2_time_s": 0.023212541666666666,
+        "overhead_time_s": 0.11440408333333332,
+        "total_wall_time_s": 0.26333325,
+        "solver_self_report_wall_s": 0.2624205,
+        "independent_crosscheck_residual_s": 0.00091275000000001771
+      }
+    },
+    {
+      "accounting": {
+        "total_wall_time_s": 0.25784175,
+        "component_sum_s": 0.25784175,
+        "timing_accounting_residual_s": 0,
+        "timing_accounting_relative_residual": 0,
+        "timing_accounting_tolerance_s": 1E-6,
+        "timing_accounting_tolerance_rel": 1E-9,
+        "timing_accounting_fail": false,
+        "independent_crosscheck_residual_s": 0.00090491666666664416,
+        "independent_crosscheck_relative": 0.0035095816199922792,
+        "independent_crosscheck_tolerance_rel": 0.05,
+        "independent_crosscheck_fail": false
+      },
+      "caveat": "",
+      "counts": {
+        "count1_name": "stage1_iterations",
+        "count1": 6,
+        "count2_name": "stage2_iterations",
+        "count2": 6,
+        "stage1_iterations": 6,
+        "stage2_iterations": 6,
+        "iterations_total_generic": 12
+      },
+      "error": "",
+      "evaluator": {
+        "evaluator_candidate": "C",
+        "density_representation": "ACTUAL_GRAY",
+        "modal_classifier_version": "candidate_c_unanimous_v1",
+        "volume": 0.50001402005214535,
+        "volume_residual": 1.4020052145347073E-5,
+        "minimum_density": 0.028920501766279087,
+        "maximum_density": 1,
+        "mean_density": 0.50001402005214535,
+        "std_density": 0.28488748063184621,
+        "grayness": 0.676709174007723,
+        "gray_fraction_01_09": 0.75,
+        "connectivity_raw_05": {
+          "n_components": 4,
+          "left_right_connected": false,
+          "largest_component_fraction": 0.46,
+          "solid_fraction": 0.41666666666666669
+        },
+        "binary_solid_count": 120,
+        "binary_volume": 0.5,
+        "connectivity_binary": {
+          "n_components": 4,
+          "left_right_connected": false,
+          "largest_component_fraction": 0.46666666666666667,
+          "solid_fraction": 0.5
+        },
+        "binary_role": "ENDPOINT_MANUFACTURABILITY_TOPOLOGY_DIAGNOSTIC_EXCLUDED_FROM_Q",
+        "modal_raw_E1": {
+          "model": "E1",
+          "classifier": "UNANIMOUS_ALL_THREE",
+          "rho_void_threshold": 0.1,
+          "voidKE_threshold": 0.5,
+          "voidSE_threshold": 0.5,
+          "densityParticipation_threshold": 0.5,
+          "IPR_role": "NONBINDING_QA",
+          "status": "PASS",
+          "solver_status": "PASS",
+          "failure_reason": "",
+          "modes_requested_final": 3,
+          "escalation_count": 0,
+          "batch_schedule": 3,
+          "lambda": [
+            15339.552470139539,
+            28353.804180270985,
+            125617.89641713839
+          ],
+          "omega": [
+            123.85294695783196,
+            168.38587880303677,
+            354.4261508652238
+          ],
+          "eigenpair_residual": [
+            5.4899113706819685E-12,
+            2.3608991365850676E-12,
+            9.3044779118905032E-13
+          ],
+          "eigenpair_valid": [
+            true,
+            true,
+            true
+          ],
+          "diagnostic_finite": [
+            true,
+            true,
+            true
+          ],
+          "voidKE": [
+            0.013792667861941464,
+            0.0061990961436833945,
+            0.0084031323706565443
+          ],
+          "voidSE": [
+            0.00054715777895760561,
+            0.022886972045180906,
+            0.10941455405013539
+          ],
+          "densityParticipation": [
+            0.75106414716654757,
+            0.690716175189887,
+            0.8304900842911781
+          ],
+          "IPR": [
+            0.0094614632573737159,
+            0.0084923790744895426,
+            0.025429636084996442
+          ],
+          "kinetic_energy_total": [
+            0.99999999999999967,
+            1.0000000000000004,
+            1.0000000000000004
+          ],
+          "strain_energy_total": [
+            15339.552470123062,
+            28353.804180268155,
+            125617.89641710621
+          ],
+          "condition_margins": [
+            [
+              0.48620733213805856,
+              0.49945284222104241,
+              0.25106414716654757
+            ],
+            [
+              0.49380090385631659,
+              0.47711302795481908,
+              0.19071617518988704
+            ],
+            [
+              0.49159686762934346,
+              0.39058544594986461,
+              0.3304900842911781
+            ]
+          ],
+          "minimum_margin": [
+            0.25106414716654757,
+            0.19071617518988704,
+            0.3304900842911781
+          ],
+          "valid_structural": [
+            true,
+            true,
+            true
+          ],
+          "selected_ordinal": 1,
+          "selected_lambda": 15339.552470139539,
+          "selected_omega": 123.85294695783196,
+          "selected_voidKE": 0.013792667861941464,
+          "selected_voidSE": 0.00054715777895760561,
+          "selected_densityParticipation": 0.75106414716654757,
+          "selected_IPR": 0.0094614632573737159,
+          "selected_condition_margins": [
+            0.48620733213805856,
+            0.49945284222104241,
+            0.25106414716654757
+          ],
+          "selected_minimum_margin": 0.25106414716654757,
+          "matrix_free_dofs": null,
+          "technical_mode_limit": null
+        },
+        "omega_raw_E1": [
+          123.85294695783196,
+          168.38587880303677,
+          354.4261508652238
+        ],
+        "selected_ordinal_raw_E1": 1,
+        "selected_lambda_raw_E1": 15339.552470139539,
+        "selected_omega_raw_E1": 123.85294695783196,
+        "status_raw_E1": "PASS",
+        "binary_diagnostic_E1": {
+          "model": "",
+          "classifier": "UNANIMOUS_ALL_THREE",
+          "rho_void_threshold": 0.1,
+          "voidKE_threshold": 0.5,
+          "voidSE_threshold": 0.5,
+          "densityParticipation_threshold": 0.5,
+          "IPR_role": "NONBINDING_QA",
+          "status": "PASS",
+          "solver_status": "NOT_RUN",
+          "failure_reason": "",
+          "modes_requested_final": 0,
+          "escalation_count": 0,
+          "batch_schedule": [],
+          "lambda": [
+            39.091690077531183,
+            2921.6972375758928,
+            6230.91777250019,
+            22151.840819421868,
+            50697.314884684885,
+            158533.03649157303
+          ],
+          "omega": [
+            6.2523347701103775,
+            54.05272645830081,
+            78.936162641087321,
+            148.83494488668268,
+            225.16064239712253,
+            398.16207314556345
+          ],
+          "eigenpair_residual": [
+            2.4795534454120035E-9,
+            4.5258551895729882E-11,
+            1.858935196642444E-11,
+            7.4597992242124422E-12,
+            2.2051611630855087E-12,
+            1.2191797483117932E-12
+          ],
+          "eigenpair_valid": [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ],
+          "diagnostic_finite": [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ],
+          "voidKE": [
+            9.7822540246590946E-7,
+            9.0349412894083781E-7,
+            3.4165971901169106E-7,
+            4.56236924644026E-7,
+            1.0879756189290127E-6,
+            1.2948810459331445E-6
+          ],
+          "voidSE": [
+            0.99965360296540462,
+            0.0017247079141472087,
+            0.033094689775209019,
+            0.0084150133175842114,
+            0.00079266403427222677,
+            0.00032151473293690893
+          ],
+          "densityParticipation": [
+            0.99999902177459765,
+            0.99999909650587115,
+            0.99999965834028093,
+            0.99999954376307543,
+            0.999998912024381,
+            0.999998705118954
+          ],
+          "IPR": [
+            0.011782333670164211,
+            0.014899807681896081,
+            0.015202207135798959,
+            0.012349641195058091,
+            0.012396989330753276,
+            0.025787361454127439
+          ],
+          "kinetic_energy_total": [
+            1,
+            0.99999999999999978,
+            0.99999999999999978,
+            0.99999999999999967,
+            1,
+            1.0000000000000004
+          ],
+          "strain_energy_total": [
+            39.091689997062318,
+            2921.6972374936522,
+            6230.9177724228994,
+            22151.84081933276,
+            50697.314884586769,
+            158533.0364914964
+          ],
+          "condition_margins": [
+            [
+              0.49999902177459754,
+              -0.49965360296540462,
+              0.49999902177459765
+            ],
+            [
+              0.49999909650587104,
+              0.49827529208585281,
+              0.49999909650587115
+            ],
+            [
+              0.499999658340281,
+              0.466905310224791,
+              0.49999965834028093
+            ],
+            [
+              0.49999954376307537,
+              0.49158498668241579,
+              0.49999954376307543
+            ],
+            [
+              0.49999891202438107,
+              0.49920733596572775,
+              0.49999891202438096
+            ],
+            [
+              0.49999870511895406,
+              0.4996784852670631,
+              0.49999870511895395
+            ]
+          ],
+          "minimum_margin": [
+            -0.49965360296540462,
+            0.49827529208585281,
+            0.466905310224791,
+            0.49158498668241579,
+            0.49920733596572775,
+            0.4996784852670631
+          ],
+          "valid_structural": [
+            false,
+            true,
+            true,
+            true,
+            true,
+            true
+          ],
+          "selected_ordinal": null,
+          "selected_lambda": null,
+          "selected_omega": null,
+          "selected_voidKE": null,
+          "selected_voidSE": null,
+          "selected_densityParticipation": null,
+          "selected_IPR": null,
+          "selected_condition_margins": [
+            null,
+            null,
+            null
+          ],
+          "selected_minimum_margin": null,
+          "matrix_free_dofs": null,
+          "technical_mode_limit": null,
+          "role": "ENDPOINT_MANUFACTURABILITY_TOPOLOGY_DIAGNOSTIC_EXCLUDED_FROM_Q"
+        },
+        "omega_binary_E1": [
+          6.2523347701103775,
+          54.05272645830081,
+          78.936162641087321,
+          148.83494488668268,
+          225.16064239712253,
+          398.16207314556345
+        ],
+        "modal_raw_E2": {
+          "model": "E2",
+          "classifier": "UNANIMOUS_ALL_THREE",
+          "rho_void_threshold": 0.1,
+          "voidKE_threshold": 0.5,
+          "voidSE_threshold": 0.5,
+          "densityParticipation_threshold": 0.5,
+          "IPR_role": "NONBINDING_QA",
+          "status": "PASS",
+          "solver_status": "PASS",
+          "failure_reason": "",
+          "modes_requested_final": 3,
+          "escalation_count": 0,
+          "batch_schedule": 3,
+          "lambda": [
+            15549.002557030346,
+            28512.385299356218,
+            126395.92905852158
+          ],
+          "omega": [
+            124.69563968732164,
+            168.8561082678273,
+            355.52205143777167
+          ],
+          "eigenpair_residual": [
+            4.4888211115482759E-12,
+            1.9122429826474839E-12,
+            6.1434606313822038E-13
+          ],
+          "eigenpair_valid": [
+            true,
+            true,
+            true
+          ],
+          "diagnostic_finite": [
+            true,
+            true,
+            true
+          ],
+          "voidKE": [
+            0.00021056292635715829,
+            0.0001393567775078133,
+            0.00010259859233811627
+          ],
+          "voidSE": [
+            0.000444560037782461,
+            0.022391434429630808,
+            0.10759459253015764
+          ],
+          "densityParticipation": [
+            0.76071270782438538,
+            0.69460260054828993,
+            0.83712839714781584
+          ],
+          "IPR": [
+            0.0097012739202593911,
+            0.0085915604750536612,
+            0.025849132477777068
+          ],
+          "kinetic_energy_total": [
+            1.0000000000000004,
+            1.0000000000000002,
+            1
+          ],
+          "strain_energy_total": [
+            15549.002557008575,
+            28512.3852993475,
+            126395.92905848194
+          ],
+          "condition_margins": [
+            [
+              0.49978943707364282,
+              0.49955543996221752,
+              0.26071270782438538
+            ],
+            [
+              0.49986064322249218,
+              0.47760856557036918,
+              0.19460260054828993
+            ],
+            [
+              0.49989740140766187,
+              0.39240540746984237,
+              0.33712839714781584
+            ]
+          ],
+          "minimum_margin": [
+            0.26071270782438538,
+            0.19460260054828993,
+            0.33712839714781584
+          ],
+          "valid_structural": [
+            true,
+            true,
+            true
+          ],
+          "selected_ordinal": 1,
+          "selected_lambda": 15549.002557030346,
+          "selected_omega": 124.69563968732164,
+          "selected_voidKE": 0.00021056292635715829,
+          "selected_voidSE": 0.000444560037782461,
+          "selected_densityParticipation": 0.76071270782438538,
+          "selected_IPR": 0.0097012739202593911,
+          "selected_condition_margins": [
+            0.49978943707364282,
+            0.49955543996221752,
+            0.26071270782438538
+          ],
+          "selected_minimum_margin": 0.26071270782438538,
+          "matrix_free_dofs": null,
+          "technical_mode_limit": null
+        },
+        "omega_raw_E2": [
+          124.69563968732164,
+          168.8561082678273,
+          355.52205143777167
+        ],
+        "selected_ordinal_raw_E2": 1,
+        "selected_lambda_raw_E2": 15549.002557030346,
+        "selected_omega_raw_E2": 124.69563968732164,
+        "status_raw_E2": "PASS",
+        "binary_diagnostic_E2": {
+          "model": "",
+          "classifier": "UNANIMOUS_ALL_THREE",
+          "rho_void_threshold": 0.1,
+          "voidKE_threshold": 0.5,
+          "voidSE_threshold": 0.5,
+          "densityParticipation_threshold": 0.5,
+          "IPR_role": "NONBINDING_QA",
+          "status": "PASS",
+          "solver_status": "NOT_RUN",
+          "failure_reason": "",
+          "modes_requested_final": 0,
+          "escalation_count": 0,
+          "batch_schedule": [],
+          "lambda": [
+            0.039105273779474141,
+            2916.664111777859,
+            6024.91551199646,
+            21965.62132254065,
+            50657.23473443179,
+            158482.30687560546
+          ],
+          "omega": [
+            0.19775053420780977,
+            54.006148833052883,
+            77.620329244318853,
+            148.20803393386151,
+            225.07162134403305,
+            398.09836331691372
+          ],
+          "eigenpair_residual": [
+            1.9925847007166561E-6,
+            5.063007486113831E-11,
+            1.9266631352913967E-11,
+            9.0260468242693427E-12,
+            2.2027844745498475E-12,
+            1.3931036797858268E-12
+          ],
+          "eigenpair_valid": [
+            false,
+            true,
+            true,
+            true,
+            true,
+            true
+          ],
+          "diagnostic_finite": [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ],
+          "voidKE": [
+            9.78353298897571E-10,
+            9.0351168435169438E-10,
+            3.4165924648662656E-10,
+            4.5618746634975551E-10,
+            1.0878699609219676E-9,
+            1.2950984186515062E-9
+          ],
+          "voidSE": [
+            0.99999979088070812,
+            1.7288686708430855E-6,
+            3.4226344600851185E-5,
+            8.4870758380506274E-6,
+            7.9287526161196924E-7,
+            3.2180638376759217E-7
+          ],
+          "densityParticipation": [
+            0.99999999902164671,
+            0.99999999909648829,
+            0.99999999965834063,
+            0.99999999954381258,
+            0.99999999891213,
+            0.99999999870490153
+          ],
+          "IPR": [
+            0.011787993545130937,
+            0.014899416391345977,
+            0.015201944952965733,
+            0.012350516169046534,
+            0.012397445871813104,
+            0.025804275225336397
+          ],
+          "kinetic_energy_total": [
+            0.99999999999999978,
+            0.99999999999999956,
+            1,
+            1.0000000000000004,
+            1,
+            0.99999999999999978
+          ],
+          "strain_energy_total": [
+            0.03910525141132655,
+            2916.6641117327795,
+            6024.9155119505722,
+            21965.621322488689,
+            50657.234734372149,
+            158482.30687555598
+          ],
+          "condition_margins": [
+            [
+              0.49999999902164671,
+              -0.49999979088070812,
+              0.49999999902164671
+            ],
+            [
+              0.49999999909648829,
+              0.49999827113132916,
+              0.49999999909648829
+            ],
+            [
+              0.49999999965834074,
+              0.49996577365539913,
+              0.49999999965834063
+            ],
+            [
+              0.49999999954381252,
+              0.49999151292416194,
+              0.49999999954381258
+            ],
+            [
+              0.49999999891213004,
+              0.49999920712473839,
+              0.49999999891213
+            ],
+            [
+              0.49999999870490158,
+              0.49999967819361624,
+              0.49999999870490153
+            ]
+          ],
+          "minimum_margin": [
+            -0.49999979088070812,
+            0.49999827113132916,
+            0.49996577365539913,
+            0.49999151292416194,
+            0.49999920712473839,
+            0.49999967819361624
+          ],
+          "valid_structural": [
+            false,
+            true,
+            true,
+            true,
+            true,
+            true
+          ],
+          "selected_ordinal": null,
+          "selected_lambda": null,
+          "selected_omega": null,
+          "selected_voidKE": null,
+          "selected_voidSE": null,
+          "selected_densityParticipation": null,
+          "selected_IPR": null,
+          "selected_condition_margins": [
+            null,
+            null,
+            null
+          ],
+          "selected_minimum_margin": null,
+          "matrix_free_dofs": null,
+          "technical_mode_limit": null,
+          "role": "ENDPOINT_MANUFACTURABILITY_TOPOLOGY_DIAGNOSTIC_EXCLUDED_FROM_Q"
+        },
+        "omega_binary_E2": [
+          0.19775053420780977,
+          54.006148833052883,
+          77.620329244318853,
+          148.20803393386151,
+          225.07162134403305,
+          398.09836331691372
+        ],
+        "modal_raw_E3": {
+          "model": "E3",
+          "classifier": "UNANIMOUS_ALL_THREE",
+          "rho_void_threshold": 0.1,
+          "voidKE_threshold": 0.5,
+          "voidSE_threshold": 0.5,
+          "densityParticipation_threshold": 0.5,
+          "IPR_role": "NONBINDING_QA",
+          "status": "PASS",
+          "solver_status": "PASS",
+          "failure_reason": "",
+          "modes_requested_final": 3,
+          "escalation_count": 0,
+          "batch_schedule": 3,
+          "lambda": [
+            15549.00234216018,
+            28512.372755973352,
+            126395.67371207838
+          ],
+          "omega": [
+            124.69563882574315,
+            168.85607112559902,
+            355.52169232281506
+          ],
+          "eigenpair_residual": [
+            4.6604200359853738E-12,
+            2.8369431419188364E-12,
+            7.5729709455791014E-13
+          ],
+          "eigenpair_valid": [
+            true,
+            true,
+            true
+          ],
+          "diagnostic_finite": [
+            true,
+            true,
+            true
+          ],
+          "voidKE": [
+            0.00021056254961738629,
+            0.00013935668644666691,
+            0.00010259835388771908
+          ],
+          "voidSE": [
+            0.00044455384697583689,
+            0.022391041784983655,
+            0.10759286829847843
+          ],
+          "densityParticipation": [
+            0.76071270972626281,
+            0.69460260625172232,
+            0.8371283971332002
+          ],
+          "IPR": [
+            0.0097012740638599618,
+            0.0085915606490323919,
+            0.025849132303027024
+          ],
+          "kinetic_energy_total": [
+            1.0000000000000007,
+            1.0000000000000002,
+            1.0000000000000002
+          ],
+          "strain_energy_total": [
+            15549.002342127031,
+            28512.372755960008,
+            126395.67371202909
+          ],
+          "condition_margins": [
+            [
+              0.49978943745038262,
+              0.49955544615302416,
+              0.26071270972626281
+            ],
+            [
+              0.49986064331355334,
+              0.47760895821501637,
+              0.19460260625172232
+            ],
+            [
+              0.49989740164611229,
+              0.39240713170152158,
+              0.3371283971332002
+            ]
+          ],
+          "minimum_margin": [
+            0.26071270972626281,
+            0.19460260625172232,
+            0.3371283971332002
+          ],
+          "valid_structural": [
+            true,
+            true,
+            true
+          ],
+          "selected_ordinal": 1,
+          "selected_lambda": 15549.00234216018,
+          "selected_omega": 124.69563882574315,
+          "selected_voidKE": 0.00021056254961738629,
+          "selected_voidSE": 0.00044455384697583689,
+          "selected_densityParticipation": 0.76071270972626281,
+          "selected_IPR": 0.0097012740638599618,
+          "selected_condition_margins": [
+            0.49978943745038262,
+            0.49955544615302416,
+            0.26071270972626281
+          ],
+          "selected_minimum_margin": 0.26071270972626281,
+          "matrix_free_dofs": null,
+          "technical_mode_limit": null
+        },
+        "omega_raw_E3": [
+          124.69563882574315,
+          168.85607112559902,
+          355.52169232281506
+        ],
+        "selected_ordinal_raw_E3": 1,
+        "selected_lambda_raw_E3": 15549.00234216018,
+        "selected_omega_raw_E3": 124.69563882574315,
+        "status_raw_E3": "PASS",
+        "binary_diagnostic_E3": {
+          "model": "",
+          "classifier": "UNANIMOUS_ALL_THREE",
+          "rho_void_threshold": 0.1,
+          "voidKE_threshold": 0.5,
+          "voidSE_threshold": 0.5,
+          "densityParticipation_threshold": 0.5,
+          "IPR_role": "NONBINDING_QA",
+          "status": "PASS",
+          "solver_status": "NOT_RUN",
+          "failure_reason": "",
+          "modes_requested_final": 0,
+          "escalation_count": 0,
+          "batch_schedule": [],
+          "lambda": [
+            0.039105273817729061,
+            2916.6641144128271,
+            6024.9155140547164,
+            21965.62133255984,
+            50657.2347895306,
+            158482.30708079381
+          ],
+          "omega": [
+            0.19775053430453496,
+            54.006148857447954,
+            77.620329257577339,
+            148.20803396766263,
+            225.07162146643589,
+            398.09836357462439
+          ],
+          "eigenpair_residual": [
+            1.9562505089693977E-6,
+            5.35574999916047E-11,
+            1.8368106257906329E-11,
+            8.2712318963872947E-12,
+            2.1593817763240575E-12,
+            1.2299695381495567E-12
+          ],
+          "eigenpair_valid": [
+            false,
+            true,
+            true,
+            true,
+            true,
+            true
+          ],
+          "diagnostic_finite": [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ],
+          "voidKE": [
+            9.7835329975141489E-14,
+            9.0350330198376977E-14,
+            3.4165800473495318E-14,
+            4.5616573648057006E-14,
+            1.0877054315151012E-13,
+            1.2945711223186435E-13
+          ],
+          "voidSE": [
+            0.99999977935638584,
+            1.7288686666358997E-6,
+            3.4226344600266495E-5,
+            8.4870758272349467E-6,
+            7.9287517943933547E-7,
+            3.2180611981602535E-7
+          ],
+          "densityParticipation": [
+            0.99999999999990219,
+            0.99999999999990985,
+            0.999999999999966,
+            0.99999999999995437,
+            0.99999999999989142,
+            0.99999999999987066
+          ],
+          "IPR": [
+            0.011787993568194275,
+            0.014899416418274304,
+            0.015201944963339754,
+            0.012350516180390493,
+            0.012397445898632245,
+            0.025804275272229914
+          ],
+          "kinetic_energy_total": [
+            0.99999999999999978,
+            0.99999999999999922,
+            0.99999999999999989,
+            0.99999999999999989,
+            1.0000000000000002,
+            1
+          ],
+          "strain_energy_total": [
+            0.039105251900243096,
+            2916.664114364994,
+            6024.9155140025405,
+            21965.621332504452,
+            50657.234789472452,
+            158482.30708074538
+          ],
+          "condition_margins": [
+            [
+              0.49999999999990219,
+              -0.49999977935638584,
+              0.49999999999990219
+            ],
+            [
+              0.49999999999990963,
+              0.49999827113133338,
+              0.49999999999990985
+            ],
+            [
+              0.49999999999996586,
+              0.49996577365539974,
+              0.499999999999966
+            ],
+            [
+              0.49999999999995437,
+              0.49999151292417277,
+              0.49999999999995437
+            ],
+            [
+              0.49999999999989125,
+              0.49999920712482054,
+              0.49999999999989142
+            ],
+            [
+              0.49999999999987055,
+              0.49999967819388019,
+              0.49999999999987066
+            ]
+          ],
+          "minimum_margin": [
+            -0.49999977935638584,
+            0.49999827113133338,
+            0.49996577365539974,
+            0.49999151292417277,
+            0.49999920712482054,
+            0.49999967819388019
+          ],
+          "valid_structural": [
+            false,
+            true,
+            true,
+            true,
+            true,
+            true
+          ],
+          "selected_ordinal": null,
+          "selected_lambda": null,
+          "selected_omega": null,
+          "selected_voidKE": null,
+          "selected_voidSE": null,
+          "selected_densityParticipation": null,
+          "selected_IPR": null,
+          "selected_condition_margins": [
+            null,
+            null,
+            null
+          ],
+          "selected_minimum_margin": null,
+          "matrix_free_dofs": null,
+          "technical_mode_limit": null,
+          "role": "ENDPOINT_MANUFACTURABILITY_TOPOLOGY_DIAGNOSTIC_EXCLUDED_FROM_Q"
+        },
+        "omega_binary_E3": [
+          0.19775053430453496,
+          54.006148857447954,
+          77.620329257577339,
+          148.20803396766263,
+          225.07162146643589,
+          398.09836357462439
+        ],
+        "status": "PASS"
+      },
+      "is_warmup": false,
+      "label": "smoke",
+      "mesh": [
+        40,
+        6
+      ],
+      "method": "Yuksel",
+      "method_key": "yuksel",
+      "method_label": "Yuksel",
+      "n_elements": 240,
+      "ok": false,
+      "omega": [
+        156.07273092096153,
+        206.15157455854384,
+        399.89015600442684
+      ],
+      "omega1_native": 156.07273092096153,
+      "overridden": true,
+      "profile_id": "yuksel_practical_move01_tol001",
+      "resolved_implementation": [],
+      "scientific_observation": false,
+      "solver_log": [],
+      "status": "CAP_HIT",
+      "status_note": "iteration cap reached (max_iterations); NOT convergence | warm-up or overridden budget; NOT a benchmark observation",
+      "stopping": {
+        "stop_reason": "max_iterations",
+        "iterations_total": 12,
+        "iter_stage1": 6,
+        "iter_stage2": 6,
+        "final_max_density_change": 0.026701906310179879,
+        "final_rms_density_change": 0.00954318997665849,
+        "final_relative_objective_change": 0.016572438538384946,
+        "final_grayness": 0.676709174007723,
+        "convergence_tolerance": 0.01,
+        "volume": 0.50001402005214535
+      },
+      "times": {
+        "time1_name": "stage1_time_s",
+        "time1": 0.016258833333333333,
+        "time2_name": "stage2_time_s",
+        "time2": 0.020888333333333332,
+        "stage1_time_s": 0.016258833333333333,
+        "stage2_time_s": 0.020888333333333332,
+        "stage1_share_pct": 50,
+        "stage2_share_pct": 50,
+        "overhead_time_s": 0.22069458333333331,
+        "total_wall_time_s": 0.25784175,
+        "solver_self_report_wall_s": 0.25693683333333334,
+        "independent_crosscheck_residual_s": 0.00090491666666664416
+      }
+    },
+    {
+      "accounting": {
+        "total_wall_time_s": 0.44200025,
+        "component_sum_s": 0.44200025,
+        "timing_accounting_residual_s": 0,
+        "timing_accounting_relative_residual": 0,
+        "timing_accounting_tolerance_s": 1E-6,
+        "timing_accounting_tolerance_rel": 1E-9,
+        "timing_accounting_fail": false,
+        "independent_crosscheck_residual_s": 0.00015087499999999476,
+        "independent_crosscheck_relative": 0.00034134596077715966,
+        "independent_crosscheck_tolerance_rel": 0.05,
+        "independent_crosscheck_fail": false
+      },
+      "caveat": "Du-Olhoff timings and iteration counts refer to the frozen reconstruction used in this study. Some continuation and inner-solver details are not uniquely specified by the original publication; therefore these values should be interpreted as representative measurements of this reconstruction rather than exact historical implementation timings.",
+      "counts": {
+        "count1_name": "outer_iterations",
+        "count1": 6,
+        "count2_name": "inner_mma_iterations_total",
+        "count2": 97,
+        "outer_iterations": 6,
+        "inner_iterations_total": 97,
+        "inner_iterations_per_outer_mean": 16.166666666666668,
+        "iterations_total_generic": null
+      },
+      "error": "",
+      "evaluator": {
+        "evaluator_candidate": "C",
+        "density_representation": "ACTUAL_GRAY",
+        "modal_classifier_version": "candidate_c_unanimous_v1",
+        "volume": 0.49997428106377534,
+        "volume_residual": -2.571893622466126E-5,
+        "minimum_density": 0.26002892319027676,
+        "maximum_density": 0.73998964056795946,
+        "mean_density": 0.49997428106377534,
+        "std_density": 0.17390226607541767,
+        "grayness": 0.87953603807191993,
+        "gray_fraction_01_09": 1,
+        "connectivity_raw_05": {
+          "n_components": 4,
+          "left_right_connected": false,
+          "largest_component_fraction": 0.48275862068965519,
+          "solid_fraction": 0.48333333333333334
+        },
+        "binary_solid_count": 120,
+        "binary_volume": 0.5,
+        "connectivity_binary": {
+          "n_components": 4,
+          "left_right_connected": false,
+          "largest_component_fraction": 0.48333333333333334,
+          "solid_fraction": 0.5
+        },
+        "binary_role": "ENDPOINT_MANUFACTURABILITY_TOPOLOGY_DIAGNOSTIC_EXCLUDED_FROM_Q",
+        "modal_raw_E1": {
+          "model": "E1",
+          "classifier": "UNANIMOUS_ALL_THREE",
+          "rho_void_threshold": 0.1,
+          "voidKE_threshold": 0.5,
+          "voidSE_threshold": 0.5,
+          "densityParticipation_threshold": 0.5,
+          "IPR_role": "NONBINDING_QA",
+          "status": "PASS",
+          "solver_status": "PASS",
+          "failure_reason": "",
+          "modes_requested_final": 3,
+          "escalation_count": 0,
+          "batch_schedule": 3,
+          "lambda": [
+            10405.628137129495,
+            99031.014664467264,
+            280924.87429509941
+          ],
+          "omega": [
+            102.0079807521426,
+            314.69193612875955,
+            530.02346579665641
+          ],
+          "eigenpair_residual": [
+            4.6115164946316945E-12,
+            4.8538895041507434E-13,
+            2.1007497457960366E-13
+          ],
+          "eigenpair_valid": [
+            true,
+            true,
+            true
+          ],
+          "diagnostic_finite": [
+            true,
+            true,
+            true
+          ],
+          "voidKE": [
+            0,
+            0,
+            0
+          ],
+          "voidSE": [
+            0,
+            0,
+            0
+          ],
+          "densityParticipation": [
+            0.58533342820130185,
+            0.56817832182678385,
+            0.57511548181406857
+          ],
+          "IPR": [
+            0.0072036907897826651,
+            0.00681874844542363,
+            0.0056998066787044763
+          ],
+          "kinetic_energy_total": [
+            1.0000000000000004,
+            0.99999999999999944,
+            1
+          ],
+          "strain_energy_total": [
+            10405.62813712654,
+            99031.014664476039,
+            280924.87429509964
+          ],
+          "condition_margins": [
+            [
+              0.5,
+              0.5,
+              0.085333428201301853
+            ],
+            [
+              0.5,
+              0.5,
+              0.06817832182678385
+            ],
+            [
+              0.5,
+              0.5,
+              0.075115481814068574
+            ]
+          ],
+          "minimum_margin": [
+            0.085333428201301853,
+            0.06817832182678385,
+            0.075115481814068574
+          ],
+          "valid_structural": [
+            true,
+            true,
+            true
+          ],
+          "selected_ordinal": 1,
+          "selected_lambda": 10405.628137129495,
+          "selected_omega": 102.0079807521426,
+          "selected_voidKE": 0,
+          "selected_voidSE": 0,
+          "selected_densityParticipation": 0.58533342820130185,
+          "selected_IPR": 0.0072036907897826651,
+          "selected_condition_margins": [
+            0.5,
+            0.5,
+            0.085333428201301853
+          ],
+          "selected_minimum_margin": 0.085333428201301853,
+          "matrix_free_dofs": null,
+          "technical_mode_limit": null
+        },
+        "omega_raw_E1": [
+          102.0079807521426,
+          314.69193612875955,
+          530.02346579665641
+        ],
+        "selected_ordinal_raw_E1": 1,
+        "selected_lambda_raw_E1": 10405.628137129495,
+        "selected_omega_raw_E1": 102.0079807521426,
+        "status_raw_E1": "PASS",
+        "binary_diagnostic_E1": {
+          "model": "",
+          "classifier": "UNANIMOUS_ALL_THREE",
+          "rho_void_threshold": 0.1,
+          "voidKE_threshold": 0.5,
+          "voidSE_threshold": 0.5,
+          "densityParticipation_threshold": 0.5,
+          "IPR_role": "NONBINDING_QA",
+          "status": "PASS",
+          "solver_status": "NOT_RUN",
+          "failure_reason": "",
+          "modes_requested_final": 0,
+          "escalation_count": 0,
+          "batch_schedule": [],
+          "lambda": [
+            68.00605490919888,
+            2487.8669148882295,
+            5411.326616275127,
+            17225.21050143124,
+            32644.218331641692,
+            195458.84576474334
+          ],
+          "omega": [
+            8.2465783758598263,
+            49.878521578814158,
+            73.561719775132545,
+            131.24484942820135,
+            180.67711070205237,
+            442.10727857019424
+          ],
+          "eigenpair_residual": [
+            1.2321334025961403E-9,
+            1.3778944761324707E-10,
+            3.9650330651838559E-11,
+            2.0310125714550896E-11,
+            1.2022586660234725E-11,
+            8.239415790287736E-13
+          ],
+          "eigenpair_valid": [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ],
+          "diagnostic_finite": [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ],
+          "voidKE": [
+            7.9753335779723829E-7,
+            6.9404946657985474E-7,
+            2.310977703924461E-7,
+            5.1405279459295382E-7,
+            1.0327231133877104E-6,
+            1.2912101680952944E-6
+          ],
+          "voidSE": [
+            0.99955780287621521,
+            0.00096678550446790328,
+            0.036804359386599969,
+            0.0099872024026028509,
+            0.00098092055580593245,
+            0.00024762635603330644
+          ],
+          "densityParticipation": [
+            0.9999992024666422,
+            0.99999930595053321,
+            0.99999976890222952,
+            0.99999948594720556,
+            0.99999896727688686,
+            0.9999987087898321
+          ],
+          "IPR": [
+            0.00925142906236258,
+            0.011362060562395762,
+            0.012081263549088639,
+            0.012857535471979979,
+            0.012808131831401453,
+            0.014673395002890973
+          ],
+          "kinetic_energy_total": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            0.99999999999999978
+          ],
+          "strain_energy_total": [
+            68.0060548420144,
+            2487.8669148209046,
+            5411.326616213647,
+            17225.210501348392,
+            32644.21833156202,
+            195458.84576466572
+          ],
+          "condition_margins": [
+            [
+              0.4999992024666422,
+              -0.49955780287621521,
+              0.4999992024666422
+            ],
+            [
+              0.49999930595053343,
+              0.49903321449553212,
+              0.49999930595053321
+            ],
+            [
+              0.49999976890222958,
+              0.4631956406134,
+              0.49999976890222952
+            ],
+            [
+              0.49999948594720539,
+              0.49001279759739713,
+              0.49999948594720556
+            ],
+            [
+              0.49999896727688659,
+              0.49901907944419405,
+              0.49999896727688686
+            ],
+            [
+              0.49999870878983188,
+              0.49975237364396669,
+              0.4999987087898321
+            ]
+          ],
+          "minimum_margin": [
+            -0.49955780287621521,
+            0.49903321449553212,
+            0.4631956406134,
+            0.49001279759739713,
+            0.49901907944419405,
+            0.49975237364396669
+          ],
+          "valid_structural": [
+            false,
+            true,
+            true,
+            true,
+            true,
+            true
+          ],
+          "selected_ordinal": null,
+          "selected_lambda": null,
+          "selected_omega": null,
+          "selected_voidKE": null,
+          "selected_voidSE": null,
+          "selected_densityParticipation": null,
+          "selected_IPR": null,
+          "selected_condition_margins": [
+            null,
+            null,
+            null
+          ],
+          "selected_minimum_margin": null,
+          "matrix_free_dofs": null,
+          "technical_mode_limit": null,
+          "role": "ENDPOINT_MANUFACTURABILITY_TOPOLOGY_DIAGNOSTIC_EXCLUDED_FROM_Q"
+        },
+        "omega_binary_E1": [
+          8.2465783758598263,
+          49.878521578814158,
+          73.561719775132545,
+          131.24484942820135,
+          180.67711070205237,
+          442.10727857019424
+        ],
+        "modal_raw_E2": {
+          "model": "E2",
+          "classifier": "UNANIMOUS_ALL_THREE",
+          "rho_void_threshold": 0.1,
+          "voidKE_threshold": 0.5,
+          "voidSE_threshold": 0.5,
+          "densityParticipation_threshold": 0.5,
+          "IPR_role": "NONBINDING_QA",
+          "status": "PASS",
+          "solver_status": "PASS",
+          "failure_reason": "",
+          "modes_requested_final": 3,
+          "escalation_count": 0,
+          "batch_schedule": 3,
+          "lambda": [
+            10405.585488081304,
+            99029.319622740659,
+            280923.2406331533
+          ],
+          "omega": [
+            102.00777170432312,
+            314.68924294093796,
+            530.021924672134
+          ],
+          "eigenpair_residual": [
+            4.8451610157609513E-12,
+            4.8236613976022436E-13,
+            1.8967389758136604E-13
+          ],
+          "eigenpair_valid": [
+            true,
+            true,
+            true
+          ],
+          "diagnostic_finite": [
+            true,
+            true,
+            true
+          ],
+          "voidKE": [
+            0,
+            0,
+            0
+          ],
+          "voidSE": [
+            0,
+            0,
+            0
+          ],
+          "densityParticipation": [
+            0.585333594405162,
+            0.568178502981173,
+            0.57511557107367639
+          ],
+          "IPR": [
+            0.0072037038126882263,
+            0.0068187586527565123,
+            0.00569980707043842
+          ],
+          "kinetic_energy_total": [
+            0.99999999999999911,
+            1,
+            1
+          ],
+          "strain_energy_total": [
+            10405.585488082485,
+            99029.319622740528,
+            280923.24063315138
+          ],
+          "condition_margins": [
+            [
+              0.5,
+              0.5,
+              0.085333594405161972
+            ],
+            [
+              0.5,
+              0.5,
+              0.068178502981173
+            ],
+            [
+              0.5,
+              0.5,
+              0.07511557107367639
+            ]
+          ],
+          "minimum_margin": [
+            0.085333594405161972,
+            0.068178502981173,
+            0.07511557107367639
+          ],
+          "valid_structural": [
+            true,
+            true,
+            true
+          ],
+          "selected_ordinal": 1,
+          "selected_lambda": 10405.585488081304,
+          "selected_omega": 102.00777170432312,
+          "selected_voidKE": 0,
+          "selected_voidSE": 0,
+          "selected_densityParticipation": 0.585333594405162,
+          "selected_IPR": 0.0072037038126882263,
+          "selected_condition_margins": [
+            0.5,
+            0.5,
+            0.085333594405161972
+          ],
+          "selected_minimum_margin": 0.085333594405161972,
+          "matrix_free_dofs": null,
+          "technical_mode_limit": null
+        },
+        "omega_raw_E2": [
+          102.00777170432312,
+          314.68924294093796,
+          530.021924672134
+        ],
+        "selected_ordinal_raw_E2": 1,
+        "selected_lambda_raw_E2": 10405.585488081304,
+        "selected_omega_raw_E2": 102.00777170432312,
+        "status_raw_E2": "PASS",
+        "binary_diagnostic_E2": {
+          "model": "",
+          "classifier": "UNANIMOUS_ALL_THREE",
+          "rho_void_threshold": 0.1,
+          "voidKE_threshold": 0.5,
+          "voidSE_threshold": 0.5,
+          "densityParticipation_threshold": 0.5,
+          "IPR_role": "NONBINDING_QA",
+          "status": "PASS",
+          "solver_status": "NOT_RUN",
+          "failure_reason": "",
+          "modes_requested_final": 0,
+          "escalation_count": 0,
+          "batch_schedule": [],
+          "lambda": [
+            0.068036184343058928,
+            2485.4651758425321,
+            5212.3663307196239,
+            17053.344295743093,
+            32612.286707710711,
+            195410.73943585524
+          ],
+          "omega": [
+            0.26083746729152796,
+            49.854439880942721,
+            72.196719667306382,
+            130.58845391436063,
+            180.58872253745722,
+            442.05286950302138
+          ],
+          "eigenpair_residual": [
+            1.2347882013745185E-6,
+            1.5250305654210871E-10,
+            4.4409187133496256E-11,
+            2.2627875024919383E-11,
+            1.3217674820565511E-11,
+            8.4905857961750717E-13
+          ],
+          "eigenpair_valid": [
+            false,
+            true,
+            true,
+            true,
+            true,
+            true
+          ],
+          "diagnostic_finite": [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ],
+          "voidKE": [
+            7.9725023223227768E-10,
+            6.94077304263374E-10,
+            2.3110220208716716E-10,
+            5.1394300575079951E-10,
+            1.0330647892109569E-9,
+            1.2912117547075546E-9
+          ],
+          "voidSE": [
+            0.99999956179785809,
+            9.6823113308902853E-7,
+            3.8209312810602751E-5,
+            1.0089659479167848E-5,
+            9.804041212667764E-7,
+            2.4774943893872607E-7
+          ],
+          "densityParticipation": [
+            0.99999999920275,
+            0.99999999930592309,
+            0.99999999976889786,
+            0.999999999486057,
+            0.99999999896693514,
+            0.9999999987087882
+          ],
+          "IPR": [
+            0.0092529552772505248,
+            0.011361707060062903,
+            0.012081044738514764,
+            0.01285893481927931,
+            0.012814767860494455,
+            0.014672712872937602
+          ],
+          "kinetic_energy_total": [
+            0.99999999999999978,
+            0.99999999999999956,
+            0.99999999999999944,
+            0.99999999999999967,
+            1,
+            1.0000000000000004
+          ],
+          "strain_energy_total": [
+            0.068036124546446086,
+            2485.4651757743959,
+            5212.3663306477865,
+            17053.3442956593,
+            32612.286707636384,
+            195410.7394357688
+          ],
+          "condition_margins": [
+            [
+              0.49999999920274979,
+              -0.49999956179785809,
+              0.49999999920274996
+            ],
+            [
+              0.4999999993059227,
+              0.4999990317688669,
+              0.49999999930592309
+            ],
+            [
+              0.49999999976889781,
+              0.49996179068718938,
+              0.49999999976889786
+            ],
+            [
+              0.499999999486057,
+              0.49998991034052082,
+              0.499999999486057
+            ],
+            [
+              0.4999999989669352,
+              0.49999901959587872,
+              0.49999999896693514
+            ],
+            [
+              0.49999999870878825,
+              0.49999975225056104,
+              0.4999999987087882
+            ]
+          ],
+          "minimum_margin": [
+            -0.49999956179785809,
+            0.4999990317688669,
+            0.49996179068718938,
+            0.49998991034052082,
+            0.49999901959587872,
+            0.49999975225056104
+          ],
+          "valid_structural": [
+            false,
+            true,
+            true,
+            true,
+            true,
+            true
+          ],
+          "selected_ordinal": null,
+          "selected_lambda": null,
+          "selected_omega": null,
+          "selected_voidKE": null,
+          "selected_voidSE": null,
+          "selected_densityParticipation": null,
+          "selected_IPR": null,
+          "selected_condition_margins": [
+            null,
+            null,
+            null
+          ],
+          "selected_minimum_margin": null,
+          "matrix_free_dofs": null,
+          "technical_mode_limit": null,
+          "role": "ENDPOINT_MANUFACTURABILITY_TOPOLOGY_DIAGNOSTIC_EXCLUDED_FROM_Q"
+        },
+        "omega_binary_E2": [
+          0.26083746729152796,
+          49.854439880942721,
+          72.196719667306382,
+          130.58845391436063,
+          180.58872253745722,
+          442.05286950302138
+        ],
+        "modal_raw_E3": {
+          "model": "E3",
+          "classifier": "UNANIMOUS_ALL_THREE",
+          "rho_void_threshold": 0.1,
+          "voidKE_threshold": 0.5,
+          "voidSE_threshold": 0.5,
+          "densityParticipation_threshold": 0.5,
+          "IPR_role": "NONBINDING_QA",
+          "status": "PASS",
+          "solver_status": "PASS",
+          "failure_reason": "",
+          "modes_requested_final": 3,
+          "escalation_count": 0,
+          "batch_schedule": 3,
+          "lambda": [
+            10405.585445395382,
+            99029.317925946481,
+            280923.23899784562
+          ],
+          "omega": [
+            102.00777149509435,
+            314.68924024495419,
+            530.02192312945476
+          ],
+          "eigenpair_residual": [
+            4.455590151808891E-12,
+            4.7013681465939854E-13,
+            2.2714568777972551E-13
+          ],
+          "eigenpair_valid": [
+            true,
+            true,
+            true
+          ],
+          "diagnostic_finite": [
+            true,
+            true,
+            true
+          ],
+          "voidKE": [
+            0,
+            0,
+            0
+          ],
+          "voidSE": [
+            0,
+            0,
+            0
+          ],
+          "densityParticipation": [
+            0.58533359457153233,
+            0.56817850316251184,
+            0.575115571163024
+          ],
+          "IPR": [
+            0.0072037038257242222,
+            0.0068187586629743641,
+            0.0056998070708305214
+          ],
+          "kinetic_energy_total": [
+            1,
+            1,
+            1.0000000000000002
+          ],
+          "strain_energy_total": [
+            10405.58544539178,
+            99029.317925952986,
+            280923.23899784731
+          ],
+          "condition_margins": [
+            [
+              0.5,
+              0.5,
+              0.085333594571532334
+            ],
+            [
+              0.5,
+              0.5,
+              0.068178503162511839
+            ],
+            [
+              0.5,
+              0.5,
+              0.075115571163024031
+            ]
+          ],
+          "minimum_margin": [
+            0.085333594571532334,
+            0.068178503162511839,
+            0.075115571163024031
+          ],
+          "valid_structural": [
+            true,
+            true,
+            true
+          ],
+          "selected_ordinal": 1,
+          "selected_lambda": 10405.585445395382,
+          "selected_omega": 102.00777149509435,
+          "selected_voidKE": 0,
+          "selected_voidSE": 0,
+          "selected_densityParticipation": 0.58533359457153233,
+          "selected_IPR": 0.0072037038257242222,
+          "selected_condition_margins": [
+            0.5,
+            0.5,
+            0.085333594571532334
+          ],
+          "selected_minimum_margin": 0.085333594571532334,
+          "matrix_free_dofs": null,
+          "technical_mode_limit": null
+        },
+        "omega_raw_E3": [
+          102.00777149509435,
+          314.68924024495419,
+          530.02192312945476
+        ],
+        "selected_ordinal_raw_E3": 1,
+        "selected_lambda_raw_E3": 10405.585445395382,
+        "selected_omega_raw_E3": 102.00777149509435,
+        "status_raw_E3": "PASS",
+        "binary_diagnostic_E3": {
+          "model": "",
+          "classifier": "UNANIMOUS_ALL_THREE",
+          "rho_void_threshold": 0.1,
+          "voidKE_threshold": 0.5,
+          "voidSE_threshold": 0.5,
+          "densityParticipation_threshold": 0.5,
+          "IPR_role": "NONBINDING_QA",
+          "status": "PASS",
+          "solver_status": "NOT_RUN",
+          "failure_reason": "",
+          "modes_requested_final": 0,
+          "escalation_count": 0,
+          "batch_schedule": [],
+          "lambda": [
+            0.068036184397295391,
+            2485.4651775674338,
+            5212.3663319240513,
+            17053.344304506514,
+            32612.286741395823,
+            195410.73968803481
+          ],
+          "omega": [
+            0.260837467395494,
+            49.8544398982421,
+            72.196719675647671,
+            130.58845394791422,
+            180.58872263072195,
+            442.05286978825825
+          ],
+          "eigenpair_residual": [
+            1.1653504945686489E-6,
+            1.3495876880841497E-10,
+            3.9170255714840888E-11,
+            1.9024482513325077E-11,
+            1.0973177443985616E-11,
+            8.7663398939818175E-13
+          ],
+          "eigenpair_valid": [
+            false,
+            true,
+            true,
+            true,
+            true,
+            true
+          ],
+          "diagnostic_finite": [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ],
+          "voidKE": [
+            7.9725023271197125E-14,
+            6.9407253310639288E-14,
+            2.311013713565761E-14,
+            5.1392660631916886E-14,
+            1.0329417039971628E-13,
+            1.2900693219427415E-13
+          ],
+          "voidSE": [
+            0.99999955816227459,
+            9.6823113067889622E-7,
+            3.8209312810134735E-5,
+            1.0089659471077178E-5,
+            9.8040405937401118E-7,
+            2.4774886746986511E-7
+          ],
+          "densityParticipation": [
+            0.99999999999992051,
+            0.99999999999993061,
+            0.99999999999997691,
+            0.9999999999999486,
+            0.99999999999989675,
+            0.999999999999871
+          ],
+          "IPR": [
+            0.0092529552920028943,
+            0.011361707075882107,
+            0.012081044744125337,
+            0.012858934832546694,
+            0.012814767887996058,
+            0.014672712914004864
+          ],
+          "kinetic_energy_total": [
+            0.99999999999999989,
+            0.99999999999999978,
+            0.99999999999999989,
+            1.0000000000000004,
+            1,
+            1
+          ],
+          "strain_energy_total": [
+            0.068036124848033661,
+            2485.4651774907234,
+            5212.3663318588269,
+            17053.344304422313,
+            32612.286741317526,
+            195410.73968794776
+          ],
+          "condition_margins": [
+            [
+              0.49999999999992029,
+              -0.49999955816227459,
+              0.49999999999992051
+            ],
+            [
+              0.49999999999993061,
+              0.49999903176886934,
+              0.49999999999993061
+            ],
+            [
+              0.49999999999997691,
+              0.49996179068718988,
+              0.49999999999997691
+            ],
+            [
+              0.4999999999999486,
+              0.49998991034052892,
+              0.4999999999999486
+            ],
+            [
+              0.49999999999989669,
+              0.49999901959594062,
+              0.49999999999989675
+            ],
+            [
+              0.499999999999871,
+              0.49999975225113252,
+              0.499999999999871
+            ]
+          ],
+          "minimum_margin": [
+            -0.49999955816227459,
+            0.49999903176886934,
+            0.49996179068718988,
+            0.49998991034052892,
+            0.49999901959594062,
+            0.49999975225113252
+          ],
+          "valid_structural": [
+            false,
+            true,
+            true,
+            true,
+            true,
+            true
+          ],
+          "selected_ordinal": null,
+          "selected_lambda": null,
+          "selected_omega": null,
+          "selected_voidKE": null,
+          "selected_voidSE": null,
+          "selected_densityParticipation": null,
+          "selected_IPR": null,
+          "selected_condition_margins": [
+            null,
+            null,
+            null
+          ],
+          "selected_minimum_margin": null,
+          "matrix_free_dofs": null,
+          "technical_mode_limit": null,
+          "role": "ENDPOINT_MANUFACTURABILITY_TOPOLOGY_DIAGNOSTIC_EXCLUDED_FROM_Q"
+        },
+        "omega_binary_E3": [
+          0.260837467395494,
+          49.8544398982421,
+          72.196719675647671,
+          130.58845394791422,
+          180.58872263072195,
+          442.05286978825825
+        ],
+        "status": "PASS"
+      },
+      "is_warmup": false,
+      "label": "smoke",
+      "mesh": [
+        40,
+        6
+      ],
+      "method": "Du-Olhoff reconstruction (M4)",
+      "method_key": "olhoff",
+      "method_label": "Du-Olhoff reconstruction (M4)",
+      "n_elements": 240,
+      "ok": false,
+      "omega": [
+        102.00777149511693,
+        314.68924024496044,
+        530.02192312946988
+      ],
+      "omega1_native": 102.00777149511693,
+      "overridden": true,
+      "profile_id": "olhoff_m4_subspaceN2_R006_tolInner005_S2beta_settledmove_v1",
+      "resolved_implementation": [
+        {
+          "name": "applyFilter",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffM4Reconstruction/+frozen/filter/applyFilter.m"
+        },
+        {
+          "name": "assemble2D",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffM4Reconstruction/+frozen/fem/assemble2D.m"
+        },
+        {
+          "name": "classifyModes",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffM4Reconstruction/+frozen/fem/classifyModes.m"
+        },
+        {
+          "name": "defaultCfg",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffM4Reconstruction/+frozen/algo/defaultCfg.m"
+        },
+        {
+          "name": "deltaLambda",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffM4Reconstruction/+frozen/algo/deltaLambda.m"
+        },
+        {
+          "name": "eigSolve",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffM4Reconstruction/+frozen/fem/eigSolve.m"
+        },
+        {
+          "name": "elemMats2D",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffM4Reconstruction/+frozen/fem/elemMats2D.m"
+        },
+        {
+          "name": "genGrad",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffM4Reconstruction/+frozen/algo/genGrad.m"
+        },
+        {
+          "name": "innerLoop",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffM4Reconstruction/+frozen/algo/innerLoop.m"
+        },
+        {
+          "name": "innerLoopLP",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffM4Reconstruction/+frozen/algo/innerLoopLP.m"
+        },
+        {
+          "name": "innerLoopRho",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffM4Reconstruction/+frozen/algo/innerLoopRho.m"
+        },
+        {
+          "name": "massScale",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffM4Reconstruction/+frozen/fem/massScale.m"
+        },
+        {
+          "name": "mmasub",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffM4Reconstruction/+frozen/mma_published/mmasub.m"
+        },
+        {
+          "name": "model2D",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffM4Reconstruction/+frozen/fem/model2D.m"
+        },
+        {
+          "name": "moveControl",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffM4Reconstruction/+frozen/algo/moveControl.m"
+        },
+        {
+          "name": "multRule",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffM4Reconstruction/+frozen/algo/multRule.m"
+        },
+        {
+          "name": "olhoffOpt",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffM4Reconstruction/+frozen/algo/olhoffOpt.m"
+        },
+        {
+          "name": "prepFilter",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffM4Reconstruction/+frozen/filter/prepFilter.m"
+        },
+        {
+          "name": "subsolv",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffM4Reconstruction/+frozen/mma_published/subsolv.m"
+        },
+        {
+          "name": "useMMA",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffM4Reconstruction/+frozen/algo/useMMA.m"
+        }
+      ],
+      "scientific_observation": false,
+      "solver_log": [],
+      "status": "CAP_HIT",
+      "status_note": "reached the 6-outer safety cap; this is NOT convergence | warm-up or overridden budget; NOT a benchmark observation",
+      "stopping": {
+        "outer_iterations": 6,
+        "max_outer": 6,
+        "converged": false,
+        "final_max_density_change": 0.039997959954848672,
+        "final_l2_density_change": 0.50446561523644329,
+        "final_rms_density_change": 0.032563115442417058,
+        "eps_l2": 0.013693063937629153,
+        "eps_rms": 0.00088388347648318442,
+        "final_move_limit": 0.04,
+        "final_ladder_stage": 1,
+        "final_multiplicity": 2,
+        "final_inner_converged": 1,
+        "n_inner_not_converged": 0,
+        "volume": 0.49997428106377534,
+        "final_grayness": 0.87953603807191993,
+        "gap12_pct": 208.49535837573364
+      },
+      "times": {
+        "time1_name": "outer_time_excluding_inner_s",
+        "time1": 0.051201874999999952,
+        "time2_name": "inner_mma_time_total_s",
+        "time2": 0.37049675000000004,
+        "outer_time_excluding_inner_s": 0.051201874999999952,
+        "inner_time_total_s": 0.37049675000000004,
+        "inner_time_per_outer_mean_s": 0.06174945833333334,
+        "inner_time_per_inner_iteration_mean_s": 0.0038195541237113408,
+        "inner_time_share_pct": 83.822746706591246,
+        "eigen_time_s": 0.036627416666666669,
+        "gradient_time_s": 0.010741249999999999,
+        "outer_bookkeeping_time_s": 0.0038332083333332823,
+        "overhead_time_s": 0.02030162499999999,
+        "total_wall_time_s": 0.44200025,
+        "solver_self_report_wall_s": 0.441849375,
+        "independent_crosscheck_residual_s": 0.00015087499999999476
+      }
+    },
+    {
+      "accounting": {
+        "total_wall_time_s": 0.287467125,
+        "component_sum_s": 0.287467125,
+        "timing_accounting_residual_s": 0,
+        "timing_accounting_relative_residual": 0,
+        "timing_accounting_tolerance_s": 1E-6,
+        "timing_accounting_tolerance_rel": 1E-9,
+        "timing_accounting_fail": false,
+        "independent_crosscheck_residual_s": 0.00083137499999996756,
+        "independent_crosscheck_relative": 0.002892069832332889,
+        "independent_crosscheck_tolerance_rel": 0.05,
+        "independent_crosscheck_fail": false
+      },
+      "caveat": "",
+      "counts": {
+        "count1_name": "eigenanalysis_solves",
+        "count1": 1,
+        "count2_name": "simp_iterations",
+        "count2": 6,
+        "stage1_solves": 1,
+        "stage2_iterations": 6,
+        "iterations_total_generic": 6
+      },
+      "error": "",
+      "evaluator": {
+        "evaluator_candidate": "C",
+        "density_representation": "ACTUAL_GRAY",
+        "modal_classifier_version": "candidate_c_unanimous_v1",
+        "volume": 0.50030530902480308,
+        "volume_residual": 0.00030530902480307986,
+        "minimum_density": 0.0054906135114388722,
+        "maximum_density": 1,
+        "mean_density": 0.50030530902480308,
+        "std_density": 0.285271273962002,
+        "grayness": 0.67515899231854914,
+        "gray_fraction_01_09": 0.8,
+        "connectivity_raw_05": {
+          "n_components": 4,
+          "left_right_connected": false,
+          "largest_component_fraction": 0.46491228070175439,
+          "solid_fraction": 0.475
+        },
+        "binary_solid_count": 240,
+        "binary_volume": 0.5,
+        "connectivity_binary": {
+          "n_components": 1,
+          "left_right_connected": true,
+          "largest_component_fraction": 1,
+          "solid_fraction": 0.5
+        },
+        "binary_role": "ENDPOINT_MANUFACTURABILITY_TOPOLOGY_DIAGNOSTIC_EXCLUDED_FROM_Q",
+        "modal_raw_E1": {
+          "model": "E1",
+          "classifier": "UNANIMOUS_ALL_THREE",
+          "rho_void_threshold": 0.1,
+          "voidKE_threshold": 0.5,
+          "voidSE_threshold": 0.5,
+          "densityParticipation_threshold": 0.5,
+          "IPR_role": "NONBINDING_QA",
+          "status": "PASS",
+          "solver_status": "PASS",
+          "failure_reason": "",
+          "modes_requested_final": 3,
+          "escalation_count": 0,
+          "batch_schedule": 3,
+          "lambda": [
+            16175.392783135492,
+            40071.216522900395,
+            173662.65323723244
+          ],
+          "omega": [
+            127.18251760024053,
+            200.17796213095085,
+            416.72851262810474
+          ],
+          "eigenpair_residual": [
+            1.0221402803018191E-11,
+            3.8987476299369273E-12,
+            1.8970887354179973E-10
+          ],
+          "eigenpair_valid": [
+            true,
+            true,
+            true
+          ],
+          "diagnostic_finite": [
+            true,
+            true,
+            true
+          ],
+          "voidKE": [
+            0.0050772621060913084,
+            0.0035524426133720227,
+            0.99863528454710793
+          ],
+          "voidSE": [
+            0.00052711127482501661,
+            0.012668465994131123,
+            0.99570412937696717
+          ],
+          "densityParticipation": [
+            0.75115147154833328,
+            0.69217660302390016,
+            0.0067708694966863679
+          ],
+          "IPR": [
+            0.0047565010205884257,
+            0.004217162085429299,
+            0.08183617615733238
+          ],
+          "kinetic_energy_total": [
+            1.0000000000000002,
+            1.0000000000000004,
+            1.0000000000000002
+          ],
+          "strain_energy_total": [
+            16175.392783091049,
+            40071.216522868,
+            173662.65323723236
+          ],
+          "condition_margins": [
+            [
+              0.49492273789390867,
+              0.499472888725175,
+              0.25115147154833328
+            ],
+            [
+              0.496447557386628,
+              0.48733153400586887,
+              0.19217660302390016
+            ],
+            [
+              -0.49863528454710793,
+              -0.49570412937696717,
+              -0.49322913050331363
+            ]
+          ],
+          "minimum_margin": [
+            0.25115147154833328,
+            0.19217660302390016,
+            -0.49863528454710793
+          ],
+          "valid_structural": [
+            true,
+            true,
+            false
+          ],
+          "selected_ordinal": 1,
+          "selected_lambda": 16175.392783135492,
+          "selected_omega": 127.18251760024053,
+          "selected_voidKE": 0.0050772621060913084,
+          "selected_voidSE": 0.00052711127482501661,
+          "selected_densityParticipation": 0.75115147154833328,
+          "selected_IPR": 0.0047565010205884257,
+          "selected_condition_margins": [
+            0.49492273789390867,
+            0.499472888725175,
+            0.25115147154833328
+          ],
+          "selected_minimum_margin": 0.25115147154833328,
+          "matrix_free_dofs": null,
+          "technical_mode_limit": null
+        },
+        "omega_raw_E1": [
+          127.18251760024053,
+          200.17796213095085,
+          416.72851262810474
+        ],
+        "selected_ordinal_raw_E1": 1,
+        "selected_lambda_raw_E1": 16175.392783135492,
+        "selected_omega_raw_E1": 127.18251760024053,
+        "status_raw_E1": "PASS",
+        "binary_diagnostic_E1": {
+          "model": "",
+          "classifier": "UNANIMOUS_ALL_THREE",
+          "rho_void_threshold": 0.1,
+          "voidKE_threshold": 0.5,
+          "voidSE_threshold": 0.5,
+          "densityParticipation_threshold": 0.5,
+          "IPR_role": "NONBINDING_QA",
+          "status": "PASS",
+          "solver_status": "NOT_RUN",
+          "failure_reason": "",
+          "modes_requested_final": 0,
+          "escalation_count": 0,
+          "batch_schedule": [],
+          "lambda": [
+            7062.8435008054639,
+            7116.5374405938182,
+            17977.1431073454,
+            43949.6539212291,
+            176513.64543397602,
+            209874.38814855085
+          ],
+          "omega": [
+            84.040725251543748,
+            84.35957231158666,
+            134.0788689814521,
+            209.64172752872722,
+            420.13527039987491,
+            458.120495228658
+          ],
+          "eigenpair_residual": [
+            3.1269059282883341E-11,
+            2.7641292821956063E-11,
+            1.2782982084396457E-11,
+            6.75399979728028E-12,
+            1.7118854734443454E-12,
+            2.2684260003240173E-12
+          ],
+          "eigenpair_valid": [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ],
+          "diagnostic_finite": [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ],
+          "voidKE": [
+            9.9486096333438717E-7,
+            3.4354560655489088E-7,
+            9.0182100636739478E-7,
+            4.0452104568575978E-7,
+            7.70668500536637E-7,
+            9.5554724568206138E-7
+          ],
+          "voidSE": [
+            0.00019615735824367767,
+            0.024550557551509977,
+            0.00086640526464543208,
+            0.00379042926341606,
+            0.00021547671758045283,
+            6.2440180191823992E-5
+          ],
+          "densityParticipation": [
+            0.9999990051390365,
+            0.99999965645439337,
+            0.99999909817899368,
+            0.99999959547895434,
+            0.99999922933149943,
+            0.99999904445275434
+          ],
+          "IPR": [
+            0.0077936761421411446,
+            0.0077696331452317569,
+            0.0056078764224751845,
+            0.0067835909608397714,
+            0.0052190325110242561,
+            0.00665087016081744
+          ],
+          "kinetic_energy_total": [
+            1.0000000000000002,
+            1.0000000000000002,
+            0.99999999999999967,
+            1.0000000000000004,
+            0.99999999999999956,
+            0.99999999999999956
+          ],
+          "strain_energy_total": [
+            7062.8435008321958,
+            7116.53744061955,
+            17977.143107362572,
+            43949.65392125272,
+            176513.64543398778,
+            209874.38814857771
+          ],
+          "condition_margins": [
+            [
+              0.49999900513903667,
+              0.49980384264175631,
+              0.4999990051390365
+            ],
+            [
+              0.49999965645439343,
+              0.47544944244849,
+              0.49999965645439337
+            ],
+            [
+              0.49999909817899363,
+              0.49913359473535457,
+              0.49999909817899368
+            ],
+            [
+              0.49999959547895434,
+              0.49620957073658395,
+              0.49999959547895434
+            ],
+            [
+              0.49999922933149948,
+              0.49978452328241957,
+              0.49999922933149943
+            ],
+            [
+              0.49999904445275434,
+              0.4999375598198082,
+              0.49999904445275434
+            ]
+          ],
+          "minimum_margin": [
+            0.49980384264175631,
+            0.47544944244849,
+            0.49913359473535457,
+            0.49620957073658395,
+            0.49978452328241957,
+            0.4999375598198082
+          ],
+          "valid_structural": [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ],
+          "selected_ordinal": null,
+          "selected_lambda": null,
+          "selected_omega": null,
+          "selected_voidKE": null,
+          "selected_voidSE": null,
+          "selected_densityParticipation": null,
+          "selected_IPR": null,
+          "selected_condition_margins": [
+            null,
+            null,
+            null
+          ],
+          "selected_minimum_margin": null,
+          "matrix_free_dofs": null,
+          "technical_mode_limit": null,
+          "role": "ENDPOINT_MANUFACTURABILITY_TOPOLOGY_DIAGNOSTIC_EXCLUDED_FROM_Q"
+        },
+        "omega_binary_E1": [
+          84.040725251543748,
+          84.35957231158666,
+          134.0788689814521,
+          209.64172752872722,
+          420.13527039987491,
+          458.120495228658
+        ],
+        "modal_raw_E2": {
+          "model": "E2",
+          "classifier": "UNANIMOUS_ALL_THREE",
+          "rho_void_threshold": 0.1,
+          "voidKE_threshold": 0.5,
+          "voidSE_threshold": 0.5,
+          "densityParticipation_threshold": 0.5,
+          "IPR_role": "NONBINDING_QA",
+          "status": "PASS",
+          "solver_status": "PASS",
+          "failure_reason": "",
+          "modes_requested_final": 3,
+          "escalation_count": 0,
+          "batch_schedule": 3,
+          "lambda": [
+            16239.656768632012,
+            40159.413645668363,
+            255769.47904558471
+          ],
+          "omega": [
+            127.43491189086299,
+            200.39813782984203,
+            505.73657080102947
+          ],
+          "eigenpair_residual": [
+            1.0575028511528284E-11,
+            3.5838712018277065E-12,
+            8.5937988156744838E-13
+          ],
+          "eigenpair_valid": [
+            true,
+            true,
+            true
+          ],
+          "diagnostic_finite": [
+            true,
+            true,
+            true
+          ],
+          "voidKE": [
+            0.0010762854331959207,
+            0.00098314380801372181,
+            0.00031123543642374316
+          ],
+          "voidSE": [
+            0.00048445905585098049,
+            0.012332000951390993,
+            0.040134247865868729
+          ],
+          "densityParticipation": [
+            0.75396367528676678,
+            0.69378479372728674,
+            0.85329069739664742
+          ],
+          "IPR": [
+            0.0047919095187423525,
+            0.0042373324351047776,
+            0.017369317005584479
+          ],
+          "kinetic_energy_total": [
+            1,
+            0.99999999999999944,
+            0.99999999999999978
+          ],
+          "strain_energy_total": [
+            16239.656768584082,
+            40159.413645641675,
+            255769.47904550788
+          ],
+          "condition_margins": [
+            [
+              0.49892371456680407,
+              0.499515540944149,
+              0.25396367528676678
+            ],
+            [
+              0.49901685619198627,
+              0.487667999048609,
+              0.19378479372728674
+            ],
+            [
+              0.49968876456357625,
+              0.45986575213413128,
+              0.35329069739664742
+            ]
+          ],
+          "minimum_margin": [
+            0.25396367528676678,
+            0.19378479372728674,
+            0.35329069739664742
+          ],
+          "valid_structural": [
+            true,
+            true,
+            true
+          ],
+          "selected_ordinal": 1,
+          "selected_lambda": 16239.656768632012,
+          "selected_omega": 127.43491189086299,
+          "selected_voidKE": 0.0010762854331959207,
+          "selected_voidSE": 0.00048445905585098049,
+          "selected_densityParticipation": 0.75396367528676678,
+          "selected_IPR": 0.0047919095187423525,
+          "selected_condition_margins": [
+            0.49892371456680407,
+            0.499515540944149,
+            0.25396367528676678
+          ],
+          "selected_minimum_margin": 0.25396367528676678,
+          "matrix_free_dofs": null,
+          "technical_mode_limit": null
+        },
+        "omega_raw_E2": [
+          127.43491189086299,
+          200.39813782984203,
+          505.73657080102947
+        ],
+        "selected_ordinal_raw_E2": 1,
+        "selected_lambda_raw_E2": 16239.656768632012,
+        "selected_omega_raw_E2": 127.43491189086299,
+        "status_raw_E2": "PASS",
+        "binary_diagnostic_E2": {
+          "model": "",
+          "classifier": "UNANIMOUS_ALL_THREE",
+          "rho_void_threshold": 0.1,
+          "voidKE_threshold": 0.5,
+          "voidSE_threshold": 0.5,
+          "densityParticipation_threshold": 0.5,
+          "IPR_role": "NONBINDING_QA",
+          "status": "PASS",
+          "solver_status": "NOT_RUN",
+          "failure_reason": "",
+          "modes_requested_final": 0,
+          "escalation_count": 0,
+          "batch_schedule": [],
+          "lambda": [
+            6941.9994980883666,
+            7061.4664022394318,
+            17961.597359700907,
+            43783.248749986822,
+            176475.78609070595,
+            209861.49693846051
+          ],
+          "omega": [
+            83.318662363772773,
+            84.032531809052571,
+            134.02088404312556,
+            209.24447125309385,
+            420.09021184824809,
+            458.10642534072855
+          ],
+          "eigenpair_residual": [
+            2.9694448779250115E-11,
+            2.9913984737629144E-11,
+            1.3079076548485903E-11,
+            7.75857126786725E-12,
+            2.4097950189725417E-12,
+            3.5847535306171077E-12
+          ],
+          "eigenpair_valid": [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ],
+          "diagnostic_finite": [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ],
+          "voidKE": [
+            3.4354526527133883E-10,
+            9.9486166137316755E-10,
+            9.01791079251118E-10,
+            4.0450714203533307E-10,
+            7.70688414106042E-10,
+            9.5554764172778375E-10
+          ],
+          "voidSE": [
+            2.5167846534567547E-5,
+            1.9621661662653828E-7,
+            8.6738034731312142E-7,
+            3.8049008521412274E-6,
+            2.1550798524091263E-7,
+            6.24445719337106E-8
+          ],
+          "densityParticipation": [
+            0.99999999965645481,
+            0.99999999900513825,
+            0.99999999909820858,
+            0.999999999595493,
+            0.99999999922931215,
+            0.99999999904445225
+          ],
+          "IPR": [
+            0.0077695587307637318,
+            0.007793809392671212,
+            0.0056076262666662343,
+            0.00678373462358378,
+            0.0052193094532298739,
+            0.0066509058113834729
+          ],
+          "kinetic_energy_total": [
+            1.0000000000000002,
+            0.999999999999999,
+            1.0000000000000007,
+            1.0000000000000002,
+            0.99999999999999967,
+            0.999999999999999
+          ],
+          "strain_energy_total": [
+            6941.9994981337386,
+            7061.466402284037,
+            17961.597359724554,
+            43783.248750007668,
+            176475.78609073104,
+            209861.49693849
+          ],
+          "condition_margins": [
+            [
+              0.49999999965645475,
+              0.49997483215346544,
+              0.49999999965645481
+            ],
+            [
+              0.49999999900513836,
+              0.49999980378338338,
+              0.49999999900513825
+            ],
+            [
+              0.49999999909820891,
+              0.49999913261965268,
+              0.49999999909820858
+            ],
+            [
+              0.49999999959549285,
+              0.49999619509914783,
+              0.499999999595493
+            ],
+            [
+              0.4999999992293116,
+              0.49999978449201476,
+              0.49999999922931215
+            ],
+            [
+              0.49999999904445236,
+              0.49999993755542804,
+              0.49999999904445225
+            ]
+          ],
+          "minimum_margin": [
+            0.49997483215346544,
+            0.49999980378338338,
+            0.49999913261965268,
+            0.49999619509914783,
+            0.49999978449201476,
+            0.49999993755542804
+          ],
+          "valid_structural": [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ],
+          "selected_ordinal": null,
+          "selected_lambda": null,
+          "selected_omega": null,
+          "selected_voidKE": null,
+          "selected_voidSE": null,
+          "selected_densityParticipation": null,
+          "selected_IPR": null,
+          "selected_condition_margins": [
+            null,
+            null,
+            null
+          ],
+          "selected_minimum_margin": null,
+          "matrix_free_dofs": null,
+          "technical_mode_limit": null,
+          "role": "ENDPOINT_MANUFACTURABILITY_TOPOLOGY_DIAGNOSTIC_EXCLUDED_FROM_Q"
+        },
+        "omega_binary_E2": [
+          83.318662363772773,
+          84.032531809052571,
+          134.02088404312556,
+          209.24447125309385,
+          420.09021184824809,
+          458.10642534072855
+        ],
+        "modal_raw_E3": {
+          "model": "E3",
+          "classifier": "UNANIMOUS_ALL_THREE",
+          "rho_void_threshold": 0.1,
+          "voidKE_threshold": 0.5,
+          "voidSE_threshold": 0.5,
+          "densityParticipation_threshold": 0.5,
+          "IPR_role": "NONBINDING_QA",
+          "status": "PASS",
+          "solver_status": "PASS",
+          "failure_reason": "",
+          "modes_requested_final": 3,
+          "escalation_count": 0,
+          "batch_schedule": 3,
+          "lambda": [
+            16239.656616634717,
+            40159.399491336633,
+            255769.11753020808
+          ],
+          "omega": [
+            127.43491129449072,
+            200.39810251431183,
+            505.73621338619608
+          ],
+          "eigenpair_residual": [
+            1.0136747259582606E-11,
+            3.5755542812622024E-12,
+            9.1701495104771974E-13
+          ],
+          "eigenpair_valid": [
+            true,
+            true,
+            true
+          ],
+          "diagnostic_finite": [
+            true,
+            true,
+            true
+          ],
+          "voidKE": [
+            0.0010762851921218514,
+            0.000983143971827981,
+            0.00031123504418396306
+          ],
+          "voidSE": [
+            0.00048445614805635008,
+            0.012331687622270779,
+            0.040132954664884479
+          ],
+          "densityParticipation": [
+            0.753963676635589,
+            0.69378479828513473,
+            0.85329066780653529
+          ],
+          "IPR": [
+            0.0047919095636897446,
+            0.0042373325216329555,
+            0.017369315954517548
+          ],
+          "kinetic_energy_total": [
+            1.0000000000000004,
+            1.0000000000000002,
+            0.99999999999999956
+          ],
+          "strain_energy_total": [
+            16239.656616616856,
+            40159.399491347096,
+            255769.1175301359
+          ],
+          "condition_margins": [
+            [
+              0.49892371480787817,
+              0.49951554385194363,
+              0.25396367663558905
+            ],
+            [
+              0.49901685602817203,
+              0.48766831237772923,
+              0.19378479828513473
+            ],
+            [
+              0.49968876495581604,
+              0.45986704533511552,
+              0.35329066780653529
+            ]
+          ],
+          "minimum_margin": [
+            0.25396367663558905,
+            0.19378479828513473,
+            0.35329066780653529
+          ],
+          "valid_structural": [
+            true,
+            true,
+            true
+          ],
+          "selected_ordinal": 1,
+          "selected_lambda": 16239.656616634717,
+          "selected_omega": 127.43491129449072,
+          "selected_voidKE": 0.0010762851921218514,
+          "selected_voidSE": 0.00048445614805635008,
+          "selected_densityParticipation": 0.753963676635589,
+          "selected_IPR": 0.0047919095636897446,
+          "selected_condition_margins": [
+            0.49892371480787817,
+            0.49951554385194363,
+            0.25396367663558905
+          ],
+          "selected_minimum_margin": 0.25396367663558905,
+          "matrix_free_dofs": null,
+          "technical_mode_limit": null
+        },
+        "omega_raw_E3": [
+          127.43491129449072,
+          200.39810251431183,
+          505.73621338619608
+        ],
+        "selected_ordinal_raw_E3": 1,
+        "selected_lambda_raw_E3": 16239.656616634717,
+        "selected_omega_raw_E3": 127.43491129449072,
+        "status_raw_E3": "PASS",
+        "binary_diagnostic_E3": {
+          "model": "",
+          "classifier": "UNANIMOUS_ALL_THREE",
+          "rho_void_threshold": 0.1,
+          "voidKE_threshold": 0.5,
+          "voidSE_threshold": 0.5,
+          "densityParticipation_threshold": 0.5,
+          "IPR_role": "NONBINDING_QA",
+          "status": "PASS",
+          "solver_status": "NOT_RUN",
+          "failure_reason": "",
+          "modes_requested_final": 0,
+          "escalation_count": 0,
+          "batch_schedule": [],
+          "lambda": [
+            6941.999500473019,
+            7061.4664092638168,
+            17961.597375896396,
+            43783.248767694749,
+            176475.78622666598,
+            209861.49713890164
+          ],
+          "omega": [
+            83.318662378083218,
+            84.0325318508482,
+            134.02088410354708,
+            209.24447129540783,
+            420.0902120100705,
+            458.10642555949994
+          ],
+          "eigenpair_residual": [
+            2.8353780652351905E-11,
+            2.9444242344029939E-11,
+            1.2242650193777843E-11,
+            8.29061374084928E-12,
+            2.3843243133814742E-12,
+            3.3026407094981561E-12
+          ],
+          "eigenpair_valid": [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ],
+          "diagnostic_finite": [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ],
+          "voidKE": [
+            3.4354316228139425E-14,
+            9.9483677134255477E-14,
+            9.0173784832234355E-14,
+            4.0446057725570876E-14,
+            7.703036359583143E-14,
+            9.5486479036430179E-14
+          ],
+          "voidSE": [
+            2.5167846533491961E-5,
+            1.9621660417996373E-7,
+            8.6738032072543864E-7,
+            3.8049008288677241E-6,
+            2.1550779277774903E-7,
+            6.2444230396902011E-8
+          ],
+          "densityParticipation": [
+            0.99999999999996581,
+            0.9999999999999003,
+            0.99999999999990985,
+            0.9999999999999597,
+            0.99999999999992306,
+            0.99999999999990463
+          ],
+          "IPR": [
+            0.007769558736095113,
+            0.0077938094081791975,
+            0.0056076262767446724,
+            0.0067837346291028831,
+            0.0052193094616367827,
+            0.0066509058241070711
+          ],
+          "kinetic_energy_total": [
+            0.99999999999999956,
+            1.0000000000000007,
+            0.99999999999999989,
+            0.99999999999999978,
+            0.99999999999999944,
+            1.0000000000000002
+          ],
+          "strain_energy_total": [
+            6941.9995005250958,
+            7061.46640930891,
+            17961.597375907349,
+            43783.248767716272,
+            176475.7862266922,
+            209861.49713893593
+          ],
+          "condition_margins": [
+            [
+              0.49999999999996564,
+              0.4999748321534665,
+              0.49999999999996581
+            ],
+            [
+              0.49999999999990052,
+              0.49999980378339581,
+              0.4999999999999003
+            ],
+            [
+              0.49999999999990985,
+              0.49999913261967927,
+              0.49999999999990985
+            ],
+            [
+              0.49999999999995953,
+              0.49999619509917115,
+              0.4999999999999597
+            ],
+            [
+              0.49999999999992295,
+              0.49999978449220722,
+              0.49999999999992306
+            ],
+            [
+              0.49999999999990452,
+              0.4999999375557696,
+              0.49999999999990463
+            ]
+          ],
+          "minimum_margin": [
+            0.4999748321534665,
+            0.49999980378339581,
+            0.49999913261967927,
+            0.49999619509917115,
+            0.49999978449220722,
+            0.4999999375557696
+          ],
+          "valid_structural": [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ],
+          "selected_ordinal": null,
+          "selected_lambda": null,
+          "selected_omega": null,
+          "selected_voidKE": null,
+          "selected_voidSE": null,
+          "selected_densityParticipation": null,
+          "selected_IPR": null,
+          "selected_condition_margins": [
+            null,
+            null,
+            null
+          ],
+          "selected_minimum_margin": null,
+          "matrix_free_dofs": null,
+          "technical_mode_limit": null,
+          "role": "ENDPOINT_MANUFACTURABILITY_TOPOLOGY_DIAGNOSTIC_EXCLUDED_FROM_Q"
+        },
+        "omega_binary_E3": [
+          83.318662378083218,
+          84.0325318508482,
+          134.02088410354708,
+          209.24447129540783,
+          420.0902120100705,
+          458.10642555949994
+        ],
+        "status": "PASS"
+      },
+      "is_warmup": false,
+      "label": "smoke",
+      "mesh": [
+        60,
+        8
+      ],
+      "method": "Proposed",
+      "method_key": "proposed",
+      "method_label": "Proposed",
+      "n_elements": 480,
+      "ok": false,
+      "omega": [
+        127.17409634298902,
+        168.55281541422659,
+        200.13710093351921
+      ],
+      "omega1_native": 127.17409634298902,
+      "overridden": true,
+      "profile_id": "proposed_practical_move02_tol001",
+      "resolved_implementation": [],
+      "scientific_observation": false,
+      "solver_log": [],
+      "status": "CAP_HIT",
+      "status_note": "iteration cap reached (max_iterations); NOT convergence | warm-up or overridden budget; NOT a benchmark observation",
+      "stopping": {
+        "stop_reason": "max_iterations",
+        "iterations_total": 6,
+        "iter_stage1": null,
+        "iter_stage2": null,
+        "final_max_density_change": 0.1116103750596884,
+        "final_rms_density_change": 0.039457026005799672,
+        "final_relative_objective_change": 0.02720095812987192,
+        "final_grayness": 0.67515899231854914,
+        "convergence_tolerance": 0.01,
+        "volume": 0.50030530902480308
+      },
+      "times": {
+        "time1_name": "stage1_eigenanalysis_and_preparation_s",
+        "time1": 0.14912141666666673,
+        "time2_name": "stage2_simp_time_s",
+        "time2": 0.02500075,
+        "stage1_time_s": 0.14912141666666673,
+        "stage1_reference_eigen_time_s": 0.00778625,
+        "stage2_time_s": 0.02500075,
+        "overhead_time_s": 0.11334495833333326,
+        "total_wall_time_s": 0.287467125,
+        "solver_self_report_wall_s": 0.28663575,
+        "independent_crosscheck_residual_s": 0.00083137499999996756
+      }
+    },
+    {
+      "accounting": {
+        "total_wall_time_s": 0.281273875,
+        "component_sum_s": 0.281273875,
+        "timing_accounting_residual_s": 0,
+        "timing_accounting_relative_residual": 0,
+        "timing_accounting_tolerance_s": 1E-6,
+        "timing_accounting_tolerance_rel": 1E-9,
+        "timing_accounting_fail": false,
+        "independent_crosscheck_residual_s": 0.000725750000000025,
+        "independent_crosscheck_relative": 0.0025802254119762277,
+        "independent_crosscheck_tolerance_rel": 0.05,
+        "independent_crosscheck_fail": false
+      },
+      "caveat": "",
+      "counts": {
+        "count1_name": "stage1_iterations",
+        "count1": 6,
+        "count2_name": "stage2_iterations",
+        "count2": 6,
+        "stage1_iterations": 6,
+        "stage2_iterations": 6,
+        "iterations_total_generic": 12
+      },
+      "error": "",
+      "evaluator": {
+        "evaluator_candidate": "C",
+        "density_representation": "ACTUAL_GRAY",
+        "modal_classifier_version": "candidate_c_unanimous_v1",
+        "volume": 0.49985600275177833,
+        "volume_residual": -0.00014399724822167226,
+        "minimum_density": 0.00089207569983348553,
+        "maximum_density": 1,
+        "mean_density": 0.49985600275177833,
+        "std_density": 0.31270429550883011,
+        "grayness": 0.60967887781072228,
+        "gray_fraction_01_09": 0.71666666666666667,
+        "connectivity_raw_05": {
+          "n_components": 4,
+          "left_right_connected": false,
+          "largest_component_fraction": 0.48,
+          "solid_fraction": 0.41666666666666669
+        },
+        "binary_solid_count": 240,
+        "binary_volume": 0.5,
+        "connectivity_binary": {
+          "n_components": 1,
+          "left_right_connected": true,
+          "largest_component_fraction": 1,
+          "solid_fraction": 0.5
+        },
+        "binary_role": "ENDPOINT_MANUFACTURABILITY_TOPOLOGY_DIAGNOSTIC_EXCLUDED_FROM_Q",
+        "modal_raw_E1": {
+          "model": "E1",
+          "classifier": "UNANIMOUS_ALL_THREE",
+          "rho_void_threshold": 0.1,
+          "voidKE_threshold": 0.5,
+          "voidSE_threshold": 0.5,
+          "densityParticipation_threshold": 0.5,
+          "IPR_role": "NONBINDING_QA",
+          "status": "PASS",
+          "solver_status": "PASS",
+          "failure_reason": "",
+          "modes_requested_final": 3,
+          "escalation_count": 0,
+          "batch_schedule": 3,
+          "lambda": [
+            15707.476685843765,
+            40215.048574004133,
+            238281.95505417895
+          ],
+          "omega": [
+            125.32947253477039,
+            200.53690077889439,
+            488.14132692712974
+          ],
+          "eigenpair_residual": [
+            1.1106352338285766E-11,
+            3.9730814509479824E-12,
+            1.2536780594724338E-12
+          ],
+          "eigenpair_valid": [
+            true,
+            true,
+            true
+          ],
+          "diagnostic_finite": [
+            true,
+            true,
+            true
+          ],
+          "voidKE": [
+            0.0051578111164092277,
+            0.0026794181972502754,
+            0.0067933873606871933
+          ],
+          "voidSE": [
+            0.0001200520157281717,
+            0.0019486956273011041,
+            0.0058419765012588561
+          ],
+          "densityParticipation": [
+            0.798613925660932,
+            0.71388997443769475,
+            0.92765851003436894
+          ],
+          "IPR": [
+            0.0050208264968491781,
+            0.0043173116716789268,
+            0.016777384637001378
+          ],
+          "kinetic_energy_total": [
+            0.99999999999999933,
+            1.0000000000000004,
+            1
+          ],
+          "strain_energy_total": [
+            15707.476685837792,
+            40215.04857398379,
+            238281.95505420503
+          ],
+          "condition_margins": [
+            [
+              0.49484218888359077,
+              0.49987994798427182,
+              0.29861392566093203
+            ],
+            [
+              0.49732058180274974,
+              0.4980513043726989,
+              0.21388997443769475
+            ],
+            [
+              0.49320661263931281,
+              0.49415802349874116,
+              0.42765851003436894
+            ]
+          ],
+          "minimum_margin": [
+            0.29861392566093203,
+            0.21388997443769475,
+            0.42765851003436894
+          ],
+          "valid_structural": [
+            true,
+            true,
+            true
+          ],
+          "selected_ordinal": 1,
+          "selected_lambda": 15707.476685843765,
+          "selected_omega": 125.32947253477039,
+          "selected_voidKE": 0.0051578111164092277,
+          "selected_voidSE": 0.0001200520157281717,
+          "selected_densityParticipation": 0.798613925660932,
+          "selected_IPR": 0.0050208264968491781,
+          "selected_condition_margins": [
+            0.49484218888359077,
+            0.49987994798427182,
+            0.29861392566093203
+          ],
+          "selected_minimum_margin": 0.29861392566093203,
+          "matrix_free_dofs": null,
+          "technical_mode_limit": null
+        },
+        "omega_raw_E1": [
+          125.32947253477039,
+          200.53690077889439,
+          488.14132692712974
+        ],
+        "selected_ordinal_raw_E1": 1,
+        "selected_lambda_raw_E1": 15707.476685843765,
+        "selected_omega_raw_E1": 125.32947253477039,
+        "status_raw_E1": "PASS",
+        "binary_diagnostic_E1": {
+          "model": "",
+          "classifier": "UNANIMOUS_ALL_THREE",
+          "rho_void_threshold": 0.1,
+          "voidKE_threshold": 0.5,
+          "voidSE_threshold": 0.5,
+          "densityParticipation_threshold": 0.5,
+          "IPR_role": "NONBINDING_QA",
+          "status": "PASS",
+          "solver_status": "NOT_RUN",
+          "failure_reason": "",
+          "modes_requested_final": 0,
+          "escalation_count": 0,
+          "batch_schedule": [],
+          "lambda": [
+            8067.1751779296192,
+            8118.2291858648214,
+            18708.635251193788,
+            41720.170493362471,
+            205906.06837551345,
+            213398.13069809548
+          ],
+          "omega": [
+            89.817454750898051,
+            90.101216339541281,
+            136.77951327298175,
+            204.25516026128318,
+            453.76873886982725,
+            461.95035523105236
+          ],
+          "eigenpair_residual": [
+            2.6489993326648344E-11,
+            2.7822222563323058E-11,
+            1.2351506534824272E-11,
+            6.2598094710542647E-12,
+            1.458997031004414E-12,
+            1.8117237709798364E-12
+          ],
+          "eigenpair_valid": [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ],
+          "diagnostic_finite": [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ],
+          "voidKE": [
+            3.4288296766993771E-7,
+            9.94649944101439E-7,
+            8.9807209214686218E-7,
+            4.1377536845308033E-7,
+            7.6532046923140552E-7,
+            9.461228128643483E-7
+          ],
+          "voidSE": [
+            0.021667145723730082,
+            0.00016550394946055478,
+            0.00076432959601528466,
+            0.003961900633882319,
+            0.00017410702908470459,
+            6.1019094511358734E-5
+          ],
+          "densityParticipation": [
+            0.99999965711703265,
+            0.99999900535005581,
+            0.99999910192790753,
+            0.99999958622463136,
+            0.999999234679531,
+            0.99999905387718757
+          ],
+          "IPR": [
+            0.007875583275794849,
+            0.0079236790476123233,
+            0.0056426734038096549,
+            0.0066138526363126787,
+            0.0052523356280442246,
+            0.0065074549912186369
+          ],
+          "kinetic_energy_total": [
+            1.0000000000000002,
+            0.99999999999999978,
+            1.0000000000000002,
+            1,
+            0.99999999999999944,
+            1
+          ],
+          "strain_energy_total": [
+            8067.1751779865008,
+            8118.2291859308571,
+            18708.635251232306,
+            41720.1704934112,
+            205906.06837552317,
+            213398.13069814091
+          ],
+          "condition_margins": [
+            [
+              0.49999965711703231,
+              0.47833285427626993,
+              0.49999965711703265
+            ],
+            [
+              0.49999900535005593,
+              0.49983449605053942,
+              0.49999900535005581
+            ],
+            [
+              0.49999910192790786,
+              0.4992356704039847,
+              0.49999910192790753
+            ],
+            [
+              0.49999958622463153,
+              0.4960380993661177,
+              0.49999958622463136
+            ],
+            [
+              0.49999923467953078,
+              0.49982589297091529,
+              0.499999234679531
+            ],
+            [
+              0.49999905387718713,
+              0.49993898090548866,
+              0.49999905387718757
+            ]
+          ],
+          "minimum_margin": [
+            0.47833285427626993,
+            0.49983449605053942,
+            0.4992356704039847,
+            0.4960380993661177,
+            0.49982589297091529,
+            0.49993898090548866
+          ],
+          "valid_structural": [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ],
+          "selected_ordinal": null,
+          "selected_lambda": null,
+          "selected_omega": null,
+          "selected_voidKE": null,
+          "selected_voidSE": null,
+          "selected_densityParticipation": null,
+          "selected_IPR": null,
+          "selected_condition_margins": [
+            null,
+            null,
+            null
+          ],
+          "selected_minimum_margin": null,
+          "matrix_free_dofs": null,
+          "technical_mode_limit": null,
+          "role": "ENDPOINT_MANUFACTURABILITY_TOPOLOGY_DIAGNOSTIC_EXCLUDED_FROM_Q"
+        },
+        "omega_binary_E1": [
+          89.817454750898051,
+          90.101216339541281,
+          136.77951327298175,
+          204.25516026128318,
+          453.76873886982725,
+          461.95035523105236
+        ],
+        "modal_raw_E2": {
+          "model": "E2",
+          "classifier": "UNANIMOUS_ALL_THREE",
+          "rho_void_threshold": 0.1,
+          "voidKE_threshold": 0.5,
+          "voidSE_threshold": 0.5,
+          "densityParticipation_threshold": 0.5,
+          "IPR_role": "NONBINDING_QA",
+          "status": "PASS",
+          "solver_status": "PASS",
+          "failure_reason": "",
+          "modes_requested_final": 3,
+          "escalation_count": 0,
+          "batch_schedule": 3,
+          "lambda": [
+            15741.230015377412,
+            40250.843874587845,
+            238272.34295346081
+          ],
+          "omega": [
+            125.46405865975089,
+            200.6261295908084,
+            488.1314812153185
+          ],
+          "eigenpair_residual": [
+            1.1243795083830994E-11,
+            3.6274418224075735E-12,
+            9.6823477783648142E-13
+          ],
+          "eigenpair_valid": [
+            true,
+            true,
+            true
+          ],
+          "diagnostic_finite": [
+            true,
+            true,
+            true
+          ],
+          "voidKE": [
+            0.0029864245877778131,
+            0.0014276844856481881,
+            0.0053922825119927832
+          ],
+          "voidSE": [
+            9.6028627865290964E-5,
+            0.0016140456608992185,
+            0.004451471432152132
+          ],
+          "densityParticipation": [
+            0.80028244839581231,
+            0.71473754269975309,
+            0.92892833138718056
+          ],
+          "IPR": [
+            0.0050416239070365521,
+            0.0043278810818743194,
+            0.016824014941143283
+          ],
+          "kinetic_energy_total": [
+            1.0000000000000002,
+            0.99999999999999978,
+            0.99999999999999956
+          ],
+          "strain_energy_total": [
+            15741.230015388406,
+            40250.843874578182,
+            238272.34295351524
+          ],
+          "condition_margins": [
+            [
+              0.49701357541222219,
+              0.49990397137213471,
+              0.30028244839581231
+            ],
+            [
+              0.49857231551435183,
+              0.49838595433910077,
+              0.21473754269975309
+            ],
+            [
+              0.49460771748800719,
+              0.49554852856784787,
+              0.42892833138718056
+            ]
+          ],
+          "minimum_margin": [
+            0.30028244839581231,
+            0.21473754269975309,
+            0.42892833138718056
+          ],
+          "valid_structural": [
+            true,
+            true,
+            true
+          ],
+          "selected_ordinal": 1,
+          "selected_lambda": 15741.230015377412,
+          "selected_omega": 125.46405865975089,
+          "selected_voidKE": 0.0029864245877778131,
+          "selected_voidSE": 9.6028627865290964E-5,
+          "selected_densityParticipation": 0.80028244839581231,
+          "selected_IPR": 0.0050416239070365521,
+          "selected_condition_margins": [
+            0.49701357541222219,
+            0.49990397137213471,
+            0.30028244839581231
+          ],
+          "selected_minimum_margin": 0.30028244839581231,
+          "matrix_free_dofs": null,
+          "technical_mode_limit": null
+        },
+        "omega_raw_E2": [
+          125.46405865975089,
+          200.6261295908084,
+          488.1314812153185
+        ],
+        "selected_ordinal_raw_E2": 1,
+        "selected_lambda_raw_E2": 15741.230015377412,
+        "selected_omega_raw_E2": 125.46405865975089,
+        "status_raw_E2": "PASS",
+        "binary_diagnostic_E2": {
+          "model": "",
+          "classifier": "UNANIMOUS_ALL_THREE",
+          "rho_void_threshold": 0.1,
+          "voidKE_threshold": 0.5,
+          "voidSE_threshold": 0.5,
+          "densityParticipation_threshold": 0.5,
+          "IPR_role": "NONBINDING_QA",
+          "status": "PASS",
+          "solver_status": "NOT_RUN",
+          "failure_reason": "",
+          "modes_requested_final": 0,
+          "escalation_count": 0,
+          "batch_schedule": [],
+          "lambda": [
+            7892.5599294047815,
+            8116.8949230510543,
+            18694.365346370716,
+            41555.060033526366,
+            205870.41266058155,
+            213385.32399703123
+          ],
+          "omega": [
+            88.840080647221285,
+            90.093811791105026,
+            136.72733942548109,
+            203.85058261757891,
+            453.72944874735822,
+            461.93649346748003
+          ],
+          "eigenpair_residual": [
+            2.7451744978848567E-11,
+            2.8010437636731042E-11,
+            1.2495305304447504E-11,
+            7.32554693871075E-12,
+            2.0982575277016439E-12,
+            3.0665986222155508E-12
+          ],
+          "eigenpair_valid": [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ],
+          "diagnostic_finite": [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ],
+          "voidKE": [
+            3.4288255817302881E-10,
+            9.946507222731715E-10,
+            8.9804851813496522E-10,
+            4.1375769886333645E-10,
+            7.6533400194047206E-10,
+            9.461233124483296E-10
+          ],
+          "voidSE": [
+            2.2146539387913126E-5,
+            1.6554928767147653E-7,
+            7.650650035899956E-7,
+            3.977728757527904E-6,
+            1.7413023028610121E-7,
+            6.10232695038635E-8
+          ],
+          "densityParticipation": [
+            0.99999999965711772,
+            0.99999999900534919,
+            0.99999999910195125,
+            0.99999999958624208,
+            0.999999999234666,
+            0.99999999905387671
+          ],
+          "IPR": [
+            0.0078754902863074974,
+            0.0079238259389403168,
+            0.0056424833769185192,
+            0.0066140168667234338,
+            0.0052525542236110979,
+            0.0065074938990159967
+          ],
+          "kinetic_energy_total": [
+            0.99999999999999978,
+            0.99999999999999956,
+            1.0000000000000009,
+            1,
+            1,
+            1.0000000000000002
+          ],
+          "strain_energy_total": [
+            7892.5599294237618,
+            8116.894923075768,
+            18694.36534642132,
+            41555.06003358114,
+            205870.41266062125,
+            213385.32399707896
+          ],
+          "condition_margins": [
+            [
+              0.49999999965711744,
+              0.49997785346061208,
+              0.49999999965711772
+            ],
+            [
+              0.4999999990053493,
+              0.49999983445071233,
+              0.49999999900534919
+            ],
+            [
+              0.49999999910195148,
+              0.49999923493499643,
+              0.49999999910195125
+            ],
+            [
+              0.49999999958624231,
+              0.49999602227124246,
+              0.49999999958624208
+            ],
+            [
+              0.499999999234666,
+              0.49999982586976971,
+              0.499999999234666
+            ],
+            [
+              0.49999999905387671,
+              0.49999993897673051,
+              0.49999999905387671
+            ]
+          ],
+          "minimum_margin": [
+            0.49997785346061208,
+            0.49999983445071233,
+            0.49999923493499643,
+            0.49999602227124246,
+            0.49999982586976971,
+            0.49999993897673051
+          ],
+          "valid_structural": [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ],
+          "selected_ordinal": null,
+          "selected_lambda": null,
+          "selected_omega": null,
+          "selected_voidKE": null,
+          "selected_voidSE": null,
+          "selected_densityParticipation": null,
+          "selected_IPR": null,
+          "selected_condition_margins": [
+            null,
+            null,
+            null
+          ],
+          "selected_minimum_margin": null,
+          "matrix_free_dofs": null,
+          "technical_mode_limit": null,
+          "role": "ENDPOINT_MANUFACTURABILITY_TOPOLOGY_DIAGNOSTIC_EXCLUDED_FROM_Q"
+        },
+        "omega_binary_E2": [
+          88.840080647221285,
+          90.093811791105026,
+          136.72733942548109,
+          203.85058261757891,
+          453.72944874735822,
+          461.93649346748003
+        ],
+        "modal_raw_E3": {
+          "model": "E3",
+          "classifier": "UNANIMOUS_ALL_THREE",
+          "rho_void_threshold": 0.1,
+          "voidKE_threshold": 0.5,
+          "voidSE_threshold": 0.5,
+          "densityParticipation_threshold": 0.5,
+          "IPR_role": "NONBINDING_QA",
+          "status": "PASS",
+          "solver_status": "PASS",
+          "failure_reason": "",
+          "modes_requested_final": 3,
+          "escalation_count": 0,
+          "batch_schedule": 3,
+          "lambda": [
+            15741.229816363099,
+            40250.8291691732,
+            238272.01283880058
+          ],
+          "omega": [
+            125.46405786663804,
+            200.62609294200294,
+            488.13114307407244
+          ],
+          "eigenpair_residual": [
+            1.1226260587254721E-11,
+            3.9079557077140959E-12,
+            8.7664141435998265E-13
+          ],
+          "eigenpair_valid": [
+            true,
+            true,
+            true
+          ],
+          "diagnostic_finite": [
+            true,
+            true,
+            true
+          ],
+          "voidKE": [
+            0.0029864243838054884,
+            0.0014276848809288908,
+            0.0053922873177658127
+          ],
+          "voidSE": [
+            9.6024419896842408E-5,
+            0.0016137110006701103,
+            0.0044501537041933287
+          ],
+          "densityParticipation": [
+            0.80028245001468767,
+            0.7147375480639766,
+            0.92892830465648391
+          ],
+          "IPR": [
+            0.0050416239549655323,
+            0.0043278811636639743,
+            0.016824014015206997
+          ],
+          "kinetic_energy_total": [
+            1.0000000000000009,
+            1.0000000000000004,
+            1.0000000000000004
+          ],
+          "strain_energy_total": [
+            15741.229816322053,
+            40250.8291691389,
+            238272.01283875355
+          ],
+          "condition_margins": [
+            [
+              0.49701357561619453,
+              0.49990397558010313,
+              0.30028245001468767
+            ],
+            [
+              0.49857231511907113,
+              0.49838628899932991,
+              0.2147375480639766
+            ],
+            [
+              0.49460771268223419,
+              0.49554984629580667,
+              0.42892830465648391
+            ]
+          ],
+          "minimum_margin": [
+            0.30028245001468767,
+            0.2147375480639766,
+            0.42892830465648391
+          ],
+          "valid_structural": [
+            true,
+            true,
+            true
+          ],
+          "selected_ordinal": 1,
+          "selected_lambda": 15741.229816363099,
+          "selected_omega": 125.46405786663804,
+          "selected_voidKE": 0.0029864243838054884,
+          "selected_voidSE": 9.6024419896842408E-5,
+          "selected_densityParticipation": 0.80028245001468767,
+          "selected_IPR": 0.0050416239549655323,
+          "selected_condition_margins": [
+            0.49701357561619453,
+            0.49990397558010313,
+            0.30028245001468767
+          ],
+          "selected_minimum_margin": 0.30028245001468767,
+          "matrix_free_dofs": null,
+          "technical_mode_limit": null
+        },
+        "omega_raw_E3": [
+          125.46405786663804,
+          200.62609294200294,
+          488.13114307407244
+        ],
+        "selected_ordinal_raw_E3": 1,
+        "selected_lambda_raw_E3": 15741.229816363099,
+        "selected_omega_raw_E3": 125.46405786663804,
+        "status_raw_E3": "PASS",
+        "binary_diagnostic_E3": {
+          "model": "",
+          "classifier": "UNANIMOUS_ALL_THREE",
+          "rho_void_threshold": 0.1,
+          "voidKE_threshold": 0.5,
+          "voidSE_threshold": 0.5,
+          "densityParticipation_threshold": 0.5,
+          "IPR_role": "NONBINDING_QA",
+          "status": "PASS",
+          "solver_status": "NOT_RUN",
+          "failure_reason": "",
+          "modes_requested_final": 0,
+          "escalation_count": 0,
+          "batch_schedule": [],
+          "lambda": [
+            7892.5599321107393,
+            8116.8949311235883,
+            18694.36536315698,
+            41555.060050717235,
+            205870.41281807952,
+            213385.32419882712
+          ],
+          "omega": [
+            88.84008066245066,
+            90.09381183590574,
+            136.727339486867,
+            203.85058265974428,
+            453.72944892091755,
+            461.93649368590388
+          ],
+          "eigenpair_residual": [
+            2.6963786046140594E-11,
+            2.6942137715081E-11,
+            1.2259819158727171E-11,
+            7.616741916173562E-12,
+            2.3070514151027334E-12,
+            3.3230802123332202E-12
+          ],
+          "eigenpair_valid": [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ],
+          "diagnostic_finite": [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ],
+          "voidKE": [
+            3.4288023274583694E-14,
+            9.9462212326640611E-14,
+            8.9799344202853838E-14,
+            4.1370799863509392E-14,
+            7.6489038165619031E-14,
+            9.4544357729357214E-14
+          ],
+          "voidSE": [
+            2.2146539386732169E-5,
+            1.6554927337015952E-7,
+            7.6506497607267362E-7,
+            3.9777287326899952E-6,
+            1.741300083929134E-7,
+            6.1022929524307992E-8
+          ],
+          "densityParticipation": [
+            0.99999999999996581,
+            0.99999999999990052,
+            0.99999999999991041,
+            0.99999999999995848,
+            0.99999999999992351,
+            0.99999999999990563
+          ],
+          "IPR": [
+            0.0078754902916993823,
+            0.0079238259547036276,
+            0.0056424833870199753,
+            0.0066140168722331749,
+            0.0052525542320452064,
+            0.0065074939113244244
+          ],
+          "kinetic_energy_total": [
+            1.0000000000000004,
+            1.0000000000000009,
+            0.99999999999999978,
+            0.99999999999999978,
+            0.99999999999999956,
+            1
+          ],
+          "strain_energy_total": [
+            7892.5599321363243,
+            8116.8949311469387,
+            18694.36536320611,
+            41555.0600507747,
+            205870.4128181189,
+            213385.3241988724
+          ],
+          "condition_margins": [
+            [
+              0.49999999999996569,
+              0.49997785346061324,
+              0.49999999999996581
+            ],
+            [
+              0.49999999999990052,
+              0.49999983445072665,
+              0.49999999999990052
+            ],
+            [
+              0.49999999999991018,
+              0.49999923493502391,
+              0.49999999999991041
+            ],
+            [
+              0.49999999999995864,
+              0.49999602227126733,
+              0.49999999999995848
+            ],
+            [
+              0.49999999999992351,
+              0.49999982586999159,
+              0.49999999999992351
+            ],
+            [
+              0.49999999999990546,
+              0.49999993897707046,
+              0.49999999999990563
+            ]
+          ],
+          "minimum_margin": [
+            0.49997785346061324,
+            0.49999983445072665,
+            0.49999923493502391,
+            0.49999602227126733,
+            0.49999982586999159,
+            0.49999993897707046
+          ],
+          "valid_structural": [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ],
+          "selected_ordinal": null,
+          "selected_lambda": null,
+          "selected_omega": null,
+          "selected_voidKE": null,
+          "selected_voidSE": null,
+          "selected_densityParticipation": null,
+          "selected_IPR": null,
+          "selected_condition_margins": [
+            null,
+            null,
+            null
+          ],
+          "selected_minimum_margin": null,
+          "matrix_free_dofs": null,
+          "technical_mode_limit": null,
+          "role": "ENDPOINT_MANUFACTURABILITY_TOPOLOGY_DIAGNOSTIC_EXCLUDED_FROM_Q"
+        },
+        "omega_binary_E3": [
+          88.84008066245066,
+          90.09381183590574,
+          136.727339486867,
+          203.85058265974428,
+          453.72944892091755,
+          461.93649368590388
+        ],
+        "status": "PASS"
+      },
+      "is_warmup": false,
+      "label": "smoke",
+      "mesh": [
+        60,
+        8
+      ],
+      "method": "Yuksel",
+      "method_key": "yuksel",
+      "method_label": "Yuksel",
+      "n_elements": 480,
+      "ok": false,
+      "omega": [
+        135.70792389616355,
+        215.24055359283241,
+        511.91806062859945
+      ],
+      "omega1_native": 135.70792389616355,
+      "overridden": true,
+      "profile_id": "yuksel_practical_move01_tol001",
+      "resolved_implementation": [],
+      "scientific_observation": false,
+      "solver_log": [],
+      "status": "CAP_HIT",
+      "status_note": "iteration cap reached (max_iterations); NOT convergence | warm-up or overridden budget; NOT a benchmark observation",
+      "stopping": {
+        "stop_reason": "max_iterations",
+        "iterations_total": 12,
+        "iter_stage1": 6,
+        "iter_stage2": 6,
+        "final_max_density_change": 0.042375925264327152,
+        "final_rms_density_change": 0.013028994805745145,
+        "final_relative_objective_change": 0.022082689733637084,
+        "final_grayness": 0.60967887781072228,
+        "convergence_tolerance": 0.01,
+        "volume": 0.49985600275177833
+      },
+      "times": {
+        "time1_name": "stage1_time_s",
+        "time1": 0.02355775,
+        "time2_name": "stage2_time_s",
+        "time2": 0.024694666666666667,
+        "stage1_time_s": 0.02355775,
+        "stage2_time_s": 0.024694666666666667,
+        "stage1_share_pct": 50,
+        "stage2_share_pct": 50,
+        "overhead_time_s": 0.23302145833333335,
+        "total_wall_time_s": 0.281273875,
+        "solver_self_report_wall_s": 0.280548125,
+        "independent_crosscheck_residual_s": 0.000725750000000025
+      }
+    },
+    {
+      "accounting": {
+        "total_wall_time_s": 0.74005529166666661,
+        "component_sum_s": 0.74005529166666661,
+        "timing_accounting_residual_s": 0,
+        "timing_accounting_relative_residual": 0,
+        "timing_accounting_tolerance_s": 1E-6,
+        "timing_accounting_tolerance_rel": 1E-9,
+        "timing_accounting_fail": false,
+        "independent_crosscheck_residual_s": 0.00013566666666664506,
+        "independent_crosscheck_relative": 0.00018331963597086423,
+        "independent_crosscheck_tolerance_rel": 0.05,
+        "independent_crosscheck_fail": false
+      },
+      "caveat": "Du-Olhoff timings and iteration counts refer to the frozen reconstruction used in this study. Some continuation and inner-solver details are not uniquely specified by the original publication; therefore these values should be interpreted as representative measurements of this reconstruction rather than exact historical implementation timings.",
+      "counts": {
+        "count1_name": "outer_iterations",
+        "count1": 6,
+        "count2_name": "inner_mma_iterations_total",
+        "count2": 112,
+        "outer_iterations": 6,
+        "inner_iterations_total": 112,
+        "inner_iterations_per_outer_mean": 18.666666666666668,
+        "iterations_total_generic": null
+      },
+      "error": "",
+      "evaluator": {
+        "evaluator_candidate": "C",
+        "density_representation": "ACTUAL_GRAY",
+        "modal_classifier_version": "candidate_c_unanimous_v1",
+        "volume": 0.49997458012795526,
+        "volume_residual": -2.5419872044740721E-5,
+        "minimum_density": 0.26005869708940127,
+        "maximum_density": 0.73998338837383171,
+        "mean_density": 0.49997458012795526,
+        "std_density": 0.19591572017431763,
+        "grayness": 0.84678797784806314,
+        "gray_fraction_01_09": 1,
+        "connectivity_raw_05": {
+          "n_components": 8,
+          "left_right_connected": false,
+          "largest_component_fraction": 0.48181818181818181,
+          "solid_fraction": 0.45833333333333331
+        },
+        "binary_solid_count": 240,
+        "binary_volume": 0.5,
+        "connectivity_binary": {
+          "n_components": 4,
+          "left_right_connected": false,
+          "largest_component_fraction": 0.49166666666666664,
+          "solid_fraction": 0.5
+        },
+        "binary_role": "ENDPOINT_MANUFACTURABILITY_TOPOLOGY_DIAGNOSTIC_EXCLUDED_FROM_Q",
+        "modal_raw_E1": {
+          "model": "E1",
+          "classifier": "UNANIMOUS_ALL_THREE",
+          "rho_void_threshold": 0.1,
+          "voidKE_threshold": 0.5,
+          "voidSE_threshold": 0.5,
+          "densityParticipation_threshold": 0.5,
+          "IPR_role": "NONBINDING_QA",
+          "status": "PASS",
+          "solver_status": "PASS",
+          "failure_reason": "",
+          "modes_requested_final": 3,
+          "escalation_count": 0,
+          "batch_schedule": 3,
+          "lambda": [
+            10851.277971083813,
+            93375.097981057741,
+            269075.14004193537
+          ],
+          "omega": [
+            104.16946755687971,
+            305.57339213527371,
+            518.72453194536251
+          ],
+          "eigenpair_residual": [
+            9.115382809829423E-12,
+            1.085968092010921E-12,
+            4.789948966162036E-13
+          ],
+          "eigenpair_valid": [
+            true,
+            true,
+            true
+          ],
+          "diagnostic_finite": [
+            true,
+            true,
+            true
+          ],
+          "voidKE": [
+            0,
+            0,
+            0
+          ],
+          "voidSE": [
+            0,
+            0,
+            0
+          ],
+          "densityParticipation": [
+            0.606818700321652,
+            0.59322534973499252,
+            0.59311388532547127
+          ],
+          "IPR": [
+            0.003770685442045086,
+            0.0035597343611691295,
+            0.0028559282918372421
+          ],
+          "kinetic_energy_total": [
+            1.0000000000000007,
+            1,
+            1.0000000000000002
+          ],
+          "strain_energy_total": [
+            10851.27797109009,
+            93375.0979810614,
+            269075.14004193689
+          ],
+          "condition_margins": [
+            [
+              0.5,
+              0.5,
+              0.10681870032165197
+            ],
+            [
+              0.5,
+              0.5,
+              0.093225349734992524
+            ],
+            [
+              0.5,
+              0.5,
+              0.093113885325471268
+            ]
+          ],
+          "minimum_margin": [
+            0.10681870032165197,
+            0.093225349734992524,
+            0.093113885325471268
+          ],
+          "valid_structural": [
+            true,
+            true,
+            true
+          ],
+          "selected_ordinal": 1,
+          "selected_lambda": 10851.277971083813,
+          "selected_omega": 104.16946755687971,
+          "selected_voidKE": 0,
+          "selected_voidSE": 0,
+          "selected_densityParticipation": 0.606818700321652,
+          "selected_IPR": 0.003770685442045086,
+          "selected_condition_margins": [
+            0.5,
+            0.5,
+            0.10681870032165197
+          ],
+          "selected_minimum_margin": 0.10681870032165197,
+          "matrix_free_dofs": null,
+          "technical_mode_limit": null
+        },
+        "omega_raw_E1": [
+          104.16946755687971,
+          305.57339213527371,
+          518.72453194536251
+        ],
+        "selected_ordinal_raw_E1": 1,
+        "selected_lambda_raw_E1": 10851.277971083813,
+        "selected_omega_raw_E1": 104.16946755687971,
+        "status_raw_E1": "PASS",
+        "binary_diagnostic_E1": {
+          "model": "",
+          "classifier": "UNANIMOUS_ALL_THREE",
+          "rho_void_threshold": 0.1,
+          "voidKE_threshold": 0.5,
+          "voidSE_threshold": 0.5,
+          "densityParticipation_threshold": 0.5,
+          "IPR_role": "NONBINDING_QA",
+          "status": "PASS",
+          "solver_status": "NOT_RUN",
+          "failure_reason": "",
+          "modes_requested_final": 0,
+          "escalation_count": 0,
+          "batch_schedule": [],
+          "lambda": [
+            66.357706952007135,
+            2120.6161561922077,
+            5934.6769062064277,
+            23060.425592905322,
+            38394.00395977014,
+            158388.52013322213
+          ],
+          "omega": [
+            8.1460239965278234,
+            46.050148275463869,
+            77.036854207622127,
+            151.8565954870098,
+            195.94387961804304,
+            397.98055245604922
+          ],
+          "eigenpair_residual": [
+            2.4574100789223293E-9,
+            1.7682496205296815E-10,
+            3.4797129043897062E-11,
+            1.3018227864777365E-11,
+            9.2710548065346692E-12,
+            1.82417967644812E-12
+          ],
+          "eigenpair_valid": [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ],
+          "diagnostic_finite": [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ],
+          "voidKE": [
+            6.4666309981524927E-7,
+            9.8759863148948243E-7,
+            3.4005599826097088E-7,
+            4.3686892741051578E-7,
+            9.3295249581428109E-7,
+            9.0086093555750945E-7
+          ],
+          "voidSE": [
+            0.99944706790052484,
+            0.001322643834233873,
+            0.029616110206152908,
+            0.0071719816421672248,
+            0.00079624553136954472,
+            0.00011978737015019871
+          ],
+          "densityParticipation": [
+            0.9999993533369,
+            0.99999901240136868,
+            0.999999659944002,
+            0.99999956313107263,
+            0.99999906704750385,
+            0.99999909913906448
+          ],
+          "IPR": [
+            0.0044893062229954652,
+            0.0068485344703501034,
+            0.007365226786217401,
+            0.0058624565749170751,
+            0.0062232445077360764,
+            0.0063588342235672349
+          ],
+          "kinetic_energy_total": [
+            1,
+            0.99999999999999978,
+            0.99999999999999956,
+            0.99999999999999989,
+            1.0000000000000002,
+            0.99999999999999956
+          ],
+          "strain_energy_total": [
+            66.357706977783792,
+            2120.6161562992897,
+            5934.6769063163511,
+            23060.425592986914,
+            38394.003959855654,
+            158388.52013331652
+          ],
+          "condition_margins": [
+            [
+              0.49999935333690021,
+              -0.49944706790052484,
+              0.49999935333690004
+            ],
+            [
+              0.49999901240136851,
+              0.49867735616576614,
+              0.49999901240136868
+            ],
+            [
+              0.49999965994400175,
+              0.4703838897938471,
+              0.499999659944002
+            ],
+            [
+              0.49999956313107258,
+              0.4928280183578328,
+              0.49999956313107263
+            ],
+            [
+              0.49999906704750419,
+              0.49920375446863047,
+              0.49999906704750385
+            ],
+            [
+              0.49999909913906443,
+              0.49988021262984977,
+              0.49999909913906448
+            ]
+          ],
+          "minimum_margin": [
+            -0.49944706790052484,
+            0.49867735616576614,
+            0.4703838897938471,
+            0.4928280183578328,
+            0.49920375446863047,
+            0.49988021262984977
+          ],
+          "valid_structural": [
+            false,
+            true,
+            true,
+            true,
+            true,
+            true
+          ],
+          "selected_ordinal": null,
+          "selected_lambda": null,
+          "selected_omega": null,
+          "selected_voidKE": null,
+          "selected_voidSE": null,
+          "selected_densityParticipation": null,
+          "selected_IPR": null,
+          "selected_condition_margins": [
+            null,
+            null,
+            null
+          ],
+          "selected_minimum_margin": null,
+          "matrix_free_dofs": null,
+          "technical_mode_limit": null,
+          "role": "ENDPOINT_MANUFACTURABILITY_TOPOLOGY_DIAGNOSTIC_EXCLUDED_FROM_Q"
+        },
+        "omega_binary_E1": [
+          8.1460239965278234,
+          46.050148275463869,
+          77.036854207622127,
+          151.8565954870098,
+          195.94387961804304,
+          397.98055245604922
+        ],
+        "modal_raw_E2": {
+          "model": "E2",
+          "classifier": "UNANIMOUS_ALL_THREE",
+          "rho_void_threshold": 0.1,
+          "voidKE_threshold": 0.5,
+          "voidSE_threshold": 0.5,
+          "densityParticipation_threshold": 0.5,
+          "IPR_role": "NONBINDING_QA",
+          "status": "PASS",
+          "solver_status": "PASS",
+          "failure_reason": "",
+          "modes_requested_final": 3,
+          "escalation_count": 0,
+          "batch_schedule": 3,
+          "lambda": [
+            10851.223749833511,
+            93373.392676405041,
+            269073.46917788615
+          ],
+          "omega": [
+            104.16920730155103,
+            305.57060178689483,
+            518.72292139241938
+          ],
+          "eigenpair_residual": [
+            8.5667466485406855E-12,
+            9.52255274613853E-13,
+            5.0370019170427307E-13
+          ],
+          "eigenpair_valid": [
+            true,
+            true,
+            true
+          ],
+          "diagnostic_finite": [
+            true,
+            true,
+            true
+          ],
+          "voidKE": [
+            0,
+            0,
+            0
+          ],
+          "voidSE": [
+            0,
+            0,
+            0
+          ],
+          "densityParticipation": [
+            0.60681892119747549,
+            0.59322561337521962,
+            0.59311397645501873
+          ],
+          "IPR": [
+            0.0037706952070357285,
+            0.0035597405932323426,
+            0.0028559284082725475
+          ],
+          "kinetic_energy_total": [
+            0.99999999999999933,
+            0.99999999999999956,
+            1.0000000000000004
+          ],
+          "strain_energy_total": [
+            10851.223749838638,
+            93373.392676405361,
+            269073.46917789651
+          ],
+          "condition_margins": [
+            [
+              0.5,
+              0.5,
+              0.10681892119747549
+            ],
+            [
+              0.5,
+              0.5,
+              0.093225613375219618
+            ],
+            [
+              0.5,
+              0.5,
+              0.093113976455018732
+            ]
+          ],
+          "minimum_margin": [
+            0.10681892119747549,
+            0.093225613375219618,
+            0.093113976455018732
+          ],
+          "valid_structural": [
+            true,
+            true,
+            true
+          ],
+          "selected_ordinal": 1,
+          "selected_lambda": 10851.223749833511,
+          "selected_omega": 104.16920730155103,
+          "selected_voidKE": 0,
+          "selected_voidSE": 0,
+          "selected_densityParticipation": 0.60681892119747549,
+          "selected_IPR": 0.0037706952070357285,
+          "selected_condition_margins": [
+            0.5,
+            0.5,
+            0.10681892119747549
+          ],
+          "selected_minimum_margin": 0.10681892119747549,
+          "matrix_free_dofs": null,
+          "technical_mode_limit": null
+        },
+        "omega_raw_E2": [
+          104.16920730155103,
+          305.57060178689483,
+          518.72292139241938
+        ],
+        "selected_ordinal_raw_E2": 1,
+        "selected_lambda_raw_E2": 10851.223749833511,
+        "selected_omega_raw_E2": 104.16920730155103,
+        "status_raw_E2": "PASS",
+        "binary_diagnostic_E2": {
+          "model": "",
+          "classifier": "UNANIMOUS_ALL_THREE",
+          "rho_void_threshold": 0.1,
+          "voidKE_threshold": 0.5,
+          "voidSE_threshold": 0.5,
+          "densityParticipation_threshold": 0.5,
+          "IPR_role": "NONBINDING_QA",
+          "status": "PASS",
+          "solver_status": "NOT_RUN",
+          "failure_reason": "",
+          "modes_requested_final": 0,
+          "escalation_count": 0,
+          "batch_schedule": [],
+          "lambda": [
+            0.0663944511328316,
+            2117.8158368712579,
+            5759.0923528321946,
+            22895.206906707961,
+            38363.531148157163,
+            158369.70755765279
+          ],
+          "omega": [
+            0.25767120741912863,
+            46.019733124728766,
+            75.888683957703435,
+            151.31162184944012,
+            195.86610515389631,
+            397.95691671040572
+          ],
+          "eigenpair_residual": [
+            2.3902161516797E-6,
+            1.8921852321441853E-10,
+            3.7136605789322093E-11,
+            1.383558265542157E-11,
+            1.0010074110290198E-11,
+            2.0971505136729705E-12
+          ],
+          "eigenpair_valid": [
+            false,
+            true,
+            true,
+            true,
+            true,
+            true
+          ],
+          "diagnostic_finite": [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ],
+          "voidKE": [
+            6.4650715362861139E-10,
+            9.8759943650427452E-10,
+            3.4005453222683912E-10,
+            4.3681739049777372E-10,
+            9.3312301471718888E-10,
+            9.0086544137936045E-10
+          ],
+          "voidSE": [
+            0.9999980949480527,
+            1.3247662675249012E-6,
+            3.0519142232413785E-5,
+            7.2241873886457913E-6,
+            7.9521410694819627E-7,
+            1.1981600480698195E-7
+          ],
+          "densityParticipation": [
+            0.99999999935349293,
+            0.99999999901240044,
+            0.99999999965994557,
+            0.99999999956318275,
+            0.99999999906687664,
+            0.99999999909913473
+          ],
+          "IPR": [
+            0.0044897439985381237,
+            0.0068484129682588237,
+            0.0073649688909562657,
+            0.0058628116965277277,
+            0.0062256332152626779,
+            0.0063588524269608451
+          ],
+          "kinetic_energy_total": [
+            0.99999999999999956,
+            1,
+            0.99999999999999989,
+            0.99999999999999967,
+            1.0000000000000011,
+            0.99999999999999956
+          ],
+          "strain_energy_total": [
+            0.066394466627442278,
+            2117.8158369587168,
+            5759.09235291438,
+            22895.20690678867,
+            38363.531148236987,
+            158369.70755775244
+          ],
+          "condition_margins": [
+            [
+              0.49999999935349282,
+              -0.4999980949480527,
+              0.49999999935349293
+            ],
+            [
+              0.49999999901240055,
+              0.49999867523373248,
+              0.49999999901240044
+            ],
+            [
+              0.49999999965994546,
+              0.4999694808577676,
+              0.49999999965994557
+            ],
+            [
+              0.49999999956318258,
+              0.49999277581261137,
+              0.49999999956318275
+            ],
+            [
+              0.499999999066877,
+              0.49999920478589305,
+              0.49999999906687664
+            ],
+            [
+              0.49999999909913456,
+              0.49999988018399522,
+              0.49999999909913473
+            ]
+          ],
+          "minimum_margin": [
+            -0.4999980949480527,
+            0.49999867523373248,
+            0.4999694808577676,
+            0.49999277581261137,
+            0.49999920478589305,
+            0.49999988018399522
+          ],
+          "valid_structural": [
+            false,
+            true,
+            true,
+            true,
+            true,
+            true
+          ],
+          "selected_ordinal": null,
+          "selected_lambda": null,
+          "selected_omega": null,
+          "selected_voidKE": null,
+          "selected_voidSE": null,
+          "selected_densityParticipation": null,
+          "selected_IPR": null,
+          "selected_condition_margins": [
+            null,
+            null,
+            null
+          ],
+          "selected_minimum_margin": null,
+          "matrix_free_dofs": null,
+          "technical_mode_limit": null,
+          "role": "ENDPOINT_MANUFACTURABILITY_TOPOLOGY_DIAGNOSTIC_EXCLUDED_FROM_Q"
+        },
+        "omega_binary_E2": [
+          0.25767120741912863,
+          46.019733124728766,
+          75.888683957703435,
+          151.31162184944012,
+          195.86610515389631,
+          397.95691671040572
+        ],
+        "modal_raw_E3": {
+          "model": "E3",
+          "classifier": "UNANIMOUS_ALL_THREE",
+          "rho_void_threshold": 0.1,
+          "voidKE_threshold": 0.5,
+          "voidSE_threshold": 0.5,
+          "densityParticipation_threshold": 0.5,
+          "IPR_role": "NONBINDING_QA",
+          "status": "PASS",
+          "solver_status": "PASS",
+          "failure_reason": "",
+          "modes_requested_final": 3,
+          "escalation_count": 0,
+          "batch_schedule": 3,
+          "lambda": [
+            10851.223695573013,
+            93373.390969335625,
+            269073.46750534431
+          ],
+          "omega": [
+            104.16920704110699,
+            305.570598993646,
+            518.7229197802468
+          ],
+          "eigenpair_residual": [
+            9.670597102031043E-12,
+            1.0427739981302175E-12,
+            4.7180652684057471E-13
+          ],
+          "eigenpair_valid": [
+            true,
+            true,
+            true
+          ],
+          "diagnostic_finite": [
+            true,
+            true,
+            true
+          ],
+          "voidKE": [
+            0,
+            0,
+            0
+          ],
+          "voidSE": [
+            0,
+            0,
+            0
+          ],
+          "densityParticipation": [
+            0.6068189214185713,
+            0.59322561363912707,
+            0.5931139765462371
+          ],
+          "IPR": [
+            0.0037706952168102019,
+            0.0035597405994708029,
+            0.0028559284083890732
+          ],
+          "kinetic_energy_total": [
+            1,
+            0.99999999999999989,
+            0.99999999999999989
+          ],
+          "strain_energy_total": [
+            10851.22369556428,
+            93373.390969350221,
+            269073.46750535315
+          ],
+          "condition_margins": [
+            [
+              0.5,
+              0.5,
+              0.1068189214185713
+            ],
+            [
+              0.5,
+              0.5,
+              0.09322561363912707
+            ],
+            [
+              0.5,
+              0.5,
+              0.0931139765462371
+            ]
+          ],
+          "minimum_margin": [
+            0.1068189214185713,
+            0.09322561363912707,
+            0.0931139765462371
+          ],
+          "valid_structural": [
+            true,
+            true,
+            true
+          ],
+          "selected_ordinal": 1,
+          "selected_lambda": 10851.223695573013,
+          "selected_omega": 104.16920704110699,
+          "selected_voidKE": 0,
+          "selected_voidSE": 0,
+          "selected_densityParticipation": 0.6068189214185713,
+          "selected_IPR": 0.0037706952168102019,
+          "selected_condition_margins": [
+            0.5,
+            0.5,
+            0.1068189214185713
+          ],
+          "selected_minimum_margin": 0.1068189214185713,
+          "matrix_free_dofs": null,
+          "technical_mode_limit": null
+        },
+        "omega_raw_E3": [
+          104.16920704110699,
+          305.570598993646,
+          518.7229197802468
+        ],
+        "selected_ordinal_raw_E3": 1,
+        "selected_lambda_raw_E3": 10851.223695573013,
+        "selected_omega_raw_E3": 104.16920704110699,
+        "status_raw_E3": "PASS",
+        "binary_diagnostic_E3": {
+          "model": "",
+          "classifier": "UNANIMOUS_ALL_THREE",
+          "rho_void_threshold": 0.1,
+          "voidKE_threshold": 0.5,
+          "voidSE_threshold": 0.5,
+          "densityParticipation_threshold": 0.5,
+          "IPR_role": "NONBINDING_QA",
+          "status": "PASS",
+          "solver_status": "NOT_RUN",
+          "failure_reason": "",
+          "modes_requested_final": 0,
+          "escalation_count": 0,
+          "batch_schedule": [],
+          "lambda": [
+            0.06639445117575192,
+            2117.8158389626137,
+            5759.0923547904067,
+            22895.206916707557,
+            38363.53118394941,
+            158369.70770027253
+          ],
+          "omega": [
+            0.25767120750241368,
+            46.019733147451149,
+            75.8886839706053,
+            151.31162188248317,
+            195.86610524526546,
+            397.95691688959562
+          ],
+          "eigenpair_residual": [
+            2.3856848746807208E-6,
+            1.8228815610079296E-10,
+            3.9561477433715588E-11,
+            1.325038579635248E-11,
+            9.55217661338437E-12,
+            2.0351136320594129E-12
+          ],
+          "eigenpair_valid": [
+            false,
+            true,
+            true,
+            true,
+            true,
+            true
+          ],
+          "diagnostic_finite": [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ],
+          "voidKE": [
+            6.4650715396683943E-14,
+            9.8759210149129E-14,
+            3.4005302578988827E-14,
+            4.3678069162114851E-14,
+            9.3300876023202479E-14,
+            9.0041015329417826E-14
+          ],
+          "voidSE": [
+            0.999998091307408,
+            1.3247662638589642E-6,
+            3.0519142231612593E-5,
+            7.2241873703446034E-6,
+            7.9521404964310919E-7,
+            1.1981577709775184E-7
+          ],
+          "densityParticipation": [
+            0.99999999999993516,
+            0.99999999999990141,
+            0.999999999999966,
+            0.9999999999999567,
+            0.99999999999990663,
+            0.99999999999990985
+          ],
+          "IPR": [
+            0.0044897440043428442,
+            0.00684841298178209,
+            0.0073649688959572662,
+            0.0058628117016969877,
+            0.0062256332271140441,
+            0.0063588524384022059
+          ],
+          "kinetic_energy_total": [
+            1.0000000000000007,
+            1,
+            1.0000000000000002,
+            0.99999999999999956,
+            1.0000000000000004,
+            1.0000000000000009
+          ],
+          "strain_energy_total": [
+            0.066394466912081715,
+            2117.8158390464337,
+            5759.09235488191,
+            22895.206916789066,
+            38363.531184027066,
+            158369.70770036947
+          ],
+          "condition_margins": [
+            [
+              0.49999999999993533,
+              -0.499998091307408,
+              0.49999999999993516
+            ],
+            [
+              0.49999999999990125,
+              0.49999867523373615,
+              0.49999999999990141
+            ],
+            [
+              0.49999999999996597,
+              0.49996948085776838,
+              0.499999999999966
+            ],
+            [
+              0.49999999999995631,
+              0.49999277581262963,
+              0.4999999999999567
+            ],
+            [
+              0.49999999999990669,
+              0.49999920478595034,
+              0.49999999999990663
+            ],
+            [
+              0.49999999999990996,
+              0.49999988018422292,
+              0.49999999999990985
+            ]
+          ],
+          "minimum_margin": [
+            -0.499998091307408,
+            0.49999867523373615,
+            0.49996948085776838,
+            0.49999277581262963,
+            0.49999920478595034,
+            0.49999988018422292
+          ],
+          "valid_structural": [
+            false,
+            true,
+            true,
+            true,
+            true,
+            true
+          ],
+          "selected_ordinal": null,
+          "selected_lambda": null,
+          "selected_omega": null,
+          "selected_voidKE": null,
+          "selected_voidSE": null,
+          "selected_densityParticipation": null,
+          "selected_IPR": null,
+          "selected_condition_margins": [
+            null,
+            null,
+            null
+          ],
+          "selected_minimum_margin": null,
+          "matrix_free_dofs": null,
+          "technical_mode_limit": null,
+          "role": "ENDPOINT_MANUFACTURABILITY_TOPOLOGY_DIAGNOSTIC_EXCLUDED_FROM_Q"
+        },
+        "omega_binary_E3": [
+          0.25767120750241368,
+          46.019733147451149,
+          75.8886839706053,
+          151.31162188248317,
+          195.86610524526546,
+          397.95691688959562
+        ],
+        "status": "PASS"
+      },
+      "is_warmup": false,
+      "label": "smoke",
+      "mesh": [
+        60,
+        8
+      ],
+      "method": "Du-Olhoff reconstruction (M4)",
+      "method_key": "olhoff",
+      "method_label": "Du-Olhoff reconstruction (M4)",
+      "n_elements": 480,
+      "ok": false,
+      "omega": [
+        104.16920704068633,
+        305.570598993537,
+        518.72291978017927
+      ],
+      "omega1_native": 104.16920704068633,
+      "overridden": true,
+      "profile_id": "olhoff_m4_subspaceN2_R006_tolInner005_S2beta_settledmove_v1",
+      "resolved_implementation": [
+        {
+          "name": "applyFilter",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffM4Reconstruction/+frozen/filter/applyFilter.m"
+        },
+        {
+          "name": "assemble2D",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffM4Reconstruction/+frozen/fem/assemble2D.m"
+        },
+        {
+          "name": "classifyModes",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffM4Reconstruction/+frozen/fem/classifyModes.m"
+        },
+        {
+          "name": "defaultCfg",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffM4Reconstruction/+frozen/algo/defaultCfg.m"
+        },
+        {
+          "name": "deltaLambda",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffM4Reconstruction/+frozen/algo/deltaLambda.m"
+        },
+        {
+          "name": "eigSolve",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffM4Reconstruction/+frozen/fem/eigSolve.m"
+        },
+        {
+          "name": "elemMats2D",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffM4Reconstruction/+frozen/fem/elemMats2D.m"
+        },
+        {
+          "name": "genGrad",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffM4Reconstruction/+frozen/algo/genGrad.m"
+        },
+        {
+          "name": "innerLoop",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffM4Reconstruction/+frozen/algo/innerLoop.m"
+        },
+        {
+          "name": "innerLoopLP",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffM4Reconstruction/+frozen/algo/innerLoopLP.m"
+        },
+        {
+          "name": "innerLoopRho",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffM4Reconstruction/+frozen/algo/innerLoopRho.m"
+        },
+        {
+          "name": "massScale",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffM4Reconstruction/+frozen/fem/massScale.m"
+        },
+        {
+          "name": "mmasub",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffM4Reconstruction/+frozen/mma_published/mmasub.m"
+        },
+        {
+          "name": "model2D",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffM4Reconstruction/+frozen/fem/model2D.m"
+        },
+        {
+          "name": "moveControl",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffM4Reconstruction/+frozen/algo/moveControl.m"
+        },
+        {
+          "name": "multRule",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffM4Reconstruction/+frozen/algo/multRule.m"
+        },
+        {
+          "name": "olhoffOpt",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffM4Reconstruction/+frozen/algo/olhoffOpt.m"
+        },
+        {
+          "name": "prepFilter",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffM4Reconstruction/+frozen/filter/prepFilter.m"
+        },
+        {
+          "name": "subsolv",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffM4Reconstruction/+frozen/mma_published/subsolv.m"
+        },
+        {
+          "name": "useMMA",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffM4Reconstruction/+frozen/algo/useMMA.m"
+        }
+      ],
+      "scientific_observation": false,
+      "solver_log": [],
+      "status": "CAP_HIT",
+      "status_note": "reached the 6-outer safety cap; this is NOT convergence | warm-up or overridden budget; NOT a benchmark observation",
+      "stopping": {
+        "outer_iterations": 6,
+        "max_outer": 6,
+        "converged": false,
+        "final_max_density_change": 0.039996436661134,
+        "final_l2_density_change": 0.68203181063405394,
+        "final_rms_density_change": 0.031130350635030266,
+        "eps_l2": 0.019364916731037088,
+        "eps_rms": 0.00088388347648318453,
+        "final_move_limit": 0.04,
+        "final_ladder_stage": 1,
+        "final_multiplicity": 2,
+        "final_inner_converged": 1,
+        "n_inner_not_converged": 0,
+        "volume": 0.49997458012795526,
+        "final_grayness": 0.84678797784806314,
+        "gap12_pct": 193.34062116282351
+      },
+      "times": {
+        "time1_name": "outer_time_excluding_inner_s",
+        "time1": 0.058136749999999959,
+        "time2_name": "inner_mma_time_total_s",
+        "time2": 0.66907566666666662,
+        "outer_time_excluding_inner_s": 0.058136749999999959,
+        "inner_time_total_s": 0.66907566666666662,
+        "inner_time_per_outer_mean_s": 0.1115126111111111,
+        "inner_time_per_inner_iteration_mean_s": 0.0059738898809523809,
+        "inner_time_share_pct": 90.408875417923454,
+        "eigen_time_s": 0.037041749999999991,
+        "gradient_time_s": 0.016121458333333335,
+        "outer_bookkeeping_time_s": 0.0049735416666666366,
+        "overhead_time_s": 0.012842875000000031,
+        "total_wall_time_s": 0.74005529166666661,
+        "solver_self_report_wall_s": 0.739919625,
+        "independent_crosscheck_residual_s": 0.00013566666666664506
+      }
+    }
+  ]
+}

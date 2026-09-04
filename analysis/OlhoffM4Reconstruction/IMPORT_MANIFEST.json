@@ -1,0 +1,257 @@
+{
+  "manifest_schema": "olhoff_m4_import_manifest/1",
+  "import_datetime_local": "2026-09-04T13:43:04.285116+02:00",
+  "destination_namespace": "analysis/OlhoffM4Reconstruction",
+  "source_repository": {
+    "path": "/Users/piotrek/Programming/Matlab/Olhoff",
+    "version_control": "none (not a git repository)",
+    "state_identification": "SHA-256 of every file in algo/, fem/, filter/, mma/, mma_published/ plus NOTES.md, CLAUDE.md, setpaths.m",
+    "newest_source_mtime": "2026-09-04T12:19:55.765722+02:00",
+    "file_hashes": {
+      "algo/compareHistory.m": "1caaff78e5ffd57d8b4c0f4ad93ae6d8feed0d2b38a6b391f471311e6303604a",
+      "algo/compareHistoryTo.m": "5f1797b29907990a67fa203e838beb09ab403a0068cdb290971925f15c3c6c61",
+      "algo/compareTopology.m": "adadf0b1a143231e6ca7f5168be9f7747040b81b9a91fc4b79ebc8900c9e58fd",
+      "algo/defaultCfg.m": "dd8f1cc7c19d41dfb4dde989ddd40a3dbfd733fecb622f43275144c359a6b911",
+      "algo/deltaLambda.m": "101519fcdcc2175d7d2aa135d919ad0a0efaa24cbb3edd7761d8f27b9b504038",
+      "algo/genGrad.m": "13f2ab8541b2f626e340a592b99730ee4cba101e4f978a214dd7227adaeb5208",
+      "algo/imresizeNN.m": "b548f7838cdbaa2db1998fc885a2ee45b704e17ae0bcedfbf16236a7ae962be9",
+      "algo/innerLoop.m": "9ec33d7dcbabf4df905089b57a03af140ca9a2f0b43902ad8f75962ae756ca6b",
+      "algo/innerLoopLP.m": "7724753c02f84d6009c3998f758d5b3f9c5144ad39ca6f470584a2c99e089465",
+      "algo/innerLoopRho.m": "aded1849467e93201d2a8c78effaa303300e71da4e192cefad4649f55cab35e5",
+      "algo/moveControl.m": "76ff15824f205db8d5a6a4b1ef4890f7320e450dc0bd1e6f4989ad794791c80d",
+      "algo/multRule.m": "c8ee926c2cf985b79e634b99116bbd37b96d9a1f9b26b51c4bb88ee31d5d4b52",
+      "algo/olhoffOpt.m": "c6c4862440208c2ec5239577028168716685d04a89cfadce76b45803a6cc9cfb",
+      "algo/plotHistory.m": "4f0b1620c557fae43f2ac9d20accb9484da01cb8d3e751b9ac869e0f35c5163c",
+      "algo/textStamp.m": "f540e10ab2c84b85c70c62e69192998f806260031275d4c94d60bc9db2fe2c55",
+      "algo/topologyImage.m": "1bcdf9b9849475a46beea8ef4651618d699debed1823aee8658a4df412141823",
+      "algo/useMMA.m": "b87ef5f65918c015e5262eda6138b6fa47403f127846212dc0238e0549e100d8",
+      "fem/assemble2D.m": "7b2f1e10228d57237d962689909297351c879c9b613f311500f23dd37bd00878",
+      "fem/classifyModes.m": "0f93a2acce7aac69e5ad168edc1413e01bce5757b7e00c9c2c4a7a70288c29e1",
+      "fem/eigSolve.m": "b0784ceeb15fafe164ba138b963c3ab4dc5a466fc2953c79786809edd16159cd",
+      "fem/elemMats2D.m": "b8ae7c424d42f02390ebeb724592bf606ff9504f4be588810a58a1c4493bfba1",
+      "fem/massScale.m": "90ba72c3df056ed0e705bfcfb763c1ef631f48891d626b18c180d6702d683a63",
+      "fem/model2D.m": "3cc19e1c52023225a1350d1c3e7623a9df68b01f52a74c82ddd4aac377ac6560",
+      "filter/applyFilter.m": "461ec7c7950b4d08e20c04d348d9d95674d3e42f1f167b05d3804c94abe057a7",
+      "filter/prepFilter.m": "18ceb629c567fafcd90830c4eed3a4809fc2dda682d54cef1176b82bd6d47e1a",
+      "filter/top88_reference.m": "eb8613bdb46e833b45acf9d43a8dad39a7e8fd104beafeab896742bcc3093810",
+      "mma/mmasub.m": "54c1680036e6effdb70bc32524b0c11c366cebed64d5a508c82553e871ff7660",
+      "mma/subsolv.m": "130033335ac5a21f31437a196bf8f37c5b97880a00e93cf2962a8a54bac2b98a",
+      "mma_published/README.md": "14ac696e5b319a19e44a11b4a5aa41d74c1b9915ff1ebf1435d5e046f637d1d0",
+      "mma_published/mmasub.m": "4507b73e3e44cdd6999b52c7a815569a4fc716749b1e23c2d0c228ff51da2edb",
+      "mma_published/subsolv.m": "130033335ac5a21f31437a196bf8f37c5b97880a00e93cf2962a8a54bac2b98a",
+      "NOTES.md": "8e127111882b1de38076f06f2b22e032fb24c6c6f491002456351afd1a0b23ee",
+      "CLAUDE.md": "bc4cb3ed79fd48521276c163471e4d730d8b757bcbdb85b94c620465462958d0",
+      "setpaths.m": "5299621d625c7cec17cfb755f7b0b0074df356270111dc40fb52126a406ceb55"
+    }
+  },
+  "governing_audits": {
+    "frozen_realization_spec": "audit_conference_admission/WP4_frozen_realization.md",
+    "filter_freeze": "audit_filter_mesh_admission/FROZEN_REALIZATION.json",
+    "termination_and_guard": "audit_termination_mesh_admission/REPORT.md (verdict S2_CONTINUATION_DEFECT)",
+    "latest_audit": "audit_s2_design_continuation/REPORT.md (verdict S2_LADDER_ITSELF_DEFECTIVE; the drms trigger was NOT adopted, s2Signal stays 'beta')",
+    "conference_active_realization": "the audit_termination_mesh_admission (TMA) realization: M4 subspace subN=2, physical filter R=0.06, tolInner=0.05, S2 beta ladder, outerGuard='settledmove', l2 outer norm with tolOuter = 0.05*sqrt(NE/3200)"
+  },
+  "epistemic_status": {
+    "label": "Du-Olhoff reconstruction (M4)",
+    "must_not_be_labelled": "Olhoff 2007",
+    "statement": "M4 is a RECONSTRUCTION of the published nested formulation, not a claimed exact historical implementation. Numerical continuation and inner convergence details are incompletely specified in the original publication."
+  },
+  "modifications": [
+    {
+      "file": "+frozen/algo/olhoffOpt.m",
+      "kind": "timing instrumentation only",
+      "diff": "patches/olhoffOpt.timing-instrumentation.diff",
+      "source_verbatim_copy": "patches/olhoffOpt.m.source-verbatim",
+      "description": "Adds hist.tOuter, the wall time of each complete outer iteration (inner solve included). Three hunks: one hist field, one tic, one toc. No value is read back; no scientific quantity, tolerance, rule or ordering is touched.",
+      "inertness_evidence": "evidence/import_equivalence_160x20.json"
+    }
+  ],
+  "not_imported": {
+    "reason": "development/plotting/analysis utilities not on the solver call graph",
+    "files": [
+      "algo/compareHistory.m",
+      "algo/compareHistoryTo.m",
+      "algo/compareTopology.m",
+      "algo/imresizeNN.m",
+      "algo/plotHistory.m",
+      "algo/textStamp.m",
+      "algo/topologyImage.m",
+      "filter/top88_reference.m",
+      "top88.m",
+      "setpaths.m",
+      "docs/",
+      "runs/",
+      "results/",
+      "audit_*/"
+    ]
+  },
+  "files": [
+    {
+      "source_path": "algo/defaultCfg.m",
+      "destination_path": "analysis/OlhoffM4Reconstruction/+frozen/algo/defaultCfg.m",
+      "sha256_source": "dd8f1cc7c19d41dfb4dde989ddd40a3dbfd733fecb622f43275144c359a6b911",
+      "sha256_imported": "dd8f1cc7c19d41dfb4dde989ddd40a3dbfd733fecb622f43275144c359a6b911",
+      "byte_identical": true
+    },
+    {
+      "source_path": "algo/deltaLambda.m",
+      "destination_path": "analysis/OlhoffM4Reconstruction/+frozen/algo/deltaLambda.m",
+      "sha256_source": "101519fcdcc2175d7d2aa135d919ad0a0efaa24cbb3edd7761d8f27b9b504038",
+      "sha256_imported": "101519fcdcc2175d7d2aa135d919ad0a0efaa24cbb3edd7761d8f27b9b504038",
+      "byte_identical": true
+    },
+    {
+      "source_path": "algo/genGrad.m",
+      "destination_path": "analysis/OlhoffM4Reconstruction/+frozen/algo/genGrad.m",
+      "sha256_source": "13f2ab8541b2f626e340a592b99730ee4cba101e4f978a214dd7227adaeb5208",
+      "sha256_imported": "13f2ab8541b2f626e340a592b99730ee4cba101e4f978a214dd7227adaeb5208",
+      "byte_identical": true
+    },
+    {
+      "source_path": "algo/innerLoop.m",
+      "destination_path": "analysis/OlhoffM4Reconstruction/+frozen/algo/innerLoop.m",
+      "sha256_source": "9ec33d7dcbabf4df905089b57a03af140ca9a2f0b43902ad8f75962ae756ca6b",
+      "sha256_imported": "9ec33d7dcbabf4df905089b57a03af140ca9a2f0b43902ad8f75962ae756ca6b",
+      "byte_identical": true
+    },
+    {
+      "source_path": "algo/innerLoopLP.m",
+      "destination_path": "analysis/OlhoffM4Reconstruction/+frozen/algo/innerLoopLP.m",
+      "sha256_source": "7724753c02f84d6009c3998f758d5b3f9c5144ad39ca6f470584a2c99e089465",
+      "sha256_imported": "7724753c02f84d6009c3998f758d5b3f9c5144ad39ca6f470584a2c99e089465",
+      "byte_identical": true
+    },
+    {
+      "source_path": "algo/innerLoopRho.m",
+      "destination_path": "analysis/OlhoffM4Reconstruction/+frozen/algo/innerLoopRho.m",
+      "sha256_source": "aded1849467e93201d2a8c78effaa303300e71da4e192cefad4649f55cab35e5",
+      "sha256_imported": "aded1849467e93201d2a8c78effaa303300e71da4e192cefad4649f55cab35e5",
+      "byte_identical": true
+    },
+    {
+      "source_path": "algo/moveControl.m",
+      "destination_path": "analysis/OlhoffM4Reconstruction/+frozen/algo/moveControl.m",
+      "sha256_source": "76ff15824f205db8d5a6a4b1ef4890f7320e450dc0bd1e6f4989ad794791c80d",
+      "sha256_imported": "76ff15824f205db8d5a6a4b1ef4890f7320e450dc0bd1e6f4989ad794791c80d",
+      "byte_identical": true
+    },
+    {
+      "source_path": "algo/multRule.m",
+      "destination_path": "analysis/OlhoffM4Reconstruction/+frozen/algo/multRule.m",
+      "sha256_source": "c8ee926c2cf985b79e634b99116bbd37b96d9a1f9b26b51c4bb88ee31d5d4b52",
+      "sha256_imported": "c8ee926c2cf985b79e634b99116bbd37b96d9a1f9b26b51c4bb88ee31d5d4b52",
+      "byte_identical": true
+    },
+    {
+      "source_path": "algo/olhoffOpt.m",
+      "destination_path": "analysis/OlhoffM4Reconstruction/+frozen/algo/olhoffOpt.m",
+      "sha256_source": "c6c4862440208c2ec5239577028168716685d04a89cfadce76b45803a6cc9cfb",
+      "sha256_imported": "f83b468415cdeccf50b6d6ccab53259901f0baf54be304b5ef51a31cff026859",
+      "byte_identical": false
+    },
+    {
+      "source_path": "algo/useMMA.m",
+      "destination_path": "analysis/OlhoffM4Reconstruction/+frozen/algo/useMMA.m",
+      "sha256_source": "b87ef5f65918c015e5262eda6138b6fa47403f127846212dc0238e0549e100d8",
+      "sha256_imported": "b87ef5f65918c015e5262eda6138b6fa47403f127846212dc0238e0549e100d8",
+      "byte_identical": true
+    },
+    {
+      "source_path": "fem/assemble2D.m",
+      "destination_path": "analysis/OlhoffM4Reconstruction/+frozen/fem/assemble2D.m",
+      "sha256_source": "7b2f1e10228d57237d962689909297351c879c9b613f311500f23dd37bd00878",
+      "sha256_imported": "7b2f1e10228d57237d962689909297351c879c9b613f311500f23dd37bd00878",
+      "byte_identical": true
+    },
+    {
+      "source_path": "fem/classifyModes.m",
+      "destination_path": "analysis/OlhoffM4Reconstruction/+frozen/fem/classifyModes.m",
+      "sha256_source": "0f93a2acce7aac69e5ad168edc1413e01bce5757b7e00c9c2c4a7a70288c29e1",
+      "sha256_imported": "0f93a2acce7aac69e5ad168edc1413e01bce5757b7e00c9c2c4a7a70288c29e1",
+      "byte_identical": true
+    },
+    {
+      "source_path": "fem/eigSolve.m",
+      "destination_path": "analysis/OlhoffM4Reconstruction/+frozen/fem/eigSolve.m",
+      "sha256_source": "b0784ceeb15fafe164ba138b963c3ab4dc5a466fc2953c79786809edd16159cd",
+      "sha256_imported": "b0784ceeb15fafe164ba138b963c3ab4dc5a466fc2953c79786809edd16159cd",
+      "byte_identical": true
+    },
+    {
+      "source_path": "fem/elemMats2D.m",
+      "destination_path": "analysis/OlhoffM4Reconstruction/+frozen/fem/elemMats2D.m",
+      "sha256_source": "b8ae7c424d42f02390ebeb724592bf606ff9504f4be588810a58a1c4493bfba1",
+      "sha256_imported": "b8ae7c424d42f02390ebeb724592bf606ff9504f4be588810a58a1c4493bfba1",
+      "byte_identical": true
+    },
+    {
+      "source_path": "fem/massScale.m",
+      "destination_path": "analysis/OlhoffM4Reconstruction/+frozen/fem/massScale.m",
+      "sha256_source": "90ba72c3df056ed0e705bfcfb763c1ef631f48891d626b18c180d6702d683a63",
+      "sha256_imported": "90ba72c3df056ed0e705bfcfb763c1ef631f48891d626b18c180d6702d683a63",
+      "byte_identical": true
+    },
+    {
+      "source_path": "fem/model2D.m",
+      "destination_path": "analysis/OlhoffM4Reconstruction/+frozen/fem/model2D.m",
+      "sha256_source": "3cc19e1c52023225a1350d1c3e7623a9df68b01f52a74c82ddd4aac377ac6560",
+      "sha256_imported": "3cc19e1c52023225a1350d1c3e7623a9df68b01f52a74c82ddd4aac377ac6560",
+      "byte_identical": true
+    },
+    {
+      "source_path": "filter/applyFilter.m",
+      "destination_path": "analysis/OlhoffM4Reconstruction/+frozen/filter/applyFilter.m",
+      "sha256_source": "461ec7c7950b4d08e20c04d348d9d95674d3e42f1f167b05d3804c94abe057a7",
+      "sha256_imported": "461ec7c7950b4d08e20c04d348d9d95674d3e42f1f167b05d3804c94abe057a7",
+      "byte_identical": true
+    },
+    {
+      "source_path": "filter/prepFilter.m",
+      "destination_path": "analysis/OlhoffM4Reconstruction/+frozen/filter/prepFilter.m",
+      "sha256_source": "18ceb629c567fafcd90830c4eed3a4809fc2dda682d54cef1176b82bd6d47e1a",
+      "sha256_imported": "18ceb629c567fafcd90830c4eed3a4809fc2dda682d54cef1176b82bd6d47e1a",
+      "byte_identical": true
+    },
+    {
+      "source_path": "mma/mmasub.m",
+      "destination_path": "analysis/OlhoffM4Reconstruction/+frozen/mma/mmasub.m",
+      "sha256_source": "54c1680036e6effdb70bc32524b0c11c366cebed64d5a508c82553e871ff7660",
+      "sha256_imported": "54c1680036e6effdb70bc32524b0c11c366cebed64d5a508c82553e871ff7660",
+      "byte_identical": true
+    },
+    {
+      "source_path": "mma/subsolv.m",
+      "destination_path": "analysis/OlhoffM4Reconstruction/+frozen/mma/subsolv.m",
+      "sha256_source": "130033335ac5a21f31437a196bf8f37c5b97880a00e93cf2962a8a54bac2b98a",
+      "sha256_imported": "130033335ac5a21f31437a196bf8f37c5b97880a00e93cf2962a8a54bac2b98a",
+      "byte_identical": true
+    },
+    {
+      "source_path": "mma_published/README.md",
+      "destination_path": "analysis/OlhoffM4Reconstruction/+frozen/mma_published/README.md",
+      "sha256_source": "14ac696e5b319a19e44a11b4a5aa41d74c1b9915ff1ebf1435d5e046f637d1d0",
+      "sha256_imported": "14ac696e5b319a19e44a11b4a5aa41d74c1b9915ff1ebf1435d5e046f637d1d0",
+      "byte_identical": true
+    },
+    {
+      "source_path": "mma_published/mmasub.m",
+      "destination_path": "analysis/OlhoffM4Reconstruction/+frozen/mma_published/mmasub.m",
+      "sha256_source": "4507b73e3e44cdd6999b52c7a815569a4fc716749b1e23c2d0c228ff51da2edb",
+      "sha256_imported": "4507b73e3e44cdd6999b52c7a815569a4fc716749b1e23c2d0c228ff51da2edb",
+      "byte_identical": true
+    },
+    {
+      "source_path": "mma_published/subsolv.m",
+      "destination_path": "analysis/OlhoffM4Reconstruction/+frozen/mma_published/subsolv.m",
+      "sha256_source": "130033335ac5a21f31437a196bf8f37c5b97880a00e93cf2962a8a54bac2b98a",
+      "sha256_imported": "130033335ac5a21f31437a196bf8f37c5b97880a00e93cf2962a8a54bac2b98a",
+      "byte_identical": true
+    }
+  ],
+  "importing_repository": {
+    "path": "/Users/piotrek/Programming/topOpt4freqMax",
+    "git_head": "d0c78ca66f72b6041db908f808bd342621f5ced6",
+    "git_branch": "benchmark-methodology-r2",
+    "git_dirty_at_import": true
+  }
+}

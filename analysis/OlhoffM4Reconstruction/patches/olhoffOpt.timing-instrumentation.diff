@@ -1,0 +1,42 @@
+--- patches/olhoffOpt.m.orig	2026-09-04 13:42:17.419628855 +0200
++++ +frozen/algo/olhoffOpt.m	2026-09-04 13:42:29.223498280 +0200
+@@ -35,7 +35,13 @@
+ hist = struct('omega',[],'N',[],'beta',[],'nInner',[],'dxOuter',[], ...
+               'vol',[],'tEig',[],'tGrad',[],'tInner',[],'degen',[],'multJ',[], ...
+               'innerConv',[],'cumInner',[],'dxNorm2',[],'move',[],'gap12',[], ...
+-              'volErr',[],'dBeta',[],'stage',[]);
++              'volErr',[],'dBeta',[],'stage',[], ...
++              ... % BENCHMARK TIMING INSTRUMENTATION ONLY.  The complete delta
++              ... % from the audited source is patches/olhoffOpt.timing-instrumentation.diff.
++              ... % tOuter is the wall time of one complete outer iteration, inner
++              ... % solve included; it is recorded and never read back, so the
++              ... % trajectory is unchanged.
++              'tOuter',[]);
+ log = {};
+ cumInner = 0;
+ % Optional per-iteration diagnostic record (WP2B of the residual-discrepancy
+@@ -56,6 +62,8 @@
+ end
+ 
+ for outer = 1:cfg.maxOuter
++    tOuterTic = tic;   % BENCHMARK TIMING INSTRUMENTATION ONLY
++
+     % ---- step 1: FE analysis + multiplicity detection -------------------
+     te = tic;
+     [K,M] = assemble2D(mdl, rho, cfg.p, cfg.massInterp);
+@@ -238,6 +246,15 @@
+         otherwise
+             error('olhoffOpt:outerGuard','unknown outerGuard %s',cfg.outerGuard);
+     end
++    % BENCHMARK TIMING INSTRUMENTATION ONLY.  Placed after the convergence
++    % test and its guard so the recorded outer-iteration time covers every
++    % computational region of the iteration -- FE assembly, eigenproblem,
++    % modal processing, sensitivities, filtering, the step controller, the
++    % nested inner solve, the design update, bookkeeping and the convergence
++    % test.  The benchmark subtracts hist.tInner from it to obtain the
++    % outer-exclusive time.  Nothing reads it back.
++    hist.tOuter(outer) = toc(tOuterTic);
++
+     if convOuter
+         log{end+1} = sprintf('converged at outer iteration %d (||drho||_2 = %.3e, max|drho| = %.3e)',outer,dxNorm2,dxOuter); %#ok<AGROW>
+         break
