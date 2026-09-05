@@ -1,0 +1,53 @@
+% Conference performance table -- generated, do not edit by hand.
+% The Olhoff column is labelled "Du-Olhoff reconstruction (M4)" and must not be labelled "Olhoff 2007".
+\begin{table}[t]
+\centering
+\begin{tabular}{llrrrrrr}
+\hline
+Method & Mesh & Count 1 & Count 2 & Time 1 [s] & Time 2 [s] & Total [s] & $\omega_1$ \\
+\hline
+Proposed & $160\times20$ & 1 & 107 & 0.17 & 1.29 & 1.63 & 109.05 \\
+Yuksel & $160\times20$ & 121 & 123 & 1.48 & 2.21 & 4.01 & 157.28 \\
+Du-Olhoff reconstruction (M4) & $160\times20$ & 91 & 2241 & 2.67 & 129.12 & 131.83 & 169.50 \\
+Proposed & $240\times30$ & 1 & 236 & 0.21 & 6.19 & 6.64 & 108.78 \\
+Yuksel & $240\times30$ & 168 & 152 & 3.95 & 4.92 & 9.25 & 159.49 \\
+Du-Olhoff reconstruction (M4) & $240\times30$ & 104 & 2334 & 6.48 & 234.54 & 241.10 & 167.07 \\
+Proposed & $320\times40$ & 1 & 207 & 0.25 & 10.29 & 10.94 & 158.76 \\
+Yuksel & $320\times40$ & 252 & 320 & 10.17 & 16.88 & 27.59 & 160.75 \\
+Du-Olhoff reconstruction (M4) & $320\times40$ & 131 & 2614 & 14.73 & 367.22 & 382.08 & 165.95 \\
+Proposed & $400\times50$ & 1 & 182 & 0.34 & 15.18 & 15.96 & 159.52 \\
+Yuksel & $400\times50$ & 315 & 417 & 19.29 & 54.48 & 74.56 & 160.06 \\
+Du-Olhoff reconstruction (M4) & $400\times50$ & 139 & 2918 & 25.91 & 593.03 & 619.15 & 162.89 \\
+Proposed & $480\times60$ & 1 & 219 & 0.43 & 25.73 & 26.80 & 160.25 \\
+Yuksel & $480\times60$ & 586 & 615 & 53.23 & 70.23 & 124.52 & 160.60 \\
+Du-Olhoff reconstruction (M4) & $480\times60$ & 164 & 3463 & 46.32 & 983.93 & 1030.57 & 161.91 \\
+Proposed & $560\times70$ & 1 & 256 & 0.53 & 42.66 & 44.06 & 160.72 \\
+Yuksel & $560\times70$ & 833 & 771 & 104.04 & 117.22 & 222.67 & 160.39 \\
+Du-Olhoff reconstruction (M4) & $560\times70$ & 190 & 3922 & 73.34 & 1432.97 & 1506.78 & 161.03 \\
+Proposed & $640\times80$ & 1 & 309 & 0.67 & 68.50 & 70.28 & 160.85 \\
+Yuksel & $640\times80$ & 1000 & 1000 & 166.23 & 201.04 & 369.09 & 160.72 \\
+Du-Olhoff reconstruction (M4) & $640\times80$ & 199 & 4324 & 106.94 & 1882.67 & 1990.21 & 159.73 \\
+Proposed & $720\times90$ & 1 & 297 & 1.20 & 163.74 & 166.91 & 161.07 \\
+Yuksel & $720\times90$ & 1000 & 966 & 290.66 & 397.91 & 691.54 & 160.70 \\
+Du-Olhoff reconstruction (M4) & $720\times90$ & 223 & 4831 & 214.00 & 2492.62 & 2707.68 & 159.09 \\
+Proposed & $800\times100$ & 1 & 330 & 1.52 & 240.19 & 244.24 & 161.36 \\
+Yuksel & $800\times100$ & 1000 & 1000 & 364.69 & 512.20 & 880.54 & 160.88 \\
+Du-Olhoff reconstruction (M4) & $800\times100$ & 170 & 3713 & 197.96 & 2046.92 & 2246.20 & 153.30 \\
+\hline
+\end{tabular}
+\caption{Count/time columns represent method-native computational stages and are not mathematically identical across methods. Total wall time is the common performance quantity.
+Proposed: Count 1 = reference eigenanalysis solves (always 1, not an optimization iteration), Count 2 = SIMP iterations, Time 1 = eigenanalysis and preparation, Time 2 = SIMP. Yuksel: Count 1 and Count 2 are the Stage-1 and Stage-2 iteration counts, Time 1 and Time 2 the corresponding stage times. Du-Olhoff reconstruction (M4): Count 1 = outer iterations, Count 2 = cumulative nested MMA iterations, Time 1 = outer work excluding the nested MMA solve, Time 2 = nested MMA total. The two counts are never added.
+Du-Olhoff timings and iteration counts refer to the frozen reconstruction used in this study. Some continuation and inner-solver details are not uniquely specified by the original publication; therefore these values should be interpreted as representative measurements of this reconstruction rather than exact historical implementation timings.}
+\label{tab:conference-performance}
+\end{table}
+
+% Nested-scheme detail for the Du-Olhoff reconstruction (M4):
+%   160x20: 24.63 inner MMA iterations per outer, inner time share 97.9%
+%   240x30: 22.44 inner MMA iterations per outer, inner time share 97.3%
+%   320x40: 19.95 inner MMA iterations per outer, inner time share 96.1%
+%   400x50: 20.99 inner MMA iterations per outer, inner time share 95.8%
+%   480x60: 21.12 inner MMA iterations per outer, inner time share 95.5%
+%   560x70: 20.64 inner MMA iterations per outer, inner time share 95.1%
+%   640x80: 21.73 inner MMA iterations per outer, inner time share 94.6%
+%   720x90: 21.66 inner MMA iterations per outer, inner time share 92.1%
+%   800x100: 21.84 inner MMA iterations per outer, inner time share 91.1%

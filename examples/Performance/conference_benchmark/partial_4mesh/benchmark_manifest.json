@@ -1,0 +1,2026 @@
+{
+  "manifest_schema": "conference_performance_benchmark/1",
+  "generated_datetime": "2026-09-04T19:00:55+02:00",
+  "generated_by": "examples/Performance/performance_comparison.m",
+  "manifest_role": "OUTPUT. Generated from the runtime configuration. It is not a source of scientific settings and nothing reads it back.",
+  "configuration": {
+    "resolutions": [
+      [
+        160,
+        20
+      ],
+      [
+        240,
+        30
+      ],
+      [
+        320,
+        40
+      ],
+      [
+        400,
+        50
+      ]
+    ],
+    "methods": {
+      "proposed": true,
+      "yuksel": true,
+      "olhoff": true
+    },
+    "singleThread": true,
+    "runWarmup": true,
+    "runEvaluator": true,
+    "fitScaling": true,
+    "writeCSV": true,
+    "writeJSON": true,
+    "writeLaTeX": true,
+    "outputDir": "/Users/piotrek/Programming/topOpt4freqMax/examples/Performance/conference_benchmark/partial_4mesh",
+    "runLabel": "partial_4mesh",
+    "confirmLongCampaign": true,
+    "maxOuterOverride": [],
+    "timingTolAbs": 1E-6,
+    "timingTolRel": 1E-9,
+    "crosscheckTolRel": 0.05,
+    "scientificEvidence": true,
+    "performanceCampaign": false
+  },
+  "active_resolutions": [
+    [
+      160,
+      20
+    ],
+    [
+      240,
+      30
+    ],
+    [
+      320,
+      40
+    ],
+    [
+      400,
+      50
+    ]
+  ],
+  "active_resolutions_count": 4,
+  "active_methods": [
+    "proposed",
+    "yuksel",
+    "olhoff"
+  ],
+  "element_counts": [
+    3200,
+    7200,
+    12800,
+    20000
+  ],
+  "method_configurations": [
+    {
+      "meta": {
+        "name": "three-method study proposed 160x20",
+        "profile_id": "proposed_practical_move02_tol001",
+        "frozen_by": "analysis/three_method_parametric_study/results/profile_freeze_manifest.json",
+        "source_implementation": "analysis/ourApproach/Matlab/topopt_freq.m",
+        "threads_per_run": 1,
+        "output_dir": "/Users/piotrek/Programming/topOpt4freqMax/examples/Performance/conference_benchmark/partial_4mesh"
+      },
+      "benchmark": {
+        "enable_diagnostics": false,
+        "record_history": false,
+        "extend_beyond_native_stop": false
+      },
+      "domain": {
+        "shape": "rectangular",
+        "size": {
+          "length": 8,
+          "height": 1
+        },
+        "thickness": 1,
+        "mesh": {
+          "nelx": 160,
+          "nely": 20
+        },
+        "load_cases": {
+          "name": "proposed_mode1",
+          "factor": 1,
+          "loads": {
+            "type": "semi_harmonic",
+            "mode": 1,
+            "factor": 1
+          }
+        }
+      },
+      "material": {
+        "model": "plane_stress_isotropic",
+        "E": 1.0E+7,
+        "nu": 0.3,
+        "rho": 1
+      },
+      "bc": {
+        "supports": [
+          {
+            "type": "closest_point",
+            "location": [
+              0,
+              0.5
+            ],
+            "dofs": [
+              "ux",
+              "uy"
+            ]
+          },
+          {
+            "type": "closest_point",
+            "location": [
+              8,
+              0.5
+            ],
+            "dofs": [
+              "ux",
+              "uy"
+            ]
+          }
+        ]
+      },
+      "postprocessing": {
+        "visualize_live": false,
+        "visualize_quality": "regular",
+        "visualize_modes": {
+          "enabled": false,
+          "count": 3
+        },
+        "visualize_topology_modes": {
+          "enabled": false,
+          "count": 3
+        },
+        "write_correlation_table": false,
+        "save_snapshot_image": false,
+        "save_final_image": false,
+        "save_frequency_iterations": false
+      },
+      "void_material": {
+        "E_min_ratio": 1E-9,
+        "rho_min": 1E-9
+      },
+      "optimization": {
+        "approach": "ourApproach",
+        "optimizer": "OC",
+        "objective": "compliance",
+        "interpolation": "SIMP",
+        "volume_fraction": 0.5,
+        "penalization": 3,
+        "filter": {
+          "type": "sensitivity",
+          "heaviside": false,
+          "radius": 2,
+          "radius_units": "element",
+          "boundary_condition": "symmetric"
+        },
+        "move_limit": 0.2,
+        "max_iters": 2000,
+        "convergence_tol": 0.01,
+        "semi_harmonic_baseline": "solid",
+        "semi_harmonic_load_sensitivity": false,
+        "harmonic_normalize": false
+      }
+    },
+    {
+      "meta": {
+        "name": "three-method study proposed 240x30",
+        "profile_id": "proposed_practical_move02_tol001",
+        "frozen_by": "analysis/three_method_parametric_study/results/profile_freeze_manifest.json",
+        "source_implementation": "analysis/ourApproach/Matlab/topopt_freq.m",
+        "threads_per_run": 1,
+        "output_dir": "/Users/piotrek/Programming/topOpt4freqMax/examples/Performance/conference_benchmark/partial_4mesh"
+      },
+      "benchmark": {
+        "enable_diagnostics": false,
+        "record_history": false,
+        "extend_beyond_native_stop": false
+      },
+      "domain": {
+        "shape": "rectangular",
+        "size": {
+          "length": 8,
+          "height": 1
+        },
+        "thickness": 1,
+        "mesh": {
+          "nelx": 240,
+          "nely": 30
+        },
+        "load_cases": {
+          "name": "proposed_mode1",
+          "factor": 1,
+          "loads": {
+            "type": "semi_harmonic",
+            "mode": 1,
+            "factor": 1
+          }
+        }
+      },
+      "material": {
+        "model": "plane_stress_isotropic",
+        "E": 1.0E+7,
+        "nu": 0.3,
+        "rho": 1
+      },
+      "bc": {
+        "supports": [
+          {
+            "type": "closest_point",
+            "location": [
+              0,
+              0.5
+            ],
+            "dofs": [
+              "ux",
+              "uy"
+            ]
+          },
+          {
+            "type": "closest_point",
+            "location": [
+              8,
+              0.5
+            ],
+            "dofs": [
+              "ux",
+              "uy"
+            ]
+          }
+        ]
+      },
+      "postprocessing": {
+        "visualize_live": false,
+        "visualize_quality": "regular",
+        "visualize_modes": {
+          "enabled": false,
+          "count": 3
+        },
+        "visualize_topology_modes": {
+          "enabled": false,
+          "count": 3
+        },
+        "write_correlation_table": false,
+        "save_snapshot_image": false,
+        "save_final_image": false,
+        "save_frequency_iterations": false
+      },
+      "void_material": {
+        "E_min_ratio": 1E-9,
+        "rho_min": 1E-9
+      },
+      "optimization": {
+        "approach": "ourApproach",
+        "optimizer": "OC",
+        "objective": "compliance",
+        "interpolation": "SIMP",
+        "volume_fraction": 0.5,
+        "penalization": 3,
+        "filter": {
+          "type": "sensitivity",
+          "heaviside": false,
+          "radius": 2,
+          "radius_units": "element",
+          "boundary_condition": "symmetric"
+        },
+        "move_limit": 0.2,
+        "max_iters": 2000,
+        "convergence_tol": 0.01,
+        "semi_harmonic_baseline": "solid",
+        "semi_harmonic_load_sensitivity": false,
+        "harmonic_normalize": false
+      }
+    },
+    {
+      "meta": {
+        "name": "three-method study proposed 320x40",
+        "profile_id": "proposed_practical_move02_tol001",
+        "frozen_by": "analysis/three_method_parametric_study/results/profile_freeze_manifest.json",
+        "source_implementation": "analysis/ourApproach/Matlab/topopt_freq.m",
+        "threads_per_run": 1,
+        "output_dir": "/Users/piotrek/Programming/topOpt4freqMax/examples/Performance/conference_benchmark/partial_4mesh"
+      },
+      "benchmark": {
+        "enable_diagnostics": false,
+        "record_history": false,
+        "extend_beyond_native_stop": false
+      },
+      "domain": {
+        "shape": "rectangular",
+        "size": {
+          "length": 8,
+          "height": 1
+        },
+        "thickness": 1,
+        "mesh": {
+          "nelx": 320,
+          "nely": 40
+        },
+        "load_cases": {
+          "name": "proposed_mode1",
+          "factor": 1,
+          "loads": {
+            "type": "semi_harmonic",
+            "mode": 1,
+            "factor": 1
+          }
+        }
+      },
+      "material": {
+        "model": "plane_stress_isotropic",
+        "E": 1.0E+7,
+        "nu": 0.3,
+        "rho": 1
+      },
+      "bc": {
+        "supports": [
+          {
+            "type": "closest_point",
+            "location": [
+              0,
+              0.5
+            ],
+            "dofs": [
+              "ux",
+              "uy"
+            ]
+          },
+          {
+            "type": "closest_point",
+            "location": [
+              8,
+              0.5
+            ],
+            "dofs": [
+              "ux",
+              "uy"
+            ]
+          }
+        ]
+      },
+      "postprocessing": {
+        "visualize_live": false,
+        "visualize_quality": "regular",
+        "visualize_modes": {
+          "enabled": false,
+          "count": 3
+        },
+        "visualize_topology_modes": {
+          "enabled": false,
+          "count": 3
+        },
+        "write_correlation_table": false,
+        "save_snapshot_image": false,
+        "save_final_image": false,
+        "save_frequency_iterations": false
+      },
+      "void_material": {
+        "E_min_ratio": 1E-9,
+        "rho_min": 1E-9
+      },
+      "optimization": {
+        "approach": "ourApproach",
+        "optimizer": "OC",
+        "objective": "compliance",
+        "interpolation": "SIMP",
+        "volume_fraction": 0.5,
+        "penalization": 3,
+        "filter": {
+          "type": "sensitivity",
+          "heaviside": false,
+          "radius": 2,
+          "radius_units": "element",
+          "boundary_condition": "symmetric"
+        },
+        "move_limit": 0.2,
+        "max_iters": 2000,
+        "convergence_tol": 0.01,
+        "semi_harmonic_baseline": "solid",
+        "semi_harmonic_load_sensitivity": false,
+        "harmonic_normalize": false
+      }
+    },
+    {
+      "meta": {
+        "name": "three-method study proposed 400x50",
+        "profile_id": "proposed_practical_move02_tol001",
+        "frozen_by": "analysis/three_method_parametric_study/results/profile_freeze_manifest.json",
+        "source_implementation": "analysis/ourApproach/Matlab/topopt_freq.m",
+        "threads_per_run": 1,
+        "output_dir": "/Users/piotrek/Programming/topOpt4freqMax/examples/Performance/conference_benchmark/partial_4mesh"
+      },
+      "benchmark": {
+        "enable_diagnostics": false,
+        "record_history": false,
+        "extend_beyond_native_stop": false
+      },
+      "domain": {
+        "shape": "rectangular",
+        "size": {
+          "length": 8,
+          "height": 1
+        },
+        "thickness": 1,
+        "mesh": {
+          "nelx": 400,
+          "nely": 50
+        },
+        "load_cases": {
+          "name": "proposed_mode1",
+          "factor": 1,
+          "loads": {
+            "type": "semi_harmonic",
+            "mode": 1,
+            "factor": 1
+          }
+        }
+      },
+      "material": {
+        "model": "plane_stress_isotropic",
+        "E": 1.0E+7,
+        "nu": 0.3,
+        "rho": 1
+      },
+      "bc": {
+        "supports": [
+          {
+            "type": "closest_point",
+            "location": [
+              0,
+              0.5
+            ],
+            "dofs": [
+              "ux",
+              "uy"
+            ]
+          },
+          {
+            "type": "closest_point",
+            "location": [
+              8,
+              0.5
+            ],
+            "dofs": [
+              "ux",
+              "uy"
+            ]
+          }
+        ]
+      },
+      "postprocessing": {
+        "visualize_live": false,
+        "visualize_quality": "regular",
+        "visualize_modes": {
+          "enabled": false,
+          "count": 3
+        },
+        "visualize_topology_modes": {
+          "enabled": false,
+          "count": 3
+        },
+        "write_correlation_table": false,
+        "save_snapshot_image": false,
+        "save_final_image": false,
+        "save_frequency_iterations": false
+      },
+      "void_material": {
+        "E_min_ratio": 1E-9,
+        "rho_min": 1E-9
+      },
+      "optimization": {
+        "approach": "ourApproach",
+        "optimizer": "OC",
+        "objective": "compliance",
+        "interpolation": "SIMP",
+        "volume_fraction": 0.5,
+        "penalization": 3,
+        "filter": {
+          "type": "sensitivity",
+          "heaviside": false,
+          "radius": 2,
+          "radius_units": "element",
+          "boundary_condition": "symmetric"
+        },
+        "move_limit": 0.2,
+        "max_iters": 2000,
+        "convergence_tol": 0.01,
+        "semi_harmonic_baseline": "solid",
+        "semi_harmonic_load_sensitivity": false,
+        "harmonic_normalize": false
+      }
+    },
+    {
+      "meta": {
+        "name": "three-method study yuksel 160x20",
+        "profile_id": "yuksel_practical_move01_tol001",
+        "frozen_by": "analysis/three_method_parametric_study/results/profile_freeze_manifest.json",
+        "source_implementation": "analysis/YukselApproach/Matlab/top99neo_inertial_freq.m",
+        "threads_per_run": 1,
+        "output_dir": "/Users/piotrek/Programming/topOpt4freqMax/examples/Performance/conference_benchmark/partial_4mesh"
+      },
+      "benchmark": {
+        "enable_diagnostics": false,
+        "record_history": false,
+        "extend_beyond_native_stop": false
+      },
+      "domain": {
+        "shape": "rectangular",
+        "size": {
+          "length": 8,
+          "height": 1
+        },
+        "thickness": 1,
+        "mesh": {
+          "nelx": 160,
+          "nely": 20
+        }
+      },
+      "material": {
+        "model": "plane_stress_isotropic",
+        "E": 1.0E+7,
+        "nu": 0.3,
+        "rho": 1
+      },
+      "bc": {
+        "supports": [
+          {
+            "type": "closest_point",
+            "location": [
+              0,
+              0.5
+            ],
+            "dofs": [
+              "ux",
+              "uy"
+            ]
+          },
+          {
+            "type": "closest_point",
+            "location": [
+              8,
+              0.5
+            ],
+            "dofs": [
+              "ux",
+              "uy"
+            ]
+          }
+        ]
+      },
+      "postprocessing": {
+        "visualize_live": false,
+        "visualize_quality": "regular",
+        "visualize_modes": {
+          "enabled": false,
+          "count": 3
+        },
+        "visualize_topology_modes": {
+          "enabled": false,
+          "count": 3
+        },
+        "write_correlation_table": false,
+        "save_snapshot_image": false,
+        "save_final_image": false,
+        "save_frequency_iterations": false
+      },
+      "void_material": {
+        "E_min_ratio": 1E-9,
+        "rho_min": 1E-9
+      },
+      "optimization": {
+        "approach": "Yuksel",
+        "optimizer": "OC",
+        "objective": "compliance",
+        "interpolation": "SIMP",
+        "volume_fraction": 0.5,
+        "penalization": 3,
+        "filter": {
+          "type": "sensitivity",
+          "heaviside": false,
+          "radius": 2.5,
+          "radius_units": "element",
+          "boundary_condition": "symmetric"
+        },
+        "move_limit": 0.1,
+        "max_iters": 1000,
+        "convergence_tol": 0.01,
+        "yuksel": {
+          "stage1_max_iters": 1000,
+          "stage1_tol": 0.01,
+          "stage2_tol": 0.01,
+          "stage1_budget_independent": false
+        }
+      }
+    },
+    {
+      "meta": {
+        "name": "three-method study yuksel 240x30",
+        "profile_id": "yuksel_practical_move01_tol001",
+        "frozen_by": "analysis/three_method_parametric_study/results/profile_freeze_manifest.json",
+        "source_implementation": "analysis/YukselApproach/Matlab/top99neo_inertial_freq.m",
+        "threads_per_run": 1,
+        "output_dir": "/Users/piotrek/Programming/topOpt4freqMax/examples/Performance/conference_benchmark/partial_4mesh"
+      },
+      "benchmark": {
+        "enable_diagnostics": false,
+        "record_history": false,
+        "extend_beyond_native_stop": false
+      },
+      "domain": {
+        "shape": "rectangular",
+        "size": {
+          "length": 8,
+          "height": 1
+        },
+        "thickness": 1,
+        "mesh": {
+          "nelx": 240,
+          "nely": 30
+        }
+      },
+      "material": {
+        "model": "plane_stress_isotropic",
+        "E": 1.0E+7,
+        "nu": 0.3,
+        "rho": 1
+      },
+      "bc": {
+        "supports": [
+          {
+            "type": "closest_point",
+            "location": [
+              0,
+              0.5
+            ],
+            "dofs": [
+              "ux",
+              "uy"
+            ]
+          },
+          {
+            "type": "closest_point",
+            "location": [
+              8,
+              0.5
+            ],
+            "dofs": [
+              "ux",
+              "uy"
+            ]
+          }
+        ]
+      },
+      "postprocessing": {
+        "visualize_live": false,
+        "visualize_quality": "regular",
+        "visualize_modes": {
+          "enabled": false,
+          "count": 3
+        },
+        "visualize_topology_modes": {
+          "enabled": false,
+          "count": 3
+        },
+        "write_correlation_table": false,
+        "save_snapshot_image": false,
+        "save_final_image": false,
+        "save_frequency_iterations": false
+      },
+      "void_material": {
+        "E_min_ratio": 1E-9,
+        "rho_min": 1E-9
+      },
+      "optimization": {
+        "approach": "Yuksel",
+        "optimizer": "OC",
+        "objective": "compliance",
+        "interpolation": "SIMP",
+        "volume_fraction": 0.5,
+        "penalization": 3,
+        "filter": {
+          "type": "sensitivity",
+          "heaviside": false,
+          "radius": 2.5,
+          "radius_units": "element",
+          "boundary_condition": "symmetric"
+        },
+        "move_limit": 0.1,
+        "max_iters": 1000,
+        "convergence_tol": 0.01,
+        "yuksel": {
+          "stage1_max_iters": 1000,
+          "stage1_tol": 0.01,
+          "stage2_tol": 0.01,
+          "stage1_budget_independent": false
+        }
+      }
+    },
+    {
+      "meta": {
+        "name": "three-method study yuksel 320x40",
+        "profile_id": "yuksel_practical_move01_tol001",
+        "frozen_by": "analysis/three_method_parametric_study/results/profile_freeze_manifest.json",
+        "source_implementation": "analysis/YukselApproach/Matlab/top99neo_inertial_freq.m",
+        "threads_per_run": 1,
+        "output_dir": "/Users/piotrek/Programming/topOpt4freqMax/examples/Performance/conference_benchmark/partial_4mesh"
+      },
+      "benchmark": {
+        "enable_diagnostics": false,
+        "record_history": false,
+        "extend_beyond_native_stop": false
+      },
+      "domain": {
+        "shape": "rectangular",
+        "size": {
+          "length": 8,
+          "height": 1
+        },
+        "thickness": 1,
+        "mesh": {
+          "nelx": 320,
+          "nely": 40
+        }
+      },
+      "material": {
+        "model": "plane_stress_isotropic",
+        "E": 1.0E+7,
+        "nu": 0.3,
+        "rho": 1
+      },
+      "bc": {
+        "supports": [
+          {
+            "type": "closest_point",
+            "location": [
+              0,
+              0.5
+            ],
+            "dofs": [
+              "ux",
+              "uy"
+            ]
+          },
+          {
+            "type": "closest_point",
+            "location": [
+              8,
+              0.5
+            ],
+            "dofs": [
+              "ux",
+              "uy"
+            ]
+          }
+        ]
+      },
+      "postprocessing": {
+        "visualize_live": false,
+        "visualize_quality": "regular",
+        "visualize_modes": {
+          "enabled": false,
+          "count": 3
+        },
+        "visualize_topology_modes": {
+          "enabled": false,
+          "count": 3
+        },
+        "write_correlation_table": false,
+        "save_snapshot_image": false,
+        "save_final_image": false,
+        "save_frequency_iterations": false
+      },
+      "void_material": {
+        "E_min_ratio": 1E-9,
+        "rho_min": 1E-9
+      },
+      "optimization": {
+        "approach": "Yuksel",
+        "optimizer": "OC",
+        "objective": "compliance",
+        "interpolation": "SIMP",
+        "volume_fraction": 0.5,
+        "penalization": 3,
+        "filter": {
+          "type": "sensitivity",
+          "heaviside": false,
+          "radius": 2.5,
+          "radius_units": "element",
+          "boundary_condition": "symmetric"
+        },
+        "move_limit": 0.1,
+        "max_iters": 1000,
+        "convergence_tol": 0.01,
+        "yuksel": {
+          "stage1_max_iters": 1000,
+          "stage1_tol": 0.01,
+          "stage2_tol": 0.01,
+          "stage1_budget_independent": false
+        }
+      }
+    },
+    {
+      "meta": {
+        "name": "three-method study yuksel 400x50",
+        "profile_id": "yuksel_practical_move01_tol001",
+        "frozen_by": "analysis/three_method_parametric_study/results/profile_freeze_manifest.json",
+        "source_implementation": "analysis/YukselApproach/Matlab/top99neo_inertial_freq.m",
+        "threads_per_run": 1,
+        "output_dir": "/Users/piotrek/Programming/topOpt4freqMax/examples/Performance/conference_benchmark/partial_4mesh"
+      },
+      "benchmark": {
+        "enable_diagnostics": false,
+        "record_history": false,
+        "extend_beyond_native_stop": false
+      },
+      "domain": {
+        "shape": "rectangular",
+        "size": {
+          "length": 8,
+          "height": 1
+        },
+        "thickness": 1,
+        "mesh": {
+          "nelx": 400,
+          "nely": 50
+        }
+      },
+      "material": {
+        "model": "plane_stress_isotropic",
+        "E": 1.0E+7,
+        "nu": 0.3,
+        "rho": 1
+      },
+      "bc": {
+        "supports": [
+          {
+            "type": "closest_point",
+            "location": [
+              0,
+              0.5
+            ],
+            "dofs": [
+              "ux",
+              "uy"
+            ]
+          },
+          {
+            "type": "closest_point",
+            "location": [
+              8,
+              0.5
+            ],
+            "dofs": [
+              "ux",
+              "uy"
+            ]
+          }
+        ]
+      },
+      "postprocessing": {
+        "visualize_live": false,
+        "visualize_quality": "regular",
+        "visualize_modes": {
+          "enabled": false,
+          "count": 3
+        },
+        "visualize_topology_modes": {
+          "enabled": false,
+          "count": 3
+        },
+        "write_correlation_table": false,
+        "save_snapshot_image": false,
+        "save_final_image": false,
+        "save_frequency_iterations": false
+      },
+      "void_material": {
+        "E_min_ratio": 1E-9,
+        "rho_min": 1E-9
+      },
+      "optimization": {
+        "approach": "Yuksel",
+        "optimizer": "OC",
+        "objective": "compliance",
+        "interpolation": "SIMP",
+        "volume_fraction": 0.5,
+        "penalization": 3,
+        "filter": {
+          "type": "sensitivity",
+          "heaviside": false,
+          "radius": 2.5,
+          "radius_units": "element",
+          "boundary_condition": "symmetric"
+        },
+        "move_limit": 0.1,
+        "max_iters": 1000,
+        "convergence_tol": 0.01,
+        "yuksel": {
+          "stage1_max_iters": 1000,
+          "stage1_tol": 0.01,
+          "stage2_tol": 0.01,
+          "stage1_budget_independent": false
+        }
+      }
+    },
+    {
+      "a": 8,
+      "b": 1,
+      "t": 1,
+      "E": 1.0E+7,
+      "nu": 0.3,
+      "rhom": 1,
+      "nelx": 160,
+      "nely": 20,
+      "bc": "a",
+      "support": "mid",
+      "axial": "both",
+      "elemType": "Q4",
+      "massType": "consistent",
+      "p": 3,
+      "massInterp": "4b",
+      "rhomin": 0.001,
+      "rho0": 0.5,
+      "volfrac": 0.5,
+      "n": 1,
+      "Nmax": 4,
+      "rminEl": null,
+      "rminPhys": 0.06,
+      "filterMode": "all",
+      "tolMult": 0.05,
+      "multRule": "subspace",
+      "subN": 2,
+      "move": 0.04,
+      "moveFamily": "S2",
+      "moveMin": 0.002,
+      "s1Gamma": 0.97,
+      "s1AfterCoal": true,
+      "s2Levels": [
+        0.04,
+        0.02,
+        0.01,
+        0.005
+      ],
+      "s2Window": 10,
+      "s2Tol": 0.005,
+      "s3Lo": 0.3,
+      "s3Hi": 0.7,
+      "s3Down": 0.7,
+      "s3Up": 1.1,
+      "offDiag": true,
+      "innerSolver": "mma",
+      "mmaVariant": "published",
+      "innerVar": "drho",
+      "maxInner": 500,
+      "tolInner": 0.05,
+      "minInner": 5,
+      "maxOuter": 400,
+      "tolOuter": 0.05,
+      "outerNorm": "l2",
+      "outerGuard": "settledmove",
+      "solver": "eigs",
+      "threads": 1,
+      "verbose": false,
+      "diag": false,
+      "name": "OLHOFF_M4_160x20"
+    },
+    {
+      "a": 8,
+      "b": 1,
+      "t": 1,
+      "E": 1.0E+7,
+      "nu": 0.3,
+      "rhom": 1,
+      "nelx": 240,
+      "nely": 30,
+      "bc": "a",
+      "support": "mid",
+      "axial": "both",
+      "elemType": "Q4",
+      "massType": "consistent",
+      "p": 3,
+      "massInterp": "4b",
+      "rhomin": 0.001,
+      "rho0": 0.5,
+      "volfrac": 0.5,
+      "n": 1,
+      "Nmax": 4,
+      "rminEl": null,
+      "rminPhys": 0.06,
+      "filterMode": "all",
+      "tolMult": 0.05,
+      "multRule": "subspace",
+      "subN": 2,
+      "move": 0.04,
+      "moveFamily": "S2",
+      "moveMin": 0.002,
+      "s1Gamma": 0.97,
+      "s1AfterCoal": true,
+      "s2Levels": [
+        0.04,
+        0.02,
+        0.01,
+        0.005
+      ],
+      "s2Window": 10,
+      "s2Tol": 0.005,
+      "s3Lo": 0.3,
+      "s3Hi": 0.7,
+      "s3Down": 0.7,
+      "s3Up": 1.1,
+      "offDiag": true,
+      "innerSolver": "mma",
+      "mmaVariant": "published",
+      "innerVar": "drho",
+      "maxInner": 500,
+      "tolInner": 0.05,
+      "minInner": 5,
+      "maxOuter": 400,
+      "tolOuter": 0.075000000000000011,
+      "outerNorm": "l2",
+      "outerGuard": "settledmove",
+      "solver": "eigs",
+      "threads": 1,
+      "verbose": false,
+      "diag": false,
+      "name": "OLHOFF_M4_240x30"
+    },
+    {
+      "a": 8,
+      "b": 1,
+      "t": 1,
+      "E": 1.0E+7,
+      "nu": 0.3,
+      "rhom": 1,
+      "nelx": 320,
+      "nely": 40,
+      "bc": "a",
+      "support": "mid",
+      "axial": "both",
+      "elemType": "Q4",
+      "massType": "consistent",
+      "p": 3,
+      "massInterp": "4b",
+      "rhomin": 0.001,
+      "rho0": 0.5,
+      "volfrac": 0.5,
+      "n": 1,
+      "Nmax": 4,
+      "rminEl": null,
+      "rminPhys": 0.06,
+      "filterMode": "all",
+      "tolMult": 0.05,
+      "multRule": "subspace",
+      "subN": 2,
+      "move": 0.04,
+      "moveFamily": "S2",
+      "moveMin": 0.002,
+      "s1Gamma": 0.97,
+      "s1AfterCoal": true,
+      "s2Levels": [
+        0.04,
+        0.02,
+        0.01,
+        0.005
+      ],
+      "s2Window": 10,
+      "s2Tol": 0.005,
+      "s3Lo": 0.3,
+      "s3Hi": 0.7,
+      "s3Down": 0.7,
+      "s3Up": 1.1,
+      "offDiag": true,
+      "innerSolver": "mma",
+      "mmaVariant": "published",
+      "innerVar": "drho",
+      "maxInner": 500,
+      "tolInner": 0.05,
+      "minInner": 5,
+      "maxOuter": 400,
+      "tolOuter": 0.1,
+      "outerNorm": "l2",
+      "outerGuard": "settledmove",
+      "solver": "eigs",
+      "threads": 1,
+      "verbose": false,
+      "diag": false,
+      "name": "OLHOFF_M4_320x40"
+    },
+    {
+      "a": 8,
+      "b": 1,
+      "t": 1,
+      "E": 1.0E+7,
+      "nu": 0.3,
+      "rhom": 1,
+      "nelx": 400,
+      "nely": 50,
+      "bc": "a",
+      "support": "mid",
+      "axial": "both",
+      "elemType": "Q4",
+      "massType": "consistent",
+      "p": 3,
+      "massInterp": "4b",
+      "rhomin": 0.001,
+      "rho0": 0.5,
+      "volfrac": 0.5,
+      "n": 1,
+      "Nmax": 4,
+      "rminEl": null,
+      "rminPhys": 0.06,
+      "filterMode": "all",
+      "tolMult": 0.05,
+      "multRule": "subspace",
+      "subN": 2,
+      "move": 0.04,
+      "moveFamily": "S2",
+      "moveMin": 0.002,
+      "s1Gamma": 0.97,
+      "s1AfterCoal": true,
+      "s2Levels": [
+        0.04,
+        0.02,
+        0.01,
+        0.005
+      ],
+      "s2Window": 10,
+      "s2Tol": 0.005,
+      "s3Lo": 0.3,
+      "s3Hi": 0.7,
+      "s3Down": 0.7,
+      "s3Up": 1.1,
+      "offDiag": true,
+      "innerSolver": "mma",
+      "mmaVariant": "published",
+      "innerVar": "drho",
+      "maxInner": 500,
+      "tolInner": 0.05,
+      "minInner": 5,
+      "maxOuter": 400,
+      "tolOuter": 0.125,
+      "outerNorm": "l2",
+      "outerGuard": "settledmove",
+      "solver": "eigs",
+      "threads": 1,
+      "verbose": false,
+      "diag": false,
+      "name": "OLHOFF_M4_400x50"
+    }
+  ],
+  "resolved_implementations": {
+    "olhoff": [
+      {
+        "name": "applyFilter",
+        "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffM4Reconstruction/+frozen/filter/applyFilter.m"
+      },
+      {
+        "name": "assemble2D",
+        "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffM4Reconstruction/+frozen/fem/assemble2D.m"
+      },
+      {
+        "name": "classifyModes",
+        "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffM4Reconstruction/+frozen/fem/classifyModes.m"
+      },
+      {
+        "name": "defaultCfg",
+        "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffM4Reconstruction/+frozen/algo/defaultCfg.m"
+      },
+      {
+        "name": "deltaLambda",
+        "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffM4Reconstruction/+frozen/algo/deltaLambda.m"
+      },
+      {
+        "name": "eigSolve",
+        "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffM4Reconstruction/+frozen/fem/eigSolve.m"
+      },
+      {
+        "name": "elemMats2D",
+        "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffM4Reconstruction/+frozen/fem/elemMats2D.m"
+      },
+      {
+        "name": "genGrad",
+        "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffM4Reconstruction/+frozen/algo/genGrad.m"
+      },
+      {
+        "name": "innerLoop",
+        "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffM4Reconstruction/+frozen/algo/innerLoop.m"
+      },
+      {
+        "name": "innerLoopLP",
+        "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffM4Reconstruction/+frozen/algo/innerLoopLP.m"
+      },
+      {
+        "name": "innerLoopRho",
+        "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffM4Reconstruction/+frozen/algo/innerLoopRho.m"
+      },
+      {
+        "name": "massScale",
+        "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffM4Reconstruction/+frozen/fem/massScale.m"
+      },
+      {
+        "name": "mmasub",
+        "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffM4Reconstruction/+frozen/mma_published/mmasub.m"
+      },
+      {
+        "name": "model2D",
+        "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffM4Reconstruction/+frozen/fem/model2D.m"
+      },
+      {
+        "name": "moveControl",
+        "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffM4Reconstruction/+frozen/algo/moveControl.m"
+      },
+      {
+        "name": "multRule",
+        "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffM4Reconstruction/+frozen/algo/multRule.m"
+      },
+      {
+        "name": "olhoffOpt",
+        "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffM4Reconstruction/+frozen/algo/olhoffOpt.m"
+      },
+      {
+        "name": "prepFilter",
+        "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffM4Reconstruction/+frozen/filter/prepFilter.m"
+      },
+      {
+        "name": "subsolv",
+        "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffM4Reconstruction/+frozen/mma_published/subsolv.m"
+      },
+      {
+        "name": "useMMA",
+        "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffM4Reconstruction/+frozen/algo/useMMA.m"
+      }
+    ],
+    "run_topopt_from_json": "/Users/piotrek/Programming/topOpt4freqMax/tools/Matlab/run_topopt_from_json.m",
+    "study_evaluate_design": "/Users/piotrek/Programming/topOpt4freqMax/analysis/three_method_parametric_study/study_evaluate_design.m",
+    "study_base_config": "/Users/piotrek/Programming/topOpt4freqMax/analysis/three_method_parametric_study/study_base_config.m"
+  },
+  "source_hashes": {
+    "examples_Performance_performance_comparison_m": {
+      "path": "examples/Performance/performance_comparison.m",
+      "sha256": "76c2c21ff408f4d35338a42ede75902733263756f4b97ab0ca16fcfec9f70b7b"
+    },
+    "examples_Performance_conference_bench_confbench_method_config_m": {
+      "path": "examples/Performance/conference_bench/confbench_method_config.m",
+      "sha256": "472bfaaddf92c285d7f1908a7a59f4713fa4fdbe952c242a70016fb2df89b5ce"
+    },
+    "examples_Performance_conference_bench_confbench_run_case_m": {
+      "path": "examples/Performance/conference_bench/confbench_run_case.m",
+      "sha256": "26058fcd0c8bcf488953dba0c93096141cb75854052a72c965b1580bd817dbe3"
+    },
+    "examples_Performance_conference_bench_confbench_preflight_m": {
+      "path": "examples/Performance/conference_bench/confbench_preflight.m",
+      "sha256": "17c3037a169060ee0c9ff9a39a375d07f349bc7464132989c1fad977b0d7b49a"
+    },
+    "examples_Performance_conference_bench_confbench_manifest_m": {
+      "path": "examples/Performance/conference_bench/confbench_manifest.m",
+      "sha256": "0a88e1d42560758c5884c90a836f2b7d44b03fefc836d2a61be8e8119e13e6d1"
+    },
+    "examples_Performance_conference_bench_confbench_export_m": {
+      "path": "examples/Performance/conference_bench/confbench_export.m",
+      "sha256": "e03ebd19dac50cf4b19ac4c916b9956d62409c17d043925bc37db073397e1afb"
+    },
+    "examples_Performance_conference_bench_confbench_timing_schema_m": {
+      "path": "examples/Performance/conference_bench/confbench_timing_schema.m",
+      "sha256": "7c06506f8dc9eb1f76776718ad4388601af4917a941dd8168c25884d3adee6e0"
+    },
+    "examples_Performance_conference_bench_confbench_caveats_m": {
+      "path": "examples/Performance/conference_bench/confbench_caveats.m",
+      "sha256": "f171121cd66554a3fec17ee104764c97077ef1d3a34d374a450e64fce9bcde78"
+    },
+    "examples_Performance_conference_bench_confbench_scaling_fit_m": {
+      "path": "examples/Performance/conference_bench/confbench_scaling_fit.m",
+      "sha256": "4856b54331ab1cef8ebf9f79da1d7f6e5fef76c483b4f3bfb178d6e0dad85256"
+    },
+    "analysis_OlhoffM4Reconstruction_olhoffm4_config_m": {
+      "path": "analysis/OlhoffM4Reconstruction/olhoffm4_config.m",
+      "sha256": "49106f8448c010aff87122e391a1a668ec1bb13c2bab940ab98f1accd423393e"
+    },
+    "analysis_OlhoffM4Reconstruction_olhoffm4_run_m": {
+      "path": "analysis/OlhoffM4Reconstruction/olhoffm4_run.m",
+      "sha256": "519e3ed1c440112c86ca3c877b8b5ba439de9769342dec30f99e2fd45a4aade1"
+    },
+    "analysis_OlhoffM4Reconstruction_olhoffm4_paths_m": {
+      "path": "analysis/OlhoffM4Reconstruction/olhoffm4_paths.m",
+      "sha256": "ba42a2631735661f4ec88568b8f73f34aa4701ba29754b43103f44ddb8706afe"
+    },
+    "analysis_ourApproach_Matlab_topopt_freq_m": {
+      "path": "analysis/ourApproach/Matlab/topopt_freq.m",
+      "sha256": "284630992697de9c565aa511cbfd4389d4464e951e23436927bd0e150a53c09b"
+    },
+    "analysis_YukselApproach_Matlab_top99neo_inertial_freq_m": {
+      "path": "analysis/YukselApproach/Matlab/top99neo_inertial_freq.m",
+      "sha256": "5afc3d16b4ed6af05793df461b541ed3b2ea62a6da8836f38301a9a3917e6ba2"
+    },
+    "tools_Matlab_run_topopt_from_json_m": {
+      "path": "tools/Matlab/run_topopt_from_json.m",
+      "sha256": "3418b25e1c970041e5c28d0c58b58d959c47f239a2132bd90314ff9b72550a2b"
+    },
+    "analysis_three_method_parametric_study_study_base_config_m": {
+      "path": "analysis/three_method_parametric_study/study_base_config.m",
+      "sha256": "2b3903144e1f2cd69795a1d24e1e93105e3ea89768c8f5f3aa7553dddeda39ba"
+    },
+    "analysis_three_method_parametric_study_study_evaluate_design_m": {
+      "path": "analysis/three_method_parametric_study/study_evaluate_design.m",
+      "sha256": "e14a21efe0bb2d9b9d7f3187b4c3f671ec089f6ff96773074b8f3b56cacd79e9"
+    },
+    "analysis_three_method_parametric_study_results_profile_freeze_manifest_json": {
+      "path": "analysis/three_method_parametric_study/results/profile_freeze_manifest.json",
+      "sha256": "b55e31d87d18e90e8c0b8d278bd4111d494610b62f253194ea16cfcf78252eca"
+    }
+  },
+  "olhoff_import": {
+    "namespace": "analysis/OlhoffM4Reconstruction",
+    "import_manifest": "analysis/OlhoffM4Reconstruction/IMPORT_MANIFEST.json",
+    "import_manifest_sha256": "49a9110d9f9b308e54bacf57fa567900a991eb2db7d9ade234d7a7be82fd95f7",
+    "source_repository": "/Users/piotrek/Programming/Matlab/Olhoff",
+    "import_datetime": "2026-09-04T13:43:04.285116+02:00",
+    "epistemic_status": {
+      "label": "Du-Olhoff reconstruction (M4)",
+      "must_not_be_labelled": "Olhoff 2007",
+      "statement": "M4 is a RECONSTRUCTION of the published nested formulation, not a claimed exact historical implementation. Numerical continuation and inner convergence details are incompletely specified in the original publication."
+    },
+    "declared_modifications": [
+      "+frozen/algo/olhoffOpt.m"
+    ],
+    "files": [
+      {
+        "destination_path": "analysis/OlhoffM4Reconstruction/+frozen/algo/defaultCfg.m",
+        "sha256_now": "dd8f1cc7c19d41dfb4dde989ddd40a3dbfd733fecb622f43275144c359a6b911",
+        "sha256_at_import": "dd8f1cc7c19d41dfb4dde989ddd40a3dbfd733fecb622f43275144c359a6b911",
+        "match": true
+      },
+      {
+        "destination_path": "analysis/OlhoffM4Reconstruction/+frozen/algo/deltaLambda.m",
+        "sha256_now": "101519fcdcc2175d7d2aa135d919ad0a0efaa24cbb3edd7761d8f27b9b504038",
+        "sha256_at_import": "101519fcdcc2175d7d2aa135d919ad0a0efaa24cbb3edd7761d8f27b9b504038",
+        "match": true
+      },
+      {
+        "destination_path": "analysis/OlhoffM4Reconstruction/+frozen/algo/genGrad.m",
+        "sha256_now": "13f2ab8541b2f626e340a592b99730ee4cba101e4f978a214dd7227adaeb5208",
+        "sha256_at_import": "13f2ab8541b2f626e340a592b99730ee4cba101e4f978a214dd7227adaeb5208",
+        "match": true
+      },
+      {
+        "destination_path": "analysis/OlhoffM4Reconstruction/+frozen/algo/innerLoop.m",
+        "sha256_now": "9ec33d7dcbabf4df905089b57a03af140ca9a2f0b43902ad8f75962ae756ca6b",
+        "sha256_at_import": "9ec33d7dcbabf4df905089b57a03af140ca9a2f0b43902ad8f75962ae756ca6b",
+        "match": true
+      },
+      {
+        "destination_path": "analysis/OlhoffM4Reconstruction/+frozen/algo/innerLoopLP.m",
+        "sha256_now": "7724753c02f84d6009c3998f758d5b3f9c5144ad39ca6f470584a2c99e089465",
+        "sha256_at_import": "7724753c02f84d6009c3998f758d5b3f9c5144ad39ca6f470584a2c99e089465",
+        "match": true
+      },
+      {
+        "destination_path": "analysis/OlhoffM4Reconstruction/+frozen/algo/innerLoopRho.m",
+        "sha256_now": "aded1849467e93201d2a8c78effaa303300e71da4e192cefad4649f55cab35e5",
+        "sha256_at_import": "aded1849467e93201d2a8c78effaa303300e71da4e192cefad4649f55cab35e5",
+        "match": true
+      },
+      {
+        "destination_path": "analysis/OlhoffM4Reconstruction/+frozen/algo/moveControl.m",
+        "sha256_now": "76ff15824f205db8d5a6a4b1ef4890f7320e450dc0bd1e6f4989ad794791c80d",
+        "sha256_at_import": "76ff15824f205db8d5a6a4b1ef4890f7320e450dc0bd1e6f4989ad794791c80d",
+        "match": true
+      },
+      {
+        "destination_path": "analysis/OlhoffM4Reconstruction/+frozen/algo/multRule.m",
+        "sha256_now": "c8ee926c2cf985b79e634b99116bbd37b96d9a1f9b26b51c4bb88ee31d5d4b52",
+        "sha256_at_import": "c8ee926c2cf985b79e634b99116bbd37b96d9a1f9b26b51c4bb88ee31d5d4b52",
+        "match": true
+      },
+      {
+        "destination_path": "analysis/OlhoffM4Reconstruction/+frozen/algo/olhoffOpt.m",
+        "sha256_now": "f83b468415cdeccf50b6d6ccab53259901f0baf54be304b5ef51a31cff026859",
+        "sha256_at_import": "f83b468415cdeccf50b6d6ccab53259901f0baf54be304b5ef51a31cff026859",
+        "match": true
+      },
+      {
+        "destination_path": "analysis/OlhoffM4Reconstruction/+frozen/algo/useMMA.m",
+        "sha256_now": "b87ef5f65918c015e5262eda6138b6fa47403f127846212dc0238e0549e100d8",
+        "sha256_at_import": "b87ef5f65918c015e5262eda6138b6fa47403f127846212dc0238e0549e100d8",
+        "match": true
+      },
+      {
+        "destination_path": "analysis/OlhoffM4Reconstruction/+frozen/fem/assemble2D.m",
+        "sha256_now": "7b2f1e10228d57237d962689909297351c879c9b613f311500f23dd37bd00878",
+        "sha256_at_import": "7b2f1e10228d57237d962689909297351c879c9b613f311500f23dd37bd00878",
+        "match": true
+      },
+      {
+        "destination_path": "analysis/OlhoffM4Reconstruction/+frozen/fem/classifyModes.m",
+        "sha256_now": "0f93a2acce7aac69e5ad168edc1413e01bce5757b7e00c9c2c4a7a70288c29e1",
+        "sha256_at_import": "0f93a2acce7aac69e5ad168edc1413e01bce5757b7e00c9c2c4a7a70288c29e1",
+        "match": true
+      },
+      {
+        "destination_path": "analysis/OlhoffM4Reconstruction/+frozen/fem/eigSolve.m",
+        "sha256_now": "b0784ceeb15fafe164ba138b963c3ab4dc5a466fc2953c79786809edd16159cd",
+        "sha256_at_import": "b0784ceeb15fafe164ba138b963c3ab4dc5a466fc2953c79786809edd16159cd",
+        "match": true
+      },
+      {
+        "destination_path": "analysis/OlhoffM4Reconstruction/+frozen/fem/elemMats2D.m",
+        "sha256_now": "b8ae7c424d42f02390ebeb724592bf606ff9504f4be588810a58a1c4493bfba1",
+        "sha256_at_import": "b8ae7c424d42f02390ebeb724592bf606ff9504f4be588810a58a1c4493bfba1",
+        "match": true
+      },
+      {
+        "destination_path": "analysis/OlhoffM4Reconstruction/+frozen/fem/massScale.m",
+        "sha256_now": "90ba72c3df056ed0e705bfcfb763c1ef631f48891d626b18c180d6702d683a63",
+        "sha256_at_import": "90ba72c3df056ed0e705bfcfb763c1ef631f48891d626b18c180d6702d683a63",
+        "match": true
+      },
+      {
+        "destination_path": "analysis/OlhoffM4Reconstruction/+frozen/fem/model2D.m",
+        "sha256_now": "3cc19e1c52023225a1350d1c3e7623a9df68b01f52a74c82ddd4aac377ac6560",
+        "sha256_at_import": "3cc19e1c52023225a1350d1c3e7623a9df68b01f52a74c82ddd4aac377ac6560",
+        "match": true
+      },
+      {
+        "destination_path": "analysis/OlhoffM4Reconstruction/+frozen/filter/applyFilter.m",
+        "sha256_now": "461ec7c7950b4d08e20c04d348d9d95674d3e42f1f167b05d3804c94abe057a7",
+        "sha256_at_import": "461ec7c7950b4d08e20c04d348d9d95674d3e42f1f167b05d3804c94abe057a7",
+        "match": true
+      },
+      {
+        "destination_path": "analysis/OlhoffM4Reconstruction/+frozen/filter/prepFilter.m",
+        "sha256_now": "18ceb629c567fafcd90830c4eed3a4809fc2dda682d54cef1176b82bd6d47e1a",
+        "sha256_at_import": "18ceb629c567fafcd90830c4eed3a4809fc2dda682d54cef1176b82bd6d47e1a",
+        "match": true
+      },
+      {
+        "destination_path": "analysis/OlhoffM4Reconstruction/+frozen/mma/mmasub.m",
+        "sha256_now": "54c1680036e6effdb70bc32524b0c11c366cebed64d5a508c82553e871ff7660",
+        "sha256_at_import": "54c1680036e6effdb70bc32524b0c11c366cebed64d5a508c82553e871ff7660",
+        "match": true
+      },
+      {
+        "destination_path": "analysis/OlhoffM4Reconstruction/+frozen/mma/subsolv.m",
+        "sha256_now": "130033335ac5a21f31437a196bf8f37c5b97880a00e93cf2962a8a54bac2b98a",
+        "sha256_at_import": "130033335ac5a21f31437a196bf8f37c5b97880a00e93cf2962a8a54bac2b98a",
+        "match": true
+      },
+      {
+        "destination_path": "analysis/OlhoffM4Reconstruction/+frozen/mma_published/README.md",
+        "sha256_now": "14ac696e5b319a19e44a11b4a5aa41d74c1b9915ff1ebf1435d5e046f637d1d0",
+        "sha256_at_import": "14ac696e5b319a19e44a11b4a5aa41d74c1b9915ff1ebf1435d5e046f637d1d0",
+        "match": true
+      },
+      {
+        "destination_path": "analysis/OlhoffM4Reconstruction/+frozen/mma_published/mmasub.m",
+        "sha256_now": "4507b73e3e44cdd6999b52c7a815569a4fc716749b1e23c2d0c228ff51da2edb",
+        "sha256_at_import": "4507b73e3e44cdd6999b52c7a815569a4fc716749b1e23c2d0c228ff51da2edb",
+        "match": true
+      },
+      {
+        "destination_path": "analysis/OlhoffM4Reconstruction/+frozen/mma_published/subsolv.m",
+        "sha256_now": "130033335ac5a21f31437a196bf8f37c5b97880a00e93cf2962a8a54bac2b98a",
+        "sha256_at_import": "130033335ac5a21f31437a196bf8f37c5b97880a00e93cf2962a8a54bac2b98a",
+        "match": true
+      }
+    ],
+    "all_files_match": true
+  },
+  "environment": {
+    "matlab_version": "25.2.0.2998904 (R2025b)",
+    "matlab_release": "2025b",
+    "computer": "MACA64",
+    "max_num_comp_threads": 1,
+    "single_thread_requested": true,
+    "blas_library": "Apple Accelerate BLAS (ILP64)",
+    "hostname": "PMS.local"
+  },
+  "repository": {
+    "path": "/Users/piotrek/Programming/topOpt4freqMax",
+    "git_available": true,
+    "head": "b3524bf874b7126329a8e1fb4d3cab6af92f4d86",
+    "branch": "benchmark-methodology-r2",
+    "dirty": true,
+    "dirty_files": [
+      "M analysis/OlhoffM4Reconstruction/IMPORT_MANIFEST.json",
+      " M analysis/OlhoffM4Reconstruction/IMPORT_MANIFEST.md",
+      " M analysis/OlhoffM4Reconstruction/README.md",
+      " M analysis/OlhoffM4Reconstruction/olhoffm4_sha256_file.m",
+      " M analysis/OlhoffM4Reconstruction/olhoffm4_verify_import.m",
+      " M examples/Performance/conference_bench/confbench_preflight.m",
+      " M examples/Performance/performance_comparison.m",
+      "?? analysis/OlhoffM4Reconstruction/olhoffm4_apply_unified_diff.m",
+      "?? analysis/OlhoffM4Reconstruction/olhoffm4_read_bytes.m",
+      "?? analysis/OlhoffM4Reconstruction/olhoffm4_scrub_forbidden_paths.m",
+      "?? analysis/OlhoffM4Reconstruction/olhoffm4_sha256_bytes.m",
+      "?? examples/Performance/conference_benchmark/partial_4mesh/"
+    ],
+    "dirty_file_count": 12
+  },
+  "run_class": {
+    "run_label": "partial_4mesh",
+    "scientific_evidence": true,
+    "performance_campaign": false,
+    "max_outer_override": [],
+    "warmup_performed": true
+  },
+  "caveats": {
+    "table_caption": "Count/time columns represent method-native computational stages and are not mathematically identical across methods. Total wall time is the common performance quantity.",
+    "olhoff": "Du-Olhoff timings and iteration counts refer to the frozen reconstruction used in this study. Some continuation and inner-solver details are not uniquely specified by the original publication; therefore these values should be interpreted as representative measurements of this reconstruction rather than exact historical implementation timings.",
+    "olhoff_label": "The Olhoff column is labelled \"Du-Olhoff reconstruction (M4)\" and must not be labelled \"Olhoff 2007\".",
+    "memory": "Reliable, method-independent peak-memory measurement was not available in the MATLAB environment; memory was omitted rather than reported with inconsistent semantics.",
+    "olhoff_iteration_counts": "The outer iteration count of the Du-Olhoff reconstruction depends on a move-limit continuation schedule that the original publication does not specify. The frozen schedule used here is documented; a different admissible schedule changes the count without changing the physics.",
+    "scaling": "Scaling exponents may be fitted only to complete campaign data and never to smoke or preflight runs. For the Du-Olhoff reconstruction the source audit records that its outer iteration count is an artifact of the continuation trigger, so a fitted exponent for that method describes this reconstruction, not the published method."
+  },
+  "timing_schema": {
+    "schema_version": "conference_benchmark_timing/1",
+    "common": {
+      "total_wall_time_s": "Caller-side tic/toc around the solve and nothing else. CSV/JSON/MAT writing, plotting, table formatting, LaTeX generation, the common E1/E2/E3 evaluator and topology rendering are all outside it.",
+      "overhead_time_s": "Whatever the solve spends outside the two named stages: configuration dispatch, model build, filter preparation, the final modal analysis and result assembly. It exists so that no microsecond has to be forced into a named stage.",
+      "identity": "total_wall_time_s = time1 + time2 + overhead_time_s",
+      "timing_accounting_residual_s": "total_wall_time_s minus (time1 + time2 + overhead_time_s).",
+      "timing_accounting_fail": "TIMING_ACCOUNTING_FAIL: set when the residual exceeds the predeclared tolerance recorded alongside it.",
+      "independent_crosscheck_residual_s": "A SECOND, independent measurement of the same interval: the caller-side total minus the solver's own self-reported wall time. Unlike the identity above it is not an algebraic tautology, so it detects a mis-nested timer.",
+      "threads": "All runs are single-threaded (maxNumCompThreads(1)).",
+      "memory": "NOT MEASURED and NOT REPORTED. Reliable, method-independent peak-memory measurement was not available in the MATLAB environment; memory was omitted rather than reported with inconsistent semantics."
+    },
+    "methods": {
+      "Proposed": {
+        "architecture": "one reference eigenanalysis, then a SIMP topology optimization",
+        "count1": {
+          "name": "eigenanalysis_solves",
+          "value": "always 1",
+          "meaning": "The number of reference eigenanalyses performed. This is a SOLVE count. It is NOT an optimization iteration and must not be read as one."
+        },
+        "count2": {
+          "name": "simp_iterations",
+          "meaning": "SIMP topology-optimization iterations."
+        },
+        "time1": {
+          "name": "stage1_eigenanalysis_and_preparation_s",
+          "boundary": "solver initialization: mesh and element matrices, boundary conditions, filter preparation, and the single reference eigenanalysis. stage1_reference_eigen_time_s isolates the eigenanalysis alone and is a SUB-INTERVAL of this."
+        },
+        "time2": {
+          "name": "stage2_simp_time_s",
+          "boundary": "the SIMP optimization loop only."
+        }
+      },
+      "Yuksel": {
+        "architecture": "two sequential optimization stages",
+        "count1": {
+          "name": "stage1_iterations",
+          "meaning": "Stage-1 optimization iterations."
+        },
+        "count2": {
+          "name": "stage2_iterations",
+          "meaning": "Stage-2 optimization iterations."
+        },
+        "time1": {
+          "name": "stage1_time_s",
+          "boundary": "the Stage-1 loop only."
+        },
+        "time2": {
+          "name": "stage2_time_s",
+          "boundary": "the Stage-2 loop only; disjoint from Stage 1."
+        },
+        "assertions": [
+          "N_total = N1 + N2",
+          "T1 + T2 = optimization_loop_time (non-overlapping timers)"
+        ]
+      },
+      "DuOlhoffReconstructionM4": {
+        "label": "Du-Olhoff reconstruction (M4)",
+        "architecture": "NESTED: an outer loop, each of whose iterations contains a complete MMA sub-optimization.",
+        "count1": {
+          "name": "outer_iterations",
+          "meaning": "Fig. 1 outer iterations."
+        },
+        "count2": {
+          "name": "inner_mma_iterations_total",
+          "meaning": "cumulative nested MMA sub-iterations over the whole run."
+        },
+        "time1": {
+          "name": "outer_time_excluding_inner_s",
+          "boundary": "every computational region of an outer iteration EXCEPT the nested MMA solve: FE assembly, the eigenproblem, modal processing, generalized-gradient sensitivities, sensitivity filtering, local subproblem construction, the step controller, the design update, bookkeeping and the convergence test. Measured as sum(t_outer) - sum(t_inner) from per-iteration timers, so the nested solve cannot be double-counted."
+        },
+        "time2": {
+          "name": "inner_mma_time_total_s",
+          "boundary": "the nested MMA loop, and only that."
+        },
+        "derived": [
+          "inner_iterations_per_outer_mean",
+          "inner_time_per_outer_mean_s",
+          "inner_time_per_inner_iteration_mean_s",
+          "inner_time_share_pct"
+        ],
+        "prohibited": "N_outer + N_inner must NEVER be reported as a generic iteration count: the two are different objects.",
+        "caveat": "Du-Olhoff timings and iteration counts refer to the frozen reconstruction used in this study. Some continuation and inner-solver details are not uniquely specified by the original publication; therefore these values should be interpreted as representative measurements of this reconstruction rather than exact historical implementation timings."
+      }
+    },
+    "cross_method_warning": "Count and time columns represent method-native computational stages and are not mathematically identical across methods. Total wall time is the common performance quantity."
+  },
+  "warmup": {
+    "ran": true,
+    "mesh": [
+      48,
+      6
+    ],
+    "notes": [
+      "Proposed: CAP_HIT in 0.31 s",
+      "Yuksel: CAP_HIT in 0.32 s",
+      "Du-Olhoff reconstruction (M4): CAP_HIT in 0.71 s"
+    ]
+  },
+  "preflight": {
+    "checks": [
+      {
+        "name": "cfg.resolutions is a non-empty N-by-2 integer matrix",
+        "pass": true,
+        "detail": "4 mesh(es): 160x20, 240x30, 320x40, 400x50"
+      },
+      {
+        "name": "every nely is even (mid-height supports)",
+        "pass": true,
+        "detail": "odd nely at row(s): zeros(1,0)"
+      },
+      {
+        "name": "no duplicate resolutions",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "at least one method enabled",
+        "pass": true,
+        "detail": "proposed=1 yuksel=1 olhoff=1"
+      },
+      {
+        "name": "scientific_evidence derived from cfg, not declared",
+        "pass": true,
+        "detail": "scientific_evidence=1 (min NE = 3200, floor 3200 = 160x20; override=[])"
+      },
+      {
+        "name": "a performance campaign is also scientific evidence",
+        "pass": true,
+        "detail": "performance_campaign=0"
+      },
+      {
+        "name": "meshes above 160x20 are explicitly acknowledged",
+        "pass": true,
+        "detail": "3 mesh(es) exceed 160x20. Set cfg.confirmLongCampaign = true in performance_comparison.m to run them."
+      },
+      {
+        "name": "single-threaded execution is in force",
+        "pass": true,
+        "detail": "maxNumCompThreads = 1, requested single thread = 1"
+      },
+      {
+        "name": "imported Olhoff files hash to IMPORT_MANIFEST.json",
+        "pass": true,
+        "detail": "23 imported files re-hashed; every one matches its recorded sha256_imported"
+      },
+      {
+        "name": "every imported file is attested to the audited source",
+        "pass": true,
+        "detail": "the manifest records sha256_imported == sha256_source for every imported file except the declared modification(s): +frozen/algo/olhoffOpt.m"
+      },
+      {
+        "name": "the declared modification reconstructs from the audited source",
+        "pass": true,
+        "detail": "+frozen/algo/olhoffOpt.m: audited source (c6c486244020...) + patches/olhoffOpt.timing-instrumentation.diff reproduces the running file (f83b468415cd...) byte for byte -- timing instrumentation only"
+      },
+      {
+        "name": "Olhoff dispatch gate resolves inside the import",
+        "pass": true,
+        "detail": "20 owned functions resolve inside analysis/OlhoffM4Reconstruction"
+      },
+      {
+        "name": "Olhoff 160x20: genuine nested MMA sub-optimization",
+        "pass": true,
+        "detail": "innerSolver=mma innerVar=drho mmaVariant=published offDiag=1"
+      },
+      {
+        "name": "Olhoff 160x20: M4 multiplicity treatment, frozen subN",
+        "pass": true,
+        "detail": "multRule=subspace subN=2 (no threshold classifier)"
+      },
+      {
+        "name": "Olhoff 160x20: fixed physical filter R = 0.06",
+        "pass": true,
+        "detail": "rminPhys=0.06 -> rminEl=1.2 (derived at run time), filterMode=all"
+      },
+      {
+        "name": "Olhoff 160x20: tolInner = 0.05",
+        "pass": true,
+        "detail": "tolInner=0.05 maxInner=500 minInner=5"
+      },
+      {
+        "name": "Olhoff 160x20: outer RMS stopping semantics",
+        "pass": true,
+        "detail": "||drho||_2 < 0.05, i.e. per-element RMS < 8.838834765e-04 (constant across meshes); guard=settledmove"
+      },
+      {
+        "name": "Olhoff 160x20: S2 continuation realization as frozen",
+        "pass": true,
+        "detail": "moveFamily=S2 move0=0.04 ladder=[0.04 0.02 0.01 0.005] window=10 tol=0.005; s2Signal absent => legacy beta signal (the design-driven 'drms' trigger was measured and NOT adopted)"
+      },
+      {
+        "name": "Olhoff 160x20: single thread and diagnostics off",
+        "pass": true,
+        "detail": "threads=1 diag=0 (the per-iteration recorder is proved bitwise inert and is off so it is not timed)"
+      },
+      {
+        "name": "Olhoff 240x30: genuine nested MMA sub-optimization",
+        "pass": true,
+        "detail": "innerSolver=mma innerVar=drho mmaVariant=published offDiag=1"
+      },
+      {
+        "name": "Olhoff 240x30: M4 multiplicity treatment, frozen subN",
+        "pass": true,
+        "detail": "multRule=subspace subN=2 (no threshold classifier)"
+      },
+      {
+        "name": "Olhoff 240x30: fixed physical filter R = 0.06",
+        "pass": true,
+        "detail": "rminPhys=0.06 -> rminEl=1.8 (derived at run time), filterMode=all"
+      },
+      {
+        "name": "Olhoff 240x30: tolInner = 0.05",
+        "pass": true,
+        "detail": "tolInner=0.05 maxInner=500 minInner=5"
+      },
+      {
+        "name": "Olhoff 240x30: outer RMS stopping semantics",
+        "pass": true,
+        "detail": "||drho||_2 < 0.075, i.e. per-element RMS < 8.838834765e-04 (constant across meshes); guard=settledmove"
+      },
+      {
+        "name": "Olhoff 240x30: S2 continuation realization as frozen",
+        "pass": true,
+        "detail": "moveFamily=S2 move0=0.04 ladder=[0.04 0.02 0.01 0.005] window=10 tol=0.005; s2Signal absent => legacy beta signal (the design-driven 'drms' trigger was measured and NOT adopted)"
+      },
+      {
+        "name": "Olhoff 240x30: single thread and diagnostics off",
+        "pass": true,
+        "detail": "threads=1 diag=0 (the per-iteration recorder is proved bitwise inert and is off so it is not timed)"
+      },
+      {
+        "name": "Olhoff 320x40: genuine nested MMA sub-optimization",
+        "pass": true,
+        "detail": "innerSolver=mma innerVar=drho mmaVariant=published offDiag=1"
+      },
+      {
+        "name": "Olhoff 320x40: M4 multiplicity treatment, frozen subN",
+        "pass": true,
+        "detail": "multRule=subspace subN=2 (no threshold classifier)"
+      },
+      {
+        "name": "Olhoff 320x40: fixed physical filter R = 0.06",
+        "pass": true,
+        "detail": "rminPhys=0.06 -> rminEl=2.4 (derived at run time), filterMode=all"
+      },
+      {
+        "name": "Olhoff 320x40: tolInner = 0.05",
+        "pass": true,
+        "detail": "tolInner=0.05 maxInner=500 minInner=5"
+      },
+      {
+        "name": "Olhoff 320x40: outer RMS stopping semantics",
+        "pass": true,
+        "detail": "||drho||_2 < 0.1, i.e. per-element RMS < 8.838834765e-04 (constant across meshes); guard=settledmove"
+      },
+      {
+        "name": "Olhoff 320x40: S2 continuation realization as frozen",
+        "pass": true,
+        "detail": "moveFamily=S2 move0=0.04 ladder=[0.04 0.02 0.01 0.005] window=10 tol=0.005; s2Signal absent => legacy beta signal (the design-driven 'drms' trigger was measured and NOT adopted)"
+      },
+      {
+        "name": "Olhoff 320x40: single thread and diagnostics off",
+        "pass": true,
+        "detail": "threads=1 diag=0 (the per-iteration recorder is proved bitwise inert and is off so it is not timed)"
+      },
+      {
+        "name": "Olhoff 400x50: genuine nested MMA sub-optimization",
+        "pass": true,
+        "detail": "innerSolver=mma innerVar=drho mmaVariant=published offDiag=1"
+      },
+      {
+        "name": "Olhoff 400x50: M4 multiplicity treatment, frozen subN",
+        "pass": true,
+        "detail": "multRule=subspace subN=2 (no threshold classifier)"
+      },
+      {
+        "name": "Olhoff 400x50: fixed physical filter R = 0.06",
+        "pass": true,
+        "detail": "rminPhys=0.06 -> rminEl=3 (derived at run time), filterMode=all"
+      },
+      {
+        "name": "Olhoff 400x50: tolInner = 0.05",
+        "pass": true,
+        "detail": "tolInner=0.05 maxInner=500 minInner=5"
+      },
+      {
+        "name": "Olhoff 400x50: outer RMS stopping semantics",
+        "pass": true,
+        "detail": "||drho||_2 < 0.125, i.e. per-element RMS < 8.838834765e-04 (constant across meshes); guard=settledmove"
+      },
+      {
+        "name": "Olhoff 400x50: S2 continuation realization as frozen",
+        "pass": true,
+        "detail": "moveFamily=S2 move0=0.04 ladder=[0.04 0.02 0.01 0.005] window=10 tol=0.005; s2Signal absent => legacy beta signal (the design-driven 'drms' trigger was measured and NOT adopted)"
+      },
+      {
+        "name": "Olhoff 400x50: single thread and diagnostics off",
+        "pass": true,
+        "detail": "threads=1 diag=0 (the per-iteration recorder is proved bitwise inert and is off so it is not timed)"
+      },
+      {
+        "name": "no superseded Olhoff directory is on the MATLAB path",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "no Olhoff-family name resolves into a superseded tree",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "run_topopt_from_json is the repository tool copy",
+        "pass": true,
+        "detail": "/Users/piotrek/Programming/topOpt4freqMax/tools/Matlab/run_topopt_from_json.m"
+      },
+      {
+        "name": "the common E1/E2/E3 evaluator is the frozen study copy",
+        "pass": true,
+        "detail": "/Users/piotrek/Programming/topOpt4freqMax/analysis/three_method_parametric_study/study_evaluate_design.m"
+      },
+      {
+        "name": "Proposed runs its frozen profile",
+        "pass": true,
+        "detail": "proposed_practical_move02_tol001"
+      },
+      {
+        "name": "Yuksel runs its frozen profile",
+        "pass": true,
+        "detail": "yuksel_practical_move01_tol001"
+      },
+      {
+        "name": "no memory instrumentation is requested",
+        "pass": true,
+        "detail": "memory is not measured and not reported. Reliable, method-independent peak-memory measurement was not available in the MATLAB environment; memory was omitted rather than reported with inconsistent semantics."
+      },
+      {
+        "name": "output directory does not overwrite earlier evidence",
+        "pass": true,
+        "detail": "outputDir = /Users/piotrek/Programming/topOpt4freqMax/examples/Performance/conference_benchmark/partial_4mesh"
+      },
+      {
+        "name": "timing schema is defined for every enabled method",
+        "pass": true,
+        "detail": "Count and time columns represent method-native computational stages and are not mathematically identical across methods. Total wall time is the common performance quantity."
+      },
+      {
+        "name": "the Du-Olhoff caveat is defined and non-empty",
+        "pass": true,
+        "detail": "Du-Olhoff timings and iteration counts refer to the frozen reconstruction used in this study. Some continuation and inner-solver details are not uniquely specified by the original publication; therefore these values should be interpreted as representative measurements of this reconstruction rather than exact historical implementation timings."
+      }
+    ],
+    "notes": [
+      "external Olhoff source repository (PROVENANCE ONLY, not a gate): NO LONGER IN THE IMPORTED STATE: 7 file(s) absent, 4 differing, 12 unchanged (of 23). Not blocking; the running solver is pinned by in-repository evidence.",
+      "  absent there   : algo/innerLoopRho.m, algo/moveControl.m, algo/multRule.m, algo/useMMA.m, mma_published/README.md, mma_published/mmasub.m, mma_published/subsolv.m",
+      "  differing there: algo/defaultCfg.m (aed41860a2da..., recorded dd8f1cc7c19d...), algo/deltaLambda.m (3f0e46ced3e6..., recorded 101519fcdcc2...), algo/innerLoop.m (75fcb7641c60..., recorded 9ec33d7dcbab...), algo/olhoffOpt.m (4784ecf3f6b4..., recorded c6c486244020...)"
+    ],
+    "pass": true,
+    "olhoff_import": {
+      "manifest_schema": "olhoff_m4_import_manifest/1",
+      "import_datetime": "2026-09-04T13:43:04.285116+02:00",
+      "checked": 23,
+      "imported_hash_mismatches": [],
+      "unattested_files": [],
+      "declared_patch_mismatches": [],
+      "patch_checks": [
+        "+frozen/algo/olhoffOpt.m: audited source (c6c486244020...) + patches/olhoffOpt.timing-instrumentation.diff reproduces the running file (f83b468415cd...) byte for byte -- timing instrumentation only"
+      ],
+      "declared_modifications": [
+        "+frozen/algo/olhoffOpt.m"
+      ],
+      "source_repository_state": {
+        "path": "/Users/piotrek/Programming/Matlab/Olhoff",
+        "role": "PROVENANCE ONLY. This directory is unversioned and outside this repository. Its present state is recorded, and is deliberately not part of the pass/fail decision: the running solver is pinned to the audited source by in-repository evidence (integrity + attestation + patch reconstruction), which a change here cannot affect.",
+        "reachable": true,
+        "files_checked": 16,
+        "files_matching": 12,
+        "files_absent": [
+          "algo/innerLoopRho.m",
+          "algo/moveControl.m",
+          "algo/multRule.m",
+          "algo/useMMA.m",
+          "mma_published/README.md",
+          "mma_published/mmasub.m",
+          "mma_published/subsolv.m"
+        ],
+        "files_differing": [
+          "algo/defaultCfg.m (aed41860a2da..., recorded dd8f1cc7c19d...)",
+          "algo/deltaLambda.m (3f0e46ced3e6..., recorded 101519fcdcc2...)",
+          "algo/innerLoop.m (75fcb7641c60..., recorded 9ec33d7dcbab...)",
+          "algo/olhoffOpt.m (4784ecf3f6b4..., recorded c6c486244020...)"
+        ],
+        "differs_from_import_without_declaration": [
+          "algo/defaultCfg.m",
+          "algo/deltaLambda.m",
+          "algo/innerLoop.m"
+        ],
+        "in_imported_state": false,
+        "summary": "NO LONGER IN THE IMPORTED STATE: 7 file(s) absent, 4 differing, 12 unchanged (of 23). Not blocking; the running solver is pinned by in-repository evidence."
+      },
+      "source_repository": "/Users/piotrek/Programming/Matlab/Olhoff",
+      "source_reachable": true,
+      "dispatch_ok": true,
+      "resolved": [
+        {
+          "name": "applyFilter",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffM4Reconstruction/+frozen/filter/applyFilter.m"
+        },
+        {
+          "name": "assemble2D",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffM4Reconstruction/+frozen/fem/assemble2D.m"
+        },
+        {
+          "name": "classifyModes",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffM4Reconstruction/+frozen/fem/classifyModes.m"
+        },
+        {
+          "name": "defaultCfg",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffM4Reconstruction/+frozen/algo/defaultCfg.m"
+        },
+        {
+          "name": "deltaLambda",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffM4Reconstruction/+frozen/algo/deltaLambda.m"
+        },
+        {
+          "name": "eigSolve",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffM4Reconstruction/+frozen/fem/eigSolve.m"
+        },
+        {
+          "name": "elemMats2D",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffM4Reconstruction/+frozen/fem/elemMats2D.m"
+        },
+        {
+          "name": "genGrad",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffM4Reconstruction/+frozen/algo/genGrad.m"
+        },
+        {
+          "name": "innerLoop",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffM4Reconstruction/+frozen/algo/innerLoop.m"
+        },
+        {
+          "name": "innerLoopLP",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffM4Reconstruction/+frozen/algo/innerLoopLP.m"
+        },
+        {
+          "name": "innerLoopRho",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffM4Reconstruction/+frozen/algo/innerLoopRho.m"
+        },
+        {
+          "name": "massScale",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffM4Reconstruction/+frozen/fem/massScale.m"
+        },
+        {
+          "name": "mmasub",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffM4Reconstruction/+frozen/mma_published/mmasub.m"
+        },
+        {
+          "name": "model2D",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffM4Reconstruction/+frozen/fem/model2D.m"
+        },
+        {
+          "name": "moveControl",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffM4Reconstruction/+frozen/algo/moveControl.m"
+        },
+        {
+          "name": "multRule",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffM4Reconstruction/+frozen/algo/multRule.m"
+        },
+        {
+          "name": "olhoffOpt",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffM4Reconstruction/+frozen/algo/olhoffOpt.m"
+        },
+        {
+          "name": "prepFilter",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffM4Reconstruction/+frozen/filter/prepFilter.m"
+        },
+        {
+          "name": "subsolv",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffM4Reconstruction/+frozen/mma_published/subsolv.m"
+        },
+        {
+          "name": "useMMA",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffM4Reconstruction/+frozen/algo/useMMA.m"
+        }
+      ],
+      "pass": true
+    }
+  },
+  "path_scrub": {
+    "removed_entries": [],
+    "rationale": "Superseded Olhoff implementations inherited from this MATLAB session were removed from the path before preflight, so dispatch is a property of this driver rather than of whatever ran earlier in the session."
+  }
+}

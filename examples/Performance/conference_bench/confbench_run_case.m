@@ -202,6 +202,14 @@ end
 % =========================================================================
 function rec = runYuksel(rec, mcfg, opts)
 %RUNYUKSEL  Two sequential optimization stages.
+% The per-stage safety budget, applied to BOTH stages so neither can be
+% censored while the other runs free.  max_outer_override is applied after it
+% and therefore wins: that knob is the smoke-test truncation, and a truncation
+% must not be silently widened by a raised budget.
+if isfield(opts, 'yuksel_max_iters') && ~isempty(opts.yuksel_max_iters)
+    mcfg.optimization.max_iters = double(opts.yuksel_max_iters);
+    mcfg.optimization.yuksel.stage1_max_iters = double(opts.yuksel_max_iters);
+end
 if isfield(opts, 'max_outer_override') && ~isempty(opts.max_outer_override)
     mcfg.optimization.max_iters = double(opts.max_outer_override);
     mcfg.optimization.yuksel.stage1_max_iters = double(opts.max_outer_override);

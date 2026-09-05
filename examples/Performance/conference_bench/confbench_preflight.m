@@ -15,7 +15,8 @@ function pre = confbench_preflight(cfg, methodConfigs)
 here = fileparts(mfilename('fullpath'));
 repo = fileparts(fileparts(fileparts(here)));
 
-pre = struct('checks', struct('name', {}, 'pass', {}, 'detail', {}), 'pass', true);
+pre = struct('checks', struct('name', {}, 'pass', {}, 'detail', {}), ...
+             'notes', {{}}, 'pass', true);
 
 % ---- 1. configuration shape --------------------------------------------
 R = cfg.resolutions;
@@ -38,10 +39,21 @@ pre = add(pre, 'at least one method enabled', ok, ...
 
 % ---- 2. run class is DERIVED from the configuration, not asserted -------
 NE = R(:,1).*R(:,2);
-ok = cfg.scientificEvidence == (isempty(cfg.maxOuterOverride) && all(NE >= 3200));
+% A RAISED Yuksel safety budget leaves the run scientific; a LOWERED one
+% truncates the method before its own stopping rule can fire, exactly like
+% maxOuterOverride, and must therefore void the run the same way.
+yukselFrozen = confbench_frozen_budget('yuksel');
+yukselUsed   = yukselFrozen;
+if isfield(cfg, 'yukselMaxIters') && ~isempty(cfg.yukselMaxIters)
+    yukselUsed = cfg.yukselMaxIters;
+end
+ok = cfg.scientificEvidence == (isempty(cfg.maxOuterOverride) && all(NE >= 3200) ...
+    && yukselUsed >= yukselFrozen);
 pre = add(pre, 'scientific_evidence derived from cfg, not declared', ok, ...
-    sprintf('scientific_evidence=%d (min NE = %d, floor 3200 = 160x20; override=%s)', ...
-        cfg.scientificEvidence, min(NE), mat2str(cfg.maxOuterOverride)));
+    sprintf(['scientific_evidence=%d (min NE = %d, floor 3200 = 160x20; override=%s; ' ...
+             'yuksel budget %d vs frozen %d)'], ...
+        cfg.scientificEvidence, min(NE), mat2str(cfg.maxOuterOverride), ...
+        yukselUsed, yukselFrozen));
 
 ok = ~cfg.performanceCampaign || cfg.scientificEvidence;
 pre = add(pre, 'a performance campaign is also scientific evidence', ok, ...
@@ -62,17 +74,39 @@ pre = add(pre, 'single-threaded execution is in force', ok, ...
 
 % ---- 5. the imported Du-Olhoff (M4) reconstruction ----------------------
 if cfg.methods.olhoff
+    % The identity of the running solver is proved from evidence held inside
+    % THIS repository -- integrity, attestation, reconstruction.  The external
+    % source directory is unversioned, outside this repository and not under
+    % its control; its state is recorded as a note below, never as a gate.
+    % See olhoffm4_verify_import's header for why.
     imp = olhoffm4_verify_import('Verbose', false);
-    pre = add(pre, 'imported Olhoff files match IMPORT_MANIFEST.json', ...
-        isempty(imp.imported_hash_mismatches), strjoin(imp.imported_hash_mismatches, '; '));
-    pre = add(pre, 'the audited source repository is unchanged since import', ...
-        isempty(imp.source_hash_mismatches), strjoin(imp.source_hash_mismatches, '; '));
-    pre = add(pre, 'no undeclared modification to the imported solver', ...
-        isempty(imp.undeclared_modifications), ...
-        sprintf('declared: %s', strjoin(imp.declared_modifications, ', ')));
+    pre = add(pre, 'imported Olhoff files hash to IMPORT_MANIFEST.json', ...
+        isempty(imp.imported_hash_mismatches), ...
+        joinOr(imp.imported_hash_mismatches, sprintf(['%d imported files re-hashed; ' ...
+            'every one matches its recorded sha256_imported'], imp.checked)));
+    pre = add(pre, 'every imported file is attested to the audited source', ...
+        isempty(imp.unattested_files), ...
+        joinOr(imp.unattested_files, sprintf(['the manifest records sha256_imported == ' ...
+            'sha256_source for every imported file except the declared ' ...
+            'modification(s): %s'], strjoin(imp.declared_modifications, ', '))));
+    pre = add(pre, 'the declared modification reconstructs from the audited source', ...
+        isempty(imp.declared_patch_mismatches), ...
+        joinOr(imp.declared_patch_mismatches, strjoin(imp.patch_checks, '; ')));
     pre = add(pre, 'Olhoff dispatch gate resolves inside the import', ...
         imp.dispatch_ok, resolvedSummary(imp));
     pre.olhoff_import = imp;
+
+    srcState = imp.source_repository_state;
+    pre = note(pre, sprintf('external Olhoff source repository (PROVENANCE ONLY, not a gate): %s', ...
+        srcState.summary));
+    if srcState.reachable && ~srcState.in_imported_state
+        if ~isempty(srcState.files_absent)
+            pre = note(pre, sprintf('  absent there   : %s', strjoin(srcState.files_absent, ', ')));
+        end
+        if ~isempty(srcState.files_differing)
+            pre = note(pre, sprintf('  differing there: %s', strjoin(srcState.files_differing, ', ')));
+        end
+    end
 
     % ---- 5b. the frozen realization, field by field ---------------------
     for r = 1:size(R,1)
@@ -192,6 +226,16 @@ end
 pre = add(pre, 'output directory does not overwrite earlier evidence', isempty(clash), ...
     sprintf('outputDir = %s', cfg.outputDir));
 
+% A rerun under the same label lands on top of the previous run's artifacts.
+% That is usually what is wanted and is recoverable from git, but it is never
+% allowed to happen silently.
+priorManifest = fullfile(cfg.outputDir, 'benchmark_manifest.json');
+if exist(priorManifest, 'file') == 2
+    pre = note(pre, sprintf(['%s already holds a completed run; its artifacts ' ...
+        'will be OVERWRITTEN by this one. The previous version is in git, or ' ...
+        'set cfg.runLabel to keep both.'], cfg.outputDir));
+end
+
 % ---- 11. the reporting contract ----------------------------------------
 sch = confbench_timing_schema();
 pre = add(pre, 'timing schema is defined for every enabled method', ...
@@ -207,6 +251,17 @@ end
 % =========================================================================
 function pre = add(pre, name, ok, detail)
 pre.checks(end+1) = struct('name', name, 'pass', logical(ok), 'detail', char(string(detail)));
+end
+
+function pre = note(pre, text)
+% Recorded and printed, but never part of pre.pass.  Notes carry provenance
+% that a reader needs to see and that must not be able to block a run.
+pre.notes{end+1} = char(string(text));
+end
+
+function s = joinOr(findings, okText)
+% The findings when there are any, otherwise what was actually proved.
+if isempty(findings); s = okText; else; s = strjoin(findings, '; '); end
 end
 
 function s = meshList(R)

@@ -1,0 +1,13 @@
+% Standalone preview wrapper for the generated table fragment.
+% Compile with:  pdflatex preview_table.tex
+% The paper itself should just do \input{conference_performance_table.tex}
+% inside its own document body.
+\documentclass[10pt]{article}
+\usepackage[margin=1.5cm,landscape,a4paper]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\pagestyle{empty}
+\begin{document}
+\small
+\input{conference_performance_table.tex}
+\end{document}

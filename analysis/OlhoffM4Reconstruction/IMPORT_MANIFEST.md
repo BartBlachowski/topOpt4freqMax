@@ -20,6 +20,49 @@ The source is **not a git repository**, so its state is identified by the
 SHA-256 of every file in its solver tree. The full listing is in
 `SOURCE_SHA256.txt` and in the JSON under `source_repository.file_hashes`.
 
+## Source repository status — observed 2026-09-04, **no longer in the imported state**
+
+The external source directory has been **reverted to a pre-import generation**.
+Of the 23 imported files, **7 are absent from it entirely**
+(`multRule.m`, `moveControl.m`, `useMMA.m`, `innerLoopRho.m`, and all three
+`mma_published/` files), **4 differ** (`defaultCfg.m`, `deltaLambda.m`,
+`innerLoop.m`, `olhoffOpt.m`) and 12 are unchanged. The versions now present are
+dated 2026-08-25 and predate the frozen realization itself — the `defaultCfg.m`
+there has no `multRule`, `moveFamily`, `mmaVariant` or `outerGuard` fields at
+all, and the `audit_*` directories cited under *Governing audits* are gone.
+
+**Effect on this import: none.** Every one of the 23 files under `+frozen/`
+still hashes exactly to its recorded `sha256_imported`. Nothing in
+`analysis/OlhoffM4Reconstruction` changed. This was a rollback of an unversioned
+scratch directory outside this repository.
+
+Provenance is therefore proved from evidence held **inside this repository**,
+which needs no access to that directory:
+
+| | proof | checked by |
+|---|---|---|
+| **integrity** | every `+frozen/` file hashes to `sha256_imported` | `olhoffm4_verify_import.m` |
+| **attestation** | for every file but the declared modification, the manifest records `sha256_imported == sha256_source` | `olhoffm4_verify_import.m` |
+| **reconstruction** | `patches/olhoffOpt.m.source-verbatim` hashes to the recorded `sha256_source`, and applying `patches/olhoffOpt.timing-instrumentation.diff` to it reproduces `+frozen/algo/olhoffOpt.m` **byte for byte** | `olhoffm4_apply_unified_diff.m` |
+
+The reconstruction check is *stronger* than the external-source comparison it
+replaces: it **exhibits** the delta from the audited source instead of asserting
+that one exists, so "declared modification" cannot become a loophole.
+
+The external directory's state is still measured on every run and written into
+every benchmark manifest — as **provenance, printed as a preflight note**, no
+longer as a gate. A rollback in a directory this repository does not control
+cannot change which code it runs, so it must not decide whether it may run it.
+Full detail, including the observed hashes, is in `IMPORT_MANIFEST.json` under
+`source_repository_status`.
+
+What still fails closed: any `+frozen/` file whose hash moves; any imported file
+neither attested byte-identical to the audited source nor covered by a declared
+modification; a verbatim source copy that does not hash to `sha256_source`; a
+declared diff that does not apply, or applies without reproducing
+`sha256_imported`; any owned function resolving outside the import or inside a
+superseded Olhoff tree.
+
 ## Governing audits
 
 - **frozen_realization_spec** — audit_conference_admission/WP4_frozen_realization.md

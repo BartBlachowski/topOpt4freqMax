@@ -44,6 +44,58 @@
       "setpaths.m": "5299621d625c7cec17cfb755f7b0b0074df356270111dc40fb52126a406ceb55"
     }
   },
+  "source_repository_status": {
+    "observed_datetime_local": "2026-09-04T18:08:52.208909+02:00",
+    "observed_by": "olhoffm4_verify_import.m, re-hashing every file in source_repository.file_hashes",
+    "state": "NO_LONGER_IN_THE_IMPORTED_STATE",
+    "finding": "The external source directory has been reverted to a pre-import generation. 7 of the 23 imported files are absent from it entirely, 4 differ, and 12 are unchanged. The versions now present are dated 2026-08-25, predate this import's newest_source_mtime of 2026-09-04T12:19:55, and predate the frozen realization itself: the defaultCfg.m now there has no multRule, moveFamily, mmaVariant or outerGuard fields at all, and the audit_* directories cited under governing_audits are gone. This is a rollback of an unversioned scratch directory, not an edit to anything in this repository.",
+    "files_absent": [
+      "algo/innerLoopRho.m",
+      "algo/moveControl.m",
+      "algo/multRule.m",
+      "algo/useMMA.m",
+      "mma_published/README.md",
+      "mma_published/mmasub.m",
+      "mma_published/subsolv.m"
+    ],
+    "files_differing": [
+      {
+        "source_path": "algo/defaultCfg.m",
+        "sha256_recorded_at_import": "dd8f1cc7c19d41dfb4dde989ddd40a3dbfd733fecb622f43275144c359a6b911",
+        "sha256_observed_now": "aed41860a2dac6a06e1c51cc96cf7436a65bcd9d60ecdf7af2d2a3552ea456e0",
+        "mtime_now": "2026-08-25T11:39:44+02:00"
+      },
+      {
+        "source_path": "algo/deltaLambda.m",
+        "sha256_recorded_at_import": "101519fcdcc2175d7d2aa135d919ad0a0efaa24cbb3edd7761d8f27b9b504038",
+        "sha256_observed_now": "3f0e46ced3e6126fdb07ebf9ed8201c35d21bc32c0de5803a4650c369e2dc4d2",
+        "mtime_now": "2026-08-25T10:55:06+02:00"
+      },
+      {
+        "source_path": "algo/innerLoop.m",
+        "sha256_recorded_at_import": "9ec33d7dcbabf4df905089b57a03af140ca9a2f0b43902ad8f75962ae756ca6b",
+        "sha256_observed_now": "75fcb7641c6059dc310c9ca9a63a2add677ab54bcc67e1450c68d4c8fdf3aaed",
+        "mtime_now": "2026-08-25T11:22:57+02:00"
+      },
+      {
+        "source_path": "algo/olhoffOpt.m",
+        "sha256_recorded_at_import": "c6c4862440208c2ec5239577028168716685d04a89cfadce76b45803a6cc9cfb",
+        "sha256_observed_now": "4784ecf3f6b42d8af6f5a9695e2924bf1f4c924ebf9c76be9a858a2ef769e5de",
+        "mtime_now": "2026-08-25T11:39:44+02:00"
+      }
+    ],
+    "files_unchanged": 12,
+    "effect_on_the_import": "NONE. Every one of the 23 files under +frozen/ still hashes exactly to its recorded sha256_imported, so the solver this repository runs is bit-for-bit the audited one. Nothing in analysis/OlhoffM4Reconstruction changed.",
+    "verification_basis": "Provenance is proved from evidence held inside this repository, and needs no access to the external directory: (1) INTEGRITY -- every +frozen/ file hashes to sha256_imported; (2) ATTESTATION -- for every file but the one declared modification the manifest records sha256_imported == sha256_source, so byte-identity to the audited source is attested by the record; (3) RECONSTRUCTION -- patches/olhoffOpt.m.source-verbatim hashes to the recorded sha256_source (c6c4862440208c2e...), and applying patches/olhoffOpt.timing-instrumentation.diff to it reproduces +frozen/algo/olhoffOpt.m (f83b468415cdeccf...) byte for byte. Check (3) is machine-verified on every run by olhoffm4_apply_unified_diff.m; it is strictly stronger than the external-source comparison it replaces, because it exhibits the delta from the audited source rather than asserting that one exists.",
+    "why_this_is_not_a_run_blocker": "The external directory is unversioned, outside this repository and not under its control. A rollback there cannot change which code this repository executes, so it must not decide whether this repository may execute it. Before 2026-09-04 confbench_preflight treated a source-hash difference as fatal; it now records the external state as a preflight NOTE and gates on integrity, attestation and reconstruction instead. The external state is still measured on every run and written into every benchmark manifest.",
+    "what_would_still_fail_closed": [
+      "any file under +frozen/ whose hash no longer matches sha256_imported",
+      "any imported file that is neither attested byte-identical to the audited source nor covered by a declared modification",
+      "a declared modification whose verbatim source copy does not hash to sha256_source",
+      "a declared modification whose diff does not apply cleanly, or applies but does not reproduce sha256_imported",
+      "any owned function resolving outside the import or inside a superseded Olhoff tree"
+    ]
+  },
   "governing_audits": {
     "frozen_realization_spec": "audit_conference_admission/WP4_frozen_realization.md",
     "filter_freeze": "audit_filter_mesh_admission/FROZEN_REALIZATION.json",

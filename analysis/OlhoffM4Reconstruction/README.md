@@ -36,9 +36,12 @@ olhoffm4_forbidden_paths.m      the superseded implementations that must never r
 olhoffm4_config.m               THE FROZEN CONFERENCE CONFIGURATION
 olhoffm4_caveat.m               the caveat text, in one place
 olhoffm4_run.m                  benchmark wrapper: runs, and accounts for the cost
-olhoffm4_verify_import.m        re-hashes everything against IMPORT_MANIFEST.json
+olhoffm4_verify_import.m        integrity + attestation + reconstruction proofs
+olhoffm4_apply_unified_diff.m   applies the declared diff in memory, strictly
 olhoffm4_equivalence_160x20.m   source-vs-import bitwise equivalence at 160x20
 olhoffm4_sha256_file.m          raw-file SHA-256, matching `shasum -a 256`
+olhoffm4_sha256_bytes.m         the same digest over bytes held in memory
+olhoffm4_read_bytes.m           raw uint8 file read, no encoding translation
 
 +frozen/                        THE AUDITED SOLVER CORE -- do not edit
   algo/   olhoffOpt defaultCfg multRule moveControl genGrad deltaLambda

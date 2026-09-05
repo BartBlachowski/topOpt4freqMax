@@ -1,0 +1,389 @@
+{
+  "checks": [
+    {
+      "name": "cfg.resolutions is a non-empty N-by-2 integer matrix",
+      "pass": true,
+      "detail": "4 mesh(es): 160x20, 240x30, 320x40, 400x50"
+    },
+    {
+      "name": "every nely is even (mid-height supports)",
+      "pass": true,
+      "detail": "odd nely at row(s): zeros(1,0)"
+    },
+    {
+      "name": "no duplicate resolutions",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "at least one method enabled",
+      "pass": true,
+      "detail": "proposed=1 yuksel=1 olhoff=1"
+    },
+    {
+      "name": "scientific_evidence derived from cfg, not declared",
+      "pass": true,
+      "detail": "scientific_evidence=1 (min NE = 3200, floor 3200 = 160x20; override=[])"
+    },
+    {
+      "name": "a performance campaign is also scientific evidence",
+      "pass": true,
+      "detail": "performance_campaign=0"
+    },
+    {
+      "name": "meshes above 160x20 are explicitly acknowledged",
+      "pass": false,
+      "detail": "3 mesh(es) exceed 160x20. Set cfg.confirmLongCampaign = true in performance_comparison.m to run them."
+    },
+    {
+      "name": "single-threaded execution is in force",
+      "pass": true,
+      "detail": "maxNumCompThreads = 1, requested single thread = 1"
+    },
+    {
+      "name": "imported Olhoff files hash to IMPORT_MANIFEST.json",
+      "pass": true,
+      "detail": "23 imported files re-hashed; every one matches its recorded sha256_imported"
+    },
+    {
+      "name": "every imported file is attested to the audited source",
+      "pass": true,
+      "detail": "the manifest records sha256_imported == sha256_source for every imported file except the declared modification(s): +frozen/algo/olhoffOpt.m"
+    },
+    {
+      "name": "the declared modification reconstructs from the audited source",
+      "pass": true,
+      "detail": "+frozen/algo/olhoffOpt.m: audited source (c6c486244020...) + patches/olhoffOpt.timing-instrumentation.diff reproduces the running file (f83b468415cd...) byte for byte -- timing instrumentation only"
+    },
+    {
+      "name": "Olhoff dispatch gate resolves inside the import",
+      "pass": true,
+      "detail": "20 owned functions resolve inside analysis/OlhoffM4Reconstruction"
+    },
+    {
+      "name": "Olhoff 160x20: genuine nested MMA sub-optimization",
+      "pass": true,
+      "detail": "innerSolver=mma innerVar=drho mmaVariant=published offDiag=1"
+    },
+    {
+      "name": "Olhoff 160x20: M4 multiplicity treatment, frozen subN",
+      "pass": true,
+      "detail": "multRule=subspace subN=2 (no threshold classifier)"
+    },
+    {
+      "name": "Olhoff 160x20: fixed physical filter R = 0.06",
+      "pass": true,
+      "detail": "rminPhys=0.06 -> rminEl=1.2 (derived at run time), filterMode=all"
+    },
+    {
+      "name": "Olhoff 160x20: tolInner = 0.05",
+      "pass": true,
+      "detail": "tolInner=0.05 maxInner=500 minInner=5"
+    },
+    {
+      "name": "Olhoff 160x20: outer RMS stopping semantics",
+      "pass": true,
+      "detail": "||drho||_2 < 0.05, i.e. per-element RMS < 8.838834765e-04 (constant across meshes); guard=settledmove"
+    },
+    {
+      "name": "Olhoff 160x20: S2 continuation realization as frozen",
+      "pass": true,
+      "detail": "moveFamily=S2 move0=0.04 ladder=[0.04 0.02 0.01 0.005] window=10 tol=0.005; s2Signal absent => legacy beta signal (the design-driven 'drms' trigger was measured and NOT adopted)"
+    },
+    {
+      "name": "Olhoff 160x20: single thread and diagnostics off",
+      "pass": true,
+      "detail": "threads=1 diag=0 (the per-iteration recorder is proved bitwise inert and is off so it is not timed)"
+    },
+    {
+      "name": "Olhoff 240x30: genuine nested MMA sub-optimization",
+      "pass": true,
+      "detail": "innerSolver=mma innerVar=drho mmaVariant=published offDiag=1"
+    },
+    {
+      "name": "Olhoff 240x30: M4 multiplicity treatment, frozen subN",
+      "pass": true,
+      "detail": "multRule=subspace subN=2 (no threshold classifier)"
+    },
+    {
+      "name": "Olhoff 240x30: fixed physical filter R = 0.06",
+      "pass": true,
+      "detail": "rminPhys=0.06 -> rminEl=1.8 (derived at run time), filterMode=all"
+    },
+    {
+      "name": "Olhoff 240x30: tolInner = 0.05",
+      "pass": true,
+      "detail": "tolInner=0.05 maxInner=500 minInner=5"
+    },
+    {
+      "name": "Olhoff 240x30: outer RMS stopping semantics",
+      "pass": true,
+      "detail": "||drho||_2 < 0.075, i.e. per-element RMS < 8.838834765e-04 (constant across meshes); guard=settledmove"
+    },
+    {
+      "name": "Olhoff 240x30: S2 continuation realization as frozen",
+      "pass": true,
+      "detail": "moveFamily=S2 move0=0.04 ladder=[0.04 0.02 0.01 0.005] window=10 tol=0.005; s2Signal absent => legacy beta signal (the design-driven 'drms' trigger was measured and NOT adopted)"
+    },
+    {
+      "name": "Olhoff 240x30: single thread and diagnostics off",
+      "pass": true,
+      "detail": "threads=1 diag=0 (the per-iteration recorder is proved bitwise inert and is off so it is not timed)"
+    },
+    {
+      "name": "Olhoff 320x40: genuine nested MMA sub-optimization",
+      "pass": true,
+      "detail": "innerSolver=mma innerVar=drho mmaVariant=published offDiag=1"
+    },
+    {
+      "name": "Olhoff 320x40: M4 multiplicity treatment, frozen subN",
+      "pass": true,
+      "detail": "multRule=subspace subN=2 (no threshold classifier)"
+    },
+    {
+      "name": "Olhoff 320x40: fixed physical filter R = 0.06",
+      "pass": true,
+      "detail": "rminPhys=0.06 -> rminEl=2.4 (derived at run time), filterMode=all"
+    },
+    {
+      "name": "Olhoff 320x40: tolInner = 0.05",
+      "pass": true,
+      "detail": "tolInner=0.05 maxInner=500 minInner=5"
+    },
+    {
+      "name": "Olhoff 320x40: outer RMS stopping semantics",
+      "pass": true,
+      "detail": "||drho||_2 < 0.1, i.e. per-element RMS < 8.838834765e-04 (constant across meshes); guard=settledmove"
+    },
+    {
+      "name": "Olhoff 320x40: S2 continuation realization as frozen",
+      "pass": true,
+      "detail": "moveFamily=S2 move0=0.04 ladder=[0.04 0.02 0.01 0.005] window=10 tol=0.005; s2Signal absent => legacy beta signal (the design-driven 'drms' trigger was measured and NOT adopted)"
+    },
+    {
+      "name": "Olhoff 320x40: single thread and diagnostics off",
+      "pass": true,
+      "detail": "threads=1 diag=0 (the per-iteration recorder is proved bitwise inert and is off so it is not timed)"
+    },
+    {
+      "name": "Olhoff 400x50: genuine nested MMA sub-optimization",
+      "pass": true,
+      "detail": "innerSolver=mma innerVar=drho mmaVariant=published offDiag=1"
+    },
+    {
+      "name": "Olhoff 400x50: M4 multiplicity treatment, frozen subN",
+      "pass": true,
+      "detail": "multRule=subspace subN=2 (no threshold classifier)"
+    },
+    {
+      "name": "Olhoff 400x50: fixed physical filter R = 0.06",
+      "pass": true,
+      "detail": "rminPhys=0.06 -> rminEl=3 (derived at run time), filterMode=all"
+    },
+    {
+      "name": "Olhoff 400x50: tolInner = 0.05",
+      "pass": true,
+      "detail": "tolInner=0.05 maxInner=500 minInner=5"
+    },
+    {
+      "name": "Olhoff 400x50: outer RMS stopping semantics",
+      "pass": true,
+      "detail": "||drho||_2 < 0.125, i.e. per-element RMS < 8.838834765e-04 (constant across meshes); guard=settledmove"
+    },
+    {
+      "name": "Olhoff 400x50: S2 continuation realization as frozen",
+      "pass": true,
+      "detail": "moveFamily=S2 move0=0.04 ladder=[0.04 0.02 0.01 0.005] window=10 tol=0.005; s2Signal absent => legacy beta signal (the design-driven 'drms' trigger was measured and NOT adopted)"
+    },
+    {
+      "name": "Olhoff 400x50: single thread and diagnostics off",
+      "pass": true,
+      "detail": "threads=1 diag=0 (the per-iteration recorder is proved bitwise inert and is off so it is not timed)"
+    },
+    {
+      "name": "no superseded Olhoff directory is on the MATLAB path",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "no Olhoff-family name resolves into a superseded tree",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "run_topopt_from_json is the repository tool copy",
+      "pass": true,
+      "detail": "/Users/piotrek/Programming/topOpt4freqMax/tools/Matlab/run_topopt_from_json.m"
+    },
+    {
+      "name": "the common E1/E2/E3 evaluator is the frozen study copy",
+      "pass": true,
+      "detail": "/Users/piotrek/Programming/topOpt4freqMax/analysis/three_method_parametric_study/study_evaluate_design.m"
+    },
+    {
+      "name": "Proposed runs its frozen profile",
+      "pass": true,
+      "detail": "proposed_practical_move02_tol001"
+    },
+    {
+      "name": "Yuksel runs its frozen profile",
+      "pass": true,
+      "detail": "yuksel_practical_move01_tol001"
+    },
+    {
+      "name": "no memory instrumentation is requested",
+      "pass": true,
+      "detail": "memory is not measured and not reported. Reliable, method-independent peak-memory measurement was not available in the MATLAB environment; memory was omitted rather than reported with inconsistent semantics."
+    },
+    {
+      "name": "output directory does not overwrite earlier evidence",
+      "pass": true,
+      "detail": "outputDir = /Users/piotrek/Programming/topOpt4freqMax/examples/Performance/conference_benchmark/partial_4mesh"
+    },
+    {
+      "name": "timing schema is defined for every enabled method",
+      "pass": true,
+      "detail": "Count and time columns represent method-native computational stages and are not mathematically identical across methods. Total wall time is the common performance quantity."
+    },
+    {
+      "name": "the Du-Olhoff caveat is defined and non-empty",
+      "pass": true,
+      "detail": "Du-Olhoff timings and iteration counts refer to the frozen reconstruction used in this study. Some continuation and inner-solver details are not uniquely specified by the original publication; therefore these values should be interpreted as representative measurements of this reconstruction rather than exact historical implementation timings."
+    }
+  ],
+  "notes": [
+    "external Olhoff source repository (PROVENANCE ONLY, not a gate): NO LONGER IN THE IMPORTED STATE: 7 file(s) absent, 4 differing, 12 unchanged (of 23). Not blocking; the running solver is pinned by in-repository evidence.",
+    "  absent there   : algo/innerLoopRho.m, algo/moveControl.m, algo/multRule.m, algo/useMMA.m, mma_published/README.md, mma_published/mmasub.m, mma_published/subsolv.m",
+    "  differing there: algo/defaultCfg.m (aed41860a2da..., recorded dd8f1cc7c19d...), algo/deltaLambda.m (3f0e46ced3e6..., recorded 101519fcdcc2...), algo/innerLoop.m (75fcb7641c60..., recorded 9ec33d7dcbab...), algo/olhoffOpt.m (4784ecf3f6b4..., recorded c6c486244020...)"
+  ],
+  "pass": false,
+  "olhoff_import": {
+    "manifest_schema": "olhoff_m4_import_manifest/1",
+    "import_datetime": "2026-09-04T13:43:04.285116+02:00",
+    "checked": 23,
+    "imported_hash_mismatches": [],
+    "unattested_files": [],
+    "declared_patch_mismatches": [],
+    "patch_checks": [
+      "+frozen/algo/olhoffOpt.m: audited source (c6c486244020...) + patches/olhoffOpt.timing-instrumentation.diff reproduces the running file (f83b468415cd...) byte for byte -- timing instrumentation only"
+    ],
+    "declared_modifications": [
+      "+frozen/algo/olhoffOpt.m"
+    ],
+    "source_repository_state": {
+      "path": "/Users/piotrek/Programming/Matlab/Olhoff",
+      "role": "PROVENANCE ONLY. This directory is unversioned and outside this repository. Its present state is recorded, and is deliberately not part of the pass/fail decision: the running solver is pinned to the audited source by in-repository evidence (integrity + attestation + patch reconstruction), which a change here cannot affect.",
+      "reachable": true,
+      "files_checked": 16,
+      "files_matching": 12,
+      "files_absent": [
+        "algo/innerLoopRho.m",
+        "algo/moveControl.m",
+        "algo/multRule.m",
+        "algo/useMMA.m",
+        "mma_published/README.md",
+        "mma_published/mmasub.m",
+        "mma_published/subsolv.m"
+      ],
+      "files_differing": [
+        "algo/defaultCfg.m (aed41860a2da..., recorded dd8f1cc7c19d...)",
+        "algo/deltaLambda.m (3f0e46ced3e6..., recorded 101519fcdcc2...)",
+        "algo/innerLoop.m (75fcb7641c60..., recorded 9ec33d7dcbab...)",
+        "algo/olhoffOpt.m (4784ecf3f6b4..., recorded c6c486244020...)"
+      ],
+      "differs_from_import_without_declaration": [
+        "algo/defaultCfg.m",
+        "algo/deltaLambda.m",
+        "algo/innerLoop.m"
+      ],
+      "in_imported_state": false,
+      "summary": "NO LONGER IN THE IMPORTED STATE: 7 file(s) absent, 4 differing, 12 unchanged (of 23). Not blocking; the running solver is pinned by in-repository evidence."
+    },
+    "source_repository": "/Users/piotrek/Programming/Matlab/Olhoff",
+    "source_reachable": true,
+    "dispatch_ok": true,
+    "resolved": [
+      {
+        "name": "applyFilter",
+        "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffM4Reconstruction/+frozen/filter/applyFilter.m"
+      },
+      {
+        "name": "assemble2D",
+        "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffM4Reconstruction/+frozen/fem/assemble2D.m"
+      },
+      {
+        "name": "classifyModes",
+        "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffM4Reconstruction/+frozen/fem/classifyModes.m"
+      },
+      {
+        "name": "defaultCfg",
+        "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffM4Reconstruction/+frozen/algo/defaultCfg.m"
+      },
+      {
+        "name": "deltaLambda",
+        "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffM4Reconstruction/+frozen/algo/deltaLambda.m"
+      },
+      {
+        "name": "eigSolve",
+        "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffM4Reconstruction/+frozen/fem/eigSolve.m"
+      },
+      {
+        "name": "elemMats2D",
+        "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffM4Reconstruction/+frozen/fem/elemMats2D.m"
+      },
+      {
+        "name": "genGrad",
+        "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffM4Reconstruction/+frozen/algo/genGrad.m"
+      },
+      {
+        "name": "innerLoop",
+        "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffM4Reconstruction/+frozen/algo/innerLoop.m"
+      },
+      {
+        "name": "innerLoopLP",
+        "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffM4Reconstruction/+frozen/algo/innerLoopLP.m"
+      },
+      {
+        "name": "innerLoopRho",
+        "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffM4Reconstruction/+frozen/algo/innerLoopRho.m"
+      },
+      {
+        "name": "massScale",
+        "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffM4Reconstruction/+frozen/fem/massScale.m"
+      },
+      {
+        "name": "mmasub",
+        "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffM4Reconstruction/+frozen/mma_published/mmasub.m"
+      },
+      {
+        "name": "model2D",
+        "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffM4Reconstruction/+frozen/fem/model2D.m"
+      },
+      {
+        "name": "moveControl",
+        "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffM4Reconstruction/+frozen/algo/moveControl.m"
+      },
+      {
+        "name": "multRule",
+        "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffM4Reconstruction/+frozen/algo/multRule.m"
+      },
+      {
+        "name": "olhoffOpt",
+        "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffM4Reconstruction/+frozen/algo/olhoffOpt.m"
+      },
+      {
+        "name": "prepFilter",
+        "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffM4Reconstruction/+frozen/filter/prepFilter.m"
+      },
+      {
+        "name": "subsolv",
+        "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffM4Reconstruction/+frozen/mma_published/subsolv.m"
+      },
+      {
+        "name": "useMMA",
+        "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffM4Reconstruction/+frozen/algo/useMMA.m"
+      }
+    ],
+    "pass": true
+  }
+}

@@ -5,16 +5,8 @@ function h = olhoffm4_sha256_file(filePath)
 %   and a hash checked from MATLAB are the same string.  (This is deliberately
 %   NOT sha256_hex, which prefixes a class tag and hashes MATLAB values, not
 %   files.)
+%
+%   See also OLHOFFM4_SHA256_BYTES.
 
-fid = fopen(filePath, 'r');
-if fid < 0
-    error('olhoffm4_sha256_file:CannotOpen', 'Cannot open %s', filePath);
-end
-c = onCleanup(@() fclose(fid));
-bytes = fread(fid, Inf, '*uint8');
-
-md = java.security.MessageDigest.getInstance('SHA-256');
-if ~isempty(bytes); md.update(bytes); end
-digest = typecast(md.digest(), 'uint8');
-h = lower(reshape(dec2hex(digest, 2).', 1, []));
+h = olhoffm4_sha256_bytes(olhoffm4_read_bytes(filePath));
 end

@@ -1,0 +1,33 @@
+% Conference performance table -- generated, do not edit by hand.
+% The Olhoff column is labelled "Du-Olhoff reconstruction (M4)" and must not be labelled "Olhoff 2007".
+\begin{table}[t]
+\centering
+\begin{tabular}{llrrrrrr}
+\hline
+Method & Mesh & Count 1 & Count 2 & Time 1 [s] & Time 2 [s] & Total [s] & $\omega_1$ \\
+\hline
+Proposed & $160\times20$ & 1 & 107 & 0.18 & 1.30 & 1.67 & 109.05 \\
+Yuksel & $160\times20$ & 121 & 123 & 1.48 & 2.22 & 4.02 & 157.28 \\
+Du-Olhoff reconstruction (M4) & $160\times20$ & 91 & 2241 & 2.83 & 115.35 & 118.22 & 169.50 \\
+Proposed & $240\times30$ & 1 & 236 & 0.22 & 6.18 & 6.64 & 108.78 \\
+Yuksel & $240\times30$ & 168 & 152 & 4.04 & 4.94 & 9.38 & 159.49 \\
+Du-Olhoff reconstruction (M4) & $240\times30$ & 104 & 2334 & 6.68 & 207.41 & 214.17 & 167.07 \\
+Proposed & $320\times40$ & 1 & 207 & 0.26 & 10.46 & 11.11 & 158.76 \\
+Yuksel & $320\times40$ & 252 & 320 & 10.44 & 16.80 & 27.78 & 160.75 \\
+Du-Olhoff reconstruction (M4) & $320\times40$ & 131 & 2614 & 14.99 & 324.84 & 339.96 & 165.95 \\
+Proposed & $400\times50$ & 1 & 182 & 0.34 & 15.52 & 16.31 & 159.52 \\
+Yuksel & $400\times50$ & 315 & 417 & 19.82 & 33.11 & 53.75 & 160.06 \\
+Du-Olhoff reconstruction (M4) & $400\times50$ & 139 & 2918 & 25.90 & 522.21 & 548.32 & 162.89 \\
+\hline
+\end{tabular}
+\caption{Count/time columns represent method-native computational stages and are not mathematically identical across methods. Total wall time is the common performance quantity.
+Proposed: Count 1 = reference eigenanalysis solves (always 1, not an optimization iteration), Count 2 = SIMP iterations, Time 1 = eigenanalysis and preparation, Time 2 = SIMP. Yuksel: Count 1 and Count 2 are the Stage-1 and Stage-2 iteration counts, Time 1 and Time 2 the corresponding stage times. Du-Olhoff reconstruction (M4): Count 1 = outer iterations, Count 2 = cumulative nested MMA iterations, Time 1 = outer work excluding the nested MMA solve, Time 2 = nested MMA total. The two counts are never added.
+Du-Olhoff timings and iteration counts refer to the frozen reconstruction used in this study. Some continuation and inner-solver details are not uniquely specified by the original publication; therefore these values should be interpreted as representative measurements of this reconstruction rather than exact historical implementation timings.}
+\label{tab:conference-performance}
+\end{table}
+
+% Nested-scheme detail for the Du-Olhoff reconstruction (M4):
+%   160x20: 24.63 inner MMA iterations per outer, inner time share 97.6%
+%   240x30: 22.44 inner MMA iterations per outer, inner time share 96.8%
+%   320x40: 19.95 inner MMA iterations per outer, inner time share 95.6%
+%   400x50: 20.99 inner MMA iterations per outer, inner time share 95.2%

@@ -29,6 +29,22 @@ clear; clc; close all;
 cfg = struct();
 
 % ---- Which meshes.  EDIT THIS MATRIX AND NOTHING ELSE to change the run. ----
+% Uncomment exactly one matrix.  160x20 is the documented mesh-resolution floor,
+% so even the single-row matrix is scientific evidence: it proves the whole
+% fixed pipeline end to end in minutes rather than hours.  Anything wider also
+% needs cfg.confirmLongCampaign below set to true.
+% cfg.resolutions = [
+%     160   20
+% ];
+
+% The four-resolution partial campaign:
+% cfg.resolutions = [
+%     160   20
+%     240   30
+%     320   40
+%     400   50
+% ];
+
 % The nine-resolution conference campaign:
 cfg.resolutions = [
     160   20
@@ -62,11 +78,31 @@ cfg.runLabel   = '';        % '' = auto ('smoke' / 'preflight_160x20' / 'campaig
 % Running anything above 160x20 costs minutes to hours per row.  Flip this to
 % true when you actually intend to launch it; the mesh list above stays visible
 % and editable either way.
-cfg.confirmLongCampaign = false;
+% Set true on 2026-09-04 for the four-resolution partial campaign selected
+% above (160x20, 240x30, 320x40, 400x50).
+cfg.confirmLongCampaign = true;
 
 % Truncated outer budget for MECHANICS-ONLY smoke tests.  [] = the methods'
 % own frozen budgets.  Any value here marks the whole run non-scientific.
 cfg.maxOuterOverride = [];
+
+% Yuksel per-stage SAFETY budget.  [] = the frozen profile value (1000).
+%
+% Raised to 5000 on 2026-09-05.  In campaign_9mesh, Yuksel reached the frozen
+% 1000 in stage 1 at 640x80, 720x90 and 800x100 and in stage 2 at 640x80 and
+% 800x100, so those rows report a CAP_HIT lower bound on the iterations and the
+% time the method actually needed -- they are censored, and a scaling exponent
+% fitted through them is biased downwards.  Extrapolating the uncensored
+% per-stage counts (n1 ~ 0.217*Ne^0.760, n2 ~ 0.193*Ne^0.780) predicts about
+% 1161 and 1286 at 800x100, so 5000 per stage carries roughly a four-fold
+% margin and every mesh should stop on Yuksel's own rule instead of the cap.
+%
+% RAISING a safety budget does NOT make a run non-scientific: the manifest
+% records this value's role as "per-stage safety budget; CAP_HIT is not
+% convergence", so a larger budget only lets the native stopping rule decide.
+% LOWERING it below the frozen value is truncation, and is treated exactly like
+% cfg.maxOuterOverride.
+cfg.yukselMaxIters = 5000;
 
 % ---- Timing-accounting tolerances (predeclared, recorded in the artifacts) --
 cfg.timingTolAbs     = 1e-6;   % |T_total - (T1+T2+T_overhead)|, seconds
@@ -88,6 +124,22 @@ addpath(fullfile(repoRoot, 'analysis', 'three_method_parametric_study'));
 % or Matlab/reproduction2007 path is added here, by design.
 addpath(fullfile(repoRoot, 'analysis', 'OlhoffM4Reconstruction'));
 
+% Not adding a superseded implementation is not enough: MATLAB paths are
+% session state, and other scripts in this repository (examples/Revision_v1/*.m,
+% Matlab/reproduction2007/runner/repro2007_verify_isolation.m) call
+% addpath(genpath(<repo>/analysis)), which leaves analysis/Olhoff* and
+% Matlab/reproduction2007 on the path for the rest of the session.  olhoffOpt
+% then resolves to whichever of the seven realizations came first -- a run that
+% looks fine and is scientifically void.  This driver curates its own path, so
+% it REMOVES what the session handed it rather than inheriting it.  The
+% preflight below re-checks the result independently; the scrub is recorded in
+% the benchmark manifest.
+pathScrub = olhoffm4_scrub_forbidden_paths(repoRoot);
+if ~isempty(pathScrub)
+    fprintf('Removed %d superseded Olhoff path entr%s inherited from this MATLAB session.\n', ...
+        numel(pathScrub), pluralIes(numel(pathScrub)));
+end
+
 if cfg.singleThread
     maxNumCompThreads(1);
 end
@@ -102,11 +154,23 @@ elementCounts = cfg.resolutions(:,1) .* cfg.resolutions(:,2);
 
 % 3200 elements = 160x20, this project's documented mesh-resolution floor:
 % nothing below it is scientific evidence, however cleanly it runs.
-cfg.scientificEvidence  = isempty(cfg.maxOuterOverride) && all(elementCounts >= 3200);
+% A raised Yuksel budget is still scientific evidence; a lowered one is not.
+% The frozen value is READ from the freeze manifest rather than restated here,
+% so this test cannot drift away from the number the run actually uses.
+yukselFrozenBudget = confbench_frozen_budget('yuksel');
+if isempty(cfg.yukselMaxIters)
+    cfg.yukselMaxIters = yukselFrozenBudget;
+end
+validateattributes(cfg.yukselMaxIters, {'numeric'}, ...
+    {'scalar','integer','positive','finite'}, mfilename, 'cfg.yukselMaxIters');
+yukselBudgetTruncated = cfg.yukselMaxIters < yukselFrozenBudget;
+
+cfg.scientificEvidence  = isempty(cfg.maxOuterOverride) && all(elementCounts >= 3200) ...
+    && ~yukselBudgetTruncated;
 cfg.performanceCampaign = cfg.scientificEvidence && isequal(cfg.resolutions, CAMPAIGN_MESHES);
 
 if isempty(cfg.runLabel)
-    if ~isempty(cfg.maxOuterOverride)
+    if ~isempty(cfg.maxOuterOverride) || yukselBudgetTruncated
         cfg.runLabel = 'smoke';
     elseif cfg.performanceCampaign
         cfg.runLabel = 'campaign_9mesh';
@@ -136,6 +200,8 @@ fprintf('  common evaluator     : %d (run OUTSIDE every solver timer)\n', cfg.ru
 fprintf('  scaling fit          : %d\n', cfg.fitScaling);
 fprintf('  tables CSV/JSON/TeX  : %d / %d / %d\n', cfg.writeCSV, cfg.writeJSON, cfg.writeLaTeX);
 fprintf('  outer budget override: %s\n', mat2str(cfg.maxOuterOverride));
+fprintf('  Yuksel stage budget  : %d (frozen %d)%s\n', cfg.yukselMaxIters, ...
+    yukselFrozenBudget, budgetNote(cfg.yukselMaxIters, yukselFrozenBudget));
 fprintf('  run label            : %s\n', cfg.runLabel);
 fprintf('  output directory     : %s\n', cfg.outputDir);
 fprintf('  DERIVED scientific_evidence  : %d\n', cfg.scientificEvidence);
@@ -186,6 +252,9 @@ for i = 1:numel(pre.checks)
         fprintf('         %s\n', c.detail);
     end
 end
+for i = 1:numel(pre.notes)
+    fprintf('  (note) %s\n', pre.notes{i});
+end
 fprintf('  PREFLIGHT: %s\n\n', verdict(pre.pass));
 if ~pre.pass
     writeJsonFile(fullfile(cfg.outputDir, 'preflight_FAILED.json'), pre);
@@ -232,6 +301,7 @@ runOpts = struct('timing_tol_abs', cfg.timingTolAbs, ...
                  'timing_tol_rel', cfg.timingTolRel, ...
                  'crosscheck_tol_rel', cfg.crosscheckTolRel, ...
                  'label', cfg.runLabel);
+runOpts.yuksel_max_iters = cfg.yukselMaxIters;
 if ~isempty(cfg.maxOuterOverride)
     runOpts.max_outer_override = cfg.maxOuterOverride;
 end
@@ -324,10 +394,49 @@ resolvedImpl.study_base_config = which('study_base_config');
 manifest = confbench_manifest(cfg, methodConfigs, resolvedImpl);
 manifest.warmup = warmup;
 manifest.preflight = pre;
+% Assigned field by field: struct('removed_entries', {c}) collapses to a 0x0
+% struct array when c is an empty cell, which is exactly the common case here.
+manifest.path_scrub = struct();
+manifest.path_scrub.removed_entries = pathScrub;
+manifest.path_scrub.rationale = ['Superseded Olhoff implementations inherited ' ...
+    'from this MATLAB session were removed from the path before preflight, so ' ...
+    'dispatch is a property of this driver rather than of whatever ran earlier ' ...
+    'in the session.'];
 
 files = confbench_export(cfg, records, manifest, scaling);
 save(fullfile(cfg.outputDir, 'benchmark_records.mat'), 'records', 'cfg', ...
     'manifest', 'scaling', '-v7.3');
+
+% Complexity-fit figures.  ALWAYS produced, for every run, from the recorded
+% results only -- they are a view of the data, not a second measurement, so
+% they are not gated on cfg.fitScaling or on the campaign flags.  What IS gated
+% is which rows the curve is fitted through: confbench_complexity_plots fits
+% the ok rows, the same ones confbench_scaling_fit accepts, and draws the rest
+% hollow.  A figure that cannot be written must not lose a completed campaign,
+% so the failure is a warning, not an error.
+try
+    plotFiles = confbench_complexity_plots(cfg, records, scaling);
+    pf = fieldnames(plotFiles);
+    for i = 1:numel(pf)
+        files.(pf{i}) = plotFiles.(pf{i});
+    end
+catch plotErr
+    warning('performance_comparison:ComplexityPlotsFailed', ...
+        'Complexity-fit figures were not produced (%s).', plotErr.message);
+end
+
+% Final topology image per run -- one per method per mesh, so a 9-mesh
+% three-method campaign leaves 27.  Rendered from the recorded design vector
+% records(i).x through the single shared renderer, so nothing is re-solved and
+% the three methods stay visually comparable.  Same failure policy as above: a
+% figure must not be able to lose a completed campaign.
+try
+    topoInfo = confbench_topology_images(cfg, records);
+    files.topologies_dir = topoInfo.dir;
+catch topoErr
+    warning('performance_comparison:TopologyImagesFailed', ...
+        'Final topology images were not produced (%s).', topoErr.message);
+end
 
 fprintf('---------------- ARTIFACTS ----------------\n');
 fn = fieldnames(files);
@@ -342,6 +451,20 @@ fprintf('%s\n', confbench_caveats().olhoff);
 %% ============================================================
 %  LOCAL HELPERS
 %  ============================================================
+function s = budgetNote(used, frozen)
+if used > frozen
+    s = '  RAISED -- still scientific evidence';
+elseif used < frozen
+    s = '  TRUNCATED -- run is NOT scientific evidence';
+else
+    s = '';
+end
+end
+
+function s = pluralIes(n)
+if n == 1; s = 'y'; else; s = 'ies'; end
+end
+
 function s = meshListStr(R)
 parts = arrayfun(@(i) sprintf('%dx%d', R(i,1), R(i,2)), 1:size(R,1), 'UniformOutput', false);
 s = strjoin(parts, ', ');
