@@ -58,6 +58,36 @@ cfg.resolutions = [
     800  100
 ];
 
+% ---- Guards --------------------------------------------------------------
+% Running anything above 160x20 costs minutes to hours per row.  This must be
+% true to launch the nine-resolution conference campaign selected above; the
+% mesh list stays visible and editable either way.
+cfg.confirmLongCampaign = true;
+
+% Truncated outer budget for MECHANICS-ONLY smoke tests.  [] = the methods'
+% own frozen budgets.  Any value here marks the whole run non-scientific.
+cfg.maxOuterOverride = [];
+
+% Yuksel per-stage SAFETY budget, applied to BOTH stages.  [] = the frozen
+% profile value (1000).
+%
+% Raised to 5000 on 2026-09-05.  In campaign_9mesh, Yuksel reached the frozen
+% 1000 in stage 1 at 640x80, 720x90 and 800x100 and in stage 2 at 640x80 and
+% 800x100, so those rows report a CAP_HIT lower bound on the iterations and the
+% time the method actually needed -- they are censored, and a scaling exponent
+% fitted through them is biased downwards.  Extrapolating the uncensored
+% per-stage counts (n1 ~ 0.217*Ne^0.760, n2 ~ 0.193*Ne^0.780) predicts about
+% 1161 and 1286 at 800x100, so 5000 per stage carries roughly a four-fold
+% margin and every mesh should stop on Yuksel's own rule instead of the cap.
+%
+% This is a SAFETY budget, not a stopping rule: a stage that reaches it is
+% CAP_HIT and NOT converged, and confbench_run_case now detects that
+% NUMERICALLY from the actual per-stage counts rather than from the overall
+% textual stop reason.  RAISING a safety budget does not make a run
+% non-scientific; LOWERING it below the frozen value is truncation, and is
+% treated exactly like cfg.maxOuterOverride.
+cfg.yukselMaxIters = 5000;
+
 % ---- Which methods -------------------------------------------------------
 cfg.methods = struct('proposed', true, 'yuksel', true, 'olhoff', true);
 
@@ -71,38 +101,9 @@ cfg.fitScaling   = true;    % T(Ne) = C*Ne^p; refused unless this is a full camp
 cfg.writeCSV   = true;
 cfg.writeJSON  = true;
 cfg.writeLaTeX = true;
-cfg.outputDir  = '';        % '' = auto, under examples/Performance/conference_benchmark/
-cfg.runLabel   = '';        % '' = auto ('smoke' / 'preflight_160x20' / 'campaign_9mesh')
 
-% ---- Guards --------------------------------------------------------------
-% Running anything above 160x20 costs minutes to hours per row.  Flip this to
-% true when you actually intend to launch it; the mesh list above stays visible
-% and editable either way.
-% Set true on 2026-09-04 for the four-resolution partial campaign selected
-% above (160x20, 240x30, 320x40, 400x50).
-cfg.confirmLongCampaign = true;
-
-% Truncated outer budget for MECHANICS-ONLY smoke tests.  [] = the methods'
-% own frozen budgets.  Any value here marks the whole run non-scientific.
-cfg.maxOuterOverride = [];
-
-% Yuksel per-stage SAFETY budget.  [] = the frozen profile value (1000).
-%
-% Raised to 5000 on 2026-09-05.  In campaign_9mesh, Yuksel reached the frozen
-% 1000 in stage 1 at 640x80, 720x90 and 800x100 and in stage 2 at 640x80 and
-% 800x100, so those rows report a CAP_HIT lower bound on the iterations and the
-% time the method actually needed -- they are censored, and a scaling exponent
-% fitted through them is biased downwards.  Extrapolating the uncensored
-% per-stage counts (n1 ~ 0.217*Ne^0.760, n2 ~ 0.193*Ne^0.780) predicts about
-% 1161 and 1286 at 800x100, so 5000 per stage carries roughly a four-fold
-% margin and every mesh should stop on Yuksel's own rule instead of the cap.
-%
-% RAISING a safety budget does NOT make a run non-scientific: the manifest
-% records this value's role as "per-stage safety budget; CAP_HIT is not
-% convergence", so a larger budget only lets the native stopping rule decide.
-% LOWERING it below the frozen value is truncation, and is treated exactly like
-% cfg.maxOuterOverride.
-cfg.yukselMaxIters = 5000;
+cfg.outputDir = '';                  % auto: examples/Performance/conference_benchmark/<runLabel>
+cfg.runLabel  = 'campaign_9mesh_r2';
 
 % ---- Timing-accounting tolerances (predeclared, recorded in the artifacts) --
 cfg.timingTolAbs     = 1e-6;   % |T_total - (T1+T2+T_overhead)|, seconds
@@ -140,6 +141,18 @@ if ~isempty(pathScrub)
         numel(pathScrub), pluralIes(numel(pathScrub)));
 end
 
+% Pinning threads is a property of the MEASUREMENT, not of the user's session,
+% so the entry value is captured and restored again on the way out.
+%
+% This file is a SCRIPT, and an onCleanup object in a script's workspace is NOT
+% destroyed when the script ends -- it survives in the base workspace until
+% something clears it.  (Measured: after the script returns the pin is still in
+% force; it lifts only on `clear`.)  So the guard below is a BACKSTOP for an
+% uncaught error mid-campaign -- it fires at the `clear` on the next run -- and
+% the deterministic restores are the two explicit calls to restoreThreads():
+% one before the preflight bail-out, one at the end of the script.
+entryThreads = maxNumCompThreads();
+threadGuard = onCleanup(@() maxNumCompThreads(entryThreads)); %#ok<NASGU>
 if cfg.singleThread
     maxNumCompThreads(1);
 end
@@ -258,6 +271,7 @@ end
 fprintf('  PREFLIGHT: %s\n\n', verdict(pre.pass));
 if ~pre.pass
     writeJsonFile(fullfile(cfg.outputDir, 'preflight_FAILED.json'), pre);
+    maxNumCompThreads(entryThreads);   % nothing was solved; hand the session back
     error('performance_comparison:PreflightFailed', ...
         'Preflight failed; nothing was solved.  See %s', ...
         fullfile(cfg.outputDir, 'preflight_FAILED.json'));
@@ -394,6 +408,21 @@ resolvedImpl.study_base_config = which('study_base_config');
 manifest = confbench_manifest(cfg, methodConfigs, resolvedImpl);
 manifest.warmup = warmup;
 manifest.preflight = pre;
+
+% Whether a budget was ACTUALLY reached, recorded next to the budget itself so
+% a reader of the manifest never has to reconstruct censoring from the rows.
+% confbench_classify decides CAP_HIT numerically from the per-stage counts, so
+% this summary is exactly what the scaling fit excluded.
+capRows = arrayfun(@(r) strcmp(r.status, 'CAP_HIT'), records);
+manifest.cap_summary = struct( ...
+    'any_cap_hit', any(capRows), ...
+    'n_cap_hit', sum(capRows), ...
+    'n_records', numel(records), ...
+    'cap_hit_rows', {arrayfun(@(r) sprintf('%s %dx%d', r.method, r.mesh(1), r.mesh(2)), ...
+        records(capRows), 'UniformOutput', false)}, ...
+    'meaning', ['CAP_HIT means a method reached a safety budget instead of its ' ...
+        'own stopping rule. Such rows are reported but are excluded from every ' ...
+        'scaling fit and must not be described as converged.']);
 % Assigned field by field: struct('removed_entries', {c}) collapses to a 0x0
 % struct array when c is an empty cell, which is exactly the common case here.
 manifest.path_scrub = struct();
@@ -447,6 +476,10 @@ fprintf('  %-16s %s\n', 'records_mat', fullfile(cfg.outputDir, 'benchmark_record
 fprintf('\nscientific_evidence  = %d\nperformance_campaign = %d\n', ...
     cfg.scientificEvidence, cfg.performanceCampaign);
 fprintf('%s\n', confbench_caveats().olhoff);
+
+% Every measurement is complete; give the session its thread setting back.
+maxNumCompThreads(entryThreads);
+fprintf('\nmaxNumCompThreads restored to %d.\n', maxNumCompThreads());
 
 %% ============================================================
 %  LOCAL HELPERS

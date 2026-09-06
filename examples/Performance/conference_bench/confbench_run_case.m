@@ -115,6 +115,24 @@ rec.effective_config = orStruct(o, 'effective_cfg');
 rec.stopping = orStruct(o, 'stopping');
 rec.solver_log = orCell(o, 'log');
 
+% A failed nested MMA solve must never reach the table as a clean convergence.
+% olhoffm4_run counts them but gates SOLVER_FAILURE only on a nonfinite design
+% or a nonpositive omega1, so the count is enforced here rather than by editing
+% the hash-pinned frozen import.  Inert whenever the count is zero, which it is
+% for every row of the existing campaign.
+nBadInner = 0;
+if isstruct(rec.stopping) && isfield(rec.stopping, 'n_inner_not_converged') ...
+        && ~isempty(rec.stopping.n_inner_not_converged) ...
+        && isfinite(rec.stopping.n_inner_not_converged)
+    nBadInner = double(rec.stopping.n_inner_not_converged);
+end
+if nBadInner > 0 && ~strcmp(rec.status, 'SOLVER_FAILURE')
+    rec.status = 'SOLVER_FAILURE';
+    rec.status_note = sprintf(['%d nested MMA sub-optimization(s) did not converge; ' ...
+        'NOT a clean convergence | previous status: %s'], nBadInner, rec.status_note);
+    rec.ok = false;
+end
+
 if ~isfield(o, 'accounting'); return; end
 a = o.accounting;
 
@@ -161,7 +179,9 @@ tCall = tic;
 [x, omega, tIter, nIter, ~, nIterStage, tel] = run_topopt_from_json(mcfg); %#ok<ASGLU>
 callWall = toc(tCall);
 
-rec = fillDispatched(rec, x, omega, nIter, nIterStage, tel);
+% The Proposed method has one iteration budget; compare the SIMP count to it.
+rec = fillDispatched(rec, x, omega, nIter, nIterStage, tel, ...
+    struct('total', cfgNum(mcfg, {'optimization','max_iters'})));
 
 t1 = tel.timing.initialization_time;                 % preparation + the 1 eigensolve
 t2 = tel.timing.optimization_loop_time;              % the SIMP solve
@@ -220,7 +240,17 @@ tCall = tic;
 [x, omega, tIter, nIter, ~, nIterStage, tel] = run_topopt_from_json(mcfg); %#ok<ASGLU>
 callWall = toc(tCall);
 
-rec = fillDispatched(rec, x, omega, nIter, nIterStage, tel);
+% Both per-stage caps as this run actually received them.  Stage 1 prefers the
+% value the solver echoed back (telemetry.yuksel.stage1_max_iters); Stage 2 is
+% governed by optimization.max_iters.  Neither is restated as a constant.
+yCaps = struct('stage1', telNum(tel, {'yuksel','stage1_max_iters'}), ...
+               'stage2', cfgNum(mcfg, {'optimization','max_iters'}));
+if isempty(yCaps.stage1)
+    yCaps.stage1 = cfgNum(mcfg, {'optimization','yuksel','stage1_max_iters'});
+end
+rec = fillDispatched(rec, x, omega, nIter, nIterStage, tel, yCaps);
+rec.stopping.stage1_max_iters_effective = yCaps.stage1;
+rec.stopping.stage2_max_iters_effective = yCaps.stage2;
 
 n1 = nIterStage.stage1; n2 = nIterStage.stage2;
 t1 = tel.yuksel.stage1_loop_time; t2 = tel.yuksel.stage2_loop_time;
@@ -261,54 +291,33 @@ rec.times = struct( ...
 end
 
 % =========================================================================
-function rec = fillDispatched(rec, x, omega, nIter, nIterStage, tel)
+function rec = fillDispatched(rec, x, omega, nIter, nIterStage, tel, caps)
+%FILLDISPATCHED  Shared record fill for the two dispatched methods.
+%
+%   The status decision itself lives in CONFBENCH_CLASSIFY, which is a separate
+%   file precisely so the precedence
+%
+%       SOLVER_FAILURE > CAP_HIT > NATIVE_CONVERGED > UNRECOGNIZED_STOP
+%
+%   can be regression-tested without a solve.  caps carries the ACTUAL numeric
+%   iteration caps this run received; see CONFBENCH_CLASSIFY for why the
+%   numeric test is required and the textual stop reason is not sufficient.
+if nargin < 7 || isempty(caps); caps = struct(); end
 rec.x = double(x(:));
 rec.omega = double(omega(:));
 rec.omega1_native = rec.omega(1);
 rec.telemetry = tel;
 s = tel.stopping;
+rec.stopping = s;
 
-failed = ~all(isfinite(rec.x)) || ~isfinite(rec.omega(1)) || rec.omega(1) <= 0;
-if isfield(s,'subproblem_failed') && ~isempty(s.subproblem_failed)
-    failed = failed || logical(s.subproblem_failed);
-end
-if isfield(s,'n_subproblem_failures') && isfinite(s.n_subproblem_failures)
-    failed = failed || s.n_subproblem_failures > 0;
-end
+% A nonfinite design or a nonpositive first frequency is a solver failure
+% regardless of what the solver said; hand that to the classifier as data.
+s.design_nonfinite = ~all(isfinite(rec.x)) || ~isfinite(rec.omega(1)) || rec.omega(1) <= 0;
 
-reasons = {char(string(s.stop_reason))};
-if isfield(s,'stage1_stop_reason'); reasons{end+1} = char(string(s.stage1_stop_reason)); end
-if isfield(s,'stage2_stop_reason'); reasons{end+1} = char(string(s.stage2_stop_reason)); end
-capHit = any(cellfun(@(r) contains(lower(r), 'max_iter'), reasons));
-converged = contains(lower(reasons{1}), 'tolerance');
-
-if failed
-    rec.status = 'SOLVER_FAILURE';
-    rec.status_note = 'solver reported a failed subproblem or a nonfinite result';
-elseif capHit
-    rec.status = 'CAP_HIT';
-    rec.status_note = sprintf('iteration cap reached (%s); NOT convergence', ...
-        strjoin(unique(reasons), '|'));
-elseif converged
-    rec.status = 'NATIVE_CONVERGED';
-    rec.status_note = sprintf('native stop test met (%s)', reasons{1});
-    rec.ok = true;
-else
-    rec.status = 'UNRECOGNIZED_STOP';
-    rec.status_note = sprintf('stop reason "%s" is not in the frozen vocabulary', reasons{1});
-end
-
-rec.stopping = struct( ...
-    'stop_reason', char(string(s.stop_reason)), ...
-    'iterations_total', nIter, ...
-    'iter_stage1', nIterStage.stage1, ...
-    'iter_stage2', nIterStage.stage2, ...
-    'final_max_density_change', s.final_max_density_change, ...
-    'final_rms_density_change', s.final_rms_density_change, ...
-    'final_relative_objective_change', s.final_relative_objective_change, ...
-    'final_grayness', s.final_grayness, ...
-    'convergence_tolerance', s.convergence_tolerance, ...
-    'volume', mean(rec.x));
+cls = confbench_classify(s, nIter, nIterStage, caps);
+rec.status = cls.status;
+rec.status_note = cls.note;
+rec.ok = cls.ok;
 end
 
 % =========================================================================
@@ -320,4 +329,21 @@ if isfield(s, name); v = s.(name); else; v = struct(); end
 end
 function v = orCell(s, name)
 if isfield(s, name); v = s.(name); else; v = {}; end
+end
+
+% =========================================================================
+function v = cfgNum(s, pathCells)
+%CFGNUM  Numeric value at a nested config path, [] when absent.
+v = [];
+for i = 1:numel(pathCells)
+    if ~isstruct(s) || ~isfield(s, pathCells{i}); return; end
+    s = s.(pathCells{i});
+end
+if isnumeric(s) && isscalar(s) && isfinite(s); v = double(s); end
+end
+
+% =========================================================================
+function v = telNum(t, pathCells)
+%TELNUM  Same, for telemetry.
+v = cfgNum(t, pathCells);
 end

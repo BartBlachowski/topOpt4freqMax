@@ -43,7 +43,9 @@ olhoffm4_sha256_file.m          raw-file SHA-256, matching `shasum -a 256`
 olhoffm4_sha256_bytes.m         the same digest over bytes held in memory
 olhoffm4_read_bytes.m           raw uint8 file read, no encoding translation
 
-+frozen/                        THE AUDITED SOLVER CORE -- do not edit
++frozen/
+  run_pinned_pinned.m           editable standalone runner (local, not imported)
+  # The following subdirectories are the audited solver core -- do not edit:
   algo/   olhoffOpt defaultCfg multRule moveControl genGrad deltaLambda
           innerLoop innerLoopLP innerLoopRho useMMA
   fem/    model2D elemMats2D assemble2D massScale eigSolve classifyModes
@@ -82,6 +84,66 @@ out.accounting.inner_time_share_pct
 
 Never report `outer_iterations + inner_iterations_total` as a single iteration
 count: they are different objects.
+
+### Editable pinned-pinned runner
+
+Edit the `USER PARAMETERS` block in
+[`+frozen/run_pinned_pinned.m`](+frozen/run_pinned_pinned.m), then call it by
+its **qualified** name:
+
+```matlab
+addpath('<repo>/analysis/OlhoffM4Reconstruction');
+res = frozen.run_pinned_pinned();
+res = frozen.run_pinned_pinned('nelx', 320, 'nely', 40, ...
+    'rminEl', 2.4, 'tolOuterRef', 0.025, 'tolInner', 0.02, ...
+    'maxOuter', 600, 'minInner', 5, 'maxInner', 800);
+save('pinned_pinned_result.mat', 'res');
+```
+
+The Editor's **Run** button cannot reach this file from a cold start, because
+it lives in the `+frozen` namespace folder: MATLAB refuses to add a `+`-folder
+to the path (`MATLAB:mpath:packageDirectoriesNotAllowedOnPath`), and no name
+resolves from inside one, so both answers to the "not on the path" prompt fail.
+The parent folder `analysis/OlhoffM4Reconstruction` must be the current folder
+or on the path, and the call must be qualified — the `addpath` line above does
+exactly that. This is the cost of the `+frozen/` isolation described earlier.
+
+Defaults match the current conference configuration at **160x20**: filter
+radius **1.2 elements** (`R = 0.06` physical at that mesh), outer budget
+**400**, inner budget **500**, minimum inner count **5**, and inner relative
+tolerance **0.05**. `tolOuterRef=0.05` sets the outer L2 tolerance at 3200
+elements; the runner multiplies it by `sqrt(nelx*nely/3200)` to preserve the
+RMS tolerance when refining the mesh. The S2 move ladder, window and stall
+tolerance are editable in the same block.
+
+The runner refuses a ladder whose **finest rung is not above the RMS
+tolerance**. The MMA box is `|drho| <= mv`, so `||drho||_2 <= sqrt(NE)*mv`,
+and the outer test is `||drho||_2 < tolOuter`: a terminal rung below
+`tolOuter/sqrt(NE)` satisfies that test *mechanically* once the ladder settles,
+and the run reports `NATIVE_CONVERGED` without the design having converged.
+`outerGuard='settledmove'` does not cover this — it suppresses the test only on
+the iteration where the move limit *changed*, not after it has bottomed out.
+Measured at 40x10: `s2Levels=1e-4` (0.113x RMS) stops after **2** outer
+iterations at omega1 = 69.118, against **98** iterations and omega1 = 158.208
+for the frozen ladder, both reporting `NATIVE_CONVERGED`. The frozen ladder has
+5.657x headroom at every mesh, so the check never fires on the benchmark; the
+banner prints the ratio. Note that `moveMin = 0.002` is *not* the relevant
+floor — `moveControl` applies it to the S1 and S3 families only, never S2.
+
+`rminEl` is in **element units** and reaches `prepFilter` unchanged, so the
+physical radius is `rminEl*(b/nely)`. Holding `rminEl` fixed across a mesh
+refinement therefore shrinks the filter physically; to keep the frozen
+conference filter, set `rminEl = 0.06*nely` (1.2, 1.8, 2.4, … as tabulated
+above). `rminEl <= 1` reaches no neighbour and leaves sensitivities unfiltered.
+
+Both displacements are fixed at each end's mid-height node (`bc='a'`,
+`support='mid'`, `axial='both'`); `nely` must be even. The runner displays the
+final topology and frequency history, and returns the effective configuration,
+density, frequencies in rad/s, iteration history and stopping status in `res`.
+Use `'showPlots', false` for batch runs and `'verbose', true` for iteration
+output. `CAP_HIT` means the outer safety budget was reached without satisfying
+the convergence test. Parameter changes produce a custom M4 run; the imported
+solver files and frozen conference configuration remain unchanged.
 
 ## The frozen realization
 

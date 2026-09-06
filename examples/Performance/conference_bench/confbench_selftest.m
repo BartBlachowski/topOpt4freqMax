@@ -18,6 +18,14 @@ function report = confbench_selftest(outFile)
 %         explicitly marked deprecated and unmeasured
 %     T6  the frozen Olhoff configuration rejects an odd nely
 %     T7  the preflight refuses a mesh above 160x20 without acknowledgement
+%     T8  Yuksel Stage-1 at its cap with a Stage-2 TOLERANCE stop is CAP_HIT
+%         (the campaign_9mesh 720x90 defect: the overall stop reason says
+%         tolerance, so only the numeric per-stage test can catch it)
+%     T9  Yuksel Stage-2 at its cap is CAP_HIT
+%     T10 both stages below their caps with a tolerance stop is NATIVE_CONVERGED
+%     T11 SOLVER_FAILURE outranks CAP_HIT when both conditions hold
+%     T12 confbench_scaling_fit excludes every non-ok row and reports exactly
+%         which meshes it used
 %
 %   See also PERFORMANCE_COMPARISON, CONFBENCH_PREFLIGHT.
 
@@ -163,6 +171,57 @@ report = addT(report, 'T7', 'preflight refuses a mesh above 160x20 without ackno
 report.pass = all([report.tests.pass]);
 od = fileparts(outFile);
 if exist(od,'dir') ~= 7; mkdir(od); end
+% ---- T8..T11: Yuksel per-stage cap classification -----------------------
+% Synthetic telemetry only -- no solve.  These drive the SAME classification
+% code path the campaign uses (confbench_run_case>fillDispatched), through its
+% documented caps argument, so they are a regression test of the real logic.
+capCases = { ...
+  'T8',  'Stage-1 at cap + Stage-2 tolerance stop => CAP_HIT', ...
+         1000, 966, 1000, 5000, 'density_change_tolerance', false, 'CAP_HIT'; ...
+  'T9',  'Stage-2 at cap => CAP_HIT', ...
+          300, 5000, 5000, 5000, 'density_change_tolerance', false, 'CAP_HIT'; ...
+  'T10', 'both stages below cap + tolerance stop => NATIVE_CONVERGED', ...
+          300, 400, 5000, 5000, 'density_change_tolerance', false, 'NATIVE_CONVERGED'; ...
+  'T11', 'failed subproblem outranks a cap state => SOLVER_FAILURE', ...
+         5000, 5000, 5000, 5000, 'density_change_tolerance', true,  'SOLVER_FAILURE'};
+for ci = 1:size(capCases,1)
+    id = capCases{ci,1}; nm = capCases{ci,2};
+    n1 = capCases{ci,3}; n2 = capCases{ci,4};
+    c1 = capCases{ci,5}; c2 = capCases{ci,6};
+    reason = capCases{ci,7}; failSub = capCases{ci,8}; want = capCases{ci,9};
+    try
+        stp = struct('stop_reason', reason, 'subproblem_failed', logical(failSub), ...
+                     'n_subproblem_failures', double(logical(failSub)));
+        got = confbench_classify(stp, n1+n2, struct('stage1',n1,'stage2',n2), ...
+                     struct('stage1',c1,'stage2',c2));
+        okc = strcmp(got.status, want) && (strcmp(want,'NATIVE_CONVERGED') == got.ok);
+        report = addT(report, id, nm, okc, sprintf('n1=%d/%g n2=%d/%g -> %s (ok=%d), want %s', ...
+            n1, c1, n2, c2, got.status, got.ok, want));
+    catch ME
+        report = addT(report, id, nm, false, ['probe raised: ' ME.message]);
+    end
+end
+
+% ---- T12: scaling fit censors non-ok rows -------------------------------
+try
+    mk = @(ne, t, okFlag, st) struct('method_key','yuksel','method','Yuksel', ...
+        'mesh',[ne/20 20],'ok',okFlag,'status',st, ...
+        'times',struct('total_wall_time_s',t));
+    recs = [mk(3200,4,true,'NATIVE_CONVERGED'), mk(7200,9,true,'NATIVE_CONVERGED'), ...
+            mk(12800,28,true,'NATIVE_CONVERGED'), mk(20000,75,true,'NATIVE_CONVERGED'), ...
+            mk(28800,900,false,'CAP_HIT')];
+    scfg = struct('fitScaling',true,'performanceCampaign',true,'scientificEvidence',true);
+    sc = confbench_scaling_fit(scfg, recs);
+    used = sc.methods(1).meshes;
+    okc = sc.fitted && sc.methods(1).n == 4 && ~any(strcmp(used,'1440x20'));
+    report = addT(report, 'T12', 'scaling fit excludes CAP_HIT and names the points used', okc, ...
+        sprintf('n=%d meshes={%s} C=%.4g p=%.4f', sc.methods(1).n, strjoin(used,','), ...
+                sc.methods(1).C, sc.methods(1).p));
+catch ME
+    report = addT(report, 'T12', 'scaling fit excludes CAP_HIT and names the points used', ...
+        false, ['raised: ' ME.message]);
+end
+
 fid = fopen(outFile,'w'); cl = onCleanup(@() fclose(fid)); %#ok<NASGU>
 fprintf(fid, '%s\n', jsonencode(report, 'PrettyPrint', true));
 
