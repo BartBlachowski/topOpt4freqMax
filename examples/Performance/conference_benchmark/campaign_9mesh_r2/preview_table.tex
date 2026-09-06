@@ -1,0 +1,18 @@
+% Standalone preview wrapper for conference_performance_table.tex.
+%
+% The generated table file is a FRAGMENT: a bare \begin{table}...\end{table}
+% block meant to be \input{} into your paper.  Running pdflatex on it directly
+% fails with "Environment table undefined" because it has no document class.
+% This wrapper supplies one, so:
+%
+%     pdflatex preview_table.tex
+%
+% Nothing here is part of the benchmark evidence -- it only renders the table.
+\documentclass[11pt]{article}
+\usepackage[a4paper,landscape,margin=15mm]{geometry}
+\usepackage{amsmath}
+\pagestyle{empty}
+\begin{document}
+\small
+\input{conference_performance_table.tex}
+\end{document}
