@@ -102,3 +102,9 @@ codegen/
 !analysis/iteration_efficiency_phase2i_precision_qualification/SHA256SUMS.txt
 !analysis/iteration_efficiency_phase2i_precision_qualification/raw/*.csv
 !analysis/iteration_efficiency_phase2i_precision_qualification/raw/*.mat
+
+# Archives.  Zip bundles are local backups of content that is either already
+# tracked file-by-file or deliberately excluded; they are not evidence, and one
+# of them (analysis/OlhoffArchive.zip, 552 MB) exceeds GitHub's 100 MB per-file
+# hard limit and blocks the push outright.  Keep them on disk, out of git.
+*.zip
