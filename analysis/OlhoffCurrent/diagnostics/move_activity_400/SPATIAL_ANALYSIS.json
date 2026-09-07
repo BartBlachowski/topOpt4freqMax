@@ -1,0 +1,257 @@
+{
+  "schema": "olhoff_move_activity_400_spatial/1",
+  "NE": 20000,
+  "mesh": [
+    400,
+    50
+  ],
+  "nOuter": 369,
+  "states": {
+    "beforeProductionFirstDescent": 137,
+    "representativeLaterFixedMove": 250,
+    "matureOrCapEndpoint": 369
+  },
+  "spatial_states": [
+    {
+      "label": "beforeProductionFirstDescent",
+      "iter": 137,
+      "move": 0.04,
+      "Mnd": 32.395686696632154,
+      "u_max": 0.5299286805127836,
+      "u_RMS": 0.048217748001870175,
+      "Neff": 165.5804245740459,
+      "active_1e-4": {
+        "count": 7670,
+        "frac": 0.3835,
+        "interfaceAdjacency": 0.3395045632333768,
+        "colSpanFrac": 1.0,
+        "rowSpanFrac": 1.0,
+        "meanRhoActive": 0.5198555836816517,
+        "grayFracActive": 0.8558018252933507,
+        "grayFracAll": 0.3479
+      },
+      "active_epsRMS": {
+        "count": 4930,
+        "frac": 0.2465,
+        "interfaceAdjacency": 0.5436105476673428,
+        "colSpanFrac": 1.0,
+        "rowSpanFrac": 1.0,
+        "meanRhoActive": 0.5362335239866703,
+        "grayFracActive": 0.8608519269776876,
+        "grayFracAll": 0.3479
+      },
+      "active_1e-3": {
+        "count": 4648,
+        "frac": 0.2324,
+        "interfaceAdjacency": 0.5580895008605852,
+        "colSpanFrac": 1.0,
+        "rowSpanFrac": 1.0,
+        "meanRhoActive": 0.5376783749884296,
+        "grayFracActive": 0.8605851979345955,
+        "grayFracAll": 0.3479
+      },
+      "active_1e-2": {
+        "count": 86,
+        "frac": 0.0043,
+        "interfaceAdjacency": 1.0,
+        "colSpanFrac": 0.9025,
+        "rowSpanFrac": 0.6,
+        "meanRhoActive": 0.28697326771783493,
+        "grayFracActive": 0.7906976744186046,
+        "grayFracAll": 0.3479
+      }
+    },
+    {
+      "label": "representativeLaterFixedMove",
+      "iter": 250,
+      "move": 0.04,
+      "Mnd": 25.166697948202405,
+      "u_max": 0.30680143152014977,
+      "u_RMS": 0.027089462707268162,
+      "Neff": 155.92509414427494,
+      "active_1e-4": {
+        "count": 6228,
+        "frac": 0.3114,
+        "interfaceAdjacency": 0.4576107899807322,
+        "colSpanFrac": 1.0,
+        "rowSpanFrac": 1.0,
+        "meanRhoActive": 0.5008428075890771,
+        "grayFracActive": 0.8285163776493256,
+        "grayFracAll": 0.2758
+      },
+      "active_epsRMS": {
+        "count": 3554,
+        "frac": 0.1777,
+        "interfaceAdjacency": 0.6454698930782217,
+        "colSpanFrac": 0.965,
+        "rowSpanFrac": 1.0,
+        "meanRhoActive": 0.5212433697825948,
+        "grayFracActive": 0.8626899268429938,
+        "grayFracAll": 0.2758
+      },
+      "active_1e-3": {
+        "count": 3224,
+        "frac": 0.1612,
+        "interfaceAdjacency": 0.6916873449131513,
+        "colSpanFrac": 0.965,
+        "rowSpanFrac": 1.0,
+        "meanRhoActive": 0.5298621343049293,
+        "grayFracActive": 0.859181141439206,
+        "grayFracAll": 0.2758
+      },
+      "active_1e-2": {
+        "count": 14,
+        "frac": 0.0007,
+        "interfaceAdjacency": 1.0,
+        "colSpanFrac": 0.65,
+        "rowSpanFrac": 0.56,
+        "meanRhoActive": 0.12440944440032761,
+        "grayFracActive": 0.5714285714285714,
+        "grayFracAll": 0.2758
+      }
+    },
+    {
+      "label": "matureOrCapEndpoint",
+      "iter": 369,
+      "move": 0.04,
+      "Mnd": 16.158892933214318,
+      "u_max": 0.25821214231884876,
+      "u_RMS": 0.021938072590658293,
+      "Neff": 144.36888827675548,
+      "active_1e-4": {
+        "count": 4792,
+        "frac": 0.2396,
+        "interfaceAdjacency": 0.5997495826377296,
+        "colSpanFrac": 1.0,
+        "rowSpanFrac": 1.0,
+        "meanRhoActive": 0.5239457994606934,
+        "grayFracActive": 0.6911519198664441,
+        "grayFracAll": 0.1885
+      },
+      "active_epsRMS": {
+        "count": 2464,
+        "frac": 0.1232,
+        "interfaceAdjacency": 0.8522727272727273,
+        "colSpanFrac": 0.92,
+        "rowSpanFrac": 1.0,
+        "meanRhoActive": 0.5888302505399797,
+        "grayFracActive": 0.765422077922078,
+        "grayFracAll": 0.1885
+      },
+      "active_1e-3": {
+        "count": 2256,
+        "frac": 0.1128,
+        "interfaceAdjacency": 0.875,
+        "colSpanFrac": 0.9125,
+        "rowSpanFrac": 1.0,
+        "meanRhoActive": 0.5906299397793114,
+        "grayFracActive": 0.773936170212766,
+        "grayFracAll": 0.1885
+      },
+      "active_1e-2": {
+        "count": 2,
+        "frac": 0.0001,
+        "interfaceAdjacency": 1.0,
+        "colSpanFrac": 0.0025,
+        "rowSpanFrac": 0.04,
+        "meanRhoActive": 0.026716510712892882,
+        "grayFracActive": 0.0,
+        "grayFracAll": 0.1885
+      }
+    }
+  ],
+  "persistence": [
+    {
+      "threshold": "1e-3",
+      "window": "window_before_descent",
+      "iters": [
+        128,
+        137
+      ],
+      "meanPopulation": 4680.8,
+      "consecutiveJaccard_mean": 0.9595715139470623,
+      "consecutiveJaccard_min": 0.9227013832384052,
+      "everActive": 5260,
+      "alwaysActive": 4098,
+      "alwaysOverEver": 0.7790874524714829,
+      "meanOccupancyOfEverActive": 8.898859315589354,
+      "birthsPerIter": 100.22222222222223,
+      "deathsPerIter": 94.44444444444444
+    },
+    {
+      "threshold": "1e-3",
+      "window": "window_at_endpoint",
+      "iters": [
+        360,
+        369
+      ],
+      "meanPopulation": 2474.6,
+      "consecutiveJaccard_mean": 0.9708814430397931,
+      "consecutiveJaccard_min": 0.9617365710080942,
+      "everActive": 2784,
+      "alwaysActive": 2198,
+      "alwaysOverEver": 0.7895114942528736,
+      "meanOccupancyOfEverActive": 8.888649425287356,
+      "birthsPerIter": 12.222222222222221,
+      "deathsPerIter": 61.111111111111114
+    },
+    {
+      "threshold": "1e-2",
+      "window": "window_before_descent",
+      "iters": [
+        128,
+        137
+      ],
+      "meanPopulation": 89.8,
+      "consecutiveJaccard_mean": 0.7042029035645186,
+      "consecutiveJaccard_min": 0.5507246376811594,
+      "everActive": 208,
+      "alwaysActive": 14,
+      "alwaysOverEver": 0.0673076923076923,
+      "meanOccupancyOfEverActive": 4.3173076923076925,
+      "birthsPerIter": 16.22222222222222,
+      "deathsPerIter": 16.444444444444443
+    },
+    {
+      "threshold": "1e-2",
+      "window": "window_at_endpoint",
+      "iters": [
+        360,
+        369
+      ],
+      "meanPopulation": 12.6,
+      "consecutiveJaccard_mean": 0.7201058201058201,
+      "consecutiveJaccard_min": 0.16666666666666666,
+      "everActive": 34,
+      "alwaysActive": 2,
+      "alwaysOverEver": 0.058823529411764705,
+      "meanOccupancyOfEverActive": 3.7058823529411766,
+      "birthsPerIter": 0.6666666666666666,
+      "deathsPerIter": 4.0
+    }
+  ],
+  "high_utilisation_persistence": [
+    {
+      "uThreshold": 0.5,
+      "window": [
+        128,
+        137
+      ],
+      "meanPopulation": 7.6,
+      "everActive": 34,
+      "alwaysActive": 0,
+      "consecutiveJaccard_mean": 0.38571428571428573
+    },
+    {
+      "uThreshold": 0.9,
+      "window": [
+        128,
+        137
+      ],
+      "meanPopulation": 0.0,
+      "everActive": 0,
+      "alwaysActive": 0,
+      "consecutiveJaccard_mean": NaN
+    }
+  ]
+}

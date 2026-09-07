@@ -1,0 +1,47 @@
+{
+  "schema": "olhoff_move_activity_400_prefix/1",
+  "P400_nOuter": 139,
+  "F400_nOuter": 369,
+  "P400_firstDescentIter": 138,
+  "prefixIterations": 137,
+  "rho_bitwise_identical": true,
+  "drho_bitwise_identical": true,
+  "rho_maxAbsDiff": 0.0,
+  "drho_maxAbsDiff": 0.0,
+  "rho_elementsCompared": 2740000,
+  "hist_fields": {
+    "omega": {
+      "bitwise": true,
+      "maxAbsDiff": 0.0
+    },
+    "vol": {
+      "bitwise": true,
+      "maxAbsDiff": 0.0
+    },
+    "dxOuter": {
+      "bitwise": true,
+      "maxAbsDiff": 0.0
+    },
+    "dxNorm2": {
+      "bitwise": true,
+      "maxAbsDiff": 0.0
+    },
+    "move": {
+      "bitwise": true,
+      "maxAbsDiff": 0.0
+    },
+    "beta": {
+      "bitwise": true,
+      "maxAbsDiff": 0.0
+    },
+    "nInner": {
+      "bitwise": true,
+      "maxAbsDiff": 0.0
+    },
+    "gap12": {
+      "bitwise": true,
+      "maxAbsDiff": 0.0
+    }
+  },
+  "gate": "COUNTERFACTUAL_PREFIX_VERIFIED"
+}

@@ -1,0 +1,1118 @@
+{
+  "schema": "olhoff_move_activity_400/1",
+  "study": "move_activity_400",
+  "task": "third-mesh measurement of design-activity scaling; NOT a controller experiment",
+  "preregistration_sha256": "706b8865075f97cb0d5824658fa6e562636d464dba2611580d6c10fdff7716d4",
+  "implementation": "analysis/OlhoffCurrent",
+  "production_preset": "duOlhoffFixedPenaltySensitivityFiltered",
+  "source_tree_sha256": "c1455374d5f8e256c2678a679a5fc7955d9a8a77c410a41cd30f1c189910208c",
+  "config_hash_400x50_production": "044d50a496cb64d43ed4bf75a6a7976a6726cca6feaf65e0b911a57e4593969c",
+  "matlab": "25.2.0.2998904 (R2025b)",
+  "matlab_prior_studies": "25.2.0.3042426 (R2025b) Update 1",
+  "starting_commit": "4ef315b",
+  "arms": [
+    {
+      "arm": "P400",
+      "mesh": [
+        400,
+        50
+      ],
+      "NE": 20000,
+      "cap": 400,
+      "nOuter": 139,
+      "status": "CONVERGED",
+      "wall_s": 541.0,
+      "innerTotal": 2918,
+      "descents": [
+        {
+          "iter": 138,
+          "moveFrom": 0.04,
+          "moveTo": 0.02
+        }
+      ],
+      "firstDescentIter": 138,
+      "lastIterAtMove004": 137,
+      "omega1_final": 162.882615630062,
+      "omega2_final": 175.403921349379,
+      "gap12_final": 0.0768731866865097,
+      "volume_final": 0.499999149662958,
+      "Mnd_final": 32.3283256233213,
+      "gray_final": 0.3476,
+      "mid_final": 0.1882,
+      "trajectory": "analysis/OlhoffCurrent/evidence/move_activity_400/P400_400x50_trajectory.mat",
+      "trajectoryBytes": 36576273
+    },
+    {
+      "arm": "F400",
+      "mesh": [
+        400,
+        50
+      ],
+      "NE": 20000,
+      "cap": 600,
+      "nOuter": 369,
+      "status": "CONVERGED",
+      "wall_s": 1633.0,
+      "innerTotal": 6995,
+      "descents": [],
+      "firstDescentIter": null,
+      "lastIterAtMove004": null,
+      "omega1_final": 166.364949860314,
+      "omega2_final": 200.164699686905,
+      "gap12_final": 0.203166291066541,
+      "volume_final": 0.499999498054556,
+      "Mnd_final": 16.1588929332143,
+      "gray_final": 0.1885,
+      "mid_final": 0.0398,
+      "trajectory": "analysis/OlhoffCurrent/evidence/move_activity_400/F400_400x50_trajectory.mat",
+      "trajectoryBytes": 102057786
+    }
+  ],
+  "primary_measurement_at_production_first_descent": {
+    "descentIter": 138,
+    "lastIterAtMove004": 137,
+    "NE": 20000,
+    "move": 0.04,
+    "completion_at_descent": 0.805610511079149,
+    "omega1": 162.849707047763,
+    "omega2": 175.165646798791,
+    "gap12": 0.0756276444968714,
+    "volume": 0.499997327323349,
+    "Mnd_pct": 32.3956866966321,
+    "gray_frac": 0.3479,
+    "mid_frac": 0.1875,
+    "maxAbs": 0.0211971472205113,
+    "rms": 0.00192870992007481,
+    "l2": 0.272760772685332,
+    "r_rho": 0.529928680512784,
+    "Neff": 165.580424574046,
+    "u_min": 3.99486150025276e-10,
+    "u_P50": 0.000263098191450231,
+    "u_P75": 0.0213874240946364,
+    "u_P90": 0.0707786771193713,
+    "u_P95": 0.113350060077434,
+    "u_P975": 0.153489254837502,
+    "u_P99": 0.199018627924156,
+    "u_max": 0.529928680512784,
+    "u_mean": 0.0209086739250274,
+    "u_RMS": 0.0482177480018701,
+    "nActive_1e4": 7670.0,
+    "nActive_epsRMS": 4930.0,
+    "nActive_1e3": 4648.0,
+    "nActive_1e2": 86.0,
+    "activeFrac_1e-4": 0.3835,
+    "activeFrac_epsRMS": 0.2465,
+    "activeFrac_1e-3": 0.2324,
+    "activeFrac_1e-2": 0.0043,
+    "Mnd_fixedMoveEndpoint": 16.1588929332143,
+    "remaining_absolute": 16.236793763417797,
+    "remaining_relative": 0.5012023333682196,
+    "omega1_fixedMoveEndpoint": 166.364949860314,
+    "omega1_relChange_to_endpoint": 0.02158580986283264
+  },
+  "production_vs_counterfactual": {
+    "P400_Mnd": 32.3283256233213,
+    "F400_Mnd": 16.1588929332143,
+    "Mnd_relative_reduction": 0.5001630111781151,
+    "P400_omega1": 162.882615630062,
+    "F400_omega1": 166.364949860314,
+    "omega1_relative_change": 0.021379410054177077,
+    "P400_gray": 0.3476,
+    "F400_gray": 0.1885,
+    "P400_mid": 0.1882,
+    "F400_mid": 0.0398,
+    "note": "F400 is NOT a production candidate; it measures what the descent truncates"
+  },
+  "reconstruction_checks": {
+    "volume_max_error": "< 1e-12 (asserted at run time, both arms)",
+    "final_design_bitwise_equals_res_rho": true,
+    "clamp_inert_max_error": 5.551e-17,
+    "clamp_elements_out_of_bounds": 0,
+    "clamp_note": "zero elements out of 20000 x 139 ever had rho+drho outside [rho_min,1]; the 5.551e-17 residual is round-off of the subtraction (eps/2 = 1.11e-16), NOT clamp activation.  Prior studies asserted this in prose; here it is measured."
+  },
+  "counterfactual_prefix_gate": {
+    "schema": "olhoff_move_activity_400_prefix/1",
+    "P400_nOuter": 139,
+    "F400_nOuter": 369,
+    "P400_firstDescentIter": 138,
+    "prefixIterations": 137,
+    "rho_bitwise_identical": true,
+    "drho_bitwise_identical": true,
+    "rho_maxAbsDiff": 0.0,
+    "drho_maxAbsDiff": 0.0,
+    "rho_elementsCompared": 2740000,
+    "hist_fields": {
+      "omega": {
+        "bitwise": true,
+        "maxAbsDiff": 0.0
+      },
+      "vol": {
+        "bitwise": true,
+        "maxAbsDiff": 0.0
+      },
+      "dxOuter": {
+        "bitwise": true,
+        "maxAbsDiff": 0.0
+      },
+      "dxNorm2": {
+        "bitwise": true,
+        "maxAbsDiff": 0.0
+      },
+      "move": {
+        "bitwise": true,
+        "maxAbsDiff": 0.0
+      },
+      "beta": {
+        "bitwise": true,
+        "maxAbsDiff": 0.0
+      },
+      "nInner": {
+        "bitwise": true,
+        "maxAbsDiff": 0.0
+      },
+      "gap12": {
+        "bitwise": true,
+        "maxAbsDiff": 0.0
+      }
+    },
+    "gate": "COUNTERFACTUAL_PREFIX_VERIFIED"
+  },
+  "scaling": {
+    "schema": "olhoff_move_activity_400_scaling/1",
+    "preregistration": "PREREGISTRATION.md",
+    "thresholdConvention": "absolute on |drho_e|; epsRMS=8.83883476483184e-4 identical at all meshes",
+    "matchedMaturityGrid": [
+      0.9,
+      0.95,
+      0.99
+    ],
+    "remaining_evolution": [
+      {
+        "mesh": "160x20",
+        "NE": 3200,
+        "descentIter": 79,
+        "lastIterAtMove004": 78,
+        "Mnd_at_descent": 13.4935541734659,
+        "Mnd_fixedMoveFinal": 12.2754329897822,
+        "remaining_absolute": 1.2181211836837011,
+        "remaining_relative": 0.0902743019388508,
+        "completion_at_descent": 0.9860281249962817,
+        "omega1_at_descent": 169.08549011233,
+        "omega1_fixedMoveFinal": 169.480180375229,
+        "omega1_relChange": 0.0023342645346846875,
+        "gray_at_descent": 0.1525,
+        "mid_at_descent": 0.025
+      },
+      {
+        "mesh": "320x40",
+        "NE": 12800,
+        "descentIter": 130,
+        "lastIterAtMove004": 129,
+        "Mnd_at_descent": 23.4506347127922,
+        "Mnd_fixedMoveFinal": 13.2824393172795,
+        "remaining_absolute": 10.1681953955127,
+        "remaining_relative": 0.43360000784823116,
+        "completion_at_descent": 0.8822192620129953,
+        "omega1_at_descent": 165.918844506453,
+        "omega1_fixedMoveFinal": 166.54023950172,
+        "omega1_relChange": 0.003745174317693785,
+        "gray_at_descent": 0.26421875,
+        "mid_at_descent": 0.096875
+      },
+      {
+        "mesh": "400x50",
+        "NE": 20000,
+        "descentIter": 138,
+        "lastIterAtMove004": 137,
+        "Mnd_at_descent": 32.3956866966321,
+        "Mnd_fixedMoveFinal": 16.1588929332143,
+        "remaining_absolute": 16.236793763417797,
+        "remaining_relative": 0.5012023333682196,
+        "completion_at_descent": 0.805610511079149,
+        "omega1_at_descent": 162.849707047763,
+        "omega1_fixedMoveFinal": 166.364949860314,
+        "omega1_relChange": 0.02158580986283264,
+        "gray_at_descent": 0.3479,
+        "mid_at_descent": 0.1875
+      }
+    ],
+    "scaling_matched_maturity": [
+      {
+        "threshold": "1e-4",
+        "c": 0.9,
+        "points": [
+          {
+            "mesh": "160x20",
+            "NE": 3200,
+            "iter": 56,
+            "c": 0.9094899261236926,
+            "N_active": 1240.0,
+            "frac": 0.3875
+          },
+          {
+            "mesh": "320x40",
+            "NE": 12800,
+            "iter": 142,
+            "c": 0.9014179174474272,
+            "N_active": 4114.0,
+            "frac": 0.32140625
+          },
+          {
+            "mesh": "400x50",
+            "NE": 20000,
+            "iter": 268,
+            "c": 0.9004077424629816,
+            "N_active": 5978.0,
+            "frac": 0.2989
+          }
+        ],
+        "alpha_160_320": 0.8651008366253482,
+        "alpha_320_400": 0.8373315527832241,
+        "alpha_160_400": 0.8583382050735594,
+        "alpha_global": 0.859946531564635,
+        "C_global": 1.2016772539597664,
+        "logResidual": 0.004237500454197075,
+        "pairwise_spread": 0.02776928384212407
+      },
+      {
+        "threshold": "1e-4",
+        "c": 0.95,
+        "points": [
+          {
+            "mesh": "160x20",
+            "NE": 3200,
+            "iter": 63,
+            "c": 0.9509699735211897,
+            "N_active": 1142.0,
+            "frac": 0.356875
+          },
+          {
+            "mesh": "320x40",
+            "NE": 12800,
+            "iter": 166,
+            "c": 0.9515849069714041,
+            "N_active": 3758.0,
+            "frac": 0.29359375
+          },
+          {
+            "mesh": "400x50",
+            "NE": 20000,
+            "iter": 325,
+            "c": 0.9515127164267226,
+            "N_active": 6098.0,
+            "frac": 0.3049
+          }
+        ],
+        "alpha_160_320": 0.8592012080286063,
+        "alpha_320_400": 1.0846693635640001,
+        "alpha_160_400": 0.9141092881654928,
+        "alpha_global": 0.9010507444339229,
+        "C_global": 0.7841764712673621,
+        "logResidual": 0.03440569144382208,
+        "pairwise_spread": 0.2254681555353938
+      },
+      {
+        "threshold": "1e-4",
+        "c": 0.99,
+        "points": [
+          {
+            "mesh": "160x20",
+            "NE": 3200,
+            "iter": 85,
+            "c": 0.9901833483276662,
+            "N_active": 1134.0,
+            "frac": 0.354375
+          },
+          {
+            "mesh": "320x40",
+            "NE": 12800,
+            "iter": 188,
+            "c": 0.9900361250674895,
+            "N_active": 3410.0,
+            "frac": 0.26640625
+          },
+          {
+            "mesh": "400x50",
+            "NE": 20000,
+            "iter": 353,
+            "c": 0.990371386498415,
+            "N_active": 5166.0,
+            "frac": 0.2583
+          }
+        ],
+        "alpha_160_320": 0.794175549484653,
+        "alpha_320_400": 0.9307604923642073,
+        "alpha_160_400": 0.8274379717159172,
+        "alpha_global": 0.8195273182339117,
+        "C_global": 1.510281054906702,
+        "logResidual": 0.020842408496344226,
+        "pairwise_spread": 0.13658494287955436
+      },
+      {
+        "threshold": "epsRMS",
+        "c": 0.9,
+        "points": [
+          {
+            "mesh": "160x20",
+            "NE": 3200,
+            "iter": 56,
+            "c": 0.9094899261236926,
+            "N_active": 1096.0,
+            "frac": 0.3425
+          },
+          {
+            "mesh": "320x40",
+            "NE": 12800,
+            "iter": 142,
+            "c": 0.9014179174474272,
+            "N_active": 3392.0,
+            "frac": 0.265
+          },
+          {
+            "mesh": "400x50",
+            "NE": 20000,
+            "iter": 268,
+            "c": 0.9004077424629816,
+            "N_active": 3724.0,
+            "frac": 0.1862
+          }
+        ],
+        "alpha_160_320": 0.8149441858013363,
+        "alpha_320_400": 0.20923446125870124,
+        "alpha_160_400": 0.6674361795558267,
+        "alpha_global": 0.7025173505876287,
+        "C_global": 3.8961677161614636,
+        "logResidual": 0.0924292915673639,
+        "pairwise_spread": 0.605709724542635
+      },
+      {
+        "threshold": "epsRMS",
+        "c": 0.95,
+        "points": [
+          {
+            "mesh": "160x20",
+            "NE": 3200,
+            "iter": 63,
+            "c": 0.9509699735211897,
+            "N_active": 964.0,
+            "frac": 0.30125
+          },
+          {
+            "mesh": "320x40",
+            "NE": 12800,
+            "iter": 166,
+            "c": 0.9515849069714041,
+            "N_active": 2928.0,
+            "frac": 0.22875
+          },
+          {
+            "mesh": "400x50",
+            "NE": 20000,
+            "iter": 325,
+            "c": 0.9515127164267226,
+            "N_active": 4424.0,
+            "frac": 0.2212
+          }
+        ],
+        "alpha_160_320": 0.8014052510270404,
+        "alpha_320_400": 0.9247963153992483,
+        "alpha_160_400": 0.831454578545761,
+        "alpha_global": 0.8243080810443028,
+        "C_global": 1.236098863542379,
+        "logResidual": 0.018829066471200792,
+        "pairwise_spread": 0.12339106437220793
+      },
+      {
+        "threshold": "epsRMS",
+        "c": 0.99,
+        "points": [
+          {
+            "mesh": "160x20",
+            "NE": 3200,
+            "iter": 85,
+            "c": 0.9901833483276662,
+            "N_active": 776.0,
+            "frac": 0.2425
+          },
+          {
+            "mesh": "320x40",
+            "NE": 12800,
+            "iter": 188,
+            "c": 0.9900361250674895,
+            "N_active": 2110.0,
+            "frac": 0.16484375
+          },
+          {
+            "mesh": "400x50",
+            "NE": 20000,
+            "iter": 353,
+            "c": 0.990371386498415,
+            "N_active": 3184.0,
+            "frac": 0.1592
+          }
+        ],
+        "alpha_160_320": 0.72155722070371,
+        "alpha_320_400": 0.9219408718533744,
+        "alpha_160_400": 0.7703564914890713,
+        "alpha_global": 0.7587507786317069,
+        "C_global": 1.682445919809773,
+        "logResidual": 0.03057787941481439,
+        "pairwise_spread": 0.2003836511496644
+      },
+      {
+        "threshold": "1e-3",
+        "c": 0.9,
+        "points": [
+          {
+            "mesh": "160x20",
+            "NE": 3200,
+            "iter": 56,
+            "c": 0.9094899261236926,
+            "N_active": 1092.0,
+            "frac": 0.34125
+          },
+          {
+            "mesh": "320x40",
+            "NE": 12800,
+            "iter": 142,
+            "c": 0.9014179174474272,
+            "N_active": 3332.0,
+            "frac": 0.2603125
+          },
+          {
+            "mesh": "400x50",
+            "NE": 20000,
+            "iter": 268,
+            "c": 0.9004077424629816,
+            "N_active": 3430.0,
+            "frac": 0.1715
+          }
+        ],
+        "alpha_160_320": 0.8047077722228475,
+        "alpha_320_400": 0.06495266545353727,
+        "alpha_160_400": 0.6245558009269102,
+        "alpha_global": 0.6674005405285748,
+        "C_global": 5.188871962219927,
+        "logResidual": 0.11288417154546544,
+        "pairwise_spread": 0.7397551067693102
+      },
+      {
+        "threshold": "1e-3",
+        "c": 0.95,
+        "points": [
+          {
+            "mesh": "160x20",
+            "NE": 3200,
+            "iter": 63,
+            "c": 0.9509699735211897,
+            "N_active": 958.0,
+            "frac": 0.299375
+          },
+          {
+            "mesh": "320x40",
+            "NE": 12800,
+            "iter": 166,
+            "c": 0.9515849069714041,
+            "N_active": 2852.0,
+            "frac": 0.2228125
+          },
+          {
+            "mesh": "400x50",
+            "NE": 20000,
+            "iter": 325,
+            "c": 0.9515127164267226,
+            "N_active": 4244.0,
+            "frac": 0.2122
+          }
+        ],
+        "alpha_160_320": 0.7869382103538539,
+        "alpha_320_400": 0.8906502470241348,
+        "alpha_160_400": 0.8121951199477125,
+        "alpha_global": 0.8061883818204258,
+        "C_global": 1.4232612159786073,
+        "logResidual": 0.015826112225093246,
+        "pairwise_spread": 0.10371203667028084
+      },
+      {
+        "threshold": "1e-3",
+        "c": 0.99,
+        "points": [
+          {
+            "mesh": "160x20",
+            "NE": 3200,
+            "iter": 85,
+            "c": 0.9901833483276662,
+            "N_active": 762.0,
+            "frac": 0.238125
+          },
+          {
+            "mesh": "320x40",
+            "NE": 12800,
+            "iter": 188,
+            "c": 0.9900361250674895,
+            "N_active": 1996.0,
+            "frac": 0.1559375
+          },
+          {
+            "mesh": "400x50",
+            "NE": 20000,
+            "iter": 353,
+            "c": 0.990371386498415,
+            "N_active": 3022.0,
+            "frac": 0.1511
+          }
+        ],
+        "alpha_160_320": 0.6946244089219693,
+        "alpha_320_400": 0.9293875702848123,
+        "alpha_160_400": 0.7517960944164924,
+        "alpha_global": 0.7381992075215935,
+        "C_global": 1.9467864628162381,
+        "logResidual": 0.03582407845155,
+        "pairwise_spread": 0.23476316136284303
+      },
+      {
+        "threshold": "1e-2",
+        "c": 0.9,
+        "points": [
+          {
+            "mesh": "160x20",
+            "NE": 3200,
+            "iter": 56,
+            "c": 0.9094899261236926,
+            "N_active": 694.0,
+            "frac": 0.216875
+          },
+          {
+            "mesh": "320x40",
+            "NE": 12800,
+            "iter": 142,
+            "c": 0.9014179174474272,
+            "N_active": 108.0,
+            "frac": 0.0084375
+          },
+          {
+            "mesh": "400x50",
+            "NE": 20000,
+            "iter": 268,
+            "c": 0.9004077424629816,
+            "N_active": 12.0,
+            "frac": 0.0006
+          }
+        ],
+        "alpha_160_320": -1.3419521752073962,
+        "alpha_320_400": -4.923343212016677,
+        "alpha_160_400": -2.214125478722007,
+        "alpha_global": -2.0067003930689817,
+        "C_global": 8985100067.270555,
+        "logResidual": 0.5465083734753373,
+        "pairwise_spread": 3.581391036809281
+      },
+      {
+        "threshold": "1e-2",
+        "c": 0.95,
+        "points": [
+          {
+            "mesh": "160x20",
+            "NE": 3200,
+            "iter": 63,
+            "c": 0.9509699735211897,
+            "N_active": 508.0,
+            "frac": 0.15875
+          },
+          {
+            "mesh": "320x40",
+            "NE": 12800,
+            "iter": 166,
+            "c": 0.9515849069714041,
+            "N_active": 380.0,
+            "frac": 0.0296875
+          },
+          {
+            "mesh": "400x50",
+            "NE": 20000,
+            "iter": 325,
+            "c": 0.9515127164267226,
+            "N_active": 328.0,
+            "frac": 0.0164
+          }
+        ],
+        "alpha_160_320": -0.20941453922060901,
+        "alpha_320_400": -0.3297376139027969,
+        "alpha_160_400": -0.2387167216564299,
+        "alpha_global": -0.23174791433673478,
+        "C_global": 3317.478688049033,
+        "logResidual": 0.018360901437530892,
+        "pairwise_spread": 0.12032307468218786
+      },
+      {
+        "threshold": "1e-2",
+        "c": 0.99,
+        "points": [
+          {
+            "mesh": "160x20",
+            "NE": 3200,
+            "iter": 85,
+            "c": 0.9901833483276662,
+            "N_active": 240.0,
+            "frac": 0.075
+          },
+          {
+            "mesh": "320x40",
+            "NE": 12800,
+            "iter": 188,
+            "c": 0.9900361250674895,
+            "N_active": 128.0,
+            "frac": 0.01
+          },
+          {
+            "mesh": "400x50",
+            "NE": 20000,
+            "iter": 353,
+            "c": 0.990371386498415,
+            "N_active": 74.0,
+            "frac": 0.0037
+          }
+        ],
+        "alpha_160_320": -0.45344529780425935,
+        "alpha_320_400": -1.2278310699282866,
+        "alpha_160_400": -0.6420308474207147,
+        "alpha_global": -0.5971803875126988,
+        "C_global": 30928.95533545989,
+        "logResidual": 0.11816869602236646,
+        "pairwise_spread": 0.7743857721240273
+      }
+    ],
+    "scaling_at_production_descent": [
+      {
+        "threshold": "1e-4",
+        "points": [
+          {
+            "mesh": "160x20",
+            "NE": 3200,
+            "iter": 78,
+            "c": 0.9860281249962817,
+            "N_active": 984.0,
+            "frac": 0.3075
+          },
+          {
+            "mesh": "320x40",
+            "NE": 12800,
+            "iter": 129,
+            "c": 0.8822192620129953,
+            "N_active": 4326.0,
+            "frac": 0.33796875
+          },
+          {
+            "mesh": "400x50",
+            "NE": 20000,
+            "iter": 137,
+            "c": 0.805610511079149,
+            "N_active": 7670.0,
+            "frac": 0.3835
+          }
+        ],
+        "alpha_160_320": 1.0681517223113695,
+        "alpha_320_400": 1.2831947965234116,
+        "alpha_160_400": 1.1205209907061857,
+        "alpha_global": 1.1080662412445845,
+        "C_global": 0.12716001995254794,
+        "logResidual": 0.03281485866996014,
+        "note": "meshes are at DIFFERENT maturity here; descriptive only"
+      },
+      {
+        "threshold": "epsRMS",
+        "points": [
+          {
+            "mesh": "160x20",
+            "NE": 3200,
+            "iter": 78,
+            "c": 0.9860281249962817,
+            "N_active": 720.0,
+            "frac": 0.225
+          },
+          {
+            "mesh": "320x40",
+            "NE": 12800,
+            "iter": 129,
+            "c": 0.8822192620129953,
+            "N_active": 3400.0,
+            "frac": 0.265625
+          },
+          {
+            "mesh": "400x50",
+            "NE": 20000,
+            "iter": 137,
+            "c": 0.805610511079149,
+            "N_active": 4930.0,
+            "frac": 0.2465
+          }
+        ],
+        "alpha_160_320": 1.1197329673476948,
+        "alpha_320_400": 0.8325661984049052,
+        "alpha_160_400": 1.0497994730840836,
+        "alpha_global": 1.0664314440228593,
+        "C_global": 0.13354108402635467,
+        "logResidual": 0.04382069486355513,
+        "note": "meshes are at DIFFERENT maturity here; descriptive only"
+      },
+      {
+        "threshold": "1e-3",
+        "points": [
+          {
+            "mesh": "160x20",
+            "NE": 3200,
+            "iter": 78,
+            "c": 0.9860281249962817,
+            "N_active": 708.0,
+            "frac": 0.22125
+          },
+          {
+            "mesh": "320x40",
+            "NE": 12800,
+            "iter": 129,
+            "c": 0.8822192620129953,
+            "N_active": 3274.0,
+            "frac": 0.25578125
+          },
+          {
+            "mesh": "400x50",
+            "NE": 20000,
+            "iter": 137,
+            "c": 0.805610511079149,
+            "N_active": 4648.0,
+            "frac": 0.2324
+          }
+        ],
+        "alpha_160_320": 1.104616528195578,
+        "alpha_320_400": 0.7851997929961062,
+        "alpha_160_400": 1.0268292253645046,
+        "alpha_global": 1.0453290325558313,
+        "C_global": 0.15595114078310499,
+        "logResidual": 0.04874193256768354,
+        "note": "meshes are at DIFFERENT maturity here; descriptive only"
+      },
+      {
+        "threshold": "1e-2",
+        "points": [
+          {
+            "mesh": "160x20",
+            "NE": 3200,
+            "iter": 78,
+            "c": 0.9860281249962817,
+            "N_active": 230.0,
+            "frac": 0.071875
+          },
+          {
+            "mesh": "320x40",
+            "NE": 12800,
+            "iter": 129,
+            "c": 0.8822192620129953,
+            "N_active": 106.0,
+            "frac": 0.00828125
+          },
+          {
+            "mesh": "400x50",
+            "NE": 20000,
+            "iter": 137,
+            "c": 0.805610511079149,
+            "N_active": 86.0,
+            "frac": 0.0043
+          }
+        ],
+        "alpha_160_320": -0.558784798190588,
+        "alpha_320_400": -0.4685140946872714,
+        "alpha_160_400": -0.5368012457452178,
+        "alpha_global": -0.5420294959456757,
+        "C_global": 18182.22242479697,
+        "logResidual": 0.013775009441031381,
+        "note": "meshes are at DIFFERENT maturity here; descriptive only"
+      }
+    ],
+    "verdict_inputs": {
+      "worst_pairwise_spread": 3.581391036809281,
+      "spread_across_thresholds": 2.9077511375029044,
+      "per_threshold_worst_spread": {
+        "1e-4": 0.2254681555353938,
+        "epsRMS": 0.605709724542635,
+        "1e-3": 0.7397551067693102,
+        "1e-2": 3.581391036809281
+      },
+      "global_alpha_range_per_threshold": {
+        "1e-4": [
+          0.8195273182339117,
+          0.9010507444339229
+        ],
+        "epsRMS": [
+          0.7025173505876287,
+          0.8243080810443028
+        ],
+        "1e-3": [
+          0.6674005405285748,
+          0.8061883818204258
+        ],
+        "1e-2": [
+          -2.0067003930689817,
+          -0.23174791433673478
+        ]
+      }
+    },
+    "scaling_verdict": "SINGLE_POWER_LAW_NOT_SUPPORTED"
+  },
+  "spatial": {
+    "schema": "olhoff_move_activity_400_spatial/1",
+    "NE": 20000,
+    "mesh": [
+      400,
+      50
+    ],
+    "nOuter": 369,
+    "states": {
+      "beforeProductionFirstDescent": 137,
+      "representativeLaterFixedMove": 250,
+      "matureOrCapEndpoint": 369
+    },
+    "spatial_states": [
+      {
+        "label": "beforeProductionFirstDescent",
+        "iter": 137,
+        "move": 0.04,
+        "Mnd": 32.395686696632154,
+        "u_max": 0.5299286805127836,
+        "u_RMS": 0.048217748001870175,
+        "Neff": 165.5804245740459,
+        "active_1e-4": {
+          "count": 7670,
+          "frac": 0.3835,
+          "interfaceAdjacency": 0.3395045632333768,
+          "colSpanFrac": 1.0,
+          "rowSpanFrac": 1.0,
+          "meanRhoActive": 0.5198555836816517,
+          "grayFracActive": 0.8558018252933507,
+          "grayFracAll": 0.3479
+        },
+        "active_epsRMS": {
+          "count": 4930,
+          "frac": 0.2465,
+          "interfaceAdjacency": 0.5436105476673428,
+          "colSpanFrac": 1.0,
+          "rowSpanFrac": 1.0,
+          "meanRhoActive": 0.5362335239866703,
+          "grayFracActive": 0.8608519269776876,
+          "grayFracAll": 0.3479
+        },
+        "active_1e-3": {
+          "count": 4648,
+          "frac": 0.2324,
+          "interfaceAdjacency": 0.5580895008605852,
+          "colSpanFrac": 1.0,
+          "rowSpanFrac": 1.0,
+          "meanRhoActive": 0.5376783749884296,
+          "grayFracActive": 0.8605851979345955,
+          "grayFracAll": 0.3479
+        },
+        "active_1e-2": {
+          "count": 86,
+          "frac": 0.0043,
+          "interfaceAdjacency": 1.0,
+          "colSpanFrac": 0.9025,
+          "rowSpanFrac": 0.6,
+          "meanRhoActive": 0.28697326771783493,
+          "grayFracActive": 0.7906976744186046,
+          "grayFracAll": 0.3479
+        }
+      },
+      {
+        "label": "representativeLaterFixedMove",
+        "iter": 250,
+        "move": 0.04,
+        "Mnd": 25.166697948202405,
+        "u_max": 0.30680143152014977,
+        "u_RMS": 0.027089462707268162,
+        "Neff": 155.92509414427494,
+        "active_1e-4": {
+          "count": 6228,
+          "frac": 0.3114,
+          "interfaceAdjacency": 0.4576107899807322,
+          "colSpanFrac": 1.0,
+          "rowSpanFrac": 1.0,
+          "meanRhoActive": 0.5008428075890771,
+          "grayFracActive": 0.8285163776493256,
+          "grayFracAll": 0.2758
+        },
+        "active_epsRMS": {
+          "count": 3554,
+          "frac": 0.1777,
+          "interfaceAdjacency": 0.6454698930782217,
+          "colSpanFrac": 0.965,
+          "rowSpanFrac": 1.0,
+          "meanRhoActive": 0.5212433697825948,
+          "grayFracActive": 0.8626899268429938,
+          "grayFracAll": 0.2758
+        },
+        "active_1e-3": {
+          "count": 3224,
+          "frac": 0.1612,
+          "interfaceAdjacency": 0.6916873449131513,
+          "colSpanFrac": 0.965,
+          "rowSpanFrac": 1.0,
+          "meanRhoActive": 0.5298621343049293,
+          "grayFracActive": 0.859181141439206,
+          "grayFracAll": 0.2758
+        },
+        "active_1e-2": {
+          "count": 14,
+          "frac": 0.0007,
+          "interfaceAdjacency": 1.0,
+          "colSpanFrac": 0.65,
+          "rowSpanFrac": 0.56,
+          "meanRhoActive": 0.12440944440032761,
+          "grayFracActive": 0.5714285714285714,
+          "grayFracAll": 0.2758
+        }
+      },
+      {
+        "label": "matureOrCapEndpoint",
+        "iter": 369,
+        "move": 0.04,
+        "Mnd": 16.158892933214318,
+        "u_max": 0.25821214231884876,
+        "u_RMS": 0.021938072590658293,
+        "Neff": 144.36888827675548,
+        "active_1e-4": {
+          "count": 4792,
+          "frac": 0.2396,
+          "interfaceAdjacency": 0.5997495826377296,
+          "colSpanFrac": 1.0,
+          "rowSpanFrac": 1.0,
+          "meanRhoActive": 0.5239457994606934,
+          "grayFracActive": 0.6911519198664441,
+          "grayFracAll": 0.1885
+        },
+        "active_epsRMS": {
+          "count": 2464,
+          "frac": 0.1232,
+          "interfaceAdjacency": 0.8522727272727273,
+          "colSpanFrac": 0.92,
+          "rowSpanFrac": 1.0,
+          "meanRhoActive": 0.5888302505399797,
+          "grayFracActive": 0.765422077922078,
+          "grayFracAll": 0.1885
+        },
+        "active_1e-3": {
+          "count": 2256,
+          "frac": 0.1128,
+          "interfaceAdjacency": 0.875,
+          "colSpanFrac": 0.9125,
+          "rowSpanFrac": 1.0,
+          "meanRhoActive": 0.5906299397793114,
+          "grayFracActive": 0.773936170212766,
+          "grayFracAll": 0.1885
+        },
+        "active_1e-2": {
+          "count": 2,
+          "frac": 0.0001,
+          "interfaceAdjacency": 1.0,
+          "colSpanFrac": 0.0025,
+          "rowSpanFrac": 0.04,
+          "meanRhoActive": 0.026716510712892882,
+          "grayFracActive": 0.0,
+          "grayFracAll": 0.1885
+        }
+      }
+    ],
+    "persistence": [
+      {
+        "threshold": "1e-3",
+        "window": "window_before_descent",
+        "iters": [
+          128,
+          137
+        ],
+        "meanPopulation": 4680.8,
+        "consecutiveJaccard_mean": 0.9595715139470623,
+        "consecutiveJaccard_min": 0.9227013832384052,
+        "everActive": 5260,
+        "alwaysActive": 4098,
+        "alwaysOverEver": 0.7790874524714829,
+        "meanOccupancyOfEverActive": 8.898859315589354,
+        "birthsPerIter": 100.22222222222223,
+        "deathsPerIter": 94.44444444444444
+      },
+      {
+        "threshold": "1e-3",
+        "window": "window_at_endpoint",
+        "iters": [
+          360,
+          369
+        ],
+        "meanPopulation": 2474.6,
+        "consecutiveJaccard_mean": 0.9708814430397931,
+        "consecutiveJaccard_min": 0.9617365710080942,
+        "everActive": 2784,
+        "alwaysActive": 2198,
+        "alwaysOverEver": 0.7895114942528736,
+        "meanOccupancyOfEverActive": 8.888649425287356,
+        "birthsPerIter": 12.222222222222221,
+        "deathsPerIter": 61.111111111111114
+      },
+      {
+        "threshold": "1e-2",
+        "window": "window_before_descent",
+        "iters": [
+          128,
+          137
+        ],
+        "meanPopulation": 89.8,
+        "consecutiveJaccard_mean": 0.7042029035645186,
+        "consecutiveJaccard_min": 0.5507246376811594,
+        "everActive": 208,
+        "alwaysActive": 14,
+        "alwaysOverEver": 0.0673076923076923,
+        "meanOccupancyOfEverActive": 4.3173076923076925,
+        "birthsPerIter": 16.22222222222222,
+        "deathsPerIter": 16.444444444444443
+      },
+      {
+        "threshold": "1e-2",
+        "window": "window_at_endpoint",
+        "iters": [
+          360,
+          369
+        ],
+        "meanPopulation": 12.6,
+        "consecutiveJaccard_mean": 0.7201058201058201,
+        "consecutiveJaccard_min": 0.16666666666666666,
+        "everActive": 34,
+        "alwaysActive": 2,
+        "alwaysOverEver": 0.058823529411764705,
+        "meanOccupancyOfEverActive": 3.7058823529411766,
+        "birthsPerIter": 0.6666666666666666,
+        "deathsPerIter": 4.0
+      }
+    ],
+    "high_utilisation_persistence": [
+      {
+        "uThreshold": 0.5,
+        "window": [
+          128,
+          137
+        ],
+        "meanPopulation": 7.6,
+        "everActive": 34,
+        "alwaysActive": 0,
+        "consecutiveJaccard_mean": 0.38571428571428573
+      },
+      {
+        "uThreshold": 0.9,
+        "window": [
+          128,
+          137
+        ],
+        "meanPopulation": 0.0,
+        "everActive": 0,
+        "alwaysActive": 0,
+        "consecutiveJaccard_mean": NaN
+      }
+    ]
+  }
+}

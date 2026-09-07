@@ -1,0 +1,256 @@
+{
+  "schema": "olhoff_move_activity_400_data_manifest/1",
+  "study": "move_activity_400",
+  "preregistration_sha256": "706b8865075f97cb0d5824658fa6e562636d464dba2611580d6c10fdff7716d4",
+  "evidenceRoot": "analysis/OlhoffCurrent/evidence/move_activity_400",
+  "sourceTree": "c1455374d5f8e256c2678a679a5fc7955d9a8a77c410a41cd30f1c189910208c",
+  "matlab": "25.2.0.2998904 (R2025b)",
+  "note": "Raw element-level trajectories are deliberately untracked (about 100 MB each) but DECLARED: EVIDENCE.json carries their SHA-256 and olhoffcurrent_evidence_gate fails this study if either is missing or altered.  Untracked is a storage decision; undeclared was the defect that destroyed the earlier studies.",
+  "rawEvidence": [
+    {
+      "path": "analysis/OlhoffCurrent/evidence/move_activity_400/P400_400x50_trajectory.mat",
+      "location": "durable evidence root, untracked by git, declared and hash-gated",
+      "status": "required",
+      "bytes": 36576273.0,
+      "sha256": "1dc20dbd6a0dacbd067802901fd6d78364306a5641be84a6e2216b4038917660",
+      "format": "MAT-file (v7.3 = HDF5) -- read with load()",
+      "dimensions": {
+        "DRHO": [
+          20000,
+          139
+        ],
+        "RHO": [
+          20000,
+          139
+        ],
+        "cfg": [
+          1,
+          1
+        ],
+        "hist": [
+          1,
+          1
+        ],
+        "meta": [
+          1,
+          1
+        ],
+        "move": [
+          139,
+          1
+        ]
+      },
+      "precision": [
+        "double",
+        "struct"
+      ],
+      "producingRun": "ARM P400",
+      "description": "ARM P400 element-level trajectory: RHO and DRHO (NE x nOuter, double), move, full hist, resolved cfg.  Production move ladder.",
+      "gatedBy": "olhoffcurrent_evidence_gate via EVIDENCE.json"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/evidence/move_activity_400/F400_400x50_trajectory.mat",
+      "location": "durable evidence root, untracked by git, declared and hash-gated",
+      "status": "required",
+      "bytes": 102057786.0,
+      "sha256": "c53680e86b7010e962b9f5a48a55fdc7c3e659150e05994c9bbffa1275035ded",
+      "format": "MAT-file (v7.3 = HDF5) -- read with load()",
+      "dimensions": {
+        "DRHO": [
+          20000,
+          369
+        ],
+        "RHO": [
+          20000,
+          369
+        ],
+        "cfg": [
+          1,
+          1
+        ],
+        "hist": [
+          1,
+          1
+        ],
+        "meta": [
+          1,
+          1
+        ],
+        "move": [
+          369,
+          1
+        ]
+      },
+      "precision": [
+        "double",
+        "struct"
+      ],
+      "producingRun": "ARM F400",
+      "description": "ARM F400 element-level trajectory: RHO and DRHO (NE x nOuter, double), move, full hist, resolved cfg.  Fixed move 0.04 counterfactual.",
+      "gatedBy": "olhoffcurrent_evidence_gate via EVIDENCE.json"
+    }
+  ],
+  "trackedArtifacts": [
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/move_activity_400/runs/F400_400x50_iterations.csv",
+      "location": "tracked in git beside the report",
+      "status": "required-tracked",
+      "bytes": 162083,
+      "sha256": "5c2957185f0174ace7e7df9aa5dc684a51714ba3675dda18fd6f243abfc9b5ec"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/move_activity_400/runs/P400_400x50_iterations.csv",
+      "location": "tracked in git beside the report",
+      "status": "required-tracked",
+      "bytes": 60967,
+      "sha256": "72665ec768d9959227b213a3eedd1eeac48e8fac3ebcadc22a0fc0a1bfb2ff41"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/move_activity_400/figures/fig10_map_active_mask.png",
+      "location": "tracked in git beside the report",
+      "status": "required-tracked",
+      "bytes": 54652,
+      "sha256": "c6fd02d71bfb2dea1e07d42496c1f7ba46ad12ba6e1d69fbc949530cc264fb01"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/move_activity_400/figures/fig11_Nactive_vs_NE_loglog.png",
+      "location": "tracked in git beside the report",
+      "status": "required-tracked",
+      "bytes": 80512,
+      "sha256": "b4e45ef68612cbe7d4208db5daae9661000d66ffd2144d05c4954f438f220b00"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/move_activity_400/figures/fig12_pairwise_vs_global_alpha.png",
+      "location": "tracked in git beside the report",
+      "status": "required-tracked",
+      "bytes": 51574,
+      "sha256": "86e97cd8e7b8a54fb490c7528996d303451990dfae80e6bf0dc89ae037d0574d"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/move_activity_400/figures/fig13_remaining_evolution_vs_mesh.png",
+      "location": "tracked in git beside the report",
+      "status": "required-tracked",
+      "bytes": 35198,
+      "sha256": "51ba7a6acfb8509b10e0040394d880061ff5450968c412096f4fa43610036620"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/move_activity_400/figures/fig1_Mnd_vs_iteration.png",
+      "location": "tracked in git beside the report",
+      "status": "required-tracked",
+      "bytes": 52240,
+      "sha256": "8bb30789b4174cbad6ca1048dd061f1f244784952e60a1e83952f3c890ec76a2"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/move_activity_400/figures/fig2_omega1_vs_iteration.png",
+      "location": "tracked in git beside the report",
+      "status": "required-tracked",
+      "bytes": 37437,
+      "sha256": "ba3e0893712b2ec18d2177c60857e0844068870be34fe980073c6ab4c5560ba6"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/move_activity_400/figures/fig3_move_vs_iteration.png",
+      "location": "tracked in git beside the report",
+      "status": "required-tracked",
+      "bytes": 21942,
+      "sha256": "053a8263fe55493fb6a86e65de36959f2ce7a27ce9a90be19b6d4d4406759978"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/move_activity_400/figures/fig4_activity_percentiles.png",
+      "location": "tracked in git beside the report",
+      "status": "required-tracked",
+      "bytes": 137878,
+      "sha256": "7fef28edfeed75fc9db62f9bb54846d79d82949ebbbadc05096d0a41fba837de"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/move_activity_400/figures/fig5_active_counts.png",
+      "location": "tracked in git beside the report",
+      "status": "required-tracked",
+      "bytes": 76196,
+      "sha256": "9740c3e1d4f71caf3eae85a96b8d6bbf589d77bb901e4803567af4527368e798"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/move_activity_400/figures/fig6_active_fractions.png",
+      "location": "tracked in git beside the report",
+      "status": "required-tracked",
+      "bytes": 77402,
+      "sha256": "4f024576e478666ee221d37cf0ed2733bd7294a630e9966ae46e247d5e0cee33"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/move_activity_400/figures/fig7_map_rho.png",
+      "location": "tracked in git beside the report",
+      "status": "required-tracked",
+      "bytes": 56972,
+      "sha256": "759380f52f76356e6b3f39175e9560a97c28120cda223b32215b46780d6c013a"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/move_activity_400/figures/fig8_map_absdrho.png",
+      "location": "tracked in git beside the report",
+      "status": "required-tracked",
+      "bytes": 103197,
+      "sha256": "fe59d2ecba39481a0c0ebaed9678f021019a7d0fbf372166a22e637bc6fceb0b"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/move_activity_400/figures/fig9_map_u.png",
+      "location": "tracked in git beside the report",
+      "status": "required-tracked",
+      "bytes": 105813,
+      "sha256": "1d2c18666ef1486c6cd4e57a46b255e3e7cde73a29692ace7199c902cd66cbd1"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/move_activity_400/EVIDENCE.json",
+      "location": "tracked in git beside the report",
+      "status": "required-tracked",
+      "bytes": 3674,
+      "sha256": "7c224d3aa9287dfd7c13b98f6b31dd2e63ff9f548726e7c5f067a2b0f58e514b"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/move_activity_400/METRICS.json",
+      "location": "tracked in git beside the report",
+      "status": "required-tracked",
+      "bytes": 32313,
+      "sha256": "b30fd932b1c6ffe6332007e6ae4d14ae7ee793c6a8b234ae81fa3d5673b9e91e"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/move_activity_400/PREFIX_GATE.json",
+      "location": "tracked in git beside the report",
+      "status": "required-tracked",
+      "bytes": 927,
+      "sha256": "73d5e409f509a6d87b2d477e9c799d72e4310b2a268000f0f2806011a2f5e4a5"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/move_activity_400/PREREGISTRATION.md",
+      "location": "tracked in git beside the report",
+      "status": "required-tracked",
+      "bytes": 10818,
+      "sha256": "706b8865075f97cb0d5824658fa6e562636d464dba2611580d6c10fdff7716d4"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/move_activity_400/PROVENANCE.md",
+      "location": "tracked in git beside the report",
+      "status": "required-tracked",
+      "bytes": 6558,
+      "sha256": "34a6c350cc5293d4fcac09f8e10550762e8dfd63e68aa15b076031d0108bb20c"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/move_activity_400/REPORT.md",
+      "location": "tracked in git beside the report",
+      "status": "required-tracked",
+      "bytes": 22967,
+      "sha256": "6fc092e5b5ff7f9611f0e2f385f17996ee3cc65bb1c5647e137060a58da5b311"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/move_activity_400/SCALING_ANALYSIS.json",
+      "location": "tracked in git beside the report",
+      "status": "required-tracked",
+      "bytes": 17742,
+      "sha256": "260f7726606b744fb2a1ae294db011921723c49183f8f776626002b70458aca9"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/move_activity_400/SPATIAL_ANALYSIS.json",
+      "location": "tracked in git beside the report",
+      "status": "required-tracked",
+      "bytes": 7076,
+      "sha256": "3144fe674bba096b9fccf7e7c3dd24308641a28ae2460c6ce2bf4a4ae8784fee"
+    }
+  ]
+}

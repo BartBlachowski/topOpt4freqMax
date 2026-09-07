@@ -1,0 +1,154 @@
+{
+  "schema": "olhoff_current_evidence/1",
+  "study": "move_activity_400",
+  "generated": "2026-09-07T23:48:11+02:00",
+  "evidenceRoot": "analysis/OlhoffCurrent/evidence/move_activity_400",
+  "implementation": "analysis/OlhoffCurrent",
+  "sourceTree": "c1455374d5f8e256c2678a679a5fc7955d9a8a77c410a41cd30f1c189910208c",
+  "matlab": "25.2.0.2998904 (R2025b)",
+  "preregistration_sha256": "706b8865075f97cb0d5824658fa6e562636d464dba2611580d6c10fdff7716d4",
+  "mesh": [
+    400,
+    50
+  ],
+  "NE": 20000,
+  "reconstructs": [
+    "rho(k)",
+    "rho(k-1)",
+    "Delta rho_e(k)",
+    "move(k)"
+  ],
+  "convention": "u_e(k) = |rho_e(k)-rho_e(k-1)| / move(k); move(k) bounds the increment stored at index k (olhoffSolve l.267/298/373/381)",
+  "artifacts": [
+    {
+      "path": "P400_400x50_trajectory.mat",
+      "class": "required",
+      "description": "ARM P400 element-level trajectory: RHO and DRHO (NE x nOuter, double), move, full hist, resolved cfg.  Production move ladder.",
+      "bytes": 3.6576273E+7,
+      "sha256": "1dc20dbd6a0dacbd067802901fd6d78364306a5641be84a6e2216b4038917660",
+      "present": true,
+      "format": "MAT-file (v7.3 = HDF5) -- read with load()",
+      "variables": [
+        {
+          "name": "DRHO",
+          "size": [
+            20000,
+            139
+          ],
+          "class": "double",
+          "bytes": 2.224E+7
+        },
+        {
+          "name": "RHO",
+          "size": [
+            20000,
+            139
+          ],
+          "class": "double",
+          "bytes": 2.224E+7
+        },
+        {
+          "name": "cfg",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 18873
+        },
+        {
+          "name": "hist",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 39346
+        },
+        {
+          "name": "meta",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 1297
+        },
+        {
+          "name": "move",
+          "size": [
+            139,
+            1
+          ],
+          "class": "double",
+          "bytes": 1112
+        }
+      ]
+    },
+    {
+      "path": "F400_400x50_trajectory.mat",
+      "class": "required",
+      "description": "ARM F400 element-level trajectory: RHO and DRHO (NE x nOuter, double), move, full hist, resolved cfg.  Fixed move 0.04 counterfactual.",
+      "bytes": 1.02057786E+8,
+      "sha256": "c53680e86b7010e962b9f5a48a55fdc7c3e659150e05994c9bbffa1275035ded",
+      "present": true,
+      "format": "MAT-file (v7.3 = HDF5) -- read with load()",
+      "variables": [
+        {
+          "name": "DRHO",
+          "size": [
+            20000,
+            369
+          ],
+          "class": "double",
+          "bytes": 5.904E+7
+        },
+        {
+          "name": "RHO",
+          "size": [
+            20000,
+            369
+          ],
+          "class": "double",
+          "bytes": 5.904E+7
+        },
+        {
+          "name": "cfg",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 19415
+        },
+        {
+          "name": "hist",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 98226
+        },
+        {
+          "name": "meta",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 1857
+        },
+        {
+          "name": "move",
+          "size": [
+            369,
+            1
+          ],
+          "class": "double",
+          "bytes": 2952
+        }
+      ]
+    }
+  ]
+}
