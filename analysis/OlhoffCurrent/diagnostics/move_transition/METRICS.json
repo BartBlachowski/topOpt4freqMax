@@ -1,0 +1,972 @@
+{
+  "schema": "olhoff_move_transition_experiment/1",
+  "generated": "2026-09-07T17:06:32+02:00",
+  "implementation": "analysis/OlhoffCurrent",
+  "production_preset": "duOlhoffFixedPenaltySensitivityFiltered",
+  "matlab": "25.2.0.3042426 (R2025b) Update 1",
+  "threads": 10,
+  "source_tree_sha256": "c1455374d5f8e256c2678a679a5fc7955d9a8a77c410a41cd30f1c189910208c",
+  "currentness": "CURRENT",
+  "preregistration_sha256": "25b0e04db7f6e17a509ad3f5bcdb301c0b6a9d0feb4c4017724907a98d5b3102",
+  "candidate": {
+    "metric": "maxUtilization",
+    "threshold": 0.5,
+    "persistence": 10
+  },
+  "terminal_admission": {
+    "name": "settledLocalObjective",
+    "tauAbs": 0.01,
+    "tauRel": 0.5,
+    "D": 10,
+    "W": 10,
+    "tauObj": 0.005
+  },
+  "safety_cap": 600,
+  "runs": [
+    {
+      "key": "armP_160x20",
+      "arm": "P",
+      "mesh": [
+        160,
+        20
+      ],
+      "NE": 3200,
+      "nOuterRun": 600,
+      "solverStatus": "CAP_HIT",
+      "admissionStatus": "CONVERGED",
+      "stopIter": 91,
+      "omega1_traj": 169.48059308714426,
+      "omega1_postloop_atCap": 169.69124694370953,
+      "Mnd_pct": 13.402499279526742,
+      "gray_fraction": 0.149375,
+      "mid_fraction": 0.025,
+      "volume": 0.49999900877797954,
+      "gap12": 0.014765538900412659,
+      "omega2": 171.98306537723749,
+      "l2": 0.02358256321761374,
+      "maxAbs": 0.0058104442373706419,
+      "r_rho": 0.58104442373706422,
+      "utilCount": 0,
+      "move": 0.01,
+      "stage": 3,
+      "itersSinceMoveChange": 1,
+      "innerTotal": 2241,
+      "innerAtStop": 22,
+      "innerConvAll": true,
+      "omega1_postloop": 169.49522702153845,
+      "spatial_at_stop": {
+        "quantileLevels": [
+          0.5,
+          0.9,
+          0.99,
+          1
+        ],
+        "utilQuantiles": [
+          0.010917830308923571,
+          0.038907967545460942,
+          0.182143877523416,
+          0.58104442373706344
+        ],
+        "fracAtBound": 0,
+        "fracAbove50": 0.00125,
+        "nAtBound": 0,
+        "NE": 3200
+      },
+      "spatial_median_fracAtBound": 0,
+      "spatial_median_fracAbove50": 0,
+      "descents": [
+        79,
+        90,
+        101
+      ],
+      "wall_s": 2543.6657825,
+      "cfgHash": "0c9482af58007919bca2eda50b4de3e1108af7c5a0f1abc34d25e6147fa24a68"
+    },
+    {
+      "key": "armU_160x20",
+      "arm": "U",
+      "mesh": [
+        160,
+        20
+      ],
+      "NE": 3200,
+      "nOuterRun": 600,
+      "solverStatus": "CAP_HIT",
+      "admissionStatus": "CAP_HIT",
+      "stopIter": 600,
+      "omega1_traj": 169.574746710849,
+      "omega1_postloop_atCap": 169.62358994718372,
+      "Mnd_pct": 11.458037670083639,
+      "gray_fraction": 0.138125,
+      "mid_fraction": 0.011875,
+      "volume": 0.49999106139713134,
+      "gap12": 0.0062718452622023023,
+      "omega2": 170.63829328259661,
+      "l2": 0.36287922846211018,
+      "maxAbs": 0.039970312145445476,
+      "r_rho": 0.99925780363613692,
+      "utilCount": 0,
+      "move": 0.04,
+      "stage": 1,
+      "itersSinceMoveChange": 599,
+      "innerTotal": 16283,
+      "innerAtStop": 25,
+      "innerConvAll": true,
+      "omega1_postloop": 169.62358994718372,
+      "spatial_at_stop": {
+        "quantileLevels": [
+          0.5,
+          0.9,
+          0.99,
+          1
+        ],
+        "utilQuantiles": [
+          0.00078519616148425668,
+          0.037890138100965531,
+          0.99600464911412745,
+          0.99925780363613692
+        ],
+        "fracAtBound": 0.020625,
+        "fracAbove50": 0.0265625,
+        "nAtBound": 66,
+        "NE": 3200
+      },
+      "spatial_median_fracAtBound": 0.024375,
+      "spatial_median_fracAbove50": 0.0375,
+      "descents": [],
+      "wall_s": 1189.7041992083334,
+      "cfgHash": "0c9482af58007919bca2eda50b4de3e1108af7c5a0f1abc34d25e6147fa24a68"
+    },
+    {
+      "key": "armP_320x40",
+      "arm": "P",
+      "mesh": [
+        320,
+        40
+      ],
+      "NE": 12800,
+      "nOuterRun": 600,
+      "solverStatus": "CAP_HIT",
+      "admissionStatus": "CONVERGED",
+      "stopIter": 131,
+      "omega1_traj": 165.94683890430741,
+      "omega1_postloop_atCap": 166.09088967672875,
+      "Mnd_pct": 23.359567952074254,
+      "gray_fraction": 0.26375,
+      "mid_fraction": 0.095625,
+      "volume": 0.49999913861781514,
+      "gap12": 0.10674152016769037,
+      "omega2": 183.660256755976,
+      "l2": 0.090080505073909092,
+      "maxAbs": 0.0081885774212143,
+      "r_rho": 0.409428871060715,
+      "utilCount": 1,
+      "move": 0.02,
+      "stage": 2,
+      "itersSinceMoveChange": 1,
+      "innerTotal": 2614,
+      "innerAtStop": 18,
+      "innerConvAll": true,
+      "omega1_postloop": 165.95078925220545,
+      "spatial_at_stop": {
+        "quantileLevels": [
+          0.5,
+          0.9,
+          0.99,
+          1
+        ],
+        "utilQuantiles": [
+          0.000898289190710117,
+          0.061266686018895955,
+          0.15101977977241415,
+          0.40942887106071507
+        ],
+        "fracAtBound": 0,
+        "fracAbove50": 0,
+        "nAtBound": 0,
+        "NE": 12800
+      },
+      "spatial_median_fracAtBound": 0,
+      "spatial_median_fracAbove50": 0,
+      "descents": [
+        130,
+        141,
+        152
+      ],
+      "wall_s": 4830.6321275416667,
+      "cfgHash": "d1953405fc75c0d37645ed699e1b9ad7b25a6b49155b056e19b5a38a447af31d"
+    },
+    {
+      "key": "armU_320x40",
+      "arm": "U",
+      "mesh": [
+        320,
+        40
+      ],
+      "NE": 12800,
+      "nOuterRun": 600,
+      "solverStatus": "CAP_HIT",
+      "admissionStatus": "CONVERGED",
+      "stopIter": 210,
+      "omega1_traj": 166.58696237224177,
+      "omega1_postloop_atCap": 166.53491652925823,
+      "Mnd_pct": 13.370681665166344,
+      "gray_fraction": 0.1553125,
+      "mid_fraction": 0.03109375,
+      "volume": 0.49999946725895184,
+      "gap12": 0.20575813278046656,
+      "omega2": 200.86358469552408,
+      "l2": 0.11370238635764564,
+      "maxAbs": 0.0098192708397182929,
+      "r_rho": 0.24548177099295732,
+      "utilCount": 6,
+      "move": 0.04,
+      "stage": 1,
+      "itersSinceMoveChange": 209,
+      "innerTotal": 3964,
+      "innerAtStop": 17,
+      "innerConvAll": true,
+      "omega1_postloop": 166.57994624134076,
+      "spatial_at_stop": {
+        "quantileLevels": [
+          0.5,
+          0.9,
+          0.99,
+          1
+        ],
+        "utilQuantiles": [
+          0.00033341854728840051,
+          0.030374488266737137,
+          0.10732200920172685,
+          0.24548177099295715
+        ],
+        "fracAtBound": 0,
+        "fracAbove50": 0,
+        "nAtBound": 0,
+        "NE": 12800
+      },
+      "spatial_median_fracAtBound": 0,
+      "spatial_median_fracAbove50": 0,
+      "descents": [
+        214,
+        224,
+        234
+      ],
+      "wall_s": 6459.688420625,
+      "cfgHash": "d1953405fc75c0d37645ed699e1b9ad7b25a6b49155b056e19b5a38a447af31d"
+    }
+  ],
+  "baseline_gate": [
+    {
+      "mesh": "160x20",
+      "B1": true,
+      "B2": true,
+      "B3": true,
+      "B4": true,
+      "detail": {
+        "B1_mismatched": [],
+        "B1_nCompared": 600,
+        "B1_nArchive": 600,
+        "B1_nCandidate": 600,
+        "productionStopIter": 91,
+        "B2_maxAbsDiff": 0,
+        "archivedOmega1": 169.49522702153845,
+        "recomputedOmega1": 169.49522702153845,
+        "transitionsExpected": [
+          79,
+          90,
+          101
+        ],
+        "transitionsObserved": [
+          79,
+          90,
+          101
+        ]
+      },
+      "ok": true
+    },
+    {
+      "mesh": "320x40",
+      "B1": true,
+      "B2": true,
+      "B3": true,
+      "B4": true,
+      "detail": {
+        "B1_mismatched": [],
+        "B1_nCompared": 600,
+        "B1_nArchive": 600,
+        "B1_nCandidate": 600,
+        "productionStopIter": 131,
+        "B2_maxAbsDiff": 0,
+        "archivedOmega1": 165.95078925220545,
+        "recomputedOmega1": 165.95078925220545,
+        "transitionsExpected": [
+          130,
+          141,
+          152
+        ],
+        "transitionsObserved": [
+          130,
+          141,
+          152
+        ]
+      },
+      "ok": true
+    }
+  ],
+  "transitions": [
+    {
+      "mesh": [
+        160,
+        20
+      ],
+      "armP": [
+        {
+          "iter": 79,
+          "moveFrom": 0.04,
+          "moveTo": 0.02,
+          "rrhoPrev10": [
+            0.9995352064331211,
+            0.99887192416982362,
+            0.99940054784379351,
+            0.99901952568353358,
+            0.99941097771581511,
+            0.99929431052320827,
+            0.99946011950151836,
+            0.99975062905965728,
+            0.999451623786977,
+            0.99973877413449874
+          ],
+          "allBelow": false,
+          "countAtCall": 0,
+          "Mnd": 13.493554173465853,
+          "gray": 0.1525,
+          "mid": 0.025,
+          "omega1": 169.0854901123304,
+          "volume": 0.4999900767996367
+        },
+        {
+          "iter": 90,
+          "moveFrom": 0.02,
+          "moveTo": 0.01,
+          "rrhoPrev10": [
+            0.99687144185351773,
+            0.99706856650972231,
+            0.9924437476887199,
+            0.99630996095974478,
+            0.99489723284994036,
+            0.99631891577182108,
+            0.99544618343048941,
+            0.997051295024816,
+            0.99545123151619452,
+            0.99708912425263985
+          ],
+          "allBelow": false,
+          "countAtCall": 0,
+          "Mnd": 13.360863952068696,
+          "gray": 0.149375,
+          "mid": 0.025,
+          "omega1": 169.3745584543463,
+          "volume": 0.4999948682675816
+        },
+        {
+          "iter": 101,
+          "moveFrom": 0.01,
+          "moveTo": 0.005,
+          "rrhoPrev10": [
+            0.58104442373706422,
+            0.44550024685691136,
+            0.77841444476517363,
+            0.4715361143995152,
+            0.445391866353011,
+            0.66879463695404573,
+            0.52003990154070912,
+            0.76335112080461354,
+            0.55033858947744851,
+            0.3783236899594582
+          ],
+          "allBelow": false,
+          "countAtCall": 1,
+          "Mnd": 13.332507080058194,
+          "gray": 0.14625,
+          "mid": 0.025625,
+          "omega1": 169.52413664244273,
+          "volume": 0.49999918812991234
+        }
+      ],
+      "armU": []
+    },
+    {
+      "mesh": [
+        320,
+        40
+      ],
+      "armP": [
+        {
+          "iter": 130,
+          "moveFrom": 0.04,
+          "moveTo": 0.02,
+          "rrhoPrev10": [
+            0.74551596161781175,
+            0.79840747854032723,
+            0.74894600454880611,
+            0.70206680987939729,
+            0.75895466361053865,
+            0.80591522419278183,
+            0.72864143443390139,
+            0.72562891190740775,
+            0.77049975073099641,
+            0.64706691686791284
+          ],
+          "allBelow": false,
+          "countAtCall": 0,
+          "Mnd": 23.450634712792205,
+          "gray": 0.26421875,
+          "mid": 0.096875,
+          "omega1": 165.91884450645281,
+          "volume": 0.49999715071745043
+        },
+        {
+          "iter": 141,
+          "moveFrom": 0.02,
+          "moveTo": 0.01,
+          "rrhoPrev10": [
+            0.409428871060715,
+            0.40911013692736053,
+            0.343428485889489,
+            0.35549392307580174,
+            0.38983704680817738,
+            0.41563146794655087,
+            0.38005208801241863,
+            0.40079085612240473,
+            0.39530515298939395,
+            0.3930282696634238
+          ],
+          "allBelow": true,
+          "countAtCall": 11,
+          "Mnd": 23.010377678163085,
+          "gray": 0.2596875,
+          "mid": 0.088125,
+          "omega1": 165.98362872990955,
+          "volume": 0.4999991860164536
+        },
+        {
+          "iter": 152,
+          "moveFrom": 0.01,
+          "moveTo": 0.005,
+          "rrhoPrev10": [
+            0.27727982595496103,
+            0.24519847737936709,
+            0.19889565830090686,
+            0.19908802497624897,
+            0.19836429467800076,
+            0.19858363415470548,
+            0.16874326650615812,
+            0.19933979265705226,
+            0.18992803570446795,
+            0.20135404967541073
+          ],
+          "allBelow": true,
+          "countAtCall": 11,
+          "Mnd": 22.882826918925709,
+          "gray": 0.25875,
+          "mid": 0.0865625,
+          "omega1": 165.99802574626793,
+          "volume": 0.49999679104463368
+        }
+      ],
+      "armU": [
+        {
+          "iter": 214,
+          "moveFrom": 0.04,
+          "moveTo": 0.02,
+          "rrhoPrev10": [
+            0.38279065067343832,
+            0.36097999294088151,
+            0.30606901657007662,
+            0.35463345259402129,
+            0.27932264344674984,
+            0.3683961278056751,
+            0.24548177099295732,
+            0.23210782538684521,
+            0.34087429946303494,
+            0.2378648202794475
+          ],
+          "allBelow": true,
+          "countAtCall": 10,
+          "Mnd": 13.318245209805523,
+          "gray": 0.155,
+          "mid": 0.0321875,
+          "omega1": 166.5626807416443,
+          "volume": 0.49999948530909111
+        },
+        {
+          "iter": 224,
+          "moveFrom": 0.02,
+          "moveTo": 0.01,
+          "rrhoPrev10": [
+            0.32483150765183783,
+            0.27612117675253356,
+            0.23921250987970943,
+            0.20989397779400362,
+            0.18598437742576568,
+            0.1661280545840865,
+            0.14945503663812365,
+            0.13524359963641142,
+            0.12304726658860136,
+            0.12309107118531905
+          ],
+          "allBelow": true,
+          "countAtCall": 10,
+          "Mnd": 13.257164379600757,
+          "gray": 0.15421875,
+          "mid": 0.03140625,
+          "omega1": 166.54370986724061,
+          "volume": 0.49999983857659885
+        },
+        {
+          "iter": 234,
+          "moveFrom": 0.01,
+          "moveTo": 0.005,
+          "rrhoPrev10": [
+            0.050725782209053528,
+            0.062275243130045746,
+            0.061755880624426905,
+            0.063024579578381576,
+            0.06274667801027696,
+            0.063983923775594767,
+            0.059666452609113886,
+            0.06104794774865769,
+            0.058446364843429348,
+            0.047543340606007685
+          ],
+          "allBelow": true,
+          "countAtCall": 10,
+          "Mnd": 13.216391450053077,
+          "gray": 0.15453125,
+          "mid": 0.0315625,
+          "omega1": 166.54801727128861,
+          "volume": 0.4999986226565411
+        }
+      ]
+    }
+  ],
+  "stages": [
+    {
+      "mesh": [
+        160,
+        20
+      ],
+      "armP": [
+        {
+          "stage": 1,
+          "move": 0.04,
+          "first": 1,
+          "last": 78,
+          "nIter": 78,
+          "Mnd0": 99.459234974806492,
+          "Mnd1": 13.493554173465853,
+          "dMnd": -85.965680801340639,
+          "w0": 68.398592214336887,
+          "w1": 169.0854901123304,
+          "dw": 100.68689789799352,
+          "rMed": 0.99934248974793061,
+          "rMin": 0.9976454594258124,
+          "rMax": 0.99979088399587934,
+          "finalCount": 0,
+          "mature": false
+        },
+        {
+          "stage": 2,
+          "move": 0.02,
+          "first": 79,
+          "last": 89,
+          "nIter": 11,
+          "Mnd0": 13.443465503429138,
+          "Mnd1": 13.360863952068696,
+          "dMnd": -0.082601551360442116,
+          "w0": 169.27619588495094,
+          "w1": 169.3745584543463,
+          "dw": 0.0983625693953627,
+          "rMed": 0.99631891577182108,
+          "rMin": 0.9924437476887199,
+          "rMax": 0.998837773413619,
+          "finalCount": 0,
+          "mature": false
+        },
+        {
+          "stage": 3,
+          "move": 0.01,
+          "first": 90,
+          "last": 91,
+          "nIter": 2,
+          "Mnd0": 13.385685607444028,
+          "Mnd1": 13.402499279526742,
+          "dMnd": 0.016813672082713893,
+          "w0": 169.52346274359616,
+          "w1": 169.48059308714426,
+          "dw": -0.042869656451898663,
+          "rMed": 0.75343634862468367,
+          "rMin": 0.58104442373706422,
+          "rMax": 0.92582827351230312,
+          "finalCount": 0,
+          "mature": true
+        }
+      ],
+      "armU": {
+        "stage": 1,
+        "move": 0.04,
+        "first": 1,
+        "last": 600,
+        "nIter": 600,
+        "Mnd0": 99.459234974806492,
+        "Mnd1": 11.458037670083639,
+        "dMnd": -88.001197304722851,
+        "w0": 68.398592214336887,
+        "w1": 169.574746710849,
+        "dw": 101.17615449651213,
+        "rMed": 0.99931948543822124,
+        "rMin": 0.9976454594258124,
+        "rMax": 0.99999546586267829,
+        "finalCount": 0,
+        "mature": true
+      }
+    },
+    {
+      "mesh": [
+        320,
+        40
+      ],
+      "armP": [
+        {
+          "stage": 1,
+          "move": 0.04,
+          "first": 1,
+          "last": 129,
+          "nIter": 129,
+          "Mnd0": 99.614003962719153,
+          "Mnd1": 23.450634712792205,
+          "dMnd": -76.163369249926944,
+          "w0": 68.274647841220556,
+          "w1": 165.91884450645281,
+          "dw": 97.644196665232258,
+          "rMed": 0.98696307351295565,
+          "rMin": 0.41411227474607493,
+          "rMax": 0.99936747640487333,
+          "finalCount": 0,
+          "mature": false
+        },
+        {
+          "stage": 2,
+          "move": 0.02,
+          "first": 130,
+          "last": 131,
+          "nIter": 2,
+          "Mnd0": 23.40095112134988,
+          "Mnd1": 23.359567952074254,
+          "dMnd": -0.04138316927562613,
+          "w0": 165.94330370587352,
+          "w1": 165.94683890430741,
+          "dw": 0.0035351984338944931,
+          "rMed": 0.3985537356753055,
+          "rMin": 0.38767860028989592,
+          "rMax": 0.409428871060715,
+          "finalCount": 2,
+          "mature": true
+        }
+      ],
+      "armU": {
+        "stage": 1,
+        "move": 0.04,
+        "first": 1,
+        "last": 210,
+        "nIter": 210,
+        "Mnd0": 99.614003962719153,
+        "Mnd1": 13.370681665166344,
+        "dMnd": -86.243322297552808,
+        "w0": 68.274647841220556,
+        "w1": 166.58696237224177,
+        "dw": 98.312314531021215,
+        "rMed": 0.9429312948371471,
+        "rMin": 0.24548177099295732,
+        "rMax": 0.99936747640487333,
+        "finalCount": 7,
+        "mature": true
+      }
+    }
+  ],
+  "gates": [
+    {
+      "mesh": [
+        160,
+        20
+      ],
+      "coarse": true,
+      "armU_status": "CAP_HIT",
+      "armU_stopIter": 600,
+      "armP_stopIter": 91,
+      "noSolverFailure": true,
+      "volumeFeasible": true,
+      "omega1_production_postloop": 169.49522702153845,
+      "omega1_armU_postloop": 169.62358994718372,
+      "omega1RelChange": 0.00075732472176901562,
+      "omega1RegressionOK": true,
+      "omega1RelChange_traj": 0.00055554221276735475,
+      "everyDescentLegal": true,
+      "descentDetail": [],
+      "nDescents": 0,
+      "gapToLastDescent": null,
+      "noPostDescentArtifact": true,
+      "Mnd_production": 13.402499279526742,
+      "Mnd_armU": 11.458037670083639,
+      "Mnd_relReduction": 0.14508201559192802,
+      "Mnd_materiallyImproves": false,
+      "mid_production": 0.025,
+      "mid_armU": 0.011875,
+      "mid_relChange": -0.525,
+      "mid_notWorse": true,
+      "Mnd_fixedMoveHistorical": 12.275432989782246,
+      "Mnd_excessOverFixed_production": 1.1270662897444961,
+      "Mnd_excessOverFixed_armU": -0.81739531969860657,
+      "fractionOfExcessRemoved": 1.7252415648807211,
+      "G1_noSolverFailure": true,
+      "G2_volumeFeasible": true,
+      "G3_omega1": true,
+      "G5_descentLegal": true,
+      "G6_noArtifact": true,
+      "G7_terminationHonest": true,
+      "firstDescent_armP": {
+        "occurred": true,
+        "iter": 79,
+        "Mnd": 13.493554173465853,
+        "mid": 0.025,
+        "omega1": 169.0854901123304,
+        "moveFrom": 0.04,
+        "moveTo": 0.02
+      },
+      "firstDescent_armU": {
+        "occurred": false,
+        "iter": null,
+        "Mnd": null,
+        "mid": null,
+        "omega1": null,
+        "moveFrom": null,
+        "moveTo": null
+      },
+      "armU_maxUtilCount": 0,
+      "armU_fracBelow": 0,
+      "armU_medianRatio": 0.99931948543822124,
+      "armU_stage1LastIter": 600,
+      "ladderComplete": false
+    },
+    {
+      "mesh": [
+        320,
+        40
+      ],
+      "coarse": false,
+      "armU_status": "CONVERGED",
+      "armU_stopIter": 210,
+      "armP_stopIter": 131,
+      "noSolverFailure": true,
+      "volumeFeasible": true,
+      "omega1_production_postloop": 165.95078925220545,
+      "omega1_armU_postloop": 166.57994624134076,
+      "omega1RelChange": 0.003791226254303272,
+      "omega1RegressionOK": true,
+      "omega1RelChange_traj": 0.0038574007926929148,
+      "everyDescentLegal": true,
+      "descentDetail": [
+        {
+          "iter": 214,
+          "countAtCall": 10,
+          "allBelow": true,
+          "n": 10,
+          "ok": true
+        },
+        {
+          "iter": 224,
+          "countAtCall": 10,
+          "allBelow": true,
+          "n": 10,
+          "ok": true
+        },
+        {
+          "iter": 234,
+          "countAtCall": 10,
+          "allBelow": true,
+          "n": 10,
+          "ok": true
+        }
+      ],
+      "nDescents": 3,
+      "gapToLastDescent": null,
+      "noPostDescentArtifact": true,
+      "Mnd_production": 23.359567952074254,
+      "Mnd_armU": 13.370681665166344,
+      "Mnd_relReduction": 0.42761434232866147,
+      "Mnd_materiallyImproves": true,
+      "mid_production": 0.095625,
+      "mid_armU": 0.03109375,
+      "mid_relChange": -0.67483660130718948,
+      "mid_notWorse": true,
+      "Mnd_fixedMoveHistorical": 13.282439317279476,
+      "Mnd_excessOverFixed_production": 10.077128634794779,
+      "Mnd_excessOverFixed_armU": 0.0882423478868688,
+      "fractionOfExcessRemoved": 0.99124330440893837,
+      "G8_noSolverFailure": true,
+      "G9_volumeFeasible": true,
+      "G10_omega1": true,
+      "G11_descentLegal": true,
+      "G12_noArtifact": true,
+      "G13_MndMaterial": true,
+      "G14_midNotWorse": true,
+      "firstDescent_armP": {
+        "occurred": true,
+        "iter": 130,
+        "Mnd": 23.450634712792205,
+        "mid": 0.096875,
+        "omega1": 165.91884450645281,
+        "moveFrom": 0.04,
+        "moveTo": 0.02
+      },
+      "firstDescent_armU": {
+        "occurred": true,
+        "iter": 214,
+        "Mnd": 13.318245209805523,
+        "mid": 0.0321875,
+        "omega1": 166.5626807416443,
+        "moveFrom": 0.04,
+        "moveTo": 0.02
+      },
+      "armU_maxUtilCount": 366,
+      "armU_fracBelow": 0.67333333333333334,
+      "armU_medianRatio": 0.027816895575739915,
+      "armU_stage1LastIter": 213,
+      "ladderComplete": true
+    }
+  ],
+  "config_diff": {
+    "note": "The experimental factor is the move-transition controller (mt_moveLimit), not a configuration field. ARM P and ARM U resolve to the SAME scientific configuration.",
+    "meshes": [
+      {
+        "mesh": [
+          160,
+          20
+        ],
+        "cfgHash_armP": "0c9482af58007919bca2eda50b4de3e1108af7c5a0f1abc34d25e6147fa24a68",
+        "cfgHash_armU": "0c9482af58007919bca2eda50b4de3e1108af7c5a0f1abc34d25e6147fa24a68",
+        "cfgHash_production": "c7b06b5742db2fe11b60b969424f0141d0f0b1b167adc1ca6e0ec8b1c7ddaa1e",
+        "nSchemaFields": 80,
+        "diff_armP_vs_armU": [
+          {
+            "field": "runtime.name",
+            "a": "MT_ARMP_160x20",
+            "b": "MT_ARMU_160x20"
+          }
+        ],
+        "diff_production_vs_armP": [
+          {
+            "field": "stop.tolerance",
+            "a": "0.050000000000000003",
+            "b": "0"
+          },
+          {
+            "field": "stop.toleranceRule",
+            "a": "meshScaled",
+            "b": "explicit"
+          },
+          {
+            "field": "runtime.name",
+            "a": "OLHOFF_CURRENT_160x20",
+            "b": "MT_ARMP_160x20"
+          }
+        ],
+        "diff_production_vs_armU": [
+          {
+            "field": "stop.tolerance",
+            "a": "0.050000000000000003",
+            "b": "0"
+          },
+          {
+            "field": "stop.toleranceRule",
+            "a": "meshScaled",
+            "b": "explicit"
+          },
+          {
+            "field": "runtime.name",
+            "a": "OLHOFF_CURRENT_160x20",
+            "b": "MT_ARMU_160x20"
+          }
+        ],
+        "transition_armP": {
+          "metric": "boundVariableStall"
+        },
+        "transition_armU": {
+          "metric": "maxUtilization",
+          "threshold": 0.5,
+          "persistence": 10
+        }
+      },
+      {
+        "mesh": [
+          320,
+          40
+        ],
+        "cfgHash_armP": "d1953405fc75c0d37645ed699e1b9ad7b25a6b49155b056e19b5a38a447af31d",
+        "cfgHash_armU": "d1953405fc75c0d37645ed699e1b9ad7b25a6b49155b056e19b5a38a447af31d",
+        "cfgHash_production": "4af1c8bf80a18bc4d990c8f747ad3e2446ffaf4973732cc14f7c024002f21435",
+        "nSchemaFields": 80,
+        "diff_armP_vs_armU": [
+          {
+            "field": "runtime.name",
+            "a": "MT_ARMP_320x40",
+            "b": "MT_ARMU_320x40"
+          }
+        ],
+        "diff_production_vs_armP": [
+          {
+            "field": "stop.tolerance",
+            "a": "0.10000000000000001",
+            "b": "0"
+          },
+          {
+            "field": "stop.toleranceRule",
+            "a": "meshScaled",
+            "b": "explicit"
+          },
+          {
+            "field": "runtime.name",
+            "a": "OLHOFF_CURRENT_320x40",
+            "b": "MT_ARMP_320x40"
+          }
+        ],
+        "diff_production_vs_armU": [
+          {
+            "field": "stop.tolerance",
+            "a": "0.10000000000000001",
+            "b": "0"
+          },
+          {
+            "field": "stop.toleranceRule",
+            "a": "meshScaled",
+            "b": "explicit"
+          },
+          {
+            "field": "runtime.name",
+            "a": "OLHOFF_CURRENT_320x40",
+            "b": "MT_ARMU_320x40"
+          }
+        ],
+        "transition_armP": {
+          "metric": "boundVariableStall"
+        },
+        "transition_armU": {
+          "metric": "maxUtilization",
+          "threshold": 0.5,
+          "persistence": 10
+        }
+      }
+    ]
+  }
+}

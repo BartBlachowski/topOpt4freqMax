@@ -1,0 +1,123 @@
+{
+  "note": "The experimental factor is the move-transition controller (mt_moveLimit), not a configuration field. ARM P and ARM U resolve to the SAME scientific configuration.",
+  "meshes": [
+    {
+      "mesh": [
+        160,
+        20
+      ],
+      "cfgHash_armP": "0c9482af58007919bca2eda50b4de3e1108af7c5a0f1abc34d25e6147fa24a68",
+      "cfgHash_armU": "0c9482af58007919bca2eda50b4de3e1108af7c5a0f1abc34d25e6147fa24a68",
+      "cfgHash_production": "c7b06b5742db2fe11b60b969424f0141d0f0b1b167adc1ca6e0ec8b1c7ddaa1e",
+      "nSchemaFields": 80,
+      "diff_armP_vs_armU": [
+        {
+          "field": "runtime.name",
+          "a": "MT_ARMP_160x20",
+          "b": "MT_ARMU_160x20"
+        }
+      ],
+      "diff_production_vs_armP": [
+        {
+          "field": "stop.tolerance",
+          "a": "0.050000000000000003",
+          "b": "0"
+        },
+        {
+          "field": "stop.toleranceRule",
+          "a": "meshScaled",
+          "b": "explicit"
+        },
+        {
+          "field": "runtime.name",
+          "a": "OLHOFF_CURRENT_160x20",
+          "b": "MT_ARMP_160x20"
+        }
+      ],
+      "diff_production_vs_armU": [
+        {
+          "field": "stop.tolerance",
+          "a": "0.050000000000000003",
+          "b": "0"
+        },
+        {
+          "field": "stop.toleranceRule",
+          "a": "meshScaled",
+          "b": "explicit"
+        },
+        {
+          "field": "runtime.name",
+          "a": "OLHOFF_CURRENT_160x20",
+          "b": "MT_ARMU_160x20"
+        }
+      ],
+      "transition_armP": {
+        "metric": "boundVariableStall"
+      },
+      "transition_armU": {
+        "metric": "maxUtilization",
+        "threshold": 0.5,
+        "persistence": 10
+      }
+    },
+    {
+      "mesh": [
+        320,
+        40
+      ],
+      "cfgHash_armP": "d1953405fc75c0d37645ed699e1b9ad7b25a6b49155b056e19b5a38a447af31d",
+      "cfgHash_armU": "d1953405fc75c0d37645ed699e1b9ad7b25a6b49155b056e19b5a38a447af31d",
+      "cfgHash_production": "4af1c8bf80a18bc4d990c8f747ad3e2446ffaf4973732cc14f7c024002f21435",
+      "nSchemaFields": 80,
+      "diff_armP_vs_armU": [
+        {
+          "field": "runtime.name",
+          "a": "MT_ARMP_320x40",
+          "b": "MT_ARMU_320x40"
+        }
+      ],
+      "diff_production_vs_armP": [
+        {
+          "field": "stop.tolerance",
+          "a": "0.10000000000000001",
+          "b": "0"
+        },
+        {
+          "field": "stop.toleranceRule",
+          "a": "meshScaled",
+          "b": "explicit"
+        },
+        {
+          "field": "runtime.name",
+          "a": "OLHOFF_CURRENT_320x40",
+          "b": "MT_ARMP_320x40"
+        }
+      ],
+      "diff_production_vs_armU": [
+        {
+          "field": "stop.tolerance",
+          "a": "0.10000000000000001",
+          "b": "0"
+        },
+        {
+          "field": "stop.toleranceRule",
+          "a": "meshScaled",
+          "b": "explicit"
+        },
+        {
+          "field": "runtime.name",
+          "a": "OLHOFF_CURRENT_320x40",
+          "b": "MT_ARMU_320x40"
+        }
+      ],
+      "transition_armP": {
+        "metric": "boundVariableStall"
+      },
+      "transition_armU": {
+        "metric": "maxUtilization",
+        "threshold": 0.5,
+        "persistence": 10
+      }
+    }
+  ]
+}
