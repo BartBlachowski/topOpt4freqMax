@@ -42,7 +42,7 @@ end
 info.dir = outDir;
 
 % The benchmark domain is one shared 8 x 1 beam for all three methods
-% (study_base_config: domain.size 8.0 x 1.0; olhoffm4_config: a = 8, b = 1).
+% (study_base_config: domain.size 8.0 x 1.0; OlhoffCurrent: domain.a = 8, domain.b = 1).
 % Passing it explicitly is what pins every image to the same extent and aspect
 % instead of the renderer's legacy element-index framing, which would make a
 % 160x20 and an 800x100 design impossible to compare side by side.

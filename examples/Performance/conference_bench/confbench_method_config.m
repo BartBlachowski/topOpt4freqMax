@@ -12,16 +12,21 @@ function [mcfg, profileId, profile] = confbench_method_config(methodKey, nelx, n
 %     Proposed  analysis/three_method_parametric_study/results/profile_freeze_manifest.json
 %               profile proposed_practical_move02_tol001
 %     Yuksel    the same manifest, profile yuksel_practical_move01_tol001
-%     Olhoff    analysis/OlhoffM4Reconstruction/olhoffm4_config.m, the frozen
-%               Du-Olhoff (M4) reconstruction imported from
-%               /Users/piotrek/Programming/Matlab/Olhoff
+%     Olhoff    analysis/OlhoffCurrent, the SOLE production Du-Olhoff
+%               implementation, resolved at its named production preset
+%               duOlhoffFixedPenaltySensitivityFiltered
 %
 %   The Olhoff branch deliberately does NOT read
 %   analysis/olhoff_stabilization_audit/final_campaign_profile.json.  That file
 %   names the SUPERSEDED fixed-1600-iteration S1 profile; the conference
 %   benchmark must not depend on it, even to read another method's entry.
 %
-%   See also CONFBENCH_RUN_CASE, OLHOFFM4_CONFIG.
+%   It also does not read analysis/OlhoffM4Reconstruction, which is now frozen
+%   historical evidence rather than production.  The production preset
+%   reproduces that realization bitwise at 160x20 and 320x40 -- see
+%   analysis/OLHOFF_CURRENT_PROMOTION_REPORT.md.
+%
+%   See also CONFBENCH_RUN_CASE, OLHOFFCURRENT_CONFIG, OLHOFFCURRENT_PRESET.
 
 here = fileparts(mfilename('fullpath'));
 repo = fileparts(fileparts(fileparts(here)));
@@ -32,12 +37,37 @@ methodKey = lower(char(string(methodKey)));
 
 switch methodKey
     case 'olhoff'
-        [mcfg, meta] = olhoffm4_config(nelx, nely);
-        profileId = meta.realization_id;
-        profile = meta;
-        profile.source_implementation = ...
-            'analysis/OlhoffM4Reconstruction/+frozen/algo/olhoffOpt.m';
-        profile.frozen_by_file = 'analysis/OlhoffM4Reconstruction/olhoffm4_config.m';
+        % The production path guard must be installed before olh.config.* can
+        % resolve: the canonical package lives inside +impl/ and is deliberately
+        % invisible to genpath.  The guard is released when this function
+        % returns; confbench_run_case installs its own for the solve.
+        guard = olhoffcurrent_paths(); %#ok<NASGU>
+        preset = olhoffcurrent_preset();
+        cfg = olhoffcurrent_config(nelx, nely);
+
+        % mcfg carries BOTH renderings.  The canonical cfg is the
+        % configuration; the flat view exists only so that checks and manifests
+        % written in the historical vocabulary keep working without anyone
+        % re-deriving the realization by hand.
+        mcfg = olhoffcurrent_legacy_view(cfg);
+        mcfg.nelx = nelx;
+        mcfg.nely = nely;
+        mcfg.canonical = cfg;
+
+        profileId = preset.name;
+        profile = struct( ...
+            'label',                preset.label, ...
+            'production_preset',    preset.name, ...
+            'upstream_preset',      preset.upstreamPreset, ...
+            'classification',       preset.classification, ...
+            'historical_aliases',   {preset.historicalAliases}, ...
+            'must_not_be_labelled', preset.mustNotBeLabelled, ...
+            'epistemic_class',      preset.epistemicClass, ...
+            'caveat',               olhoffcurrent_caveat(), ...
+            'source_implementation', ...
+                'analysis/OlhoffCurrent/+impl/architecture/olhoffSolve.m', ...
+            'frozen_by_file', 'analysis/OlhoffCurrent/olhoffcurrent_preset.m', ...
+            'effective_config_hash', olhoffcurrent_config_hash(cfg));
         return
 
     case {'proposed', 'ourapproach'}

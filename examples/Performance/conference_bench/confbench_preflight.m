@@ -10,7 +10,8 @@ function pre = confbench_preflight(cfg, methodConfigs)
 %   configuration that drifted from its frozen source, a mesh list that came
 %   from a manifest instead of the script, a memory sampler inside a timed loop.
 %
-%   See also PERFORMANCE_COMPARISON, CONFBENCH_MANIFEST, OLHOFFM4_VERIFY_IMPORT.
+%   See also PERFORMANCE_COMPARISON, CONFBENCH_MANIFEST,
+%            OLHOFFCURRENT_ASSERT_DISPATCH, OLHOFFCURRENT_CURRENTNESS.
 
 here = fileparts(mfilename('fullpath'));
 repo = fileparts(fileparts(fileparts(here)));
@@ -72,45 +73,67 @@ pre = add(pre, 'single-threaded execution is in force', ok, ...
     sprintf('maxNumCompThreads = %d, requested single thread = %d', ...
         maxNumCompThreads(), cfg.singleThread));
 
-% ---- 5. the imported Du-Olhoff (M4) reconstruction ----------------------
+% ---- 5. the production Du-Olhoff implementation, analysis/OlhoffCurrent -
 if cfg.methods.olhoff
     % The identity of the running solver is proved from evidence held inside
-    % THIS repository -- integrity, attestation, reconstruction.  The external
-    % source directory is unversioned, outside this repository and not under
-    % its control; its state is recorded as a note below, never as a gate.
-    % See olhoffm4_verify_import's header for why.
-    imp = olhoffm4_verify_import('Verbose', false);
-    pre = add(pre, 'imported Olhoff files hash to IMPORT_MANIFEST.json', ...
-        isempty(imp.imported_hash_mismatches), ...
-        joinOr(imp.imported_hash_mismatches, sprintf(['%d imported files re-hashed; ' ...
-            'every one matches its recorded sha256_imported'], imp.checked)));
-    pre = add(pre, 'every imported file is attested to the audited source', ...
-        isempty(imp.unattested_files), ...
-        joinOr(imp.unattested_files, sprintf(['the manifest records sha256_imported == ' ...
-            'sha256_source for every imported file except the declared ' ...
-            'modification(s): %s'], strjoin(imp.declared_modifications, ', '))));
-    pre = add(pre, 'the declared modification reconstructs from the audited source', ...
-        isempty(imp.declared_patch_mismatches), ...
-        joinOr(imp.declared_patch_mismatches, strjoin(imp.patch_checks, '; ')));
-    pre = add(pre, 'Olhoff dispatch gate resolves inside the import', ...
-        imp.dispatch_ok, resolvedSummary(imp));
-    pre.olhoff_import = imp;
+    % THIS repository -- an integrity manifest over the promoted source, the
+    % recorded upstream provenance, and a path gate that refuses to return
+    % unless exactly one Olhoff implementation is visible.  The external
+    % development repository is outside this repository and not under its
+    % control; its state is recorded as a note below, NEVER as a gate, and it
+    % is forbidden from the production path entirely.
+    ocGuard = olhoffcurrent_paths(); %#ok<NASGU>
 
-    srcState = imp.source_repository_state;
-    pre = note(pre, sprintf('external Olhoff source repository (PROVENANCE ONLY, not a gate): %s', ...
-        srcState.summary));
-    if srcState.reachable && ~srcState.in_imported_state
-        if ~isempty(srcState.files_absent)
-            pre = note(pre, sprintf('  absent there   : %s', strjoin(srcState.files_absent, ', ')));
-        end
-        if ~isempty(srcState.files_differing)
-            pre = note(pre, sprintf('  differing there: %s', strjoin(srcState.files_differing, ', ')));
-        end
+    man = olhoffcurrent_source_manifest();
+    pre = add(pre, 'promoted Olhoff source hashes to SOURCE_MANIFEST.json', man.ok, ...
+        joinOr([man.mismatches, man.missing, man.extra], ...
+            sprintf('%d files re-hashed; tree %s', man.nFiles, man.treeHash)));
+
+    cur = olhoffcurrent_currentness('Verbose', false);
+    % LOCAL_MODIFIED is a BLOCKER: production source edited in place means the
+    % recorded provenance no longer describes the code about to run.
+    % UPSTREAM_AHEAD is NOT a blocker -- upstream is a development tree, and
+    % production currentness changes only when a state is explicitly promoted.
+    pre = add(pre, 'promoted Olhoff source is not modified in place', ...
+        ~strcmp(cur.state, 'LOCAL_MODIFIED'), ...
+        sprintf('currentness state = %s', cur.state));
+    pre = add(pre, 'Olhoff provenance is consistent with its upstream', ...
+        ~strcmp(cur.state, 'PROVENANCE_MISMATCH'), cur.detail);
+    pre.olhoff_currentness = cur;
+
+    gate = olhoffcurrent_assert_dispatch('Throw', false);
+    pre = add(pre, 'exactly one Olhoff implementation is visible to MATLAB', ...
+        gate.ok, joinOr(gate.blockers, sprintf(['all %d production-owned symbols ' ...
+            'resolve inside analysis/OlhoffCurrent/+impl, with no shadow ' ...
+            'candidate anywhere else (checked with which -all)'], ...
+            numel(gate.resolved))));
+    pre.olhoff_dispatch = gate;
+
+    prov = olhoffcurrent_provenance();
+    pre = note(pre, sprintf(['production Olhoff: %s, preset %s, promoted from %s ' ...
+        '%s @ %s'], prov.implementation, prov.production_preset, ...
+        prov.source.repository, prov.source.branch, prov.source.commit));
+    pre = note(pre, sprintf('  promoted source tree sha256: %s (%d files)', ...
+        prov.live_source_tree_sha256, prov.live_source_n_files));
+    if cur.upstream.reachable
+        pre = note(pre, sprintf(['  external development repository (PROVENANCE ONLY, ' ...
+            'not a gate, FORBIDDEN on the production path): branch %s, HEAD %s, ' ...
+            '%d commit(s) ahead of the promoted state'], cur.upstream.branch, ...
+            cur.upstream.head, cur.upstream.commitsAhead));
+    else
+        pre = note(pre, ['  external development repository not present on this ' ...
+            'machine; production does not depend on it']);
     end
 
-    % ---- 5b. the frozen realization, field by field ---------------------
+    % ---- 5b. the production realization, field by field -----------------
+    % Read from the flat VIEW of the effective canonical configuration, so
+    % these assertions check what will actually be solved rather than a
+    % separately maintained copy of it.  The field names are the historical
+    % vocabulary on purpose: this is the same scientific content the frozen
+    % conference realization was checked against, and the promotion proved it
+    % bitwise-equal at 160x20 and 320x40.
     for r = 1:size(R,1)
-        c = olhoffm4_config(R(r,1), R(r,2));
+        c = olhoffcurrent_legacy_view(olhoffcurrent_config(R(r,1), R(r,2)));
         tag = sprintf('%dx%d', R(r,1), R(r,2));
         pre = add(pre, ['Olhoff ' tag ': genuine nested MMA sub-optimization'], ...
             strcmp(c.innerSolver,'mma') && strcmp(c.innerVar,'drho') && ...
@@ -133,13 +156,19 @@ if cfg.methods.olhoff
             strcmp(c.outerGuard,'settledmove'), ...
             sprintf(['||drho||_2 < %.10g, i.e. per-element RMS < %.9e (constant ' ...
                 'across meshes); guard=%s'], c.tolOuter, epsRms, c.outerGuard));
+        % The stall SIGNAL is checked by value, not by field absence.  In the
+        % flat rendering an explicit 's2Signal' of 'beta' and an absent field
+        % mean the same thing; requiring absence would fail for a configuration
+        % that is scientifically identical.
+        s2sig = 'beta';
+        if isfield(c,'s2Signal') && ~isempty(c.s2Signal); s2sig = char(c.s2Signal); end
         pre = add(pre, ['Olhoff ' tag ': S2 continuation realization as frozen'], ...
             strcmp(c.moveFamily,'S2') && isequal(c.s2Levels,[0.04 0.02 0.01 0.005]) && ...
-            c.move == 0.04 && c.s2Window == 10 && c.s2Tol == 5e-3 && ~isfield(c,'s2Signal'), ...
+            c.move == 0.04 && c.s2Window == 10 && c.s2Tol == 5e-3 && strcmp(s2sig,'beta'), ...
             sprintf(['moveFamily=S2 move0=%.4g ladder=%s window=%d tol=%.4g; ' ...
-                's2Signal absent => legacy beta signal (the design-driven ' ...
-                '''drms'' trigger was measured and NOT adopted)'], ...
-                c.move, mat2str(c.s2Levels), c.s2Window, c.s2Tol));
+                's2Signal=%s (the design-driven ''drms'' trigger was measured ' ...
+                'and NOT adopted)'], ...
+                c.move, mat2str(c.s2Levels), c.s2Window, c.s2Tol, s2sig));
         pre = add(pre, ['Olhoff ' tag ': single thread and diagnostics off'], ...
             c.threads == 1 && ~c.diag, ...
             sprintf(['threads=%d diag=%d (the per-iteration recorder is proved ' ...
@@ -147,33 +176,49 @@ if cfg.methods.olhoff
     end
 end
 
-% ---- 6. no superseded Olhoff implementation is reachable ----------------
-forbidden = olhoffm4_forbidden_paths();
+% ---- 6. no non-production Olhoff implementation is reachable ------------
+% The forbidden list covers every historical, experimental and audit tree in
+% this repository AND the external development repository by absolute path.
+[repoRel, absForbidden] = olhoffcurrent_forbidden_paths();
+forbidden = absForbidden(:).';
+for i = 1:numel(repoRel); forbidden{end+1} = fullfile(repo, repoRel{i}); end %#ok<AGROW>
+
 onPath = strsplit(path, pathsep);
 hits = {};
 for i = 1:numel(forbidden)
-    p = fullfile(repo, forbidden{i});
     for k = 1:numel(onPath)
-        if strncmp(onPath{k}, p, numel(p)); hits{end+1} = onPath{k}; end %#ok<AGROW>
-    end
-end
-pre = add(pre, 'no superseded Olhoff directory is on the MATLAB path', isempty(hits), ...
-    strjoin(hits, '; '));
-
-names = {'olhoffOpt','model2D','assemble2D','eigSolve','genGrad','innerLoop', ...
-         'prepFilter','applyFilter','multRule','moveControl','deltaLambda'};
-leaks = {};
-for i = 1:numel(names)
-    f = which(names{i});
-    for k = 1:numel(forbidden)
-        p = fullfile(repo, forbidden{k});
-        if ~isempty(f) && strncmp(f, p, numel(p))
-            leaks{end+1} = sprintf('%s -> %s', names{i}, f); %#ok<AGROW>
+        if strncmp(onPath{k}, forbidden{i}, numel(forbidden{i}))
+            hits{end+1} = onPath{k}; %#ok<AGROW>
         end
     end
 end
-pre = add(pre, 'no Olhoff-family name resolves into a superseded tree', isempty(leaks), ...
-    strjoin(leaks, '; '));
+pre = add(pre, 'no non-production Olhoff directory is on the MATLAB path', isempty(hits), ...
+    strjoin(hits, '; '));
+
+% Symbol resolution is checked by olhoffcurrent_assert_dispatch in section 5,
+% over EVERY symbol the production tree owns and with which(name,'-all') -- so
+% a shadowed second copy is caught even when the winning resolution is correct.
+% What follows is a deliberately independent second opinion on the handful of
+% names that have actually been mis-dispatched in this project's history.  It
+% is written against which(-all) too: a check that looked only at the winner
+% would report "clean" for exactly the contamination that matters.
+names = {'olhoffOpt','olhoffSolve','model2D','assemble2D','eigSolve','genGrad', ...
+         'innerLoop','prepFilter','applyFilter','multRule','moveControl', ...
+         'deltaLambda','massScale','mmasub','subsolv','useMMA'};
+leaks = {};
+for i = 1:numel(names)
+    cand = which(names{i}, '-all');
+    if ischar(cand); cand = {cand}; end
+    for c = 1:numel(cand)
+        for k = 1:numel(forbidden)
+            if strncmp(cand{c}, forbidden{k}, numel(forbidden{k}))
+                leaks{end+1} = sprintf('%s -> %s', names{i}, cand{c}); %#ok<AGROW>
+            end
+        end
+    end
+end
+pre = add(pre, 'no Olhoff-family name resolves OR SHADOWS into a non-production tree', ...
+    isempty(leaks), strjoin(leaks, '; '));
 
 % ---- 7. the dispatched methods ------------------------------------------
 pre = add(pre, 'run_topopt_from_json is the repository tool copy', ...
@@ -269,11 +314,3 @@ parts = arrayfun(@(i) sprintf('%dx%d', R(i,1), R(i,2)), 1:size(R,1), 'UniformOut
 s = strjoin(parts, ', ');
 end
 
-function s = resolvedSummary(imp)
-if ~imp.dispatch_ok
-    s = imp.dispatch_error;
-else
-    s = sprintf('%d owned functions resolve inside analysis/OlhoffM4Reconstruction', ...
-        numel(imp.resolved));
-end
-end

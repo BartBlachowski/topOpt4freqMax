@@ -119,25 +119,28 @@ addpath(scriptDir);
 addpath(fullfile(scriptDir, 'conference_bench'));
 addpath(fullfile(repoRoot, 'tools', 'Matlab'));
 addpath(fullfile(repoRoot, 'analysis', 'three_method_parametric_study'));
-% The conference Du-Olhoff reconstruction.  Its solver core lives under
-% +frozen/ and is reachable ONLY through olhoffm4_paths(), which asserts the
-% implementation's identity before anything runs.  No superseded analysis/Olhoff*
-% or Matlab/reproduction2007 path is added here, by design.
-addpath(fullfile(repoRoot, 'analysis', 'OlhoffM4Reconstruction'));
+% THE production Du-Olhoff implementation.  analysis/OlhoffCurrent is the ONLY
+% Olhoff implementation this driver -- or any production script -- may execute
+% (analysis/OLHOFF_IMPLEMENTATION_MAP.md).  Its solver core lives under +impl/
+% and is reachable ONLY through olhoffcurrent_paths(), which proves that exactly
+% one Olhoff implementation is visible before anything runs.  No historical
+% analysis/Olhoff* tree, no analysis/OlhoffM4Reconstruction, and no
+% Matlab/reproduction2007 path is added here, by design.
+addpath(fullfile(repoRoot, 'analysis', 'OlhoffCurrent'));
 
 % Not adding a superseded implementation is not enough: MATLAB paths are
 % session state, and other scripts in this repository (examples/Revision_v1/*.m,
 % Matlab/reproduction2007/runner/repro2007_verify_isolation.m) call
 % addpath(genpath(<repo>/analysis)), which leaves analysis/Olhoff* and
 % Matlab/reproduction2007 on the path for the rest of the session.  olhoffOpt
-% then resolves to whichever of the seven realizations came first -- a run that
-% looks fine and is scientifically void.  This driver curates its own path, so
-% it REMOVES what the session handed it rather than inheriting it.  The
-% preflight below re-checks the result independently; the scrub is recorded in
-% the benchmark manifest.
-pathScrub = olhoffm4_scrub_forbidden_paths(repoRoot);
+% then resolves to whichever of the realizations came first -- a run that looks
+% fine and is scientifically void.  This driver curates its own path, so it
+% REMOVES what the session handed it rather than inheriting it.  The preflight
+% below re-checks the result independently, so a scrub that missed something
+% still fails closed; the scrub is recorded in the benchmark manifest.
+pathScrub = olhoffcurrent_scrub_forbidden_paths(repoRoot);
 if ~isempty(pathScrub)
-    fprintf('Removed %d superseded Olhoff path entr%s inherited from this MATLAB session.\n', ...
+    fprintf('Removed %d non-production Olhoff path entr%s inherited from this MATLAB session.\n', ...
         numel(pathScrub), pluralIes(numel(pathScrub)));
 end
 
@@ -427,10 +430,11 @@ manifest.cap_summary = struct( ...
 % struct array when c is an empty cell, which is exactly the common case here.
 manifest.path_scrub = struct();
 manifest.path_scrub.removed_entries = pathScrub;
-manifest.path_scrub.rationale = ['Superseded Olhoff implementations inherited ' ...
-    'from this MATLAB session were removed from the path before preflight, so ' ...
-    'dispatch is a property of this driver rather than of whatever ran earlier ' ...
-    'in the session.'];
+manifest.path_scrub.rationale = ['Non-production Olhoff implementations ' ...
+    'inherited from this MATLAB session were removed from the path before ' ...
+    'preflight, so dispatch is a property of this driver rather than of ' ...
+    'whatever ran earlier in the session. The sole production implementation ' ...
+    'is analysis/OlhoffCurrent.'];
 
 files = confbench_export(cfg, records, manifest, scaling);
 save(fullfile(cfg.outputDir, 'benchmark_records.mat'), 'records', 'cfg', ...

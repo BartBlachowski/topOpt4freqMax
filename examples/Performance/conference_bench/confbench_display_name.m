@@ -4,7 +4,7 @@ function name = confbench_display_name(methodKey)
 %   The Olhoff column is "Du-Olhoff reconstruction (M4)".  It must NOT be
 %   called "Olhoff 2007": what runs is a reconstruction of the published nested
 %   formulation whose continuation and inner-convergence details the paper does
-%   not uniquely determine.  See OLHOFFM4_CAVEAT.
+%   not uniquely determine.  See OLHOFFCURRENT_CAVEAT.
 switch lower(char(string(methodKey)))
     case 'olhoff';                    name = 'Du-Olhoff reconstruction (M4)';
     case 'yuksel';                    name = 'Yuksel';

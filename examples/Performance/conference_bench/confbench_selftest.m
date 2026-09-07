@@ -62,22 +62,24 @@ try
     addpath(superseded, '-begin');
     refused = false; msg = '';
     try
-        olhoffm4_assert_dispatch({'olhoffOpt'}, olhoffm4_root());
+        olhoffcurrent_paths();
     catch ME
-        refused = strcmp(ME.identifier, 'olhoffm4_assert_dispatch:WrongImplementation');
+        refused = strcmp(ME.identifier, 'olhoffcurrent_assert_dispatch:PathContaminated');
         msg = firstLine(ME.message);
     end
     path(entryPath);
     % ... and the guard must resolve it correctly again once installed
-    g = olhoffm4_paths(); %#ok<NASGU>
-    correct = strncmp(which('olhoffOpt'), olhoffm4_root(), numel(olhoffm4_root()));
+    g = olhoffcurrent_paths(); %#ok<NASGU>
+    root = olhoffcurrent_root();
+    correct = strncmp(which('olhoffSolve'), root, numel(root)) && ...
+              strncmp(which('innerLoop'),   root, numel(root));
     clear g
-    report = addT(report, 'T2', 'dispatch gate refuses a shadowing superseded implementation', ...
+    report = addT(report, 'T2', 'dispatch gate refuses a shadowing non-production implementation', ...
         refused && correct, sprintf('refused=%d, guard then resolves correctly=%d | %s', ...
         refused, correct, msg));
 catch ME
     path(entryPath);
-    report = addT(report, 'T2', 'dispatch gate refuses a shadowing superseded implementation', ...
+    report = addT(report, 'T2', 'dispatch gate refuses a shadowing non-production implementation', ...
         false, ME.message);
 end
 path(entryPath);
@@ -147,12 +149,13 @@ report = addT(report, 'T5', 'no memory column in the exported tables', isempty(m
 % ---- T6: odd nely rejected ----------------------------------------------
 rejected = false; msg6 = '';
 try
-    olhoffm4_config(160, 21);
+    g6 = olhoffcurrent_paths(); %#ok<NASGU>
+    olhoffcurrent_config(160, 21);
 catch ME
-    rejected = strcmp(ME.identifier, 'olhoffm4_config:OddNely');
+    rejected = strcmp(ME.identifier, 'olhoffcurrent_config:OddNely');
     msg6 = firstLine(ME.message);
 end
-report = addT(report, 'T6', 'the frozen Olhoff configuration rejects an odd nely', rejected, msg6);
+report = addT(report, 'T6', 'the production Olhoff configuration rejects an odd nely', rejected, msg6);
 
 % ---- T7: large-mesh acknowledgement -------------------------------------
 c = struct('resolutions', [240 30], 'methods', struct('proposed',true,'yuksel',false,'olhoff',false), ...

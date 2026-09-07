@@ -30,7 +30,7 @@ function rec = confbench_run_case(methodKey, mcfg, opts)
 %     .timing_tol_rel       accounting-identity tolerance, relative (default 1e-9)
 %     .crosscheck_tol_rel   independent-cross-check tolerance       (default 0.05)
 %
-%   See also CONFBENCH_METHOD_CONFIG, OLHOFFM4_RUN, CONFBENCH_TIMING_SCHEMA.
+%   See also CONFBENCH_METHOD_CONFIG, OLHOFFCURRENT_RUN, CONFBENCH_TIMING_SCHEMA.
 
 if nargin < 3 || isempty(opts); opts = struct(); end
 tolAbs  = getOpt(opts, 'timing_tol_abs', 1e-6);
@@ -92,7 +92,12 @@ end
 
 % =========================================================================
 function rec = runOlhoff(rec, mcfg, opts)
-%RUNOLHOFF  The imported Du-Olhoff (M4) reconstruction.  Nested accounting.
+%RUNOLHOFF  THE production Du-Olhoff implementation, analysis/OlhoffCurrent.
+%   Nested accounting.  olhoffcurrent_run installs the fail-closed path guard
+%   and proves that exactly one Olhoff implementation is visible before it
+%   solves, so the numbers below are attributable to a PROVED implementation
+%   rather than an intended one.  The timed region is the solver call only,
+%   unchanged by the promotion.
 nelx = mcfg.nelx; nely = mcfg.nely;
 args = {};
 if isfield(opts, 'max_outer_override') && ~isempty(opts.max_outer_override)
@@ -100,7 +105,7 @@ if isfield(opts, 'max_outer_override') && ~isempty(opts.max_outer_override)
 end
 if getOpt(opts, 'warmup', false); args = [args, {'Warmup', true}]; end
 
-o = olhoffm4_run(nelx, nely, args{:});
+o = olhoffcurrent_run(nelx, nely, args{:});
 
 rec.status = o.status;
 rec.status_note = o.status_note;
@@ -111,14 +116,21 @@ rec.omega = o.omega;
 rec.omega1_native = o.omega(1);
 rec.caveat = o.caveat;
 rec.resolved_implementation = o.resolved_implementation;
+% Result provenance: enough to answer "what implementation produced this
+% number?" from the artifact alone -- implementation, named production preset,
+% effective configuration hash, promoted source tree hash, repository commit.
+rec.implementation = getOpt(o, 'implementation', '');
+rec.production_preset = getOpt(o, 'production_preset', '');
+rec.effective_config_hash = getOpt(o, 'effective_config_hash', '');
+rec.implementation_provenance = orStruct(o, 'provenance');
 rec.effective_config = orStruct(o, 'effective_cfg');
 rec.stopping = orStruct(o, 'stopping');
 rec.solver_log = orCell(o, 'log');
 
 % A failed nested MMA solve must never reach the table as a clean convergence.
-% olhoffm4_run counts them but gates SOLVER_FAILURE only on a nonfinite design
-% or a nonpositive omega1, so the count is enforced here rather than by editing
-% the hash-pinned frozen import.  Inert whenever the count is zero, which it is
+% olhoffcurrent_run counts them but gates SOLVER_FAILURE only on a nonfinite
+% design or a nonpositive omega1, so the count is enforced here rather than by
+% editing the promoted solver.  Inert whenever the count is zero, which it is
 % for every row of the existing campaign.
 nBadInner = 0;
 if isstruct(rec.stopping) && isfield(rec.stopping, 'n_inner_not_converged') ...

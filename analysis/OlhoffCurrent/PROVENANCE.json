@@ -1,0 +1,71 @@
+{
+  "manifest_schema": "olhoff_current_provenance/1",
+  "implementation": "analysis/OlhoffCurrent",
+  "role": "PRODUCTION - the only Olhoff implementation production scripts may execute",
+  "promotion_date": "2026-09-07",
+  "source": {
+    "repository": "/Users/piotrek/Programming/Matlab/Olhoff",
+    "role": "DEVELOPMENT / RESEARCH UPSTREAM",
+    "branch": "architecture/canonical-config",
+    "commit": "695f03bdac20c423a4e1d389cf9db9187597bcc3",
+    "commit_date": "2026-09-06T23:24:25+02:00",
+    "commit_subject": "Phase 24: final report -- 12/12 anchors bitwise, verdict VERIFIED",
+    "dirty_state": "clean (git status --porcelain empty at promotion time)",
+    "acceptance_evidence": "architecture/docs/OLHOFF_ARCHITECTURE_REFACTOR_REPORT.md, verdict OLHOFF_ARCHITECTURE_REFACTOR_VERIFIED"
+  },
+  "main_repository": {
+    "path": "/Users/piotrek/Programming/topOpt4freqMax",
+    "branch": "benchmark-methodology-r2",
+    "commit_before_promotion": "9cd1c8eed109e1c1b02c67fc6d9bb81f87179d6a",
+    "state_before_promotion": "clean except four untracked historical Olhoff directories"
+  },
+  "production_preset": {
+    "name": "duOlhoffFixedPenaltySensitivityFiltered",
+    "delegates_to_upstream_preset": "duOlhoffFrozenM4",
+    "historical_aliases": [
+      "M4",
+      "TMA",
+      "B0",
+      "REG160",
+      "duOlhoffFrozenM4"
+    ],
+    "alias_policy": "Historical audit IDs are PROVENANCE ALIASES and experiment identifiers only. They are NOT canonical API terminology and no production script may use them."
+  },
+  "promoted_content": {
+    "layout": "analysis/OlhoffCurrent/+impl/{algo,fem,filter,mma,mma_published,architecture}",
+    "verbatim": "All promoted files are byte-identical to the upstream commit EXCEPT the single adaptation recorded below.",
+    "excluded_from_promotion": [
+      "audit_*/",
+      "results/",
+      "runs/",
+      "docs/ (repo-root)",
+      "NOTES.md",
+      "CLAUDE.md",
+      "EVIDENCE_MANIFEST.sha256",
+      "architecture/anchors/",
+      "architecture/tests/",
+      "top88.m (repo-root duplicate of filter/top88_reference.m)",
+      "setpaths.m (replaced by olhoffcurrent_paths.m)"
+    ],
+    "exclusion_rationale": "Those are upstream evidence, upstream regression harness and upstream path setup. They remain upstream; production carries only the executable implementation plus its own repository-local gate."
+  },
+  "adaptations": [
+    {
+      "file": "+impl/architecture/olhoffSolve.m",
+      "kind": "BENCHMARK TIMING INSTRUMENTATION",
+      "change": "Adds hist.tOuter: a tic at the top of the outer loop and a toc recorded after the convergence test and every guard.",
+      "why": "The conference benchmark's nested cost accounting (outer_time_excluding_inner_s) requires the wall time of a complete outer iteration. The frozen conference reconstruction carries exactly this instrumentation as analysis/OlhoffM4Reconstruction/patches/olhoffOpt.timing-instrumentation.diff; upstream olhoffSolve.m does not. Repointing production without it would silently break the benchmark's accounting.",
+      "trajectory_effect": "NONE. hist.tOuter is written and never read back by the solver. Proved empirically, not asserted: see the equivalence evidence below.",
+      "upstream_sha256": "9f80dd8ed504dc5cce5d8ab995cd4520e1e388ec6478f6446378cb8a464e2543",
+      "promoted_sha256": "5d4abd37c8b186a42d1a7ef5b7066c8bc2429d33ee91f20b0b844bace772324b"
+    }
+  ],
+  "relationships": {
+    "analysis/OlhoffM4Reconstruction": "FROZEN_EVIDENCE. The frozen conference reconstruction, imported from the same upstream tree on 2026-09-04. It is the realization analysis/OlhoffCurrent's production preset must and does reproduce. It is NOT a production dependency and is hard-blocked from the production MATLAB path.",
+    "/Users/piotrek/Programming/Matlab/Olhoff": "DEVELOPMENT_UPSTREAM. Never an executable dependency of a production run. Blocked by absolute path in olhoffcurrent_forbidden_paths.",
+    "analysis/OlhoffExperiments": "EXPERIMENTAL. Not created by this task; already blocked pre-emptively so it cannot become a production dependency by accident.",
+    "other Olhoff trees": "HISTORICAL / AUDIT_ONLY. Classified in analysis/OLHOFF_IMPLEMENTATION_MAP.md and blocked by olhoffcurrent_forbidden_paths."
+  },
+  "alias_statement": "Historical audit IDs (M4, S2, R2, P1, PD1, PM1, T800, TMA, B0, REG160) are provenance aliases, not canonical API terminology.",
+  "equivalence_evidence": "analysis/OLHOFF_CURRENT_PROMOTION_REPORT.md"
+}

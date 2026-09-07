@@ -1,0 +1,305 @@
+{
+  "manifest_schema": "olhoff_current_source_manifest/1",
+  "generated": "2026-09-07T09:48:35+02:00",
+  "root": "analysis/OlhoffCurrent/+impl",
+  "n_files": 74,
+  "tree_sha256": "c1455374d5f8e256c2678a679a5fc7955d9a8a77c410a41cd30f1c189910208c",
+  "files": [
+    {
+      "path": "algo/compareHistory.m",
+      "sha256": "1caaff78e5ffd57d8b4c0f4ad93ae6d8feed0d2b38a6b391f471311e6303604a"
+    },
+    {
+      "path": "algo/compareHistoryTo.m",
+      "sha256": "5f1797b29907990a67fa203e838beb09ab403a0068cdb290971925f15c3c6c61"
+    },
+    {
+      "path": "algo/compareTopology.m",
+      "sha256": "adadf0b1a143231e6ca7f5168be9f7747040b81b9a91fc4b79ebc8900c9e58fd"
+    },
+    {
+      "path": "algo/defaultCfg.m",
+      "sha256": "dd8f1cc7c19d41dfb4dde989ddd40a3dbfd733fecb622f43275144c359a6b911"
+    },
+    {
+      "path": "algo/deltaLambda.m",
+      "sha256": "101519fcdcc2175d7d2aa135d919ad0a0efaa24cbb3edd7761d8f27b9b504038"
+    },
+    {
+      "path": "algo/genGrad.m",
+      "sha256": "13f2ab8541b2f626e340a592b99730ee4cba101e4f978a214dd7227adaeb5208"
+    },
+    {
+      "path": "algo/imresizeNN.m",
+      "sha256": "b548f7838cdbaa2db1998fc885a2ee45b704e17ae0bcedfbf16236a7ae962be9"
+    },
+    {
+      "path": "algo/innerLoop.m",
+      "sha256": "0f9f7fbcc89d5b518fc08c85f70af28caba08bcdc14850f10a3534fe1b65e18f"
+    },
+    {
+      "path": "algo/innerLoopLP.m",
+      "sha256": "7724753c02f84d6009c3998f758d5b3f9c5144ad39ca6f470584a2c99e089465"
+    },
+    {
+      "path": "algo/innerLoopRho.m",
+      "sha256": "aded1849467e93201d2a8c78effaa303300e71da4e192cefad4649f55cab35e5"
+    },
+    {
+      "path": "algo/moveControl.m",
+      "sha256": "76ff15824f205db8d5a6a4b1ef4890f7320e450dc0bd1e6f4989ad794791c80d"
+    },
+    {
+      "path": "algo/multRule.m",
+      "sha256": "c8ee926c2cf985b79e634b99116bbd37b96d9a1f9b26b51c4bb88ee31d5d4b52"
+    },
+    {
+      "path": "algo/olhoffOpt.m",
+      "sha256": "dd8424f84f60bafbff05b634ec176545385bd9b91d020ce0aecab431a6b03e7c"
+    },
+    {
+      "path": "algo/plotHistory.m",
+      "sha256": "4f0b1620c557fae43f2ac9d20accb9484da01cb8d3e751b9ac869e0f35c5163c"
+    },
+    {
+      "path": "algo/textStamp.m",
+      "sha256": "f540e10ab2c84b85c70c62e69192998f806260031275d4c94d60bc9db2fe2c55"
+    },
+    {
+      "path": "algo/topologyImage.m",
+      "sha256": "1bcdf9b9849475a46beea8ef4651618d699debed1823aee8658a4df412141823"
+    },
+    {
+      "path": "algo/useMMA.m",
+      "sha256": "b87ef5f65918c015e5262eda6138b6fa47403f127846212dc0238e0549e100d8"
+    },
+    {
+      "path": "architecture/+olh/+config/assign.m",
+      "sha256": "e5a8bee460f8d76226132a35ca4d5a474853e360612e6f9a23f207fbc801297b"
+    },
+    {
+      "path": "architecture/+olh/+config/defaults.m",
+      "sha256": "32c52085a91869e577388e337f57a6a8b37bfa19c552ec6094d3bcf2266e39b5"
+    },
+    {
+      "path": "architecture/+olh/+config/describe.m",
+      "sha256": "e089721ba2b91f5f3968ec9842c3dc857556b69023df1a753910bf8ac33e242f"
+    },
+    {
+      "path": "architecture/+olh/+config/epsilonForMesh.m",
+      "sha256": "8a2c621749d4bfd287bcd50dd06a066e9f963f8aa0c0b9cd3d9f2994f4c2a9fe"
+    },
+    {
+      "path": "architecture/+olh/+config/fromLegacy.m",
+      "sha256": "0883c6e08354c1cca45e52e017424c7648613abf97d84d2603acb0c873eac7c6"
+    },
+    {
+      "path": "architecture/+olh/+config/getPath.m",
+      "sha256": "f9a866853d27c16488508c21c8f38d286b56188201b891427fc030c2059b4b0e"
+    },
+    {
+      "path": "architecture/+olh/+config/paths.m",
+      "sha256": "43397408fb993e530a7bd3b5696a23b3501bc0cfaaa8e0f84c7a9bad45690720"
+    },
+    {
+      "path": "architecture/+olh/+config/resolve.m",
+      "sha256": "d77d43fd0bcbefffc66524f2b35add5384c98e30fced1e068ceb4723d283717d"
+    },
+    {
+      "path": "architecture/+olh/+config/schema.m",
+      "sha256": "3ec54d8fae85c1526b6ae4ad3d7abbeee04b32d7c40c09f739bd678ae8fc544e"
+    },
+    {
+      "path": "architecture/+olh/+config/setPath.m",
+      "sha256": "e36cebd3f921e64d33b10dbf4ef7ef44c17fb2bf1e23a6404d0b264426d79517"
+    },
+    {
+      "path": "architecture/+olh/+config/toLegacy.m",
+      "sha256": "4eff964aacace9bf277405236a3c8618333734367ca98ff981211b5fbe4a75dd"
+    },
+    {
+      "path": "architecture/+olh/+config/validate.m",
+      "sha256": "adc0ebd581c7dfd2b38e181d622c00754b811ea88936cc2ba05e0b755982987c"
+    },
+    {
+      "path": "architecture/+olh/+material/massInterpolation.m",
+      "sha256": "1b8fd4e887f08b5b61c5a4f72578a8b29c99748fcb545c68534325e6e52deab3"
+    },
+    {
+      "path": "architecture/+olh/+move/limit.m",
+      "sha256": "18b31dbe1586d25ededb779a4b4032a7b7c7654d7cc55c1c59cccaa58c89535f"
+    },
+    {
+      "path": "architecture/+olh/+multi/detect.m",
+      "sha256": "91e499e9308ccc8d471473a7d45cb7707f3e6d0f6fc73d9fdbfd04829312bfc3"
+    },
+    {
+      "path": "architecture/+olh/+presets/apply.m",
+      "sha256": "daed58374c507ff140b542483d6c51c6b12dac9bf9e764925b7e19c124a2f7ba"
+    },
+    {
+      "path": "architecture/+olh/+presets/duOlhoffFrozenM4.m",
+      "sha256": "6ed3624cd19b3569f55b23acad1d5a1038d9c625a7fae9935e801ffb765ac40e"
+    },
+    {
+      "path": "architecture/+olh/+presets/duOlhoffMatureM4.m",
+      "sha256": "0445fbc560ad2e99738be9cc72501cf5acb8e196256fdd5f028cdc4b23e14102"
+    },
+    {
+      "path": "architecture/+olh/+presets/legacyBinaryDiagonal.m",
+      "sha256": "b26bdaa0e5183a9d1cd107708b61d295f9a7d39a4d66a6251e812b112f26eade"
+    },
+    {
+      "path": "architecture/+olh/+presets/list.m",
+      "sha256": "d30b9ab76114e39af56e4938f365867cda101d1447389baf3bfbca0ed72610a8"
+    },
+    {
+      "path": "architecture/+olh/+presets/noDescentFixedMove.m",
+      "sha256": "91d16bcb595d4e1c2ed96a69d16fdc77bdccdaeae07ca4f8e06269f377ae74da"
+    },
+    {
+      "path": "architecture/+olh/+presets/pContinuationCoupled.m",
+      "sha256": "737eb4600d34bfbc21be9ecb9ceb0d5f852f556738ecb6f765112d3c1e4b8cf9"
+    },
+    {
+      "path": "architecture/+olh/+presets/pContinuationDecoupled.m",
+      "sha256": "6e774ec3e2d62b018f63e7177dfe4112d5af7486c909ba69bb063a60d14dbeee"
+    },
+    {
+      "path": "architecture/+olh/+presets/pMassCompatible.m",
+      "sha256": "329163edcd25b2220c1f7943244511c25c0f2f7d37bc3938812ffde9da9a6cd7"
+    },
+    {
+      "path": "architecture/+olh/+presets/projected.m",
+      "sha256": "bf7b0e464fce470820b7082b4278101133e23f6911e8430007753fb916f8e806"
+    },
+    {
+      "path": "architecture/+olh/+presets/projectionIdentity.m",
+      "sha256": "feac2cfaaf26112f743eff134f8a46eae3ff2d30fc8c94eb6b1a3d1ad46f16cd"
+    },
+    {
+      "path": "architecture/+olh/+presets/restorationLadderGuard.m",
+      "sha256": "74edb3cf466b6627e39259022546db7c96a1e3e5da46104bf1a46da5c921d7c6"
+    },
+    {
+      "path": "architecture/docs/ARCHITECTURE.md",
+      "sha256": "90cacf422c345c2cee9eaf070067230f43e98318a42ac6833a5a2bfb8c1be509"
+    },
+    {
+      "path": "architecture/docs/ARCHITECTURE_VARIANT_INVENTORY.md",
+      "sha256": "da5108752950843f8820c941f4343a8a9873a7f96897e822941508d11f8d87b6"
+    },
+    {
+      "path": "architecture/docs/CONFIG_REFERENCE.md",
+      "sha256": "397939c66043ef012d0f8fa6e383c7224a54724d4b62fea1a2fad79eb617a14b"
+    },
+    {
+      "path": "architecture/docs/FILE_CLASSIFICATION.md",
+      "sha256": "c412b0f0107dfbbfe472f1dd4f2002bc06e93ee79e783cd484d58634af84ba14"
+    },
+    {
+      "path": "architecture/docs/MIGRATION_FROM_LEGACY.md",
+      "sha256": "1808da8b98cafc8704183cdbb631d25835c0c4ffbae9c40cb89e856b5f8ce4b5"
+    },
+    {
+      "path": "architecture/docs/OLHOFF_ARCHITECTURE_REFACTOR_PLAN.md",
+      "sha256": "a4551702a0ffeae0c4db3477e6851605db7c016530a3a3fa9770ec2141331fe6"
+    },
+    {
+      "path": "architecture/docs/OLHOFF_ARCHITECTURE_REFACTOR_REPORT.md",
+      "sha256": "8c18d83852a250b6734b5f868e644c054bf458654d0c54ef47d4e9a7932d49e1"
+    },
+    {
+      "path": "architecture/docs/PRESETS.md",
+      "sha256": "5fc61dde76f71d627249c76f78c4171606ce18db92c4365a7c0b08a52e4ee86d"
+    },
+    {
+      "path": "architecture/docs/PYMORPHOGEN_PORT_MAP.md",
+      "sha256": "5e5c7ad0978d3f3fd20273bfcfade3d96080d27e2d0db1587f6c7316b2d0e3be"
+    },
+    {
+      "path": "architecture/docs/SCIENTIFIC_CONFIG_PROVENANCE.md",
+      "sha256": "22cd312905fe4589b566884614e5b0b8aa2dc91f69e383fdd6f929ef977e8d97"
+    },
+    {
+      "path": "architecture/docs/TERMINOLOGY.md",
+      "sha256": "a05d2ed01d8449757b470ccfc32fd13550e6741f15d786bc4ed8fb66b67127e6"
+    },
+    {
+      "path": "architecture/legacy/olhoffOpt_PRE_CANONICAL.m",
+      "sha256": "cb9790232eec619faf7ec85e43393a068166bb2466fa5bcb599a05daa03eb544"
+    },
+    {
+      "path": "architecture/olhoffSolve.m",
+      "sha256": "5d4abd37c8b186a42d1a7ef5b7066c8bc2429d33ee91f20b0b844bace772324b"
+    },
+    {
+      "path": "fem/assemble2D.m",
+      "sha256": "7b2f1e10228d57237d962689909297351c879c9b613f311500f23dd37bd00878"
+    },
+    {
+      "path": "fem/classifyModes.m",
+      "sha256": "0f93a2acce7aac69e5ad168edc1413e01bce5757b7e00c9c2c4a7a70288c29e1"
+    },
+    {
+      "path": "fem/eigSolve.m",
+      "sha256": "b0784ceeb15fafe164ba138b963c3ab4dc5a466fc2953c79786809edd16159cd"
+    },
+    {
+      "path": "fem/elemMats2D.m",
+      "sha256": "b8ae7c424d42f02390ebeb724592bf606ff9504f4be588810a58a1c4493bfba1"
+    },
+    {
+      "path": "fem/massScale.m",
+      "sha256": "2a93c74d1872bb62a41a856e10445a494721097cd7b7881fb98c110a67f6115a"
+    },
+    {
+      "path": "fem/model2D.m",
+      "sha256": "3cc19e1c52023225a1350d1c3e7623a9df68b01f52a74c82ddd4aac377ac6560"
+    },
+    {
+      "path": "filter/applyFilter.m",
+      "sha256": "461ec7c7950b4d08e20c04d348d9d95674d3e42f1f167b05d3804c94abe057a7"
+    },
+    {
+      "path": "filter/prepFilter.m",
+      "sha256": "18ceb629c567fafcd90830c4eed3a4809fc2dda682d54cef1176b82bd6d47e1a"
+    },
+    {
+      "path": "filter/projChain.m",
+      "sha256": "1392d0030d51aa43a84b4a4a3b344741274008b316aa448915d362bb659ca655"
+    },
+    {
+      "path": "filter/projDensityField.m",
+      "sha256": "cc62399dee265b56a7ac27d669857361b340365b86d1336fa227566696a4b5fb"
+    },
+    {
+      "path": "filter/projectDensity.m",
+      "sha256": "817a0db22efdfe8ee0f8cace56a13d5c52a28cb4e875bd49880392745919c320"
+    },
+    {
+      "path": "filter/top88_reference.m",
+      "sha256": "eb8613bdb46e833b45acf9d43a8dad39a7e8fd104beafeab896742bcc3093810"
+    },
+    {
+      "path": "mma/mmasub.m",
+      "sha256": "54c1680036e6effdb70bc32524b0c11c366cebed64d5a508c82553e871ff7660"
+    },
+    {
+      "path": "mma/subsolv.m",
+      "sha256": "130033335ac5a21f31437a196bf8f37c5b97880a00e93cf2962a8a54bac2b98a"
+    },
+    {
+      "path": "mma_published/README.md",
+      "sha256": "14ac696e5b319a19e44a11b4a5aa41d74c1b9915ff1ebf1435d5e046f637d1d0"
+    },
+    {
+      "path": "mma_published/mmasub.m",
+      "sha256": "4507b73e3e44cdd6999b52c7a815569a4fc716749b1e23c2d0c228ff51da2edb"
+    },
+    {
+      "path": "mma_published/subsolv.m",
+      "sha256": "130033335ac5a21f31437a196bf8f37c5b97880a00e93cf2962a8a54bac2b98a"
+    }
+  ]
+}
