@@ -1,0 +1,356 @@
+{
+  "schema": "olhoff_beta_transition_mechanism/1",
+  "task": "mechanism audit of the production beta/bound-variable stall signal",
+  "implementation": "analysis/OlhoffCurrent",
+  "starting_HEAD": "cb6c0eae31a25521f7c5fed1c4a89564ed63344e",
+  "source_tree_sha256": "c1455374d5f8e256c2678a679a5fc7955d9a8a77c410a41cd30f1c189910208c",
+  "matlab": "25.2.0.2998904 (R2025b)",
+  "no_optimisation_run": true,
+  "beta_definition": {
+    "source": "+impl/algo/innerLoop.m",
+    "role": "bound variable of the Du-Olhoff bound formulation, Eq. (25a)",
+    "subproblem": "maximise beta  s.t.  beta <= lambda_j + Delta lambda_j(drho)  for all tracked j, plus volume and the move box",
+    "implemented_as": "the (NE+1)-th PRIMAL design variable of the MMA subproblem",
+    "stored_scaled": "x(end) = beta/lambda_ref with lambda_ref = lam(1) = current lambda_n",
+    "returned": "st.beta = x(end)*lamref  -- ABSOLUTE eigenvalue units",
+    "mma_objective": "f0val = -x(end); df0dx(end) = -1  (MMA minimises, so this maximises beta)",
+    "initial_value": "x = [zeros(NE,1); 1]  ->  drho = 0, beta = lambda_n",
+    "box_on_beta": "xmin(end)=0, xmax(end)=5 (i.e. beta in [0, 5*lambda_ref])",
+    "classification": {
+      "primal": true,
+      "dual": false,
+      "slack": false,
+      "mma_artificial_yz": false,
+      "bound_variable": true
+    },
+    "units": "eigenvalue, lambda = omega^2",
+    "depends_on_NE": "NO -- beta is an eigenvalue-valued scalar; NE enters only through the discretisation of lambda itself",
+    "depends_on_move": "YES, through the box lo/hi = +/- move which bounds drho and hence Delta lambda",
+    "depends_on_asymptotes": "YES, indirectly: MMA initialises low/upp = xval -/+ 0.5*(xmax-xmin) and xmax-xmin = 2*move on interior elements"
+  },
+  "stall_predicate": {
+    "source": "+impl/architecture/+olh/+move/limit.m, case ladder, signal boundVariable",
+    "window_W": 10,
+    "tolerance": 0.005,
+    "formula": "rel = (mean(beta[-W:]) - mean(beta[-2W:-W])) / max(|mean(beta[-2W:-W])|, eps); descend if rel < tol",
+    "dwell_guard": "(outer - lastStage) > W  ->  earliest possible re-fire is lastStage + W + 1 = +11",
+    "history_available": "the controller is called before iteration `outer` is recorded, so beta[1..outer-1]",
+    "dimensionless": true,
+    "note": "rel is a RELATIVE change of an intensive scalar: it is already dimensionless and carries no explicit NE, gradient or move normalisation"
+  },
+  "predicate_replay": {
+    "purpose": "confirm the audit is analysing the rule production actually applied",
+    "results": [
+      {
+        "mesh": "160x20",
+        "actual_descents": [
+          79,
+          90,
+          101
+        ],
+        "replayed_fires": [
+          79,
+          90,
+          101,
+          112,
+          123,
+          134,
+          145,
+          156
+        ],
+        "reproduces_actual": true,
+        "spacing": [
+          11,
+          11
+        ],
+        "dwell_minimum": 11
+      },
+      {
+        "mesh": "320x40",
+        "actual_descents": [
+          130,
+          141,
+          152
+        ],
+        "replayed_fires": [
+          130,
+          141,
+          152,
+          163,
+          174,
+          185,
+          196,
+          207
+        ],
+        "reproduces_actual": true,
+        "spacing": [
+          11,
+          11
+        ],
+        "dwell_minimum": 11
+      },
+      {
+        "mesh": "400x50",
+        "actual_descents": [
+          138
+        ],
+        "replayed_fires": [
+          138
+        ],
+        "reproduces_actual": true,
+        "spacing": [],
+        "dwell_minimum": 11
+      }
+    ]
+  },
+  "event_aligned": {
+    "event": "the last iteration at move=0.04, i.e. immediately before production descends",
+    "results": [
+      {
+        "mesh": "160x20",
+        "NE": 3200,
+        "descentIter": 79,
+        "lastIterAtMove004": 78,
+        "stall_rel_at_descent": 0.004548942233628573,
+        "tolerance": 0.005,
+        "beta": 28848.965622659,
+        "lambda_n": 28589.90296652685,
+        "predicted_gain_g": 0.00906133387145325,
+        "predicted_gain_over_move": 0.22653334678633122,
+        "Mnd_at_descent": 13.4935541734659,
+        "gray_at_descent": 0.1525,
+        "mid_at_descent": 0.025,
+        "completion_at_descent": 0.9860281249962817,
+        "Mnd_fixedMoveEnd": 12.2754329897822,
+        "remaining_Mnd_relative": 0.0902743019388508,
+        "omega1_at_descent": 169.08549011233,
+        "omega1_fixedMoveEnd": 169.480180375229,
+        "omega1_relChange_after": 0.0023342645346846875,
+        "lambda_relGain_actual_after": 0.004673977860287151,
+        "beta_underprediction_factor": 0.515815654361,
+        "nAtMoveBound_at_descent": null,
+        "filter_R_over_h": 1.2
+      },
+      {
+        "mesh": "320x40",
+        "NE": 12800,
+        "descentIter": 130,
+        "lastIterAtMove004": 129,
+        "stall_rel_at_descent": 0.004835036682203495,
+        "tolerance": 0.005,
+        "beta": 27540.8342417608,
+        "lambda_n": 27529.062962356533,
+        "predicted_gain_g": 0.00042759462682632554,
+        "predicted_gain_over_move": 0.010689865670658138,
+        "Mnd_at_descent": 23.4506347127922,
+        "gray_at_descent": 0.26421875,
+        "mid_at_descent": 0.096875,
+        "completion_at_descent": 0.8822192620129953,
+        "Mnd_fixedMoveEnd": 13.2824393172795,
+        "remaining_Mnd_relative": 0.43360000784823116,
+        "omega1_at_descent": 165.918844506453,
+        "omega1_fixedMoveEnd": 166.54023950172,
+        "omega1_relChange_after": 0.003745174317693785,
+        "lambda_relGain_actual_after": 0.007504374966057445,
+        "beta_underprediction_factor": 17.550208761405855,
+        "nAtMoveBound_at_descent": null,
+        "filter_R_over_h": 2.4
+      },
+      {
+        "mesh": "400x50",
+        "NE": 20000,
+        "descentIter": 138,
+        "lastIterAtMove004": 137,
+        "stall_rel_at_descent": 0.0048836894308432275,
+        "tolerance": 0.005,
+        "beta": 26531.6878738145,
+        "lambda_n": 26520.027085542228,
+        "predicted_gain_g": 0.0004396974495787022,
+        "predicted_gain_over_move": 0.010992436239467555,
+        "Mnd_at_descent": 32.3956866966321,
+        "gray_at_descent": 0.3479,
+        "mid_at_descent": 0.1875,
+        "completion_at_descent": 0.805610511079149,
+        "Mnd_fixedMoveEnd": 16.1588929332143,
+        "remaining_Mnd_relative": 0.5012023333682196,
+        "omega1_at_descent": 162.849707047763,
+        "omega1_fixedMoveEnd": 166.364949860314,
+        "omega1_relChange_after": 0.02158580986283264,
+        "lambda_relGain_actual_after": 0.04363756691309956,
+        "beta_underprediction_factor": 99.24453042634444,
+        "nAtMoveBound_at_descent": null,
+        "filter_R_over_h": 3.0
+      }
+    ]
+  },
+  "central_finding": {
+    "stall_metric_at_descent": [
+      0.004548942233628573,
+      0.004835036682203495,
+      0.0048836894308432275
+    ],
+    "stall_metric_spread": 0.00033474719721465415,
+    "remaining_Mnd_relative": [
+      0.0902743019388508,
+      0.43360000784823116,
+      0.5012023333682196
+    ],
+    "statement": "the predicate fires at essentially the SAME metric value at all three meshes (spread 3.3e-4 against a 5e-3 tolerance) while the remaining topology evolution differs by a factor of 5.6 (9.0% / 43.4% / 50.1%). The metric is not mis-scaled; it is measuring something else."
+  },
+  "gain_move_proportionality": {
+    "rationale": "beta - lambda is the predicted eigenvalue gain.  Because the box bounds drho by the move, first-order theory predicts gain ~ c*move.  g/move is therefore the observable through which GRADIENT SCALE enters beta, and it can be measured without recording gradients (which were not recorded).",
+    "results": [
+      {
+        "mesh": "160x20",
+        "g_over_move_early": 2.0317455077278095,
+        "g_over_move_at_descent": 0.24904046408924296
+      },
+      {
+        "mesh": "320x40",
+        "g_over_move_early": 1.972644835501886,
+        "g_over_move_at_descent": 0.011327509756554898
+      },
+      {
+        "mesh": "400x50",
+        "g_over_move_early": 1.9526350878532355,
+        "g_over_move_at_descent": 0.011415913047904425
+      }
+    ],
+    "early_mesh_consistency": "g/move ~ 2.0 at all three meshes early on, so beta responds to the move exactly as the linearisation predicts and shows no mesh-dependent scaling defect"
+  },
+  "bound_activity_400x50": {
+    "definition": "an element is at the move bound when |drho_e| = move to 1e-12",
+    "samples": [
+      {
+        "outer": 1,
+        "move": 0.04,
+        "nAtBound": 0,
+        "maxU": 0.9991952046140801
+      },
+      {
+        "outer": 20,
+        "move": 0.04,
+        "nAtBound": 0,
+        "maxU": 0.995831297180666
+      },
+      {
+        "outer": 60,
+        "move": 0.04,
+        "nAtBound": 0,
+        "maxU": 0.9891098557271499
+      },
+      {
+        "outer": 100,
+        "move": 0.04,
+        "nAtBound": 0,
+        "maxU": 0.9155571207171326
+      },
+      {
+        "outer": 137,
+        "move": 0.04,
+        "nAtBound": 0,
+        "maxU": 0.5299286805127836
+      },
+      {
+        "outer": 200,
+        "move": 0.04,
+        "nAtBound": 0,
+        "maxU": 0.5008094468088828
+      },
+      {
+        "outer": 300,
+        "move": 0.04,
+        "nAtBound": 0,
+        "maxU": 0.3077270683491924
+      },
+      {
+        "outer": 369,
+        "move": 0.04,
+        "nAtBound": 0,
+        "maxU": 0.25821214231884876
+      }
+    ],
+    "total_bound_hits_over_whole_run": 0,
+    "finding": "ZERO elements are at the move bound at ANY iteration of F400.  The move box is NOT binding when production descends, so the descent cannot be justified as \"the design has used up the permitted move\"."
+  },
+  "inner_mma": {
+    "question": "is beta stable because the SUBPROBLEM is solved consistently?",
+    "results": [
+      {
+        "mesh": "160x20",
+        "nInner_before_descent": [
+          36,
+          29,
+          34,
+          22,
+          37,
+          28,
+          40,
+          22,
+          29,
+          25
+        ],
+        "allInnerConverged": true
+      },
+      {
+        "mesh": "320x40",
+        "nInner_before_descent": [
+          17,
+          17,
+          17,
+          18,
+          17,
+          17,
+          17,
+          18,
+          17,
+          18
+        ],
+        "allInnerConverged": true
+      },
+      {
+        "mesh": "400x50",
+        "nInner_before_descent": [
+          18,
+          20,
+          21,
+          18,
+          18,
+          18,
+          18,
+          18,
+          18,
+          18
+        ],
+        "allInnerConverged": true
+      }
+    ]
+  },
+  "filter_element_scale": {
+    "domain": "a=8, b=1; square elements, h = b/nely",
+    "note": "filter.radiusPhysical = 0.06 is FIXED in physical units -- correct mesh-independent practice -- so it spans progressively more ELEMENTS as the mesh refines, widening the gray transition band in element terms.",
+    "results": [
+      {
+        "mesh": "160x20",
+        "h": 0.05,
+        "R_over_h": 1.2,
+        "gray_at_descent": 0.1525,
+        "gray_over_R_over_h": 0.12708333333333333
+      },
+      {
+        "mesh": "320x40",
+        "h": 0.025,
+        "R_over_h": 2.4,
+        "gray_at_descent": 0.26421875,
+        "gray_over_R_over_h": 0.11009114583333333
+      },
+      {
+        "mesh": "400x50",
+        "h": 0.02,
+        "R_over_h": 3.0,
+        "gray_at_descent": 0.3479,
+        "gray_over_R_over_h": 0.11596666666666666
+      }
+    ]
+  }
+}

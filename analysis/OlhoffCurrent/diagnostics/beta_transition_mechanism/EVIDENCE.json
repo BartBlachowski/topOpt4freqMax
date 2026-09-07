@@ -1,0 +1,144 @@
+{
+  "schema": "olhoff_current_evidence/1",
+  "study": "beta_transition_mechanism",
+  "generated": "2026-09-08T00:23:22+02:00",
+  "evidenceRoot": "analysis/OlhoffCurrent/evidence/move_activity_400",
+  "implementation": "analysis/OlhoffCurrent",
+  "sourceTree": "c1455374d5f8e256c2678a679a5fc7955d9a8a77c410a41cd30f1c189910208c",
+  "matlab": "25.2.0.2998904 (R2025b)",
+  "audit_type": "mechanism audit, no optimisation run",
+  "starting_HEAD": "cb6c0eae31a25521f7c5fed1c4a89564ed63344e",
+  "shared_evidence_note": "referenced, not duplicated: the artifacts live in the move_activity_400 evidence root",
+  "artifacts": [
+    {
+      "path": "F400_400x50_trajectory.mat",
+      "class": "required",
+      "description": "ARM F400 element-level trajectory (shared with move_activity_400). Required HERE because the bound-active population -- zero elements at the move bound -- is computed from DRHO and is not derivable from any CSV.",
+      "bytes": 1.02057786E+8,
+      "sha256": "c53680e86b7010e962b9f5a48a55fdc7c3e659150e05994c9bbffa1275035ded",
+      "present": true,
+      "format": "MAT-file (v7.3 = HDF5) -- read with load()",
+      "variables": [
+        {
+          "name": "DRHO",
+          "size": [
+            20000,
+            369
+          ],
+          "class": "double",
+          "bytes": 5.904E+7
+        },
+        {
+          "name": "RHO",
+          "size": [
+            20000,
+            369
+          ],
+          "class": "double",
+          "bytes": 5.904E+7
+        },
+        {
+          "name": "cfg",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 19415
+        },
+        {
+          "name": "hist",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 98226
+        },
+        {
+          "name": "meta",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 1857
+        },
+        {
+          "name": "move",
+          "size": [
+            369,
+            1
+          ],
+          "class": "double",
+          "bytes": 2952
+        }
+      ]
+    },
+    {
+      "path": "P400_400x50_trajectory.mat",
+      "class": "required",
+      "description": "ARM P400 element-level trajectory (shared with move_activity_400); production-arm cross-check.",
+      "bytes": 3.6576273E+7,
+      "sha256": "1dc20dbd6a0dacbd067802901fd6d78364306a5641be84a6e2216b4038917660",
+      "present": true,
+      "format": "MAT-file (v7.3 = HDF5) -- read with load()",
+      "variables": [
+        {
+          "name": "DRHO",
+          "size": [
+            20000,
+            139
+          ],
+          "class": "double",
+          "bytes": 2.224E+7
+        },
+        {
+          "name": "RHO",
+          "size": [
+            20000,
+            139
+          ],
+          "class": "double",
+          "bytes": 2.224E+7
+        },
+        {
+          "name": "cfg",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 18873
+        },
+        {
+          "name": "hist",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 39346
+        },
+        {
+          "name": "meta",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 1297
+        },
+        {
+          "name": "move",
+          "size": [
+            139,
+            1
+          ],
+          "class": "double",
+          "bytes": 1112
+        }
+      ]
+    }
+  ]
+}

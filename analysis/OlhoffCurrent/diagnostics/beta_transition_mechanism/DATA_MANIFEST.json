@@ -1,0 +1,322 @@
+{
+  "schema": "olhoff_beta_transition_mechanism_data_manifest/1",
+  "study": "beta_transition_mechanism",
+  "starting_HEAD": "cb6c0eae31a25521f7c5fed1c4a89564ed63344e",
+  "sourceTree": "c1455374d5f8e256c2678a679a5fc7955d9a8a77c410a41cd30f1c189910208c",
+  "matlab": "25.2.0.2998904 (R2025b)",
+  "evidenceRoot": "analysis/OlhoffCurrent/evidence/move_activity_400",
+  "note": "This audit ran no optimisation and produced no new raw evidence. It nevertheless DECLARES the two 400x50 trajectories required, because its bound-activity result is computed from DRHO and is not derivable from any CSV; the gate therefore fails this study too if they are lost. They are referenced in the single durable evidence root, not duplicated.",
+  "rawEvidence": [
+    {
+      "path": "analysis/OlhoffCurrent/evidence/move_activity_400/F400_400x50_trajectory.mat",
+      "location": "durable evidence root, untracked by git, SHARED with move_activity_400 (referenced, not duplicated)",
+      "status": "required",
+      "bytes": 102057786.0,
+      "sha256": "c53680e86b7010e962b9f5a48a55fdc7c3e659150e05994c9bbffa1275035ded",
+      "format": "MAT-file (v7.3 = HDF5) -- read with load()",
+      "dimensions": {
+        "DRHO": [
+          20000,
+          369
+        ],
+        "RHO": [
+          20000,
+          369
+        ],
+        "cfg": [
+          1,
+          1
+        ],
+        "hist": [
+          1,
+          1
+        ],
+        "meta": [
+          1,
+          1
+        ],
+        "move": [
+          369,
+          1
+        ]
+      },
+      "precision": [
+        "double",
+        "struct"
+      ],
+      "producingRun": "ARM F400",
+      "producingStudy": "move_activity_400",
+      "usedHereFor": "ARM F400 element-level trajectory (shared with move_activity_400). Required HERE because the bound-active population -- zero elements at the move bound -- is computed from DRHO and is not derivable from any CSV.",
+      "gatedBy": "olhoffcurrent_evidence_gate via this study's EVIDENCE.json"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/evidence/move_activity_400/P400_400x50_trajectory.mat",
+      "location": "durable evidence root, untracked by git, SHARED with move_activity_400 (referenced, not duplicated)",
+      "status": "required",
+      "bytes": 36576273.0,
+      "sha256": "1dc20dbd6a0dacbd067802901fd6d78364306a5641be84a6e2216b4038917660",
+      "format": "MAT-file (v7.3 = HDF5) -- read with load()",
+      "dimensions": {
+        "DRHO": [
+          20000,
+          139
+        ],
+        "RHO": [
+          20000,
+          139
+        ],
+        "cfg": [
+          1,
+          1
+        ],
+        "hist": [
+          1,
+          1
+        ],
+        "meta": [
+          1,
+          1
+        ],
+        "move": [
+          139,
+          1
+        ]
+      },
+      "precision": [
+        "double",
+        "struct"
+      ],
+      "producingRun": "ARM P400",
+      "producingStudy": "move_activity_400",
+      "usedHereFor": "ARM P400 element-level trajectory (shared with move_activity_400); production-arm cross-check.",
+      "gatedBy": "olhoffcurrent_evidence_gate via this study's EVIDENCE.json"
+    }
+  ],
+  "trackedArtifacts": [
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/beta_transition_mechanism/CODE_TRACE.md",
+      "location": "tracked in git",
+      "status": "required-tracked",
+      "bytes": 5981,
+      "sha256": "e7877f11ab29a90d4ec0a91c11f5ab6ba44070d00a59df7f94e94f10d3c01f48"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/beta_transition_mechanism/DATA_INVENTORY.md",
+      "location": "tracked in git",
+      "status": "required-tracked",
+      "bytes": 3814,
+      "sha256": "ace6ee8a0d3281ede734ff5ca6811f6e66bb73d39db16c40fdf40d124ebf4073"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/beta_transition_mechanism/EVIDENCE.json",
+      "location": "tracked in git",
+      "status": "required-tracked",
+      "bytes": 3586,
+      "sha256": "318e901f8a6d048f644eaba87930fd6026d826f7f0055308fb7d55c4427dae5d"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/beta_transition_mechanism/LITERATURE_PROVENANCE.md",
+      "location": "tracked in git",
+      "status": "required-tracked",
+      "bytes": 5552,
+      "sha256": "59d9f2de18faa442047b758fa30a33b42005c9deb4e07aef92dd7f748737cd69"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/beta_transition_mechanism/MATHEMATICAL_ANALYSIS.md",
+      "location": "tracked in git",
+      "status": "required-tracked",
+      "bytes": 11787,
+      "sha256": "c8f8fad205f2d490a59e17d979717ccffb2e5a5b06c4c4772b7d8ab8b8bd0a27"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/beta_transition_mechanism/METRICS.json",
+      "location": "tracked in git",
+      "status": "required-tracked",
+      "bytes": 11468,
+      "sha256": "3e365e679cb476930a1a316a4be0035712259fc57add2ec196cbf63725c2ac96"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/beta_transition_mechanism/PROVENANCE.md",
+      "location": "tracked in git",
+      "status": "required-tracked",
+      "bytes": 3932,
+      "sha256": "da2ac8bae9f96d92d84e59cb5944bfd9fbd9a9be80f908fdee8192cc26b94437"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/beta_transition_mechanism/REPORT.md",
+      "location": "tracked in git",
+      "status": "required-tracked",
+      "bytes": 20216,
+      "sha256": "0a9e6adf3e846b2a1f4a6eeef89445864da0f9efdef4f4bc33f94f7c6e5c9481"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/beta_transition_mechanism/evidence/README.md",
+      "location": "tracked in git",
+      "status": "required-tracked",
+      "bytes": 663,
+      "sha256": "8e422a73268785b4ca774b305fb2d5f0a36e08ef7a61b737c4747a4fb02b0cd2"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/beta_transition_mechanism/figures/fig10_gradient_scale_substitute.png",
+      "location": "tracked in git",
+      "status": "required-tracked",
+      "bytes": 91036,
+      "sha256": "3c355f4bbf9b74aa9682ef044c9e006abcb8ae5ae13685a5de3b85eb665ab07d"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/beta_transition_mechanism/figures/fig11_move_asymptote_vs_beta.png",
+      "location": "tracked in git",
+      "status": "required-tracked",
+      "bytes": 54751,
+      "sha256": "0089a1a88fe282e2632101f2726cc4ccdaa335e65ddb1897c5cc12202a1cb7d8"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/beta_transition_mechanism/figures/fig12_dependency_diagram.png",
+      "location": "tracked in git",
+      "status": "required-tracked",
+      "bytes": 72244,
+      "sha256": "a191224297edb3eab6f2bf86dd518714bd8d6234cc86e473f8c9a92055f0ceba"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/beta_transition_mechanism/figures/fig1_beta_vs_iteration.png",
+      "location": "tracked in git",
+      "status": "required-tracked",
+      "bytes": 68067,
+      "sha256": "e0ee5d96ee30a103905ef11f66ab7cc2870856c006ea9d56f6681a63270ccd22"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/beta_transition_mechanism/figures/fig2_stall_metric_vs_iteration.png",
+      "location": "tracked in git",
+      "status": "required-tracked",
+      "bytes": 61056,
+      "sha256": "0657554d1aa539ef63e16aacb3268e5e47220281b597c386d29d1ad458aef79a"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/beta_transition_mechanism/figures/fig3_move_with_stall_events.png",
+      "location": "tracked in git",
+      "status": "required-tracked",
+      "bytes": 31019,
+      "sha256": "440547a6645efd38a632bc6d448b58d5dcfb46d369e90b0f554257d398c4e2f2"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/beta_transition_mechanism/figures/fig4_aligned_at_first_descent.png",
+      "location": "tracked in git",
+      "status": "required-tracked",
+      "bytes": 89091,
+      "sha256": "33247ce93d0b9dd7c2e45492ecace825bc6043dc9a6a564e2814fe097fd816d3"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/beta_transition_mechanism/figures/fig5_remaining_evolution_vs_mesh.png",
+      "location": "tracked in git",
+      "status": "required-tracked",
+      "bytes": 63336,
+      "sha256": "8335f9081aa7d3053baf14a1c715fa3dd3637691866c7e4ec88b24e317ad168e"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/beta_transition_mechanism/figures/fig6_beta_vs_Mnd.png",
+      "location": "tracked in git",
+      "status": "required-tracked",
+      "bytes": 62291,
+      "sha256": "495e43019b988b3005d6ac75713ff0c5e8ea462e04e896f2194cfe2346700096"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/beta_transition_mechanism/figures/fig7_beta_vs_rho_change.png",
+      "location": "tracked in git",
+      "status": "required-tracked",
+      "bytes": 81587,
+      "sha256": "f8ef5a74446b777d352f4aa700629446d88470f1d4385df05c9cbd523f3de5ea"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/beta_transition_mechanism/figures/fig8_beta_vs_inner_iterations.png",
+      "location": "tracked in git",
+      "status": "required-tracked",
+      "bytes": 97966,
+      "sha256": "52d7a0a2b04fd966b71e7f51be9eb22a6c1f21af77b4dc70efb3926e7bebbc5e"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/beta_transition_mechanism/figures/fig9_bound_active.png",
+      "location": "tracked in git",
+      "status": "required-tracked",
+      "bytes": 43639,
+      "sha256": "386bef11d024e77f162a7cb184238e95603b23025c4aab394a1a3d8cc16048bf"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/beta_transition_mechanism/scripts/btm_analyze.py",
+      "location": "tracked in git",
+      "status": "required-tracked",
+      "bytes": 10774,
+      "sha256": "5592e690710cb39335dec90f9af0c5928a07cc94c6ff2414b237ebe5fb3ca5b3"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/beta_transition_mechanism/scripts/btm_common.py",
+      "location": "tracked in git",
+      "status": "required-tracked",
+      "bytes": 3678,
+      "sha256": "33925d6b9d46887ef8c4f1ae3ca016aaa16c29e9bff4c61bbf106970242483bd"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/beta_transition_mechanism/scripts/btm_figures.py",
+      "location": "tracked in git",
+      "status": "required-tracked",
+      "bytes": 14050,
+      "sha256": "5a14cef03cbf57cf12ac41f652268ac376f2fc2b5f1d91ca69eb3014e124235c"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/beta_transition_mechanism/scripts/btm_manifest.py",
+      "location": "tracked in git",
+      "status": "required-tracked",
+      "bytes": 3710,
+      "sha256": "be0742814292a1ab607d4861aec14a134e19d48cf0c23049276ea8bd7963f424"
+    }
+  ],
+  "inputTelemetry": [
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/move_transition/runs/armP_160x20_iterations.csv",
+      "mesh": "160x20",
+      "role": "prod",
+      "status": "input (owned by another study)",
+      "bytes": 165868,
+      "sha256": "9fb22bff8cb65f4df2733bdcad7ae9641611b99864ec3bd504abd9faf102736b"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/move_stop/runs/fixedmove_160x20_iterations.csv",
+      "mesh": "160x20",
+      "role": "fixed",
+      "status": "input (owned by another study)",
+      "bytes": 99468,
+      "sha256": "102309499785bcace0bce20bdcb72afa1f2421d5abecfd3db7b95e0358fb3a68"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/move_transition/runs/armP_320x40_iterations.csv",
+      "mesh": "320x40",
+      "role": "prod",
+      "status": "input (owned by another study)",
+      "bytes": 167146,
+      "sha256": "1df7b1aa304be32a4465ca43644f9977db49dd287094378e435e14172bd8eba7"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/move_stop/runs/fixedmove_320x40_iterations.csv",
+      "mesh": "320x40",
+      "role": "fixed",
+      "status": "input (owned by another study)",
+      "bytes": 54614,
+      "sha256": "675e5ae0143e74704bc66f011388e47b9ab752e2db9e14f106d3423a6e8c7917"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/move_activity_400/runs/P400_400x50_iterations.csv",
+      "mesh": "400x50",
+      "role": "prod",
+      "status": "input (owned by another study)",
+      "bytes": 60967,
+      "sha256": "72665ec768d9959227b213a3eedd1eeac48e8fac3ebcadc22a0fc0a1bfb2ff41"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/move_activity_400/runs/F400_400x50_iterations.csv",
+      "mesh": "400x50",
+      "role": "fixed",
+      "status": "input (owned by another study)",
+      "bytes": 162083,
+      "sha256": "5c2957185f0174ace7e7df9aa5dc684a51714ba3675dda18fd6f243abfc9b5ec"
+    }
+  ]
+}
