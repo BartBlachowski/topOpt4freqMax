@@ -1,0 +1,18 @@
+# DURABLE RAW SCIENTIFIC EVIDENCE -- deliberately untracked, deliberately NOT scratch.
+#
+# Files here are element-level solver trajectories: tens to hundreds of MB each,
+# too large for normal git tracking (and one historical archive already exceeded
+# GitHub's 100 MB hard limit and blocked a push).  They are NOT disposable.
+#
+# The difference from the situation that lost move_stop's four .mat trajectories
+# is that these files are DECLARED: every one is listed in its study's
+# EVIDENCE.json with a SHA-256, and olhoffcurrent_evidence_gate FAILS the study
+# if a declared-required file is missing or altered.  Untracked is a storage
+# decision; undeclared was the defect.
+#
+# On a fresh clone this directory is empty and the gate reports REQUIRED_MISSING.
+# That is the correct, honest answer: the clone does not have the raw evidence,
+# and EVIDENCE.json says exactly which files and hashes are needed.
+*
+!.gitignore
+!README.md
