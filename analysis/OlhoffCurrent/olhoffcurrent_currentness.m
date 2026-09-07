@@ -7,9 +7,12 @@ function st = olhoffcurrent_currentness(varargin)
 %     CURRENT               the promoted source is intact and matches the
 %                           upstream commit it was promoted from
 %     LOCAL_MODIFIED        +impl/ no longer hashes to SOURCE_MANIFEST.json.
-%                           Production source has been edited in place -- the
+%                           Production source has been edited in place, removed,
+%                           or an unexpected source file has appeared -- the
 %                           most serious state, because it means the recorded
-%                           provenance is now a lie
+%                           provenance is now a lie.  Filesystem and editor
+%                           artifacts (.DS_Store, .asv, .m~) do NOT cause it:
+%                           see olhoffcurrent_is_artifact.
 %     UPSTREAM_AHEAD        upstream has commits after the promoted one.  This
 %                           is INFORMATIONAL, NOT OBSOLESCENCE -- see below
 %     PROVENANCE_MISMATCH   the promoted commit is not in upstream's history,
@@ -101,8 +104,12 @@ end
 if p.Results.Verbose
     fprintf('\nOLHOFF CURRENTNESS\n%s\n', repmat('=',1,64));
     fprintf('  state            : %s\n', st.state);
-    fprintf('  local integrity  : %s (%d files, tree %s)\n', ...
+    fprintf('  local integrity  : %s (%d source files, tree %s)\n', ...
         local_tf(st.localOk), man.nFiles, man.treeHash(1:16));
+    if ~isempty(man.artifactsIgnored)
+        fprintf('  artifacts ignored: %d (%s) -- filesystem/editor files, not source\n', ...
+            numel(man.artifactsIgnored), strjoin(man.artifactsIgnored, ', '));
+    end
     fprintf('  promoted commit  : %s\n', prov.source.commit);
     if up.reachable
         fprintf('  upstream branch  : %s\n', up.branch);
