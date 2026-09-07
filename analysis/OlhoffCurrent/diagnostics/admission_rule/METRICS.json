@@ -1,0 +1,218 @@
+{
+  "schema": "olhoff_admission_rule/1",
+  "generated": "2026-09-07T13:20:00+02:00",
+  "implementation": "analysis/OlhoffCurrent",
+  "production_preset": "duOlhoffFixedPenaltySensitivityFiltered",
+  "matlab": "25.2.0.3042426 (R2025b) Update 1",
+  "threads": 10,
+  "source_tree_sha256": "c1455374d5f8e256c2678a679a5fc7955d9a8a77c410a41cd30f1c189910208c",
+  "candidates": [
+    {
+      "name": "C1_settledLocalObjective",
+      "tauAbs": 0.01,
+      "tauRel": 0.5,
+      "D": 10,
+      "W": 10,
+      "tauObj": 0.005,
+      "role": "primary"
+    },
+    {
+      "name": "C2_strictRatio",
+      "tauAbs": 0.01,
+      "tauRel": 0.25,
+      "D": 10,
+      "W": 10,
+      "tauObj": 0.005,
+      "role": "sensitivity"
+    }
+  ],
+  "meshes": [
+    {
+      "mesh": [
+        160,
+        20
+      ],
+      "NE": 3200,
+      "prodStop": {
+        "tag": "production",
+        "iter": 91,
+        "move": 0.01,
+        "l2": 0.02358256321761374,
+        "rms": 0.00041688475922337808,
+        "maxAbs": 0.0058104442373706419,
+        "ratio": 0.58104442373706422,
+        "omega1": 169.48059308714426,
+        "omega2": 171.98306537723749,
+        "gap12": 0.014765538900412659,
+        "Mnd": 13.402499279526742,
+        "gray": 0.149375,
+        "mid": 0.025,
+        "volume": 0.49999900877797954,
+        "itersSinceMoveChange": 1,
+        "stage": 3
+      },
+      "prodTol": 0.05,
+      "anchor": {
+        "archivedOuter": 91,
+        "archivedOmega1": 169.49522702153845,
+        "prodStopIter": 91,
+        "outerMatch": true,
+        "omega1Bitwise": false,
+        "rhoBitwise": true,
+        "histBitwise": true,
+        "histDetail": "",
+        "baselineOuter": 91
+      },
+      "cands": [
+        {
+          "name": "C1_settledLocalObjective",
+          "role": "primary",
+          "status": "ADMITTED",
+          "stopIter": 100,
+          "gapToLastDescent": 10,
+          "lastDescentBefore": 90,
+          "state": {
+            "tag": "C1_settledLocalObjective",
+            "iter": 100,
+            "move": 0.01,
+            "l2": 0.00933985011545417,
+            "rms": 0.00016510678379759008,
+            "maxAbs": 0.0037832368995945821,
+            "ratio": 0.3783236899594582,
+            "omega1": 169.52413664244273,
+            "omega2": 171.74151010556287,
+            "gap12": 0.013079986761985312,
+            "Mnd": 13.332507080058194,
+            "gray": 0.14625,
+            "mid": 0.025625,
+            "volume": 0.49999918812991234,
+            "itersSinceMoveChange": 10,
+            "stage": 3
+          },
+          "objRelRangeAtStop": 0.00025688443168877932
+        },
+        {
+          "name": "C2_strictRatio",
+          "role": "sensitivity",
+          "status": "ADMITTED",
+          "stopIter": 117,
+          "gapToLastDescent": 16,
+          "lastDescentBefore": 101,
+          "state": {
+            "tag": "C2_strictRatio",
+            "iter": 117,
+            "move": 0.005,
+            "l2": 0.0031811660940058639,
+            "rms": 5.6235602928806707E-5,
+            "maxAbs": 0.001099190761531726,
+            "ratio": 0.21983815230634521,
+            "omega1": 169.52837124563894,
+            "omega2": 171.59223630408667,
+            "gap12": 0.01217415730053399,
+            "Mnd": 13.333058308882373,
+            "gray": 0.14625,
+            "mid": 0.025625,
+            "volume": 0.49999768798043986,
+            "itersSinceMoveChange": 16,
+            "stage": 4
+          },
+          "objRelRangeAtStop": 2.3069391805584811E-5
+        }
+      ]
+    },
+    {
+      "mesh": [
+        320,
+        40
+      ],
+      "NE": 12800,
+      "prodStop": {
+        "tag": "production",
+        "iter": 131,
+        "move": 0.02,
+        "l2": 0.090080505073909092,
+        "rms": 0.000796206699880879,
+        "maxAbs": 0.0081885774212143,
+        "ratio": 0.409428871060715,
+        "omega1": 165.94683890430741,
+        "omega2": 183.660256755976,
+        "gap12": 0.10674152016769037,
+        "Mnd": 23.359567952074254,
+        "gray": 0.26375,
+        "mid": 0.095625,
+        "volume": 0.49999913861781514,
+        "itersSinceMoveChange": 1,
+        "stage": 2
+      },
+      "prodTol": 0.1,
+      "anchor": {
+        "archivedOuter": 131,
+        "archivedOmega1": 165.95078925220545,
+        "prodStopIter": 131,
+        "outerMatch": true,
+        "omega1Bitwise": false,
+        "rhoBitwise": true,
+        "histBitwise": true,
+        "histDetail": "",
+        "baselineOuter": 131
+      },
+      "cands": [
+        {
+          "name": "C1_settledLocalObjective",
+          "role": "primary",
+          "status": "ADMITTED",
+          "stopIter": 140,
+          "gapToLastDescent": 10,
+          "lastDescentBefore": 130,
+          "state": {
+            "tag": "C1_settledLocalObjective",
+            "iter": 140,
+            "move": 0.02,
+            "l2": 0.083322968240718234,
+            "rms": 0.00073647794839503994,
+            "maxAbs": 0.0078605653932684767,
+            "ratio": 0.3930282696634238,
+            "omega1": 165.98362872990955,
+            "omega2": 184.59327600541982,
+            "gap12": 0.1121173661397179,
+            "Mnd": 23.010377678163085,
+            "gray": 0.2596875,
+            "mid": 0.088125,
+            "volume": 0.4999991860164536,
+            "itersSinceMoveChange": 10,
+            "stage": 2
+          },
+          "objRelRangeAtStop": 0.000221672128680382
+        },
+        {
+          "name": "C2_strictRatio",
+          "role": "sensitivity",
+          "status": "ADMITTED",
+          "stopIter": 151,
+          "gapToLastDescent": 10,
+          "lastDescentBefore": 141,
+          "state": {
+            "tag": "C2_strictRatio",
+            "iter": 151,
+            "move": 0.01,
+            "l2": 0.022233903751801284,
+            "rms": 0.00019652180143934635,
+            "maxAbs": 0.0020135404967541073,
+            "ratio": 0.20135404967541073,
+            "omega1": 165.99802574626793,
+            "omega2": 184.93365336110546,
+            "gap12": 0.11407140253451629,
+            "Mnd": 22.882826918925709,
+            "gray": 0.25875,
+            "mid": 0.0865625,
+            "volume": 0.49999679104463368,
+            "itersSinceMoveChange": 10,
+            "stage": 3
+          },
+          "objRelRangeAtStop": 9.6389343549959167E-5
+        }
+      ]
+    }
+  ],
+  "main_repo_commit": "2b89b070477c67aa7bbe5febc369f61fcad92da6"
+}
