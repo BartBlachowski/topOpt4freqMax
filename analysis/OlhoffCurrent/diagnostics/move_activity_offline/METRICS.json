@@ -1,0 +1,1742 @@
+{
+  "baseline_fixedmove_identity": {
+    "160x20": {
+      "iterationsCompared": 78,
+      "maxAbsDiff_Mnd_maxAbs_l2": 0.0,
+      "note": "fixed-move arm is an exact counterfactual continuation of the baseline"
+    },
+    "320x40": {
+      "iterationsCompared": 129,
+      "maxAbsDiff_Mnd_maxAbs_l2": 0.0,
+      "note": "fixed-move arm is an exact counterfactual continuation of the baseline"
+    }
+  },
+  "rms_l2_identity_maxRelErr": {
+    "ms_baseline_160x20": 5.73395516150665e-15,
+    "ms_baseline_320x40": 5.793118181405741e-15,
+    "ms_fixedmove_160x20": 5.73395516150665e-15,
+    "ms_fixedmove_320x40": 8.429968200051795e-15,
+    "ar_unstopped_160x20": 5.73395516150665e-15,
+    "ar_unstopped_320x40": 5.793118181405741e-15,
+    "mt_armP_160x20": 5.73395516150665e-15,
+    "mt_armP_320x40": 5.793118181405741e-15,
+    "mt_armU_160x20": 5.73395516150665e-15,
+    "mt_armU_320x40": 6.968376867704699e-15
+  },
+  "runs": [
+    {
+      "key": "ms_baseline_160x20",
+      "study": "move_stop",
+      "mesh": [
+        160,
+        20
+      ],
+      "NE": 3200,
+      "policy": "prodLadder",
+      "nIter": 91,
+      "productionStopIter": 91,
+      "csv": "analysis/OlhoffCurrent/diagnostics/move_stop/runs/baseline_160x20_iterations.csv",
+      "descents": [
+        {
+          "iter": 79,
+          "moveFrom": 0.04,
+          "moveTo": 0.02,
+          "beyondProductionStop": false
+        },
+        {
+          "iter": 90,
+          "moveFrom": 0.02,
+          "moveTo": 0.01,
+          "beyondProductionStop": false
+        }
+      ],
+      "Mnd_first": 99.4592349748065,
+      "Mnd_last": 13.4024992795267,
+      "omega1_last": 169.480593087144,
+      "maxU_min": 0.581044423737064,
+      "maxU_max": 0.99979088399588,
+      "maxU_median": 0.9992394880072475,
+      "rmsU_min": 0.0416884759223378,
+      "rmsU_max": 0.91920909039502,
+      "Neff_min": 16.47264501048259,
+      "Neff_max": 2705.5087668960396,
+      "Neff_final": 16.47264501048259,
+      "hasExactActiveCounts": true
+    },
+    {
+      "key": "ms_baseline_320x40",
+      "study": "move_stop",
+      "mesh": [
+        320,
+        40
+      ],
+      "NE": 12800,
+      "policy": "prodLadder",
+      "nIter": 131,
+      "productionStopIter": 131,
+      "csv": "analysis/OlhoffCurrent/diagnostics/move_stop/runs/baseline_320x40_iterations.csv",
+      "descents": [
+        {
+          "iter": 130,
+          "moveFrom": 0.04,
+          "moveTo": 0.02,
+          "beyondProductionStop": false
+        }
+      ],
+      "Mnd_first": 99.6140039627192,
+      "Mnd_last": 23.3595679520743,
+      "omega1_last": 165.946838904307,
+      "maxU_min": 0.387678600289896,
+      "maxU_max": 0.9993674764048724,
+      "maxU_median": 0.986299255414185,
+      "rmsU_min": 0.03981033499404395,
+      "rmsU_max": 0.7766072419512126,
+      "Neff_min": 61.80588829070597,
+      "Neff_max": 7729.696083381549,
+      "Neff_final": 121.01653282484608,
+      "hasExactActiveCounts": true
+    },
+    {
+      "key": "ms_fixedmove_160x20",
+      "study": "move_stop",
+      "mesh": [
+        160,
+        20
+      ],
+      "NE": 3200,
+      "policy": "fixedMove",
+      "nIter": 400,
+      "productionStopIter": null,
+      "csv": "analysis/OlhoffCurrent/diagnostics/move_stop/runs/fixedmove_160x20_iterations.csv",
+      "descents": [],
+      "Mnd_first": 99.4592349748065,
+      "Mnd_last": 12.2754329897822,
+      "omega1_last": 169.480180375229,
+      "maxU_min": 0.9976454594258124,
+      "maxU_max": 0.9998471454416199,
+      "maxU_median": 0.999370624004025,
+      "rmsU_min": 0.15388339182058924,
+      "rmsU_max": 0.91920909039502,
+      "Neff_min": 75.90327018786869,
+      "Neff_max": 2705.5087668960396,
+      "Neff_final": 96.99700697966622,
+      "hasExactActiveCounts": true
+    },
+    {
+      "key": "ms_fixedmove_320x40",
+      "study": "move_stop",
+      "mesh": [
+        320,
+        40
+      ],
+      "NE": 12800,
+      "policy": "fixedMove",
+      "nIter": 216,
+      "productionStopIter": null,
+      "csv": "analysis/OlhoffCurrent/diagnostics/move_stop/runs/fixedmove_320x40_iterations.csv",
+      "descents": [],
+      "Mnd_first": 99.6140039627192,
+      "Mnd_last": 13.2824393172795,
+      "omega1_last": 166.54023950172,
+      "maxU_min": 0.20119498084481796,
+      "maxU_max": 0.9993674764048724,
+      "maxU_median": 0.9341353464391424,
+      "rmsU_min": 0.021463343077331276,
+      "rmsU_max": 0.7766072419512126,
+      "Neff_min": 26.35758901715384,
+      "Neff_max": 7729.696083381549,
+      "Neff_final": 145.67010059205592,
+      "hasExactActiveCounts": true
+    },
+    {
+      "key": "ar_unstopped_160x20",
+      "study": "admission_rule",
+      "mesh": [
+        160,
+        20
+      ],
+      "NE": 3200,
+      "policy": "prodLadder",
+      "nIter": 600,
+      "productionStopIter": 91,
+      "csv": "analysis/OlhoffCurrent/diagnostics/admission_rule/runs/unstopped_160x20_iterations.csv",
+      "descents": [
+        {
+          "iter": 79,
+          "moveFrom": 0.04,
+          "moveTo": 0.02,
+          "beyondProductionStop": false
+        },
+        {
+          "iter": 90,
+          "moveFrom": 0.02,
+          "moveTo": 0.01,
+          "beyondProductionStop": false
+        },
+        {
+          "iter": 101,
+          "moveFrom": 0.01,
+          "moveTo": 0.005,
+          "beyondProductionStop": true
+        }
+      ],
+      "Mnd_first": 99.4592349748065,
+      "Mnd_last": 13.0988463889181,
+      "omega1_last": 169.689264792042,
+      "maxU_min": 0.045153919226616,
+      "maxU_max": 0.99979088399588,
+      "maxU_median": 0.1286085616645124,
+      "rmsU_min": 0.00518895380659432,
+      "rmsU_max": 0.91920909039502,
+      "Neff_min": 2.356834754186609,
+      "Neff_max": 2705.5087668960396,
+      "Neff_final": 158.99920805650572,
+      "hasExactActiveCounts": false
+    },
+    {
+      "key": "ar_unstopped_320x40",
+      "study": "admission_rule",
+      "mesh": [
+        320,
+        40
+      ],
+      "NE": 12800,
+      "policy": "prodLadder",
+      "nIter": 600,
+      "productionStopIter": 131,
+      "csv": "analysis/OlhoffCurrent/diagnostics/admission_rule/runs/unstopped_320x40_iterations.csv",
+      "descents": [
+        {
+          "iter": 130,
+          "moveFrom": 0.04,
+          "moveTo": 0.02,
+          "beyondProductionStop": false
+        },
+        {
+          "iter": 141,
+          "moveFrom": 0.02,
+          "moveTo": 0.01,
+          "beyondProductionStop": true
+        },
+        {
+          "iter": 152,
+          "moveFrom": 0.01,
+          "moveTo": 0.005,
+          "beyondProductionStop": true
+        }
+      ],
+      "Mnd_first": 99.6140039627192,
+      "Mnd_last": 22.0508412030335,
+      "omega1_last": 166.090706719741,
+      "maxU_min": 0.061360051491923195,
+      "maxU_max": 0.9993674764048724,
+      "maxU_median": 0.10494762976276939,
+      "rmsU_min": 0.0059018134104385995,
+      "rmsU_max": 0.7766072419512126,
+      "Neff_min": 13.739286884541308,
+      "Neff_max": 7729.696083381549,
+      "Neff_final": 46.54047487799212,
+      "hasExactActiveCounts": false
+    },
+    {
+      "key": "mt_armP_160x20",
+      "study": "move_transition",
+      "mesh": [
+        160,
+        20
+      ],
+      "NE": 3200,
+      "policy": "prodLadder",
+      "nIter": 600,
+      "productionStopIter": 91,
+      "csv": "analysis/OlhoffCurrent/diagnostics/move_transition/runs/armP_160x20_iterations.csv",
+      "descents": [
+        {
+          "iter": 79,
+          "moveFrom": 0.04,
+          "moveTo": 0.02,
+          "beyondProductionStop": false
+        },
+        {
+          "iter": 90,
+          "moveFrom": 0.02,
+          "moveTo": 0.01,
+          "beyondProductionStop": false
+        },
+        {
+          "iter": 101,
+          "moveFrom": 0.01,
+          "moveTo": 0.005,
+          "beyondProductionStop": true
+        }
+      ],
+      "Mnd_first": 99.4592349748065,
+      "Mnd_last": 13.0988463889181,
+      "omega1_last": 169.689264792042,
+      "maxU_min": 0.045153919226616,
+      "maxU_max": 0.99979088399588,
+      "maxU_median": 0.1286085616645124,
+      "rmsU_min": 0.00518895380659432,
+      "rmsU_max": 0.91920909039502,
+      "Neff_min": 2.356834754186609,
+      "Neff_max": 2705.5087668960396,
+      "Neff_final": 158.99920805650572,
+      "hasExactActiveCounts": false
+    },
+    {
+      "key": "mt_armP_320x40",
+      "study": "move_transition",
+      "mesh": [
+        320,
+        40
+      ],
+      "NE": 12800,
+      "policy": "prodLadder",
+      "nIter": 600,
+      "productionStopIter": 131,
+      "csv": "analysis/OlhoffCurrent/diagnostics/move_transition/runs/armP_320x40_iterations.csv",
+      "descents": [
+        {
+          "iter": 130,
+          "moveFrom": 0.04,
+          "moveTo": 0.02,
+          "beyondProductionStop": false
+        },
+        {
+          "iter": 141,
+          "moveFrom": 0.02,
+          "moveTo": 0.01,
+          "beyondProductionStop": true
+        },
+        {
+          "iter": 152,
+          "moveFrom": 0.01,
+          "moveTo": 0.005,
+          "beyondProductionStop": true
+        }
+      ],
+      "Mnd_first": 99.6140039627192,
+      "Mnd_last": 22.0508412030335,
+      "omega1_last": 166.090706719741,
+      "maxU_min": 0.061360051491923195,
+      "maxU_max": 0.9993674764048724,
+      "maxU_median": 0.10494762976276939,
+      "rmsU_min": 0.0059018134104385995,
+      "rmsU_max": 0.7766072419512126,
+      "Neff_min": 13.739286884541308,
+      "Neff_max": 7729.696083381549,
+      "Neff_final": 46.54047487799212,
+      "hasExactActiveCounts": false
+    },
+    {
+      "key": "mt_armU_160x20",
+      "study": "move_transition",
+      "mesh": [
+        160,
+        20
+      ],
+      "NE": 3200,
+      "policy": "maxUtil",
+      "nIter": 600,
+      "productionStopIter": 91,
+      "csv": "analysis/OlhoffCurrent/diagnostics/move_transition/runs/armU_160x20_iterations.csv",
+      "descents": [],
+      "Mnd_first": 99.4592349748065,
+      "Mnd_last": 11.4580376700836,
+      "omega1_last": 169.574746710849,
+      "maxU_min": 0.9976454594258124,
+      "maxU_max": 0.9999954658626775,
+      "maxU_median": 0.9993205123444249,
+      "rmsU_min": 0.1353462588174715,
+      "rmsU_max": 0.91920909039502,
+      "Neff_min": 58.799510214129576,
+      "Neff_max": 2705.5087668960396,
+      "Neff_final": 82.42313693261065,
+      "hasExactActiveCounts": false
+    },
+    {
+      "key": "mt_armU_320x40",
+      "study": "move_transition",
+      "mesh": [
+        320,
+        40
+      ],
+      "NE": 12800,
+      "policy": "maxUtil",
+      "nIter": 600,
+      "productionStopIter": 131,
+      "csv": "analysis/OlhoffCurrent/diagnostics/move_transition/runs/armU_320x40_iterations.csv",
+      "descents": [
+        {
+          "iter": 214,
+          "moveFrom": 0.04,
+          "moveTo": 0.02,
+          "beyondProductionStop": true
+        },
+        {
+          "iter": 224,
+          "moveFrom": 0.02,
+          "moveTo": 0.01,
+          "beyondProductionStop": true
+        },
+        {
+          "iter": 234,
+          "moveFrom": 0.01,
+          "moveTo": 0.005,
+          "beyondProductionStop": true
+        }
+      ],
+      "Mnd_first": 99.6140039627192,
+      "Mnd_last": 13.1223890607495,
+      "omega1_last": 166.526508765758,
+      "maxU_min": 0.01936780723033736,
+      "maxU_max": 0.9993674764048724,
+      "maxU_median": 0.0278181250091772,
+      "rmsU_min": 0.001905000744459128,
+      "rmsU_max": 0.7766072419512126,
+      "Neff_min": 25.18341675179722,
+      "Neff_max": 7729.696083381549,
+      "Neff_final": 2891.4890598846437,
+      "hasExactActiveCounts": false
+    }
+  ],
+  "production_first_descent": [
+    {
+      "mesh": "160x20",
+      "descentIter": 79,
+      "lastIterAtMove004": 78,
+      "move_from": 0.04,
+      "move_to": 0.02,
+      "Mnd_at": 13.4935541734659,
+      "Mnd_fixedMoveFinal": 12.2754329897822,
+      "Mnd_remaining": 1.2181211836837011,
+      "Mnd_remaining_relative": 0.0902743019388508,
+      "omega1_at": 169.08549011233,
+      "omega1_fixedMoveFinal": 169.480180375229,
+      "omega1_relChange": 0.0023342645346846875,
+      "activity_at_descent": {
+        "maxU": 0.9997387741344975,
+        "rmsU": 0.231340896216957,
+        "Neff": 171.34906276165256,
+        "phiEff": 0.053546582113016425,
+        "exactActiveCount": {
+          "1e-4": 984.0,
+          "epsRMS": 720.0,
+          "1e-3": 708.0,
+          "1e-2": 230.0
+        },
+        "exactActiveFrac": {
+          "1e-4": 0.3075,
+          "epsRMS": 0.225,
+          "1e-3": 0.22125,
+          "1e-2": 0.071875
+        }
+      },
+      "preceding10": {
+        "maxU": [
+          0.9995352064331201,
+          0.9988719241698225,
+          0.9994005478437925,
+          0.9990195256835324,
+          0.999410977715815,
+          0.9992943105232075,
+          0.9994601195015175,
+          0.9997506290596574,
+          0.9994516237869774,
+          0.9997387741344975
+        ],
+        "rmsU": [
+          0.265677963951915,
+          0.2629475297191975,
+          0.26438767899485,
+          0.23074471899590374,
+          0.24173378517563776,
+          0.23905929912801174,
+          0.2518595838312,
+          0.2281606548402575,
+          0.23266809227505225,
+          0.231340896216957
+        ],
+        "Neff": [
+          226.08141122483107,
+          221.75251594812465,
+          223.95111886063813,
+          170.7125956222863,
+          187.2131937980706,
+          183.13629871484372,
+          203.20575431569537,
+          166.6664232959383,
+          173.42035877016778,
+          171.34906276165256
+        ],
+        "activeFrac_1e3": [
+          0.263125,
+          0.270625,
+          0.255625,
+          0.24125,
+          0.24875,
+          0.22375,
+          0.23625,
+          0.223125,
+          0.2225,
+          0.22125
+        ]
+      }
+    },
+    {
+      "mesh": "320x40",
+      "descentIter": 130,
+      "lastIterAtMove004": 129,
+      "move_from": 0.04,
+      "move_to": 0.02,
+      "Mnd_at": 23.4506347127922,
+      "Mnd_fixedMoveFinal": 13.2824393172795,
+      "Mnd_remaining": 10.1681953955127,
+      "Mnd_remaining_relative": 0.43360000784823116,
+      "omega1_at": 165.918844506453,
+      "omega1_fixedMoveFinal": 166.54023950172,
+      "omega1_relChange": 0.003745174317693785,
+      "activity_at_descent": {
+        "maxU": 0.6470669168679125,
+        "rmsU": 0.05945162255013925,
+        "Neff": 108.05354050948816,
+        "phiEff": 0.008441682852303763,
+        "exactActiveCount": {
+          "1e-4": 4326.0,
+          "epsRMS": 3400.0,
+          "1e-3": 3274.0,
+          "1e-2": 106.0
+        },
+        "exactActiveFrac": {
+          "1e-4": 0.33796875,
+          "epsRMS": 0.265625,
+          "1e-3": 0.25578125,
+          "1e-2": 0.00828125
+        }
+      },
+      "preceding10": {
+        "maxU": [
+          0.7455159616178125,
+          0.7984074785403275,
+          0.748946004548805,
+          0.7020668098793974,
+          0.7589546636105374,
+          0.8059152241927825,
+          0.7286414344339025,
+          0.7256289119074075,
+          0.7704997507309975,
+          0.6470669168679125
+        ],
+        "rmsU": [
+          0.0647583778401585,
+          0.06499944893864974,
+          0.06517312793333074,
+          0.06587028082355,
+          0.061536937495370994,
+          0.06252773562106301,
+          0.060582282330309246,
+          0.06243293161746925,
+          0.057869518736829495,
+          0.05945162255013925
+        ],
+        "Neff": [
+          96.58017767594824,
+          84.8359888996282,
+          96.92729288998385,
+          112.67618001606556,
+          84.1492131947399,
+          77.05071136601019,
+          88.48578396515884,
+          94.75633820856294,
+          72.2045732972546,
+          108.05354050948816
+        ],
+        "activeFrac_1e3": [
+          0.2590625,
+          0.2559375,
+          0.255625,
+          0.259375,
+          0.25546875,
+          0.2534375,
+          0.2525,
+          0.25828125,
+          0.25375,
+          0.25578125
+        ]
+      }
+    }
+  ],
+  "cross_mesh_ordering_at_production_descent": {
+    "rationale": "160x20 had 9.0% of its M_nd evolution left, 320x40 had 43.4%. A rule \"descend when S < theta\" must therefore permit at 160x20 and block at 320x40, which requires S(160x20@78) < S(320x40@129).",
+    "tests": [
+      {
+        "statistic": "maxU",
+        "at_160x20_iter78": 0.9997387741344975,
+        "at_320x40_iter129": 0.6470669168679125,
+        "requiredOrdering": "S(160x20) < S(320x40)",
+        "satisfied": false
+      },
+      {
+        "statistic": "rmsU",
+        "at_160x20_iter78": 0.231340896216957,
+        "at_320x40_iter129": 0.05945162255013925,
+        "requiredOrdering": "S(160x20) < S(320x40)",
+        "satisfied": false
+      },
+      {
+        "statistic": "Neff",
+        "at_160x20_iter78": 171.34906276165256,
+        "at_320x40_iter129": 108.05354050948816,
+        "requiredOrdering": "S(160x20) < S(320x40)",
+        "satisfied": false
+      },
+      {
+        "statistic": "phiEff",
+        "at_160x20_iter78": 0.053546582113016425,
+        "at_320x40_iter129": 0.008441682852303763,
+        "requiredOrdering": "S(160x20) < S(320x40)",
+        "satisfied": false
+      },
+      {
+        "statistic": "activeFrac>1e-4",
+        "at_160x20_iter78": 0.3075,
+        "at_320x40_iter129": 0.33796875,
+        "requiredOrdering": "S(160x20) < S(320x40)",
+        "satisfied": true
+      },
+      {
+        "statistic": "activeCount>1e-4",
+        "at_160x20_iter78": 984.0,
+        "at_320x40_iter129": 4326.0,
+        "requiredOrdering": "S(160x20) < S(320x40)",
+        "satisfied": true
+      },
+      {
+        "statistic": "activeFrac>epsRMS",
+        "at_160x20_iter78": 0.225,
+        "at_320x40_iter129": 0.265625,
+        "requiredOrdering": "S(160x20) < S(320x40)",
+        "satisfied": true
+      },
+      {
+        "statistic": "activeCount>epsRMS",
+        "at_160x20_iter78": 720.0,
+        "at_320x40_iter129": 3400.0,
+        "requiredOrdering": "S(160x20) < S(320x40)",
+        "satisfied": true
+      },
+      {
+        "statistic": "activeFrac>1e-3",
+        "at_160x20_iter78": 0.22125,
+        "at_320x40_iter129": 0.25578125,
+        "requiredOrdering": "S(160x20) < S(320x40)",
+        "satisfied": true
+      },
+      {
+        "statistic": "activeCount>1e-3",
+        "at_160x20_iter78": 708.0,
+        "at_320x40_iter129": 3274.0,
+        "requiredOrdering": "S(160x20) < S(320x40)",
+        "satisfied": true
+      },
+      {
+        "statistic": "activeFrac>1e-2",
+        "at_160x20_iter78": 0.071875,
+        "at_320x40_iter129": 0.00828125,
+        "requiredOrdering": "S(160x20) < S(320x40)",
+        "satisfied": false
+      },
+      {
+        "statistic": "activeCount>1e-2",
+        "at_160x20_iter78": 230.0,
+        "at_320x40_iter129": 106.0,
+        "requiredOrdering": "S(160x20) < S(320x40)",
+        "satisfied": false
+      }
+    ]
+  },
+  "normalisation_exponent": {
+    "model": "statistic = activeCount / NE^alpha",
+    "derivation": "Dividing a count series by the per-mesh constant NE^alpha rescales its admissible-threshold window exactly, so a single threshold works at both meshes iff the count windows overlap after that rescaling, i.e. alpha in [log_R(loB/hiA), log_R(hiB/loA)] with R = NE_320/NE_160 = 4.",
+    "NE_ratio": 4.0,
+    "results": [
+      {
+        "quantity": "1e-4",
+        "c_min": 0.95,
+        "persistence": 5,
+        "window_160x20": [
+          963.1320725842847,
+          1191.3750371976396
+        ],
+        "window_320x40": [
+          2812.4796386124244,
+          3970.2203668682246
+        ],
+        "alpha_lo": 0.619607507966686,
+        "alpha_hi": 1.0217067676775888,
+        "admissible": true,
+        "includes_alpha_0_constantCount": false,
+        "includes_alpha_0p5_interfaceLength": false,
+        "includes_alpha_1_constantFraction": true
+      },
+      {
+        "quantity": "epsRMS",
+        "c_min": 0.95,
+        "persistence": 5,
+        "window_160x20": [
+          553.253109333015,
+          1052.9715221946817
+        ],
+        "window_320x40": [
+          1564.0073573974341,
+          3156.8976548211594
+        ],
+        "alpha_lo": 0.2853904402194359,
+        "alpha_hi": 1.2562479653278436,
+        "admissible": true,
+        "includes_alpha_0_constantCount": false,
+        "includes_alpha_0p5_interfaceLength": true,
+        "includes_alpha_1_constantFraction": true
+      },
+      {
+        "quantity": "1e-3",
+        "c_min": 0.95,
+        "persistence": 5,
+        "window_160x20": [
+          513.5300228362844,
+          1049.600168390163
+        ],
+        "window_320x40": [
+          1457.995436019286,
+          3084.8478423070296
+        ],
+        "alpha_lo": 0.23707317353106908,
+        "alpha_hi": 1.2933394010005284,
+        "admissible": true,
+        "includes_alpha_0_constantCount": false,
+        "includes_alpha_0p5_interfaceLength": true,
+        "includes_alpha_1_constantFraction": true
+      },
+      {
+        "quantity": "1e-2",
+        "c_min": 0.95,
+        "persistence": 5,
+        "window_160x20": [
+          106.35152605853786,
+          347.842881746146
+        ],
+        "window_320x40": [
+          8.080271265510815,
+          91.58043667914225
+        ],
+        "alpha_lo": -2.71394413024541,
+        "alpha_hi": -0.10786469283683195,
+        "admissible": true,
+        "includes_alpha_0_constantCount": false,
+        "includes_alpha_0p5_interfaceLength": false,
+        "includes_alpha_1_constantFraction": false
+      },
+      {
+        "quantity": "Neff",
+        "c_min": 0.95,
+        "persistence": 5,
+        "window_160x20": [
+          87.04691382449533,
+          118.64762371775116
+        ],
+        "window_320x40": [
+          74.68546402917598,
+          94.63209345761307
+        ],
+        "alpha_lo": -0.3338919107700478,
+        "alpha_hi": 0.06026819591628031,
+        "admissible": true,
+        "includes_alpha_0_constantCount": true,
+        "includes_alpha_0p5_interfaceLength": false,
+        "includes_alpha_1_constantFraction": false
+      },
+      {
+        "quantity": "1e-4",
+        "c_min": 0.95,
+        "persistence": 10,
+        "window_160x20": [
+          995.6747860865411,
+          1348.735252884845
+        ],
+        "window_320x40": [
+          2841.57286370671,
+          4011.2896472361354
+        ],
+        "alpha_lo": 0.537541262086597,
+        "alpha_hi": 1.005159821170953,
+        "admissible": true,
+        "includes_alpha_0_constantCount": false,
+        "includes_alpha_0p5_interfaceLength": false,
+        "includes_alpha_1_constantFraction": true
+      },
+      {
+        "quantity": "epsRMS",
+        "c_min": 0.95,
+        "persistence": 10,
+        "window_160x20": [
+          641.3470774595899,
+          1204.7084276958474
+        ],
+        "window_320x40": [
+          1645.7532406754806,
+          3321.899044355014
+        ],
+        "alpha_lo": 0.22503201072194282,
+        "alpha_hi": 1.1864155066497055,
+        "admissible": true,
+        "includes_alpha_0_constantCount": false,
+        "includes_alpha_0p5_interfaceLength": true,
+        "includes_alpha_1_constantFraction": true
+      },
+      {
+        "quantity": "1e-3",
+        "c_min": 0.95,
+        "persistence": 10,
+        "window_160x20": [
+          608.8137089143821,
+          1194.5436266563695
+        ],
+        "window_320x40": [
+          1536.9299896301472,
+          3239.635149502921
+        ],
+        "alpha_lo": 0.18179595222614653,
+        "alpha_hi": 1.205879297305506,
+        "admissible": true,
+        "includes_alpha_0_constantCount": false,
+        "includes_alpha_0p5_interfaceLength": true,
+        "includes_alpha_1_constantFraction": true
+      },
+      {
+        "quantity": "1e-2",
+        "c_min": 0.95,
+        "persistence": 10,
+        "window_160x20": [
+          117.27730227078396,
+          403.959296359447
+        ],
+        "window_320x40": [
+          16.10757895115828,
+          107.38464117830264
+        ],
+        "alpha_lo": -2.3241991802974717,
+        "alpha_hi": -0.06356807891558859,
+        "admissible": true,
+        "includes_alpha_0_constantCount": false,
+        "includes_alpha_0p5_interfaceLength": false,
+        "includes_alpha_1_constantFraction": false
+      },
+      {
+        "quantity": "Neff",
+        "c_min": 0.95,
+        "persistence": 10,
+        "window_160x20": [
+          91.84028125454218,
+          151.46475587544495
+        ],
+        "window_320x40": [
+          91.9818550537269,
+          110.11131790439012
+        ],
+        "alpha_lo": -0.3597804676037022,
+        "alpha_hi": 0.13088190006066258,
+        "admissible": true,
+        "includes_alpha_0_constantCount": true,
+        "includes_alpha_0p5_interfaceLength": false,
+        "includes_alpha_1_constantFraction": false
+      },
+      {
+        "quantity": "1e-4",
+        "c_min": 0.95,
+        "persistence": 20,
+        "window_160x20": [
+          1610.2584426552144,
+          1657.3072383748458
+        ],
+        "window_320x40": [
+          3125.365664957038,
+          4223.0971408394025
+        ],
+        "alpha_lo": 0.45759195681083487,
+        "alpha_hi": 0.6955045883687406,
+        "admissible": true,
+        "includes_alpha_0_constantCount": false,
+        "includes_alpha_0p5_interfaceLength": true,
+        "includes_alpha_1_constantFraction": false
+      },
+      {
+        "quantity": "epsRMS",
+        "c_min": 0.95,
+        "persistence": 20,
+        "window_160x20": [
+          687.1297832009678,
+          1511.0359907516372
+        ],
+        "window_320x40": [
+          1828.9296336366058,
+          3334.009654203334
+        ],
+        "alpha_lo": 0.1377307729643483,
+        "alpha_hi": 1.1393018798516128,
+        "admissible": true,
+        "includes_alpha_0_constantCount": false,
+        "includes_alpha_0p5_interfaceLength": true,
+        "includes_alpha_1_constantFraction": true
+      },
+      {
+        "quantity": "1e-3",
+        "c_min": 0.95,
+        "persistence": 20,
+        "window_160x20": [
+          656.1582595759775,
+          1505.675173973254
+        ],
+        "window_320x40": [
+          1733.7728137350073,
+          3251.8587131056083
+        ],
+        "alpha_lo": 0.10175215087256147,
+        "alpha_hi": 1.1545744246370868,
+        "admissible": true,
+        "includes_alpha_0_constantCount": false,
+        "includes_alpha_0p5_interfaceLength": true,
+        "includes_alpha_1_constantFraction": true
+      },
+      {
+        "quantity": "1e-2",
+        "c_min": 0.95,
+        "persistence": 20,
+        "window_160x20": [
+          122.09607802575556,
+          618.312560745728
+        ],
+        "window_320x40": [
+          48.44454362190086,
+          111.74472610628534
+        ],
+        "alpha_lo": -1.836965113252588,
+        "alpha_hi": -0.0639050575288864,
+        "admissible": true,
+        "includes_alpha_0_constantCount": false,
+        "includes_alpha_0p5_interfaceLength": false,
+        "includes_alpha_1_constantFraction": false
+      },
+      {
+        "quantity": "Neff",
+        "c_min": 0.95,
+        "persistence": 20,
+        "window_160x20": [
+          95.18161942527564,
+          223.07128662125987
+        ],
+        "window_320x40": [
+          100.1638513569023,
+          112.2163529077159
+        ],
+        "alpha_lo": -0.5775714416226202,
+        "alpha_hi": 0.11876401219986758,
+        "admissible": true,
+        "includes_alpha_0_constantCount": true,
+        "includes_alpha_0p5_interfaceLength": false,
+        "includes_alpha_1_constantFraction": false
+      },
+      {
+        "quantity": "1e-4",
+        "c_min": 0.99,
+        "persistence": 5,
+        "window_160x20": [
+          963.1320725842847,
+          1022.4988795836255
+        ],
+        "window_320x40": [
+          2812.4796386124244,
+          3350.1893398473244
+        ],
+        "alpha_lo": 0.7298716947171312,
+        "alpha_hi": 0.8992185412583124,
+        "admissible": true,
+        "includes_alpha_0_constantCount": false,
+        "includes_alpha_0p5_interfaceLength": false,
+        "includes_alpha_1_constantFraction": false
+      },
+      {
+        "quantity": "epsRMS",
+        "c_min": 0.99,
+        "persistence": 5,
+        "window_160x20": [
+          553.253109333015,
+          745.9133159738038
+        ],
+        "window_320x40": [
+          1564.0073573974341,
+          2193.9067549050555
+        ],
+        "alpha_lo": 0.5340837062113708,
+        "alpha_hi": 0.9937453252984157,
+        "admissible": true,
+        "includes_alpha_0_constantCount": false,
+        "includes_alpha_0p5_interfaceLength": false,
+        "includes_alpha_1_constantFraction": false
+      },
+      {
+        "quantity": "1e-3",
+        "c_min": 0.99,
+        "persistence": 5,
+        "window_160x20": [
+          513.5300228362844,
+          726.7076807358857
+        ],
+        "window_320x40": [
+          1457.995436019286,
+          2116.78706594775
+        ],
+        "alpha_lo": 0.5022695719522473,
+        "alpha_hi": 1.0216778111147375,
+        "admissible": true,
+        "includes_alpha_0_constantCount": false,
+        "includes_alpha_0p5_interfaceLength": false,
+        "includes_alpha_1_constantFraction": true
+      },
+      {
+        "quantity": "1e-2",
+        "c_min": 0.99,
+        "persistence": 5,
+        "window_160x20": [
+          106.35152605853786,
+          265.4394045808261
+        ],
+        "window_320x40": [
+          8.080271265510815,
+          91.58043667914225
+        ],
+        "alpha_lo": -2.5189175090091886,
+        "alpha_hi": -0.10786469283683195,
+        "admissible": true,
+        "includes_alpha_0_constantCount": false,
+        "includes_alpha_0p5_interfaceLength": false,
+        "includes_alpha_1_constantFraction": false
+      },
+      {
+        "quantity": "Neff",
+        "c_min": 0.99,
+        "persistence": 5,
+        "window_160x20": [
+          87.04691382449533,
+          118.64762371775116
+        ],
+        "window_320x40": [
+          74.68546402917598,
+          93.7403030338615
+        ],
+        "alpha_lo": -0.3338919107700478,
+        "alpha_hi": 0.053438154690466796,
+        "admissible": true,
+        "includes_alpha_0_constantCount": true,
+        "includes_alpha_0p5_interfaceLength": false,
+        "includes_alpha_1_constantFraction": false
+      },
+      {
+        "quantity": "1e-4",
+        "c_min": 0.99,
+        "persistence": 10,
+        "window_160x20": [
+          995.6747860865411,
+          1061.7413387690942
+        ],
+        "window_320x40": [
+          2841.57286370671,
+          3628.3341615527197
+        ],
+        "alpha_lo": 0.7101286848264242,
+        "alpha_hi": 0.9327804146504712,
+        "admissible": true,
+        "includes_alpha_0_constantCount": false,
+        "includes_alpha_0p5_interfaceLength": false,
+        "includes_alpha_1_constantFraction": false
+      },
+      {
+        "quantity": "epsRMS",
+        "c_min": 0.99,
+        "persistence": 10,
+        "window_160x20": [
+          641.3470774595899,
+          763.2560308922069
+        ],
+        "window_320x40": [
+          1645.7532406754806,
+          2308.57555403898
+        ],
+        "alpha_lo": 0.5542545247493617,
+        "alpha_hi": 0.9239128666202778,
+        "admissible": true,
+        "includes_alpha_0_constantCount": false,
+        "includes_alpha_0p5_interfaceLength": false,
+        "includes_alpha_1_constantFraction": false
+      },
+      {
+        "quantity": "1e-3",
+        "c_min": 0.99,
+        "persistence": 10,
+        "window_160x20": [
+          608.8137089143821,
+          754.4350186068176
+        ],
+        "window_320x40": [
+          1536.9299896301472,
+          2206.3194644126015
+        ],
+        "alpha_lo": 0.5132914502526195,
+        "alpha_hi": 0.9287844756219993,
+        "admissible": true,
+        "includes_alpha_0_constantCount": false,
+        "includes_alpha_0p5_interfaceLength": false,
+        "includes_alpha_1_constantFraction": false
+      },
+      {
+        "quantity": "1e-2",
+        "c_min": 0.99,
+        "persistence": 10,
+        "window_160x20": [
+          117.27730227078396,
+          284.4096895874683
+        ],
+        "window_320x40": [
+          16.10757895115828,
+          107.38464117830264
+        ],
+        "alpha_lo": -2.071079522948333,
+        "alpha_hi": -0.06356807891558859,
+        "admissible": true,
+        "includes_alpha_0_constantCount": false,
+        "includes_alpha_0p5_interfaceLength": false,
+        "includes_alpha_1_constantFraction": false
+      },
+      {
+        "quantity": "Neff",
+        "c_min": 0.99,
+        "persistence": 10,
+        "window_160x20": [
+          91.84028125454218,
+          151.46475587544495
+        ],
+        "window_320x40": [
+          91.9818550537269,
+          94.63209345761307
+        ],
+        "alpha_lo": -0.3597804676037022,
+        "alpha_hi": 0.021601240447647253,
+        "admissible": true,
+        "includes_alpha_0_constantCount": true,
+        "includes_alpha_0p5_interfaceLength": false,
+        "includes_alpha_1_constantFraction": false
+      },
+      {
+        "quantity": "1e-4",
+        "c_min": 0.99,
+        "persistence": 20,
+        "admissible": false,
+        "reason": "160x20 never admissible"
+      },
+      {
+        "quantity": "epsRMS",
+        "c_min": 0.99,
+        "persistence": 20,
+        "window_160x20": [
+          687.1297832009678,
+          831.2770968681812
+        ],
+        "window_320x40": [
+          1828.9296336366058,
+          2956.738264895613
+        ],
+        "alpha_lo": 0.5687991006837022,
+        "alpha_hi": 1.0526760086419016,
+        "admissible": true,
+        "includes_alpha_0_constantCount": false,
+        "includes_alpha_0p5_interfaceLength": false,
+        "includes_alpha_1_constantFraction": true
+      },
+      {
+        "quantity": "1e-3",
+        "c_min": 0.99,
+        "persistence": 20,
+        "window_160x20": [
+          656.1582595759775,
+          891.3782873558677
+        ],
+        "window_320x40": [
+          1733.7728137350073,
+          2882.6609453203655
+        ],
+        "alpha_lo": 0.4799025708435008,
+        "alpha_hi": 1.0676427158736337,
+        "admissible": true,
+        "includes_alpha_0_constantCount": false,
+        "includes_alpha_0p5_interfaceLength": true,
+        "includes_alpha_1_constantFraction": true
+      },
+      {
+        "quantity": "1e-2",
+        "c_min": 0.99,
+        "persistence": 20,
+        "window_160x20": [
+          122.09607802575556,
+          357.992862383015
+        ],
+        "window_320x40": [
+          48.44454362190086,
+          111.74472610628534
+        ],
+        "alpha_lo": -1.4427623682006514,
+        "alpha_hi": -0.0639050575288864,
+        "admissible": true,
+        "includes_alpha_0_constantCount": false,
+        "includes_alpha_0p5_interfaceLength": false,
+        "includes_alpha_1_constantFraction": false
+      },
+      {
+        "quantity": "Neff",
+        "c_min": 0.99,
+        "persistence": 20,
+        "window_160x20": [
+          95.18161942527564,
+          223.07128662125987
+        ],
+        "window_320x40": [
+          100.1638513569023,
+          112.2163529077159
+        ],
+        "alpha_lo": -0.5775714416226202,
+        "alpha_hi": 0.11876401219986758,
+        "admissible": true,
+        "includes_alpha_0_constantCount": true,
+        "includes_alpha_0p5_interfaceLength": false,
+        "includes_alpha_1_constantFraction": false
+      },
+      {
+        "quantity": "1e-4",
+        "c_min": 0.999,
+        "persistence": 5,
+        "admissible": false,
+        "reason": "160x20 never admissible"
+      },
+      {
+        "quantity": "epsRMS",
+        "c_min": 0.999,
+        "persistence": 5,
+        "admissible": false,
+        "reason": "160x20 never admissible"
+      },
+      {
+        "quantity": "1e-3",
+        "c_min": 0.999,
+        "persistence": 5,
+        "admissible": false,
+        "reason": "160x20 never admissible"
+      },
+      {
+        "quantity": "1e-2",
+        "c_min": 0.999,
+        "persistence": 5,
+        "window_160x20": [
+          106.35152605853786,
+          127.84616635781443
+        ],
+        "window_320x40": [
+          8.080271265510815,
+          19.91664652706212
+        ],
+        "alpha_lo": -1.9919306814134414,
+        "alpha_hi": -1.2083970381579898,
+        "admissible": true,
+        "includes_alpha_0_constantCount": false,
+        "includes_alpha_0p5_interfaceLength": false,
+        "includes_alpha_1_constantFraction": false
+      },
+      {
+        "quantity": "Neff",
+        "c_min": 0.999,
+        "persistence": 5,
+        "admissible": false,
+        "reason": "320x40 never admissible"
+      },
+      {
+        "quantity": "1e-4",
+        "c_min": 0.999,
+        "persistence": 10,
+        "admissible": false,
+        "reason": "160x20 never admissible"
+      },
+      {
+        "quantity": "epsRMS",
+        "c_min": 0.999,
+        "persistence": 10,
+        "window_160x20": [
+          641.3470774595899,
+          671.5168100180786
+        ],
+        "window_320x40": [
+          1645.7532406754806,
+          1738.0852320216623
+        ],
+        "alpha_lo": 0.6466263092606519,
+        "alpha_hi": 0.719160807397324,
+        "admissible": true,
+        "includes_alpha_0_constantCount": false,
+        "includes_alpha_0p5_interfaceLength": false,
+        "includes_alpha_1_constantFraction": false
+      },
+      {
+        "quantity": "1e-3",
+        "c_min": 0.999,
+        "persistence": 10,
+        "window_160x20": [
+          608.8137089143821,
+          638.5304705913676
+        ],
+        "window_320x40": [
+          1536.9299896301472,
+          1682.316338592249
+        ],
+        "alpha_lo": 0.633612038425191,
+        "alpha_hi": 0.7331881309042297,
+        "admissible": true,
+        "includes_alpha_0_constantCount": false,
+        "includes_alpha_0p5_interfaceLength": false,
+        "includes_alpha_1_constantFraction": false
+      },
+      {
+        "quantity": "1e-2",
+        "c_min": 0.999,
+        "persistence": 10,
+        "window_160x20": [
+          117.27730227078396,
+          133.86705385362285
+        ],
+        "window_320x40": [
+          16.10757895115828,
+          31.686405439792274
+        ],
+        "alpha_lo": -1.5274946850346096,
+        "alpha_hi": -0.9439939551725148,
+        "admissible": true,
+        "includes_alpha_0_constantCount": false,
+        "includes_alpha_0p5_interfaceLength": false,
+        "includes_alpha_1_constantFraction": false
+      },
+      {
+        "quantity": "Neff",
+        "c_min": 0.999,
+        "persistence": 10,
+        "admissible": false,
+        "reason": "320x40 never admissible"
+      },
+      {
+        "quantity": "1e-4",
+        "c_min": 0.999,
+        "persistence": 20,
+        "admissible": false,
+        "reason": "160x20 never admissible"
+      },
+      {
+        "quantity": "epsRMS",
+        "c_min": 0.999,
+        "persistence": 20,
+        "admissible": false,
+        "reason": "160x20 never admissible"
+      },
+      {
+        "quantity": "1e-3",
+        "c_min": 0.999,
+        "persistence": 20,
+        "window_160x20": [
+          656.1582595759775,
+          662.8934305108825
+        ],
+        "window_320x40": [
+          1733.7728137350073,
+          1869.4054463914767
+        ],
+        "alpha_lo": 0.6935330029050056,
+        "alpha_hi": 0.7552318875049743,
+        "admissible": true,
+        "includes_alpha_0_constantCount": false,
+        "includes_alpha_0p5_interfaceLength": false,
+        "includes_alpha_1_constantFraction": false
+      },
+      {
+        "quantity": "1e-2",
+        "c_min": 0.999,
+        "persistence": 20,
+        "window_160x20": [
+          122.09607802575556,
+          171.43458224749767
+        ],
+        "window_320x40": [
+          48.44454362190086,
+          89.18246388765805
+        ],
+        "alpha_lo": -0.91162603802541,
+        "alpha_hi": -0.22659244770679662,
+        "admissible": true,
+        "includes_alpha_0_constantCount": false,
+        "includes_alpha_0p5_interfaceLength": false,
+        "includes_alpha_1_constantFraction": false
+      },
+      {
+        "quantity": "Neff",
+        "c_min": 0.999,
+        "persistence": 20,
+        "admissible": false,
+        "reason": "320x40 never admissible"
+      }
+    ]
+  },
+  "predictive_correlation": {
+    "target": "remaining M_nd evolution at move=0.04, rem(k) = Mnd(k) - Mnd(final)",
+    "method": "Spearman rank correlation over the whole fixed-move trajectory",
+    "note": "Positive and large = statistic falls as the topology matures, WITHIN that mesh.",
+    "results": [
+      {
+        "statistic": "maxU",
+        "spearman_160x20": 0.06601897511859449,
+        "spearman_320x40": 0.6437942819038093
+      },
+      {
+        "statistic": "rmsU",
+        "spearman_160x20": 0.6182884893030581,
+        "spearman_320x40": 0.7822372259731599
+      },
+      {
+        "statistic": "Neff",
+        "spearman_160x20": 0.6185838036487729,
+        "spearman_320x40": 0.7434465759296968
+      },
+      {
+        "statistic": "phiEff",
+        "spearman_160x20": 0.6185838036487729,
+        "spearman_320x40": 0.7434465759296968
+      },
+      {
+        "statistic": "n>1e-4",
+        "spearman_160x20": 0.5430616180762711,
+        "spearman_320x40": 0.9791861222180537
+      },
+      {
+        "statistic": "n>epsRMS",
+        "spearman_160x20": 0.6803706554896416,
+        "spearman_320x40": 0.9900784424675103
+      },
+      {
+        "statistic": "n>1e-3",
+        "spearman_160x20": 0.6868689681850557,
+        "spearman_320x40": 0.9869118792764718
+      },
+      {
+        "statistic": "n>1e-2",
+        "spearman_160x20": 0.7380690143394815,
+        "spearman_320x40": 0.7829244107383788
+      },
+      {
+        "statistic": "frac>1e-4",
+        "spearman_160x20": 0.5430616180762711,
+        "spearman_320x40": 0.9791861222180537
+      },
+      {
+        "statistic": "frac>epsRMS",
+        "spearman_160x20": 0.6803706554896416,
+        "spearman_320x40": 0.9900784424675103
+      },
+      {
+        "statistic": "frac>1e-3",
+        "spearman_160x20": 0.6868689681850557,
+        "spearman_320x40": 0.9869118792764718
+      },
+      {
+        "statistic": "frac>1e-2",
+        "spearman_160x20": 0.7380690143394815,
+        "spearman_320x40": 0.7829244107383788
+      },
+      {
+        "statistic": "omega1_relRange_W10",
+        "spearman_160x20": 0.6172238576491103,
+        "spearman_320x40": 0.9225282511103966
+      }
+    ]
+  },
+  "omega1_as_maturity_proxy": {
+    "question": "does omega1 settling imply the topology has finished evolving?",
+    "results": [
+      {
+        "mesh": "160x20",
+        "fromIter": 78,
+        "toIter": 400,
+        "omega1_relChange": 0.0023342645346846875,
+        "Mnd_relChange": 0.0902743019388508,
+        "gray_relChange": 0.11475409836065566,
+        "ratio_Mnd_over_omega1": 38.67355246051624
+      },
+      {
+        "mesh": "320x40",
+        "fromIter": 129,
+        "toIter": 216,
+        "omega1_relChange": 0.003745174317693785,
+        "Mnd_relChange": 0.43360000784823116,
+        "gray_relChange": 0.41632170313424016,
+        "ratio_Mnd_over_omega1": 115.7756545001715
+      }
+    ]
+  },
+  "self_normalised_active_set": {
+    "definition": "s(k) = activeCount(k) / max_j activeCount(j)",
+    "finding": "the peak is reached at iteration 1 where essentially every element moves, so the peak is ~NE and this variant degenerates to the area fraction",
+    "results": [
+      {
+        "threshold": "1e-4",
+        "c_min": 0.95,
+        "peak_160x20": 3200.0,
+        "peak_320x40": 12800.0,
+        "peakFrac_160x20": 1.0,
+        "peakFrac_320x40": 1.0,
+        "window_160x20": [
+          0.3111483706520441,
+          0.4214797665265141
+        ],
+        "window_320x40": [
+          0.22199787997708673,
+          0.3133820036903231
+        ],
+        "overlap": [
+          0.3111483706520441,
+          0.3133820036903231
+        ],
+        "admissible": true
+      },
+      {
+        "threshold": "1e-4",
+        "c_min": 0.99,
+        "peak_160x20": 3200.0,
+        "peak_320x40": 12800.0,
+        "peakFrac_160x20": 1.0,
+        "peakFrac_320x40": 1.0,
+        "window_160x20": [
+          0.3111483706520441,
+          0.331794168365342
+        ],
+        "window_320x40": [
+          0.22199787997708673,
+          0.28346360637130624
+        ],
+        "overlap": null,
+        "admissible": false
+      },
+      {
+        "threshold": "epsRMS",
+        "c_min": 0.95,
+        "peak_160x20": 3184.0,
+        "peak_320x40": 12676.0,
+        "peakFrac_160x20": 0.995,
+        "peakFrac_320x40": 0.9903125,
+        "window_160x20": [
+          0.20142810221720786,
+          0.37836319965321835
+        ],
+        "window_320x40": [
+          0.12983222157427268,
+          0.2620620893306259
+        ],
+        "overlap": [
+          0.20142810221720786,
+          0.2620620893306259
+        ],
+        "admissible": true
+      },
+      {
+        "threshold": "epsRMS",
+        "c_min": 0.99,
+        "peak_160x20": 3184.0,
+        "peak_320x40": 12676.0,
+        "peakFrac_160x20": 0.995,
+        "peakFrac_320x40": 0.9903125,
+        "window_160x20": [
+          0.20142810221720786,
+          0.23971609010433637
+        ],
+        "window_320x40": [
+          0.12983222157427268,
+          0.18212176980427422
+        ],
+        "overlap": null,
+        "admissible": false
+      },
+      {
+        "threshold": "1e-3",
+        "c_min": 0.95,
+        "peak_160x20": 3184.0,
+        "peak_320x40": 12664.0,
+        "peakFrac_160x20": 0.995,
+        "peakFrac_320x40": 0.989375,
+        "window_160x20": [
+          0.19121033571431598,
+          0.3751707370151914
+        ],
+        "window_320x40": [
+          0.12136212805039065,
+          0.2558145253871542
+        ],
+        "overlap": [
+          0.19121033571431598,
+          0.2558145253871542
+        ],
+        "admissible": true
+      },
+      {
+        "threshold": "1e-3",
+        "c_min": 0.99,
+        "peak_160x20": 3184.0,
+        "peak_320x40": 12664.0,
+        "peakFrac_160x20": 0.995,
+        "peakFrac_320x40": 0.989375,
+        "window_160x20": [
+          0.19121033571431598,
+          0.2369456716729955
+        ],
+        "window_320x40": [
+          0.12136212805039065,
+          0.17421979346277647
+        ],
+        "overlap": null,
+        "admissible": false
+      },
+      {
+        "threshold": "1e-2",
+        "c_min": 0.95,
+        "peak_160x20": 3060.0,
+        "peak_320x40": 11456.0,
+        "peakFrac_160x20": 0.95625,
+        "peakFrac_320x40": 0.895,
+        "window_160x20": [
+          0.038325915774765996,
+          0.1320128419475317
+        ],
+        "window_320x40": [
+          0.0014060386654293194,
+          0.009373659320731725
+        ],
+        "overlap": null,
+        "admissible": false
+      },
+      {
+        "threshold": "1e-2",
+        "c_min": 0.99,
+        "peak_160x20": 3060.0,
+        "peak_320x40": 11456.0,
+        "peakFrac_160x20": 0.95625,
+        "peakFrac_320x40": 0.895,
+        "window_160x20": [
+          0.038325915774765996,
+          0.0929443430024406
+        ],
+        "window_320x40": [
+          0.0014060386654293194,
+          0.009373659320731725
+        ],
+        "overlap": null,
+        "admissible": false
+      }
+    ]
+  },
+  "markov_cap_tightness": {
+    "statement": "frac(u>=t) <= rmsU^2/t^2 is exact; this is how loose it is in practice",
+    "comparedAgainst": "exact frac(|drho|>1e-2) from the move_stop runs",
+    "n": 612,
+    "median": 9.411764705882353,
+    "p10": 3.8408749741056627,
+    "p90": 13.069051590482621,
+    "min": 1.0457516339869282,
+    "max": 35.89763137513548
+  },
+  "mesh_collapse": {
+    "method": "match the two fixed-move runs at equal M_nd maturity, then find the alpha minimising the RMS log-discrepancy of activeCount/NE^alpha between meshes",
+    "completionGrid": [
+      0.5,
+      0.999
+    ],
+    "nGridPoints": 200,
+    "caveat": "ONE exponent fitted to TWO meshes. The band width is fit sensitivity, NOT statistical confidence: two points cannot validate a power law. A third mesh is required and that needs an optimisation run, which this task forbids.",
+    "results": [
+      {
+        "quantity": "1e-4",
+        "best_alpha": 0.96,
+        "best_residual": 0.1698772979018238,
+        "alpha_band_1p5x": [
+          0.8240000000000001,
+          1.088
+        ],
+        "residual_at_alpha0_constantCount": 1.3386891148669169,
+        "residual_at_alpha0p5_interface": 0.657056074439645,
+        "residual_at_alpha1_constantFraction": 0.1796186279017469,
+        "collapses": true
+      },
+      {
+        "quantity": "epsRMS",
+        "best_alpha": 0.8320000000000001,
+        "best_residual": 0.11544936246158019,
+        "alpha_band_1p5x": [
+          0.736,
+          0.9200000000000002
+        ],
+        "residual_at_alpha0_constantCount": 1.1542136409249066,
+        "residual_at_alpha0p5_interface": 0.4696720441916259,
+        "residual_at_alpha1_constantFraction": 0.2643493089258131,
+        "collapses": true
+      },
+      {
+        "quantity": "1e-3",
+        "best_alpha": 0.808,
+        "best_residual": 0.12285430322767603,
+        "alpha_band_1p5x": [
+          0.712,
+          0.9040000000000001
+        ],
+        "residual_at_alpha0_constantCount": 1.1304676578345303,
+        "residual_at_alpha0p5_interface": 0.4477977835832949,
+        "residual_at_alpha1_constantFraction": 0.2898182402657518,
+        "collapses": true
+      },
+      {
+        "quantity": "1e-2",
+        "best_alpha": -0.192,
+        "best_residual": 0.8974580164304351,
+        "alpha_band_1p5x": [
+          -0.2,
+          0.528
+        ],
+        "residual_at_alpha0_constantCount": 0.9363143603366489,
+        "residual_at_alpha0p5_interface": 1.3142252612532177,
+        "residual_at_alpha1_constantFraction": 1.8811160307370598,
+        "collapses": false
+      },
+      {
+        "quantity": "Neff",
+        "best_alpha": -0.2,
+        "best_residual": 0.7803813135107862,
+        "alpha_band_1p5x": [
+          -0.2,
+          0.26400000000000007
+        ],
+        "residual_at_alpha0_constantCount": 0.9107951697481393,
+        "residual_at_alpha0p5_interface": 1.4330262306117532,
+        "residual_at_alpha1_constantFraction": 2.0587584952690587,
+        "collapses": false
+      }
+    ]
+  },
+  "schema": "olhoff_move_activity_offline/1",
+  "task": "offline characterisation of the design-activity signal; NO optimisation run"
+}
