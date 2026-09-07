@@ -1,0 +1,13 @@
+# The move/stop diagnostic's figures, per-iteration data and hash manifest are
+# EVIDENCE the report cites, not scratch output.  The repository-wide ignores
+# for *.png, *.csv and *.txt are right for generated plots and scratch data
+# elsewhere; inside this tree those files are the record, so they are
+# re-included here and nowhere else.
+!*.png
+!*.csv
+!*.txt
+
+# Raw solver state stays ignored: 37 MB of per-iteration density history that is
+# fully reproducible from code/ and already summarised in the committed CSVs and
+# METRICS.json.
+*.mat

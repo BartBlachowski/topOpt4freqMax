@@ -1,0 +1,509 @@
+{
+  "schema": "olhoff_move_stop_diagnostic/1",
+  "generated": "2026-09-07T11:39:43+02:00",
+  "implementation": "analysis/OlhoffCurrent",
+  "production_preset": "duOlhoffFixedPenaltySensitivityFiltered",
+  "matlab": "25.2.0.3042426 (R2025b) Update 1",
+  "threads": 10,
+  "source_tree_sha256": "c1455374d5f8e256c2678a679a5fc7955d9a8a77c410a41cd30f1c189910208c",
+  "main_repo_commit": "a19d13eccc8dfe6487145f6c10ad6f8e024be525",
+  "runs": [
+    {
+      "key": "baseline_160x20",
+      "arm": "baseline",
+      "label": "Production: move ladder",
+      "mesh": [
+        160,
+        20
+      ],
+      "NE": 3200,
+      "status": "NATIVE_CONVERGED",
+      "converged": true,
+      "nOuter": 91,
+      "innerTotal": 2241,
+      "omega1": 169.49522702153845,
+      "omega2": 171.95999591815919,
+      "gap12": 0.014765538900412659,
+      "volume": 0.49999900877797954,
+      "Mnd_pct": 13.402499279526742,
+      "gray_fraction": 0.149375,
+      "mid_fraction": 0.025,
+      "tolOuter": 0.05,
+      "epsRMS": 0.00088388347648318442,
+      "l2_final": 0.02358256321761374,
+      "l2_over_tol": 0.47165126435227478,
+      "maxAbs_final": 0.0058104442373706419,
+      "nActive_final": [
+        120,
+        1806,
+        98,
+        0
+      ],
+      "wall_s": 125.47670220833334,
+      "cfgHash": "72d20df9c1f0400aab218b4747d84a244e6482d0cfc0f38dd5b1407759fce8bf"
+    },
+    {
+      "key": "baseline_320x40",
+      "arm": "baseline",
+      "label": "Production: move ladder",
+      "mesh": [
+        320,
+        40
+      ],
+      "NE": 12800,
+      "status": "NATIVE_CONVERGED",
+      "converged": true,
+      "nOuter": 131,
+      "innerTotal": 2614,
+      "omega1": 165.95078925220545,
+      "omega2": 183.76971226824654,
+      "gap12": 0.10674152016769037,
+      "volume": 0.49999913861781514,
+      "Mnd_pct": 23.359567952074254,
+      "gray_fraction": 0.26375,
+      "mid_fraction": 0.095625,
+      "tolOuter": 0.1,
+      "epsRMS": 0.00088388347648318442,
+      "l2_final": 0.090080505073909092,
+      "l2_over_tol": 0.9008050507390909,
+      "maxAbs_final": 0.0081885774212143,
+      "nActive_final": [
+        2016,
+        4020,
+        1724,
+        0
+      ],
+      "wall_s": 387.95770145833336,
+      "cfgHash": "cd4410b66db9388b7f7ad733a291219dddca6c002e0daacdbb28e0ec79dd6d7d"
+    },
+    {
+      "key": "fixedmove_160x20",
+      "arm": "fixedmove",
+      "label": "Diagnostic: fixed move 0.04",
+      "mesh": [
+        160,
+        20
+      ],
+      "NE": 3200,
+      "status": "CAP_HIT",
+      "converged": false,
+      "nOuter": 400,
+      "innerTotal": 11429,
+      "omega1": 169.56039582350002,
+      "omega2": 170.37254402238736,
+      "gap12": 0.0057429077871229382,
+      "volume": 0.49994712273350683,
+      "Mnd_pct": 12.275432989782246,
+      "gray_fraction": 0.135,
+      "mid_fraction": 0.018125,
+      "tolOuter": 0.05,
+      "epsRMS": 0.00088388347648318442,
+      "l2_final": 0.39377799256344603,
+      "l2_over_tol": 7.87555985126892,
+      "maxAbs_final": 0.039982714322001581,
+      "nActive_final": [
+        584,
+        981,
+        550,
+        112
+      ],
+      "wall_s": 711.74391816666662,
+      "cfgHash": "9072be48297bc689263fd983a11808fa1c9635a50b36caa41bc3ef420fb77949"
+    },
+    {
+      "key": "fixedmove_320x40",
+      "arm": "fixedmove",
+      "label": "Diagnostic: fixed move 0.04",
+      "mesh": [
+        320,
+        40
+      ],
+      "NE": 12800,
+      "status": "NATIVE_CONVERGED",
+      "converged": true,
+      "nOuter": 216,
+      "innerTotal": 4070,
+      "omega1": 166.53107093432882,
+      "omega2": 201.4923380205818,
+      "gap12": 0.20941399176800357,
+      "volume": 0.4999995810753064,
+      "Mnd_pct": 13.282439317279476,
+      "gray_fraction": 0.15421875,
+      "mid_fraction": 0.03140625,
+      "tolOuter": 0.1,
+      "epsRMS": 0.00088388347648318442,
+      "l2_final": 0.097132002796251435,
+      "l2_over_tol": 0.97132002796251427,
+      "maxAbs_final": 0.0080477992337927226,
+      "nActive_final": [
+        1428,
+        2734,
+        1322,
+        0
+      ],
+      "wall_s": 695.123735,
+      "cfgHash": "55a2baf6fa9b3c92ea4ff272356ef57b04c0e1256593b25868e10ad4c476bab7"
+    }
+  ],
+  "transitions": [
+    {
+      "key": "baseline_160x20",
+      "mesh": [
+        160,
+        20
+      ],
+      "arm": "baseline",
+      "events": [
+        {
+          "iter": 79,
+          "moveBefore": 0.04,
+          "moveAfter": 0.02,
+          "moveFactor": 2,
+          "l2Before": 0.52346469273850749,
+          "l2After": 0.28477092440928004,
+          "l2Factor": 1.8381957140616318,
+          "rmsBefore": 0.0092536358486782783,
+          "rmsAfter": 0.0050340862933640909,
+          "maxBefore": 0.039989550965379948,
+          "maxAfter": 0.019976755468272381,
+          "maxFactor": 2.0018040982126664,
+          "MndBefore": 13.493554173465853,
+          "MndAfter": 13.443465503429138,
+          "MndRelChange": -0.00371204423925689,
+          "omega1Before": 169.0854901123304,
+          "omega1After": 169.27619588495094,
+          "omega1RelChange": 0.0011278659836147897,
+          "volBefore": 0.4999900767996367,
+          "volAfter": 0.49999711614741466,
+          "stopRawAfter": false
+        },
+        {
+          "iter": 90,
+          "moveBefore": 0.02,
+          "moveAfter": 0.01,
+          "moveFactor": 2,
+          "l2Before": 0.11244045948760327,
+          "l2After": 0.0409357711245758,
+          "l2Factor": 2.7467531793996089,
+          "rmsBefore": 0.0019876852845853886,
+          "rmsAfter": 0.00072364903388220014,
+          "maxBefore": 0.019941782485052798,
+          "maxAfter": 0.0092582827351230315,
+          "maxFactor": 2.153939672786175,
+          "MndBefore": 13.360863952068696,
+          "MndAfter": 13.385685607444028,
+          "MndRelChange": 0.0018577881987555743,
+          "omega1Before": 169.3745584543463,
+          "omega1After": 169.52346274359616,
+          "omega1RelChange": 0.00087914200697380464,
+          "volBefore": 0.4999948682675816,
+          "volAfter": 0.49999820964088681,
+          "stopRawAfter": true
+        }
+      ],
+      "stopIter": 91,
+      "lastDescent": 90,
+      "gapToStop": 1
+    },
+    {
+      "key": "baseline_320x40",
+      "mesh": [
+        320,
+        40
+      ],
+      "arm": "baseline",
+      "events": {
+        "iter": 130,
+        "moveBefore": 0.04,
+        "moveAfter": 0.02,
+        "moveFactor": 2,
+        "l2Before": 0.26904733092957739,
+        "l2After": 0.0928280396026779,
+        "l2Factor": 2.8983411917471531,
+        "rmsBefore": 0.0023780649020055662,
+        "rmsAfter": 0.00082049170359133658,
+        "maxBefore": 0.025882676674716516,
+        "maxAfter": 0.0077535720057979188,
+        "maxFactor": 3.3381616441250723,
+        "MndBefore": 23.450634712792205,
+        "MndAfter": 23.40095112134988,
+        "MndRelChange": -0.0021186459151667321,
+        "omega1Before": 165.91884450645281,
+        "omega1After": 165.94330370587352,
+        "omega1RelChange": 0.000147416645128293,
+        "volBefore": 0.49999715071745043,
+        "volAfter": 0.49999908528312637,
+        "stopRawAfter": true
+      },
+      "stopIter": 131,
+      "lastDescent": 130,
+      "gapToStop": 1
+    },
+    {
+      "key": "fixedmove_160x20",
+      "mesh": [
+        160,
+        20
+      ],
+      "arm": "fixedmove",
+      "events": [],
+      "stopIter": 400,
+      "lastDescent": null,
+      "gapToStop": null
+    },
+    {
+      "key": "fixedmove_320x40",
+      "mesh": [
+        320,
+        40
+      ],
+      "arm": "fixedmove",
+      "events": [],
+      "stopIter": 216,
+      "lastDescent": null,
+      "gapToStop": null
+    }
+  ],
+  "activeSet": [
+    {
+      "key": "baseline_160x20",
+      "mesh": [
+        160,
+        20
+      ],
+      "arm": "baseline",
+      "NE": 3200,
+      "tau": [
+        0.00088388347648318442,
+        0.0001,
+        0.001,
+        0.01
+      ],
+      "nActiveFinal": [
+        120,
+        1806,
+        98,
+        0
+      ],
+      "fracActiveFinal": [
+        0.0375,
+        0.564375,
+        0.030625,
+        0
+      ],
+      "nActiveMedianLast10": [
+        516,
+        1103,
+        476,
+        30
+      ],
+      "rmsMeasuredFinal": 0.00041688475922337808,
+      "rmsPredictedFinal": 0.0019364916731037087,
+      "ratio": 0.21527836396797759
+    },
+    {
+      "key": "baseline_320x40",
+      "mesh": [
+        320,
+        40
+      ],
+      "arm": "baseline",
+      "NE": 12800,
+      "tau": [
+        0.00088388347648318442,
+        0.0001,
+        0.001,
+        0.01
+      ],
+      "nActiveFinal": [
+        2016,
+        4020,
+        1724,
+        0
+      ],
+      "fracActiveFinal": [
+        0.1575,
+        0.3140625,
+        0.1346875,
+        0
+      ],
+      "nActiveMedianLast10": [
+        3400,
+        4332,
+        3259,
+        120
+      ],
+      "rmsMeasuredFinal": 0.000796206699880879,
+      "rmsPredictedFinal": 0.0079372539331937723,
+      "ratio": 0.10031261524229745
+    },
+    {
+      "key": "fixedmove_160x20",
+      "mesh": [
+        160,
+        20
+      ],
+      "arm": "fixedmove",
+      "NE": 3200,
+      "tau": [
+        0.00088388347648318442,
+        0.0001,
+        0.001,
+        0.01
+      ],
+      "nActiveFinal": [
+        584,
+        981,
+        550,
+        112
+      ],
+      "fracActiveFinal": [
+        0.1825,
+        0.3065625,
+        0.171875,
+        0.035
+      ],
+      "nActiveMedianLast10": [
+        566.5,
+        968,
+        532,
+        111
+      ],
+      "rmsMeasuredFinal": 0.0069610772205909643,
+      "rmsPredictedFinal": 0.017088007490635063,
+      "ratio": 0.40736623180940923
+    },
+    {
+      "key": "fixedmove_320x40",
+      "mesh": [
+        320,
+        40
+      ],
+      "arm": "fixedmove",
+      "NE": 12800,
+      "tau": [
+        0.00088388347648318442,
+        0.0001,
+        0.001,
+        0.01
+      ],
+      "nActiveFinal": [
+        1428,
+        2734,
+        1322,
+        0
+      ],
+      "fracActiveFinal": [
+        0.1115625,
+        0.21359375,
+        0.10328125,
+        0
+      ],
+      "nActiveMedianLast10": [
+        1544,
+        2807,
+        1442,
+        4
+      ],
+      "rmsMeasuredFinal": 0.000858533723093251,
+      "rmsPredictedFinal": 0.013360389215887388,
+      "ratio": 0.0642596341484074
+    }
+  ],
+  "grayness": [
+    {
+      "mesh": [
+        160,
+        20
+      ],
+      "baselineMnd": 13.402499279526742,
+      "fixedMnd": 12.275432989782246,
+      "MndRelReduction": 0.084093739998641073,
+      "baselineGray": 0.149375,
+      "fixedGray": 0.135,
+      "baselineMid": 0.025,
+      "fixedMid": 0.018125,
+      "baselineOmega1": 169.49522702153845,
+      "fixedOmega1": 169.56039582350002,
+      "omega1RelChange": 0.00038448753458574186,
+      "baselineVol": 0.49999900877797954,
+      "fixedVol": 0.49994712273350683
+    },
+    {
+      "mesh": [
+        320,
+        40
+      ],
+      "baselineMnd": 23.359567952074254,
+      "fixedMnd": 13.282439317279476,
+      "MndRelReduction": 0.43139190996466875,
+      "baselineGray": 0.26375,
+      "fixedGray": 0.15421875,
+      "baselineMid": 0.095625,
+      "fixedMid": 0.03140625,
+      "baselineOmega1": 165.95078925220545,
+      "fixedOmega1": 166.53107093432882,
+      "omega1RelChange": 0.0034967093843794941,
+      "baselineVol": 0.49999913861781514,
+      "fixedVol": 0.4999995810753064
+    }
+  ],
+  "stability": [
+    {
+      "key": "baseline_160x20",
+      "status": "NATIVE_CONVERGED",
+      "omega1RelRangeLast25": 0.0028181063067772645,
+      "MndRelRangeLast25": 0.1287331722801848,
+      "maxAbsLast25": 0.03999002516238629,
+      "l2Last": 0.02358256321761374,
+      "tolOuter": 0.05,
+      "l2OverTol": 0.47165126435227478,
+      "boundSaturationFinal": 0.58104442373706422,
+      "boundSaturationMeanLast25": 0.97827361408030811,
+      "MndSlopeLast30": -0.10200946936767319,
+      "omega1SlopeLast30": 0.018751961789494391
+    },
+    {
+      "key": "baseline_320x40",
+      "status": "NATIVE_CONVERGED",
+      "omega1RelRangeLast25": 0.0061852026761074885,
+      "MndRelRangeLast25": 0.14071202017354092,
+      "maxAbsLast25": 0.038326329552430406,
+      "l2Last": 0.090080505073909092,
+      "tolOuter": 0.1,
+      "l2OverTol": 0.9008050507390909,
+      "boundSaturationFinal": 0.409428871060715,
+      "boundSaturationMeanLast25": 0.779735843381533,
+      "MndSlopeLast30": -0.16036088265226886,
+      "omega1SlopeLast30": 0.049128918820420628
+    },
+    {
+      "key": "fixedmove_160x20",
+      "status": "CAP_HIT",
+      "omega1RelRangeLast25": 0.0013123028357290947,
+      "MndRelRangeLast25": 0.0068765865626747216,
+      "maxAbsLast25": 0.0399878338988156,
+      "l2Last": 0.39377799256344603,
+      "tolOuter": 0.05,
+      "l2OverTol": 7.87555985126892,
+      "boundSaturationFinal": 0.99956785805003945,
+      "boundSaturationMeanLast25": 0.99920119411616037,
+      "MndSlopeLast30": -0.0012970462730856139,
+      "omega1SlopeLast30": -0.0026751163242342679
+    },
+    {
+      "key": "fixedmove_320x40",
+      "status": "NATIVE_CONVERGED",
+      "omega1RelRangeLast25": 0.0011674172622679136,
+      "MndRelRangeLast25": 0.048174678995858151,
+      "maxAbsLast25": 0.0367744924725997,
+      "l2Last": 0.097132002796251435,
+      "tolOuter": 0.1,
+      "l2OverTol": 0.97132002796251427,
+      "boundSaturationFinal": 0.20119498084481807,
+      "boundSaturationMeanLast25": 0.44020188238801844,
+      "MndSlopeLast30": -0.030899611755896145,
+      "omega1SlopeLast30": -0.0073040465666101761
+    }
+  ]
+}
