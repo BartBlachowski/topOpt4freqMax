@@ -1,0 +1,261 @@
+{
+  "study": "two_branch_maturity_240",
+  "generated_utc": "2026-09-08T12:54:22Z",
+  "repo_head_at_task_start": "7154d8201e9defb06d0d758da866c3769c07179a",
+  "branch": "benchmark-methodology-r2",
+  "impl_tree_sha256": "c1455374d5f8e256c2678a679a5fc7955d9a8a77c410a41cd30f1c189910208c",
+  "impl_tree_reverified_after_run": true,
+  "matlab": "25.2.0.3042426 (R2025b) Update 1",
+  "threads": 1,
+  "preregistration_sha256": "62748225253f85f6a2fbc1bad35489a2c201cd45ee64ff279601003354b73abd",
+  "preregistration_frozen_utc": "2026-09-08T12:04:53Z",
+  "withheld_discipline": "No 240x30 numeric content opened before the freeze; only filenames and the mesh-determined stop.tolerance (0.075).",
+  "scientific_runs_executed": 1,
+  "solver_copies": 0,
+  "production_files_modified": 0,
+  "runD": {
+    "mesh": "240x30",
+    "policy": "fixed move 0.04, unstopped",
+    "cap": 1200,
+    "nOuter": 1200,
+    "status": "CAP_HIT",
+    "omega1": 167.013409434,
+    "Mnd_final": 13.4507,
+    "wall_s": 2387,
+    "nativeStopWouldFireAt": 147,
+    "betaStallFirst": 92,
+    "cfgHash": "3a4653bd2c874c7b014d0fc330ccb5aa0378a5238031ac9e946b451270fd2bb6"
+  },
+  "result": {
+    "branchA": null,
+    "branchB": 187,
+    "event": 187,
+    "branch": "B",
+    "remUseful_pct": -0.711,
+    "postRelImp_pct": 0.029,
+    "tail": 1013,
+    "boundFrac": 0.0,
+    "criteria_P1_P6_all_pass": true
+  },
+  "union_coverage": {
+    "160x20": "A@83",
+    "240x30": "B@187",
+    "320x40": "A@255",
+    "400x50": "B@369"
+  },
+  "verdicts": [
+    "TWO_BRANCH_MATURITY_HYPOTHESIS_CONFIRMED",
+    "TWO_BRANCH_CONTROLLER_PREREGISTRATION_JUSTIFIED",
+    "KEEP_CURRENT_MOVE_POLICY_PENDING_REVIEW",
+    "NINE_MESH_PERFORMANCE_CAMPAIGN_BLOCKED"
+  ],
+  "qualifications": [
+    "preregistered branch prediction was wrong (predicted A@159, got B@187)",
+    "Branch A blind to low-amplitude cancellation; never fired at 240x30 despite cancelling endpoint",
+    "new pathway observed: converge coherently then re-excite",
+    "160x20 remains weak: 14.19% relative M_nd improvement still available at its event"
+  ],
+  "retention_note": "runD_240x30.mat is hashed here and in FINAL_SHA256.txt; it does not exist only in an unmanifested ignored path.",
+  "inputs": [
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/fixedmove_400_dynamics/evidence/fm_analysis.mat",
+      "sha256": "b0bdd1a20efd3a8aa826c05b5b3ea19abd756b672cb1cc655d0fab4490da77f5",
+      "bytes": 345220483,
+      "role": "INPUT: preceding analysis object (160/320/400 numbers)"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/dynamical_regime/runs/runB_320x40.mat",
+      "sha256": "196ce8c317648dd4121d81b2237e6bb7cce1813dcc8fe5812ca1c5e405737832",
+      "bytes": 98159344,
+      "role": "INPUT: 320x40 extended fixed move"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/fixedmove_400_dynamics/runs/runC_400x50.mat",
+      "sha256": "31bc06c5a0bd374e9105379ed930d20d4137cf958a8815482bc7eb0ee64ec7d0",
+      "bytes": 154617059,
+      "role": "INPUT: 400x50 fixed move"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/dynamical_regime/scripts/dr_telemetry.m",
+      "sha256": "5f646f9c0751e3e1ff3edab129dea28f1d4c94ba48c2051f88729d8dfc11f491",
+      "bytes": 4867,
+      "role": "INPUT: frozen dynamical definitions (called by reference)"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/dynamical_regime/scripts/dr_dyn.m",
+      "sha256": "77b466187065487a9fb47962b4606ded4ccf6182a06560731158fb7301e63c3d",
+      "bytes": 2483,
+      "role": "INPUT: frozen dynamical definitions (called by reference)"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/dynamical_regime/scripts/dr_classify.m",
+      "sha256": "5727b117ba63e646d52924d9e62fd69c933fc8ae186d4c53f2fff1210e625af5",
+      "bytes": 1324,
+      "role": "INPUT: frozen regime classifier (called by reference)"
+    }
+  ],
+  "outputs": [
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_maturity_240/CROSS_MESH_ANALYSIS.md",
+      "sha256": "09a1c62c4f9f2bc63d915b36b1ca2120d84cc748833400247bd1c419c4594c18",
+      "bytes": 6798,
+      "role": "OUTPUT"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_maturity_240/DATA_INVENTORY.md",
+      "sha256": "fbfd2512198ce743c499c7cec8855254b50b02552f3f8f2c06a6429b0b1350d6",
+      "bytes": 5050,
+      "role": "OUTPUT"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_maturity_240/METRICS.json",
+      "sha256": "fbf7433e2efeba0edb4f793c19b2529070762f452a785cef1b7d5192555eb7b1",
+      "bytes": 7517,
+      "role": "OUTPUT"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_maturity_240/PREREGISTRATION.md",
+      "sha256": "62748225253f85f6a2fbc1bad35489a2c201cd45ee64ff279601003354b73abd",
+      "bytes": 13696,
+      "role": "OUTPUT"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_maturity_240/PROVENANCE.md",
+      "sha256": "d5ba02928eb679977a65f0ce0b5ede310c073fe3a1fdebfa787047aefcbc4cea",
+      "bytes": 4989,
+      "role": "OUTPUT"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_maturity_240/REPORT.md",
+      "sha256": "5adc763ccc536fca4feadc2994a5001a63214ef1a9a762a919c6d961ff6e2ae2",
+      "bytes": 13759,
+      "role": "OUTPUT"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_maturity_240/TWO_BRANCH_ANALYSIS.md",
+      "sha256": "2fbce88771c09a6eef84d7ec8d45e3893e7124c49dc92a087d63a3cb25528d34",
+      "bytes": 9253,
+      "role": "OUTPUT"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_maturity_240/evidence/PREREGISTRATION.frozen",
+      "sha256": "b75adcb9c94b25c5e4c5521902d2d2b501ad16d76eaf14bcfdab8d48f4dd2483",
+      "bytes": 223,
+      "role": "OUTPUT"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_maturity_240/evidence/tb_analysis.mat",
+      "sha256": "a06a7faab3872278e17e4b6d6187e7877e954fa89d3db8485607a2f56f5409d0",
+      "bytes": 399877992,
+      "role": "OUTPUT"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_maturity_240/figures/F10_xmesh_event.png",
+      "sha256": "5f5b30152e1db5c0b0e1dc8ad9fdb383ae6b6c25c661cfa77ce5af7db6dbf75c",
+      "bytes": 43446,
+      "role": "OUTPUT"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_maturity_240/figures/F11_xmesh_useful.png",
+      "sha256": "ac5a7822d2116c4c98877690628b3ac3fc1a6375c6e46ed7438336947f92d683",
+      "bytes": 33324,
+      "role": "OUTPUT"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_maturity_240/figures/F12_union_diagram.png",
+      "sha256": "08393127368b098f00b0b12763fac2c54153c9f8eb2db3d442375241cf90260d",
+      "bytes": 71530,
+      "role": "OUTPUT"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_maturity_240/figures/F1_cos.png",
+      "sha256": "cda5b47445ddf732766df1fe0f0fe8bf2d834ef0ee813b6d9cbb82c7dace4089",
+      "bytes": 47427,
+      "role": "OUTPUT"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_maturity_240/figures/F2_netpath.png",
+      "sha256": "d797d6b8251c1482493e784cbdda4c98ed56a7914be3cb36793e2135cf62e4ec",
+      "bytes": 54472,
+      "role": "OUTPUT"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_maturity_240/figures/F3_amplitude.png",
+      "sha256": "b6c597f6b9b05d5cb73f1a45aeda0a27fcc69bb1cfa01434a5e2dbb1e25b2f30",
+      "bytes": 61168,
+      "role": "OUTPUT"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_maturity_240/figures/F4_Mnd.png",
+      "sha256": "4d6d97f5f64242eb1fcff5fec7dae057231cb28d257e2dd54694455cbf7c4428",
+      "bytes": 41341,
+      "role": "OUTPUT"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_maturity_240/figures/F5_omega1.png",
+      "sha256": "d6e54453dd8180691d0cad916a0a31d53567fd43ad4f33d7ff228c37cdad47ce",
+      "bytes": 35101,
+      "role": "OUTPUT"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_maturity_240/figures/F6_events.png",
+      "sha256": "47d3d5873109e87698ed035c6476d4c9400efd7abfb83ba9f9424dd4720bf988",
+      "bytes": 79959,
+      "role": "OUTPUT"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_maturity_240/figures/F7_F8_spatial.png",
+      "sha256": "f266618d2ef3c4539a9fd0c63867531c93601ca906a2a96f094cb69601491c2e",
+      "bytes": 38084,
+      "role": "OUTPUT"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_maturity_240/figures/F9_xmesh_endpoint.png",
+      "sha256": "bf34174c0f5b12838dcf0981b619dfeab4655de204ccb0ad5e739932d244f11e",
+      "bytes": 39301,
+      "role": "OUTPUT"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_maturity_240/scripts/tb_analyze.m",
+      "sha256": "6708167db12fea3926569e29ccc17845cd0b0c85055526955c454da698a142e6",
+      "bytes": 4196,
+      "role": "OUTPUT"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_maturity_240/scripts/tb_branches.m",
+      "sha256": "bc146572e3f1a7928914ea556a2f892ad3081d8037c7ec858c50d7ca7a06f3c2",
+      "bytes": 1817,
+      "role": "OUTPUT"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_maturity_240/scripts/tb_config.m",
+      "sha256": "339a11a37ea72d714c0b39c01ed67201fba75f183846d5abdc634d3ae78d828c",
+      "bytes": 1486,
+      "role": "OUTPUT"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_maturity_240/scripts/tb_figures.m",
+      "sha256": "6d39622f1ba1a62cf69d27055cb68d217b7aacad70dee4b8e4a5969ea367a774",
+      "bytes": 6331,
+      "role": "OUTPUT"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_maturity_240/scripts/tb_metrics.m",
+      "sha256": "8000f363481306d051ded35316e8621786be92dc923e277de814dc1c341807e7",
+      "bytes": 2034,
+      "role": "OUTPUT"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_maturity_240/scripts/tb_run.m",
+      "sha256": "26451075b64b12d0bb1ce6eeb52561fd90aeec59f486996235f4fa7716adeb9a",
+      "bytes": 4360,
+      "role": "OUTPUT"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_maturity_240/runs/runD_240x30.mat",
+      "sha256": "8cd55994e10c97037198172fe1271a9d7ae91e4cb32da553de3dd7fe9aee7e80",
+      "bytes": 54084856,
+      "role": "REQUIRED RAW TRAJECTORY"
+    }
+  ]
+}

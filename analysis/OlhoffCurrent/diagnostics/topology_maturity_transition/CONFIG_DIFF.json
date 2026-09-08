@@ -1,0 +1,31 @@
+{
+  "note": "No causal arms were run, so there is no P-vs-T configuration diff to report.",
+  "phase_reached": "A",
+  "terminal_verdict": "TOPOLOGY_MATURITY_SIGNAL_NOT_IDENTIFIED",
+  "arms_defined": [],
+  "arms_executed": [],
+  "solver_runs_executed": 0,
+  "production_config_fields_changed": [],
+  "impl_tree_sha256_before": "c1455374d5f8e256c2678a679a5fc7955d9a8a77c410a41cd30f1c189910208c",
+  "impl_tree_sha256_after": "c1455374d5f8e256c2678a679a5fc7955d9a8a77c410a41cd30f1c189910208c",
+  "impl_tree_unchanged": true,
+  "presets_added": [],
+  "presets_modified": [],
+  "schema_fields_added": [],
+  "hard_scientific_lock_respected": {
+    "p": "unchanged (3, fixed)",
+    "mass_interpolation": "unchanged (eq4b)",
+    "q": "unchanged (1)",
+    "sensitivity_filter": "unchanged",
+    "filter_radius_R": "unchanged (0.06*b)",
+    "projection": "unchanged (OFF)",
+    "multiplicity_treatment": "unchanged (fixed 2-mode)",
+    "MMA_variant": "unchanged (published Svanberg)",
+    "FE_formulation": "unchanged",
+    "eigensolver": "unchanged",
+    "objective": "unchanged",
+    "volume_constraint": "unchanged",
+    "move_levels": "unchanged ([0.04, 0.02, 0.01, 0.005])",
+    "move_transition_trigger": "unchanged (boundVariable stall) -- NOT replaced"
+  }
+}

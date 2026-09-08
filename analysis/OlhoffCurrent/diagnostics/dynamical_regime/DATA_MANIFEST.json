@@ -1,0 +1,276 @@
+{
+  "study": "dynamical_regime",
+  "generated_utc": "2026-09-08T09:07:48Z",
+  "repo_head_at_task_start": "7154d8201e9defb06d0d758da866c3769c07179a",
+  "branch": "benchmark-methodology-r2",
+  "impl_tree_sha256": "c1455374d5f8e256c2678a679a5fc7955d9a8a77c410a41cd30f1c189910208c",
+  "impl_tree_reverified_after_runs": true,
+  "matlab": "25.2.0.3042426 (R2025b) Update 1",
+  "threads": 1,
+  "preregistration_sha256": "2ac361e769fe87ce458a4668840174a53de01de508da6b802c257982cab974b3",
+  "preregistration_frozen_utc": "2026-09-08T07:50:04Z",
+  "scientific_runs_executed": 2,
+  "solver_copies": 0,
+  "production_files_modified": 0,
+  "runs": {
+    "A": {
+      "mesh": "400x50",
+      "policy": "production",
+      "cap": 400,
+      "nOuter": 139,
+      "status": "CONVERGED",
+      "omega1": 162.888779843,
+      "Mnd_final": 32.3283,
+      "wall_s": 640,
+      "cfgHash": "044d50a496cb64d43ed4bf75a6a7976a6726cca6feaf65e0b911a57e4593969c"
+    },
+    "B": {
+      "mesh": "320x40",
+      "policy": "fixed move 0.04, unstopped",
+      "cap": 1200,
+      "nOuter": 1200,
+      "status": "CAP_HIT",
+      "omega1": 166.315388525,
+      "Mnd_final": 13.5242,
+      "wall_s": 4133,
+      "cfgHash": "4d49b0abf33edf77610ae6f2c6076870e2aa7dcfeff09908dc0a3990b3250c3e"
+    }
+  },
+  "prefix_reproduction": {
+    "vs_fixedmove_320x40_1_216": "BITWISE",
+    "vs_armU_320x40_1_213": "BITWISE"
+  },
+  "verdicts": [
+    "DYNAMICAL_MATURITY_SIGNAL_NARROWED",
+    "MORE_DYNAMICAL_EVIDENCE_REQUIRED",
+    "KEEP_CURRENT_MOVE_POLICY_PENDING_REVIEW",
+    "NINE_MESH_PERFORMANCE_CAMPAIGN_BLOCKED"
+  ],
+  "retention_note": "Both required raw trajectories are hashed here and in FINAL_SHA256.txt; neither exists only in an unmanifested ignored path.",
+  "inputs": [
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/move_stop/runs/fixedmove_320x40.mat",
+      "sha256": "7175740945e81f6fe2e39fe1f4e5972d95b056f9d8cef7038c25b087ce7b76dd",
+      "bytes": 17794522,
+      "role": "INPUT (read-only)"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/move_transition/runs/armU_320x40.mat",
+      "sha256": "213ac81442dbfc15d186c7bb34966213359a9afb1ad7b612b0a703e0b82d49d5",
+      "bytes": 49578554,
+      "role": "INPUT (read-only)"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/move_transition/runs/armU_160x20.mat",
+      "sha256": "c1dbe7a9d302226847a94b15e09619b18b559d80a5baefb4eff409f3cc323053",
+      "bytes": 13086395,
+      "role": "INPUT (read-only)"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/move_transition/runs/armP_160x20.mat",
+      "sha256": "37ee282ec3f633cca7de16ee3370b794096a8851be4b835f2d9a63c2df684684",
+      "bytes": 12227549,
+      "role": "INPUT (read-only)"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/move_transition/runs/armP_320x40.mat",
+      "sha256": "0ddbfde7ce7082fd663bd1db45345d4f7ae8ad07696ef17068f3602800dde93d",
+      "bytes": 48815185,
+      "role": "INPUT (read-only)"
+    }
+  ],
+  "outputs": [
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/dynamical_regime/DATA_INVENTORY.md",
+      "sha256": "65fe0bd615830de74b117132ca71c335a141f455bcf737c9717274734ad993de",
+      "bytes": 4251,
+      "role": "OUTPUT"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/dynamical_regime/DYNAMICAL_ANALYSIS.md",
+      "sha256": "f3674381799a0c90af8f2bd31aa2a1e2eb56005e40ce2bfdb83824e6ce3cba27",
+      "bytes": 14237,
+      "role": "OUTPUT"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/dynamical_regime/METRICS.json",
+      "sha256": "6f8eb493a7869fe16046b6fe9b803f6124d0e364fde062aa72e27a94cb8f3f22",
+      "bytes": 12331,
+      "role": "OUTPUT"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/dynamical_regime/PREREGISTRATION.md",
+      "sha256": "2ac361e769fe87ce458a4668840174a53de01de508da6b802c257982cab974b3",
+      "bytes": 12323,
+      "role": "OUTPUT"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/dynamical_regime/PROVENANCE.md",
+      "sha256": "5afd125b341cbb43cedde86afe4aecbcc43df42bc9066db51888afe6124d3340",
+      "bytes": 5230,
+      "role": "OUTPUT"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/dynamical_regime/REPORT.md",
+      "sha256": "042ed35569a4e70cb1255c2508cc6c3f656f1c10aea6664ea20b5aeec4706ee5",
+      "bytes": 14090,
+      "role": "OUTPUT"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/dynamical_regime/evidence/PREREGISTRATION.frozen",
+      "sha256": "995d0fbfeec1158134d348a6c7bbacca7b2131dc2d98a1710f98a2b13446563a",
+      "bytes": 168,
+      "role": "OUTPUT"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/dynamical_regime/evidence/dr_analysis.mat",
+      "sha256": "bc9399ddda516ea8b039427da2f24da8e40311d5c8b9b9ca196177c3b08c90fe",
+      "bytes": 190303101,
+      "role": "OUTPUT"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/dynamical_regime/figures/F10_spatial_f320.png",
+      "sha256": "621cc66658995f4ac0a1fce108bf8ad709c94cfa59f133c7a915a0f646394416",
+      "bytes": 22123,
+      "role": "OUTPUT"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/dynamical_regime/figures/F11_spatial_p400.png",
+      "sha256": "e377f617f2d693f70ba7f90076d9bbec75d2d4b1f098b1db3d6aa5af15166043",
+      "bytes": 23649,
+      "role": "OUTPUT"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/dynamical_regime/figures/F12_matched_events.png",
+      "sha256": "945238c01edbcb77e0bc6304c07342ddbedf2301e8efc5f7f3cc4b95b46d1def",
+      "bytes": 62814,
+      "role": "OUTPUT"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/dynamical_regime/figures/F1_q2_f160.png",
+      "sha256": "7ded3c107e230ba94f4163bbf856e609df6c1be1c72fa43e3ed5985abba18c33",
+      "bytes": 61390,
+      "role": "OUTPUT"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/dynamical_regime/figures/F2_q2_f320.png",
+      "sha256": "6883e59a9ecce7145f9603d914ad9fa15c2b07eb2805c9f8001873bf7532efa8",
+      "bytes": 51731,
+      "role": "OUTPUT"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/dynamical_regime/figures/F3_q2_p400.png",
+      "sha256": "0fe619f6c6355538a09a9ece389a72a8ad9f458389dcc0f4bc4bb3df5ac8fdd4",
+      "bytes": 56422,
+      "role": "OUTPUT"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/dynamical_regime/figures/F4_costheta_all.png",
+      "sha256": "1de7a965701510a80a6783d8bb1abfad7d01eb499bbd4ad4c3e6ae385ff277c3",
+      "bytes": 79394,
+      "role": "OUTPUT"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/dynamical_regime/figures/F5_netratio_all.png",
+      "sha256": "0bca87f6087073af3ff1f42942cac29dde60d2c73e329b1283cc73dba15198aa",
+      "bytes": 109432,
+      "role": "OUTPUT"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/dynamical_regime/figures/F6_Mnd_events.png",
+      "sha256": "1ead52d83acbb3e860de7b19c57fc7fed306581ab7a3b8da29ec18648af34df4",
+      "bytes": 71506,
+      "role": "OUTPUT"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/dynamical_regime/figures/F7_omega1_events.png",
+      "sha256": "19664ff9ef7547dd2101edf9b9061d3320c38ff2a439bed9e1187dd3e3ddb9e1",
+      "bytes": 67409,
+      "role": "OUTPUT"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/dynamical_regime/figures/F8_move_events.png",
+      "sha256": "ae313a08fa5a7b503b44ab3baf66274d7d237844103db5946722eb445eb22ca1",
+      "bytes": 73863,
+      "role": "OUTPUT"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/dynamical_regime/figures/F9_spatial_f160.png",
+      "sha256": "809594d1710c810d83c0ecb7dcbb9c90950f77b3a493910de0c833ac8303d422",
+      "bytes": 19638,
+      "role": "OUTPUT"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/dynamical_regime/scripts/dr_analyze.m",
+      "sha256": "9b5db79dcfbfc6070ff1167aa89d31208b8c5273e54fd879c676a67402d188bb",
+      "bytes": 3670,
+      "role": "OUTPUT"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/dynamical_regime/scripts/dr_classify.m",
+      "sha256": "5727b117ba63e646d52924d9e62fd69c933fc8ae186d4c53f2fff1210e625af5",
+      "bytes": 1324,
+      "role": "OUTPUT"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/dynamical_regime/scripts/dr_config.m",
+      "sha256": "f94b8ea6fee2b696d27ecb4ccf54d0a6467ef4bfc0c60693ed70cb556e1b4c7d",
+      "bytes": 2220,
+      "role": "OUTPUT"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/dynamical_regime/scripts/dr_dyn.m",
+      "sha256": "77b466187065487a9fb47962b4606ded4ccf6182a06560731158fb7301e63c3d",
+      "bytes": 2483,
+      "role": "OUTPUT"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/dynamical_regime/scripts/dr_figures.m",
+      "sha256": "fb6f47e78c842b2b79cf527980de56083f73946e4d86424aa9f305231b137e56",
+      "bytes": 6034,
+      "role": "OUTPUT"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/dynamical_regime/scripts/dr_metrics.m",
+      "sha256": "3555edaa7dc426c5d3f38693aa3d3f5b919200dedc9577c21e5cb6787b8e6482",
+      "bytes": 3356,
+      "role": "OUTPUT"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/dynamical_regime/scripts/dr_prefix.m",
+      "sha256": "bc385c547c9d6a026dfbdd7d98a6971d8b2acd1a64cfeb271c08e3a0ccb4c67c",
+      "bytes": 1428,
+      "role": "OUTPUT"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/dynamical_regime/scripts/dr_run.m",
+      "sha256": "d386d2cf1d8f7b132ceb7ef72755acc5ae3748750be4ba70135f601d74e7fe35",
+      "bytes": 4150,
+      "role": "OUTPUT"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/dynamical_regime/scripts/dr_spatial.m",
+      "sha256": "5abbd017ffd22ea92a336622508eb16c2970d9cf74482109449ba4675adeafbd",
+      "bytes": 1667,
+      "role": "OUTPUT"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/dynamical_regime/scripts/dr_telemetry.m",
+      "sha256": "5f646f9c0751e3e1ff3edab129dea28f1d4c94ba48c2051f88729d8dfc11f491",
+      "bytes": 4867,
+      "role": "OUTPUT"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/dynamical_regime/runs/runA_400x50.mat",
+      "sha256": "465bb7475342a2fe719102c5f2e0d7b859e9d2eb6cd66938175d2a0e5398607b",
+      "bytes": 17744831,
+      "role": "REQUIRED RAW TRAJECTORY"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/dynamical_regime/runs/runB_320x40.mat",
+      "sha256": "196ce8c317648dd4121d81b2237e6bb7cce1813dcc8fe5812ca1c5e405737832",
+      "bytes": 98159344,
+      "role": "REQUIRED RAW TRAJECTORY"
+    }
+  ]
+}

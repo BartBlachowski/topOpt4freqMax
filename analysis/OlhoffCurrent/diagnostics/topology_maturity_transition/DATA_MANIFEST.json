@@ -1,0 +1,160 @@
+{
+  "study": "topology_maturity_transition",
+  "generated_utc": "2026-09-08T07:38:18Z",
+  "phase_reached": "A",
+  "terminal_verdict": "TOPOLOGY_MATURITY_SIGNAL_NOT_IDENTIFIED",
+  "repo_head_at_task_start": "7154d8201e9defb06d0d758da866c3769c07179a",
+  "branch": "benchmark-methodology-r2",
+  "impl_tree_sha256": "c1455374d5f8e256c2678a679a5fc7955d9a8a77c410a41cd30f1c189910208c",
+  "impl_tree_reverified_after_work": true,
+  "matlab": "25.2.0.3042426 (R2025b) Update 1",
+  "solver_runs_executed": 0,
+  "production_files_modified": 0,
+  "meshes_analysed": [
+    "160x20",
+    "320x40"
+  ],
+  "meshes_with_no_data_in_repository": [
+    "400x50"
+  ],
+  "regeneration_performed": false,
+  "regeneration_needed": false,
+  "evidence_retention_hazard": "move_transition armP/armU .mat raw densities are gitignored AND absent from move_transition/FINAL_SHA256.txt; they are protected by nothing but presence on this disk.",
+  "inputs": [
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/move_transition/runs/armP_160x20.mat",
+      "sha256": "37ee282ec3f633cca7de16ee3370b794096a8851be4b835f2d9a63c2df684684",
+      "bytes": 12227549,
+      "manifested_upstream": false,
+      "role": "INPUT (read-only)"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/move_transition/runs/armU_160x20.mat",
+      "sha256": "c1dbe7a9d302226847a94b15e09619b18b559d80a5baefb4eff409f3cc323053",
+      "bytes": 13086395,
+      "manifested_upstream": false,
+      "role": "INPUT (read-only)"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/move_transition/runs/armP_320x40.mat",
+      "sha256": "0ddbfde7ce7082fd663bd1db45345d4f7ae8ad07696ef17068f3602800dde93d",
+      "bytes": 48815185,
+      "manifested_upstream": false,
+      "role": "INPUT (read-only)"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/move_transition/runs/armU_320x40.mat",
+      "sha256": "213ac81442dbfc15d186c7bb34966213359a9afb1ad7b612b0a703e0b82d49d5",
+      "bytes": 49578554,
+      "manifested_upstream": false,
+      "role": "INPUT (read-only)"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/move_transition/runs/armU_160x20_iterations.csv",
+      "sha256": "a5f48446f0977cd443b0bfc8b0694930bab012870b1415e1aa4b188f71f8baca",
+      "bytes": 162121,
+      "manifested_upstream": true,
+      "role": "INPUT (read-only)"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/move_transition/runs/armU_320x40_iterations.csv",
+      "sha256": "67bbd33c73c268f647253cfe1a919aaa1d8e81077038d209c54f73d5ad6035aa",
+      "bytes": 167087,
+      "manifested_upstream": true,
+      "role": "INPUT (read-only)"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/move_transition/FINAL_SHA256.txt",
+      "sha256": "27fed249e5b2bfbc2caa737c7c48cdf0e56ba1537d59b96dae7d948b0a3fe671",
+      "bytes": 5377,
+      "manifested_upstream": true,
+      "role": "INPUT (read-only)"
+    }
+  ],
+  "outputs": [
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/topology_maturity_transition/CONFIG_DIFF.json",
+      "sha256": "08ae112a9bfc5c8babe31ca195cf02e973ee34b03d4bd8a6f411e1002f150bae",
+      "bytes": 1256,
+      "role": "OUTPUT"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/topology_maturity_transition/METRICS.json",
+      "sha256": "fe5d44d29e8ef7e0fe6ef06b04ed4e5836f9f8be0f55763c7d55ab2be5e4cf75",
+      "bytes": 16661,
+      "role": "OUTPUT"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/topology_maturity_transition/OFFLINE_SIGNAL_ANALYSIS.md",
+      "sha256": "46aa76353d7de11ae330660449a773ec9ef394364ac8490ad42cb547a320347b",
+      "bytes": 13930,
+      "role": "OUTPUT"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/topology_maturity_transition/PREREGISTRATION.md",
+      "sha256": "f723c13eed6c8d6a17585cb5818e97a0f8afd439a1e9c17ac4a38c6929019e31",
+      "bytes": 1870,
+      "role": "OUTPUT"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/topology_maturity_transition/PROVENANCE.md",
+      "sha256": "d7242bf185e16b6ea222eedd6e4b79c1c1808608b12e6b3a9db8524043c2984b",
+      "bytes": 7320,
+      "role": "OUTPUT"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/topology_maturity_transition/REPORT.md",
+      "sha256": "c6bd435970fbfca57cabba9fe2a20a1a1d885f34b985ecccaee745ee4b61e501",
+      "bytes": 11639,
+      "role": "OUTPUT"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/topology_maturity_transition/evidence/phaseA_stats.mat",
+      "sha256": "4dadb23fda8c26a9a31f648e93791de20b67b9e8f723af34841f677473b93d48",
+      "bytes": 262216,
+      "role": "OUTPUT"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/topology_maturity_transition/figures/F1_regime_diagnosis.png",
+      "sha256": "3cdd56d26924c3467e1da14f51256158e986711849aea89a12efe40aa669628a",
+      "bytes": 72345,
+      "role": "OUTPUT"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/topology_maturity_transition/figures/F2_candidates_vs_maturity.png",
+      "sha256": "b8975f7febba6e827b9c68e10810e8dda31a9e9d840086a8863a87884037fb49",
+      "bytes": 123331,
+      "role": "OUTPUT"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/topology_maturity_transition/figures/F3_Mnd_discarded.png",
+      "sha256": "15dadd5f764bad7d842fe8ea91b4309f9a858d927137eee585097b22e2f2facf",
+      "bytes": 67327,
+      "role": "OUTPUT"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/topology_maturity_transition/scripts/tm_figures.m",
+      "sha256": "e4deed7af260351d73ec1dd423f23715b21ac9b83cfdd7e5e945a6b634adbbb5",
+      "bytes": 2723,
+      "role": "OUTPUT"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/topology_maturity_transition/scripts/tm_metrics.m",
+      "sha256": "03bc73bb81f15d417cbe8301585585a3cbbe1a4f4aa98f453b3ac00474a836fc",
+      "bytes": 3506,
+      "role": "OUTPUT"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/topology_maturity_transition/scripts/tm_offline.m",
+      "sha256": "b172f7cd763bd6aef845ebb9685e6bf69eb88085033e99cef1f209b730ef2e2c",
+      "bytes": 4139,
+      "role": "OUTPUT"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/topology_maturity_transition/scripts/tm_phaseA.m",
+      "sha256": "067fc3d10d587f7551844ad67e69f90ab58348bdb512b1ee21b803dde2409859",
+      "bytes": 4009,
+      "role": "OUTPUT"
+    }
+  ]
+}

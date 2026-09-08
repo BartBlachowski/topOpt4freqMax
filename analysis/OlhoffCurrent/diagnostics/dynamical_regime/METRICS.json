@@ -1,0 +1,525 @@
+{
+  "study": "dynamical_regime",
+  "repo_head_at_task_start": "7154d8201e9defb06d0d758da866c3769c07179a",
+  "impl_tree_sha256": "c1455374d5f8e256c2678a679a5fc7955d9a8a77c410a41cd30f1c189910208c",
+  "matlab": "25.2.0.3042426 (R2025b) Update 1",
+  "threads": 1,
+  "classifier": {
+    "persistence_P": 20,
+    "period2_rule": "median q2 < 1 AND median cos < 0",
+    "coherent_rule": "median q2 > 1.5 AND median cos > 0.25",
+    "W": 10
+  },
+  "runA": {
+    "status": "CONVERGED",
+    "nOuter": 139,
+    "wall_s": 640.083872375,
+    "innerTotal": 2918,
+    "omega1": 162.88877984265557,
+    "Mnd_final": 32.328325623321305,
+    "cfgHash": "044d50a496cb64d43ed4bf75a6a7976a6726cca6feaf65e0b911a57e4593969c",
+    "volume_final": 0.49999914966295755
+  },
+  "runB": {
+    "status": "CAP_HIT",
+    "nOuter": 1200,
+    "wall_s": 4132.8014344166668,
+    "innerTotal": 20934,
+    "omega1": 166.31538852474961,
+    "Mnd_final": 13.524231287096342,
+    "cfgHash": "4d49b0abf33edf77610ae6f2c6076870e2aa7dcfeff09908dc0a3990b3250c3e",
+    "volume_final": 0.49999955866071771
+  },
+  "prefix": {
+    "vs_move_stop_fixedmove": {
+      "tag": "fixedmove216",
+      "refFile": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/diagnostics/move_stop/runs/fixedmove_320x40.mat",
+      "nCompared": 216,
+      "bitwise": true,
+      "maxAbsRhoDiff": 0,
+      "firstDifferingIter": null,
+      "maxAbsOmega1Diff": 0,
+      "maxAbsMndDiff": 0,
+      "maxAbsVolumeDiff": 0,
+      "maxAbsMoveDiff": 0,
+      "moveEventsNew": [],
+      "moveEventsRef": [],
+      "eventStructureIdentical": true
+    },
+    "vs_move_transition_armU": {
+      "tag": "armU213",
+      "refFile": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/diagnostics/move_transition/runs/armU_320x40.mat",
+      "nCompared": 213,
+      "bitwise": true,
+      "maxAbsRhoDiff": 0,
+      "firstDifferingIter": null,
+      "maxAbsOmega1Diff": 0,
+      "maxAbsMndDiff": 0,
+      "maxAbsVolumeDiff": 0,
+      "maxAbsMoveDiff": 0,
+      "moveEventsNew": [],
+      "moveEventsRef": [],
+      "eventStructureIdentical": true
+    }
+  },
+  "f160": {
+    "label": "160x20 fixed move 0.04 (retained ARM U)",
+    "nOuter": 600,
+    "events": {
+      "nOuter": 600,
+      "firstBetaStall": 79,
+      "moveDescents": [],
+      "firstDescent": null,
+      "period2Onset": 81,
+      "coherentOnset": 20,
+      "finalLabel": "PERIOD2"
+    },
+    "final": {
+      "Mnd": 11.458037670083639,
+      "gray": 0.138125,
+      "mid": 0.011875,
+      "omega1": 169.574746710849,
+      "volume": 0.49999106139713134,
+      "move": 0.04
+    },
+    "regime": {
+      "finalLabel": "PERIOD2",
+      "fracPERIOD2": 0.85166666666666668,
+      "fracCOHERENT": 0.076666666666666661,
+      "period2Onset": 81,
+      "coherentOnset": 20
+    },
+    "undefined": {
+      "q2": 0,
+      "cosTheta": 0
+    },
+    "descentTableCols": [
+      "iter",
+      "moveBefore",
+      "moveAfter",
+      "betaStallRel",
+      "Mnd",
+      "gray",
+      "mid",
+      "omega1",
+      "d1",
+      "d2",
+      "q2",
+      "cosTheta",
+      "net_ratio",
+      "boundFrac",
+      "revFrac"
+    ],
+    "descentTable": [],
+    "atPeriod2Onset": {
+      "iter": 81,
+      "Mnd": 13.288567339565333,
+      "gray": 0.148125,
+      "mid": 0.0275,
+      "omega1": 169.20166349393776,
+      "move": 0.04,
+      "q2": 0.57319485449132823,
+      "cosTheta": -0.83325998766614684,
+      "net_ratio": 0.30154581223303012,
+      "remaining_Mnd_pct": 2.0801190501341651,
+      "remaining_L1_pct": 15.094297465653431
+    },
+    "atFirstDescent": []
+  },
+  "p160": {
+    "label": "160x20 production (retained ARM P)",
+    "nOuter": 600,
+    "events": {
+      "nOuter": 600,
+      "firstBetaStall": 79,
+      "moveDescents": [
+        79,
+        90,
+        101
+      ],
+      "firstDescent": 79,
+      "period2Onset": null,
+      "coherentOnset": 20,
+      "finalLabel": "OTHER"
+    },
+    "final": {
+      "Mnd": 13.098846388918146,
+      "gray": 0.145625,
+      "mid": 0.026875,
+      "omega1": 169.68926479204191,
+      "volume": 0.49999925573916992,
+      "move": 0.005
+    },
+    "regime": {
+      "finalLabel": "OTHER",
+      "fracPERIOD2": 0.02,
+      "fracCOHERENT": 0.56166666666666665,
+      "period2Onset": null,
+      "coherentOnset": 20
+    },
+    "undefined": {
+      "q2": 0,
+      "cosTheta": 0
+    },
+    "descentTableCols": [
+      "iter",
+      "moveBefore",
+      "moveAfter",
+      "betaStallRel",
+      "Mnd",
+      "gray",
+      "mid",
+      "omega1",
+      "d1",
+      "d2",
+      "q2",
+      "cosTheta",
+      "net_ratio",
+      "boundFrac",
+      "revFrac"
+    ],
+    "descentTable": [
+      [
+        79,
+        0.04,
+        0.02,
+        0.0045489422336280659,
+        13.443465503429138,
+        0.151875,
+        0.025,
+        169.27619588495094,
+        0.0050340862933640909,
+        0.0058991550067480558,
+        1.1718422496102807,
+        -0.81758139305565025,
+        0.34589134933585081,
+        0.051875,
+        0.704375
+      ],
+      [
+        90,
+        0.02,
+        0.01,
+        -0.0054519587950240048,
+        13.385685607444028,
+        0.149375,
+        0.025,
+        169.52346274359616,
+        0.00072364903388220014,
+        0.001424524357784738,
+        1.9685293437656002,
+        -0.85001180417242883,
+        0.32969290174263671,
+        0.00125,
+        0.675
+      ],
+      [
+        101,
+        0.01,
+        0.005,
+        0.00041593030078242393,
+        13.335488985009105,
+        0.14625,
+        0.025625,
+        169.52708631302141,
+        9.7441112995928252E-5,
+        0.00024899992637546697,
+        2.5553887750222217,
+        0.7846110935162609,
+        0.7745703204418648,
+        0,
+        0.285
+      ]
+    ],
+    "atPeriod2Onset": [],
+    "atFirstDescent": {
+      "iter": 79,
+      "q2": 1.1718422496102807,
+      "q2_unsat": 1.7591202333928557,
+      "cosTheta": -0.81758139305565025,
+      "cosTheta_unsat": 0.0748589695561044,
+      "net_ratio": 0.34589134933585081,
+      "net_ratio_unsat": 0.77266264939598672,
+      "boundFrac": 0.051875,
+      "revFrac": 0.704375,
+      "Mnd": 13.443465503429138,
+      "omega1": 169.27619588495094,
+      "move": 0.02,
+      "q2_L1norm": 1.2872118509855093,
+      "net_ratio_L1norm": 0.3362864951732108,
+      "regimeLabel": "OTHER"
+    }
+  },
+  "p320": {
+    "label": "320x40 production (retained ARM P)",
+    "nOuter": 600,
+    "events": {
+      "nOuter": 600,
+      "firstBetaStall": 130,
+      "moveDescents": [
+        130,
+        141,
+        152
+      ],
+      "firstDescent": 130,
+      "period2Onset": null,
+      "coherentOnset": 20,
+      "finalLabel": "COHERENT"
+    },
+    "final": {
+      "Mnd": 22.050841203033471,
+      "gray": 0.24953125,
+      "mid": 0.06921875,
+      "omega1": 166.09070671974132,
+      "volume": 0.49999763575339273,
+      "move": 0.005
+    },
+    "regime": {
+      "finalLabel": "COHERENT",
+      "fracPERIOD2": 0,
+      "fracCOHERENT": 0.96833333333333338,
+      "period2Onset": null,
+      "coherentOnset": 20
+    },
+    "undefined": {
+      "q2": 0,
+      "cosTheta": 0
+    },
+    "descentTableCols": [
+      "iter",
+      "moveBefore",
+      "moveAfter",
+      "betaStallRel",
+      "Mnd",
+      "gray",
+      "mid",
+      "omega1",
+      "d1",
+      "d2",
+      "q2",
+      "cosTheta",
+      "net_ratio",
+      "boundFrac",
+      "revFrac"
+    ],
+    "descentTable": [
+      [
+        130,
+        0.04,
+        0.02,
+        0.0048350366822040277,
+        23.40095112134988,
+        0.26375,
+        0.0965625,
+        165.94330370587352,
+        0.00082049170359133658,
+        0.003157621707354525,
+        3.8484505005150496,
+        0.933325173471881,
+        0.96215205535369752,
+        0,
+        0.30453125
+      ],
+      [
+        141,
+        0.02,
+        0.01,
+        0.0015357879998942653,
+        22.998316774387831,
+        0.259375,
+        0.08796875,
+        165.98802656928819,
+        0.00021292640750588405,
+        0.000945953261010318,
+        4.442630071538578,
+        0.97914410673811791,
+        0.99232991434765339,
+        0,
+        0.40546875
+      ],
+      [
+        152,
+        0.01,
+        0.005,
+        0.00023450753932626275,
+        22.883833702347669,
+        0.25875,
+        0.0865625,
+        165.99962891573583,
+        4.3159388947779709E-5,
+        0.00023660088629525198,
+        5.48202585957658,
+        0.91351479645352474,
+        0.99296992603250434,
+        0,
+        0.49734375
+      ]
+    ],
+    "atPeriod2Onset": [],
+    "atFirstDescent": {
+      "iter": 130,
+      "q2": 3.8484505005150496,
+      "q2_unsat": 3.84845050051505,
+      "cosTheta": 0.933325173471881,
+      "cosTheta_unsat": 0.933325173471881,
+      "net_ratio": 0.96215205535369752,
+      "net_ratio_unsat": 0.96215205535369763,
+      "boundFrac": 0,
+      "revFrac": 0.30453125,
+      "Mnd": 23.40095112134988,
+      "omega1": 165.94330370587352,
+      "move": 0.02,
+      "q2_L1norm": 3.5017930882117834,
+      "net_ratio_L1norm": 0.99508716176642265,
+      "regimeLabel": "COHERENT"
+    }
+  },
+  "f320": {
+    "label": "320x40 fixed move 0.04 EXTENDED (RUN B)",
+    "nOuter": 1200,
+    "events": {
+      "nOuter": 1200,
+      "firstBetaStall": 130,
+      "moveDescents": [],
+      "firstDescent": null,
+      "period2Onset": 253,
+      "coherentOnset": 20,
+      "finalLabel": "PERIOD2"
+    },
+    "final": {
+      "Mnd": 13.524231287096342,
+      "gray": 0.156875,
+      "mid": 0.0334375,
+      "omega1": 166.32921322518038,
+      "volume": 0.49999955866071771,
+      "move": 0.04
+    },
+    "regime": {
+      "finalLabel": "PERIOD2",
+      "fracPERIOD2": 0.79,
+      "fracCOHERENT": 0.17833333333333334,
+      "period2Onset": 253,
+      "coherentOnset": 20
+    },
+    "undefined": {
+      "q2": 0,
+      "cosTheta": 0
+    },
+    "descentTableCols": [
+      "iter",
+      "moveBefore",
+      "moveAfter",
+      "betaStallRel",
+      "Mnd",
+      "gray",
+      "mid",
+      "omega1",
+      "d1",
+      "d2",
+      "q2",
+      "cosTheta",
+      "net_ratio",
+      "boundFrac",
+      "revFrac"
+    ],
+    "descentTable": [],
+    "atPeriod2Onset": {
+      "iter": 253,
+      "Mnd": 13.027541088924757,
+      "gray": 0.15203125,
+      "mid": 0.03,
+      "omega1": 166.43192055787671,
+      "move": 0.04,
+      "q2": 0.87266601666301236,
+      "cosTheta": -0.62686042088887484,
+      "net_ratio": 0.45359667081383448,
+      "remaining_Mnd_pct": -0.57694448798588571,
+      "remaining_L1_pct": 9.423114119777523
+    },
+    "atFirstDescent": []
+  },
+  "p400": {
+    "label": "400x50 production (RUN A)",
+    "nOuter": 139,
+    "events": {
+      "nOuter": 139,
+      "firstBetaStall": 138,
+      "moveDescents": 138,
+      "firstDescent": 138,
+      "period2Onset": null,
+      "coherentOnset": 20,
+      "finalLabel": "COHERENT"
+    },
+    "final": {
+      "Mnd": 32.328325623321305,
+      "gray": 0.3476,
+      "mid": 0.1882,
+      "omega1": 162.88261563006242,
+      "volume": 0.49999914966295755,
+      "move": 0.02
+    },
+    "regime": {
+      "finalLabel": "COHERENT",
+      "fracPERIOD2": 0,
+      "fracCOHERENT": 0.86330935251798557,
+      "period2Onset": null,
+      "coherentOnset": 20
+    },
+    "undefined": {
+      "q2": 0,
+      "cosTheta": 0
+    },
+    "descentTableCols": [
+      "iter",
+      "moveBefore",
+      "moveAfter",
+      "betaStallRel",
+      "Mnd",
+      "gray",
+      "mid",
+      "omega1",
+      "d1",
+      "d2",
+      "q2",
+      "cosTheta",
+      "net_ratio",
+      "boundFrac",
+      "revFrac"
+    ],
+    "descentTable": [
+      138,
+      0.04,
+      0.02,
+      0.004883689430843087,
+      32.35879066209705,
+      0.3476,
+      0.1879,
+      162.87660574004363,
+      0.00064709298545543084,
+      0.0025453441551234524,
+      3.9335060220626752,
+      0.93750925136381358,
+      0.97763152061444247,
+      0,
+      0.4253
+    ],
+    "atPeriod2Onset": [],
+    "atFirstDescent": {
+      "iter": 138,
+      "q2": 3.9335060220626752,
+      "q2_unsat": 3.9335060220626752,
+      "cosTheta": 0.93750925136381358,
+      "cosTheta_unsat": 0.93750925136381358,
+      "net_ratio": 0.97763152061444247,
+      "net_ratio_unsat": 0.97763152061444258,
+      "boundFrac": 0,
+      "revFrac": 0.4253,
+      "Mnd": 32.35879066209705,
+      "omega1": 162.87660574004363,
+      "move": 0.02,
+      "q2_L1norm": 3.5641645880134427,
+      "net_ratio_L1norm": 0.99224276571985159,
+      "regimeLabel": "COHERENT"
+    }
+  }
+}
