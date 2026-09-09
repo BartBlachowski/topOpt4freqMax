@@ -1,11 +1,11 @@
 {
   "schema": "olhoff_current_evidence/1",
   "study": "move_activity_400",
-  "generated": "2026-09-09T09:57:22+02:00",
+  "generated": "2026-09-07T23:48:11+02:00",
   "evidenceRoot": "analysis/OlhoffCurrent/evidence/move_activity_400",
   "implementation": "analysis/OlhoffCurrent",
-  "sourceTree": "edbfe47eb32109a2fb017f6f13d5327f2c240357caa96630064ffcf37ee152cb",
-  "matlab": "25.2.0.3042426 (R2025b) Update 1",
+  "sourceTree": "c1455374d5f8e256c2678a679a5fc7955d9a8a77c410a41cd30f1c189910208c",
+  "matlab": "25.2.0.2998904 (R2025b)",
   "preregistration_sha256": "706b8865075f97cb0d5824658fa6e562636d464dba2611580d6c10fdff7716d4",
   "mesh": [
     400,
@@ -24,8 +24,8 @@
       "path": "P400_400x50_trajectory.mat",
       "class": "required",
       "description": "ARM P400 element-level trajectory: RHO and DRHO (NE x nOuter, double), move, full hist, resolved cfg.  Production move ladder.",
-      "bytes": 3.6585921E+7,
-      "sha256": "0f4d2dacb2fc40d14399cba603f158a160b4b2b0849a52e679f068cbc939c517",
+      "bytes": 3.6576273E+7,
+      "sha256": "1dc20dbd6a0dacbd067802901fd6d78364306a5641be84a6e2216b4038917660",
       "present": true,
       "format": "MAT-file (v7.3 = HDF5) -- read with load()",
       "variables": [
@@ -54,7 +54,7 @@
             1
           ],
           "class": "struct",
-          "bytes": 19029
+          "bytes": 18873
         },
         {
           "name": "hist",
@@ -63,7 +63,7 @@
             1
           ],
           "class": "struct",
-          "bytes": 40948
+          "bytes": 39346
         },
         {
           "name": "meta",
@@ -89,8 +89,8 @@
       "path": "F400_400x50_trajectory.mat",
       "class": "required",
       "description": "ARM F400 element-level trajectory: RHO and DRHO (NE x nOuter, double), move, full hist, resolved cfg.  Fixed move 0.04 counterfactual.",
-      "bytes": 1.02067434E+8,
-      "sha256": "f03cec07b45f71633d5fe125dcec84df5a64d5d55c7e5b90305e5c5144fe165c",
+      "bytes": 1.02057786E+8,
+      "sha256": "c53680e86b7010e962b9f5a48a55fdc7c3e659150e05994c9bbffa1275035ded",
       "present": true,
       "format": "MAT-file (v7.3 = HDF5) -- read with load()",
       "variables": [
@@ -119,7 +119,7 @@
             1
           ],
           "class": "struct",
-          "bytes": 19571
+          "bytes": 19415
         },
         {
           "name": "hist",
@@ -128,7 +128,7 @@
             1
           ],
           "class": "struct",
-          "bytes": 99828
+          "bytes": 98226
         },
         {
           "name": "meta",

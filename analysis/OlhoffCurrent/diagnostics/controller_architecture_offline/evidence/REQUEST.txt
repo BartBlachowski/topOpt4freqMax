@@ -1,0 +1,1156 @@
+Work in:
+
+/Users/piotrek/Programming/topOpt4freqMax
+
+Canonical implementation:
+
+analysis/OlhoffCurrent
+
+Use CURRENT repository HEAD at task start and record it. Do not assume any
+hash from previous briefs.
+
+Relevant completed studies include:
+
+analysis/OlhoffCurrent/diagnostics/move_stop/
+analysis/OlhoffCurrent/diagnostics/admission_rule/
+analysis/OlhoffCurrent/diagnostics/move_transition/
+analysis/OlhoffCurrent/diagnostics/topology_maturity_transition/
+analysis/OlhoffCurrent/diagnostics/dynamical_regime/
+analysis/OlhoffCurrent/diagnostics/fixedmove_400_dynamics/
+analysis/OlhoffCurrent/diagnostics/two_branch_maturity_240/
+analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/
+
+Latest causal-validation verdicts:
+
+    TWO_BRANCH_CONTROLLER_PARTIALLY_VALIDATED
+    PRODUCTION_CONTROLLER_NOT_PROMOTED
+    NINE_MESH_PERFORMANCE_CAMPAIGN_BLOCKED
+
+======================================================================
+MISSION
+======================================================================
+
+Perform an OFFLINE-ONLY controller-architecture postmortem.
+
+ZERO new scientific optimization runs are authorized.
+
+The purpose is to answer two narrowly defined questions using already generated
+trajectories:
+
+QUESTION 1 — LOW-AMPLITUDE CANCELLATION
+
+    Was the C320 failure caused specifically by the amplitude clause inside
+    Branch A, and can that defect be repaired by the minimal semantic change:
+
+        persistent cancellation remains exhaustion even when its amplitude
+        has already decayed below the old Branch-A amplitude floor?
+
+QUESTION 2 — LOWER MOVE STAGES
+
+    After the first move=0.04 stage, do move levels:
+
+        0.02
+        0.01
+        0.005
+
+    contribute enough additional scientific benefit to justify retaining the
+    same recursive A OR B stage-exhaustion controller?
+
+The outcome should justify exactly ONE next controller architecture for a
+future preregistered causal experiment, or conclude that more architecture
+analysis is needed.
+
+Do NOT implement the future controller in production.
+
+Do NOT launch its causal validation.
+
+Do NOT run the nine-mesh performance campaign.
+
+======================================================================
+IMPORTANT CURRENT EVIDENCE
+======================================================================
+
+Treat these as established only after provenance verification.
+
+The tested frozen controller used:
+
+    E = A OR B
+
+where:
+
+A:
+    persistent cancellation/recurrence,
+    including an amplitude clause intended to prevent small-motion noise from
+    counting as cancellation exhaustion;
+
+B:
+    inherited native design-change convergence concept
+    + coherence guard
+    + persistence.
+
+Mechanism evidence before causal validation:
+
+    160x20:
+        A-type high-amplitude cancelling maturity
+
+    240x30:
+        withheld test
+        B fired at 187
+        later entered low-amplitude cancellation
+
+    320x40:
+        A-type cancellation under fixed move
+
+    400x50:
+        B-type coherent amplitude convergence.
+
+Causal-controller results:
+
+    C160:
+        CONVERGED @ 219
+        M_nd: 13.40 -> 12.70
+        relative M_nd improvement: -5.21%
+        omega1: +0.304%
+        outer-cost multiplier: x2.41
+
+    C320:
+        CAP_HIT @ 1600
+        M_nd: 23.36 -> 12.92
+        relative M_nd improvement: -44.68%
+        omega1: +0.287%
+        outer-cost multiplier: x12.21
+        wall-time multiplier: x88.60
+
+    C400:
+        CONVERGED @ 505
+        M_nd: 32.33 -> 15.33
+        relative M_nd improvement: -52.58%
+        omega1: +2.194%
+        outer-cost multiplier: x3.63
+
+The causal intervention improved omega1 on all three meshes while reducing
+grayness.
+
+Production/candidate common-prefix evidence established that the observed
+difference is caused by the controller intervention rather than a hidden
+scientific configuration change.
+
+The principal C320 failure was diagnosed as:
+
+    low-amplitude persistent cancellation
+
+which was rejected by Branch A because the amplitude clause failed, while
+Branch B did not admit the state because its coherence condition was also not
+satisfied.
+
+The run therefore remained trapped in an exhausted stationary limit cycle and
+consumed approximately 91.5% of its inner work there.
+
+A counterfactual estimate suggested that if termination had been possible at
+the appropriate exhausted-state floor, C320 outer cost would have been around
+x2.98 instead of x12.21.
+
+This estimate must be independently re-derived here before being treated as a
+result.
+
+A second structural finding was:
+
+    after stage 1, every later candidate stage declared exhaustion at the
+    arithmetic history-availability floor, approximately s+38,
+
+rather than after a visibly distinct newly detected maturity event.
+
+This must also be independently audited from raw data.
+
+======================================================================
+CRITICAL STATUS OF IN-FLIGHT EVIDENCE
+======================================================================
+
+At the end of the previous study one C320 verification artifact was still
+regenerating.
+
+Before beginning substantive offline analysis:
+
+1. check whether that process has completed;
+2. verify P15/evidence-manifest status;
+3. hash-verify the resulting artifact.
+
+If the process is still legitimately running, DO NOT start another MATLAB
+scientific optimization.
+
+It is acceptable to prepare provenance/inventory material while waiting, but
+do not freeze the final audit conclusions until the C320 evidence set is
+complete.
+
+If the regenerating artifact fails for a software/evidence-retention reason,
+repair only the evidence regeneration as already authorized by the preceding
+study.
+
+Do not create new scientific trajectories.
+
+======================================================================
+HARD SCOPE LOCK
+======================================================================
+
+ZERO new scientific optimization runs.
+
+Do NOT run:
+
+    160x20
+    240x30
+    320x40
+    400x50
+    or any other scientific mesh
+
+through the optimizer.
+
+Do NOT run:
+
+    fixed-move arms
+    production arms
+    candidate-controller arms
+    nine-mesh campaign.
+
+Offline replay, parsing, recomputation of diagnostics from retained rho
+histories, software-mechanics tests and plotting are allowed.
+
+Do NOT change:
+
+- p;
+- mass interpolation;
+- q;
+- filter;
+- R=0.06*b;
+- projection;
+- multiplicity;
+- MMA;
+- FE formulation;
+- eigensolver;
+- objective;
+- volume constraint;
+- move ladder.
+
+Do NOT:
+
+- add Branch C;
+- search a large parameter grid;
+- fit thresholds to M_nd;
+- fit thresholds to omega1;
+- introduce mesh-dependent constants;
+- introduce an NE scaling exponent;
+- repair production;
+- promote anything.
+
+======================================================================
+PHASE 0 — PROVENANCE / EVIDENCE GATE
+======================================================================
+
+Record:
+
+- branch;
+- starting HEAD;
+- git status;
+- MATLAB version;
+- +impl tree hash;
+- canonical source manifest;
+- frozen causal-controller preregistration hash;
+- frozen two-branch mechanism preregistration hash;
+- evidence manifests;
+- C160/C320/C400 raw trajectory locations/hashes;
+- fixed-move 160/240/320/400 trajectory locations/hashes.
+
+Require:
+
+    source integrity PASS
+    prior preregistration hashes unchanged
+    C160 evidence valid
+    C320 evidence valid
+    C400 evidence valid
+    fixed-move evidence valid where used
+    evidence manifest complete
+    tests PASS
+
+If required evidence is missing and cannot be recovered without a new
+scientific optimization:
+
+    OFFLINE_ARCHITECTURE_EVIDENCE_INCOMPLETE
+
+STOP.
+
+======================================================================
+PHASE 1 — FREEZE THE OFFLINE AUDIT PLAN
+======================================================================
+
+Create before substantive replay:
+
+analysis/OlhoffCurrent/diagnostics/controller_architecture_offline/
+    PREREGISTRATION.md
+
+Freeze SHA-256.
+
+This is not a new prospective scientific validation of the controller—the
+trajectories are already known.
+
+The purpose of freezing this document is to prevent post-hoc cherry-picking
+within the offline postmortem.
+
+Explicitly label the study:
+
+    POST-HOC OFFLINE ARCHITECTURE AUDIT
+
+not:
+
+    withheld validation.
+
+======================================================================
+PHASE 2 — RECOVER THE EXACT TESTED RULE
+======================================================================
+
+Recover from the frozen previous preregistration and code:
+
+- exact A definition;
+- exact B definition;
+- exact amplitude clause inside A;
+- exact cancellation statistic(s);
+- exact persistence;
+- windows;
+- indexing;
+- `omitnan` semantics;
+- history reset semantics;
+- native tolerance scaling;
+- terminal semantics.
+
+Do not reconstruct definitions from prose if authoritative code/preregistration
+exists.
+
+Produce a machine-readable rule specification.
+
+Verify the implementation used in C160/C320/C400 matches that specification.
+
+======================================================================
+PHASE 3 — RESOLVE THE s+38 / s+39 / s+47 ISSUE
+======================================================================
+
+Independently derive the earliest mathematically possible firing iteration after
+a stage transition under the authoritative frozen rule.
+
+Pay special attention to:
+
+    §2.1 `omitnan` semantics
+
+versus:
+
+    §8 stated arithmetic floors.
+
+Determine exactly:
+
+- which preregistration statement is normative;
+- which statement is a derived prediction;
+- whether implementation follows the normative rule;
+- the actual earliest A firing iteration;
+- the actual earliest B firing iteration;
+- the actual earliest E=A OR B firing iteration.
+
+Account carefully for:
+
+    MATLAB indexing
+    first valid Delta rho
+    lagged quantities
+    rolling windows
+    persistence counter initialization
+    reset iteration
+    inclusive/exclusive indexing.
+
+Produce a short mathematical derivation and executable unit test.
+
+Classify exactly one:
+
+    FLOOR_DISCREPANCY_DOCUMENTATION_ERROR
+
+    FLOOR_DISCREPANCY_IMPLEMENTATION_ERROR
+
+    FLOOR_DISCREPANCY_RULE_AMBIGUITY
+
+If implementation follows the authoritative normative definition and §8 merely
+miscomputed the consequence, do NOT modify implementation in this task.
+
+======================================================================
+PHASE 4 — STAGE-BY-STAGE DECOMPOSITION
+======================================================================
+
+For each causal trajectory:
+
+    C160
+    C320
+    C400
+
+split the optimization exactly by move stage:
+
+    S1: move = 0.04
+    S2: move = 0.02
+    S3: move = 0.01
+    S4: move = 0.005
+
+For every stage report:
+
+- start iteration;
+- end iteration;
+- duration;
+- triggering event;
+- whether A fired;
+- whether B fired;
+- whether E fired;
+- earliest mathematically possible firing iteration;
+- event minus arithmetic floor;
+- M_nd start/end/change;
+- relative M_nd change;
+- omega1 start/end/change;
+- relative omega1 change;
+- gray start/end/change;
+- mid-density start/end/change;
+- density-field displacement;
+- outer iterations;
+- inner MMA work;
+- wall time if recoverable;
+- fraction of total work;
+- beta behavior;
+- native-stop behavior;
+- terminal outcome.
+
+======================================================================
+PHASE 5 — CLASSIFY EACH STAGE EVENT
+======================================================================
+
+Classify every S1–S4 transition as exactly one:
+
+    DYNAMICAL_EVENT
+
+        A/B became satisfied materially after the arithmetic floor and reflects
+        a newly observed trajectory change.
+
+    FLOOR_EVENT
+
+        E became satisfied at the first mathematically admissible point, with
+        no evidence of a distinct newly observed stage-exhaustion transition.
+
+    MIXED_EVENT
+
+        event is near the floor but contains independent dynamical evidence.
+
+    NO_EVENT
+
+        stage never satisfied E.
+
+Do not classify solely from final M_nd.
+
+Use the telemetry and trajectory dynamics.
+
+Produce one table across all 12 possible mesh/stage combinations.
+
+======================================================================
+PHASE 6 — QUANTIFY VALUE OF EACH MOVE STAGE
+======================================================================
+
+This is a central analysis.
+
+For each mesh compute incremental benefit from:
+
+    S1
+    S2
+    S3
+    S4
+
+in terms of:
+
+    Delta M_nd
+    relative Delta M_nd
+    Delta omega1
+    relative Delta omega1
+    density-field change.
+
+And incremental cost:
+
+    outer iterations
+    inner MMA work
+    wall time.
+
+Compute marginal efficiency such as:
+
+    |Delta M_nd| / outer iteration
+    |Delta M_nd| / inner MMA work
+    |Delta M_nd| / wall second
+
+and analogous omega1 quantities where useful.
+
+Do not collapse scientific quality into one arbitrary scalar score.
+
+The purpose is descriptive:
+
+    Which move stages actually buy useful topology refinement?
+
+======================================================================
+PHASE 7 — COUNTERFACTUAL TRUNCATION REPLAY
+======================================================================
+
+Using existing trajectories only, construct offline truncation states at:
+
+    end of S1
+    end of S2
+    end of S3
+    actual terminal state
+
+for C160/C320/C400.
+
+For each truncation report:
+
+    M_nd
+    omega1
+    volume
+    gap
+    gray
+    mid
+    topology/density-field distance from actual final.
+
+This is NOT a claim that a live optimizer would necessarily terminate
+identically there.
+
+Label it clearly:
+
+    RECORDED-TRAJECTORY TRUNCATION COUNTERFACTUAL
+
+Use it only to measure what later stages contributed along the already observed
+trajectory.
+
+======================================================================
+PHASE 8 — RE-DERIVE THE C320 COST FAILURE
+======================================================================
+
+Identify precisely:
+
+- when C320 first entered the terminal low-amplitude cancelling state;
+- when original A's cancellation signature was satisfied;
+- why A's amplitude clause excluded it;
+- why B excluded it;
+- how long the trajectory remained in that state;
+- outer iterations wasted;
+- inner MMA work wasted;
+- wall time wasted;
+- M_nd change during that interval;
+- omega1 change during that interval.
+
+Recompute the claim:
+
+    approximately 91.5% of inner work occurred after useful exhaustion
+
+from raw evidence.
+
+Recompute the counterfactual outer-cost multiplier:
+
+    approximately x2.98
+
+from first principles.
+
+Do not simply copy the number from REPORT.md.
+
+======================================================================
+PHASE 9 — MINIMAL BRANCH-A REPAIR
+======================================================================
+
+Test exactly ONE predefined semantic repair offline:
+
+    A_LOWAMP
+
+defined as:
+
+    the original frozen Branch A
+    with ONLY its amplitude-exclusion clause removed,
+
+while preserving unchanged:
+
+    cancellation/recurrence definition
+    persistence
+    windows
+    indexing
+    reset semantics
+    all other conditions.
+
+Do NOT alter B.
+
+Thus:
+
+    E_REPAIR = A_LOWAMP OR B.
+
+This is the only rule modification authorized in this audit.
+
+Do not tune any threshold.
+
+Do not search variants.
+
+======================================================================
+PHASE 10 — REPLAY A_LOWAMP ON ALL AVAILABLE TRAJECTORIES
+======================================================================
+
+Replay:
+
+    original A
+    original B
+    original E
+
+and:
+
+    A_LOWAMP
+    E_REPAIR
+
+offline over all valid relevant trajectories, including where available:
+
+FIXED-MOVE MECHANISM TRAJECTORIES:
+    F160
+    F240
+    F320
+    F400
+
+CAUSAL CONTROLLER TRAJECTORIES:
+    C160
+    C320
+    C400
+
+and any production trajectory needed only for false-positive auditing.
+
+For every trajectory report:
+
+- first A event;
+- first A_LOWAMP event;
+- first B event;
+- first original E event;
+- first E_REPAIR event;
+- difference in iteration;
+- M_nd at event;
+- omega1 at event;
+- useful evolution remaining where defined.
+
+======================================================================
+PHASE 11 — FALSE-POSITIVE AUDIT FOR A_LOWAMP
+======================================================================
+
+This is the critical gate.
+
+Removing the amplitude clause is acceptable offline only if it does NOT begin
+classifying harmless small numerical reversals during productive evolution as
+maturity.
+
+Search every retained trajectory for:
+
+    A_LOWAMP = true
+
+while substantial subsequent useful topology evolution still remains.
+
+Report all such events, not only the first.
+
+Pay particular attention to:
+
+    early iterations
+    immediately after move changes
+    transient sign reversals
+    small-amplitude numerical noise
+    short-lived recurrence
+    coherent productive periods.
+
+Do not rescue A_LOWAMP by adding another condition if a false positive appears.
+
+If it fails, report it.
+
+======================================================================
+PHASE 12 — LOW-AMPLITUDE CANCELLATION SCIENTIFIC INTERPRETATION
+======================================================================
+
+Determine whether amplitude has any principled role in defining cancellation
+maturity.
+
+Distinguish:
+
+    amplitude required to establish that oscillation is numerically meaningful
+
+from:
+
+    amplitude required to establish exhaustion.
+
+The C320 pathology suggests that once persistent recurrence is established,
+small amplitude may strengthen—not weaken—the exhaustion interpretation.
+
+But this is a hypothesis to audit against the trajectories, not an instruction
+to reach that conclusion.
+
+======================================================================
+PHASE 13 — DOES THE REPAIRED RULE FIX C320 OFFLINE?
+======================================================================
+
+If A_LOWAMP triggers during C320's terminal stationary cycle, compute the
+recorded state at its first valid persistent firing:
+
+    iteration
+    move
+    M_nd
+    omega1
+    gray
+    mid
+    volume
+    cos(theta)
+    net/path
+    normalized amplitude
+    inner work consumed so far.
+
+Estimate, strictly as an offline replay:
+
+    outer-cost multiplier
+    inner-work multiplier
+    wall-time multiplier
+
+if the live controller had terminated at that point.
+
+Label these:
+
+    OFFLINE COUNTERFACTUAL ESTIMATES
+
+not measured causal results.
+
+======================================================================
+PHASE 14 — POST-STAGE-1 CONTROLLER AUDIT
+======================================================================
+
+Determine whether applying the full maturity detector recursively to S2–S4 is
+supported by evidence.
+
+For each lower stage ask:
+
+1. Does a genuinely new dynamical transition occur?
+2. Or does E merely become computable and immediately fire?
+3. How much M_nd improvement occurs before the event?
+4. How much omega1 improvement occurs?
+5. How much work is consumed waiting for history availability?
+6. Would a simpler deterministic policy have produced essentially the same
+   stage duration?
+7. Does the persistence window dominate the lower-stage cost?
+
+Do not invent the simpler policy yet.
+
+======================================================================
+PHASE 15 — HISTORY-FLOOR COST
+======================================================================
+
+Quantify the unavoidable arithmetic/history cost introduced by the current
+detector after each move change.
+
+For each mesh compute:
+
+    number of iterations spent solely reaching first evaluability
+
+as a fraction of:
+
+    total stage length
+    total candidate run
+    total inner work
+    total wall time.
+
+Explicitly verify or refute the earlier statement that at 160x20 these
+history-floor waits comprise approximately 53% of the run.
+
+======================================================================
+PHASE 16 — ARCHITECTURE OPTIONS
+======================================================================
+
+After all offline measurements are frozen, assess exactly these architecture
+families conceptually:
+
+ARCHITECTURE R — RECURSIVE
+
+    use repaired E_REPAIR independently at every move level.
+
+ARCHITECTURE F — FIRST-STAGE MATURITY + DETERMINISTIC REFINEMENT
+
+    use E_REPAIR to decide when move=0.04 is exhausted;
+    after that, use a simpler preregisterable deterministic refinement policy
+    rather than re-estimating maturity from a fresh long history at each rung.
+
+ARCHITECTURE L — REDUCED MOVE LADDER
+
+    use E_REPAIR to leave move=0.04;
+    retain fewer than the current three lower refinement levels.
+
+ARCHITECTURE X — ABANDON CURRENT LADDER CONCEPT
+
+    evidence shows the existing ladder architecture itself is not defensible.
+
+This phase is an architecture assessment, not a parameter-selection exercise.
+
+Do not instantiate/tune a new live controller here.
+
+======================================================================
+PHASE 17 — ARCHITECTURE DECISION RULE
+======================================================================
+
+Prefer ARCHITECTURE R only if:
+
+- A_LOWAMP has no material false positives;
+- later stages exhibit genuine maturity events rather than floor events;
+- recursive detection adds scientific information commensurate with its cost.
+
+Prefer ARCHITECTURE F if:
+
+- stage 1 has meaningful maturity dynamics;
+- lower stages are predominantly floor-driven;
+- lower stages nevertheless contribute useful refinement;
+- their progression can plausibly be handled by a simpler deterministic
+  refinement policy.
+
+Prefer ARCHITECTURE L if:
+
+- one or more lower move levels add negligible scientific benefit relative to
+  their cost.
+
+Prefer ARCHITECTURE X if:
+
+- A_LOWAMP introduces false positives;
+- useful lower-stage behavior cannot be represented cleanly;
+- or the whole ladder lacks defensible structure.
+
+Do not choose an architecture merely because it is cheapest.
+
+======================================================================
+PHASE 18 — NO NEW CONTROLLER NUMBERS
+======================================================================
+
+Even if ARCHITECTURE F or L is preferred, do NOT select in this task:
+
+- new lower-stage iteration counts;
+- new dwell values;
+- new move values;
+- a new ladder;
+- a new terminal threshold;
+- mesh-specific constants.
+
+The next task will preregister those from this audit if justified.
+
+This audit determines architecture, not final controller parameters.
+
+======================================================================
+PHASE 19 — REQUIRED CROSS-MESH TABLES
+======================================================================
+
+Produce at minimum:
+
+TABLE A — tested candidate stage decomposition
+
+Rows:
+    C160, C320, C400 x S1..S4
+
+Columns:
+    stage start/end
+    move
+    duration
+    arithmetic floor
+    event-floor offset
+    event class
+    A/B/E
+    Delta M_nd
+    Delta omega1
+    inner work
+    wall time.
+
+TABLE B — original vs A_LOWAMP replay
+
+Rows:
+    F160/F240/F320/F400/C160/C320/C400
+
+Columns:
+    original A event
+    A_LOWAMP event
+    B event
+    original E event
+    repaired E event
+    M_nd at repaired event
+    useful evolution remaining
+    false-positive flag.
+
+TABLE C — lower-stage scientific value
+
+Rows:
+    S1/S2/S3/S4 for each candidate mesh
+
+Columns:
+    M_nd contribution
+    omega1 contribution
+    density change
+    outer cost
+    inner cost
+    wall cost
+    marginal benefit.
+
+TABLE D — architecture evidence
+
+Rows:
+    R/F/L/X
+
+Columns:
+    evidence for
+    evidence against
+    unresolved assumptions
+    scientific risk
+    computational risk.
+
+======================================================================
+PHASE 20 — REQUIRED FIGURES
+======================================================================
+
+Produce at minimum:
+
+1. C320 full-history M_nd with original A/B/E events;
+2. C320 amplitude, cos(theta), net/path around terminal cycle;
+3. C320 original A vs A_LOWAMP replay;
+4. stage-by-stage M_nd contribution for C160/C320/C400;
+5. stage-by-stage omega1 contribution;
+6. stage-by-stage inner-work contribution;
+7. stage event minus arithmetic floor;
+8. original E vs repaired E event timing across all trajectories;
+9. false-positive audit visualization;
+10. recorded-trajectory truncation comparison;
+11. cumulative benefit vs cumulative work across move stages;
+12. architecture evidence summary.
+
+======================================================================
+PHASE 21 — REQUIRED DELIVERABLES
+======================================================================
+
+Create:
+
+analysis/OlhoffCurrent/diagnostics/controller_architecture_offline/
+    PREREGISTRATION.md
+    PROVENANCE.md
+    REPORT.md
+    RULE_RECOVERY.md
+    FLOOR_DERIVATION.md
+    STAGE_DECOMPOSITION.md
+    LOW_AMPLITUDE_CANCELLATION.md
+    OFFLINE_REPLAY.md
+    FALSE_POSITIVE_AUDIT.md
+    ARCHITECTURE_ASSESSMENT.md
+    METRICS.json
+    DATA_MANIFEST.json
+    figures/
+    scripts/
+    evidence/
+    FINAL_SHA256.txt
+
+No new optimization `runs/` directory is required unless needed to reference
+existing immutable run artifacts.
+
+Do not copy huge raw trajectories unnecessarily if they are already durably
+manifested elsewhere; reference them by path/hash where appropriate.
+
+======================================================================
+PHASE 22 — REQUIRED SCIENTIFIC VERDICTS
+======================================================================
+
+Issue exactly ONE low-amplitude-cancellation verdict:
+
+    LOW_AMPLITUDE_CANCELLATION_REPAIR_SUPPORTED
+
+    LOW_AMPLITUDE_CANCELLATION_REPAIR_PARTIAL
+
+    LOW_AMPLITUDE_CANCELLATION_REPAIR_REFUTED
+
+    LOW_AMPLITUDE_CANCELLATION_REPAIR_INCONCLUSIVE
+
+Then exactly ONE lower-stage verdict:
+
+    RECURSIVE_LOWER_STAGE_DETECTION_SUPPORTED
+
+    LOWER_STAGES_FLOOR_DRIVEN
+
+    LOWER_STAGE_STRUCTURE_MIXED
+
+    LOWER_STAGE_EVIDENCE_INCONCLUSIVE
+
+Then exactly ONE architecture verdict:
+
+    RECURSIVE_CONTROLLER_ARCHITECTURE_JUSTIFIED
+
+    FIRST_STAGE_PLUS_REFINEMENT_ARCHITECTURE_JUSTIFIED
+
+    REDUCED_MOVE_LADDER_ARCHITECTURE_JUSTIFIED
+
+    RECONSIDER_MOVE_LADDER_ARCHITECTURE
+
+    CONTROLLER_ARCHITECTURE_INCONCLUSIVE
+
+======================================================================
+PHASE 23 — NEXT-STEP VERDICT
+======================================================================
+
+Then exactly ONE:
+
+    REVISED_CONTROLLER_PREREGISTRATION_JUSTIFIED
+
+    MORE_OFFLINE_ARCHITECTURE_WORK_REQUIRED
+
+    CONTROLLER_ROUTE_REQUIRES_REDESIGN
+
+Do not authorize new scientific runs unless:
+
+    REVISED_CONTROLLER_PREREGISTRATION_JUSTIFIED
+
+======================================================================
+PHASE 24 — PRODUCTION / PERFORMANCE STATUS
+======================================================================
+
+Production MUST remain unchanged in this task:
+
+    PRODUCTION_CONTROLLER_NOT_PROMOTED
+
+The final performance campaign remains:
+
+    NINE_MESH_PERFORMANCE_CAMPAIGN_BLOCKED
+
+This offline audit cannot authorize the campaign by itself.
+
+======================================================================
+PHASE 25 — REPORT MUST ANSWER
+======================================================================
+
+REPORT.md must explicitly answer:
+
+1. What branch/HEAD was audited?
+2. Was the evidence manifest complete before final analysis?
+3. Did the in-flight C320 verification finish successfully?
+4. Were zero new scientific optimization runs executed?
+5. What exact original A rule was tested?
+6. What exact amplitude clause caused the C320 miss?
+7. What exact B rule was tested?
+8. What is the authoritative `omitnan` semantics?
+9. What is the mathematically correct post-transition firing floor?
+10. Is the §8 discrepancy documentation, implementation, or rule ambiguity?
+11. Which S1–S4 events are genuine dynamical events?
+12. Which are arithmetic-floor events?
+13. How much M_nd does each stage contribute at each mesh?
+14. How much omega1 does each stage contribute?
+15. How much inner work does each stage consume?
+16. How much wall time does each stage consume?
+17. What fraction of later-stage cost is merely history availability?
+18. Is the 53% C160 history-floor claim reproduced?
+19. Exactly when did C320 enter its terminal low-amplitude cycle?
+20. How much useful work occurred after that point?
+21. Is the 91.5% wasted-inner-work claim reproduced?
+22. Is the x2.98 counterfactual cost reproduced?
+23. What happens if ONLY Branch A's amplitude clause is removed?
+24. Does A_LOWAMP correctly recognize C320?
+25. Does it create any material false positives?
+26. Does it change classification of F160?
+27. Does it change classification of F240?
+28. Does it change classification of F320?
+29. Does it change classification of F400?
+30. Does it change C160 behavior offline?
+31. Does it change C400 behavior offline?
+32. Is low-amplitude persistent cancellation scientifically consistent with
+    stage exhaustion?
+33. Does recursive maturity detection provide meaningful information after
+    stage 1?
+34. Are S2–S4 mostly floor-driven?
+35. Which lower stages provide material topology improvement?
+36. Which lower stages provide material omega1 improvement?
+37. Which lower stages are poor value relative to cost?
+38. Does evidence favor recursive detection?
+39. Does evidence favor first-stage maturity plus deterministic refinement?
+40. Does evidence favor reducing the ladder?
+41. Does evidence suggest abandoning the current ladder?
+42. What exact architecture should the NEXT preregistered controller test use?
+43. Which details remain to be frozen in that next preregistration?
+44. Did production remain unchanged?
+45. Is all evidence hash-valid?
+46. Is the nine-mesh campaign still blocked?
+
+======================================================================
+PHASE 26 — REQUIRED FINAL SUMMARY
+======================================================================
+
+End with:
+
+    branch
+    starting HEAD
+    final HEAD
+    starting dirty state
+    final dirty state
+    MATLAB version
+    tests
+    scientific optimization runs executed = 0
+    source tree hash
+    original controller hash
+    offline preregistration hash
+    evidence manifest status
+
+Then exactly ONE:
+
+    LOW_AMPLITUDE_CANCELLATION_REPAIR_SUPPORTED
+    LOW_AMPLITUDE_CANCELLATION_REPAIR_PARTIAL
+    LOW_AMPLITUDE_CANCELLATION_REPAIR_REFUTED
+    LOW_AMPLITUDE_CANCELLATION_REPAIR_INCONCLUSIVE
+
+Then exactly ONE:
+
+    RECURSIVE_LOWER_STAGE_DETECTION_SUPPORTED
+    LOWER_STAGES_FLOOR_DRIVEN
+    LOWER_STAGE_STRUCTURE_MIXED
+    LOWER_STAGE_EVIDENCE_INCONCLUSIVE
+
+Then exactly ONE:
+
+    RECURSIVE_CONTROLLER_ARCHITECTURE_JUSTIFIED
+    FIRST_STAGE_PLUS_REFINEMENT_ARCHITECTURE_JUSTIFIED
+    REDUCED_MOVE_LADDER_ARCHITECTURE_JUSTIFIED
+    RECONSIDER_MOVE_LADDER_ARCHITECTURE
+    CONTROLLER_ARCHITECTURE_INCONCLUSIVE
+
+Then exactly ONE:
+
+    REVISED_CONTROLLER_PREREGISTRATION_JUSTIFIED
+    MORE_OFFLINE_ARCHITECTURE_WORK_REQUIRED
+    CONTROLLER_ROUTE_REQUIRES_REDESIGN
+
+Then:
+
+    PRODUCTION_CONTROLLER_NOT_PROMOTED
+    NINE_MESH_PERFORMANCE_CAMPAIGN_BLOCKED
+
+======================================================================
+STOP
+======================================================================
+
+STOP after the offline audit.
+
+ZERO new scientific optimization runs.
+
+Do NOT:
+
+- implement a revised live controller;
+- rerun C160;
+- rerun C320;
+- rerun C400;
+- rerun fixed-move arms;
+- change production;
+- promote anything;
+- choose/tune a new lower-stage dwell;
+- choose a new move ladder;
+- add Branch C;
+- introduce mesh-specific tuning;
+- introduce projection;
+- change R;
+- change p/mass/q;
+- run the nine-mesh campaign.
+
+If:
+
+    REVISED_CONTROLLER_PREREGISTRATION_JUSTIFIED
+
+then the NEXT task will preregister and causally test exactly ONE revised
+controller architecture.
+
+Only after that controller passes its promotion gates may the production
+nine-mesh performance campaign be authorized.

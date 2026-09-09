@@ -1,0 +1,50 @@
+{
+ "m160": {
+  "file": "analysis/OlhoffCurrent/diagnostics/move_stop/runs/baseline_160x20.mat",
+  "exists": true,
+  "nOuter_in_file": 91,
+  "NE_in_file": 3200,
+  "recomputed": {
+   "Mnd": 13.402499279526733,
+   "gray": 0.149375,
+   "mid": 0.025,
+   "volume": 0.49999900877797915
+  },
+  "frozen": {
+   "Mnd": 13.402499279526742,
+   "gray": 0.149375,
+   "mid": 0.025,
+   "volume": 0.49999900877797954
+  },
+  "maxAbsDeviation": 8.881784197001252e-15,
+  "verified": true,
+  "rho_sha256": "22aa4447bc5f2855271f44f0661536f4ad6c86c5711cedcfe51ea6d97d0ff18b",
+  "trajectorySha": "aad98bb1842ce43f47f1fe88b6cf943d421f10d9e98219af41bfcacecc226c6c"
+ },
+ "m320": {
+  "file": "analysis/OlhoffCurrent/diagnostics/move_stop/runs/baseline_320x40.mat",
+  "exists": true,
+  "nOuter_in_file": 131,
+  "NE_in_file": 12800,
+  "recomputed": {
+   "Mnd": 23.359567952074237,
+   "gray": 0.26375,
+   "mid": 0.095625,
+   "volume": 0.4999991386178148
+  },
+  "frozen": {
+   "Mnd": 23.359567952074254,
+   "gray": 0.26375,
+   "mid": 0.095625,
+   "volume": 0.49999913861781514
+  },
+  "maxAbsDeviation": 1.7763568394002505e-14,
+  "verified": true,
+  "rho_sha256": "4af7ff4a9c8748c77315faa2d15bcfddd02779b70f4b8be44301cf7826606c97",
+  "trajectorySha": "21900ae78741cfb8cf65d041fd64641a0ecae3babe94eeeb0ad917e4352f3fe9"
+ },
+ "m400": {
+  "file": "analysis/OlhoffCurrent/evidence/move_activity_400/P400_400x50_trajectory.mat",
+  "exists": false
+ }
+}

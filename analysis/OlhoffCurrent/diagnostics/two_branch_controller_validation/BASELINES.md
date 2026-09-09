@@ -74,3 +74,45 @@ machine (`PROVENANCE.md` §5). Therefore, for those two meshes:
 They are marked unavailable in every table and figure. Regenerating them would
 require a production rerun, which is not authorized and is not needed: every
 scalar the comparison rests on survives in the tracked `METRICS.json` and CSVs.
+
+---
+
+# ADDENDUM — §4 superseded, 2026-09-09
+
+§4 above is **wrong about the machine, not about the freeze.** At resumption the
+160×20 and 320×40 production final density vectors *do* exist here:
+
+| mesh | file | `RHO` |
+|---|---|---|
+| 160×20 | `diagnostics/move_stop/runs/baseline_160x20.mat` | 91 × 3200 |
+| 320×40 | `diagnostics/move_stop/runs/baseline_320x40.mat` | 131 × 12800 |
+
+They were not adopted on the strength of their filenames. `scripts/cv_recover_baselines.py`
+re-derives `M_nd`, `gray`, `mid` and `volume` from each file's **final** density
+column and refuses the file unless all four reproduce the frozen
+`evidence/baselines.json` values to ≤1e-9 absolute *and* the stored `nOuter`
+matches. Both passed:
+
+| mesh | `nOuter` in file | max abs deviation from frozen scalars |
+|---|---|---|
+| 160×20 | 91 (= frozen 91) | **8.88e-15** |
+| 320×40 | 131 (= frozen 131) | **1.78e-14** |
+
+The residual is floating-point summation order, not a different run.
+
+**No frozen baseline scalar was edited.** The recovery is purely additive:
+`rho_recovered`, `rho_recovered_file`, `rho_recovered_sha256`,
+`rho_recovered_trajectorySha` and a note were appended to each entry, and the
+original `"UNAVAILABLE -- raw .mat lost"` string is preserved verbatim under
+`rho_sha256_frozen_state`. Machine-readable: `evidence/baseline_recovery.json`.
+
+Consequences, all of them *additions* to what the preregistration expected:
+
+* the production topology image and the density-field distance are available at
+  **all three** meshes, not only 400×50;
+* the 400×50 pair (`P400`/`F400`) was lost with the rest of
+  `analysis/OlhoffCurrent/evidence/` and was **recomputed** in this session
+  (`PROVENANCE.md` §A4), so the declared `move_activity_400` evidence gate can
+  return to `ok`.
+
+Nothing here changes a baseline number, a preregistered bound, or the controller.

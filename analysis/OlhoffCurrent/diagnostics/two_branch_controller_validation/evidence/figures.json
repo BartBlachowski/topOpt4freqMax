@@ -1,0 +1,18 @@
+{
+ "figures": [
+  "F1_Mnd_160x20.png",
+  "F2_Mnd_320x40.png",
+  "F3_Mnd_400x50.png",
+  "F4_omega1_all.png",
+  "F5_move_events.png",
+  "F6_beta_vs_exhaustion.png",
+  "F7_signals_at_events.png",
+  "F8_topology.png",
+  "F9_final_Mnd.png",
+  "F10_final_omega1.png",
+  "F11_cost.png",
+  "F12_transitions.png",
+  "F13_terminal_admission.png",
+  "F14_summary.png"
+ ]
+}

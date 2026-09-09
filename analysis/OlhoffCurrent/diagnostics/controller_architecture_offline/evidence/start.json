@@ -1,0 +1,18 @@
+{
+  "started_utc": "2026-09-09T09:30:32.543534+00:00",
+  "branch": "benchmark-methodology-r2",
+  "starting_head": "1438aa3f4bd934f5b588587ef65f4f2ca35bac1c",
+  "starting_status": " M analysis/OlhoffCurrent/diagnostics/move_activity_400/EVIDENCE.json\n M analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/BASELINES.md\n M analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/PROVENANCE.md\n M analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/evidence/analysis.json\n M analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/evidence/baselines.json\n M analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/scripts/cv_analyze.py\n M analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/scripts/cv_figures.py\n?? analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/CAUSAL_ANALYSIS.md\n?? analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/DATA_MANIFEST.json\n?? analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/FINAL_SHA256.txt\n?? analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/METRICS.json\n?? analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/PERFORMANCE_READINESS.md\n?? analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/PROMOTION.md\n?? analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/REPORT.md\n?? analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/evidence/baseline_recovery.json\n?? analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/evidence/figures.json\n?? analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/evidence/frozen_rule_recheck.json\n?? analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/evidence/prefix_stage1.json\n?? analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/evidence/provenance_resume_20260909.json\n?? analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/evidence/rerun_20260909/\n?? analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/evidence/software_tests_rerun_20260909.json\n?? analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/evidence/software_tests_rerun_20260909_after_F400_restore.json\n?? analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/evidence/suite_tests_20260909.json\n?? analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/figures/\n?? analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/runs/C400x50_iterations.csv\n?? analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/runs/C400x50_record.json\n?? analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/scripts/cv_binary_equiv.py\n?? analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/scripts/cv_frozen_rule_check.py\n?? analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/scripts/cv_manifest.py\n?? analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/scripts/cv_prefix_stage1.py\n?? analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/scripts/cv_recover_baselines.py\n?? analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/scripts/cv_report.py\n",
+  "scientific_optimization_runs_launched_by_this_audit": 0,
+  "preexisting_process": {
+    "pid": 63654,
+    "observed_elapsed": "01:32:22",
+    "observed_cpu_percent": 100.0,
+    "observed_cpu_time": "90:24.10",
+    "state": "RN",
+    "script": "/tmp/claude-502/-Users-piotrek-Programming-topOpt4freqMax/061f2a5c-5a26-4402-ac5b-3f6f45f5b9fe/scratchpad/c320.m",
+    "status": "ACTIVE_PREEXISTING_REGENERATION",
+    "launched_by_this_audit": false
+  },
+  "phase": "PHASE_0_PENDING_C320"
+}

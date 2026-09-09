@@ -1,0 +1,12 @@
+{
+  "pid": 63654,
+  "observed_utc": "2026-09-09T09:33:40.242485+00:00",
+  "elapsed": "01:36:14",
+  "cpu_time": "94:14.22",
+  "cpu_percent": 99.2,
+  "state": "RN",
+  "complete": false,
+  "trajectory_present": false,
+  "launched_by_this_audit": false,
+  "process_left_untouched": true
+}

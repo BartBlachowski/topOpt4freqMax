@@ -1,0 +1,75 @@
+{
+  "generated": "2026-09-09T07:04:15Z",
+  "nTests": 17,
+  "nFail": 1,
+  "results": [
+    {
+      "name": "1  A true, B false -> E true",
+      "pass": true
+    },
+    {
+      "name": "2  A false, B true -> E true",
+      "pass": true
+    },
+    {
+      "name": "3  A false, B false -> E false",
+      "pass": true
+    },
+    {
+      "name": "3b documented hole: low-amplitude cancellation -> E false",
+      "pass": true
+    },
+    {
+      "name": "4  persistence boundary: 19 no declaration, 20 declares",
+      "pass": true
+    },
+    {
+      "name": "5  window reset after descent (no pre-transition data, no decl before s+38)",
+      "pass": true
+    },
+    {
+      "name": "6  exactly one rung per accepted transition, applied the iteration after declaration",
+      "pass": true
+    },
+    {
+      "name": "7  move never drops below 0.005",
+      "pass": true
+    },
+    {
+      "name": "8  beta stall alone cannot descend the move",
+      "pass": true
+    },
+    {
+      "name": "9  beta stall alone cannot admit terminal convergence",
+      "pass": true
+    },
+    {
+      "name": "10 move_min + E false cannot converge",
+      "pass": true
+    },
+    {
+      "name": "11 move_min + persistent E true converges at the declaring iteration",
+      "pass": true
+    },
+    {
+      "name": "12 CAP_HIT remains CAP_HIT under the candidate",
+      "pass": true
+    },
+    {
+      "name": "13 failure remains failure: status precedence byte-identical to task start",
+      "pass": true
+    },
+    {
+      "name": "14a production config still selects the production controller",
+      "pass": true
+    },
+    {
+      "name": "15 telemetry does not alter numerical results",
+      "pass": true
+    },
+    {
+      "name": "16 online == frozen tb_branches  [F400:MISSING alternate:A@39==20+19 coherent:B@39==20+19 none:noEvent(decl=0) mixed:A@39==20+19]",
+      "pass": false
+    }
+  ]
+}

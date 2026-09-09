@@ -1,0 +1,29 @@
+{
+ "tag": "C160x20",
+ "origFile": "evidence/rerun_20260909/C160x20_iterations.ORIG.csv",
+ "newFile": "runs/C160x20_iterations.csv",
+ "origMatlab": "25.2.0.2998904 (R2025b)",
+ "newMatlab": "25.2.0.3042426 (R2025b) Update 1",
+ "origRows": 219,
+ "newRows": 219,
+ "columnsIdentical": true,
+ "bitwiseIdentical": false,
+ "firstDifference": {
+  "row": 1,
+  "column": "tOuter",
+  "orig": "1.1695915833333332",
+  "new": "1.237223",
+  "absDiff": 0.06763141666666672,
+  "relDiff": 0.054663885707480965
+ },
+ "nColumnsDiffering": 1,
+ "worstPerColumn": {
+  "tOuter": {
+   "relDiff": 0.4682887170746258,
+   "absDiff": 1.8877955833333337,
+   "firstRow": 58,
+   "orig": "2.1434687083333333",
+   "new": "4.031264291666667"
+  }
+ }
+}

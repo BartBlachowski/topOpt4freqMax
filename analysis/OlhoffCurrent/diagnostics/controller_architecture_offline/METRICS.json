@@ -1,0 +1,20 @@
+{
+  "study": "POST-HOC OFFLINE ARCHITECTURE AUDIT",
+  "status": "PHASE_0_PENDING_C320",
+  "completed": false,
+  "substantive_replay_performed": false,
+  "scientific_optimization_runs_executed_by_this_audit": 0,
+  "source_integrity_pass": true,
+  "prior_frozen_hashes_unchanged": true,
+  "input_check_counts": {
+    "PASS": 110,
+    "MISSING": 1,
+    "HASH_MISMATCH": 0,
+    "UNHASHED_IN_PRIOR_MANIFEST": 0
+  },
+  "prior_P15": "FAIL_PENDING_C320_RAW_ARTIFACT",
+  "scientific_metrics": null,
+  "scientific_verdicts": null,
+  "production_status": "PRODUCTION_CONTROLLER_NOT_PROMOTED",
+  "performance_status": "NINE_MESH_PERFORMANCE_CAMPAIGN_BLOCKED"
+}

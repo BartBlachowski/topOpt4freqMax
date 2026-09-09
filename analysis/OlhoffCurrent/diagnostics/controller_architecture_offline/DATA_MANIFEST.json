@@ -1,0 +1,1107 @@
+{
+  "study": "POST-HOC OFFLINE ARCHITECTURE AUDIT",
+  "generated_utc": "2026-09-09T09:31:50.202721+00:00",
+  "phase": "PHASE_0_PENDING_C320",
+  "evidence_gate_pass": false,
+  "note": "Inventory only. Presence/hash alone cannot close the C320 numerical-equivalence/P15 gate.",
+  "scientific_optimization_runs_launched_by_this_audit": 0,
+  "source_integrity_pass": true,
+  "impl_tree_sha256": "edbfe47eb32109a2fb017f6f13d5327f2c240357caa96630064ffcf37ee152cb",
+  "original_controller_sha256": "17b37a384b1aa5d987d9c861e16071d1140af130f92406ccc11cec4518bcae0c",
+  "causal_preregistration_sha256": "8e323f837f7bbdaa5176d92621b4a45e4b377af131af5b3172429c629da27fbf",
+  "mechanism_preregistration_sha256": "62748225253f85f6a2fbc1bad35489a2c201cd45ee64ff279601003354b73abd",
+  "offline_preregistration_sha256": "b60dc9ae65d1a9f42f14bdea677fc0395550a59c8e250242bb125982a39e786a",
+  "prior_frozen_hashes_unchanged": true,
+  "frozen_checks": [
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_maturity_240/PREREGISTRATION.md",
+      "expected": "62748225253f85f6a2fbc1bad35489a2c201cd45ee64ff279601003354b73abd",
+      "observed": "62748225253f85f6a2fbc1bad35489a2c201cd45ee64ff279601003354b73abd",
+      "pass": true
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_maturity_240/evidence/PREREGISTRATION.frozen",
+      "expected": "b75adcb9c94b25c5e4c5521902d2d2b501ad16d76eaf14bcfdab8d48f4dd2483",
+      "observed": "b75adcb9c94b25c5e4c5521902d2d2b501ad16d76eaf14bcfdab8d48f4dd2483",
+      "pass": true
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_maturity_240/scripts/tb_branches.m",
+      "expected": "bc146572e3f1a7928914ea556a2f892ad3081d8037c7ec858c50d7ca7a06f3c2",
+      "observed": "bc146572e3f1a7928914ea556a2f892ad3081d8037c7ec858c50d7ca7a06f3c2",
+      "pass": true
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/dynamical_regime/PREREGISTRATION.md",
+      "expected": "2ac361e769fe87ce458a4668840174a53de01de508da6b802c257982cab974b3",
+      "observed": "2ac361e769fe87ce458a4668840174a53de01de508da6b802c257982cab974b3",
+      "pass": true
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/dynamical_regime/scripts/dr_telemetry.m",
+      "expected": "5f646f9c0751e3e1ff3edab129dea28f1d4c94ba48c2051f88729d8dfc11f491",
+      "observed": "5f646f9c0751e3e1ff3edab129dea28f1d4c94ba48c2051f88729d8dfc11f491",
+      "pass": true
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/dynamical_regime/scripts/dr_dyn.m",
+      "expected": "77b466187065487a9fb47962b4606ded4ccf6182a06560731158fb7301e63c3d",
+      "observed": "77b466187065487a9fb47962b4606ded4ccf6182a06560731158fb7301e63c3d",
+      "pass": true
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/fixedmove_400_dynamics/PREREGISTRATION.md",
+      "expected": "f6e84d8a65a3d8180508693f307a07ec9ae8ada51cf852a4668c087b1aeafcbc",
+      "observed": "f6e84d8a65a3d8180508693f307a07ec9ae8ada51cf852a4668c087b1aeafcbc",
+      "pass": true
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/PREREGISTRATION.md",
+      "expected": "8e323f837f7bbdaa5176d92621b4a45e4b377af131af5b3172429c629da27fbf",
+      "observed": "8e323f837f7bbdaa5176d92621b4a45e4b377af131af5b3172429c629da27fbf",
+      "pass": true
+    }
+  ],
+  "matlab": {
+    "version": "25.2.0.3042426",
+    "release": "R2025b",
+    "description": "Update 1",
+    "date": "Oct 03 2025",
+    "method": "Installed VersionInfo.xml, corroborated by existing C320 log; no MATLAB launched"
+  },
+  "retained_tests": [
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/evidence/software_tests_rerun_20260909_after_F400_restore.json",
+      "sha256": "da7c63b844e101bdd10647f6ce18f1163bc0f5690f8bb3a893f0a16faf10000b",
+      "n_tests": 17,
+      "n_fail": 0,
+      "provenance": "PRIOR_RETAINED_RESULT_NOT_RERUN"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/evidence/suite_tests_20260909.json",
+      "sha256": "6511c08376ac8743f88abb0b7e5d36b3472312ceb234d8b12d602bd2a2d8b6e4",
+      "n_tests": 5,
+      "n_fail": 0,
+      "provenance": "PRIOR_RETAINED_RESULT_NOT_RERUN"
+    }
+  ],
+  "input_manifests": [
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/DATA_MANIFEST.json",
+      "sha256": "53f2e0a74366f50033427feaa243a9e02e80db047a055b762676793967d20609"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_maturity_240/DATA_MANIFEST.json",
+      "sha256": "ed54a1dd30ad181368e320afbe8b67cadff17fd52db76ba7f67dbc8e03449a52"
+    }
+  ],
+  "input_checks": [
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/BASELINES.md",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/DATA_MANIFEST.json",
+      "section": "tracked",
+      "expected_sha256": "2212a66a50c62f118c0a17047c8e2c8fa55bf88b9edfe0a2c21bcf50baa4f0df",
+      "observed_sha256": "2212a66a50c62f118c0a17047c8e2c8fa55bf88b9edfe0a2c21bcf50baa4f0df",
+      "bytes": 5958,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/CAUSAL_ANALYSIS.md",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/DATA_MANIFEST.json",
+      "section": "tracked",
+      "expected_sha256": "950d5d4b2764858ccd7b1580e82d44f72aac215d74d97fa2a1ebefde6129a12c",
+      "observed_sha256": "950d5d4b2764858ccd7b1580e82d44f72aac215d74d97fa2a1ebefde6129a12c",
+      "bytes": 4521,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/IMPLEMENTATION.md",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/DATA_MANIFEST.json",
+      "section": "tracked",
+      "expected_sha256": "d3b865e912a93dfbfe22ab475a6861399d7cd080cf61b46e76d063acd7b578ed",
+      "observed_sha256": "d3b865e912a93dfbfe22ab475a6861399d7cd080cf61b46e76d063acd7b578ed",
+      "bytes": 7821,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/METRICS.json",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/DATA_MANIFEST.json",
+      "section": "tracked",
+      "expected_sha256": "1761f17912d5b70d3e42867951ee74cb69d23339c87cea0d683a395f03a311b3",
+      "observed_sha256": "1761f17912d5b70d3e42867951ee74cb69d23339c87cea0d683a395f03a311b3",
+      "bytes": 18133,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/PERFORMANCE_READINESS.md",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/DATA_MANIFEST.json",
+      "section": "tracked",
+      "expected_sha256": "c32b7386ab4314ffe1ae74c30c3a15cc96bba490de6927834148e6f115f87755",
+      "observed_sha256": "c32b7386ab4314ffe1ae74c30c3a15cc96bba490de6927834148e6f115f87755",
+      "bytes": 5442,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/PREREGISTRATION.md",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/DATA_MANIFEST.json",
+      "section": "tracked",
+      "expected_sha256": "8e323f837f7bbdaa5176d92621b4a45e4b377af131af5b3172429c629da27fbf",
+      "observed_sha256": "8e323f837f7bbdaa5176d92621b4a45e4b377af131af5b3172429c629da27fbf",
+      "bytes": 25025,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/PROMOTION.md",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/DATA_MANIFEST.json",
+      "section": "tracked",
+      "expected_sha256": "b4a5e260ef9c536d00b55208272c4eda1f4f152ac4fa1b70b0ede914da768e9c",
+      "observed_sha256": "b4a5e260ef9c536d00b55208272c4eda1f4f152ac4fa1b70b0ede914da768e9c",
+      "bytes": 4548,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/PROVENANCE.md",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/DATA_MANIFEST.json",
+      "section": "tracked",
+      "expected_sha256": "0e987a9bc7b39425661ffcee0cd81ebc5fa88010d35e094daff8d4df35459a33",
+      "observed_sha256": "0e987a9bc7b39425661ffcee0cd81ebc5fa88010d35e094daff8d4df35459a33",
+      "bytes": 18301,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/REPORT.md",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/DATA_MANIFEST.json",
+      "section": "tracked",
+      "expected_sha256": "35f3a24ee2bf79165ba0d5d7ec1dad0c2d207797a846b5d5e61e41a8e3379c57",
+      "observed_sha256": "35f3a24ee2bf79165ba0d5d7ec1dad0c2d207797a846b5d5e61e41a8e3379c57",
+      "bytes": 55105,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/SINGLE_FACTOR_AUDIT.md",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/DATA_MANIFEST.json",
+      "section": "tracked",
+      "expected_sha256": "71ff23f5a9cdfe126df7393a6ba4a725220794224bf15818fce91a2f6fb17408",
+      "observed_sha256": "71ff23f5a9cdfe126df7393a6ba4a725220794224bf15818fce91a2f6fb17408",
+      "bytes": 5093,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/evidence/PREREGISTRATION.frozen",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/DATA_MANIFEST.json",
+      "section": "tracked",
+      "expected_sha256": "8e323f837f7bbdaa5176d92621b4a45e4b377af131af5b3172429c629da27fbf",
+      "observed_sha256": "8e323f837f7bbdaa5176d92621b4a45e4b377af131af5b3172429c629da27fbf",
+      "bytes": 25025,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/evidence/PREREGISTRATION.sha256",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/DATA_MANIFEST.json",
+      "section": "tracked",
+      "expected_sha256": "845b74a3be3a584814b876f8cef08ce9fb327ff515d5ff3c32db2b3de5ef2d1e",
+      "observed_sha256": "845b74a3be3a584814b876f8cef08ce9fb327ff515d5ff3c32db2b3de5ef2d1e",
+      "bytes": 315,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/evidence/analysis.json",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/DATA_MANIFEST.json",
+      "section": "tracked",
+      "expected_sha256": "9b2f07b67f8ed38904276992a3479ffd6537a32b545c0a4be8669a6f0081b6ff",
+      "observed_sha256": "9b2f07b67f8ed38904276992a3479ffd6537a32b545c0a4be8669a6f0081b6ff",
+      "bytes": 31750,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/evidence/baseline_recovery.json",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/DATA_MANIFEST.json",
+      "section": "tracked",
+      "expected_sha256": "cb7a56938969a2caf9203e2e2946b2cbcc3c967b5cd7e8bc563f2553197c5caf",
+      "observed_sha256": "cb7a56938969a2caf9203e2e2946b2cbcc3c967b5cd7e8bc563f2553197c5caf",
+      "bytes": 1411,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/evidence/baselines.json",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/DATA_MANIFEST.json",
+      "section": "tracked",
+      "expected_sha256": "a4b55671c26187bb2aaf7c466eb990bf1164a7d9fe14dddc1b5f4bd8738f420e",
+      "observed_sha256": "a4b55671c26187bb2aaf7c466eb990bf1164a7d9fe14dddc1b5f4bd8738f420e",
+      "bytes": 5009,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/evidence/figures.json",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/DATA_MANIFEST.json",
+      "section": "tracked",
+      "expected_sha256": "d18023d7dd2f2344e7a68757a2d61e25bc026f481293ef56378b2b5bed170c3e",
+      "observed_sha256": "d18023d7dd2f2344e7a68757a2d61e25bc026f481293ef56378b2b5bed170c3e",
+      "bytes": 361,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/evidence/frozen_rule_recheck.json",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/DATA_MANIFEST.json",
+      "section": "tracked",
+      "expected_sha256": "a3a928aeec5b4e7054afa51d29df78f244b4f5fdccbcd3260ade489b2804b8b3",
+      "observed_sha256": "a3a928aeec5b4e7054afa51d29df78f244b4f5fdccbcd3260ade489b2804b8b3",
+      "bytes": 693,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/evidence/prefix_stage1.json",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/DATA_MANIFEST.json",
+      "section": "tracked",
+      "expected_sha256": "d0dad04bd008f32f5bc302a0c01331458bd16d5923ea90d67deb7c07a11da1aa",
+      "observed_sha256": "d0dad04bd008f32f5bc302a0c01331458bd16d5923ea90d67deb7c07a11da1aa",
+      "bytes": 784,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/evidence/provenance_resume_20260909.json",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/DATA_MANIFEST.json",
+      "section": "tracked",
+      "expected_sha256": "3d1542e476c29f18cf51ab60c3ca8579f79360f850c78204ea5e1dd15149efc6",
+      "observed_sha256": "3d1542e476c29f18cf51ab60c3ca8579f79360f850c78204ea5e1dd15149efc6",
+      "bytes": 12347,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/evidence/provenance_start.json",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/DATA_MANIFEST.json",
+      "section": "tracked",
+      "expected_sha256": "379634535f3a13ac68b17bfbf13b9f20745012ce15a26ef8a73f5ed62b57c7ba",
+      "observed_sha256": "379634535f3a13ac68b17bfbf13b9f20745012ce15a26ef8a73f5ed62b57c7ba",
+      "bytes": 12185,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/evidence/single_factor.json",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/DATA_MANIFEST.json",
+      "section": "tracked",
+      "expected_sha256": "6efe319f6cb424c6836f164b853635cfa7fb4375df4f525989434a74cf567889",
+      "observed_sha256": "6efe319f6cb424c6836f164b853635cfa7fb4375df4f525989434a74cf567889",
+      "bytes": 1638,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/evidence/software_tests.json",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/DATA_MANIFEST.json",
+      "section": "tracked",
+      "expected_sha256": "8759b90be01f775a3e7cdb7592c1cb0a1e2938581dea593bf4697cc05811a386",
+      "observed_sha256": "8759b90be01f775a3e7cdb7592c1cb0a1e2938581dea593bf4697cc05811a386",
+      "bytes": 1892,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/evidence/software_tests_rerun_20260909.json",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/DATA_MANIFEST.json",
+      "section": "tracked",
+      "expected_sha256": "54bd205c69bb74e556e8d047b119fcc66a4668004dbec3f6e5ba46d0d97c1e4a",
+      "observed_sha256": "54bd205c69bb74e556e8d047b119fcc66a4668004dbec3f6e5ba46d0d97c1e4a",
+      "bytes": 1885,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/evidence/software_tests_rerun_20260909_after_F400_restore.json",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/DATA_MANIFEST.json",
+      "section": "tracked",
+      "expected_sha256": "da7c63b844e101bdd10647f6ce18f1163bc0f5690f8bb3a893f0a16faf10000b",
+      "observed_sha256": "da7c63b844e101bdd10647f6ce18f1163bc0f5690f8bb3a893f0a16faf10000b",
+      "bytes": 1892,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/evidence/suite_tests_20260909.json",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/DATA_MANIFEST.json",
+      "section": "tracked",
+      "expected_sha256": "6511c08376ac8743f88abb0b7e5d36b3472312ceb234d8b12d602bd2a2d8b6e4",
+      "observed_sha256": "6511c08376ac8743f88abb0b7e5d36b3472312ceb234d8b12d602bd2a2d8b6e4",
+      "bytes": 1329,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/evidence/rerun_20260909/C160x20_binary_equiv.json",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/DATA_MANIFEST.json",
+      "section": "tracked",
+      "expected_sha256": "3e601332c86f697384540b933953f6f25bccb9a189db0e628cc76ece51a7ae68",
+      "observed_sha256": "3e601332c86f697384540b933953f6f25bccb9a189db0e628cc76ece51a7ae68",
+      "bytes": 713,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/evidence/rerun_20260909/C160x20_iterations.ORIG.csv",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/DATA_MANIFEST.json",
+      "section": "tracked",
+      "expected_sha256": "7121c9d3a16f1ebcd5eb2c9b6f6c242b90b9ec2ac4690a385cfb7e1102de0ce9",
+      "observed_sha256": "7121c9d3a16f1ebcd5eb2c9b6f6c242b90b9ec2ac4690a385cfb7e1102de0ce9",
+      "bytes": 149556,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/evidence/rerun_20260909/C160x20_iterations.RERUN.csv",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/DATA_MANIFEST.json",
+      "section": "tracked",
+      "expected_sha256": "3f677fa157ef42b74d4d37b87e3f91a04e8f85dbb497984323bd265e88ec910d",
+      "observed_sha256": "3f677fa157ef42b74d4d37b87e3f91a04e8f85dbb497984323bd265e88ec910d",
+      "bytes": 149548,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/evidence/rerun_20260909/C160x20_record.ORIG.json",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/DATA_MANIFEST.json",
+      "section": "tracked",
+      "expected_sha256": "6c77f0123a279de0a635d2eff8fd31d06d9c0da86ba1bc36dc3d453351a74a47",
+      "observed_sha256": "6c77f0123a279de0a635d2eff8fd31d06d9c0da86ba1bc36dc3d453351a74a47",
+      "bytes": 3141,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/evidence/rerun_20260909/C160x20_record.RERUN.json",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/DATA_MANIFEST.json",
+      "section": "tracked",
+      "expected_sha256": "8fdc674cba553c46878bedc99cb5141d651ff84bd0626962da596545b2b703d5",
+      "observed_sha256": "8fdc674cba553c46878bedc99cb5141d651ff84bd0626962da596545b2b703d5",
+      "bytes": 3159,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/evidence/rerun_20260909/C320x40_iterations.ORIG.csv",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/DATA_MANIFEST.json",
+      "section": "tracked",
+      "expected_sha256": "ff570d6e4d024f360974ab065c3042127404b7073a66ed972bfd8718563b356c",
+      "observed_sha256": "ff570d6e4d024f360974ab065c3042127404b7073a66ed972bfd8718563b356c",
+      "bytes": 1138275,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/evidence/rerun_20260909/C320x40_record.ORIG.json",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/DATA_MANIFEST.json",
+      "section": "tracked",
+      "expected_sha256": "3fc68c050a9d81b5a6ad6ab482abda9679d5cd5f2455967dc4a3a8b64dc236be",
+      "observed_sha256": "3fc68c050a9d81b5a6ad6ab482abda9679d5cd5f2455967dc4a3a8b64dc236be",
+      "bytes": 2891,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/evidence/rerun_20260909/move_activity_400_EVIDENCE.ORIG.json",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/DATA_MANIFEST.json",
+      "section": "tracked",
+      "expected_sha256": "7c224d3aa9287dfd7c13b98f6b31dd2e63ff9f548726e7c5f067a2b0f58e514b",
+      "observed_sha256": "7c224d3aa9287dfd7c13b98f6b31dd2e63ff9f548726e7c5f067a2b0f58e514b",
+      "bytes": 3674,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/figures/F10_final_omega1.png",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/DATA_MANIFEST.json",
+      "section": "tracked",
+      "expected_sha256": "0707ae6e9105cf71feeb8a7311f7350758f74cf4da62940eb57629eaa94c59a8",
+      "observed_sha256": "0707ae6e9105cf71feeb8a7311f7350758f74cf4da62940eb57629eaa94c59a8",
+      "bytes": 18245,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/figures/F11_cost.png",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/DATA_MANIFEST.json",
+      "section": "tracked",
+      "expected_sha256": "5cd33562f89a07006e904ebe43e3686177c3e7db08d158e549ef5a0916c31089",
+      "observed_sha256": "5cd33562f89a07006e904ebe43e3686177c3e7db08d158e549ef5a0916c31089",
+      "bytes": 41229,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/figures/F12_transitions.png",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/DATA_MANIFEST.json",
+      "section": "tracked",
+      "expected_sha256": "bab63fb6d11ab69c4e720c34217cfc9e30ee98ca3749d0ed2941b21ac9d48ffa",
+      "observed_sha256": "bab63fb6d11ab69c4e720c34217cfc9e30ee98ca3749d0ed2941b21ac9d48ffa",
+      "bytes": 31105,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/figures/F13_terminal_admission.png",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/DATA_MANIFEST.json",
+      "section": "tracked",
+      "expected_sha256": "426ca725a3bddec290593d5998720a37c77d6bd42a7a66f27f81a233144c0a99",
+      "observed_sha256": "426ca725a3bddec290593d5998720a37c77d6bd42a7a66f27f81a233144c0a99",
+      "bytes": 85514,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/figures/F14_summary.png",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/DATA_MANIFEST.json",
+      "section": "tracked",
+      "expected_sha256": "80b6749c48fbf47bd05ef157b17d86ad8fd4f18b21f80017bc30533d76992fe2",
+      "observed_sha256": "80b6749c48fbf47bd05ef157b17d86ad8fd4f18b21f80017bc30533d76992fe2",
+      "bytes": 45906,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/figures/F1_Mnd_160x20.png",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/DATA_MANIFEST.json",
+      "section": "tracked",
+      "expected_sha256": "827533306cfeac42169d43179c57c4e4f307564106049683d8ae21d20d226c46",
+      "observed_sha256": "827533306cfeac42169d43179c57c4e4f307564106049683d8ae21d20d226c46",
+      "bytes": 39219,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/figures/F2_Mnd_320x40.png",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/DATA_MANIFEST.json",
+      "section": "tracked",
+      "expected_sha256": "bc771b6c32c6e020458b7e67eb34f7657e525149fdb47d6a928b9e59d9b9d99a",
+      "observed_sha256": "bc771b6c32c6e020458b7e67eb34f7657e525149fdb47d6a928b9e59d9b9d99a",
+      "bytes": 37071,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/figures/F3_Mnd_400x50.png",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/DATA_MANIFEST.json",
+      "section": "tracked",
+      "expected_sha256": "3e1b9e5f260d8f06a255a434856865229f15e61726cdf0fb22f870a623d539fe",
+      "observed_sha256": "3e1b9e5f260d8f06a255a434856865229f15e61726cdf0fb22f870a623d539fe",
+      "bytes": 38860,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/figures/F4_omega1_all.png",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/DATA_MANIFEST.json",
+      "section": "tracked",
+      "expected_sha256": "59b61c6923baeae20c200cab2785ea11480d8157b7aafd1fdf60fb5cfbccc1b8",
+      "observed_sha256": "59b61c6923baeae20c200cab2785ea11480d8157b7aafd1fdf60fb5cfbccc1b8",
+      "bytes": 45008,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/figures/F5_move_events.png",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/DATA_MANIFEST.json",
+      "section": "tracked",
+      "expected_sha256": "74c32b31b16eeb3ce812a4fbab08546c1c80aa1ef998bbb3b7ce7f338babfc8f",
+      "observed_sha256": "74c32b31b16eeb3ce812a4fbab08546c1c80aa1ef998bbb3b7ce7f338babfc8f",
+      "bytes": 83526,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/figures/F6_beta_vs_exhaustion.png",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/DATA_MANIFEST.json",
+      "section": "tracked",
+      "expected_sha256": "c4c592b5eb255181933feab46e380fb20a43351606a347dc5b0de68f05f05e23",
+      "observed_sha256": "c4c592b5eb255181933feab46e380fb20a43351606a347dc5b0de68f05f05e23",
+      "bytes": 99625,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/figures/F7_signals_at_events.png",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/DATA_MANIFEST.json",
+      "section": "tracked",
+      "expected_sha256": "635a95ee3584682e1690dca8cbe9024d3af115193a0fcb8f80c53728ce5ac26a",
+      "observed_sha256": "635a95ee3584682e1690dca8cbe9024d3af115193a0fcb8f80c53728ce5ac26a",
+      "bytes": 299917,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/figures/F8_topology.png",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/DATA_MANIFEST.json",
+      "section": "tracked",
+      "expected_sha256": "e798bcd76ea9aef07d930b0dc638ddae850cbdd143f39ca5e6bd91eabcfcf4cd",
+      "observed_sha256": "e798bcd76ea9aef07d930b0dc638ddae850cbdd143f39ca5e6bd91eabcfcf4cd",
+      "bytes": 86160,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/figures/F9_final_Mnd.png",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/DATA_MANIFEST.json",
+      "section": "tracked",
+      "expected_sha256": "1faf59af8c7b974a657199c672899b66506c285b2bbdf9c4a31079a4f83d30ac",
+      "observed_sha256": "1faf59af8c7b974a657199c672899b66506c285b2bbdf9c4a31079a4f83d30ac",
+      "bytes": 16859,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/scripts/cv_analyze.py",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/DATA_MANIFEST.json",
+      "section": "tracked",
+      "expected_sha256": "16b2317f65c4e9e649472ee0fdef81e223daaa8150cd58b94cfeea317e5848b9",
+      "observed_sha256": "16b2317f65c4e9e649472ee0fdef81e223daaa8150cd58b94cfeea317e5848b9",
+      "bytes": 19642,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/scripts/cv_baselines.m",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/DATA_MANIFEST.json",
+      "section": "tracked",
+      "expected_sha256": "9809b0d7c57726fd087281ef32e625206feb6cbe3de441813921e375eb379d8f",
+      "observed_sha256": "9809b0d7c57726fd087281ef32e625206feb6cbe3de441813921e375eb379d8f",
+      "bytes": 5926,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/scripts/cv_binary_equiv.py",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/DATA_MANIFEST.json",
+      "section": "tracked",
+      "expected_sha256": "9a4cbdf35fedec299e2103109c581ee479844ec0e0909186d9f395faa5954c04",
+      "observed_sha256": "9a4cbdf35fedec299e2103109c581ee479844ec0e0909186d9f395faa5954c04",
+      "bytes": 3095,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/scripts/cv_config.m",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/DATA_MANIFEST.json",
+      "section": "tracked",
+      "expected_sha256": "b41fb5a5f496b75ff03ae4493feb4afc3127f64e74679807bbac22c868b96e20",
+      "observed_sha256": "b41fb5a5f496b75ff03ae4493feb4afc3127f64e74679807bbac22c868b96e20",
+      "bytes": 1927,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/scripts/cv_export.m",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/DATA_MANIFEST.json",
+      "section": "tracked",
+      "expected_sha256": "fb2f5099dcf31b560fe34b7cdc7979bf2b7b12ba7d58398803c1e035512ddf54",
+      "observed_sha256": "fb2f5099dcf31b560fe34b7cdc7979bf2b7b12ba7d58398803c1e035512ddf54",
+      "bytes": 1070,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/scripts/cv_figures.py",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/DATA_MANIFEST.json",
+      "section": "tracked",
+      "expected_sha256": "c4f499632b378f9d24d2f93c4e890ede982b6df11936cc3e79093f2631ab6db4",
+      "observed_sha256": "c4f499632b378f9d24d2f93c4e890ede982b6df11936cc3e79093f2631ab6db4",
+      "bytes": 16934,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/scripts/cv_frozen_rule_check.py",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/DATA_MANIFEST.json",
+      "section": "tracked",
+      "expected_sha256": "325e08c3527cbb7ef4956c4f483afe8c15a158a4b1bcb39acc612ff042b94e58",
+      "observed_sha256": "325e08c3527cbb7ef4956c4f483afe8c15a158a4b1bcb39acc612ff042b94e58",
+      "bytes": 4679,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/scripts/cv_manifest.py",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/DATA_MANIFEST.json",
+      "section": "tracked",
+      "expected_sha256": "a7d45b7eca9181d29808177ac26e2fe2127bc2603263f1fadadf960775469f25",
+      "observed_sha256": "a7d45b7eca9181d29808177ac26e2fe2127bc2603263f1fadadf960775469f25",
+      "bytes": 4698,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/scripts/cv_prefix_stage1.py",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/DATA_MANIFEST.json",
+      "section": "tracked",
+      "expected_sha256": "57f5e44fd5c671e68a892e8a226aa6f9136d305a7e91a1d1e8157e250a685f73",
+      "observed_sha256": "57f5e44fd5c671e68a892e8a226aa6f9136d305a7e91a1d1e8157e250a685f73",
+      "bytes": 3244,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/scripts/cv_provenance.m",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/DATA_MANIFEST.json",
+      "section": "tracked",
+      "expected_sha256": "307fa5272ca3fcdfd83e21bc5fdc1a3e3fa543f3db9cfb325b31ac7e5ac52dc7",
+      "observed_sha256": "307fa5272ca3fcdfd83e21bc5fdc1a3e3fa543f3db9cfb325b31ac7e5ac52dc7",
+      "bytes": 9563,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/scripts/cv_recover_baselines.py",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/DATA_MANIFEST.json",
+      "section": "tracked",
+      "expected_sha256": "b014adfc4c69e38df100814f76f1c3c67521490b5aaaa89d5f2530ad7727778c",
+      "observed_sha256": "b014adfc4c69e38df100814f76f1c3c67521490b5aaaa89d5f2530ad7727778c",
+      "bytes": 4046,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/scripts/cv_report.py",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/DATA_MANIFEST.json",
+      "section": "tracked",
+      "expected_sha256": "e5b493e494928f3e35818e0badf7d2d5437fc3804d63323b8bba05fa95761e10",
+      "observed_sha256": "e5b493e494928f3e35818e0badf7d2d5437fc3804d63323b8bba05fa95761e10",
+      "bytes": 7897,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/scripts/cv_run.m",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/DATA_MANIFEST.json",
+      "section": "tracked",
+      "expected_sha256": "7cae23621c01dca72271eb487f465d3a9f8a9301ee142674e9d5bf34e0833d02",
+      "observed_sha256": "7cae23621c01dca72271eb487f465d3a9f8a9301ee142674e9d5bf34e0833d02",
+      "bytes": 6574,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/scripts/cv_singlefactor.m",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/DATA_MANIFEST.json",
+      "section": "tracked",
+      "expected_sha256": "194c9d4656f9ae440d005000b3c3e1dc82aa2c790fe3f131b0892e4bc272fa26",
+      "observed_sha256": "194c9d4656f9ae440d005000b3c3e1dc82aa2c790fe3f131b0892e4bc272fa26",
+      "bytes": 4062,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/scripts/cv_telemetry.m",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/DATA_MANIFEST.json",
+      "section": "tracked",
+      "expected_sha256": "dd69a6c5f03ddd117dd1488628ac5c5fbefd3563e2e76d62ed7b4cbcfa842806",
+      "observed_sha256": "dd69a6c5f03ddd117dd1488628ac5c5fbefd3563e2e76d62ed7b4cbcfa842806",
+      "bytes": 2991,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/scripts/cv_tests.m",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/DATA_MANIFEST.json",
+      "section": "tracked",
+      "expected_sha256": "69098c68478515c0ccf3cb32c55c0da75edd4020e9ba632b3ed5e709fb84232a",
+      "observed_sha256": "69098c68478515c0ccf3cb32c55c0da75edd4020e9ba632b3ed5e709fb84232a",
+      "bytes": 17323,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/runs/C160x20_iterations.csv",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/DATA_MANIFEST.json",
+      "section": "tracked",
+      "expected_sha256": "7121c9d3a16f1ebcd5eb2c9b6f6c242b90b9ec2ac4690a385cfb7e1102de0ce9",
+      "observed_sha256": "7121c9d3a16f1ebcd5eb2c9b6f6c242b90b9ec2ac4690a385cfb7e1102de0ce9",
+      "bytes": 149556,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/runs/C160x20_record.json",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/DATA_MANIFEST.json",
+      "section": "tracked",
+      "expected_sha256": "6c77f0123a279de0a635d2eff8fd31d06d9c0da86ba1bc36dc3d453351a74a47",
+      "observed_sha256": "6c77f0123a279de0a635d2eff8fd31d06d9c0da86ba1bc36dc3d453351a74a47",
+      "bytes": 3141,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/runs/C320x40_iterations.csv",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/DATA_MANIFEST.json",
+      "section": "tracked",
+      "expected_sha256": "ff570d6e4d024f360974ab065c3042127404b7073a66ed972bfd8718563b356c",
+      "observed_sha256": "ff570d6e4d024f360974ab065c3042127404b7073a66ed972bfd8718563b356c",
+      "bytes": 1138275,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/runs/C320x40_record.json",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/DATA_MANIFEST.json",
+      "section": "tracked",
+      "expected_sha256": "3fc68c050a9d81b5a6ad6ab482abda9679d5cd5f2455967dc4a3a8b64dc236be",
+      "observed_sha256": "3fc68c050a9d81b5a6ad6ab482abda9679d5cd5f2455967dc4a3a8b64dc236be",
+      "bytes": 2891,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/runs/C400x50_iterations.csv",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/DATA_MANIFEST.json",
+      "section": "tracked",
+      "expected_sha256": "34704ce9cb11881cacc4407ccdc02890d2244c9b8e1f81b22b71e701cd535d3c",
+      "observed_sha256": "34704ce9cb11881cacc4407ccdc02890d2244c9b8e1f81b22b71e701cd535d3c",
+      "bytes": 332710,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/runs/C400x50_record.json",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/DATA_MANIFEST.json",
+      "section": "tracked",
+      "expected_sha256": "7edd5d9ad6fc46578a94ec6448afd8a74203c9b1f83f08cff33d09dbbd34cefa",
+      "observed_sha256": "7edd5d9ad6fc46578a94ec6448afd8a74203c9b1f83f08cff33d09dbbd34cefa",
+      "bytes": 3164,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/evidence/two_branch_controller_validation/C160x20_trajectory.mat",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/DATA_MANIFEST.json",
+      "section": "raw",
+      "expected_sha256": "81244cf570e1f5382f3840f54bc5dec3cbd51fd803ed6f518b73b498fc39c4e1",
+      "observed_sha256": "81244cf570e1f5382f3840f54bc5dec3cbd51fd803ed6f518b73b498fc39c4e1",
+      "bytes": 8858016,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/evidence/two_branch_controller_validation/C320x40_trajectory.mat",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/DATA_MANIFEST.json",
+      "section": "raw",
+      "expected_sha256": null,
+      "observed_sha256": null,
+      "bytes": null,
+      "status": "MISSING"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/evidence/two_branch_controller_validation/C400x50_trajectory.mat",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/DATA_MANIFEST.json",
+      "section": "raw",
+      "expected_sha256": "673be8c7e2ba868b56e18777f8edbdbb528b4c4872d56cf827594af8e6a27bb8",
+      "observed_sha256": "673be8c7e2ba868b56e18777f8edbdbb528b4c4872d56cf827594af8e6a27bb8",
+      "bytes": 139808745,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/evidence/move_activity_400/P400_400x50_trajectory.mat",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/DATA_MANIFEST.json",
+      "section": "raw",
+      "expected_sha256": "0f4d2dacb2fc40d14399cba603f158a160b4b2b0849a52e679f068cbc939c517",
+      "observed_sha256": "0f4d2dacb2fc40d14399cba603f158a160b4b2b0849a52e679f068cbc939c517",
+      "bytes": 36585921,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/evidence/move_activity_400/F400_400x50_trajectory.mat",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/DATA_MANIFEST.json",
+      "section": "raw",
+      "expected_sha256": "f03cec07b45f71633d5fe125dcec84df5a64d5d55c7e5b90305e5c5144fe165c",
+      "observed_sha256": "f03cec07b45f71633d5fe125dcec84df5a64d5d55c7e5b90305e5c5144fe165c",
+      "bytes": 102067434,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/move_stop/runs/baseline_160x20.mat",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/DATA_MANIFEST.json",
+      "section": "raw",
+      "expected_sha256": "aad98bb1842ce43f47f1fe88b6cf943d421f10d9e98219af41bfcacecc226c6c",
+      "observed_sha256": "aad98bb1842ce43f47f1fe88b6cf943d421f10d9e98219af41bfcacecc226c6c",
+      "bytes": 1781721,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/move_stop/runs/baseline_320x40.mat",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/DATA_MANIFEST.json",
+      "section": "raw",
+      "expected_sha256": "21900ae78741cfb8cf65d041fd64641a0ecae3babe94eeeb0ad917e4352f3fe9",
+      "observed_sha256": "21900ae78741cfb8cf65d041fd64641a0ecae3babe94eeeb0ad917e4352f3fe9",
+      "bytes": 10483440,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/move_stop/runs/fixedmove_160x20.mat",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/DATA_MANIFEST.json",
+      "section": "raw",
+      "expected_sha256": "55ea2de29b730ab14350f018bdb22795c494e9bfc22a91ee65c214011e7b3ef9",
+      "observed_sha256": "55ea2de29b730ab14350f018bdb22795c494e9bfc22a91ee65c214011e7b3ef9",
+      "bytes": 8098562,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/move_stop/runs/fixedmove_320x40.mat",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/DATA_MANIFEST.json",
+      "section": "raw",
+      "expected_sha256": "7175740945e81f6fe2e39fe1f4e5972d95b056f9d8cef7038c25b087ce7b76dd",
+      "observed_sha256": "7175740945e81f6fe2e39fe1f4e5972d95b056f9d8cef7038c25b087ce7b76dd",
+      "bytes": 17794522,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/fixedmove_400_dynamics/evidence/fm_analysis.mat",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_maturity_240/DATA_MANIFEST.json",
+      "section": "inputs",
+      "expected_sha256": "b0bdd1a20efd3a8aa826c05b5b3ea19abd756b672cb1cc655d0fab4490da77f5",
+      "observed_sha256": "b0bdd1a20efd3a8aa826c05b5b3ea19abd756b672cb1cc655d0fab4490da77f5",
+      "bytes": 345220483,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/dynamical_regime/runs/runB_320x40.mat",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_maturity_240/DATA_MANIFEST.json",
+      "section": "inputs",
+      "expected_sha256": "196ce8c317648dd4121d81b2237e6bb7cce1813dcc8fe5812ca1c5e405737832",
+      "observed_sha256": "196ce8c317648dd4121d81b2237e6bb7cce1813dcc8fe5812ca1c5e405737832",
+      "bytes": 98159344,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/fixedmove_400_dynamics/runs/runC_400x50.mat",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_maturity_240/DATA_MANIFEST.json",
+      "section": "inputs",
+      "expected_sha256": "31bc06c5a0bd374e9105379ed930d20d4137cf958a8815482bc7eb0ee64ec7d0",
+      "observed_sha256": "31bc06c5a0bd374e9105379ed930d20d4137cf958a8815482bc7eb0ee64ec7d0",
+      "bytes": 154617059,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/dynamical_regime/scripts/dr_telemetry.m",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_maturity_240/DATA_MANIFEST.json",
+      "section": "inputs",
+      "expected_sha256": "5f646f9c0751e3e1ff3edab129dea28f1d4c94ba48c2051f88729d8dfc11f491",
+      "observed_sha256": "5f646f9c0751e3e1ff3edab129dea28f1d4c94ba48c2051f88729d8dfc11f491",
+      "bytes": 4867,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/dynamical_regime/scripts/dr_dyn.m",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_maturity_240/DATA_MANIFEST.json",
+      "section": "inputs",
+      "expected_sha256": "77b466187065487a9fb47962b4606ded4ccf6182a06560731158fb7301e63c3d",
+      "observed_sha256": "77b466187065487a9fb47962b4606ded4ccf6182a06560731158fb7301e63c3d",
+      "bytes": 2483,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/dynamical_regime/scripts/dr_classify.m",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_maturity_240/DATA_MANIFEST.json",
+      "section": "inputs",
+      "expected_sha256": "5727b117ba63e646d52924d9e62fd69c933fc8ae186d4c53f2fff1210e625af5",
+      "observed_sha256": "5727b117ba63e646d52924d9e62fd69c933fc8ae186d4c53f2fff1210e625af5",
+      "bytes": 1324,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_maturity_240/CROSS_MESH_ANALYSIS.md",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_maturity_240/DATA_MANIFEST.json",
+      "section": "outputs",
+      "expected_sha256": "09a1c62c4f9f2bc63d915b36b1ca2120d84cc748833400247bd1c419c4594c18",
+      "observed_sha256": "09a1c62c4f9f2bc63d915b36b1ca2120d84cc748833400247bd1c419c4594c18",
+      "bytes": 6798,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_maturity_240/DATA_INVENTORY.md",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_maturity_240/DATA_MANIFEST.json",
+      "section": "outputs",
+      "expected_sha256": "fbfd2512198ce743c499c7cec8855254b50b02552f3f8f2c06a6429b0b1350d6",
+      "observed_sha256": "fbfd2512198ce743c499c7cec8855254b50b02552f3f8f2c06a6429b0b1350d6",
+      "bytes": 5050,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_maturity_240/METRICS.json",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_maturity_240/DATA_MANIFEST.json",
+      "section": "outputs",
+      "expected_sha256": "fbf7433e2efeba0edb4f793c19b2529070762f452a785cef1b7d5192555eb7b1",
+      "observed_sha256": "fbf7433e2efeba0edb4f793c19b2529070762f452a785cef1b7d5192555eb7b1",
+      "bytes": 7517,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_maturity_240/PREREGISTRATION.md",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_maturity_240/DATA_MANIFEST.json",
+      "section": "outputs",
+      "expected_sha256": "62748225253f85f6a2fbc1bad35489a2c201cd45ee64ff279601003354b73abd",
+      "observed_sha256": "62748225253f85f6a2fbc1bad35489a2c201cd45ee64ff279601003354b73abd",
+      "bytes": 13696,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_maturity_240/PROVENANCE.md",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_maturity_240/DATA_MANIFEST.json",
+      "section": "outputs",
+      "expected_sha256": "d5ba02928eb679977a65f0ce0b5ede310c073fe3a1fdebfa787047aefcbc4cea",
+      "observed_sha256": "d5ba02928eb679977a65f0ce0b5ede310c073fe3a1fdebfa787047aefcbc4cea",
+      "bytes": 4989,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_maturity_240/REPORT.md",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_maturity_240/DATA_MANIFEST.json",
+      "section": "outputs",
+      "expected_sha256": "5adc763ccc536fca4feadc2994a5001a63214ef1a9a762a919c6d961ff6e2ae2",
+      "observed_sha256": "5adc763ccc536fca4feadc2994a5001a63214ef1a9a762a919c6d961ff6e2ae2",
+      "bytes": 13759,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_maturity_240/TWO_BRANCH_ANALYSIS.md",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_maturity_240/DATA_MANIFEST.json",
+      "section": "outputs",
+      "expected_sha256": "2fbce88771c09a6eef84d7ec8d45e3893e7124c49dc92a087d63a3cb25528d34",
+      "observed_sha256": "2fbce88771c09a6eef84d7ec8d45e3893e7124c49dc92a087d63a3cb25528d34",
+      "bytes": 9253,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_maturity_240/evidence/PREREGISTRATION.frozen",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_maturity_240/DATA_MANIFEST.json",
+      "section": "outputs",
+      "expected_sha256": "b75adcb9c94b25c5e4c5521902d2d2b501ad16d76eaf14bcfdab8d48f4dd2483",
+      "observed_sha256": "b75adcb9c94b25c5e4c5521902d2d2b501ad16d76eaf14bcfdab8d48f4dd2483",
+      "bytes": 223,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_maturity_240/evidence/tb_analysis.mat",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_maturity_240/DATA_MANIFEST.json",
+      "section": "outputs",
+      "expected_sha256": "a06a7faab3872278e17e4b6d6187e7877e954fa89d3db8485607a2f56f5409d0",
+      "observed_sha256": "a06a7faab3872278e17e4b6d6187e7877e954fa89d3db8485607a2f56f5409d0",
+      "bytes": 399877992,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_maturity_240/figures/F10_xmesh_event.png",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_maturity_240/DATA_MANIFEST.json",
+      "section": "outputs",
+      "expected_sha256": "5f5b30152e1db5c0b0e1dc8ad9fdb383ae6b6c25c661cfa77ce5af7db6dbf75c",
+      "observed_sha256": "5f5b30152e1db5c0b0e1dc8ad9fdb383ae6b6c25c661cfa77ce5af7db6dbf75c",
+      "bytes": 43446,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_maturity_240/figures/F11_xmesh_useful.png",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_maturity_240/DATA_MANIFEST.json",
+      "section": "outputs",
+      "expected_sha256": "ac5a7822d2116c4c98877690628b3ac3fc1a6375c6e46ed7438336947f92d683",
+      "observed_sha256": "ac5a7822d2116c4c98877690628b3ac3fc1a6375c6e46ed7438336947f92d683",
+      "bytes": 33324,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_maturity_240/figures/F12_union_diagram.png",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_maturity_240/DATA_MANIFEST.json",
+      "section": "outputs",
+      "expected_sha256": "08393127368b098f00b0b12763fac2c54153c9f8eb2db3d442375241cf90260d",
+      "observed_sha256": "08393127368b098f00b0b12763fac2c54153c9f8eb2db3d442375241cf90260d",
+      "bytes": 71530,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_maturity_240/figures/F1_cos.png",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_maturity_240/DATA_MANIFEST.json",
+      "section": "outputs",
+      "expected_sha256": "cda5b47445ddf732766df1fe0f0fe8bf2d834ef0ee813b6d9cbb82c7dace4089",
+      "observed_sha256": "cda5b47445ddf732766df1fe0f0fe8bf2d834ef0ee813b6d9cbb82c7dace4089",
+      "bytes": 47427,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_maturity_240/figures/F2_netpath.png",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_maturity_240/DATA_MANIFEST.json",
+      "section": "outputs",
+      "expected_sha256": "d797d6b8251c1482493e784cbdda4c98ed56a7914be3cb36793e2135cf62e4ec",
+      "observed_sha256": "d797d6b8251c1482493e784cbdda4c98ed56a7914be3cb36793e2135cf62e4ec",
+      "bytes": 54472,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_maturity_240/figures/F3_amplitude.png",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_maturity_240/DATA_MANIFEST.json",
+      "section": "outputs",
+      "expected_sha256": "b6c597f6b9b05d5cb73f1a45aeda0a27fcc69bb1cfa01434a5e2dbb1e25b2f30",
+      "observed_sha256": "b6c597f6b9b05d5cb73f1a45aeda0a27fcc69bb1cfa01434a5e2dbb1e25b2f30",
+      "bytes": 61168,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_maturity_240/figures/F4_Mnd.png",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_maturity_240/DATA_MANIFEST.json",
+      "section": "outputs",
+      "expected_sha256": "4d6d97f5f64242eb1fcff5fec7dae057231cb28d257e2dd54694455cbf7c4428",
+      "observed_sha256": "4d6d97f5f64242eb1fcff5fec7dae057231cb28d257e2dd54694455cbf7c4428",
+      "bytes": 41341,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_maturity_240/figures/F5_omega1.png",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_maturity_240/DATA_MANIFEST.json",
+      "section": "outputs",
+      "expected_sha256": "d6e54453dd8180691d0cad916a0a31d53567fd43ad4f33d7ff228c37cdad47ce",
+      "observed_sha256": "d6e54453dd8180691d0cad916a0a31d53567fd43ad4f33d7ff228c37cdad47ce",
+      "bytes": 35101,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_maturity_240/figures/F6_events.png",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_maturity_240/DATA_MANIFEST.json",
+      "section": "outputs",
+      "expected_sha256": "47d3d5873109e87698ed035c6476d4c9400efd7abfb83ba9f9424dd4720bf988",
+      "observed_sha256": "47d3d5873109e87698ed035c6476d4c9400efd7abfb83ba9f9424dd4720bf988",
+      "bytes": 79959,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_maturity_240/figures/F7_F8_spatial.png",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_maturity_240/DATA_MANIFEST.json",
+      "section": "outputs",
+      "expected_sha256": "f266618d2ef3c4539a9fd0c63867531c93601ca906a2a96f094cb69601491c2e",
+      "observed_sha256": "f266618d2ef3c4539a9fd0c63867531c93601ca906a2a96f094cb69601491c2e",
+      "bytes": 38084,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_maturity_240/figures/F9_xmesh_endpoint.png",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_maturity_240/DATA_MANIFEST.json",
+      "section": "outputs",
+      "expected_sha256": "bf34174c0f5b12838dcf0981b619dfeab4655de204ccb0ad5e739932d244f11e",
+      "observed_sha256": "bf34174c0f5b12838dcf0981b619dfeab4655de204ccb0ad5e739932d244f11e",
+      "bytes": 39301,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_maturity_240/scripts/tb_analyze.m",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_maturity_240/DATA_MANIFEST.json",
+      "section": "outputs",
+      "expected_sha256": "6708167db12fea3926569e29ccc17845cd0b0c85055526955c454da698a142e6",
+      "observed_sha256": "6708167db12fea3926569e29ccc17845cd0b0c85055526955c454da698a142e6",
+      "bytes": 4196,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_maturity_240/scripts/tb_branches.m",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_maturity_240/DATA_MANIFEST.json",
+      "section": "outputs",
+      "expected_sha256": "bc146572e3f1a7928914ea556a2f892ad3081d8037c7ec858c50d7ca7a06f3c2",
+      "observed_sha256": "bc146572e3f1a7928914ea556a2f892ad3081d8037c7ec858c50d7ca7a06f3c2",
+      "bytes": 1817,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_maturity_240/scripts/tb_config.m",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_maturity_240/DATA_MANIFEST.json",
+      "section": "outputs",
+      "expected_sha256": "339a11a37ea72d714c0b39c01ed67201fba75f183846d5abdc634d3ae78d828c",
+      "observed_sha256": "339a11a37ea72d714c0b39c01ed67201fba75f183846d5abdc634d3ae78d828c",
+      "bytes": 1486,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_maturity_240/scripts/tb_figures.m",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_maturity_240/DATA_MANIFEST.json",
+      "section": "outputs",
+      "expected_sha256": "6d39622f1ba1a62cf69d27055cb68d217b7aacad70dee4b8e4a5969ea367a774",
+      "observed_sha256": "6d39622f1ba1a62cf69d27055cb68d217b7aacad70dee4b8e4a5969ea367a774",
+      "bytes": 6331,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_maturity_240/scripts/tb_metrics.m",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_maturity_240/DATA_MANIFEST.json",
+      "section": "outputs",
+      "expected_sha256": "8000f363481306d051ded35316e8621786be92dc923e277de814dc1c341807e7",
+      "observed_sha256": "8000f363481306d051ded35316e8621786be92dc923e277de814dc1c341807e7",
+      "bytes": 2034,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_maturity_240/scripts/tb_run.m",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_maturity_240/DATA_MANIFEST.json",
+      "section": "outputs",
+      "expected_sha256": "26451075b64b12d0bb1ce6eeb52561fd90aeec59f486996235f4fa7716adeb9a",
+      "observed_sha256": "26451075b64b12d0bb1ce6eeb52561fd90aeec59f486996235f4fa7716adeb9a",
+      "bytes": 4360,
+      "status": "PASS"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_maturity_240/runs/runD_240x30.mat",
+      "manifest": "analysis/OlhoffCurrent/diagnostics/two_branch_maturity_240/DATA_MANIFEST.json",
+      "section": "outputs",
+      "expected_sha256": "8cd55994e10c97037198172fe1271a9d7ae91e4cb32da553de3dd7fe9aee7e80",
+      "observed_sha256": "8cd55994e10c97037198172fe1271a9d7ae91e4cb32da553de3dd7fe9aee7e80",
+      "bytes": 54084856,
+      "status": "PASS"
+    }
+  ],
+  "check_counts": {
+    "PASS": 110,
+    "MISSING": 1,
+    "HASH_MISMATCH": 0,
+    "UNHASHED_IN_PRIOR_MANIFEST": 0
+  },
+  "snapshot_head": "1438aa3f4bd934f5b588587ef65f4f2ca35bac1c",
+  "snapshot_status": " M analysis/OlhoffCurrent/diagnostics/move_activity_400/EVIDENCE.json\n M analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/BASELINES.md\n M analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/PROVENANCE.md\n M analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/evidence/analysis.json\n M analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/evidence/baselines.json\n M analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/scripts/cv_analyze.py\n M analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/scripts/cv_figures.py\n?? analysis/OlhoffCurrent/diagnostics/controller_architecture_offline/\n?? analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/CAUSAL_ANALYSIS.md\n?? analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/DATA_MANIFEST.json\n?? analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/FINAL_SHA256.txt\n?? analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/METRICS.json\n?? analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/PERFORMANCE_READINESS.md\n?? analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/PROMOTION.md\n?? analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/REPORT.md\n?? analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/evidence/baseline_recovery.json\n?? analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/evidence/figures.json\n?? analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/evidence/frozen_rule_recheck.json\n?? analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/evidence/prefix_stage1.json\n?? analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/evidence/provenance_resume_20260909.json\n?? analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/evidence/rerun_20260909/\n?? analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/evidence/software_tests_rerun_20260909.json\n?? analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/evidence/software_tests_rerun_20260909_after_F400_restore.json\n?? analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/evidence/suite_tests_20260909.json\n?? analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/figures/\n?? analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/runs/C400x50_iterations.csv\n?? analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/runs/C400x50_record.json\n?? analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/scripts/cv_binary_equiv.py\n?? analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/scripts/cv_frozen_rule_check.py\n?? analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/scripts/cv_manifest.py\n?? analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/scripts/cv_prefix_stage1.py\n?? analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/scripts/cv_recover_baselines.py\n?? analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/scripts/cv_report.py\n"
+}

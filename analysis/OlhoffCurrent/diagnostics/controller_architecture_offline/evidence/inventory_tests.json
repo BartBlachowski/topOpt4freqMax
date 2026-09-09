@@ -1,0 +1,10 @@
+{
+  "generated_utc": "2026-09-09T09:31:50.202721+00:00",
+  "scope": "READ_ONLY_PROVENANCE_CHECKS_ONLY",
+  "source_integrity": true,
+  "frozen_preregistrations_and_definitions": true,
+  "prior_manifest_hashes_for_present_inputs": true,
+  "missing_inputs_do_not_count_as_pass": true,
+  "complete_evidence_gate": false,
+  "scientific_optimization_runs": 0
+}

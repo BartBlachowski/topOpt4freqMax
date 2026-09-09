@@ -1,0 +1,18 @@
+{
+ "generated": "2026-09-09T07:34:00Z",
+ "matlab": "25.2.0.3042426 (R2025b) Update 1",
+ "head": "1438aa3f4bd934f5b588587ef65f4f2ca35bac1c",
+ "note": "analysis/OlhoffCurrent/tests suite, re-run at resumption under the Update 1 build. test_preset_equivalence is simultaneously PREREGISTRATION sec.8 test 14 (candidate OFF reproduces production) and an independent demonstration that the build change is numerically inert.",
+ "harnessCaveat": "test_path_isolation deliberately mutates the MATLAB path; when the whole suite runs in one process it can leave tests/ off the path, which made test_source_integrity and test_preset_equivalence report 'Unrecognized function'. Re-run in a fresh process both PASS. That is a harness ordering artifact, not a product failure.",
+ "results": [
+  {"name": "test_currentness",        "pass": true},
+  {"name": "test_evidence_retention", "pass": true},
+  {"name": "test_path_isolation",     "pass": true},
+  {"name": "test_source_integrity",   "pass": true,
+   "detail": "tree restored pristine: 75 source files, tree edbfe47eb32109a2"},
+  {"name": "test_preset_equivalence", "pass": true,
+   "detail": "160x20 production preset vs frozen conference record: rho BITWISE, omega1 BITWISE 169.49522702153845, volume BITWISE, outer 91/91, inner 2241/2241, CONVERGED"}
+ ],
+ "nTests": 5,
+ "nFail": 0
+}

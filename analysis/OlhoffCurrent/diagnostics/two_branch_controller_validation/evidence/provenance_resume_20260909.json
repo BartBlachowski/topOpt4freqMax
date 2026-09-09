@@ -1,0 +1,368 @@
+{
+  "tag": "resume_20260909",
+  "timestamp": "2026-09-09T07:01:39Z",
+  "matlab": "25.2.0.3042426 (R2025b) Update 1",
+  "computer": "MACA64",
+  "repo": "/Users/piotrek/Programming/topOpt4freqMax",
+  "branch": "benchmark-methodology-r2",
+  "head": "1438aa3f4bd934f5b588587ef65f4f2ca35bac1c",
+  "status": "",
+  "clean": true,
+  "currentness": "CURRENT",
+  "sourceTree": "edbfe47eb32109a2fb017f6f13d5327f2c240357caa96630064ffcf37ee152cb",
+  "sourceNFiles": 75,
+  "sourceOk": true,
+  "sourceMismatch": 0,
+  "sourceMissing": 0,
+  "sourceExtra": 0,
+  "dispatchOk": true,
+  "dispatchNSymbols": 0,
+  "dispatchBlockers": 0,
+  "dispatchWarnings": 0,
+  "resolvedImpl": [
+    {
+      "name": "applyFilter",
+      "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/filter/applyFilter.m"
+    },
+    {
+      "name": "assemble2D",
+      "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/fem/assemble2D.m"
+    },
+    {
+      "name": "classifyModes",
+      "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/fem/classifyModes.m"
+    },
+    {
+      "name": "compareHistory",
+      "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/algo/compareHistory.m"
+    },
+    {
+      "name": "compareHistoryTo",
+      "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/algo/compareHistoryTo.m"
+    },
+    {
+      "name": "compareTopology",
+      "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/algo/compareTopology.m"
+    },
+    {
+      "name": "defaultCfg",
+      "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/algo/defaultCfg.m"
+    },
+    {
+      "name": "deltaLambda",
+      "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/algo/deltaLambda.m"
+    },
+    {
+      "name": "eigSolve",
+      "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/fem/eigSolve.m"
+    },
+    {
+      "name": "elemMats2D",
+      "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/fem/elemMats2D.m"
+    },
+    {
+      "name": "genGrad",
+      "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/algo/genGrad.m"
+    },
+    {
+      "name": "imresizeNN",
+      "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/algo/imresizeNN.m"
+    },
+    {
+      "name": "innerLoop",
+      "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/algo/innerLoop.m"
+    },
+    {
+      "name": "innerLoopLP",
+      "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/algo/innerLoopLP.m"
+    },
+    {
+      "name": "innerLoopRho",
+      "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/algo/innerLoopRho.m"
+    },
+    {
+      "name": "massScale",
+      "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/fem/massScale.m"
+    },
+    {
+      "name": "mmasub",
+      "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/mma_published/mmasub.m"
+    },
+    {
+      "name": "model2D",
+      "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/fem/model2D.m"
+    },
+    {
+      "name": "moveControl",
+      "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/algo/moveControl.m"
+    },
+    {
+      "name": "multRule",
+      "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/algo/multRule.m"
+    },
+    {
+      "name": "olhoffOpt",
+      "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/algo/olhoffOpt.m"
+    },
+    {
+      "name": "olhoffSolve",
+      "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/architecture/olhoffSolve.m"
+    },
+    {
+      "name": "plotHistory",
+      "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/algo/plotHistory.m"
+    },
+    {
+      "name": "prepFilter",
+      "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/filter/prepFilter.m"
+    },
+    {
+      "name": "projChain",
+      "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/filter/projChain.m"
+    },
+    {
+      "name": "projDensityField",
+      "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/filter/projDensityField.m"
+    },
+    {
+      "name": "projectDensity",
+      "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/filter/projectDensity.m"
+    },
+    {
+      "name": "subsolv",
+      "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/mma_published/subsolv.m"
+    },
+    {
+      "name": "textStamp",
+      "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/algo/textStamp.m"
+    },
+    {
+      "name": "top88_reference",
+      "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/filter/top88_reference.m"
+    },
+    {
+      "name": "topologyImage",
+      "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/algo/topologyImage.m"
+    },
+    {
+      "name": "useMMA",
+      "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/algo/useMMA.m"
+    }
+  ],
+  "mmasubPath": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/mma_published/mmasub.m",
+  "mmaPublished": true,
+  "forbiddenOnPath": [],
+  "forbiddenAbsent": true,
+  "lock": {
+    "p": 3,
+    "pContinuation": false,
+    "massModel": "eq4b",
+    "q": 1,
+    "filterType": "sensitivity",
+    "filterApplyTo": "all",
+    "radiusPhysical": 0.06,
+    "projection": false,
+    "multMethod": "subspace",
+    "subspaceSize": 2,
+    "diagonalOffsets": true,
+    "offDiagonal": true,
+    "mmaVariant": "published",
+    "innerVariable": "increment",
+    "eigenSolver": "eigs",
+    "targetMode": 1,
+    "volumeFraction": 0.5,
+    "moveLevels": [
+      0.04,
+      0.02,
+      0.01,
+      0.005
+    ],
+    "movePolicy": "ladder",
+    "contSignal": "boundVariable",
+    "contWindow": 10,
+    "contTolerance": 0.005,
+    "stopNorm": "l2",
+    "stopToleranceRule": "meshScaled",
+    "stopTolerance160": 0.05
+  },
+  "sensitivityFilterWins": true,
+  "tolCheck": [
+    {
+      "mesh": [
+        160,
+        20
+      ],
+      "NE": 3200,
+      "stopTolerance": 0.05,
+      "frozenTol": 0.05,
+      "identical": true
+    },
+    {
+      "mesh": [
+        240,
+        30
+      ],
+      "NE": 7200,
+      "stopTolerance": 0.075000000000000011,
+      "frozenTol": 0.075000000000000011,
+      "identical": true
+    },
+    {
+      "mesh": [
+        320,
+        40
+      ],
+      "NE": 12800,
+      "stopTolerance": 0.1,
+      "frozenTol": 0.1,
+      "identical": true
+    },
+    {
+      "mesh": [
+        400,
+        50
+      ],
+      "NE": 20000,
+      "stopTolerance": 0.125,
+      "frozenTol": 0.125,
+      "identical": true
+    }
+  ],
+  "toleranceLawIdentical": true,
+  "evidence": [
+    {
+      "path": "analysis/OlhoffCurrent/evidence/move_activity_400/P400_400x50_trajectory.mat",
+      "exists": false,
+      "bytes": null,
+      "sha256": ""
+    },
+    {
+      "path": "analysis/OlhoffCurrent/evidence/move_activity_400/F400_400x50_trajectory.mat",
+      "exists": false,
+      "bytes": null,
+      "sha256": ""
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/move_stop/runs/baseline_160x20_iterations.csv",
+      "exists": true,
+      "bytes": 22658,
+      "sha256": "f438612943aee5789b3f289eb0563159efd1d5121de147381cf94fa164308a20"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/move_stop/runs/baseline_320x40_iterations.csv",
+      "exists": true,
+      "bytes": 33214,
+      "sha256": "73baa20070133e9e30e073438927f401b557a962a8e05bf31700101e41642804"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/move_stop/runs/fixedmove_160x20_iterations.csv",
+      "exists": true,
+      "bytes": 99468,
+      "sha256": "102309499785bcace0bce20bdcb72afa1f2421d5abecfd3db7b95e0358fb3a68"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/move_stop/runs/fixedmove_320x40_iterations.csv",
+      "exists": true,
+      "bytes": 54614,
+      "sha256": "675e5ae0143e74704bc66f011388e47b9ab752e2db9e14f106d3423a6e8c7917"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/move_transition/runs/armP_160x20_iterations.csv",
+      "exists": true,
+      "bytes": 165868,
+      "sha256": "9fb22bff8cb65f4df2733bdcad7ae9641611b99864ec3bd504abd9faf102736b"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/move_transition/runs/armP_320x40_iterations.csv",
+      "exists": true,
+      "bytes": 167146,
+      "sha256": "1df7b1aa304be32a4465ca43644f9977db49dd287094378e435e14172bd8eba7"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/move_transition/runs/armU_160x20_iterations.csv",
+      "exists": true,
+      "bytes": 162121,
+      "sha256": "a5f48446f0977cd443b0bfc8b0694930bab012870b1415e1aa4b188f71f8baca"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/move_transition/runs/armU_320x40_iterations.csv",
+      "exists": true,
+      "bytes": 167087,
+      "sha256": "67bbd33c73c268f647253cfe1a919aaa1d8e81077038d209c54f73d5ad6035aa"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/move_activity_400/runs/P400_400x50_iterations.csv",
+      "exists": true,
+      "bytes": 60967,
+      "sha256": "72665ec768d9959227b213a3eedd1eeac48e8fac3ebcadc22a0fc0a1bfb2ff41"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/move_activity_400/runs/F400_400x50_iterations.csv",
+      "exists": true,
+      "bytes": 162083,
+      "sha256": "5c2957185f0174ace7e7df9aa5dc684a51714ba3675dda18fd6f243abfc9b5ec"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_maturity_240/runs/runD_240x30.mat",
+      "exists": true,
+      "bytes": 5.4084856E+7,
+      "sha256": "8cd55994e10c97037198172fe1271a9d7ae91e4cb32da553de3dd7fe9aee7e80"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/dynamical_regime/runs/runB_320x40.mat",
+      "exists": true,
+      "bytes": 9.8159344E+7,
+      "sha256": "196ce8c317648dd4121d81b2237e6bb7cce1813dcc8fe5812ca1c5e405737832"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/fixedmove_400_dynamics/runs/runC_400x50.mat",
+      "exists": true,
+      "bytes": 1.54617059E+8,
+      "sha256": "31bc06c5a0bd374e9105379ed930d20d4137cf958a8815482bc7eb0ee64ec7d0"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/fixedmove_400_dynamics/evidence/fm_analysis.mat",
+      "exists": true,
+      "bytes": 3.45220483E+8,
+      "sha256": "b0bdd1a20efd3a8aa826c05b5b3ea19abd756b672cb1cc655d0fab4490da77f5"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_maturity_240/evidence/tb_analysis.mat",
+      "exists": true,
+      "bytes": 3.99877992E+8,
+      "sha256": "a06a7faab3872278e17e4b6d6187e7877e954fa89d3db8485607a2f56f5409d0"
+    }
+  ],
+  "moveActivity400Gate": "ok=0 required=2 present=0 missing=2 mismatch=0",
+  "frozen": [
+    {
+      "path": "diagnostics/two_branch_maturity_240/PREREGISTRATION.md",
+      "sha256": "62748225253f85f6a2fbc1bad35489a2c201cd45ee64ff279601003354b73abd"
+    },
+    {
+      "path": "diagnostics/two_branch_maturity_240/evidence/PREREGISTRATION.frozen",
+      "sha256": "b75adcb9c94b25c5e4c5521902d2d2b501ad16d76eaf14bcfdab8d48f4dd2483"
+    },
+    {
+      "path": "diagnostics/two_branch_maturity_240/scripts/tb_branches.m",
+      "sha256": "bc146572e3f1a7928914ea556a2f892ad3081d8037c7ec858c50d7ca7a06f3c2"
+    },
+    {
+      "path": "diagnostics/dynamical_regime/PREREGISTRATION.md",
+      "sha256": "2ac361e769fe87ce458a4668840174a53de01de508da6b802c257982cab974b3"
+    },
+    {
+      "path": "diagnostics/dynamical_regime/scripts/dr_telemetry.m",
+      "sha256": "5f646f9c0751e3e1ff3edab129dea28f1d4c94ba48c2051f88729d8dfc11f491"
+    },
+    {
+      "path": "diagnostics/dynamical_regime/scripts/dr_dyn.m",
+      "sha256": "77b466187065487a9fb47962b4606ded4ccf6182a06560731158fb7301e63c3d"
+    },
+    {
+      "path": "diagnostics/fixedmove_400_dynamics/PREREGISTRATION.md",
+      "sha256": "f6e84d8a65a3d8180508693f307a07ec9ae8ada51cf852a4668c087b1aeafcbc"
+    }
+  ],
+  "gatePass": true
+}

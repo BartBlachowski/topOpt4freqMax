@@ -199,10 +199,21 @@ for i, k in enumerate(KEYS):
     nelx, nely = [int(x) for x in d['label'].split('x')]
     cpath = os.path.join(ROOT, 'evidence', 'two_branch_controller_validation',
                          d['tag'] + '_trajectory.mat')
-    ppath = os.path.join(REPO, d['base']['trajectory']) if d['base']['rho_available'] else None
-    axs[i][1].imshow(loadrho(cpath).reshape(nelx, nely).T, cmap='gray_r',
-                     vmin=0, vmax=1, aspect='equal')
-    axs[i][1].set_title(f"candidate {d['label']}  $M_{{nd}}$={d['rec']['Mnd_final']:.2f}%", fontsize=7)
+    b = d['base']
+    if b.get('rho_recovered'):
+        ppath = os.path.join(REPO, b['rho_recovered_file'])
+    elif b.get('rho_available'):
+        ppath = os.path.join(REPO, b['trajectory'])
+    else:
+        ppath = None
+    if os.path.isfile(cpath):
+        axs[i][1].imshow(loadrho(cpath).reshape(nelx, nely).T, cmap='gray_r',
+                         vmin=0, vmax=1, aspect='equal')
+        axs[i][1].set_title(f"candidate {d['label']}  $M_{{nd}}$={d['rec']['Mnd_final']:.2f}%", fontsize=7)
+    else:
+        axs[i][1].text(0.5, 0.5, 'candidate density field\nUNAVAILABLE\n(raw .mat lost)',
+                       ha='center', va='center', fontsize=7, transform=axs[i][1].transAxes)
+        axs[i][1].set_title(f"candidate {d['label']}  $M_{{nd}}$={d['rec']['Mnd_final']:.2f}%", fontsize=7)
     if ppath and os.path.isfile(ppath):
         axs[i][0].imshow(loadrho(ppath).reshape(nelx, nely).T, cmap='gray_r',
                          vmin=0, vmax=1, aspect='equal')
@@ -301,7 +312,8 @@ dc = [D[k]['an']['delta']['outer_mult'] for k in KEYS]
 delay = [D[k]['an']['delta']['descentDelay'] for k in KEYS]
 axs[0].bar(x, dm, 0.5, color=[CB if v < 0 else CA for v in dm])
 axs[0].axhline(-20, color='k', ls='--', lw=0.9)
-axs[0].annotate('preregistered fine-mesh bar (-20 %)', (0, -20), fontsize=6, va='bottom')
+axs[0].annotate('preregistered fine-mesh bar (-20 %)', (0.5, -20), fontsize=6,
+                va='bottom', ha='center')
 axs[0].set_title('relative $M_{nd}$ change [%]\n(negative = better)')
 axs[1].bar(x, do, 0.5, color=[CB if v > 0 else CA for v in do])
 axs[1].axhline(-1.0, color='k', ls='--', lw=0.9)
@@ -311,9 +323,13 @@ axs[2].axhline(8, color='k', ls='--', lw=0.9)
 axs[2].set_title('outer-iteration multiplier\n(preregistered bound 8x)')
 for ax in axs:
     ax.set_xticks(x); ax.set_xticklabels(labels)
+# Annotate INSIDE the axes, just under the top of each bar, so the label can
+# never collide with the x tick labels for a deep bar (400x50 reaches -52 %).
 for i, v in enumerate(delay):
     axs[0].annotate(f'held move=0.04\n{int(v)} iters longer', (i, dm[i]),
-                    xytext=(0, -22), textcoords='offset points', ha='center', fontsize=6)
+                    xytext=(0, 8), textcoords='offset points',
+                    ha='center', va='bottom', fontsize=6)
+axs[0].margins(y=0.18)
 fig.suptitle('F14  causal effect of replacing beta-stall continuation with the frozen A OR B rule',
              y=1.02, fontsize=9)
 save(fig, 'F14_summary.png')

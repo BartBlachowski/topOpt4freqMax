@@ -1,0 +1,26 @@
+{
+ "frozen": {
+  "tol": 0.125,
+  "branchA_ever": false,
+  "first_B": 369,
+  "nativeStop": 369,
+  "med20cos_at_369": 0.9937451892796663,
+  "med20net_at_369": 0.9728297014945854,
+  "amp_at_369": 0.1241004791601378,
+  "Mnd_at_369": 16.158892933214315,
+  "omega1_at_369": 166.3649498603138
+ },
+ "rederived": {
+  "nOuter": 369,
+  "tol": 0.125,
+  "branchA_ever": false,
+  "first_B": 369,
+  "med20cos_at_369": 0.9937451892796668,
+  "med20net_at_369": 0.972829701494584,
+  "amp_at_369": 0.12410047916013768,
+  "Mnd_at_369": 16.158892933214318,
+  "omega1_at_369": 166.3649498603138
+ },
+ "allAgree": true,
+ "note": "Two independent implementations of the frozen rule, on a recomputed F400 trajectory."
+}

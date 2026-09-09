@@ -1,0 +1,23 @@
+{
+ "160x20": {
+  "candidate": "analysis/OlhoffCurrent/evidence/two_branch_controller_validation/C160x20_trajectory.mat",
+  "fixedmove": "analysis/OlhoffCurrent/diagnostics/move_stop/runs/fixedmove_160x20.mat",
+  "stage1LastIter": 102,
+  "checked": true,
+  "nCompared": 102,
+  "candNOuter": 219,
+  "fmNOuter": 400,
+  "coversWholeStage1": true,
+  "prefixBitwiseIdentical": true,
+  "maxAbsDiffInPrefix": 0.0,
+  "firstDifferingIteration": 103,
+  "firstDifferenceIsFirstDescent": true
+ },
+ "320x40": {
+  "candidate": "analysis/OlhoffCurrent/evidence/two_branch_controller_validation/C320x40_trajectory.mat",
+  "fixedmove": "analysis/OlhoffCurrent/diagnostics/move_stop/runs/fixedmove_320x40.mat",
+  "stage1LastIter": 274,
+  "checked": false,
+  "detail": "candidate trajectory missing"
+ }
+}
