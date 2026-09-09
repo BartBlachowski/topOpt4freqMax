@@ -1,0 +1,58 @@
+[
+ {
+  "file": "figures/F1_omega1_P_S1_S2_S3_F.png",
+  "sha256": "79c1573d94eba5df611855709075666fd42f57d0fc90eb731951de1d6f3483ac"
+ },
+ {
+  "file": "figures/F2_Mnd_P_S1_S2_S3_F.png",
+  "sha256": "7fd64f50af0a212ec19bb8befdbfa5b08cfd465a06438c2645e691e8b060565b"
+ },
+ {
+  "file": "figures/F3_rung_omega1.png",
+  "sha256": "5db0c49f34d1ad77dd69f716c37e4f893aad1d0c35a3c9255b3bddfb1143d427"
+ },
+ {
+  "file": "figures/F4_rung_Mnd.png",
+  "sha256": "6576966c11c5db9926510cfcf381e8055fc957fc5960e83db9598c5775d8a91c"
+ },
+ {
+  "file": "figures/F5_rung_topology.png",
+  "sha256": "33c69f6958b5594e3d57dfb96e8197f6fae09ba16df2f3775292bbada1d14483"
+ },
+ {
+  "file": "figures/F6_rung_outer_work.png",
+  "sha256": "a5db085f3b9baaab41c73d6d076acdbf2bb794e5eb4c1cf1d26e78b6d6f3edcc"
+ },
+ {
+  "file": "figures/F7_rung_inner_work.png",
+  "sha256": "68bb421091e9a5a8083153faec8858e2a0573611c05adb4695a48177145f24be"
+ },
+ {
+  "file": "figures/F8_benefit_per_inner_work.png",
+  "sha256": "88f9f274146a3f44c979b5f172bc975e7f1846bfe0cd72a3288f795c8f650a26"
+ },
+ {
+  "file": "figures/F9_topology_S3_vs_F.png",
+  "sha256": "95f2d35bda2e8019c6d9ff37f0f92a745acafb86ba6e6e6e8a25bd59ccd00ef2"
+ },
+ {
+  "file": "figures/F10_multiplicity_gap.png",
+  "sha256": "7015d5dd99961378d3e4d87bbf0136d36bb2bd4367c8461d3bc633cd9b877bd6"
+ },
+ {
+  "file": "figures/F11_declaration_offset.png",
+  "sha256": "82219134033d5d345964a5a7dd333692aed58e0f595ec5c96c58d52fe1e8e527"
+ },
+ {
+  "file": "figures/F12_first_evaluable_vs_declaration.png",
+  "sha256": "e4a51850e84f2b133ff2b478a003e2683489543831e9201b36a1bea854c693a7"
+ },
+ {
+  "file": "figures/F13_C320_S3_vs_CAP_HIT.png",
+  "sha256": "b0b1387eaa853b2272eb254edec2510b68a9ad6afad832c3356ce77e12877292"
+ },
+ {
+  "file": "figures/F14_architecture_summary.png",
+  "sha256": "b180f47e26902891e4a22b9f374e5d6dabef0afdda190e183c69e575026c4d3b"
+ }
+]

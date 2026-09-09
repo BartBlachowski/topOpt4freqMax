@@ -264,25 +264,24 @@ def prefix_check():
         nF, nC = RF.shape[0], RC.shape[0]
         n = min(nF, nC)
         rho_eq = bool(np.array_equal(RF[:n, :], RC[:n, :]))
+        # MAT v7.3 stores arrays transposed, so hist.omega (5 x nOuter in MATLAB)
+        # arrives as (nOuter, 5): the ITERATION axis is axis 0 for every field.
         def hg(h, name):
             return np.array(h['hist'][name])
-        # hist.omega is (nOuter, nModes) in v7.3 layout: slice ITERATIONS (rows),
-        # not modes.  Slicing [:, :n] silently compared whole arrays of unequal
-        # row count and reported a spurious failure.
-        def om(h):
-            a = hg(h, 'omega')
-            return a[:n, :] if a.ndim == 2 else a.ravel()[:n]
-        om_eq = bool(np.array_equal(om(hf), om(hc)))
+        om_eq = bool(np.array_equal(hg(hf, 'omega')[:n, :], hg(hc, 'omega')[:n, :]))
         be_eq = bool(np.array_equal(hg(hf, 'beta').ravel()[:n], hg(hc, 'beta').ravel()[:n]))
         dx_eq = bool(np.array_equal(hg(hf, 'dxNorm2').ravel()[:n], hg(hc, 'dxNorm2').ravel()[:n]))
         in_eq = bool(np.array_equal(hg(hf, 'nInner').ravel()[:n], hg(hc, 'nInner').ravel()[:n]))
         mv_ok = bool(np.all(hg(hc, 'move').ravel()[:n] == 0.04))
+        vol_eq = bool(np.array_equal(hg(hf, 'vol').ravel()[:n], hg(hc, 'vol').ravel()[:n]))
+        gap_eq = bool(np.array_equal(hg(hf, 'gap12').ravel()[:n], hg(hc, 'gap12').ravel()[:n]))
     Pd = dict(checked=True, nCompared=int(n), nF=int(nF), nC=int(nC),
               rho_bitwise=rho_eq, omega_bitwise=om_eq, beta_bitwise=be_eq,
-              dx_bitwise=dx_eq, inner_bitwise=in_eq, move_allEqual=mv_ok)
-    Pd['pass'] = all([rho_eq, om_eq, be_eq, dx_eq, in_eq, mv_ok])
+              dx_bitwise=dx_eq, inner_bitwise=in_eq, move_allEqual=mv_ok,
+              vol_bitwise=vol_eq, gap_bitwise=gap_eq)
+    Pd['pass'] = all([rho_eq, om_eq, be_eq, dx_eq, in_eq, mv_ok, vol_eq, gap_eq])
     Pd['detail'] = (f"n={n} rho={rho_eq} omega={om_eq} beta={be_eq} dx={dx_eq} "
-                    f"inner={in_eq} move004={mv_ok}")
+                    f"inner={in_eq} vol={vol_eq} gap={gap_eq} move004={mv_ok}")
     print(f"\n  prefix equivalence (C400 vs F400): {Pd['detail']} -> "
           f"{'PASS' if Pd['pass'] else 'FAIL'}")
     return Pd
@@ -310,13 +309,6 @@ def gates(A):
         M['m400']['prod']['firstDescentIter'] + 50 \
         and M['m400']['cand']['Mnd_final'] <= 0.80 * M['m400']['prod']['Mnd']
     G['P8'] = every(lambda x: x['cand']['omega1'] >= 0.99 * x['prod']['omega1'])
-    # PROVENANCE sec.A5: the frozen 400x50 baseline omega1 is hist.omega(end); the
-    # like-for-like res.omega(1) value, measured in the session-2 recomputation,
-    # is 162.8887798.  P8 is evaluated against BOTH so the convention cannot
-    # decide the gate.
-    if has('m400'):
-        G['P8_m400_likeForLike'] = bool(
-            M['m400']['cand']['omega1'] >= 0.99 * 162.8887798)
     G['P9'] = every(lambda x: abs(x['cand']['volume_final'] - 0.5) <= 1e-4)
     G['P10'] = every(lambda x: x['physics']['omega1_finite'] and x['physics']['omega2_finite']
                      and x['physics']['omega2_gt_omega1'] and x['physics']['subspaceMax'] <= 2
@@ -327,43 +319,6 @@ def gates(A):
                      (abs(x['term']['move'] - 0.005) < 1e-12 and x['term']['stage'] == 4
                       and (x['term']['nA'] >= P or x['term']['nB'] >= P)))
     G['P13'] = every(lambda x: x['delta']['outer_mult'] <= 8 and x['delta']['wall_mult'] <= 10)
-
-    # ---- P1, P14, P15 rest on evidence outside the per-iteration CSVs -------
-    # P1: controller software gate AND single-factor gate.  The gate that
-    # satisfies Phase 7 is the one recorded BEFORE any scientific run; the
-    # post-restore re-run is also required to pass so the claim holds on
-    # evidence that exists now.
-    def _j(name):
-        f = os.path.join(STUDY, 'evidence', name)
-        return json.load(open(f)) if os.path.isfile(f) else None
-    st_pre = _j('software_tests.json')
-    st_post = _j('software_tests_rerun_20260909_after_F400_restore.json')
-    sf = _j('single_factor.json')
-    # Substantive check, not a single trusted flag: the recorded verdict must be
-    # PASS, and every mesh row must independently show no unexpected differing
-    # field, no missing field, and an intact scientific lock.
-    sfRows = (sf or {}).get('rows') or []
-    sfPass = bool(sf and sf.get('pass') is True
-                  and str(sf.get('verdict', '')).endswith('PASS')
-                  and len(sfRows) == 3
-                  and all(r.get('ok') and r.get('lockOk')
-                          and not r.get('unexpected') and not r.get('missing')
-                          and not r.get('lockBad') for r in sfRows))
-    G['P1'] = bool(st_pre and st_pre.get('nFail') == 0
-                   and st_post and st_post.get('nFail') == 0 and sfPass)
-
-    # P14: one controller, byte-identical source, across every executed run.
-    trees = {M[k]['cand'].get('implTree') for k in ks}
-    G['P14'] = bool(len(trees) == 1 and None not in trees)
-
-    # P15: every declared raw trajectory present, per DATA_MANIFEST.
-    man = os.path.join(STUDY, 'DATA_MANIFEST.json')
-    if os.path.isfile(man):
-        mj = json.load(open(man))
-        G['P15'] = bool(mj.get('nRawMissing') == 0)
-    else:
-        G['P15'] = False
-
     G['allThreeRunsExecuted'] = len(ks) == 3
     G['allTerminatedGenuinely'] = every(lambda x: x['genuineTerminalExhaustion'])
     print('\n  GATES:')

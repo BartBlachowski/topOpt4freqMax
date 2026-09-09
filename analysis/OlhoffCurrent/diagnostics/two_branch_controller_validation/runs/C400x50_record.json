@@ -7,7 +7,7 @@
   "NE": 20000,
   "status": "CONVERGED",
   "nOuter": 505,
-  "wall_s": 4689.3413573333337,
+  "wall_s": 3539.3367536666665,
   "innerTotal": 10301,
   "innerMax": 46,
   "innerNonConv": 0,
@@ -32,7 +32,7 @@
   "stage_final": 4,
   "rho_sha256": "1f648be89dc981f00233838311bfda1b6349ae3991f373f66438624981d459d7",
   "trajectory": "analysis/OlhoffCurrent/evidence/two_branch_controller_validation/C400x50_trajectory.mat",
-  "trajectoryBytes": 1.39808745E+8,
+  "trajectoryBytes": 1.39808729E+8,
   "csv": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/runs/C400x50_iterations.csv",
   "exhaustion": {
     "W": 20,
@@ -139,7 +139,7 @@
     "iter 505: terminal stage exhaustion declared (branch B, window 486-505) at move 0.005, the last ladder level",
     "converged at outer iteration 505 (||drho||_2 = 1.347e-03, max|drho| = 1.023e-04)"
   ],
-  "matlab": "25.2.0.3042426 (R2025b) Update 1",
+  "matlab": "25.2.0.2998904 (R2025b)",
   "implTree": "edbfe47eb32109a2fb017f6f13d5327f2c240357caa96630064ffcf37ee152cb",
   "clampDisplacementMax": 5.5511151231257827E-17
 }

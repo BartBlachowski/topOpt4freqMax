@@ -1,0 +1,29 @@
+{
+ "m160": {
+  "omega1_inloop": 169.480593087144,
+  "omega2_inloop": 171.983065377237,
+  "gap12_inloop": 0.0147655389004127,
+  "Mnd_inloop": 13.4024992795267,
+  "gray_inloop": 0.149375,
+  "mid_inloop": 0.025,
+  "volume_inloop": 0.49999900877798
+ },
+ "m320": {
+  "omega1_inloop": 165.946838904307,
+  "omega2_inloop": 183.660256755976,
+  "gap12_inloop": 0.10674152016769,
+  "Mnd_inloop": 23.3595679520743,
+  "gray_inloop": 0.26375,
+  "mid_inloop": 0.095625,
+  "volume_inloop": 0.499999138617815
+ },
+ "m400": {
+  "omega1_inloop": 162.882615630062,
+  "omega2_inloop": 175.403921349379,
+  "gap12_inloop": 0.0768731866865097,
+  "Mnd_inloop": 32.3283256233213,
+  "gray_inloop": 0.3476,
+  "mid_inloop": 0.1882,
+  "volume_inloop": 0.499999149662958
+ }
+}

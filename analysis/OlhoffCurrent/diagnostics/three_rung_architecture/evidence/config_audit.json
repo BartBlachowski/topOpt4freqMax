@@ -1,0 +1,239 @@
+{
+  "timestamp": "2026-09-09T16:39:10Z",
+  "meshes": [
+    {
+      "mesh": [
+        160,
+        20
+      ],
+      "flags": {
+        "movePolicy": "ladder",
+        "moveLevels": [
+          0.04,
+          0.02,
+          0.01,
+          0.005
+        ],
+        "moveInitial": 0.04,
+        "contSignal": "stageExhaustion",
+        "stopRule": "stageExhaustion",
+        "stopTolerance": 0.05,
+        "stopNorm": "l2",
+        "projectionEnabled": false,
+        "pContinuationEnabled": false,
+        "guardLadderExhausted": false,
+        "guardMaxDesignChange": false,
+        "guardSettledMove": true,
+        "designInitial": 0.5,
+        "p": 3,
+        "q": 1,
+        "filterType": "sensitivity",
+        "radiusPhysical": 0.06,
+        "subspaceSize": 2,
+        "offDiagonal": true,
+        "mmaVariant": "published",
+        "pDriver": "n/a (continuation disabled)",
+        "pBlocksStopUntilFinal": false,
+        "exhaustMove": true,
+        "exhaustStop": true,
+        "useExhaustion": true,
+        "anyStopGuard": false,
+        "pOwnCounter": false,
+        "pBlocksStop": false,
+        "useProj": false,
+        "line485_inert": false,
+        "line485_neverRuns": true,
+        "line312_neverRuns": true,
+        "projectionBlockNeverRuns": true
+      },
+      "cfgHash": "31d2ef382746a942a4036d07dd6a1012742432cba0497d2de5ec24b51d2b5904"
+    },
+    {
+      "mesh": [
+        320,
+        40
+      ],
+      "flags": {
+        "movePolicy": "ladder",
+        "moveLevels": [
+          0.04,
+          0.02,
+          0.01,
+          0.005
+        ],
+        "moveInitial": 0.04,
+        "contSignal": "stageExhaustion",
+        "stopRule": "stageExhaustion",
+        "stopTolerance": 0.1,
+        "stopNorm": "l2",
+        "projectionEnabled": false,
+        "pContinuationEnabled": false,
+        "guardLadderExhausted": false,
+        "guardMaxDesignChange": false,
+        "guardSettledMove": true,
+        "designInitial": 0.5,
+        "p": 3,
+        "q": 1,
+        "filterType": "sensitivity",
+        "radiusPhysical": 0.06,
+        "subspaceSize": 2,
+        "offDiagonal": true,
+        "mmaVariant": "published",
+        "pDriver": "n/a (continuation disabled)",
+        "pBlocksStopUntilFinal": false,
+        "exhaustMove": true,
+        "exhaustStop": true,
+        "useExhaustion": true,
+        "anyStopGuard": false,
+        "pOwnCounter": false,
+        "pBlocksStop": false,
+        "useProj": false,
+        "line485_inert": false,
+        "line485_neverRuns": true,
+        "line312_neverRuns": true,
+        "projectionBlockNeverRuns": true
+      },
+      "cfgHash": "2359a1112fcec9edd0971aae9a89508cd703ea3899770e7e85c850138c2550f4"
+    },
+    {
+      "mesh": [
+        400,
+        50
+      ],
+      "flags": {
+        "movePolicy": "ladder",
+        "moveLevels": [
+          0.04,
+          0.02,
+          0.01,
+          0.005
+        ],
+        "moveInitial": 0.04,
+        "contSignal": "stageExhaustion",
+        "stopRule": "stageExhaustion",
+        "stopTolerance": 0.125,
+        "stopNorm": "l2",
+        "projectionEnabled": false,
+        "pContinuationEnabled": false,
+        "guardLadderExhausted": false,
+        "guardMaxDesignChange": false,
+        "guardSettledMove": true,
+        "designInitial": 0.5,
+        "p": 3,
+        "q": 1,
+        "filterType": "sensitivity",
+        "radiusPhysical": 0.06,
+        "subspaceSize": 2,
+        "offDiagonal": true,
+        "mmaVariant": "published",
+        "pDriver": "n/a (continuation disabled)",
+        "pBlocksStopUntilFinal": false,
+        "exhaustMove": true,
+        "exhaustStop": true,
+        "useExhaustion": true,
+        "anyStopGuard": false,
+        "pOwnCounter": false,
+        "pBlocksStop": false,
+        "useProj": false,
+        "line485_inert": false,
+        "line485_neverRuns": true,
+        "line312_neverRuns": true,
+        "projectionBlockNeverRuns": true
+      },
+      "cfgHash": "0afb0d4daa11b52aac8f184c856f71626bfd11b0a581e66d5aaacfa7f78f3a78"
+    }
+  ],
+  "threeRungLegal": true,
+  "threeRungError": "",
+  "threeRungLevels": [
+    0.04,
+    0.02,
+    0.01
+  ],
+  "threeRungDiff": [
+    "move.levels: [0.04 0.02 0.01 0.005] -> [0.04 0.02 0.01]",
+    "provenance.overrides: cell -> cell"
+  ],
+  "productionLevels": [
+    0.04,
+    0.02,
+    0.01,
+    0.005
+  ],
+  "productionSignal": "boundVariable",
+  "productionUnchanged": true,
+  "dependenceSites": [
+    {
+      "file": "+impl/architecture/olhoffSolve.m",
+      "line": 104,
+      "expr": "moveLevels = g('move.levels')",
+      "role": "read only",
+      "active": true,
+      "dependsOnLength": false,
+      "dependsOnFinalRungIdentity": false
+    },
+    {
+      "file": "+impl/architecture/olhoffSolve.m",
+      "line": 312,
+      "expr": "mvNow = moveLevels(1)",
+      "role": "p-continuation stall consumption",
+      "active": false,
+      "dependsOnLength": false,
+      "dependsOnFinalRungIdentity": false
+    },
+    {
+      "file": "+impl/architecture/olhoffSolve.m",
+      "line": 485,
+      "expr": "~any(moveLevels(stage+1:end) > epsRMS)",
+      "role": "ladder-restoration stop guard",
+      "active": false,
+      "dependsOnLength": true,
+      "dependsOnFinalRungIdentity": true
+    },
+    {
+      "file": "+impl/architecture/olhoffSolve.m",
+      "line": 509,
+      "expr": "atLastLevel = stage >= numel(moveLevels)",
+      "role": "terminal admission",
+      "active": true,
+      "dependsOnLength": true,
+      "dependsOnFinalRungIdentity": false
+    },
+    {
+      "file": "+impl/architecture/+olh/+move/limit.m",
+      "line": 109,
+      "expr": "state.stage < numel(cfg.move.levels)",
+      "role": "descent gate",
+      "active": true,
+      "dependsOnLength": true,
+      "dependsOnFinalRungIdentity": false
+    },
+    {
+      "file": "+impl/architecture/+olh/+move/limit.m",
+      "line": 122,
+      "expr": "mv = cfg.move.levels(state.stage)",
+      "role": "move value at the stage",
+      "active": true,
+      "dependsOnLength": false,
+      "dependsOnFinalRungIdentity": false
+    },
+    {
+      "file": "+impl/architecture/+olh/+move/limit.m",
+      "line": 148,
+      "expr": "state.stage = min(state.stage+1, numel(cfg.move.levels))",
+      "role": "beta-stall descent (other continuation branch)",
+      "active": false,
+      "dependsOnLength": true,
+      "dependsOnFinalRungIdentity": false
+    },
+    {
+      "file": "+impl/architecture/+olh/+move/limit.m",
+      "line": 152,
+      "expr": "mv = cfg.move.levels(state.stage)",
+      "role": "beta-stall move value",
+      "active": false,
+      "dependsOnLength": false,
+      "dependsOnFinalRungIdentity": false
+    }
+  ]
+}

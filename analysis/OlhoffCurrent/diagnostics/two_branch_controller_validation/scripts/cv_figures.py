@@ -23,7 +23,9 @@ written = []
 
 
 def save(fig, name):
-    fig.tight_layout(); fig.savefig(os.path.join(FIG, name)); plt.close(fig)
+    if not getattr(fig, '_cv_laid_out', False):
+        fig.tight_layout()
+    fig.savefig(os.path.join(FIG, name), bbox_inches='tight'); plt.close(fig)
     written.append(name); print('  ', name)
 
 
@@ -112,24 +114,33 @@ for i, k in enumerate(KEYS):
             label='production move')
     ax.step(d['cand']['outer'], d['cand']['prodMoveShadow'], where='post', color=CP,
             lw=0.9, ls=':', label="production rule replayed on candidate path")
+    ylev = [0.0345, 0.0255, 0.0185]                 # staggered label heights
+    nmax = float(d['cand']['outer'][-1])
     for j, row in enumerate(descents(d)):
         br = branches(d)[j]
         ax.axvline(row[0], color=CA if br == 'A' else CB, lw=0.9, ls='--')
-        ax.annotate(f'{br}@{int(row[0])}\nwin {int(row[3])}-{int(row[2])}',
-                    xy=(row[0], 0.04), xytext=(4, -2), textcoords='offset points',
-                    fontsize=6, color=CA if br == 'A' else CB, va='top')
+        right = row[0] > 0.62 * nmax                # keep labels inside the axes
+        ax.annotate(f'{br}@{int(row[0])} (win {int(row[3])}-{int(row[2])})',
+                    xy=(row[0], ylev[j % 3]), xytext=(-5 if right else 5, 0),
+                    textcoords='offset points', fontsize=6,
+                    color=CA if br == 'A' else CB, va='center',
+                    ha='right' if right else 'left')
     t = d['an']['term']
-    ax.axvline(d['rec']['nOuter'], color='k', lw=0.9)
-    ax.annotate(f"{d['rec']['status']} @ {d['rec']['nOuter']}\nterminal {t['branch']}",
-                xy=(d['rec']['nOuter'], 0.02), xytext=(-60, 0), textcoords='offset points',
-                fontsize=6)
-    ax.set_yscale('log'); ax.set_yticks([0.005, 0.01, 0.02, 0.04])
+    ax.axvline(d['rec']['nOuter'], color='k', lw=1.0)
+    term = f"terminal {t['branch']}" if t['branch'] else 'no exhaustion'
+    ax.annotate(f"{d['rec']['status']} @ {d['rec']['nOuter']}\n{term}",
+                xy=(d['rec']['nOuter'], 0.0125), xytext=(-6, 0), textcoords='offset points',
+                fontsize=6, ha='right', va='center')
+    ax.set_yscale('log'); ax.set_ylim(0.0042, 0.052)
+    ax.set_yticks([0.005, 0.01, 0.02, 0.04])
     ax.set_yticklabels(['0.005', '0.01', '0.02', '0.04'])
+    ax.minorticks_off()
     ax.set_ylabel('move'); ax.set_title(f"{d['label']}")
     if i == 0:
-        ax.legend(loc='upper right')
+        ax.legend(loc='lower left', framealpha=0.9)
 axs[-1][0].set_xlabel('outer iteration')
-fig.suptitle('F5  candidate move ladder with A/B transition events', y=1.005, fontsize=9)
+fig.suptitle('F5  candidate move ladder with A/B transition events', fontsize=9)
+fig.tight_layout(rect=[0, 0, 1, 0.965]); fig._cv_laid_out = True
 save(fig, 'F5_move_events.png')
 
 # ---------------------------------------------------------------- F6
@@ -193,27 +204,16 @@ def loadrho(path):
         return np.array(R[-1, :])            # MATLAB v7.3 stores transposed
 
 
-fig, axs = plt.subplots(len(KEYS), 2, figsize=(9.0, 1.5 * len(KEYS)), squeeze=False)
+fig, axs = plt.subplots(len(KEYS), 2, figsize=(9.6, 1.75 * len(KEYS)), squeeze=False)
 for i, k in enumerate(KEYS):
     d = D[k]
     nelx, nely = [int(x) for x in d['label'].split('x')]
     cpath = os.path.join(ROOT, 'evidence', 'two_branch_controller_validation',
                          d['tag'] + '_trajectory.mat')
-    b = d['base']
-    if b.get('rho_recovered'):
-        ppath = os.path.join(REPO, b['rho_recovered_file'])
-    elif b.get('rho_available'):
-        ppath = os.path.join(REPO, b['trajectory'])
-    else:
-        ppath = None
-    if os.path.isfile(cpath):
-        axs[i][1].imshow(loadrho(cpath).reshape(nelx, nely).T, cmap='gray_r',
-                         vmin=0, vmax=1, aspect='equal')
-        axs[i][1].set_title(f"candidate {d['label']}  $M_{{nd}}$={d['rec']['Mnd_final']:.2f}%", fontsize=7)
-    else:
-        axs[i][1].text(0.5, 0.5, 'candidate density field\nUNAVAILABLE\n(raw .mat lost)',
-                       ha='center', va='center', fontsize=7, transform=axs[i][1].transAxes)
-        axs[i][1].set_title(f"candidate {d['label']}  $M_{{nd}}$={d['rec']['Mnd_final']:.2f}%", fontsize=7)
+    ppath = os.path.join(REPO, d['base']['trajectory']) if d['base']['rho_available'] else None
+    axs[i][1].imshow(loadrho(cpath).reshape(nelx, nely).T, cmap='gray_r',
+                     vmin=0, vmax=1, aspect='equal')
+    axs[i][1].set_title(f"candidate {d['label']}  $M_{{nd}}$={d['rec']['Mnd_final']:.2f}%", fontsize=7)
     if ppath and os.path.isfile(ppath):
         axs[i][0].imshow(loadrho(ppath).reshape(nelx, nely).T, cmap='gray_r',
                          vmin=0, vmax=1, aspect='equal')
@@ -224,7 +224,8 @@ for i, k in enumerate(KEYS):
         axs[i][0].set_title(f"production {d['label']}", fontsize=7)
     for a in axs[i]:
         a.set_xticks([]); a.set_yticks([]); a.grid(False)
-fig.suptitle('F8  final topology, production vs candidate', y=1.02, fontsize=9)
+fig.suptitle('F8  final topology, production vs candidate', fontsize=9)
+fig.tight_layout(rect=[0, 0, 1, 0.94]); fig._cv_laid_out = True
 save(fig, 'F8_topology.png')
 
 # ---------------------------------------------------------------- F9-F12
@@ -294,8 +295,12 @@ for i, k in enumerate(KEYS):
     ax.axhline(20, color='k', ls=':', lw=0.9, label='P = 20')
     ax.axvline(n, color='k', lw=1.0)
     t = d['an']['term']
-    ax.set_title(f"{d['label']}  {d['rec']['status']} at {n}: move={t['move']}, stage={t['stage']}, "
-                 f"branch {t['branch']}, window {t['declBegin']}-{t['declIter']}", fontsize=8)
+    if t['branch']:
+        how = f"branch {t['branch']}, window {t['declBegin']}-{t['declIter']}"
+    else:
+        how = 'NO branch ever fired: E false on every terminal-stage iteration'
+    ax.set_title(f"{d['label']}  {d['rec']['status']} at {n}: move={t['move']:g}, "
+                 f"stage={t['stage']}, {how}", fontsize=8)
     ax.set_ylabel('consecutive iterations')
     if i == 0:
         ax.legend(loc='upper left')
@@ -312,23 +317,23 @@ dc = [D[k]['an']['delta']['outer_mult'] for k in KEYS]
 delay = [D[k]['an']['delta']['descentDelay'] for k in KEYS]
 axs[0].bar(x, dm, 0.5, color=[CB if v < 0 else CA for v in dm])
 axs[0].axhline(-20, color='k', ls='--', lw=0.9)
-axs[0].annotate('preregistered fine-mesh bar (-20 %)', (0.5, -20), fontsize=6,
-                va='bottom', ha='center')
-axs[0].set_title('relative $M_{nd}$ change [%]\n(negative = better)')
+axs[0].set_title('relative $M_{nd}$ change [%]\n(negative = better; fine-mesh bar -20 %)')
+for i, v in enumerate(dm):
+    axs[0].annotate(f'{v:+.1f} %', (i, v), xytext=(0, -3), textcoords='offset points',
+                    ha='center', va='top', fontsize=6.5)
 axs[1].bar(x, do, 0.5, color=[CB if v > 0 else CA for v in do])
 axs[1].axhline(-1.0, color='k', ls='--', lw=0.9)
 axs[1].set_title('relative $\\omega_1$ change [%]\n(positive = better; bound -1 %)')
 axs[2].bar(x, dc, 0.5, color=CC)
 axs[2].axhline(8, color='k', ls='--', lw=0.9)
 axs[2].set_title('outer-iteration multiplier\n(preregistered bound 8x)')
+for i, v in enumerate(dc):
+    axs[2].annotate(f'x{v:.2f}', (i, v), xytext=(0, 2), textcoords='offset points',
+                    ha='center', va='bottom', fontsize=6.5)
 for ax in axs:
     ax.set_xticks(x); ax.set_xticklabels(labels)
-# Annotate INSIDE the axes, just under the top of each bar, so the label can
-# never collide with the x tick labels for a deep bar (400x50 reaches -52 %).
-for i, v in enumerate(delay):
-    axs[0].annotate(f'held move=0.04\n{int(v)} iters longer', (i, dm[i]),
-                    xytext=(0, 8), textcoords='offset points',
-                    ha='center', va='bottom', fontsize=6)
+# the delay is the mechanism, so it belongs on the axis rather than floating
+axs[0].set_xticklabels([f'{l}\n(+{int(v)} it)' for l, v in zip(labels, delay)])
 axs[0].margins(y=0.18)
 fig.suptitle('F14  causal effect of replacing beta-stall continuation with the frozen A OR B rule',
              y=1.02, fontsize=9)

@@ -1,0 +1,396 @@
+{
+  "schema": "olhoff_current_evidence/1",
+  "study": "move_ladder_necessity",
+  "generated": "2026-09-09T17:34:03+02:00",
+  "evidenceRoot": "analysis/OlhoffCurrent/evidence/move_ladder_necessity",
+  "implementation": "analysis/OlhoffCurrent",
+  "sourceTree": "edbfe47eb32109a2fb017f6f13d5327f2c240357caa96630064ffcf37ee152cb",
+  "matlab": "25.2.0.2998904 (R2025b)",
+  "scientific_runs_executed": 0,
+  "note": "This study executed zero optimization runs.  It declares pre-existing durable trajectories by immutable path and SHA-256 rather than copying them.",
+  "preregistration_sha256": "a08b879b9d4893bc55dd9e5dfc2c26f897cb9d49355f0557ccc8644c7fc6ca3e",
+  "impl_tree_sha256": "edbfe47eb32109a2fb017f6f13d5327f2c240357caa96630064ffcf37ee152cb",
+  "architecture_verdict": "FOUR_RUNG_LADDER_PARTIALLY_USEFUL",
+  "next_step_verdict": "RETAIN_MOVE_LADDER_PENDING_REDESIGN",
+  "artifacts": [
+    {
+      "path": "analysis/OlhoffCurrent/evidence/two_branch_controller_validation/C160x20_trajectory.mat",
+      "class": "required",
+      "description": "160x20 four-rung candidate trajectory: source of S160 and the rung decomposition.",
+      "bytes": 8.858E+6,
+      "sha256": "4d11a2fdc1c985b15dea74cc234ed9d1f658960c1d42bfd8092770cc1b658832",
+      "present": true,
+      "format": "MAT-file (v7.3 = HDF5) -- read with load()",
+      "variables": [
+        {
+          "name": "DRHO",
+          "size": [
+            3200,
+            219
+          ],
+          "class": "double",
+          "bytes": 5.6064E+6
+        },
+        {
+          "name": "RHO",
+          "size": [
+            3200,
+            219
+          ],
+          "class": "double",
+          "bytes": 5.6064E+6
+        },
+        {
+          "name": "cfg",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 19641
+        },
+        {
+          "name": "exh",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 2564
+        },
+        {
+          "name": "hist",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 82452
+        },
+        {
+          "name": "log",
+          "size": [
+            1,
+            7
+          ],
+          "class": "cell",
+          "bytes": 2094
+        },
+        {
+          "name": "meta",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 2798
+        },
+        {
+          "name": "move",
+          "size": [
+            219,
+            1
+          ],
+          "class": "double",
+          "bytes": 1752
+        }
+      ]
+    },
+    {
+      "path": "analysis/OlhoffCurrent/evidence/two_branch_controller_validation/C320x40_trajectory.mat",
+      "class": "required",
+      "description": "320x40 four-rung candidate trajectory (CAP_HIT): source of S320 and the terminal-rung diagnosis.",
+      "bytes": 2.83657283E+8,
+      "sha256": "c9d4d76649de605690acecad185875f400dedea6c287cd91d4ee8b644ea328c0",
+      "present": true,
+      "format": "MAT-file (v7.3 = HDF5) -- read with load()",
+      "variables": [
+        {
+          "name": "DRHO",
+          "size": [
+            12800,
+            1600
+          ],
+          "class": "double",
+          "bytes": 1.6384E+8
+        },
+        {
+          "name": "RHO",
+          "size": [
+            12800,
+            1600
+          ],
+          "class": "double",
+          "bytes": 1.6384E+8
+        },
+        {
+          "name": "cfg",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 19641
+        },
+        {
+          "name": "exh",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 2562
+        },
+        {
+          "name": "hist",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 568564
+        },
+        {
+          "name": "log",
+          "size": [
+            1,
+            4
+          ],
+          "class": "cell",
+          "bytes": 1240
+        },
+        {
+          "name": "meta",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 2798
+        },
+        {
+          "name": "move",
+          "size": [
+            1600,
+            1
+          ],
+          "class": "double",
+          "bytes": 12800
+        }
+      ]
+    },
+    {
+      "path": "analysis/OlhoffCurrent/evidence/two_branch_controller_validation/C400x50_trajectory.mat",
+      "class": "required",
+      "description": "400x50 four-rung candidate trajectory: source of S400.",
+      "bytes": 1.39808729E+8,
+      "sha256": "fa0e714c712889a1442c8063d1ec809244bc42701883cf74366efb0a2019045e",
+      "present": true,
+      "format": "MAT-file (v7.3 = HDF5) -- read with load()",
+      "variables": [
+        {
+          "name": "DRHO",
+          "size": [
+            20000,
+            505
+          ],
+          "class": "double",
+          "bytes": 8.08E+7
+        },
+        {
+          "name": "RHO",
+          "size": [
+            20000,
+            505
+          ],
+          "class": "double",
+          "bytes": 8.08E+7
+        },
+        {
+          "name": "cfg",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 19641
+        },
+        {
+          "name": "exh",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 2564
+        },
+        {
+          "name": "hist",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 183124
+        },
+        {
+          "name": "log",
+          "size": [
+            1,
+            7
+          ],
+          "class": "cell",
+          "bytes": 2098
+        },
+        {
+          "name": "meta",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 2798
+        },
+        {
+          "name": "move",
+          "size": [
+            505,
+            1
+          ],
+          "class": "double",
+          "bytes": 4040
+        }
+      ]
+    },
+    {
+      "path": "analysis/OlhoffCurrent/evidence/move_activity_400/F400_400x50_trajectory.mat",
+      "class": "required",
+      "description": "400x50 fixed-move 0.04 arm: the bitwise reference proving the single-stage prefix argument.",
+      "bytes": 1.02057786E+8,
+      "sha256": "c53680e86b7010e962b9f5a48a55fdc7c3e659150e05994c9bbffa1275035ded",
+      "present": true,
+      "format": "MAT-file (v7.3 = HDF5) -- read with load()",
+      "variables": [
+        {
+          "name": "DRHO",
+          "size": [
+            20000,
+            369
+          ],
+          "class": "double",
+          "bytes": 5.904E+7
+        },
+        {
+          "name": "RHO",
+          "size": [
+            20000,
+            369
+          ],
+          "class": "double",
+          "bytes": 5.904E+7
+        },
+        {
+          "name": "cfg",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 19415
+        },
+        {
+          "name": "hist",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 98226
+        },
+        {
+          "name": "meta",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 1857
+        },
+        {
+          "name": "move",
+          "size": [
+            369,
+            1
+          ],
+          "class": "double",
+          "bytes": 2952
+        }
+      ]
+    },
+    {
+      "path": "analysis/OlhoffCurrent/evidence/move_activity_400/P400_400x50_trajectory.mat",
+      "class": "optional",
+      "description": "400x50 production trajectory; the only surviving production density field.",
+      "bytes": 3.6576273E+7,
+      "sha256": "1dc20dbd6a0dacbd067802901fd6d78364306a5641be84a6e2216b4038917660",
+      "present": true,
+      "format": "MAT-file (v7.3 = HDF5) -- read with load()",
+      "variables": [
+        {
+          "name": "DRHO",
+          "size": [
+            20000,
+            139
+          ],
+          "class": "double",
+          "bytes": 2.224E+7
+        },
+        {
+          "name": "RHO",
+          "size": [
+            20000,
+            139
+          ],
+          "class": "double",
+          "bytes": 2.224E+7
+        },
+        {
+          "name": "cfg",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 18873
+        },
+        {
+          "name": "hist",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 39346
+        },
+        {
+          "name": "meta",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 1297
+        },
+        {
+          "name": "move",
+          "size": [
+            139,
+            1
+          ],
+          "class": "double",
+          "bytes": 1112
+        }
+      ]
+    }
+  ]
+}

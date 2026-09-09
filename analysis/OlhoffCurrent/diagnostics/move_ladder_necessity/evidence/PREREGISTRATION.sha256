@@ -1,0 +1,8 @@
+sha256  a08b879b9d4893bc55dd9e5dfc2c26f897cb9d49355f0557ccc8644c7fc6ca3e
+file    PREREGISTRATION.md
+frozen  2026-09-09T15:17:49Z
+head    1438aa3f4bd934f5b588587ef65f4f2ca35bac1c
+note    Frozen before the lower-rung value decomposition was computed.  Section 8
+        discloses exactly which downstream quantities were already visible from the
+        previous study, and the materiality thresholds in section 6 are anchored to
+        the project's prior preregistered bars, not to this audit's outputs.

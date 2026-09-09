@@ -1,0 +1,68 @@
+{
+ "C160x20": {
+  "mesh": [
+   160,
+   20
+  ],
+  "NE": 3200,
+  "tol": 0.05,
+  "nOuter": 219,
+  "prefix_len": 102,
+  "first_descent_applied": 103,
+  "offline_declaration": 102,
+  "offline_branch": "A",
+  "offline_window": [
+   83,
+   102
+  ],
+  "recorded_declaration": 102,
+  "A_elementwise_match": true,
+  "B_elementwise_match": true,
+  "declaration_matches": true,
+  "descent_is_declaration_plus_one": true
+ },
+ "C320x40": {
+  "mesh": [
+   320,
+   40
+  ],
+  "NE": 12800,
+  "tol": 0.1,
+  "nOuter": 1600,
+  "prefix_len": 274,
+  "first_descent_applied": 275,
+  "offline_declaration": 274,
+  "offline_branch": "A",
+  "offline_window": [
+   255,
+   274
+  ],
+  "recorded_declaration": 274,
+  "A_elementwise_match": true,
+  "B_elementwise_match": true,
+  "declaration_matches": true,
+  "descent_is_declaration_plus_one": true
+ },
+ "C400x50": {
+  "mesh": [
+   400,
+   50
+  ],
+  "NE": 20000,
+  "tol": 0.125,
+  "nOuter": 505,
+  "prefix_len": 388,
+  "first_descent_applied": 389,
+  "offline_declaration": 388,
+  "offline_branch": "B",
+  "offline_window": [
+   369,
+   388
+  ],
+  "recorded_declaration": 388,
+  "A_elementwise_match": true,
+  "B_elementwise_match": true,
+  "declaration_matches": true,
+  "descent_is_declaration_plus_one": true
+ }
+}

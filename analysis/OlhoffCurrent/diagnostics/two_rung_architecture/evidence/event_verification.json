@@ -1,0 +1,467 @@
+{
+ "C160x20": {
+  "mesh": [
+   160,
+   20
+  ],
+  "NE": 3200,
+  "tol": 0.05,
+  "nOuter": 219,
+  "status": "CONVERGED",
+  "recorded_stageStarts": [
+   1,
+   103,
+   142,
+   181
+  ],
+  "recorded_descents": [
+   [
+    103,
+    1,
+    102,
+    83
+   ],
+   [
+    142,
+    2,
+    141,
+    122
+   ],
+   [
+    181,
+    3,
+    180,
+    161
+   ]
+  ],
+  "stages": [
+   {
+    "stage": 1,
+    "move": 0.04,
+    "stageStart": 1,
+    "stageEnd": 102,
+    "nIter": 102,
+    "offline_decl": 102,
+    "offline_branch": "A",
+    "offline_window": [
+     83,
+     102
+    ],
+    "recorded_decl": 102,
+    "decl_match": true,
+    "A_match": true,
+    "B_match": true,
+    "E_match": true,
+    "nA_match": true,
+    "nB_match": true,
+    "stageStart_trace_ok": true,
+    "min_latency": 101,
+    "earliest_possible": 38,
+    "declared_at_earliest": false,
+    "move_constant": true,
+    "terminal": false
+   },
+   {
+    "stage": 2,
+    "move": 0.02,
+    "stageStart": 103,
+    "stageEnd": 141,
+    "nIter": 39,
+    "offline_decl": 141,
+    "offline_branch": "A",
+    "offline_window": [
+     122,
+     141
+    ],
+    "recorded_decl": 141,
+    "decl_match": true,
+    "A_match": true,
+    "B_match": true,
+    "E_match": true,
+    "nA_match": true,
+    "nB_match": true,
+    "stageStart_trace_ok": true,
+    "min_latency": 38,
+    "earliest_possible": 38,
+    "declared_at_earliest": true,
+    "move_constant": true,
+    "terminal": false
+   },
+   {
+    "stage": 3,
+    "move": 0.01,
+    "stageStart": 142,
+    "stageEnd": 180,
+    "nIter": 39,
+    "offline_decl": 180,
+    "offline_branch": "B",
+    "offline_window": [
+     161,
+     180
+    ],
+    "recorded_decl": 180,
+    "decl_match": true,
+    "A_match": true,
+    "B_match": true,
+    "E_match": true,
+    "nA_match": true,
+    "nB_match": true,
+    "stageStart_trace_ok": true,
+    "min_latency": 38,
+    "earliest_possible": 38,
+    "declared_at_earliest": true,
+    "move_constant": true,
+    "terminal": false
+   },
+   {
+    "stage": 4,
+    "move": 0.005,
+    "stageStart": 181,
+    "stageEnd": 219,
+    "nIter": 39,
+    "offline_decl": 219,
+    "offline_branch": "B",
+    "offline_window": [
+     200,
+     219
+    ],
+    "recorded_decl": 219,
+    "decl_match": true,
+    "A_match": true,
+    "B_match": true,
+    "E_match": true,
+    "nA_match": true,
+    "nB_match": true,
+    "stageStart_trace_ok": true,
+    "min_latency": 38,
+    "earliest_possible": 38,
+    "declared_at_earliest": true,
+    "move_constant": true,
+    "terminal": true
+   }
+  ],
+  "kE1": 102,
+  "kE1_branch": "A",
+  "kE2": 141,
+  "kE2_branch": "A",
+  "first_descent_applied": 103,
+  "counterfactual_validity": {
+   "1_stage1_holds_0.04_to_kE1": true,
+   "2_exactly_one_descent_before_kE2": true,
+   "3_stage2_holds_0.02_to_kE2": true,
+   "4_no_0.01_or_lower_at_or_before_kE2": true,
+   "5_reset_semantics_stageStart_is_kE1_plus_1": true,
+   "all": true
+  },
+  "replay_all_match": true
+ },
+ "C320x40": {
+  "mesh": [
+   320,
+   40
+  ],
+  "NE": 12800,
+  "tol": 0.1,
+  "nOuter": 1600,
+  "status": "CAP_HIT",
+  "recorded_stageStarts": [
+   1,
+   275,
+   314,
+   353
+  ],
+  "recorded_descents": [
+   [
+    275,
+    1,
+    274,
+    255
+   ],
+   [
+    314,
+    2,
+    313,
+    294
+   ],
+   [
+    353,
+    3,
+    352,
+    333
+   ]
+  ],
+  "stages": [
+   {
+    "stage": 1,
+    "move": 0.04,
+    "stageStart": 1,
+    "stageEnd": 274,
+    "nIter": 274,
+    "offline_decl": 274,
+    "offline_branch": "A",
+    "offline_window": [
+     255,
+     274
+    ],
+    "recorded_decl": 274,
+    "decl_match": true,
+    "A_match": true,
+    "B_match": true,
+    "E_match": true,
+    "nA_match": true,
+    "nB_match": true,
+    "stageStart_trace_ok": true,
+    "min_latency": 273,
+    "earliest_possible": 38,
+    "declared_at_earliest": false,
+    "move_constant": true,
+    "terminal": false
+   },
+   {
+    "stage": 2,
+    "move": 0.02,
+    "stageStart": 275,
+    "stageEnd": 313,
+    "nIter": 39,
+    "offline_decl": 313,
+    "offline_branch": "B",
+    "offline_window": [
+     294,
+     313
+    ],
+    "recorded_decl": 313,
+    "decl_match": true,
+    "A_match": true,
+    "B_match": true,
+    "E_match": true,
+    "nA_match": true,
+    "nB_match": true,
+    "stageStart_trace_ok": true,
+    "min_latency": 38,
+    "earliest_possible": 38,
+    "declared_at_earliest": true,
+    "move_constant": true,
+    "terminal": false
+   },
+   {
+    "stage": 3,
+    "move": 0.01,
+    "stageStart": 314,
+    "stageEnd": 352,
+    "nIter": 39,
+    "offline_decl": 352,
+    "offline_branch": "B",
+    "offline_window": [
+     333,
+     352
+    ],
+    "recorded_decl": 352,
+    "decl_match": true,
+    "A_match": true,
+    "B_match": true,
+    "E_match": true,
+    "nA_match": true,
+    "nB_match": true,
+    "stageStart_trace_ok": true,
+    "min_latency": 38,
+    "earliest_possible": 38,
+    "declared_at_earliest": true,
+    "move_constant": true,
+    "terminal": false
+   },
+   {
+    "stage": 4,
+    "move": 0.005,
+    "stageStart": 353,
+    "stageEnd": 1600,
+    "nIter": 1248,
+    "offline_decl": null,
+    "offline_branch": null,
+    "offline_window": null,
+    "recorded_decl": null,
+    "decl_match": true,
+    "A_match": true,
+    "B_match": true,
+    "E_match": true,
+    "nA_match": true,
+    "nB_match": true,
+    "stageStart_trace_ok": true,
+    "min_latency": null,
+    "earliest_possible": 38,
+    "declared_at_earliest": null,
+    "move_constant": true,
+    "terminal": true
+   }
+  ],
+  "kE1": 274,
+  "kE1_branch": "A",
+  "kE2": 313,
+  "kE2_branch": "B",
+  "first_descent_applied": 275,
+  "counterfactual_validity": {
+   "1_stage1_holds_0.04_to_kE1": true,
+   "2_exactly_one_descent_before_kE2": true,
+   "3_stage2_holds_0.02_to_kE2": true,
+   "4_no_0.01_or_lower_at_or_before_kE2": true,
+   "5_reset_semantics_stageStart_is_kE1_plus_1": true,
+   "all": true
+  },
+  "replay_all_match": true
+ },
+ "C400x50": {
+  "mesh": [
+   400,
+   50
+  ],
+  "NE": 20000,
+  "tol": 0.125,
+  "nOuter": 505,
+  "status": "CONVERGED",
+  "recorded_stageStarts": [
+   1,
+   389,
+   428,
+   467
+  ],
+  "recorded_descents": [
+   [
+    389,
+    1,
+    388,
+    369
+   ],
+   [
+    428,
+    2,
+    427,
+    408
+   ],
+   [
+    467,
+    3,
+    466,
+    447
+   ]
+  ],
+  "stages": [
+   {
+    "stage": 1,
+    "move": 0.04,
+    "stageStart": 1,
+    "stageEnd": 388,
+    "nIter": 388,
+    "offline_decl": 388,
+    "offline_branch": "B",
+    "offline_window": [
+     369,
+     388
+    ],
+    "recorded_decl": 388,
+    "decl_match": true,
+    "A_match": true,
+    "B_match": true,
+    "E_match": true,
+    "nA_match": true,
+    "nB_match": true,
+    "stageStart_trace_ok": true,
+    "min_latency": 387,
+    "earliest_possible": 38,
+    "declared_at_earliest": false,
+    "move_constant": true,
+    "terminal": false
+   },
+   {
+    "stage": 2,
+    "move": 0.02,
+    "stageStart": 389,
+    "stageEnd": 427,
+    "nIter": 39,
+    "offline_decl": 427,
+    "offline_branch": "B",
+    "offline_window": [
+     408,
+     427
+    ],
+    "recorded_decl": 427,
+    "decl_match": true,
+    "A_match": true,
+    "B_match": true,
+    "E_match": true,
+    "nA_match": true,
+    "nB_match": true,
+    "stageStart_trace_ok": true,
+    "min_latency": 38,
+    "earliest_possible": 38,
+    "declared_at_earliest": true,
+    "move_constant": true,
+    "terminal": false
+   },
+   {
+    "stage": 3,
+    "move": 0.01,
+    "stageStart": 428,
+    "stageEnd": 466,
+    "nIter": 39,
+    "offline_decl": 466,
+    "offline_branch": "B",
+    "offline_window": [
+     447,
+     466
+    ],
+    "recorded_decl": 466,
+    "decl_match": true,
+    "A_match": true,
+    "B_match": true,
+    "E_match": true,
+    "nA_match": true,
+    "nB_match": true,
+    "stageStart_trace_ok": true,
+    "min_latency": 38,
+    "earliest_possible": 38,
+    "declared_at_earliest": true,
+    "move_constant": true,
+    "terminal": false
+   },
+   {
+    "stage": 4,
+    "move": 0.005,
+    "stageStart": 467,
+    "stageEnd": 505,
+    "nIter": 39,
+    "offline_decl": 505,
+    "offline_branch": "B",
+    "offline_window": [
+     486,
+     505
+    ],
+    "recorded_decl": 505,
+    "decl_match": true,
+    "A_match": true,
+    "B_match": true,
+    "E_match": true,
+    "nA_match": true,
+    "nB_match": true,
+    "stageStart_trace_ok": true,
+    "min_latency": 38,
+    "earliest_possible": 38,
+    "declared_at_earliest": true,
+    "move_constant": true,
+    "terminal": true
+   }
+  ],
+  "kE1": 388,
+  "kE1_branch": "B",
+  "kE2": 427,
+  "kE2_branch": "B",
+  "first_descent_applied": 389,
+  "counterfactual_validity": {
+   "1_stage1_holds_0.04_to_kE1": true,
+   "2_exactly_one_descent_before_kE2": true,
+   "3_stage2_holds_0.02_to_kE2": true,
+   "4_no_0.01_or_lower_at_or_before_kE2": true,
+   "5_reset_semantics_stageStart_is_kE1_plus_1": true,
+   "all": true
+  },
+  "replay_all_match": true
+ }
+}

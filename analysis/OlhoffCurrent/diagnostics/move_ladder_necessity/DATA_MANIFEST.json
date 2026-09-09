@@ -1,0 +1,367 @@
+{
+ "schema": "olhoff_move_ladder_necessity_manifest/1",
+ "study": "move_ladder_necessity",
+ "generated": "2026-09-09T15:34:33Z",
+ "scientific_runs_executed": 0,
+ "note": "This study produced no raw scientific data.  It depends on five pre-existing durable trajectories, declared by immutable path and SHA-256 in EVIDENCE.json and verified by olhoffcurrent_evidence_gate (PASS, 4/4 required).  Everything listed here is tracked: diagnostics/.gitignore re-includes *.png, *.csv and *.txt.",
+ "verdicts": {
+  "architecture": "FOUR_RUNG_LADDER_PARTIALLY_USEFUL",
+  "next_step": "RETAIN_MOVE_LADDER_PENDING_REDESIGN",
+  "production": "PRODUCTION_CONTROLLER_NOT_CHANGED",
+  "campaign": "NINE_MESH_PERFORMANCE_CAMPAIGN_BLOCKED",
+  "midtask_commit": "MIDTASK_COMMIT_NONINTERFERENCE_VERIFIED"
+ },
+ "artifacts": [
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/move_ladder_necessity/PREREGISTRATION.md",
+   "role": "preregistration",
+   "description": "Frozen 2026-09-09T15:17:49Z, before the decomposition.",
+   "bytes": 9199,
+   "sha256": "a08b879b9d4893bc55dd9e5dfc2c26f897cb9d49355f0557ccc8644c7fc6ca3e",
+   "tracked": true
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/move_ladder_necessity/evidence/PREREGISTRATION.frozen",
+   "role": "preregistration",
+   "description": "Read-only copy; byte-identical.",
+   "bytes": 9199,
+   "sha256": "a08b879b9d4893bc55dd9e5dfc2c26f897cb9d49355f0557ccc8644c7fc6ca3e",
+   "tracked": true
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/move_ladder_necessity/evidence/PREREGISTRATION.sha256",
+   "role": "preregistration",
+   "description": "Freeze digest and timestamp.",
+   "bytes": 505,
+   "sha256": "92f1e7446750dae74fb5b4d8623969fb02db85e1bf3cf5ef738cc984b5b21308",
+   "tracked": true
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/move_ladder_necessity/REPORT.md",
+   "role": "report",
+   "description": "The forty-two required answers and the verdicts.",
+   "bytes": 18030,
+   "sha256": "b8fd8b14578819b36b76067a7b430cd394b713bd57fcf05f9659d7bd4eaf2100",
+   "tracked": true
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/move_ladder_necessity/PROVENANCE.md",
+   "role": "report",
+   "description": "Repository state, environment, gates, changes made.",
+   "bytes": 3087,
+   "sha256": "6a6b118169b0b1861808dc368e1f4a48a62e2924e079efde52a6565c7d95e6ea",
+   "tracked": true
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/move_ladder_necessity/MIDTASK_COMMIT_AUDIT.md",
+   "role": "report",
+   "description": "Audit of commit 1438aa3.",
+   "bytes": 5919,
+   "sha256": "a3ee088d890c7dd8876bd4e6aa9edb59b75c031e04ed76b4fc5eed077c32174f",
+   "tracked": true
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/move_ladder_necessity/RETENTION_AUDIT.md",
+   "role": "report",
+   "description": "Why raw trajectories were lost; the enforcement added.",
+   "bytes": 8917,
+   "sha256": "5a53b71d9d6563a0aecd464ee182fc3ee89f75fbd2afb84313803b86a78fed6c",
+   "tracked": true
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/move_ladder_necessity/EVIDENCE_INVENTORY.md",
+   "role": "report",
+   "description": "What the audit stands on, and the declared gaps.",
+   "bytes": 4148,
+   "sha256": "eb3685163c79a4f6614e958c1bc60d987a9249d6ab1464b37e820d79eddac85e",
+   "tracked": true
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/move_ladder_necessity/SINGLE_STAGE_COUNTERFACTUAL.md",
+   "role": "report",
+   "description": "The prefix argument and the S endpoints.",
+   "bytes": 5804,
+   "sha256": "784b55995a3a615504bacc884933ec47164e5a9d10b1318493386fe99983aa86",
+   "tracked": true
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/move_ladder_necessity/LADDER_VALUE_ANALYSIS.md",
+   "role": "report",
+   "description": "P/S/F tables, rung decomposition, materiality.",
+   "bytes": 10315,
+   "sha256": "0704f621cba6393532a8654928c0452869b5df4e930401d8f7a20b20c4506b8f",
+   "tracked": true
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/move_ladder_necessity/CROSS_MESH_ANALYSIS.md",
+   "role": "report",
+   "description": "Why the meshes disagree, and what generalizes.",
+   "bytes": 5168,
+   "sha256": "58f8bdebaef032fadbe56c0d0b31d5b33045a5c4dca492249e25e6c75b583e79",
+   "tracked": true
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/move_ladder_necessity/PERFORMANCE_READINESS.md",
+   "role": "report",
+   "description": "Campaign decision.",
+   "bytes": 3165,
+   "sha256": "713ca3a518572aff2f386d56e6892bbdb55c157e88266a440c47e93d7c4e4ff0",
+   "tracked": true
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/move_ladder_necessity/METRICS.json",
+   "role": "metrics",
+   "description": "Machine-readable record.",
+   "bytes": 24130,
+   "sha256": "4ba10e376f40b576e0f4a243a2726f667ba7d8f9ab13916f399c9eb793b538dc",
+   "tracked": true
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/move_ladder_necessity/EVIDENCE.json",
+   "role": "evidence_declaration",
+   "description": "Declared trajectory dependencies, hashed.",
+   "bytes": 9181,
+   "sha256": "7a1783ab2b9fb9d30f462d0d68dbda5dbaf8b058f6292a2acc6d70c47f555ab2",
+   "tracked": true
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/move_ladder_necessity/evidence/event_verification.json",
+   "role": "evidence",
+   "description": "",
+   "bytes": 1237,
+   "sha256": "d21a585a7ecdf8ce84a7c651d9e8d899fcaad680308f9c3d0014e5438e92bc2f",
+   "tracked": true
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/move_ladder_necessity/evidence/figures.json",
+   "role": "evidence",
+   "description": "",
+   "bytes": 325,
+   "sha256": "1cb871b9140d8a5ead9f0d5125d01a315731a23a422e75ec4b793439bb86b3a2",
+   "tracked": true
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/move_ladder_necessity/evidence/ladder_analysis.json",
+   "role": "evidence",
+   "description": "",
+   "bytes": 23387,
+   "sha256": "613a92d7ef612478d17d9fac8754e9582592ae2128c18edbf00a7ee04d9a966e",
+   "tracked": true
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/move_ladder_necessity/evidence/production_inloop.json",
+   "role": "evidence",
+   "description": "",
+   "bytes": 744,
+   "sha256": "0e028bc5227cc2fdfcd963346dd60b33d2cb588cf55f7e0d1e776b896641f79c",
+   "tracked": true
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/move_ladder_necessity/figures/F10_topology_S_vs_F.png",
+   "role": "figure",
+   "description": "",
+   "bytes": 106530,
+   "sha256": "e46538cb4182f8cc799feb721037fe5387a6796aa5f4378daef91263fd188ee8",
+   "tracked": true
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/move_ladder_necessity/figures/F11_multiplicity.png",
+   "role": "figure",
+   "description": "",
+   "bytes": 53663,
+   "sha256": "3744adb77c6834800ac913df3b59c0582e59757d276e0b462c9b1037ec9252c0",
+   "tracked": true
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/move_ladder_necessity/figures/F12_tradeoff.png",
+   "role": "figure",
+   "description": "",
+   "bytes": 50059,
+   "sha256": "4220f3965164abfb1151f1bf1b9d936237879f7e3519f1cfb4b2a1b05d4fa3e1",
+   "tracked": true
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/move_ladder_necessity/figures/F1_Mnd_P_S_F.png",
+   "role": "figure",
+   "description": "",
+   "bytes": 51115,
+   "sha256": "970159433cb4dc8ee9b7b55113f23c1bd810d1d913733787a3552ce042578eff",
+   "tracked": true
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/move_ladder_necessity/figures/F2_omega1_P_S_F.png",
+   "role": "figure",
+   "description": "",
+   "bytes": 44888,
+   "sha256": "26aecfd7827a9f6788db4802c6252d94efdb8bc28298869c29a4dcb9870fa6a5",
+   "tracked": true
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/move_ladder_necessity/figures/F3_cumgain_Mnd.png",
+   "role": "figure",
+   "description": "",
+   "bytes": 57936,
+   "sha256": "42a8e0da9bccb4be6679675fa8b541075e359ed8a4f3cc5e6585b767d7cb826c",
+   "tracked": true
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/move_ladder_necessity/figures/F4_cumgain_omega1.png",
+   "role": "figure",
+   "description": "",
+   "bytes": 55704,
+   "sha256": "897ecea8472e5406c8ab66ffc83c15a83a92ee088fc6b90a1586a536bac59bae",
+   "tracked": true
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/move_ladder_necessity/figures/F5_move_history.png",
+   "role": "figure",
+   "description": "",
+   "bytes": 75235,
+   "sha256": "bfad69d6cc387b06e9496ea1ec0807ef8a8a60cb810b80f4da0488ea2f308be7",
+   "tracked": true
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/move_ladder_necessity/figures/F6_cost_wall.png",
+   "role": "figure",
+   "description": "",
+   "bytes": 55849,
+   "sha256": "f81dc7fa297901af589f2e68df37115739844c64ec9b2af80dc4aa42d1b7b823",
+   "tracked": true
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/move_ladder_necessity/figures/F7_cost_cumInner.png",
+   "role": "figure",
+   "description": "",
+   "bytes": 70120,
+   "sha256": "228169759d5af3b1bfa4b11db88ecfb7034470ac6d0327ef5d16fec9a35bbd8b",
+   "tracked": true
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/move_ladder_necessity/figures/F8_banked_fraction.png",
+   "role": "figure",
+   "description": "",
+   "bytes": 35932,
+   "sha256": "04ae323d1e69620fc284c77a9d60a2fa261c662a9f3645b3cdaeb0a47db693dd",
+   "tracked": true
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/move_ladder_necessity/figures/F9_marginal_per_rung.png",
+   "role": "figure",
+   "description": "",
+   "bytes": 63778,
+   "sha256": "fe6109bc813f30138508cc0ed7febf070cecd83f4da08766de0a16fd0cdbc5db",
+   "tracked": true
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/move_ladder_necessity/scripts/ml_analyze.py",
+   "role": "code",
+   "description": "",
+   "bytes": 12135,
+   "sha256": "ed85b10e06472b3a1b390c50495682991f3adf6cd7fea506b57cdbcd9f76101d",
+   "tracked": true
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/move_ladder_necessity/scripts/ml_figures.py",
+   "role": "code",
+   "description": "",
+   "bytes": 11582,
+   "sha256": "a427f9ecbf89181127b3cf10b891d916c93179b1b861bf6e5657d872617a0668",
+   "tracked": true
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/move_ladder_necessity/scripts/ml_frozen.py",
+   "role": "code",
+   "description": "",
+   "bytes": 2980,
+   "sha256": "08bf3e4f471c4222f0bdc20aaf4eaad2b5ff0ad9b4038726389986b2b3fd1583",
+   "tracked": true
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/move_ladder_necessity/scripts/ml_verify_events.py",
+   "role": "code",
+   "description": "",
+   "bytes": 3525,
+   "sha256": "3c27f928ea4915685f32db762af267c76fcde4a13ccbedcc06e1bf5f2d855fe2",
+   "tracked": true
+  },
+  {
+   "path": "analysis/OlhoffCurrent/olhoffcurrent_finalization_gate.m",
+   "role": "enforcement",
+   "description": "fail-closed finalization gate added by this task (outside +impl/)",
+   "bytes": 8672,
+   "sha256": "bcfe816124a2f52f42df5474e69801abaf42339909b7cac5a942756b69817957",
+   "tracked": true
+  },
+  {
+   "path": "analysis/OlhoffCurrent/tests/test_finalization_gate.m",
+   "role": "enforcement",
+   "description": "its 12 software tests",
+   "bytes": 6680,
+   "sha256": "0421382edd6165a8290501b66c76fb06985b68e677c20686a559060bd97c01a6",
+   "tracked": true
+  },
+  {
+   "path": "analysis/OlhoffCurrent/evidence/two_branch_controller_validation/C160x20_trajectory.mat",
+   "role": "raw_trajectory_dependency",
+   "description": "160x20 four-rung candidate trajectory: source of S160 and the rung decomposition.",
+   "bytes": 8858000,
+   "sha256": "4d11a2fdc1c985b15dea74cc234ed9d1f658960c1d42bfd8092770cc1b658832",
+   "tracked": false,
+   "declared_in": "EVIDENCE.json",
+   "gate": "olhoffcurrent_evidence_gate: PASS"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/evidence/two_branch_controller_validation/C320x40_trajectory.mat",
+   "role": "raw_trajectory_dependency",
+   "description": "320x40 four-rung candidate trajectory (CAP_HIT): source of S320 and the terminal-rung diagnosis.",
+   "bytes": 283657283,
+   "sha256": "c9d4d76649de605690acecad185875f400dedea6c287cd91d4ee8b644ea328c0",
+   "tracked": false,
+   "declared_in": "EVIDENCE.json",
+   "gate": "olhoffcurrent_evidence_gate: PASS"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/evidence/two_branch_controller_validation/C400x50_trajectory.mat",
+   "role": "raw_trajectory_dependency",
+   "description": "400x50 four-rung candidate trajectory: source of S400.",
+   "bytes": 139808729,
+   "sha256": "fa0e714c712889a1442c8063d1ec809244bc42701883cf74366efb0a2019045e",
+   "tracked": false,
+   "declared_in": "EVIDENCE.json",
+   "gate": "olhoffcurrent_evidence_gate: PASS"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/evidence/move_activity_400/F400_400x50_trajectory.mat",
+   "role": "raw_trajectory_dependency",
+   "description": "400x50 fixed-move 0.04 arm: the bitwise reference proving the single-stage prefix argument.",
+   "bytes": 102057786,
+   "sha256": "c53680e86b7010e962b9f5a48a55fdc7c3e659150e05994c9bbffa1275035ded",
+   "tracked": false,
+   "declared_in": "EVIDENCE.json",
+   "gate": "olhoffcurrent_evidence_gate: PASS"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/evidence/move_activity_400/P400_400x50_trajectory.mat",
+   "role": "raw_trajectory_dependency",
+   "description": "400x50 production trajectory; the only surviving production density field.",
+   "bytes": 36576273,
+   "sha256": "1dc20dbd6a0dacbd067802901fd6d78364306a5641be84a6e2216b4038917660",
+   "tracked": false,
+   "declared_in": "EVIDENCE.json",
+   "gate": "olhoffcurrent_evidence_gate: PASS"
+  }
+ ],
+ "counts": {
+  "total": 41,
+  "code": 4,
+  "enforcement": 2,
+  "evidence": 4,
+  "evidence_declaration": 1,
+  "figure": 12,
+  "metrics": 1,
+  "preregistration": 3,
+  "raw_trajectory_dependency": 5,
+  "report": 9
+ },
+ "total_bytes": 571866914
+}

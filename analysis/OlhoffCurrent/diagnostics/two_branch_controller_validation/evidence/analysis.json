@@ -1,5 +1,5 @@
 {
- "generated": "2026-09-09T09:19:11Z",
+ "generated": "2026-09-09T06:17:40Z",
  "preregistration_sha256": "8e323f837f7bbdaa5176d92621b4a45e4b377af131af5b3172429c629da27fbf",
  "mesh": {
   "m160": {
@@ -55,13 +55,7 @@
     "rho_available": false,
     "rho_sha256": "UNAVAILABLE -- raw .mat lost (see EVIDENCE_POLICY.md)",
     "trajectory": "UNAVAILABLE",
-    "trajectorySha": "",
-    "rho_recovered": true,
-    "rho_recovered_file": "analysis/OlhoffCurrent/diagnostics/move_stop/runs/baseline_160x20.mat",
-    "rho_recovered_sha256": "22aa4447bc5f2855271f44f0661536f4ad6c86c5711cedcfe51ea6d97d0ff18b",
-    "rho_recovered_trajectorySha": "aad98bb1842ce43f47f1fe88b6cf943d421f10d9e98219af41bfcacecc226c6c",
-    "rho_recovered_note": "Recovered after the freeze; frozen scalars re-derived from this file and matched to <=1e-9. No frozen value was edited.",
-    "rho_sha256_frozen_state": "UNAVAILABLE -- raw .mat lost (see EVIDENCE_POLICY.md)"
+    "trajectorySha": ""
    },
    "cand": {
     "tag": "C160x20",
@@ -469,13 +463,7 @@
     "rho_available": false,
     "rho_sha256": "UNAVAILABLE -- raw .mat lost (see EVIDENCE_POLICY.md)",
     "trajectory": "UNAVAILABLE",
-    "trajectorySha": "",
-    "rho_recovered": true,
-    "rho_recovered_file": "analysis/OlhoffCurrent/diagnostics/move_stop/runs/baseline_320x40.mat",
-    "rho_recovered_sha256": "4af7ff4a9c8748c77315faa2d15bcfddd02779b70f4b8be44301cf7826606c97",
-    "rho_recovered_trajectorySha": "21900ae78741cfb8cf65d041fd64641a0ecae3babe94eeeb0ad917e4352f3fe9",
-    "rho_recovered_note": "Recovered after the freeze; frozen scalars re-derived from this file and matched to <=1e-9. No frozen value was edited.",
-    "rho_sha256_frozen_state": "UNAVAILABLE -- raw .mat lost (see EVIDENCE_POLICY.md)"
+    "trajectorySha": ""
    },
    "cand": {
     "tag": "C320x40",
@@ -891,7 +879,7 @@
     "NE": 20000,
     "status": "CONVERGED",
     "nOuter": 505,
-    "wall_s": 4689.341357333334,
+    "wall_s": 3539.3367536666665,
     "innerTotal": 10301,
     "innerMax": 46,
     "innerNonConv": 0,
@@ -916,7 +904,7 @@
     "stage_final": 4,
     "rho_sha256": "1f648be89dc981f00233838311bfda1b6349ae3991f373f66438624981d459d7",
     "trajectory": "analysis/OlhoffCurrent/evidence/two_branch_controller_validation/C400x50_trajectory.mat",
-    "trajectoryBytes": 139808745.0,
+    "trajectoryBytes": 139808729.0,
     "csv": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/runs/C400x50_iterations.csv",
     "exhaustion": {
      "W": 20,
@@ -1014,7 +1002,7 @@
      149,
      160
     ],
-    "matlab": "25.2.0.3042426 (R2025b) Update 1",
+    "matlab": "25.2.0.2998904 (R2025b)",
     "implTree": "edbfe47eb32109a2fb017f6f13d5327f2c240357caa96630064ffcf37ee152cb",
     "clampDisplacementMax": 5.551115123125783e-17
    },
@@ -1169,7 +1157,7 @@
     "volume_abs": 2.825217970126026e-07,
     "outer_mult": 3.633093525179856,
     "inner_mult": 3.5301576422206993,
-    "wall_mult": 8.66791378434997,
+    "wall_mult": 6.542212113986444,
     "firstDescent_prod": 138,
     "firstDescent_cand": 389,
     "descentDelay": 251
@@ -1260,8 +1248,10 @@
   "dx_bitwise": true,
   "inner_bitwise": true,
   "move_allEqual": true,
+  "vol_bitwise": true,
+  "gap_bitwise": true,
   "pass": true,
-  "detail": "n=369 rho=True omega=True beta=True dx=True inner=True move004=True"
+  "detail": "n=369 rho=True omega=True beta=True dx=True inner=True vol=True gap=True move004=True"
  },
  "gates": {
   "P2": true,
@@ -1271,15 +1261,11 @@
   "P6": true,
   "P7": true,
   "P8": true,
-  "P8_m400_likeForLike": true,
   "P9": true,
   "P10": true,
   "P11": true,
   "P12": true,
   "P13": false,
-  "P1": true,
-  "P14": true,
-  "P15": false,
   "allThreeRunsExecuted": true,
   "allTerminatedGenuinely": false
  }

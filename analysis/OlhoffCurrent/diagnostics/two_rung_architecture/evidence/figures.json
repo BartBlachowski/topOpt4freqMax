@@ -1,0 +1,46 @@
+[
+ {
+  "file": "figures/F1_Mnd_P_S1_S2_F.png",
+  "sha256": "ffe72eac2134a8a09f207f7a34fd8aaff8accbc04e3ee99778ec363f1ae4a2f8"
+ },
+ {
+  "file": "figures/F2_omega1_P_S1_S2_F.png",
+  "sha256": "118170e1742223be793213079ed4c1e173528291557c68cac247000226d85478"
+ },
+ {
+  "file": "figures/F3_move_history_events.png",
+  "sha256": "8962f8bdefbafba5d133ee26f2bfc861f2e61220f6115807f4b273f36d5911c3"
+ },
+ {
+  "file": "figures/F4_cumulative_inner_work.png",
+  "sha256": "1d6672eb742df2e1302cbe76fc99630497bc5cdb63e393913eacad30f3174d56"
+ },
+ {
+  "file": "figures/F5_cumulative_wall_time.png",
+  "sha256": "4f3145060e0c8a7e51928a64a0524f5f9dc41487d76fadc2af737813e8f1fc7a"
+ },
+ {
+  "file": "figures/F6_rung2_value.png",
+  "sha256": "70bba98cab81d436c4c7ec4a44e227ad128f73cebfd71256488a460fb58228a4"
+ },
+ {
+  "file": "figures/F7_rung34_value.png",
+  "sha256": "b408b2148e8a346e1c86413e1c7689a7f2254b3cfd1ae97d480a0a064fccca18"
+ },
+ {
+  "file": "figures/F8_rung_cost.png",
+  "sha256": "2bf5f57af19c36cf247079cc34c9572e59a3a65cf6c7907329bea0b484f0cd65"
+ },
+ {
+  "file": "figures/F9_topology_S2_vs_F.png",
+  "sha256": "15262499ec4429fe647b912002836d59cdaedcd808e8ac7ed3394c5338c5e5af"
+ },
+ {
+  "file": "figures/F10_multiplicity_gap.png",
+  "sha256": "212d58daa14cf756191608aecb2390280c25a06e721271102c7444f889483c5b"
+ },
+ {
+  "file": "figures/F11_architecture_summary.png",
+  "sha256": "5e268a185fb0bf1dbbc90155a445b165431243bb0a06a363737b32d1c3d72ce5"
+ }
+]

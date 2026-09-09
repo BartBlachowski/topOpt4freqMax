@@ -1,0 +1,16 @@
+{
+ "figures": [
+  "F1_Mnd_P_S_F.png",
+  "F2_omega1_P_S_F.png",
+  "F3_cumgain_Mnd.png",
+  "F4_cumgain_omega1.png",
+  "F5_move_history.png",
+  "F6_cost_wall.png",
+  "F7_cost_cumInner.png",
+  "F8_banked_fraction.png",
+  "F9_marginal_per_rung.png",
+  "F10_topology_S_vs_F.png",
+  "F11_multiplicity.png",
+  "F12_tradeoff.png"
+ ]
+}

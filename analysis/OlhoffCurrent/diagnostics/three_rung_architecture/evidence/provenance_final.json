@@ -1,0 +1,300 @@
+{
+  "study": "three_rung_architecture",
+  "tag": "final",
+  "timestamp": "2026-09-09T17:20:43Z",
+  "matlab": "25.2.0.2998904 (R2025b)",
+  "computer": "MACA64",
+  "repo": "/Users/piotrek/Programming/topOpt4freqMax",
+  "scientificRunsExecuted": 0,
+  "branch": "benchmark-methodology-r2",
+  "head": "1438aa3f4bd934f5b588587ef65f4f2ca35bac1c",
+  "status": "M analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/evidence/analysis.json\n M analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/evidence/software_tests.json\n M analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/scripts/cv_analyze.py\n M analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/scripts/cv_figures.py\n?? analysis/OlhoffCurrent/diagnostics/move_ladder_necessity/\n?? analysis/OlhoffCurrent/diagnostics/three_rung_architecture/\n?? analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/CAUSAL_ANALYSIS.md\n?? analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/DATA_MANIFEST.json\n?? analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/EVIDENCE.json\n?? analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/FINAL_SHA256.txt\n?? analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/METRICS.json\n?? analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/PERFORMANCE_READINESS.md\n?? analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/PROMOTION.md\n?? analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/REPORT.md\n?? analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/evidence/figures.json\n?? analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/evidence/provenance_final.json\n?? analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/figures/\n?? analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/runs/C400x50_iterations.csv\n?? analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/runs/C400x50_record.json\n?? analysis/OlhoffCurrent/diagnostics/two_rung_architecture/\n?? analysis/OlhoffCurrent/olhoffcurrent_finalization_gate.m\n?? analysis/OlhoffCurrent/tests/test_finalization_gate.m",
+  "clean": false,
+  "nDirtyPaths": 22,
+  "currentness": "CURRENT",
+  "implTreeSha256": "edbfe47eb32109a2fb017f6f13d5327f2c240357caa96630064ffcf37ee152cb",
+  "implNFiles": 75,
+  "sourceOk": true,
+  "sourceMismatch": 0,
+  "sourceMissing": 0,
+  "sourceExtra": 0,
+  "dispatchOk": true,
+  "dispatchBlockers": 0,
+  "mmasubPath": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/mma_published/mmasub.m",
+  "mmaPublished": true,
+  "forbiddenOnPath": [],
+  "forbiddenAbsent": true,
+  "lock": {
+    "p": 3,
+    "massModel": "eq4b",
+    "q": 1,
+    "filterType": "sensitivity",
+    "radiusPhysical": 0.06,
+    "projection": false,
+    "multMethod": "subspace",
+    "subspaceSize": 2,
+    "offDiagonal": true,
+    "mmaVariant": "published",
+    "moveLevels": [
+      0.04,
+      0.02,
+      0.01,
+      0.005
+    ],
+    "movePolicy": "ladder",
+    "contSignal": "boundVariable",
+    "stopToleranceRule": "meshScaled"
+  },
+  "sensitivityFilterWins": true,
+  "fourRungLevelsIntact": true,
+  "tolCheck": [
+    {
+      "mesh": [
+        160,
+        20
+      ],
+      "NE": 3200,
+      "stopTolerance": 0.05,
+      "frozenTol": 0.05,
+      "identical": true
+    },
+    {
+      "mesh": [
+        240,
+        30
+      ],
+      "NE": 7200,
+      "stopTolerance": 0.075000000000000011,
+      "frozenTol": 0.075000000000000011,
+      "identical": true
+    },
+    {
+      "mesh": [
+        320,
+        40
+      ],
+      "NE": 12800,
+      "stopTolerance": 0.1,
+      "frozenTol": 0.1,
+      "identical": true
+    },
+    {
+      "mesh": [
+        400,
+        50
+      ],
+      "NE": 20000,
+      "stopTolerance": 0.125,
+      "frozenTol": 0.125,
+      "identical": true
+    }
+  ],
+  "toleranceLawIdentical": true,
+  "inheritedPrereg": [
+    {
+      "path": "diagnostics/two_branch_maturity_240/PREREGISTRATION.md",
+      "sha256": "62748225253f85f6a2fbc1bad35489a2c201cd45ee64ff279601003354b73abd",
+      "recordedSha": "",
+      "match": true
+    },
+    {
+      "path": "diagnostics/two_branch_controller_validation/PREREGISTRATION.md",
+      "sha256": "8e323f837f7bbdaa5176d92621b4a45e4b377af131af5b3172429c629da27fbf",
+      "recordedSha": "8e323f837f7bbdaa5176d92621b4a45e4b377af131af5b3172429c629da27fbf",
+      "match": true
+    },
+    {
+      "path": "diagnostics/move_ladder_necessity/PREREGISTRATION.md",
+      "sha256": "a08b879b9d4893bc55dd9e5dfc2c26f897cb9d49355f0557ccc8644c7fc6ca3e",
+      "recordedSha": "a08b879b9d4893bc55dd9e5dfc2c26f897cb9d49355f0557ccc8644c7fc6ca3e",
+      "match": true
+    },
+    {
+      "path": "diagnostics/two_rung_architecture/PREREGISTRATION.md",
+      "sha256": "b50455fbd3d97dcb72093fc13738f236d4d0f2e37a47caba0f515a16aaf7ca04",
+      "recordedSha": "b50455fbd3d97dcb72093fc13738f236d4d0f2e37a47caba0f515a16aaf7ca04",
+      "match": true
+    }
+  ],
+  "required": [
+    {
+      "path": "analysis/OlhoffCurrent/evidence/two_branch_controller_validation/C160x20_trajectory.mat",
+      "exists": true,
+      "bytes": 8.858E+6,
+      "sha256": "4d11a2fdc1c985b15dea74cc234ed9d1f658960c1d42bfd8092770cc1b658832"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/evidence/two_branch_controller_validation/C320x40_trajectory.mat",
+      "exists": true,
+      "bytes": 2.83657283E+8,
+      "sha256": "c9d4d76649de605690acecad185875f400dedea6c287cd91d4ee8b644ea328c0"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/evidence/two_branch_controller_validation/C400x50_trajectory.mat",
+      "exists": true,
+      "bytes": 1.39808729E+8,
+      "sha256": "fa0e714c712889a1442c8063d1ec809244bc42701883cf74366efb0a2019045e"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/runs/C160x20_iterations.csv",
+      "exists": true,
+      "bytes": 149556,
+      "sha256": "7121c9d3a16f1ebcd5eb2c9b6f6c242b90b9ec2ac4690a385cfb7e1102de0ce9"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/runs/C320x40_iterations.csv",
+      "exists": true,
+      "bytes": 1.138275E+6,
+      "sha256": "ff570d6e4d024f360974ab065c3042127404b7073a66ed972bfd8718563b356c"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/runs/C400x50_iterations.csv",
+      "exists": true,
+      "bytes": 332741,
+      "sha256": "e2346b67280dbee3b2531bc9852295fac03339f81f671205eabcf1255a0e355d"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/runs/C160x20_record.json",
+      "exists": true,
+      "bytes": 3141,
+      "sha256": "6c77f0123a279de0a635d2eff8fd31d06d9c0da86ba1bc36dc3d453351a74a47"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/runs/C320x40_record.json",
+      "exists": true,
+      "bytes": 2891,
+      "sha256": "3fc68c050a9d81b5a6ad6ab482abda9679d5cd5f2455967dc4a3a8b64dc236be"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/runs/C400x50_record.json",
+      "exists": true,
+      "bytes": 3155,
+      "sha256": "f0546e4ad9d51d9dca745a027ddb58a0c25e2a3dd90a1c650fa8e87fca6a271f"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/evidence/baselines.json",
+      "exists": true,
+      "bytes": 4193,
+      "sha256": "08b48346da8685398e293a320f1124b5d069344a265209279571570710b4c571"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/move_ladder_necessity/METRICS.json",
+      "exists": true,
+      "bytes": 24130,
+      "sha256": "4ba10e376f40b576e0f4a243a2726f667ba7d8f9ab13916f399c9eb793b538dc"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_rung_architecture/METRICS.json",
+      "exists": true,
+      "bytes": 39961,
+      "sha256": "01c3003453321dbb8b606d6410a67bd8394520dd1ff59e40ad60c88303602afb"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_rung_architecture/evidence/event_verification.json",
+      "exists": true,
+      "bytes": 8687,
+      "sha256": "979d23c4e198a08b34bde6aec6b619010f297faca6b5a6e9aa7763698a7e9d61"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_rung_architecture/evidence/analysis.json",
+      "exists": true,
+      "bytes": 38522,
+      "sha256": "6c5f2da693da264ce9aa34f152e11dcfe6403d857e4d11fd92ac708af9c11a2c"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/+impl/architecture/+olh/+move/exhaustion.m",
+      "exists": true,
+      "bytes": 6083,
+      "sha256": "17b37a384b1aa5d987d9c861e16071d1140af130f92406ccc11cec4518bcae0c"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/+impl/architecture/+olh/+move/limit.m",
+      "exists": true,
+      "bytes": 8934,
+      "sha256": "61fa923d430121ead764a229b4f48dfd77617540b4ab6db883ccd9d5904b1c1e"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/+impl/architecture/olhoffSolve.m",
+      "exists": true,
+      "bytes": 30985,
+      "sha256": "1e5a114cbf91717e01e5592e86203f401ed5cdb3e5f5ce9a727b8163cdf2fba3"
+    }
+  ],
+  "requiredAllPresent": true,
+  "c240Candidates": [],
+  "priorGates": [
+    {
+      "study": "two_branch_controller_validation",
+      "ok": true,
+      "detail": "G1 declares=1 G2 required=1 G3 hashfile=1 G4 selfverify=1 G5 nomissingmat=1"
+    },
+    {
+      "study": "move_ladder_necessity",
+      "ok": true,
+      "detail": "G1 declares=1 G2 required=1 G3 hashfile=1 G4 selfverify=1 G5 nomissingmat=1"
+    },
+    {
+      "study": "two_rung_architecture",
+      "ok": true,
+      "detail": "G1 declares=1 G2 required=1 G3 hashfile=1 G4 selfverify=1 G5 nomissingmat=1"
+    },
+    {
+      "study": "two_branch_maturity_240",
+      "ok": false,
+      "detail": "G1 declares=0 G2 required=0 G3 hashfile=1 G4 selfverify=0 G5 nomissingmat=0"
+    }
+  ],
+  "tests": [
+    {
+      "name": "test_currentness",
+      "ok": true,
+      "err": ""
+    },
+    {
+      "name": "test_evidence_retention",
+      "ok": true,
+      "err": ""
+    },
+    {
+      "name": "test_finalization_gate",
+      "ok": true,
+      "err": ""
+    },
+    {
+      "name": "test_path_isolation",
+      "ok": true,
+      "err": ""
+    },
+    {
+      "name": "test_preset_equivalence",
+      "ok": true,
+      "err": ""
+    },
+    {
+      "name": "test_source_integrity",
+      "ok": true,
+      "err": ""
+    }
+  ],
+  "testsPass": true,
+  "nTests": 6,
+  "selfFinalizationGate": true,
+  "testFailures": [],
+  "testsPassOrSelfReference": true,
+  "gate": {
+    "currentnessCurrent": true,
+    "sourceIntegrityPass": true,
+    "mmaPublished": true,
+    "forbiddenAbsent": true,
+    "sensitivityFilter": true,
+    "toleranceLaw": true,
+    "fourRungLevels": true,
+    "preregHashesValid": true,
+    "requiredEvidence": true,
+    "controllerGatePass": true,
+    "twoRungGatePass": true,
+    "testsPass": true
+  },
+  "gateOk": true,
+  "verdict": "THREE_RUNG_EVIDENCE_GATE_PASS"
+}

@@ -1,0 +1,66 @@
+[
+ {
+  "file": "figures/F01_omega1_history.png",
+  "sha256": "b4b4d3715dc4f88849dafedccb1dc42c9c6f43303810a4788d11f024b516f86f"
+ },
+ {
+  "file": "figures/F02_Mnd_history.png",
+  "sha256": "512d9dabd9639408795effbfa21e2c5db17dd0b09b263d50e87de589367b2af5"
+ },
+ {
+  "file": "figures/F03_move_stage_history.png",
+  "sha256": "551e6907931195268e64aca943b4bd5e85c1c919bbcafbda8dd3729da0b59838"
+ },
+ {
+  "file": "figures/F04_ABE_by_stage.png",
+  "sha256": "7fae3ec06d27fc3c7c83bfd74a3b183eca97253db5d00223c4adc9f54b2983aa"
+ },
+ {
+  "file": "figures/F05_declaration_timing.png",
+  "sha256": "528cc0ee74e2bf97ffabdcc971db5987367d3a84dd8acbb02eefcabf38206139"
+ },
+ {
+  "file": "figures/F06_rung_omega1.png",
+  "sha256": "1d476cc61bb80286ccc62d1a1b62b7311cef4401cc28113c65410896d2fb1685"
+ },
+ {
+  "file": "figures/F07_rung_Mnd.png",
+  "sha256": "183bf7aa47c0fb01ba1c02b45177605e3b91d941ed7805f0296f7eb9ee681c00"
+ },
+ {
+  "file": "figures/F08_rung_topology.png",
+  "sha256": "233e403ecdbf5e67072ccac1d38f6b9434ba7f4c5ba5bd9b7766131ac8a54225"
+ },
+ {
+  "file": "figures/F09_cumulative_outer.png",
+  "sha256": "ee8d8802cc726b5756c81b8580c32c3d69369df9aba0cb179b64de6497af9811"
+ },
+ {
+  "file": "figures/F10_cumulative_inner.png",
+  "sha256": "8c762e84fbc10abd099192f03339f6be99ffa5645bb30423612ba4d8c6329c6e"
+ },
+ {
+  "file": "figures/F11_topology_S3_vs_F.png",
+  "sha256": "c565f304a76f5c2288721fd3ce342566d36c2395a9dab1f770a25691ce720209"
+ },
+ {
+  "file": "figures/F12_gap_multiplicity.png",
+  "sha256": "14517b9f5d8c4831abcaaaecbb282fe474c697b78b75d1831341a3d259c415b1"
+ },
+ {
+  "file": "figures/F13_crossmesh_rung4_omega1.png",
+  "sha256": "1f5f3225b32f588bec5eda6ad82b07295cf1b28d88037cf54b635c210c37b2d7"
+ },
+ {
+  "file": "figures/F14_crossmesh_rung4_Mnd.png",
+  "sha256": "6ec779f57c5c1c9e4aa4156833d758da877fc1a54695b39f604f7404c682caf7"
+ },
+ {
+  "file": "figures/F15_crossmesh_rung4_cost.png",
+  "sha256": "0af52764105d85712862ed650066cfb8ede8adf278a6d50e180931f75e67dd87"
+ },
+ {
+  "file": "figures/F16_threshold_splitting_resolution.png",
+  "sha256": "6b4f4fd6a531d7cc750fbf2778b6ce78783694f8299e570b54de23c4e02256e5"
+ }
+]

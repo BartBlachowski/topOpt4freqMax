@@ -1,0 +1,318 @@
+{
+  "schema": "olhoff_three_rung_architecture_manifest/1",
+  "study": "three_rung_architecture",
+  "generated": "2026-09-09T17:23:44Z",
+  "scientific_runs_executed": 0,
+  "note": "No raw scientific data was produced.  The study depends on pre-existing durable trajectories declared in EVIDENCE.json and verified by olhoffcurrent_evidence_gate.",
+  "verdicts": {
+    "counterfactual": "THREE_RUNG_COUNTERFACTUAL_EXACT",
+    "architecture": "THREE_RUNG_ARCHITECTURE_PARTIALLY_SUPPORTED",
+    "next_step": "MORE_THREE_RUNG_EVIDENCE_REQUIRED",
+    "production": "PRODUCTION_CONTROLLER_NOT_CHANGED",
+    "campaign": "NINE_MESH_PERFORMANCE_CAMPAIGN_BLOCKED"
+  },
+  "preregistration_sha256": "12c4bb960eeb6169521ea4b2e01b084a7bb3983d5387e94121e1729c2d71075c",
+  "artifacts": [
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/three_rung_architecture/COUNTERFACTUAL_VALIDITY.md",
+      "role": "report",
+      "bytes": 8870,
+      "sha256": "5e56863cb2d1f0f0274eb160e1f25affd21f72164a4138b26da813321e575787",
+      "tracked": true
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/three_rung_architecture/DATA_MANIFEST.json",
+      "role": "metrics",
+      "bytes": 12343,
+      "sha256": "6ccf90b6c81a4a66a7db60df38703d7ab2a5373f6ce845618b02dc6ed68b671e",
+      "tracked": true
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/three_rung_architecture/DECLARATION_TIMING_AUDIT.md",
+      "role": "report",
+      "bytes": 6285,
+      "sha256": "49c54f63dde803311b5b76e0f9dbd01f16044fdf71ee3cfae53ffa0e99ee3ba8",
+      "tracked": true
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/three_rung_architecture/EVIDENCE.json",
+      "role": "metrics",
+      "bytes": 11078,
+      "sha256": "47560482e8351d776fa5fcabe5c51722a8e72d96dca7f16448a7b1a9947183f6",
+      "tracked": true
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/three_rung_architecture/EVIDENCE_INVENTORY.md",
+      "role": "report",
+      "bytes": 5883,
+      "sha256": "b9a50294e72de3e35a8e39c9563e801f8964543afd4b8d40becff23db8182276",
+      "tracked": true
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/three_rung_architecture/METRICS.json",
+      "role": "metrics",
+      "bytes": 70946,
+      "sha256": "e09fd62439da070818ac0eb37559deeaefabac1418393558e14619ac6f996437",
+      "tracked": true
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/three_rung_architecture/PERFORMANCE_READINESS.md",
+      "role": "report",
+      "bytes": 4961,
+      "sha256": "618e606a4aed08a8c30e62d24abf15df6ac80ea6dc2465ba1c0f9f8f57a57942",
+      "tracked": true
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/three_rung_architecture/PHYSICS_SAFETY.md",
+      "role": "report",
+      "bytes": 6117,
+      "sha256": "8747938304bcfd5832573344d4df58208b0fc9bc50143076c3cb7e0a2779fe2a",
+      "tracked": true
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/three_rung_architecture/PREREGISTRATION.md",
+      "role": "report",
+      "bytes": 25744,
+      "sha256": "12c4bb960eeb6169521ea4b2e01b084a7bb3983d5387e94121e1729c2d71075c",
+      "tracked": true
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/three_rung_architecture/PROVENANCE.md",
+      "role": "report",
+      "bytes": 6981,
+      "sha256": "369b437b425785f02b92574031ebdd187bf98d766d13d40c77edf19609b6f415",
+      "tracked": true
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/three_rung_architecture/REPORT.md",
+      "role": "report",
+      "bytes": 24954,
+      "sha256": "f064a26c3730f925882ac7edb1d466e520ed508d4f8c3f2969b2dbfa640ca725",
+      "tracked": true
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/three_rung_architecture/RUNG_VALUE_DECOMPOSITION.md",
+      "role": "report",
+      "bytes": 8866,
+      "sha256": "aebd3f96d3704721f8164fcd1495d51e722d97f4d2acc038103a0a1de0af95a2",
+      "tracked": true
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/three_rung_architecture/THREE_RUNG_ANALYSIS.md",
+      "role": "report",
+      "bytes": 8854,
+      "sha256": "b71b4483a7a0e615f9b28fa3f3df99091ff2b4837cea4c8c37237cc920401deb",
+      "tracked": true
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/three_rung_architecture/evidence/PREREGISTRATION.frozen",
+      "role": "evidence",
+      "bytes": 25744,
+      "sha256": "12c4bb960eeb6169521ea4b2e01b084a7bb3983d5387e94121e1729c2d71075c",
+      "tracked": true
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/three_rung_architecture/evidence/PREREGISTRATION.sha256",
+      "role": "evidence",
+      "bytes": 933,
+      "sha256": "b4b0392bf0eafaac53259b2e59abdc7753316e2bb526ef4e601d119888a85cf3",
+      "tracked": true
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/three_rung_architecture/evidence/analysis.json",
+      "role": "evidence",
+      "bytes": 62939,
+      "sha256": "0064b709f0b7a13cfd405c1afba2853f9dbb6e0fb94fc509a6964a535a923182",
+      "tracked": true
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/three_rung_architecture/evidence/config_audit.json",
+      "role": "evidence",
+      "bytes": 6620,
+      "sha256": "d45ac4530aceae983c59284f664c87bc4cba9691a416306327eb1852d7e9b48b",
+      "tracked": true
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/three_rung_architecture/evidence/event_verification.json",
+      "role": "evidence",
+      "bytes": 13339,
+      "sha256": "0fd55ee57310c6bd565dd4bc15e02408d1ced3ce03d72e0729159d1bd291c0b1",
+      "tracked": true
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/three_rung_architecture/evidence/figures.json",
+      "role": "evidence",
+      "bytes": 1854,
+      "sha256": "e4cd9de9346c62b664242a28f5dbb75424806749edc8aed33ef727b092335e68",
+      "tracked": true
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/three_rung_architecture/evidence/provenance_final.json",
+      "role": "evidence",
+      "bytes": 10984,
+      "sha256": "b3d27c630707f2f4775d0e4b8a979d1c16b7fd5e98db7850b103541060ae2a17",
+      "tracked": true
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/three_rung_architecture/evidence/provenance_start.json",
+      "role": "evidence",
+      "bytes": 11019,
+      "sha256": "2a4f31fb25968bf8d8c6a73129ba5c2e1b22e3f21b850ffe5e3ef9081b2a3fa9",
+      "tracked": true
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/three_rung_architecture/figures/F10_multiplicity_gap.png",
+      "role": "figure",
+      "bytes": 53848,
+      "sha256": "7015d5dd99961378d3e4d87bbf0136d36bb2bd4367c8461d3bc633cd9b877bd6",
+      "tracked": true
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/three_rung_architecture/figures/F11_declaration_offset.png",
+      "role": "figure",
+      "bytes": 43296,
+      "sha256": "82219134033d5d345964a5a7dd333692aed58e0f595ec5c96c58d52fe1e8e527",
+      "tracked": true
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/three_rung_architecture/figures/F12_first_evaluable_vs_declaration.png",
+      "role": "figure",
+      "bytes": 41429,
+      "sha256": "e4a51850e84f2b133ff2b478a003e2683489543831e9201b36a1bea854c693a7",
+      "tracked": true
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/three_rung_architecture/figures/F13_C320_S3_vs_CAP_HIT.png",
+      "role": "figure",
+      "bytes": 94344,
+      "sha256": "b0b1387eaa853b2272eb254edec2510b68a9ad6afad832c3356ce77e12877292",
+      "tracked": true
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/three_rung_architecture/figures/F14_architecture_summary.png",
+      "role": "figure",
+      "bytes": 105535,
+      "sha256": "b180f47e26902891e4a22b9f374e5d6dabef0afdda190e183c69e575026c4d3b",
+      "tracked": true
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/three_rung_architecture/figures/F1_omega1_P_S1_S2_S3_F.png",
+      "role": "figure",
+      "bytes": 64175,
+      "sha256": "79c1573d94eba5df611855709075666fd42f57d0fc90eb731951de1d6f3483ac",
+      "tracked": true
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/three_rung_architecture/figures/F2_Mnd_P_S1_S2_S3_F.png",
+      "role": "figure",
+      "bytes": 57752,
+      "sha256": "7fd64f50af0a212ec19bb8befdbfa5b08cfd465a06438c2645e691e8b060565b",
+      "tracked": true
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/three_rung_architecture/figures/F3_rung_omega1.png",
+      "role": "figure",
+      "bytes": 54548,
+      "sha256": "5db0c49f34d1ad77dd69f716c37e4f893aad1d0c35a3c9255b3bddfb1143d427",
+      "tracked": true
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/three_rung_architecture/figures/F4_rung_Mnd.png",
+      "role": "figure",
+      "bytes": 38991,
+      "sha256": "6576966c11c5db9926510cfcf381e8055fc957fc5960e83db9598c5775d8a91c",
+      "tracked": true
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/three_rung_architecture/figures/F5_rung_topology.png",
+      "role": "figure",
+      "bytes": 39531,
+      "sha256": "33c69f6958b5594e3d57dfb96e8197f6fae09ba16df2f3775292bbada1d14483",
+      "tracked": true
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/three_rung_architecture/figures/F6_rung_outer_work.png",
+      "role": "figure",
+      "bytes": 36992,
+      "sha256": "a5db085f3b9baaab41c73d6d076acdbf2bb794e5eb4c1cf1d26e78b6d6f3edcc",
+      "tracked": true
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/three_rung_architecture/figures/F7_rung_inner_work.png",
+      "role": "figure",
+      "bytes": 45136,
+      "sha256": "68bb421091e9a5a8083153faec8858e2a0573611c05adb4695a48177145f24be",
+      "tracked": true
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/three_rung_architecture/figures/F8_benefit_per_inner_work.png",
+      "role": "figure",
+      "bytes": 37200,
+      "sha256": "88f9f274146a3f44c979b5f172bc975e7f1846bfe0cd72a3288f795c8f650a26",
+      "tracked": true
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/three_rung_architecture/figures/F9_topology_S3_vs_F.png",
+      "role": "figure",
+      "bytes": 215364,
+      "sha256": "95f2d35bda2e8019c6d9ff37f0f92a745acafb86ba6e6e6e8a25bd59ccd00ef2",
+      "tracked": true
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/three_rung_architecture/scripts/tr3_analyze.py",
+      "role": "analysis code",
+      "bytes": 18077,
+      "sha256": "e8777a9ec30cdc6677b12ed32ac2f3156c92faa145428ab14afafdff76a8ad4d",
+      "tracked": true
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/three_rung_architecture/scripts/tr3_configaudit.m",
+      "role": "analysis code",
+      "bytes": 9693,
+      "sha256": "871d0e9a31c83b3205c3eeafd4a276f13977ece5d7bdc0aee576064ecfd42876",
+      "tracked": true
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/three_rung_architecture/scripts/tr3_figures.py",
+      "role": "analysis code",
+      "bytes": 21716,
+      "sha256": "6ccef93dcb04aa0db397f33445ab21b2a5683718b96212f7e3c30d4de2c0edee",
+      "tracked": true
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/three_rung_architecture/scripts/tr3_finalize.m",
+      "role": "analysis code",
+      "bytes": 8141,
+      "sha256": "2529581c35d98e9fccbfd2e7ecb784a4d1693cc78b470c134bec35a04ea84ce1",
+      "tracked": true
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/three_rung_architecture/scripts/tr3_frozen.py",
+      "role": "analysis code",
+      "bytes": 3262,
+      "sha256": "59f88ace2ec8fc7412629c4a3fd1a60a00dc4e5695f493bf082626454f068dac",
+      "tracked": true
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/three_rung_architecture/scripts/tr3_metrics.py",
+      "role": "analysis code",
+      "bytes": 15404,
+      "sha256": "a772fce022a751938b02a4f6f03a5264ab3957701eb2c4ce1602fdb1c4be3d9c",
+      "tracked": true
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/three_rung_architecture/scripts/tr3_provenance.m",
+      "role": "analysis code",
+      "bytes": 11865,
+      "sha256": "eabc9b30b21a1133b926d19ccef9289fe55a04353166299ecd151ed100643a80",
+      "tracked": true
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/three_rung_architecture/scripts/tr3_verify.py",
+      "role": "analysis code",
+      "bytes": 10071,
+      "sha256": "7837969399adffe6b9248fb6ba8d4966221baa4a9b16b13ef4694c9f25e00fa0",
+      "tracked": true
+    }
+  ]
+}

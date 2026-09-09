@@ -1,0 +1,147 @@
+{
+  "tag": "C240x30",
+  "mesh": [
+    240,
+    30
+  ],
+  "NE": 7200,
+  "status": "CONVERGED",
+  "nOuter": 1358,
+  "wall_s": 14160.235697458333,
+  "innerTotal": 44181,
+  "innerMax": 97,
+  "innerNonConv": 0,
+  "cfgHash": "33833323efa08facaa5849c24fe32d6c9c47b5924f88c00d34fb65f7140d54d6",
+  "cap": 1600,
+  "tol": 0.075000000000000011,
+  "omega": [
+    167.05075913598358,
+    197.030878129851,
+    363.9029770179547,
+    608.037719638611,
+    710.57021518512249
+  ],
+  "omega1": 167.05075913598358,
+  "omega2": 197.030878129851,
+  "gap12": 0.17946712214257488,
+  "volume_final": 0.49999920062450726,
+  "Mnd_final": 12.942486226218918,
+  "gray_final": 0.14944444444444444,
+  "mid_final": 0.03111111111111111,
+  "move_final": 0.005,
+  "stage_final": 4,
+  "rho_sha256": "ed2dd8cd37cbe6388b7476b1b86e08664bcfe9782aaa28905e7df4e58338b5cf",
+  "trajectory": "analysis/OlhoffCurrent/evidence/three_rung_resolution_240/C240x30_trajectory.mat",
+  "trajectoryBytes": 1.31203128E+8,
+  "csv": "analysis/OlhoffCurrent/diagnostics/three_rung_resolution_240/runs/C240x30_iterations.csv",
+  "exhaustion": {
+    "W": 20,
+    "P": 20,
+    "Wnp": 10,
+    "tol": 0.075000000000000011,
+    "stageStarts": [
+      1,
+      207,
+      246,
+      285
+    ],
+    "descents": [
+      [
+        207,
+        1,
+        206,
+        187
+      ],
+      [
+        246,
+        2,
+        245,
+        226
+      ],
+      [
+        285,
+        3,
+        284,
+        265
+      ]
+    ],
+    "events": [
+      [
+        207,
+        206,
+        187
+      ],
+      [
+        246,
+        245,
+        226
+      ],
+      [
+        285,
+        284,
+        265
+      ]
+    ],
+    "eventBranch": [
+      "B",
+      "B",
+      "B"
+    ],
+    "terminalDeclared": true,
+    "terminalDeclIter": 1358,
+    "terminalDeclBegin": 1339,
+    "terminalBranch": "B",
+    "signalDrivesMove": true,
+    "ruleAdmitsStop": true
+  },
+  "descents": [
+    [
+      207,
+      1,
+      206,
+      187
+    ],
+    [
+      246,
+      2,
+      245,
+      226
+    ],
+    [
+      285,
+      3,
+      284,
+      265
+    ]
+  ],
+  "eventBranch": [
+    "B",
+    "B",
+    "B"
+  ],
+  "terminalDeclared": true,
+  "terminalDeclIter": 1358,
+  "terminalDeclBegin": 1339,
+  "terminalBranch": "B",
+  "betaStallFirst": 92,
+  "prodStopFirst": 147,
+  "prodShadowDescents": [
+    92,
+    103,
+    114
+  ],
+  "log": [
+    "iter 8: omega_J (J=3) is itself multiple -- (25b) undefined",
+    "iter 9: omega_J (J=3) is itself multiple -- (25b) undefined",
+    "iter 12: omega_J (J=3) is itself multiple -- (25b) undefined",
+    "iter 206: stage exhaustion declared (branch B, window 187-206) at move 0.04; ladder descends, not converged",
+    "iter 245: stage exhaustion declared (branch B, window 226-245) at move 0.02; ladder descends, not converged",
+    "iter 284: stage exhaustion declared (branch B, window 265-284) at move 0.01; ladder descends, not converged",
+    "iter 1358: terminal stage exhaustion declared (branch B, window 1339-1358) at move 0.005, the last ladder level",
+    "converged at outer iteration 1358 (||drho||_2 = 1.146e-03, max|drho| = 6.400e-04)"
+  ],
+  "matlab": "25.2.0.2998904 (R2025b)",
+  "implTree": "edbfe47eb32109a2fb017f6f13d5327f2c240357caa96630064ffcf37ee152cb",
+  "clampDisplacementMax": 5.5511151231257827E-17,
+  "preregSha256": "f86d022e5259beb0936072d204e54e3761f14b2fd903c1794a6d4ccb2c5652cc"
+}

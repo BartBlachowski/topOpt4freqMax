@@ -1,0 +1,14 @@
+sha256  f86d022e5259beb0936072d204e54e3761f14b2fd903c1794a6d4ccb2c5652cc
+file    PREREGISTRATION.md
+frozen  2026-09-09T17:44:21Z
+head    1438aa3f4bd934f5b588587ef65f4f2ca35bac1c
+note    Frozen BEFORE the C240x30 scientific run begins.  No 240x30 CAUSAL result of
+        any kind existed when this was hashed: the only prior 240x30 arm was FIXED-MOVE
+        (move=0.04 held, CAP_HIT @1200) and never descended, so S2, S3, F and every
+        rung-3/rung-4 quantity were unmeasured.  Section 10 discloses in full what WAS
+        visible, including that fixed-move arm's move=0.04 event (Branch B, window
+        begins 187 => declaration 206) and the resulting sharp S1 prediction, and states
+        plainly that the DIRECTION of the answer is foreseeable rather than claiming a
+        blind test.  Materiality bars (S6), the denominator convention, the index
+        convention (S5) and the safety cap 1600 (S4) are all INHERITED verbatim.
+        The objective bar remains 0.10 % with no uncertainty padding.

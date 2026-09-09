@@ -1,0 +1,116 @@
+FINAL_SHA256 -- move_ladder_necessity
+==============================================================================
+generated 2026-09-09T15:35:04Z
+branch    benchmark-methodology-r2
+HEAD      1438aa3f4bd934f5b588587ef65f4f2ca35bac1c  (unchanged start to end)
++impl     edbfe47eb32109a2fb017f6f13d5327f2c240357caa96630064ffcf37ee152cb  (75 files, UNCHANGED)
+
+SCIENTIFIC OPTIMIZATION RUNS EXECUTED:  ZERO
+
+VERDICTS
+  MIDTASK_COMMIT_NONINTERFERENCE_VERIFIED
+  CONTROLLER_DEFINITION_RECOVERY_PASS
+  RETENTION_ENFORCEMENT_ADDED
+  FOUR_RUNG_LADDER_PARTIALLY_USEFUL
+  RETAIN_MOVE_LADDER_PENDING_REDESIGN
+  PRODUCTION_CONTROLLER_NOT_CHANGED
+  NINE_MESH_PERFORMANCE_CAMPAIGN_BLOCKED
+
+GATES     repository test suite 6/6 (0 failures)
+          evidence gate PASS 4/4 required + 1 optional
+          finalization gate G1-G5 PASS
+          previous study re-verified: FINAL_SHA256 71/71, DATA_MANIFEST 53/53, EVIDENCE 3/3
+
+PREREGISTRATION (frozen before the lower-rung decomposition)
+------------------------------------------------------------------------------
+a08b879b9d4893bc55dd9e5dfc2c26f897cb9d49355f0557ccc8644c7fc6ca3e  PREREGISTRATION.md
+a08b879b9d4893bc55dd9e5dfc2c26f897cb9d49355f0557ccc8644c7fc6ca3e  evidence/PREREGISTRATION.frozen
+92f1e7446750dae74fb5b4d8623969fb02db85e1bf3cf5ef738cc984b5b21308  evidence/PREREGISTRATION.sha256
+
+REPORTS
+------------------------------------------------------------------------------
+b8fd8b14578819b36b76067a7b430cd394b713bd57fcf05f9659d7bd4eaf2100  REPORT.md
+6a6b118169b0b1861808dc368e1f4a48a62e2924e079efde52a6565c7d95e6ea  PROVENANCE.md
+a3ee088d890c7dd8876bd4e6aa9edb59b75c031e04ed76b4fc5eed077c32174f  MIDTASK_COMMIT_AUDIT.md
+5a53b71d9d6563a0aecd464ee182fc3ee89f75fbd2afb84313803b86a78fed6c  RETENTION_AUDIT.md
+eb3685163c79a4f6614e958c1bc60d987a9249d6ab1464b37e820d79eddac85e  EVIDENCE_INVENTORY.md
+784b55995a3a615504bacc884933ec47164e5a9d10b1318493386fe99983aa86  SINGLE_STAGE_COUNTERFACTUAL.md
+0704f621cba6393532a8654928c0452869b5df4e930401d8f7a20b20c4506b8f  LADDER_VALUE_ANALYSIS.md
+58f8bdebaef032fadbe56c0d0b31d5b33045a5c4dca492249e25e6c75b583e79  CROSS_MESH_ANALYSIS.md
+713ca3a518572aff2f386d56e6892bbdb55c157e88266a440c47e93d7c4e4ff0  PERFORMANCE_READINESS.md
+
+MACHINE-READABLE
+------------------------------------------------------------------------------
+4ba10e376f40b576e0f4a243a2726f667ba7d8f9ab13916f399c9eb793b538dc  METRICS.json
+3b2c69fe13379ac4ba6ba6bb24ca4855b0ec05ee3bc303117ba313e5a3443b4c  DATA_MANIFEST.json
+7a1783ab2b9fb9d30f462d0d68dbda5dbaf8b058f6292a2acc6d70c47f555ab2  EVIDENCE.json
+
+EVIDENCE
+------------------------------------------------------------------------------
+d21a585a7ecdf8ce84a7c651d9e8d899fcaad680308f9c3d0014e5438e92bc2f  evidence/event_verification.json
+1cb871b9140d8a5ead9f0d5125d01a315731a23a422e75ec4b793439bb86b3a2  evidence/figures.json
+613a92d7ef612478d17d9fac8754e9582592ae2128c18edbf00a7ee04d9a966e  evidence/ladder_analysis.json
+0e028bc5227cc2fdfcd963346dd60b33d2cb588cf55f7e0d1e776b896641f79c  evidence/production_inloop.json
+
+FIGURES
+------------------------------------------------------------------------------
+e46538cb4182f8cc799feb721037fe5387a6796aa5f4378daef91263fd188ee8  figures/F10_topology_S_vs_F.png
+3744adb77c6834800ac913df3b59c0582e59757d276e0b462c9b1037ec9252c0  figures/F11_multiplicity.png
+4220f3965164abfb1151f1bf1b9d936237879f7e3519f1cfb4b2a1b05d4fa3e1  figures/F12_tradeoff.png
+970159433cb4dc8ee9b7b55113f23c1bd810d1d913733787a3552ce042578eff  figures/F1_Mnd_P_S_F.png
+26aecfd7827a9f6788db4802c6252d94efdb8bc28298869c29a4dcb9870fa6a5  figures/F2_omega1_P_S_F.png
+42a8e0da9bccb4be6679675fa8b541075e359ed8a4f3cc5e6585b767d7cb826c  figures/F3_cumgain_Mnd.png
+897ecea8472e5406c8ab66ffc83c15a83a92ee088fc6b90a1586a536bac59bae  figures/F4_cumgain_omega1.png
+bfad69d6cc387b06e9496ea1ec0807ef8a8a60cb810b80f4da0488ea2f308be7  figures/F5_move_history.png
+f81dc7fa297901af589f2e68df37115739844c64ec9b2af80dc4aa42d1b7b823  figures/F6_cost_wall.png
+228169759d5af3b1bfa4b11db88ecfb7034470ac6d0327ef5d16fec9a35bbd8b  figures/F7_cost_cumInner.png
+04ae323d1e69620fc284c77a9d60a2fa261c662a9f3645b3cdaeb0a47db693dd  figures/F8_banked_fraction.png
+fe6109bc813f30138508cc0ed7febf070cecd83f4da08766de0a16fd0cdbc5db  figures/F9_marginal_per_rung.png
+
+CODE
+------------------------------------------------------------------------------
+ed85b10e06472b3a1b390c50495682991f3adf6cd7fea506b57cdbcd9f76101d  scripts/ml_analyze.py
+a427f9ecbf89181127b3cf10b891d916c93179b1b861bf6e5657d872617a0668  scripts/ml_figures.py
+08bf3e4f471c4222f0bdc20aaf4eaad2b5ff0ad9b4038726389986b2b3fd1583  scripts/ml_frozen.py
+3c27f928ea4915685f32db762af267c76fcde4a13ccbedcc06e1bf5f2d855fe2  scripts/ml_verify_events.py
+
+RETENTION ENFORCEMENT ADDED BY THIS TASK (outside +impl/, scientifically inert)
+------------------------------------------------------------------------------
+bcfe816124a2f52f42df5474e69801abaf42339909b7cac5a942756b69817957  analysis/OlhoffCurrent/olhoffcurrent_finalization_gate.m
+0421382edd6165a8290501b66c76fb06985b68e677c20686a559060bd97c01a6  analysis/OlhoffCurrent/tests/test_finalization_gate.m
+
+RAW TRAJECTORY DEPENDENCIES (pre-existing, untracked by storage decision,
+DECLARED in EVIDENCE.json, gated: PASS)
+------------------------------------------------------------------------------
+4d11a2fdc1c985b15dea74cc234ed9d1f658960c1d42bfd8092770cc1b658832  analysis/OlhoffCurrent/evidence/two_branch_controller_validation/C160x20_trajectory.mat   (8858000 bytes)
+c9d4d76649de605690acecad185875f400dedea6c287cd91d4ee8b644ea328c0  analysis/OlhoffCurrent/evidence/two_branch_controller_validation/C320x40_trajectory.mat   (283657283 bytes)
+fa0e714c712889a1442c8063d1ec809244bc42701883cf74366efb0a2019045e  analysis/OlhoffCurrent/evidence/two_branch_controller_validation/C400x50_trajectory.mat   (139808729 bytes)
+c53680e86b7010e962b9f5a48a55fdc7c3e659150e05994c9bbffa1275035ded  analysis/OlhoffCurrent/evidence/move_activity_400/F400_400x50_trajectory.mat   (102057786 bytes)
+1dc20dbd6a0dacbd067802901fd6d78364306a5641be84a6e2216b4038917660  analysis/OlhoffCurrent/evidence/move_activity_400/P400_400x50_trajectory.mat   (36576273 bytes)
+
+READ-ONLY INPUTS REUSED (unmodified)
+------------------------------------------------------------------------------
+7121c9d3a16f1ebcd5eb2c9b6f6c242b90b9ec2ac4690a385cfb7e1102de0ce9  analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/runs/C160x20_iterations.csv
+ff570d6e4d024f360974ab065c3042127404b7073a66ed972bfd8718563b356c  analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/runs/C320x40_iterations.csv
+e2346b67280dbee3b2531bc9852295fac03339f81f671205eabcf1255a0e355d  analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/runs/C400x50_iterations.csv
+08b48346da8685398e293a320f1124b5d069344a265209279571570710b4c571  analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/evidence/baselines.json
+fbf7433e2efeba0edb4f793c19b2529070762f452a785cef1b7d5192555eb7b1  analysis/OlhoffCurrent/diagnostics/two_branch_maturity_240/METRICS.json
+bc146572e3f1a7928914ea556a2f892ad3081d8037c7ec858c50d7ca7a06f3c2  analysis/OlhoffCurrent/diagnostics/two_branch_maturity_240/scripts/tb_branches.m
+f438612943aee5789b3f289eb0563159efd1d5121de147381cf94fa164308a20  analysis/OlhoffCurrent/diagnostics/move_stop/runs/baseline_160x20_iterations.csv
+73baa20070133e9e30e073438927f401b557a962a8e05bf31700101e41642804  analysis/OlhoffCurrent/diagnostics/move_stop/runs/baseline_320x40_iterations.csv
+72665ec768d9959227b213a3eedd1eeac48e8fac3ebcadc22a0fc0a1bfb2ff41  analysis/OlhoffCurrent/diagnostics/move_activity_400/runs/P400_400x50_iterations.csv
+
+MISSING PRIOR EVIDENCE (12 hash-manifested artifacts, tree-wide; see RETENTION_AUDIT.md)
+------------------------------------------------------------------------------
+MISSING                                                           analysis/OlhoffCurrent/diagnostics/dynamical_regime/evidence/dr_analysis.mat
+MISSING                                                           analysis/OlhoffCurrent/diagnostics/dynamical_regime/runs/runA_400x50.mat
+MISSING                                                           analysis/OlhoffCurrent/diagnostics/dynamical_regime/runs/runB_320x40.mat
+MISSING                                                           analysis/OlhoffCurrent/diagnostics/fixedmove_400_dynamics/evidence/fm_analysis.mat
+MISSING                                                           analysis/OlhoffCurrent/diagnostics/fixedmove_400_dynamics/runs/runC_400x50.mat
+MISSING                                                           analysis/OlhoffCurrent/diagnostics/move_stop/runs/baseline_160x20.mat
+MISSING                                                           analysis/OlhoffCurrent/diagnostics/move_stop/runs/baseline_320x40.mat
+MISSING                                                           analysis/OlhoffCurrent/diagnostics/move_stop/runs/fixedmove_160x20.mat
+MISSING                                                           analysis/OlhoffCurrent/diagnostics/move_stop/runs/fixedmove_320x40.mat
+MISSING                                                           analysis/OlhoffCurrent/diagnostics/topology_maturity_transition/evidence/phaseA_stats.mat
+MISSING                                                           analysis/OlhoffCurrent/diagnostics/two_branch_maturity_240/evidence/tb_analysis.mat
+MISSING                                                           analysis/OlhoffCurrent/diagnostics/two_branch_maturity_240/runs/runD_240x30.mat

@@ -1,0 +1,11 @@
+sha256  b50455fbd3d97dcb72093fc13738f236d4d0f2e37a47caba0f515a16aaf7ca04
+file    PREREGISTRATION.md
+frozen  2026-09-09T15:57:27Z
+head    1438aa3f4bd934f5b588587ef65f4f2ca35bac1c
+note    Frozen BEFORE any S2 endpoint value (M_nd, omega1, omega2, gap, gray, mid,
+        volume, density field) was read.  Section 13 discloses exactly what was
+        already visible -- including that S2's M_nd and omega1 already exist in
+        move_ladder_necessity/METRICS.json as rungs[2].Mnd_to / omega1_to, which
+        were not opened before freezing.  The materiality thresholds (S9) and the
+        production-relative acceptance gates (S10) are inherited verbatim from two
+        earlier frozen preregistrations, not chosen here.

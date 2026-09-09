@@ -1,0 +1,13 @@
+sha256  12c4bb960eeb6169521ea4b2e01b084a7bb3983d5387e94121e1729c2d71075c
+file    PREREGISTRATION.md
+frozen  2026-09-09T16:43:33Z
+head    1438aa3f4bd934f5b588587ef65f4f2ca35bac1c
+note    Frozen BEFORE any S3 scientific value (M_nd, omega1, omega2, gap, gray, mid,
+        volume, density field, bound fraction) was read.  Section 16 discloses exactly
+        what was already visible -- including that S3's M_nd and omega1 already exist
+        in move_ladder_necessity/METRICS.json as rungs[3].Mnd_to / omega1_to, which
+        were not opened before freezing, and that the per-rung cost figures were
+        already known (which is why section 12 declines to invent a cost threshold).
+        The materiality thresholds (S9), the production-relative acceptance gates
+        (S10) and the relative-change denominator convention are inherited VERBATIM
+        from earlier frozen preregistrations.  The objective bar remains 0.10 %.

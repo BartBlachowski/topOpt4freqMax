@@ -1,0 +1,175 @@
+{
+  "timestamp": "2026-09-09T17:41:23Z",
+  "note": "cv_config is CALLED, not copied: the 240x30 controller is the same function that produced the 160x20 / 320x40 / 400x50 causal evidence.",
+  "cap": 1600,
+  "capInheritedFrom": "cv_config.m CAP constant, identical for every candidate arm",
+  "overrides": [
+    "move.continuation.signal",
+    "stageExhaustion",
+    "stop.rule",
+    "stageExhaustion"
+  ],
+  "preset": "duOlhoffFixedPenaltySensitivityFiltered",
+  "upstreamPreset": "duOlhoffFrozenM4",
+  "allowedDifferences": [
+    "domain_mesh_nelx",
+    "domain_mesh_nely",
+    "stop_tolerance",
+    "runtime_name",
+    "provenance_resolvedAt",
+    "provenance_configHash",
+    "provenance_overrides"
+  ],
+  "allowedRationale": {
+    "domain_mesh_nelx": "THE authorized experimental factor",
+    "domain_mesh_nely": "THE authorized experimental factor",
+    "stop_tolerance": "deterministic function of NE under the inherited meshScaled law 0.05*sqrt(NE/3200); not a free choice",
+    "runtime_name": "a run label; enters no computation",
+    "provenance_overrides": "the RECORDED override list, which embeds nelx/nely/name; verified element-wise below to differ in those entries only"
+  },
+  "overrideDiff": [
+    {
+      "mesh": [
+        160,
+        20
+      ],
+      "entries": [
+        "[2] 160 -> 240",
+        "[4] 20 -> 30",
+        "[14] CV_C_160x20 -> CV_C_240x30"
+      ],
+      "onlyMeshOrName": true
+    },
+    {
+      "mesh": [
+        320,
+        40
+      ],
+      "entries": [
+        "[2] 320 -> 240",
+        "[4] 40 -> 30",
+        "[14] CV_C_320x40 -> CV_C_240x30"
+      ],
+      "onlyMeshOrName": true
+    },
+    {
+      "mesh": [
+        400,
+        50
+      ],
+      "entries": [
+        "[2] 400 -> 240",
+        "[4] 50 -> 30",
+        "[14] CV_C_400x50 -> CV_C_240x30"
+      ],
+      "onlyMeshOrName": true
+    }
+  ],
+  "overridesMeshOnly": true,
+  "diffVsPriorArm": [
+    {
+      "mesh": [
+        160,
+        20
+      ],
+      "nDiff": 5,
+      "differences": [
+        "domain_mesh_nelx: 160 -> 240",
+        "domain_mesh_nely: 20 -> 30",
+        "provenance_overrides: cell[18] -> cell[18]",
+        "runtime_name: CV_C_160x20 -> CV_C_240x30",
+        "stop_tolerance: 0.05 -> 0.075"
+      ],
+      "unexpected": []
+    },
+    {
+      "mesh": [
+        320,
+        40
+      ],
+      "nDiff": 5,
+      "differences": [
+        "domain_mesh_nelx: 320 -> 240",
+        "domain_mesh_nely: 40 -> 30",
+        "provenance_overrides: cell[18] -> cell[18]",
+        "runtime_name: CV_C_320x40 -> CV_C_240x30",
+        "stop_tolerance: 0.1 -> 0.075"
+      ],
+      "unexpected": []
+    },
+    {
+      "mesh": [
+        400,
+        50
+      ],
+      "nDiff": 5,
+      "differences": [
+        "domain_mesh_nelx: 400 -> 240",
+        "domain_mesh_nely: 50 -> 30",
+        "provenance_overrides: cell[18] -> cell[18]",
+        "runtime_name: CV_C_400x50 -> CV_C_240x30",
+        "stop_tolerance: 0.125 -> 0.075"
+      ],
+      "unexpected": []
+    }
+  ],
+  "singleFactorOk": true,
+  "lock": {
+    "p": 3,
+    "pContinuation": false,
+    "massModel": "eq4b",
+    "q": 1,
+    "filterType": "sensitivity",
+    "filterApplyTo": "all",
+    "radiusPhysical": 0.06,
+    "projection": false,
+    "multMethod": "subspace",
+    "subspaceSize": 2,
+    "diagonalOffsets": true,
+    "offDiagonal": true,
+    "mmaVariant": "published",
+    "volumeFraction": 0.5,
+    "designInitial": 0.5,
+    "moveLevels": [
+      0.04,
+      0.02,
+      0.01,
+      0.005
+    ],
+    "movePolicy": "ladder",
+    "contSignal": "stageExhaustion",
+    "stopRule": "stageExhaustion",
+    "stopNorm": "l2",
+    "stopTolerance": 0.075000000000000011,
+    "maxOuter": 1600
+  },
+  "lockOk": true,
+  "toleranceExpected": 0.075000000000000011,
+  "ladderDependence": {
+    "exhaustMove": true,
+    "exhaustStop": true,
+    "useProj": false,
+    "guardLadderExhausted": false,
+    "guardMaxDesignChange": false,
+    "guardSettledMove": true,
+    "pContinuation": false,
+    "anyStopGuard": false,
+    "pDriver": "n/a",
+    "pOwnCounter": false,
+    "site485_ladderTail_neverRuns": true,
+    "site312_pContinuation_neverRuns": true,
+    "site_projectionBlock_neverRuns": true,
+    "site509_dependsOnLengthOnly": true,
+    "site109_dependsOnLengthOnly": true,
+    "site122_valueLookupByStage": true
+  },
+  "counterfactualExactPreRun": true,
+  "threeRungLegal": true,
+  "threeRungDiff": [
+    "move_levels: [0.04 0.02 0.01 0.005] -> [0.04 0.02 0.01]",
+    "provenance_implementation: analysis/OlhoffCurrent -> <absent>",
+    "provenance_overrides: cell[18] -> cell[20]",
+    "provenance_productionPreset: duOlhoffFixedPenaltySensitivityFiltered -> <absent>"
+  ],
+  "configHash240": "33833323efa08facaa5849c24fe32d6c9c47b5924f88c00d34fb65f7140d54d6"
+}

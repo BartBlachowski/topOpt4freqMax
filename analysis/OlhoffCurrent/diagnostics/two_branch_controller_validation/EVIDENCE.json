@@ -1,0 +1,280 @@
+{
+  "schema": "olhoff_current_evidence/1",
+  "study": "two_branch_controller_validation",
+  "generated": "2026-09-09T08:24:29+02:00",
+  "evidenceRoot": "analysis/OlhoffCurrent/evidence/two_branch_controller_validation",
+  "implementation": "analysis/OlhoffCurrent",
+  "sourceTree": "edbfe47eb32109a2fb017f6f13d5327f2c240357caa96630064ffcf37ee152cb",
+  "matlab": "25.2.0.2998904 (R2025b)",
+  "mesh_set": [
+    "160x20",
+    "320x40",
+    "400x50"
+  ],
+  "controller": "frozen two-branch stage exhaustion E = A OR B",
+  "reconstructs": [
+    "rho(k)",
+    "rho(k-1)",
+    "Delta rho_e(k)",
+    "move(k)",
+    "A(k)",
+    "B(k)",
+    "persistence counters"
+  ],
+  "convention": "RHO(:,k) is the design after outer iteration k; DRHO(:,k) is the increment the sub-problem returned at k; rho_0 = cfg.design.initial is the uniform initial design",
+  "clamp_displacement_max": 5.5511151231257827E-17,
+  "preregistration_sha256": "8e323f837f7bbdaa5176d92621b4a45e4b377af131af5b3172429c629da27fbf",
+  "impl_tree_sha256": "edbfe47eb32109a2fb017f6f13d5327f2c240357caa96630064ffcf37ee152cb",
+  "primary_verdict": "TWO_BRANCH_CONTROLLER_PARTIALLY_VALIDATED",
+  "artifacts": [
+    {
+      "path": "C160x20_trajectory.mat",
+      "class": "required",
+      "description": "ARM C160 candidate trajectory: RHO and DRHO (NE x nOuter, double), move, full hist including the controller trace, resolved cfg, exhaustion summary, solver log.",
+      "bytes": 8.858E+6,
+      "sha256": "4d11a2fdc1c985b15dea74cc234ed9d1f658960c1d42bfd8092770cc1b658832",
+      "present": true,
+      "format": "MAT-file (v7.3 = HDF5) -- read with load()",
+      "variables": [
+        {
+          "name": "DRHO",
+          "size": [
+            3200,
+            219
+          ],
+          "class": "double",
+          "bytes": 5.6064E+6
+        },
+        {
+          "name": "RHO",
+          "size": [
+            3200,
+            219
+          ],
+          "class": "double",
+          "bytes": 5.6064E+6
+        },
+        {
+          "name": "cfg",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 19641
+        },
+        {
+          "name": "exh",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 2564
+        },
+        {
+          "name": "hist",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 82452
+        },
+        {
+          "name": "log",
+          "size": [
+            1,
+            7
+          ],
+          "class": "cell",
+          "bytes": 2094
+        },
+        {
+          "name": "meta",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 2798
+        },
+        {
+          "name": "move",
+          "size": [
+            219,
+            1
+          ],
+          "class": "double",
+          "bytes": 1752
+        }
+      ]
+    },
+    {
+      "path": "C320x40_trajectory.mat",
+      "class": "required",
+      "description": "ARM C320 candidate trajectory (CAP_HIT at 1600), same contents.",
+      "bytes": 2.83657283E+8,
+      "sha256": "c9d4d76649de605690acecad185875f400dedea6c287cd91d4ee8b644ea328c0",
+      "present": true,
+      "format": "MAT-file (v7.3 = HDF5) -- read with load()",
+      "variables": [
+        {
+          "name": "DRHO",
+          "size": [
+            12800,
+            1600
+          ],
+          "class": "double",
+          "bytes": 1.6384E+8
+        },
+        {
+          "name": "RHO",
+          "size": [
+            12800,
+            1600
+          ],
+          "class": "double",
+          "bytes": 1.6384E+8
+        },
+        {
+          "name": "cfg",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 19641
+        },
+        {
+          "name": "exh",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 2562
+        },
+        {
+          "name": "hist",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 568564
+        },
+        {
+          "name": "log",
+          "size": [
+            1,
+            4
+          ],
+          "class": "cell",
+          "bytes": 1240
+        },
+        {
+          "name": "meta",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 2798
+        },
+        {
+          "name": "move",
+          "size": [
+            1600,
+            1
+          ],
+          "class": "double",
+          "bytes": 12800
+        }
+      ]
+    },
+    {
+      "path": "C400x50_trajectory.mat",
+      "class": "required",
+      "description": "ARM C400 candidate trajectory, same contents.  Its first 369 iterations are bitwise identical to move_activity_400/F400.",
+      "bytes": 1.39808729E+8,
+      "sha256": "fa0e714c712889a1442c8063d1ec809244bc42701883cf74366efb0a2019045e",
+      "present": true,
+      "format": "MAT-file (v7.3 = HDF5) -- read with load()",
+      "variables": [
+        {
+          "name": "DRHO",
+          "size": [
+            20000,
+            505
+          ],
+          "class": "double",
+          "bytes": 8.08E+7
+        },
+        {
+          "name": "RHO",
+          "size": [
+            20000,
+            505
+          ],
+          "class": "double",
+          "bytes": 8.08E+7
+        },
+        {
+          "name": "cfg",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 19641
+        },
+        {
+          "name": "exh",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 2564
+        },
+        {
+          "name": "hist",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 183124
+        },
+        {
+          "name": "log",
+          "size": [
+            1,
+            7
+          ],
+          "class": "cell",
+          "bytes": 2098
+        },
+        {
+          "name": "meta",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 2798
+        },
+        {
+          "name": "move",
+          "size": [
+            505,
+            1
+          ],
+          "class": "double",
+          "bytes": 4040
+        }
+      ]
+    }
+  ]
+}

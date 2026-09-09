@@ -1,0 +1,381 @@
+{
+  "schema": "olhoff_current_evidence/1",
+  "study": "two_rung_architecture",
+  "generated": "2026-09-09T18:14:38+02:00",
+  "evidenceRoot": "analysis/OlhoffCurrent/evidence/two_branch_controller_validation",
+  "implementation": "analysis/OlhoffCurrent",
+  "sourceTree": "edbfe47eb32109a2fb017f6f13d5327f2c240357caa96630064ffcf37ee152cb",
+  "matlab": "25.2.0.2998904 (R2025b)",
+  "scientific_runs_executed": 0,
+  "note": "This study executed zero optimization runs.  It declares pre-existing durable trajectories by immutable path and SHA-256 rather than copying them.",
+  "preregistration_sha256": "b50455fbd3d97dcb72093fc13738f236d4d0f2e37a47caba0f515a16aaf7ca04",
+  "impl_tree_sha256": "edbfe47eb32109a2fb017f6f13d5327f2c240357caa96630064ffcf37ee152cb",
+  "architecture_verdict": "TWO_RUNG_ARCHITECTURE_PARTIALLY_SUPPORTED",
+  "next_step_verdict": "MORE_TWO_RUNG_EVIDENCE_REQUIRED",
+  "evidence_gaps": [
+    "240x30: no causal trajectory exists (no runs/ dir; that arm was fixed-move) -- UNAVAILABLE, not inferred",
+    "160x20 and 320x40 production density fields: raw .mat lost, rho_available=false in baselines.json",
+    "wall-clock time: s/inner drifts 3.8x-5.2x within each run; down-weighted, never decisive"
+  ],
+  "artifacts": [
+    {
+      "path": "analysis/OlhoffCurrent/evidence/two_branch_controller_validation/C160x20_trajectory.mat",
+      "class": "required",
+      "description": "160x20 four-rung causal-controller trajectory: source of the frozen replay and of S1/S2/F densities.",
+      "bytes": 8.858E+6,
+      "sha256": "4d11a2fdc1c985b15dea74cc234ed9d1f658960c1d42bfd8092770cc1b658832",
+      "present": true,
+      "format": "MAT-file (v7.3 = HDF5) -- read with load()",
+      "variables": [
+        {
+          "name": "DRHO",
+          "size": [
+            3200,
+            219
+          ],
+          "class": "double",
+          "bytes": 5.6064E+6
+        },
+        {
+          "name": "RHO",
+          "size": [
+            3200,
+            219
+          ],
+          "class": "double",
+          "bytes": 5.6064E+6
+        },
+        {
+          "name": "cfg",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 19641
+        },
+        {
+          "name": "exh",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 2564
+        },
+        {
+          "name": "hist",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 82452
+        },
+        {
+          "name": "log",
+          "size": [
+            1,
+            7
+          ],
+          "class": "cell",
+          "bytes": 2094
+        },
+        {
+          "name": "meta",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 2798
+        },
+        {
+          "name": "move",
+          "size": [
+            219,
+            1
+          ],
+          "class": "double",
+          "bytes": 1752
+        }
+      ]
+    },
+    {
+      "path": "analysis/OlhoffCurrent/evidence/two_branch_controller_validation/C320x40_trajectory.mat",
+      "class": "required",
+      "description": "320x40 four-rung causal-controller trajectory (CAP_HIT @1600).",
+      "bytes": 2.83657283E+8,
+      "sha256": "c9d4d76649de605690acecad185875f400dedea6c287cd91d4ee8b644ea328c0",
+      "present": true,
+      "format": "MAT-file (v7.3 = HDF5) -- read with load()",
+      "variables": [
+        {
+          "name": "DRHO",
+          "size": [
+            12800,
+            1600
+          ],
+          "class": "double",
+          "bytes": 1.6384E+8
+        },
+        {
+          "name": "RHO",
+          "size": [
+            12800,
+            1600
+          ],
+          "class": "double",
+          "bytes": 1.6384E+8
+        },
+        {
+          "name": "cfg",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 19641
+        },
+        {
+          "name": "exh",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 2562
+        },
+        {
+          "name": "hist",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 568564
+        },
+        {
+          "name": "log",
+          "size": [
+            1,
+            4
+          ],
+          "class": "cell",
+          "bytes": 1240
+        },
+        {
+          "name": "meta",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 2798
+        },
+        {
+          "name": "move",
+          "size": [
+            1600,
+            1
+          ],
+          "class": "double",
+          "bytes": 12800
+        }
+      ]
+    },
+    {
+      "path": "analysis/OlhoffCurrent/evidence/two_branch_controller_validation/C400x50_trajectory.mat",
+      "class": "required",
+      "description": "400x50 four-rung causal-controller trajectory.",
+      "bytes": 1.39808729E+8,
+      "sha256": "fa0e714c712889a1442c8063d1ec809244bc42701883cf74366efb0a2019045e",
+      "present": true,
+      "format": "MAT-file (v7.3 = HDF5) -- read with load()",
+      "variables": [
+        {
+          "name": "DRHO",
+          "size": [
+            20000,
+            505
+          ],
+          "class": "double",
+          "bytes": 8.08E+7
+        },
+        {
+          "name": "RHO",
+          "size": [
+            20000,
+            505
+          ],
+          "class": "double",
+          "bytes": 8.08E+7
+        },
+        {
+          "name": "cfg",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 19641
+        },
+        {
+          "name": "exh",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 2564
+        },
+        {
+          "name": "hist",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 183124
+        },
+        {
+          "name": "log",
+          "size": [
+            1,
+            7
+          ],
+          "class": "cell",
+          "bytes": 2098
+        },
+        {
+          "name": "meta",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 2798
+        },
+        {
+          "name": "move",
+          "size": [
+            505,
+            1
+          ],
+          "class": "double",
+          "bytes": 4040
+        }
+      ]
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/runs/C160x20_iterations.csv",
+      "class": "required",
+      "description": "160x20 per-iteration telemetry incl. the ex* controller trace the solver acted on.",
+      "bytes": 149556,
+      "sha256": "7121c9d3a16f1ebcd5eb2c9b6f6c242b90b9ec2ac4690a385cfb7e1102de0ce9",
+      "present": true,
+      "format": "CSV, comma separated, header row"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/runs/C320x40_iterations.csv",
+      "class": "required",
+      "description": "320x40 per-iteration telemetry.",
+      "bytes": 1.138275E+6,
+      "sha256": "ff570d6e4d024f360974ab065c3042127404b7073a66ed972bfd8718563b356c",
+      "present": true,
+      "format": "CSV, comma separated, header row"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/runs/C400x50_iterations.csv",
+      "class": "required",
+      "description": "400x50 per-iteration telemetry.",
+      "bytes": 332741,
+      "sha256": "e2346b67280dbee3b2531bc9852295fac03339f81f671205eabcf1255a0e355d",
+      "present": true,
+      "format": "CSV, comma separated, header row"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/evidence/baselines.json",
+      "class": "required",
+      "description": "The three frozen production baselines P.",
+      "bytes": 4193,
+      "sha256": "08b48346da8685398e293a320f1124b5d069344a265209279571570710b4c571",
+      "present": true,
+      "format": "JSON"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/evidence/move_activity_400/P400_400x50_trajectory.mat",
+      "class": "optional",
+      "description": "Production 400x50 density field -- the only surviving P topology; 160x20 and 320x40 are lost.",
+      "bytes": 3.6576273E+7,
+      "sha256": "1dc20dbd6a0dacbd067802901fd6d78364306a5641be84a6e2216b4038917660",
+      "present": true,
+      "format": "MAT-file (v7.3 = HDF5) -- read with load()",
+      "variables": [
+        {
+          "name": "DRHO",
+          "size": [
+            20000,
+            139
+          ],
+          "class": "double",
+          "bytes": 2.224E+7
+        },
+        {
+          "name": "RHO",
+          "size": [
+            20000,
+            139
+          ],
+          "class": "double",
+          "bytes": 2.224E+7
+        },
+        {
+          "name": "cfg",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 18873
+        },
+        {
+          "name": "hist",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 39346
+        },
+        {
+          "name": "meta",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 1297
+        },
+        {
+          "name": "move",
+          "size": [
+            139,
+            1
+          ],
+          "class": "double",
+          "bytes": 1112
+        }
+      ]
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/move_ladder_necessity/METRICS.json",
+      "class": "optional",
+      "description": "Prior audit: S1 extraction and rung boundaries, used for cross-checking only.",
+      "bytes": 24130,
+      "sha256": "4ba10e376f40b576e0f4a243a2726f667ba7d8f9ab13916f399c9eb793b538dc",
+      "present": true,
+      "format": "JSON"
+    }
+  ]
+}
