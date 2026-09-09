@@ -1,9 +1,9 @@
 {
   "manifest_schema": "olhoff_current_source_manifest/1",
-  "generated": "2026-09-07T09:48:35+02:00",
+  "generated": "2026-09-08T21:23:27+02:00",
   "root": "analysis/OlhoffCurrent/+impl",
-  "n_files": 74,
-  "tree_sha256": "c1455374d5f8e256c2678a679a5fc7955d9a8a77c410a41cd30f1c189910208c",
+  "n_files": 75,
+  "tree_sha256": "edbfe47eb32109a2fb017f6f13d5327f2c240357caa96630064ffcf37ee152cb",
   "files": [
     {
       "path": "algo/compareHistory.m",
@@ -91,7 +91,7 @@
     },
     {
       "path": "architecture/+olh/+config/fromLegacy.m",
-      "sha256": "0883c6e08354c1cca45e52e017424c7648613abf97d84d2603acb0c873eac7c6"
+      "sha256": "7d0bad832c906c5304acb2ebf84304739fe3531281a0e007aa395fd58ae96ff8"
     },
     {
       "path": "architecture/+olh/+config/getPath.m",
@@ -107,7 +107,7 @@
     },
     {
       "path": "architecture/+olh/+config/schema.m",
-      "sha256": "3ec54d8fae85c1526b6ae4ad3d7abbeee04b32d7c40c09f739bd678ae8fc544e"
+      "sha256": "d7a808995d9a34810442ddf17f15de980aa1e62efe90b3563f3e474ae5f5cf67"
     },
     {
       "path": "architecture/+olh/+config/setPath.m",
@@ -115,19 +115,23 @@
     },
     {
       "path": "architecture/+olh/+config/toLegacy.m",
-      "sha256": "4eff964aacace9bf277405236a3c8618333734367ca98ff981211b5fbe4a75dd"
+      "sha256": "685caacbd3db2bd19e14cc4fe3be0098b7bba423fe2b4a91f0cb83a3e4a21a04"
     },
     {
       "path": "architecture/+olh/+config/validate.m",
-      "sha256": "adc0ebd581c7dfd2b38e181d622c00754b811ea88936cc2ba05e0b755982987c"
+      "sha256": "30e495ea8bcc25193de2c64f04984549870e213f9f9df871e52cc4c906cab141"
     },
     {
       "path": "architecture/+olh/+material/massInterpolation.m",
       "sha256": "1b8fd4e887f08b5b61c5a4f72578a8b29c99748fcb545c68534325e6e52deab3"
     },
     {
+      "path": "architecture/+olh/+move/exhaustion.m",
+      "sha256": "17b37a384b1aa5d987d9c861e16071d1140af130f92406ccc11cec4518bcae0c"
+    },
+    {
       "path": "architecture/+olh/+move/limit.m",
-      "sha256": "18b31dbe1586d25ededb779a4b4032a7b7c7654d7cc55c1c59cccaa58c89535f"
+      "sha256": "61fa923d430121ead764a229b4f48dfd77617540b4ab6db883ccd9d5904b1c1e"
     },
     {
       "path": "architecture/+olh/+multi/detect.m",
@@ -231,7 +235,7 @@
     },
     {
       "path": "architecture/olhoffSolve.m",
-      "sha256": "5d4abd37c8b186a42d1a7ef5b7066c8bc2429d33ee91f20b0b844bace772324b"
+      "sha256": "1e5a114cbf91717e01e5592e86203f401ed5cdb3e5f5ce9a727b8163cdf2fba3"
     },
     {
       "path": "fem/assemble2D.m",

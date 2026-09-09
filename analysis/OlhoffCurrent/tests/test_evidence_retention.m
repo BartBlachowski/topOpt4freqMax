@@ -30,6 +30,13 @@ addpath(root);
 nFail = 0;
 fprintf('\n%s\nTEST_EVIDENCE_RETENTION\n%s\n', repmat('=',1,72), repmat('=',1,72));
 
+% The +impl tree hash BEFORE any of this runs.  R10b compares against it, so the
+% test asks the question it is for -- "did the retention mechanism disturb
+% production source?" -- rather than pinning one historical digest, which would
+% have to be edited every time production legitimately changes and would then no
+% longer be a check at all.
+treeHash0 = olhoffcurrent_source_manifest('Verify', false).treeHash;
+
 sandbox   = fullfile(root, 'evidence', '_gate_selftest');
 studyDir  = fullfile(sandbox, 'study');
 evDirRel  = 'analysis/OlhoffCurrent/evidence/_gate_selftest/data';
@@ -126,8 +133,8 @@ cur = olhoffcurrent_currentness('Verbose', false);
 man = olhoffcurrent_source_manifest('Verify', true);
 nFail = nFail + chk('R10 source integrity still CURRENT', ...
                     man.ok && ~strcmp(cur.state,'LOCAL_MODIFIED'), true);
-nFail = nFail + chk('R10b +impl tree hash unchanged', ...
-    strcmp(man.treeHash, 'c1455374d5f8e256c2678a679a5fc7955d9a8a77c410a41cd30f1c189910208c'), true);
+nFail = nFail + chk('R10b +impl tree hash unchanged by the evidence mechanism', ...
+    strcmp(man.treeHash, treeHash0), true);
 
 fprintf('%s\nTEST_EVIDENCE_RETENTION: %d failure(s)\n%s\n', ...
         repmat('-',1,72), nFail, repmat('=',1,72));

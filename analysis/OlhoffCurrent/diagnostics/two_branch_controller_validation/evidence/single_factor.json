@@ -1,0 +1,79 @@
+{
+  "allowed": [
+    "move.continuation.signal",
+    "stop.rule",
+    "runtime.name"
+  ],
+  "meshes": [
+    [
+      160,
+      20
+    ],
+    [
+      320,
+      40
+    ],
+    [
+      400,
+      50
+    ]
+  ],
+  "pass": true,
+  "rows": [
+    {
+      "mesh": [
+        160,
+        20
+      ],
+      "diffs": [
+        "move.continuation.signal",
+        "stop.rule",
+        "runtime.name"
+      ],
+      "unexpected": [],
+      "missing": [],
+      "ok": true,
+      "cfgHashProd": "cffa417eff67def9fb8ab62ea679c6087cfd44d422e141204144524a0087f962",
+      "cfgHashCand": "31d2ef382746a942a4036d07dd6a1012742432cba0497d2de5ec24b51d2b5904",
+      "lockOk": true,
+      "lockBad": []
+    },
+    {
+      "mesh": [
+        320,
+        40
+      ],
+      "diffs": [
+        "move.continuation.signal",
+        "stop.rule",
+        "runtime.name"
+      ],
+      "unexpected": [],
+      "missing": [],
+      "ok": true,
+      "cfgHashProd": "a1b31c6f4259b5ee4d51165247d33b6936501fa1b910a179535b1cca47bd6677",
+      "cfgHashCand": "2359a1112fcec9edd0971aae9a89508cd703ea3899770e7e85c850138c2550f4",
+      "lockOk": true,
+      "lockBad": []
+    },
+    {
+      "mesh": [
+        400,
+        50
+      ],
+      "diffs": [
+        "move.continuation.signal",
+        "stop.rule",
+        "runtime.name"
+      ],
+      "unexpected": [],
+      "missing": [],
+      "ok": true,
+      "cfgHashProd": "ab7d70d8b801ab06daaf11a461ee6cf37c5051dbdf09ae7ef4f8ca33e14d4888",
+      "cfgHashCand": "0afb0d4daa11b52aac8f184c856f71626bfd11b0a581e66d5aaacfa7f78f3a78",
+      "lockOk": true,
+      "lockBad": []
+    }
+  ],
+  "verdict": "CONTROLLER_SINGLE_FACTOR_PASS"
+}

@@ -104,10 +104,11 @@ S = {
 'move.trust.hiRatio',           'double', 0.70,   [0 Inf],  'D', 'grow above this ratio'
 'move.trust.shrink',            'double', 0.7,    [0 1],    'D', 'contraction factor'
 'move.trust.grow',              'double', 1.1,    [1 Inf],  'D', 'expansion factor'
-'move.continuation.signal',     'enum',   'boundVariable', {'boundVariable','designRms'}, 'C', 'what the ladder stall detector watches: the bound variable beta of (25a), or ||drho||/sqrt(NE)'
+'move.continuation.signal',     'enum',   'boundVariable', {'boundVariable','designRms','stageExhaustion'}, 'C', 'what advances the ladder: the bound variable beta of (25a), ||drho||/sqrt(NE), or the frozen two-branch stage-exhaustion rule E = A OR B'
 'move.continuation.window',     'int',    10,     [1 Inf],  'C', 'stall detector window W'
 'move.continuation.tolerance',  'double', 5e-3,   [0 Inf],  'C', 'relative-progress threshold below which a stall is declared'
 % ---- stopping -----------------------------------------------------------
+'stop.rule',                    'enum',   'designChange', {'designChange','stageExhaustion'}, 'C', 'what admits outer convergence: the sec. 3.5.1 design-increment test with its guards, or the frozen two-branch exhaustion rule at the last move level'
 'stop.norm',                    'enum',   'l2',   {'l2','max'}, 'B', 'sec. 3.5.1 writes "the norm" unqualified; l2 is the natural reading'
 'stop.tolerance',               'double', 0.05,   [0 Inf],  'C', 'epsilon of Fig. 1; never given in the paper'
 'stop.toleranceRule',           'enum',   'meshScaled', {'explicit','meshScaled'}, 'C', 'meshScaled recomputes stop.tolerance as 0.05*sqrt(NE/3200) AFTER mesh overrides, so eps means the same RMS density change at every resolution'

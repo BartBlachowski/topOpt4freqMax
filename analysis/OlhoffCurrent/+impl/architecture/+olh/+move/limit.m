@@ -37,7 +37,7 @@ function [mv, state] = limit(cfg, outer, hist, state)
 if isempty(state)
     state = struct('mv',cfg.move.initial,'stage',1,'lastBeta',NaN,'stall',0, ...
                    'ratioHist',[],'coalSeen',false,'lastStage',0, ...
-                   'lastRealized',NaN);
+                   'lastRealized',NaN,'ex',[],'stageStarts',1,'descents',zeros(0,4));
 end
 
 % has the pair coalesced yet?  (used by the geometric policy's optional trigger)
@@ -84,9 +84,45 @@ switch cfg.move.policy
         %                   signal cancels identically, and no absolute
         %                   threshold on it is used.
         %
-        % Both use the same window and tolerance.  'designRms' introduces no new
-        % numerical constant.  It was TESTED and NOT ADOPTED
-        % (audit_s2_design_continuation, verdict S2_LADDER_ITSELF_DEFECTIVE).
+        %   'stageExhaustion'  the FROZEN two-branch rule E = A OR B of
+        %                   two_branch_maturity_240/PREREGISTRATION.md, evaluated
+        %                   online by olh.move.exhaustion.  "Has this move level
+        %                   stopped producing useful topology evolution?"  A
+        %                   statement about the DESIGN'S dynamics, not about the
+        %                   objective's improvement history.  The detector is
+        %                   advanced by the solver after each design update and
+        %                   read here, so at the top of iteration `outer` it
+        %                   carries information through outer-1 -- the same
+        %                   causal structure the beta stall detector has.
+        %
+        %                   No dwell clock is needed: descending resets the
+        %                   detector's whole window to the new stage, which is a
+        %                   strictly longer re-arm than cfg.move.continuation.window.
+        % 'boundVariable' and 'designRms' use the same window and tolerance.
+        % 'designRms' introduces no new numerical constant.  It was TESTED and
+        % NOT ADOPTED (audit_s2_design_continuation, verdict
+        % S2_LADDER_ITSELF_DEFECTIVE).  'stageExhaustion' uses neither the
+        % window nor the tolerance, and is handled in its own branch below.
+        %
+        if strcmp(cfg.move.continuation.signal, 'stageExhaustion')
+            if ~isempty(state.ex) && state.ex.declared && ...
+                    state.stage < numel(cfg.move.levels)
+                state.descents(end+1,:) = [outer, state.stage, ...
+                    state.ex.declIter, state.ex.declBegin];
+                state.stage       = state.stage + 1;
+                state.lastStage   = outer;
+                state.stageStarts(end+1) = outer;
+                state.ex.stageStart = outer;
+                state.ex.cntA = 0;  state.ex.cntB = 0;
+                state.ex.declared = false;
+                state.ex.events(end+1,:) = [outer, state.ex.declIter, state.ex.declBegin];
+                state.ex.eventBranch{end+1} = state.ex.declBranch;
+                state.ex.declIter = NaN; state.ex.declBegin = NaN; state.ex.declBranch = '';
+            end
+            mv = cfg.move.levels(state.stage);
+            state.mv = mv;
+            return
+        end
         W   = cfg.move.continuation.window;
         tol = cfg.move.continuation.tolerance;
         switch cfg.move.continuation.signal

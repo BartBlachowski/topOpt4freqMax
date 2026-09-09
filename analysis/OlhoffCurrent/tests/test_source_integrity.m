@@ -89,7 +89,7 @@ function ok = local_isCurrent()
 m  = olhoffcurrent_source_manifest();
 st = olhoffcurrent_currentness('Verbose', false);
 ok = m.ok && isempty(m.mismatches) && isempty(m.missing) && isempty(m.extra) && ...
-     strcmp(st.state, 'CURRENT') && m.nFiles == 74;
+     strcmp(st.state, 'CURRENT') && m.nFiles == 75;
 if ~ok
     fprintf('      (ok=%d nFiles=%d state=%s mism=%d miss=%d extra=%d)\n', ...
         m.ok, m.nFiles, st.state, numel(m.mismatches), numel(m.missing), numel(m.extra));
@@ -171,7 +171,7 @@ end
 function local_assertPristine(root)
 addpath(root);
 m = olhoffcurrent_source_manifest();
-if ~(m.ok && m.nFiles == 74)
+if ~(m.ok && m.nFiles == 75)
     error('test_source_integrity:TreeNotRestored', ...
         ['THE TREE WAS NOT RESTORED: ok=%d nFiles=%d mismatches=%d missing=%d ' ...
          'extra=%d. Investigate before running anything else.'], ...

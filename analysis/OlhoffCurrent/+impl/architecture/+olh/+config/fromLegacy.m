@@ -183,7 +183,7 @@ put('move.trust.loRatio', take('s3Lo', 0.30));
 put('move.trust.hiRatio', take('s3Hi', 0.70));
 put('move.trust.shrink',  take('s3Down', 0.7));
 put('move.trust.grow',    take('s3Up', 1.1));
-sigMap = struct('beta','boundVariable','drms','designRms');
+sigMap = struct('beta','boundVariable','drms','designRms','exhaustion','stageExhaustion');
 sig = lower(take('s2Signal','beta'));
 if ~isfield(sigMap, sig), error('olh:config:legacyS2Signal','unknown legacy s2Signal ''%s''', sig); end
 put('move.continuation.signal',    sigMap.(sig));
@@ -192,6 +192,7 @@ put('move.continuation.tolerance', take('s2Tol', 5e-3));
 
 % ---- stopping ------------------------------------------------------------
 put('stop.norm',      lower(take('outerNorm','l2')));
+put('stop.rule',      take('stopRule','designChange'));
 put('stop.tolerance', take('tolOuter', 1e-3));
 % A legacy config carries a NUMBER, not a rule.  Preserve it verbatim: several
 % audit runners computed it with the mesh-scaling law and several did not, and

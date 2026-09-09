@@ -1,0 +1,6 @@
+sha256  8e323f837f7bbdaa5176d92621b4a45e4b377af131af5b3172429c629da27fbf
+file    PREREGISTRATION.md
+frozen  2026-09-08T18:51:03Z
+head    b6014ba8bca41f85671d79ab4c8bdee7419880bb
+note    Frozen BEFORE the controller was implemented and therefore before any
+        candidate optimization result of any kind existed.

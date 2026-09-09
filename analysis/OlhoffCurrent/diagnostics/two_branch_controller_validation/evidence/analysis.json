@@ -1,0 +1,853 @@
+{
+ "generated": "2026-09-09T05:17:04Z",
+ "preregistration_sha256": "8e323f837f7bbdaa5176d92621b4a45e4b377af131af5b3172429c629da27fbf",
+ "mesh": {
+  "m160": {
+   "mesh": [
+    160,
+    20
+   ],
+   "NE": 3200,
+   "tol": 0.05,
+   "prod": {
+    "mesh": [
+     160,
+     20
+    ],
+    "NE": 3200,
+    "matlab": "25.2.0.3042426 (R2025b) Update 1",
+    "metricsFile": "analysis/OlhoffCurrent/diagnostics/move_stop/METRICS.json",
+    "csvFile": "analysis/OlhoffCurrent/diagnostics/move_stop/runs/baseline_160x20_iterations.csv",
+    "metricsSha": "e2fc17dbed6fc8f7b95983a26457ae52403da8e2cc7992bd2cf153ccc9662a6e",
+    "csvSha": "f438612943aee5789b3f289eb0563159efd1d5121de147381cf94fa164308a20",
+    "status": "NATIVE_CONVERGED",
+    "nOuter": 91,
+    "innerTotal": 2241,
+    "wall_s": 125.47670220833334,
+    "omega1": 169.49522702153845,
+    "omega2": 171.9599959181592,
+    "gap12": 0.01476553890041266,
+    "volume": 0.49999900877797954,
+    "Mnd": 13.402499279526742,
+    "gray": 0.149375,
+    "mid": 0.025,
+    "tolOuter": 0.05,
+    "cfgHash": "72d20df9c1f0400aab218b4747d84a244e6482d0cfc0f38dd5b1407759fce8bf",
+    "moveTransitions": [
+     {
+      "iter": 79,
+      "from": 0.04,
+      "to": 0.02
+     },
+     {
+      "iter": 90,
+      "from": 0.02,
+      "to": 0.01
+     }
+    ],
+    "firstDescentIter": 79,
+    "move_final": 0.01,
+    "stage_final": 3,
+    "laddersReached": 3,
+    "reachedMoveMin": false,
+    "betaStallFirst": 79,
+    "convergenceIter": 91,
+    "rho_available": false,
+    "rho_sha256": "UNAVAILABLE -- raw .mat lost (see EVIDENCE_POLICY.md)",
+    "trajectory": "UNAVAILABLE",
+    "trajectorySha": ""
+   },
+   "cand": {
+    "tag": "C160x20",
+    "mesh": [
+     160,
+     20
+    ],
+    "NE": 3200,
+    "status": "CONVERGED",
+    "nOuter": 219,
+    "wall_s": 425.32491625,
+    "innerTotal": 5074,
+    "innerMax": 53,
+    "innerNonConv": 0,
+    "cfgHash": "31d2ef382746a942a4036d07dd6a1012742432cba0497d2de5ec24b51d2b5904",
+    "cap": 1600,
+    "tol": 0.05,
+    "omega": [
+     170.01131577599028,
+     171.4282527572349,
+     360.9119460035844,
+     547.1058927827345,
+     802.5226906243648
+    ],
+    "omega1": 170.01131577599028,
+    "omega2": 171.4282527572349,
+    "gap12": 0.008334368655269967,
+    "volume_final": 0.49999913419341135,
+    "Mnd_final": 12.704121410327563,
+    "gray_final": 0.144375,
+    "mid_final": 0.026875,
+    "move_final": 0.005,
+    "stage_final": 4,
+    "rho_sha256": "332c00a5181372bfd0fe82bbe8b7309496b1fb9f082d0a45945a61f0dcd2624a",
+    "trajectory": "analysis/OlhoffCurrent/evidence/two_branch_controller_validation/C160x20_trajectory.mat",
+    "trajectoryBytes": 8858000.0,
+    "csv": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/runs/C160x20_iterations.csv",
+    "exhaustion": {
+     "W": 20,
+     "P": 20,
+     "Wnp": 10,
+     "tol": 0.05,
+     "stageStarts": [
+      1,
+      103,
+      142,
+      181
+     ],
+     "descents": [
+      [
+       103,
+       1,
+       102,
+       83
+      ],
+      [
+       142,
+       2,
+       141,
+       122
+      ],
+      [
+       181,
+       3,
+       180,
+       161
+      ]
+     ],
+     "events": [
+      [
+       103,
+       102,
+       83
+      ],
+      [
+       142,
+       141,
+       122
+      ],
+      [
+       181,
+       180,
+       161
+      ]
+     ],
+     "eventBranch": [
+      "A",
+      "A",
+      "B"
+     ],
+     "terminalDeclared": true,
+     "terminalDeclIter": 219,
+     "terminalDeclBegin": 200,
+     "terminalBranch": "B",
+     "signalDrivesMove": true,
+     "ruleAdmitsStop": true
+    },
+    "descents": [
+     [
+      103,
+      1,
+      102,
+      83
+     ],
+     [
+      142,
+      2,
+      141,
+      122
+     ],
+     [
+      181,
+      3,
+      180,
+      161
+     ]
+    ],
+    "eventBranch": [
+     "A",
+     "A",
+     "B"
+    ],
+    "terminalDeclared": true,
+    "terminalDeclIter": 219,
+    "terminalDeclBegin": 200,
+    "terminalBranch": "B",
+    "betaStallFirst": 79,
+    "prodStopFirst": 143,
+    "prodShadowDescents": [
+     79,
+     90,
+     101
+    ],
+    "matlab": "25.2.0.2998904 (R2025b)",
+    "implTree": "edbfe47eb32109a2fb017f6f13d5327f2c240357caa96630064ffcf37ee152cb",
+    "clampDisplacementMax": 5.551115123125783e-17
+   },
+   "candLog": [
+    "iter 8: omega_J (J=3) is itself multiple -- (25b) undefined",
+    "iter 12: omega_J (J=3) is itself multiple -- (25b) undefined",
+    "iter 102: stage exhaustion declared (branch A, window 83-102) at move 0.04; ladder descends, not converged",
+    "iter 141: stage exhaustion declared (branch A, window 122-141) at move 0.02; ladder descends, not converged",
+    "iter 180: stage exhaustion declared (branch B, window 161-180) at move 0.01; ladder descends, not converged",
+    "iter 219: terminal stage exhaustion declared (branch B, window 200-219) at move 0.005, the last ladder level",
+    "converged at outer iteration 219 (||drho||_2 = 2.342e-03, max|drho| = 8.358e-04)"
+   ],
+   "transitions": [
+    {
+     "index": 1,
+     "iter": 103,
+     "moveBefore": 0.04,
+     "moveAfter": 0.02,
+     "stageFrom": 1,
+     "branch": "A",
+     "declIter": 102,
+     "declBegin": 83,
+     "A": 1,
+     "B": 0,
+     "E": 1,
+     "nA": 20,
+     "nB": 0,
+     "betaStall": 1,
+     "prodStageShadow": 4,
+     "omega1": 168.98039082827378,
+     "Mnd": 13.03637045689922,
+     "gray": 0.14625,
+     "mid": 0.026875,
+     "volume": 0.49999850661348133,
+     "cosTheta": -0.9196835652624422,
+     "netPath": 0.12027094148456524,
+     "medcos": -0.9065802323939458,
+     "mednet": 0.13296177132937564,
+     "amplitude": 0.6296497029112386,
+     "boundFrac": 0.07125
+    },
+    {
+     "index": 2,
+     "iter": 142,
+     "moveBefore": 0.02,
+     "moveAfter": 0.01,
+     "stageFrom": 2,
+     "branch": "A",
+     "declIter": 141,
+     "declBegin": 122,
+     "A": 1,
+     "B": 0,
+     "E": 1,
+     "nA": 20,
+     "nB": 0,
+     "betaStall": 1,
+     "prodStageShadow": 4,
+     "omega1": 169.81754424807076,
+     "Mnd": 12.788441245161996,
+     "gray": 0.14375,
+     "mid": 0.02625,
+     "volume": 0.4999969910437976,
+     "cosTheta": -0.8732835892799562,
+     "netPath": 0.22700162231818183,
+     "medcos": -0.8567335705633674,
+     "mednet": 0.22610186014893702,
+     "amplitude": 0.10946944087094979,
+     "boundFrac": 0.006875
+    },
+    {
+     "index": 3,
+     "iter": 181,
+     "moveBefore": 0.01,
+     "moveAfter": 0.005,
+     "stageFrom": 3,
+     "branch": "B",
+     "declIter": 180,
+     "declBegin": 161,
+     "A": 0,
+     "B": 1,
+     "E": 1,
+     "nA": 0,
+     "nB": 20,
+     "betaStall": 1,
+     "prodStageShadow": 4,
+     "omega1": 169.9766066678998,
+     "Mnd": 12.756141959540173,
+     "gray": 0.145,
+     "mid": 0.026875,
+     "volume": 0.4999967703659546,
+     "cosTheta": 0.8185854569984684,
+     "netPath": 0.7927556305539446,
+     "medcos": 0.5681067723829707,
+     "mednet": 0.8703066340589272,
+     "amplitude": 0.0051775971032311605,
+     "boundFrac": 0.0
+    }
+   ],
+   "allTransitionsAttributable": true,
+   "moveChangeIters": [
+    103,
+    142,
+    181
+   ],
+   "noUndeclaredTransition": true,
+   "oneRungPerTransition": true,
+   "term": {
+    "status": "CONVERGED",
+    "iter": 219,
+    "move": 0.005,
+    "stage": 4,
+    "A": 0,
+    "B": 1,
+    "E": 1,
+    "nA": 0,
+    "nB": 20,
+    "branch": "B",
+    "declIter": 219,
+    "declBegin": 200,
+    "omega1": 170.01131577599028,
+    "omega2": 171.4282527572349,
+    "Mnd": 12.704121410327563,
+    "gray": 0.144375,
+    "mid": 0.026875,
+    "volume": 0.49999913419341135,
+    "maxAbsDrho": 0.0008357719503571237,
+    "l2Drho": 0.0023415365873046385,
+    "betaStall": 1,
+    "prodStopAdmit": 1,
+    "nativeStopWouldHold": 1,
+    "innerConv": 1,
+    "innerNonConvTotal": 0
+   },
+   "convergenceHonest": "True",
+   "capHit": false,
+   "reachedMoveMin": true,
+   "levelsVisited": [
+    0.04,
+    0.02,
+    0.01,
+    0.005
+   ],
+   "genuineTerminalExhaustion": "True",
+   "delta": {
+    "Mnd_abs": -0.6983778691991791,
+    "Mnd_rel_pct": -5.210803258657885,
+    "omega1_abs": 0.5160887544518289,
+    "omega1_rel_pct": 0.30448571533300306,
+    "gray_abs": -0.0050000000000000044,
+    "mid_abs": 0.0018749999999999982,
+    "gap12_abs": -0.0064311702451426925,
+    "volume_abs": 1.2541543181754378e-07,
+    "outer_mult": 2.4065934065934065,
+    "inner_mult": 2.2641677822400714,
+    "wall_mult": 3.3896724153924467,
+    "firstDescent_prod": 79,
+    "firstDescent_cand": 103,
+    "descentDelay": 24
+   },
+   "gainDuringDelay": {
+    "fromIter": 79,
+    "toIter": 102,
+    "extraIterations": 24,
+    "Mnd_at_prodDescent": 13.389784790353406,
+    "Mnd_at_candDescent": 13.03637045689922,
+    "Mnd_change": -0.35341433345418594,
+    "Mnd_change_pct": -2.6394325150677647,
+    "omega1_at_prodDescent": 169.27619588495094,
+    "omega1_at_candDescent": 168.98039082827378,
+    "omega1_change_pct": -0.1747469897528877,
+    "gray_change": -0.0050000000000000044,
+    "mid_change": 0.0012500000000000011
+   },
+   "physics": {
+    "omega1_finite": true,
+    "omega2_finite": true,
+    "omega2_gt_omega1": true,
+    "subspaceMax": 2,
+    "subspaceMin": 2,
+    "gap12_min": 0.004150507596318414,
+    "gap12_final": 0.008334368655269967,
+    "degenTotal": 219.0,
+    "volume_maxDeviation": 4.2942357447506296e-05,
+    "anyNaN": false,
+    "innerNonConv": 0
+   },
+   "beta": {
+    "firstStall": 79,
+    "stallCount": 141,
+    "prodShadowDescents": [
+     79,
+     90,
+     101
+    ],
+    "prodStopWouldAdmitAt": 143,
+    "candDescents": [
+     103,
+     142,
+     181
+    ],
+    "anyDescentAtBetaStallOnly": false
+   },
+   "terminalStage": {
+    "stageStart": 181,
+    "nIterations": 39,
+    "move": 0.005,
+    "tol": 0.05,
+    "amp_median": 0.002876752235177539,
+    "amp_max": 0.005622150415754128,
+    "amp_over_tol_median": 0.05753504470355078,
+    "fracAmpBelowTol": 1.0,
+    "medcos_median": 0.920612367297772,
+    "fracMedcosPositive": 1.0,
+    "A_everTrue": false,
+    "B_everTrue": true,
+    "maxNA": 0,
+    "maxNB": 20,
+    "Mnd_min": 12.704121410327563,
+    "Mnd_max": 12.745060947327131,
+    "Mnd_range_pct": 0.3218662088263426,
+    "omega1_min": 169.97512028959605,
+    "omega1_max": 170.01102133516767,
+    "blockedBranchA_byAmplitude": true,
+    "blockedBranchB_byCoherence": false,
+    "lowAmplitudeCancellation": false
+   }
+  },
+  "m320": {
+   "mesh": [
+    320,
+    40
+   ],
+   "NE": 12800,
+   "tol": 0.1,
+   "prod": {
+    "mesh": [
+     320,
+     40
+    ],
+    "NE": 12800,
+    "matlab": "25.2.0.3042426 (R2025b) Update 1",
+    "metricsFile": "analysis/OlhoffCurrent/diagnostics/move_stop/METRICS.json",
+    "csvFile": "analysis/OlhoffCurrent/diagnostics/move_stop/runs/baseline_320x40_iterations.csv",
+    "metricsSha": "e2fc17dbed6fc8f7b95983a26457ae52403da8e2cc7992bd2cf153ccc9662a6e",
+    "csvSha": "73baa20070133e9e30e073438927f401b557a962a8e05bf31700101e41642804",
+    "status": "NATIVE_CONVERGED",
+    "nOuter": 131,
+    "innerTotal": 2614,
+    "wall_s": 387.95770145833336,
+    "omega1": 165.95078925220545,
+    "omega2": 183.76971226824654,
+    "gap12": 0.10674152016769037,
+    "volume": 0.49999913861781514,
+    "Mnd": 23.359567952074254,
+    "gray": 0.26375,
+    "mid": 0.095625,
+    "tolOuter": 0.1,
+    "cfgHash": "cd4410b66db9388b7f7ad733a291219dddca6c002e0daacdbb28e0ec79dd6d7d",
+    "moveTransitions": {
+     "iter": 130,
+     "from": 0.04,
+     "to": 0.02
+    },
+    "firstDescentIter": 130,
+    "move_final": 0.02,
+    "stage_final": 2,
+    "laddersReached": 2,
+    "reachedMoveMin": false,
+    "betaStallFirst": 130,
+    "convergenceIter": 131,
+    "rho_available": false,
+    "rho_sha256": "UNAVAILABLE -- raw .mat lost (see EVIDENCE_POLICY.md)",
+    "trajectory": "UNAVAILABLE",
+    "trajectorySha": ""
+   },
+   "cand": {
+    "tag": "C320x40",
+    "mesh": [
+     320,
+     40
+    ],
+    "NE": 12800,
+    "status": "CAP_HIT",
+    "nOuter": 1600,
+    "wall_s": 34373.83334995833,
+    "innerTotal": 76532,
+    "innerMax": 139,
+    "innerNonConv": 0,
+    "cfgHash": "2359a1112fcec9edd0971aae9a89508cd703ea3899770e7e85c850138c2550f4",
+    "cap": 1600,
+    "tol": 0.1,
+    "omega": [
+     166.42669695924684,
+     203.68490821161015,
+     372.8111827942817,
+     622.7096046853073,
+     702.997453325993
+    ],
+    "omega1": 166.42669695924684,
+    "omega2": 203.68490821161015,
+    "gap12": 0.2238716019310699,
+    "volume_final": 0.49999961671422705,
+    "Mnd_final": 12.923311188439124,
+    "gray_final": 0.1521875,
+    "mid_final": 0.0303125,
+    "move_final": 0.005,
+    "stage_final": 4,
+    "rho_sha256": "0348b288da711f2bdcd89263f7feaae33ccaedcb73a133a1a5e941421795bfb3",
+    "trajectory": "analysis/OlhoffCurrent/evidence/two_branch_controller_validation/C320x40_trajectory.mat",
+    "trajectoryBytes": 283657283.0,
+    "csv": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/runs/C320x40_iterations.csv",
+    "exhaustion": {
+     "W": 20,
+     "P": 20,
+     "Wnp": 10,
+     "tol": 0.1,
+     "stageStarts": [
+      1,
+      275,
+      314,
+      353
+     ],
+     "descents": [
+      [
+       275,
+       1,
+       274,
+       255
+      ],
+      [
+       314,
+       2,
+       313,
+       294
+      ],
+      [
+       353,
+       3,
+       352,
+       333
+      ]
+     ],
+     "events": [
+      [
+       275,
+       274,
+       255
+      ],
+      [
+       314,
+       313,
+       294
+      ],
+      [
+       353,
+       352,
+       333
+      ]
+     ],
+     "eventBranch": [
+      "A",
+      "B",
+      "B"
+     ],
+     "terminalDeclared": false,
+     "terminalDeclIter": null,
+     "terminalDeclBegin": null,
+     "terminalBranch": "",
+     "signalDrivesMove": true,
+     "ruleAdmitsStop": true
+    },
+    "descents": [
+     [
+      275,
+      1,
+      274,
+      255
+     ],
+     [
+      314,
+      2,
+      313,
+      294
+     ],
+     [
+      353,
+      3,
+      352,
+      333
+     ]
+    ],
+    "eventBranch": [
+     "A",
+     "B",
+     "B"
+    ],
+    "terminalDeclared": false,
+    "terminalDeclIter": null,
+    "terminalDeclBegin": null,
+    "terminalBranch": "",
+    "betaStallFirst": 130,
+    "prodStopFirst": 216,
+    "prodShadowDescents": [
+     130,
+     141,
+     152
+    ],
+    "matlab": "25.2.0.2998904 (R2025b)",
+    "implTree": "edbfe47eb32109a2fb017f6f13d5327f2c240357caa96630064ffcf37ee152cb",
+    "clampDisplacementMax": 5.551115123125783e-17
+   },
+   "candLog": [
+    "iter 9: omega_J (J=3) is itself multiple -- (25b) undefined",
+    "iter 274: stage exhaustion declared (branch A, window 255-274) at move 0.04; ladder descends, not converged",
+    "iter 313: stage exhaustion declared (branch B, window 294-313) at move 0.02; ladder descends, not converged",
+    "iter 352: stage exhaustion declared (branch B, window 333-352) at move 0.01; ladder descends, not converged"
+   ],
+   "transitions": [
+    {
+     "index": 1,
+     "iter": 275,
+     "moveBefore": 0.04,
+     "moveAfter": 0.02,
+     "stageFrom": 1,
+     "branch": "A",
+     "declIter": 274,
+     "declBegin": 255,
+     "A": 1,
+     "B": 0,
+     "E": 1,
+     "nA": 20,
+     "nB": 0,
+     "betaStall": 1,
+     "prodStageShadow": 4,
+     "omega1": 166.42161578583784,
+     "Mnd": 13.012131996975974,
+     "gray": 0.15234375,
+     "mid": 0.0296875,
+     "volume": 0.49999954095781,
+     "cosTheta": -0.6753362744435835,
+     "netPath": 0.3952392820181444,
+     "medcos": -0.6538842699968485,
+     "mednet": 0.4211376008333546,
+     "amplitude": 0.10312614334418228,
+     "boundFrac": 0.0
+    },
+    {
+     "index": 2,
+     "iter": 314,
+     "moveBefore": 0.02,
+     "moveAfter": 0.01,
+     "stageFrom": 2,
+     "branch": "B",
+     "declIter": 313,
+     "declBegin": 294,
+     "A": 0,
+     "B": 1,
+     "E": 1,
+     "nA": 0,
+     "nB": 20,
+     "betaStall": 1,
+     "prodStageShadow": 4,
+     "omega1": 166.41625361145563,
+     "Mnd": 12.979711357874708,
+     "gray": 0.1528125,
+     "mid": 0.03015625,
+     "volume": 0.4999999040653642,
+     "cosTheta": 0.9999494626057676,
+     "netPath": 0.9997428434000906,
+     "medcos": 0.9999649239133962,
+     "mednet": 0.9997497672502532,
+     "amplitude": 0.010803331097620687,
+     "boundFrac": 0.0
+    },
+    {
+     "index": 3,
+     "iter": 353,
+     "moveBefore": 0.01,
+     "moveAfter": 0.005,
+     "stageFrom": 3,
+     "branch": "B",
+     "declIter": 352,
+     "declBegin": 333,
+     "A": 0,
+     "B": 1,
+     "E": 1,
+     "nA": 0,
+     "nB": 20,
+     "betaStall": 1,
+     "prodStageShadow": 4,
+     "omega1": 166.4272692775777,
+     "Mnd": 12.940093529981478,
+     "gray": 0.15296875,
+     "mid": 0.03015625,
+     "volume": 0.49999874883108736,
+     "cosTheta": 0.23809420084325317,
+     "netPath": 0.8220741840973737,
+     "medcos": 0.5941707234454479,
+     "mednet": 0.7527244130517496,
+     "amplitude": 0.0032737052957694944,
+     "boundFrac": 0.0
+    }
+   ],
+   "allTransitionsAttributable": true,
+   "moveChangeIters": [
+    275,
+    314,
+    353
+   ],
+   "noUndeclaredTransition": true,
+   "oneRungPerTransition": true,
+   "term": {
+    "status": "CAP_HIT",
+    "iter": 1600,
+    "move": 0.005,
+    "stage": 4,
+    "A": 0,
+    "B": 0,
+    "E": 0,
+    "nA": 0,
+    "nB": 0,
+    "branch": "",
+    "declIter": null,
+    "declBegin": null,
+    "omega1": 166.42669695924684,
+    "omega2": 203.68490821161015,
+    "Mnd": 12.923311188439124,
+    "gray": 0.1521875,
+    "mid": 0.0303125,
+    "volume": 0.49999961671422705,
+    "maxAbsDrho": 9.063892946421357e-05,
+    "l2Drho": 0.0041870346449060635,
+    "betaStall": 1,
+    "prodStopAdmit": 1,
+    "nativeStopWouldHold": 1,
+    "innerConv": 1,
+    "innerNonConvTotal": 0
+   },
+   "convergenceHonest": true,
+   "capHit": true,
+   "reachedMoveMin": true,
+   "levelsVisited": [
+    0.04,
+    0.02,
+    0.01,
+    0.005
+   ],
+   "genuineTerminalExhaustion": false,
+   "delta": {
+    "Mnd_abs": -10.43625676363513,
+    "Mnd_rel_pct": -44.67658299608416,
+    "omega1_abs": 0.47590770704138663,
+    "omega1_rel_pct": 0.28677640473171895,
+    "gray_abs": -0.11156249999999998,
+    "mid_abs": -0.0653125,
+    "gap12_abs": 0.11713008176337952,
+    "volume_abs": 4.780964119044384e-07,
+    "outer_mult": 12.213740458015268,
+    "inner_mult": 29.277735271614382,
+    "wall_mult": 88.60201310799363,
+    "firstDescent_prod": 130,
+    "firstDescent_cand": 275,
+    "descentDelay": 145
+   },
+   "gainDuringDelay": {
+    "fromIter": 130,
+    "toIter": 274,
+    "extraIterations": 145,
+    "Mnd_at_prodDescent": 23.32239890345028,
+    "Mnd_at_candDescent": 13.012131996975974,
+    "Mnd_change": -10.310266906474308,
+    "Mnd_change_pct": -44.207574654548175,
+    "omega1_at_prodDescent": 165.94330370587352,
+    "omega1_at_candDescent": 166.42161578583784,
+    "omega1_change_pct": 0.2882382532362443,
+    "gray_change": -0.11093750000000002,
+    "mid_change": -0.0653125
+   },
+   "physics": {
+    "omega1_finite": true,
+    "omega2_finite": true,
+    "omega2_gt_omega1": true,
+    "subspaceMax": 2,
+    "subspaceMin": 2,
+    "gap12_min": 0.0041412211528688275,
+    "gap12_final": 0.2238716019310699,
+    "degenTotal": 1600.0,
+    "volume_maxDeviation": 0.00010084753777805933,
+    "anyNaN": false,
+    "innerNonConv": 0
+   },
+   "beta": {
+    "firstStall": 130,
+    "stallCount": 1471,
+    "prodShadowDescents": [
+     130,
+     141,
+     152
+    ],
+    "prodStopWouldAdmitAt": 216,
+    "candDescents": [
+     275,
+     314,
+     353
+    ],
+    "anyDescentAtBetaStallOnly": false
+   },
+   "terminalStage": {
+    "stageStart": 353,
+    "nIterations": 1248,
+    "move": 0.005,
+    "tol": 0.1,
+    "amp_median": 0.0048716783095092385,
+    "amp_max": 0.01173789408417071,
+    "amp_over_tol_median": 0.048716783095092385,
+    "fracAmpBelowTol": 1.0,
+    "medcos_median": -0.8853920718909678,
+    "fracMedcosPositive": 0.0,
+    "A_everTrue": false,
+    "B_everTrue": false,
+    "maxNA": 0,
+    "maxNB": 0,
+    "Mnd_min": 12.896126505994133,
+    "Mnd_max": 12.94829184749355,
+    "Mnd_range_pct": 0.4037792814951137,
+    "omega1_min": 166.41230976984352,
+    "omega1_max": 166.4407701339058,
+    "blockedBranchA_byAmplitude": true,
+    "blockedBranchB_byCoherence": true,
+    "lowAmplitudeCancellation": true
+   }
+  }
+ },
+ "runsExecuted": [
+  "C160x20",
+  "C320x40"
+ ],
+ "runsMissing": [
+  "C400x50"
+ ],
+ "prefix": {
+  "checked": false,
+  "detail": "trajectory missing (C400 not executed)"
+ },
+ "gates": {
+  "P2": true,
+  "P3": true,
+  "P4": true,
+  "P5": true,
+  "P6": true,
+  "P7": false,
+  "P8": true,
+  "P9": true,
+  "P10": true,
+  "P11": true,
+  "P12": true,
+  "P13": false,
+  "allThreeRunsExecuted": false,
+  "allTerminatedGenuinely": false
+ }
+}

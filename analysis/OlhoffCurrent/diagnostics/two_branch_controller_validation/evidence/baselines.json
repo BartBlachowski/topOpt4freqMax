@@ -1,0 +1,132 @@
+{
+  "m160": {
+    "mesh": [
+      160,
+      20
+    ],
+    "NE": 3200,
+    "matlab": "25.2.0.3042426 (R2025b) Update 1",
+    "metricsFile": "analysis/OlhoffCurrent/diagnostics/move_stop/METRICS.json",
+    "csvFile": "analysis/OlhoffCurrent/diagnostics/move_stop/runs/baseline_160x20_iterations.csv",
+    "metricsSha": "e2fc17dbed6fc8f7b95983a26457ae52403da8e2cc7992bd2cf153ccc9662a6e",
+    "csvSha": "f438612943aee5789b3f289eb0563159efd1d5121de147381cf94fa164308a20",
+    "status": "NATIVE_CONVERGED",
+    "nOuter": 91,
+    "innerTotal": 2241,
+    "wall_s": 125.47670220833334,
+    "omega1": 169.49522702153845,
+    "omega2": 171.95999591815919,
+    "gap12": 0.014765538900412659,
+    "volume": 0.49999900877797954,
+    "Mnd": 13.402499279526742,
+    "gray": 0.149375,
+    "mid": 0.025,
+    "tolOuter": 0.05,
+    "cfgHash": "72d20df9c1f0400aab218b4747d84a244e6482d0cfc0f38dd5b1407759fce8bf",
+    "moveTransitions": [
+      {
+        "iter": 79,
+        "from": 0.04,
+        "to": 0.02
+      },
+      {
+        "iter": 90,
+        "from": 0.02,
+        "to": 0.01
+      }
+    ],
+    "firstDescentIter": 79,
+    "move_final": 0.01,
+    "stage_final": 3,
+    "laddersReached": 3,
+    "reachedMoveMin": false,
+    "betaStallFirst": 79,
+    "convergenceIter": 91,
+    "rho_available": false,
+    "rho_sha256": "UNAVAILABLE -- raw .mat lost (see EVIDENCE_POLICY.md)",
+    "trajectory": "UNAVAILABLE",
+    "trajectorySha": ""
+  },
+  "m320": {
+    "mesh": [
+      320,
+      40
+    ],
+    "NE": 12800,
+    "matlab": "25.2.0.3042426 (R2025b) Update 1",
+    "metricsFile": "analysis/OlhoffCurrent/diagnostics/move_stop/METRICS.json",
+    "csvFile": "analysis/OlhoffCurrent/diagnostics/move_stop/runs/baseline_320x40_iterations.csv",
+    "metricsSha": "e2fc17dbed6fc8f7b95983a26457ae52403da8e2cc7992bd2cf153ccc9662a6e",
+    "csvSha": "73baa20070133e9e30e073438927f401b557a962a8e05bf31700101e41642804",
+    "status": "NATIVE_CONVERGED",
+    "nOuter": 131,
+    "innerTotal": 2614,
+    "wall_s": 387.95770145833336,
+    "omega1": 165.95078925220545,
+    "omega2": 183.76971226824654,
+    "gap12": 0.10674152016769037,
+    "volume": 0.49999913861781514,
+    "Mnd": 23.359567952074254,
+    "gray": 0.26375,
+    "mid": 0.095625,
+    "tolOuter": 0.1,
+    "cfgHash": "cd4410b66db9388b7f7ad733a291219dddca6c002e0daacdbb28e0ec79dd6d7d",
+    "moveTransitions": {
+      "iter": 130,
+      "from": 0.04,
+      "to": 0.02
+    },
+    "firstDescentIter": 130,
+    "move_final": 0.02,
+    "stage_final": 2,
+    "laddersReached": 2,
+    "reachedMoveMin": false,
+    "betaStallFirst": 130,
+    "convergenceIter": 131,
+    "rho_available": false,
+    "rho_sha256": "UNAVAILABLE -- raw .mat lost (see EVIDENCE_POLICY.md)",
+    "trajectory": "UNAVAILABLE",
+    "trajectorySha": ""
+  },
+  "m400": {
+    "mesh": [
+      400,
+      50
+    ],
+    "NE": 20000,
+    "matlab": "25.2.0.2998904 (R2025b)",
+    "metricsFile": "analysis/OlhoffCurrent/diagnostics/move_activity_400/METRICS.json",
+    "csvFile": "analysis/OlhoffCurrent/diagnostics/move_activity_400/runs/P400_400x50_iterations.csv",
+    "metricsSha": "b30fd932b1c6ffe6332007e6ae4d14ae7ee793c6a8b234ae81fa3d5673b9e91e",
+    "csvSha": "72665ec768d9959227b213a3eedd1eeac48e8fac3ebcadc22a0fc0a1bfb2ff41",
+    "status": "CONVERGED",
+    "nOuter": 139,
+    "innerTotal": 2918,
+    "wall_s": 541,
+    "omega1": 162.882615630062,
+    "omega2": 175.403921349379,
+    "gap12": 0.0768731866865097,
+    "volume": 0.499999149662958,
+    "Mnd": 32.3283256233213,
+    "gray": 0.3476,
+    "mid": 0.1882,
+    "tolOuter": 0.125,
+    "cfgHash": "044d50a496cb64d43ed4bf75a6a7976a6726cca6feaf65e0b911a57e4593969c",
+    "moveTransitions": {
+      "iter": 138,
+      "from": 0.04,
+      "to": 0.02
+    },
+    "firstDescentIter": 138,
+    "move_final": 0.02,
+    "stage_final": 2,
+    "laddersReached": 2,
+    "reachedMoveMin": false,
+    "betaStallFirst": 138,
+    "convergenceIter": 139,
+    "rho_available": true,
+    "rho_sha256": "0d8b799c77b86f62c9113e88331052b0431c4917ad2740fd651834c040eedaaf",
+    "trajectory": "analysis/OlhoffCurrent/evidence/move_activity_400/P400_400x50_trajectory.mat",
+    "trajectorySha": "1dc20dbd6a0dacbd067802901fd6d78364306a5641be84a6e2216b4038917660"
+  }
+}

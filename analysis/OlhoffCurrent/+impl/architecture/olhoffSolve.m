@@ -63,6 +63,12 @@ hist = struct('omega',[],'N',[],'beta',[],'nInner',[],'dxOuter',[], ...
               'innerConv',[],'cumInner',[],'dxNorm2',[],'move',[],'gap12',[], ...
               'volErr',[],'dBeta',[],'stage',[],'pPen',[],'pStage',[],'pEvent',[],'massLow',[], ...
               'projBeta',[],'projStage',[],'projEvent',[],'dxPhys2',[], ...
+              ... % stage-exhaustion controller trace.  Written only when the
+              ... % controller is selected; all NaN/false otherwise.  Read back
+              ... % by nothing inside the solve.
+              'exA',[],'exB',[],'exE',[],'exNA',[],'exNB',[],'exDecl',[], ...
+              'exCos',[],'exNet',[],'exMedcos',[],'exMednet',[],'exAmp',[], ...
+              'exStageStart',[], ...
               ... % BENCHMARK TIMING INSTRUMENTATION ONLY.  Carried forward from
               ... % the frozen conference reconstruction, where it is recorded as
               ... % patches/olhoffOpt.timing-instrumentation.diff.  tOuter is the
@@ -102,6 +108,19 @@ guardMaxChange= g('stop.guards.maxDesignChange');
 anyStopGuard  = guardLadder || guardMaxChange;
 tolOuter      = g('stop.tolerance');
 stopNormL2    = strcmp(g('stop.norm'),'l2');
+% ---- the stage-exhaustion controller, if selected ------------------------
+% Two INDEPENDENT switches, both defaulting to the historical behaviour, so a
+% configuration that names neither is bitwise the solver that existed before:
+%   move.continuation.signal == 'stageExhaustion'  the ladder descends on the
+%       frozen two-branch rule instead of on the bound variable's stall;
+%   stop.rule == 'stageExhaustion'                 outer convergence is admitted
+%       only at the last move level, and only once that same frozen rule has
+%       been satisfied with its full persistence.
+% Both read olh.move.exhaustion, which is advanced once per outer iteration
+% immediately after the design update.
+exhaustMove   = strcmp(g('move.continuation.signal'),'stageExhaustion');
+exhaustStop   = strcmp(g('stop.rule'),'stageExhaustion');
+useExhaustion = exhaustMove || exhaustStop;
 maxOuter      = g('runtime.maxOuter');
 verbose       = g('runtime.verbose');
 innerLP       = strcmp(g('optimizer.inner.type'),'lp');
@@ -112,6 +131,17 @@ if verbose
     fprintf('%4s %9s %9s %9s %4s %9s %6s %6s %8s %9s %8s %9s %7s\n', ...
             'it','omega1','omega2','omega3','N','sqrt(beta)', ...
             'inner','cumIn','maxdrho','|drho|2','move','vol','conv');
+end
+
+% The detector's quantities are formed from the design variable and from the
+% increment the sub-problem returned.  Under projection those are z and dz, not
+% the physical density, and the frozen rule was never defined there.  Refuse
+% rather than silently measure a different thing.
+if useExhaustion && useProj
+    error('olh:stop:exhaustionUnderProjection', ...
+        ['the two-branch stage-exhaustion rule is defined on the design ' ...
+         'variable of the unprojected formulation; projection.enabled must be ' ...
+         'false when move.continuation.signal or stop.rule is ''stageExhaustion''.']);
 end
 
 pStage    = 1;    % index into the p schedule
@@ -393,6 +423,29 @@ for outer = 1:maxOuter
                 local_yesno(st.conv));
     end
 
+    % ---- stage-exhaustion detector ---------------------------------------
+    % Advanced ONCE per outer iteration, here, so that the convergence test
+    % below sees information through this iteration and olh.move.limit sees
+    % information through the previous one -- the same causal structure the
+    % bound-variable stall detector has.  It is a pure observer of rho and drho.
+    if useExhaustion
+        mvState.ex = olh.move.exhaustion(mvState.ex, NE, tolOuter, outer, ...
+                                         rho, drho, g('design.initial'));
+        ex = mvState.ex;
+        hist.exA(outer)      = ex.A(outer);
+        hist.exB(outer)      = ex.B(outer);
+        hist.exE(outer)      = ex.E(outer);
+        hist.exNA(outer)     = ex.nA(outer);
+        hist.exNB(outer)     = ex.nB(outer);
+        hist.exDecl(outer)   = double(ex.declared);
+        hist.exCos(outer)    = ex.cos(outer);
+        hist.exNet(outer)    = ex.net(outer);
+        hist.exMedcos(outer) = ex.medcos(outer);
+        hist.exMednet(outer) = ex.mednet(outer);
+        hist.exAmp(outer)    = ex.amp(outer);
+        hist.exStageStart(outer) = ex.stageStart;
+    end
+
     % ---- convergence metric ---------------------------------------------
     % Sec. 3.5.1 tests "the norm of the vector drho ... less than a small,
     % predefined value epsilon".  The norm is unqualified; l2 is the natural
@@ -409,7 +462,7 @@ for outer = 1:maxOuter
     % iteration where mv_k differs from mv_{k-1} a scheduled reduction of the
     % move limit mechanically reduces the measured step with no change in the
     % design's behaviour, and the criterion is uninterpretable there.
-    if guardSettled
+    if guardSettled && ~exhaustStop
         moveSettled = outer >= 2 && hist.move(outer) == hist.move(outer-1);
         if convOuter && ~moveSettled
             log{end+1} = sprintf(['iter %d: ||drho|| below eps but the move limit ' ...
@@ -421,7 +474,7 @@ for outer = 1:maxOuter
 
     % ---- guards: additional conditions on admitting convergence ---------
     % Neither guard changes the update or the move controller.
-    if anyStopGuard
+    if anyStopGuard && ~exhaustStop
         epsRMS = tolOuter/sqrt(NE);
         restorationReady = true;
         if guardLadder
@@ -442,6 +495,32 @@ for outer = 1:maxOuter
                 hist.stage(outer),dxOuter,epsRMS); %#ok<AGROW>
         end
         convOuter = convOuter && restorationReady;
+    end
+
+    % ---- stage-exhaustion terminal admission -----------------------------
+    % At the last move level there is no lower rung, so the SAME scientific
+    % concept that descends the ladder must govern terminal admission: the run
+    % may stop only once the terminal stage has itself satisfied the frozen
+    % rule with its full persistence.  The sec. 3.5.1 design-change test and its
+    % settled-move / restoration guards are production's rule and are replaced
+    % wholesale, not combined with; they remain computed above and are recorded
+    % as the counterfactual.  beta has no part in either branch.
+    if exhaustStop
+        atLastLevel = hist.stage(outer) >= numel(moveLevels);
+        convOuter   = mvState.ex.declared && atLastLevel;
+        if mvState.ex.declared && ~atLastLevel
+            % A declaration at a non-terminal level is a DESCENT, consumed by
+            % olh.move.limit at the next iteration -- never a convergence.
+            log{end+1} = sprintf(['iter %d: stage exhaustion declared (branch %s, ' ...
+                'window %d-%d) at move %.4g; ladder descends, not converged'], ...
+                outer, mvState.ex.declBranch, mvState.ex.declBegin, ...
+                mvState.ex.declIter, hist.move(outer)); %#ok<AGROW>
+        elseif convOuter
+            log{end+1} = sprintf(['iter %d: terminal stage exhaustion declared ' ...
+                '(branch %s, window %d-%d) at move %.4g, the last ladder level'], ...
+                outer, mvState.ex.declBranch, mvState.ex.declBegin, ...
+                mvState.ex.declIter, hist.move(outer)); %#ok<AGROW>
+        end
     end
 
     % ---- projection continuation ----------------------------------------
@@ -497,6 +576,20 @@ res = struct('cfg',cfg,'rho',rho,'omega',w,'lambda',lam,'hist',hist, ...
              'modeTable',T,'log',{log},'nOuter',numel(hist.N), ...
              'wallclock',toc(t0),'mdl',mdl);
 res.status = local_status(log, numel(hist.N), maxOuter);
+if useExhaustion
+    res.exhaustion = struct( ...
+        'W', mvState.ex.W, 'P', mvState.ex.P, 'Wnp', mvState.ex.Wnp, ...
+        'tol', mvState.ex.tol, ...
+        'stageStarts', mvState.stageStarts, ...
+        'descents', mvState.descents, ...        % [iterApplied stageFrom declIter declBegin]
+        'events', mvState.ex.events, ...
+        'eventBranch', {mvState.ex.eventBranch}, ...
+        'terminalDeclared', mvState.ex.declared, ...
+        'terminalDeclIter', mvState.ex.declIter, ...
+        'terminalDeclBegin', mvState.ex.declBegin, ...
+        'terminalBranch', mvState.ex.declBranch, ...
+        'signalDrivesMove', exhaustMove, 'ruleAdmitsStop', exhaustStop);
+end
 if wantDiag, res.diag = dg; end
 % res.rho is ALWAYS the physical density actually used by the FE model above.
 % Under projection the design variable and the filtered field are recorded

@@ -70,7 +70,8 @@ flat.s2Levels    = g('move.levels');
 flat.s2Window    = g('move.continuation.window');
 flat.s2Tol       = g('move.continuation.tolerance');
 flat.s2Signal    = local_rev(g('move.continuation.signal'), ...
-                    {'boundVariable','designRms'}, {'beta','drms'});
+                    {'boundVariable','designRms','stageExhaustion'}, ...
+                    {'beta','drms','exhaustion'});
 flat.s3Lo = g('move.trust.loRatio');  flat.s3Hi   = g('move.trust.hiRatio');
 flat.s3Down = g('move.trust.shrink'); flat.s3Up   = g('move.trust.grow');
 
@@ -87,6 +88,7 @@ flat.minInner = g('optimizer.inner.minIterations');
 flat.maxOuter  = g('runtime.maxOuter');
 flat.tolOuter  = g('stop.tolerance');
 flat.outerNorm = g('stop.norm');
+flat.stopRule  = g('stop.rule');
 if g('stop.guards.settledMove'), flat.outerGuard = 'settledmove';
 else,                            flat.outerGuard = 'none'; end
 
