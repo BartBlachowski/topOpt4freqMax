@@ -60,6 +60,14 @@ rec.caveat = '';
 rec.resolved_implementation = struct('name', {}, 'file', {});
 % Declared up front so every record -- whatever method produced it -- carries
 % the SAME top-level field set and the driver can build one struct array.
+% The four provenance fields below are populated only by the Olhoff branch, but
+% they must EXIST on every record: the driver appends with records(end+1) = rec,
+% which requires identical field sets and fails outright when one method adds a
+% field the others never declare.
+rec.implementation = '';
+rec.production_preset = '';
+rec.effective_config_hash = '';
+rec.implementation_provenance = struct();
 rec.effective_config = struct();
 rec.solver_log = {};
 rec.telemetry = struct();

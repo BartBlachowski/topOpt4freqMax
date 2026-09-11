@@ -291,12 +291,20 @@ if cfg.runWarmup
     wNelx = 48; wNely = 6; wOuter = 5;
     warmup.ran = true; warmup.mesh = [wNelx wNely];
     fprintf('Warm-up at %dx%d (discarded)...\n', wNelx, wNely);
+    wSchemaKeys = {}; wSchemas = {};
     for m = 1:nMet
         try
             wc = confbench_method_config(methodKeys{m}, wNelx, wNely, ...
                 fullfile(cfg.outputDir, 'warmup'));
             wr = confbench_run_case(methodKeys{m}, wc, struct( ...
                 'max_outer_override', wOuter, 'warmup', true, 'label', 'warmup'));
+            % The warm-up is also the cheapest place to prove that every method
+            % returns the SAME top-level record field set.  The main loop appends
+            % with records(end+1) = rec, which requires that; discovering a
+            % mismatch there costs the meshes already solved, discovering it here
+            % costs seconds.
+            wSchemaKeys{end+1} = methodKeys{m};          %#ok<SAGROW>
+            wSchemas{end+1} = fieldnames(orderfields(wr)); %#ok<SAGROW>
             warmup.notes{end+1} = sprintf('%s: %s in %.2f s', ...
                 confbench_display_name(methodKeys{m}), wr.status, ...
                 fieldOr(wr.times, 'total_wall_time_s', NaN)); %#ok<SAGROW>
@@ -306,6 +314,19 @@ if cfg.runWarmup
             warning('performance_comparison:WarmupFailed', '%s', warmup.notes{end});
         end
         fprintf('  %s\n', warmup.notes{end});
+    end
+    for m = 2:numel(wSchemas)
+        if isequal(wSchemas{m}, wSchemas{1}); continue; end
+        onlyHere  = setdiff(wSchemas{m}, wSchemas{1});
+        onlyFirst = setdiff(wSchemas{1}, wSchemas{m});
+        maxNumCompThreads(entryThreads);   % no measured row was produced
+        error('performance_comparison:RecordSchemaMismatch', ...
+            ['Record field sets differ between methods, so the campaign cannot ' ...
+             'build one struct array.\n  %s has, and %s lacks: %s\n  %s has, and ' ...
+             '%s lacks: %s\nDeclare the missing field(s) in the shared block at ' ...
+             'the top of confbench_run_case so every method carries them.'], ...
+            wSchemaKeys{m}, wSchemaKeys{1}, strjoin(reshape(onlyHere,1,[]), ', '), ...
+            wSchemaKeys{1}, wSchemaKeys{m}, strjoin(reshape(onlyFirst,1,[]), ', '));
     end
     fprintf('\n');
 end

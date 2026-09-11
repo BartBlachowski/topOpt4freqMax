@@ -80,7 +80,7 @@
         "inner_time_share_pct"
       ],
       "prohibited": "N_outer + N_inner must NEVER be reported as a generic iteration count: the two are different objects.",
-      "caveat": "Du-Olhoff timings and iteration counts refer to the frozen reconstruction used in this study. Some continuation and inner-solver details are not uniquely specified by the original publication; therefore these values should be interpreted as representative measurements of this reconstruction rather than exact historical implementation timings."
+      "caveat": "Du-Olhoff RECONSTRUCTION (class C): internally coherent and fully documented, but not a claimed historical implementation. Numerical continuation, filter radius, multiplicity tolerance and inner-loop convergence are not specified in Du & Olhoff (2007) and are reconstruction choices here. Must NOT be labelled \"Olhoff 2007\". Field-level provenance (A/B/C/D) is documented in analysis/OlhoffCurrent/+impl/architecture/docs/SCIENTIFIC_CONFIG_PROVENANCE.md and is printed per-run by olh.config.describe."
     }
   },
   "cross_method_warning": "Count and time columns represent method-native computational stages and are not mathematically identical across methods. Total wall time is the common performance quantity."
