@@ -1,0 +1,322 @@
+{
+  "candCfgHash": "afad9ea4b27da576553f128d66a8329edee963066c1ef477b1df70f9232daaab",
+  "recordedCandCfgHash": "afad9ea4b27da576553f128d66a8329edee963066c1ef477b1df70f9232daaab",
+  "candMatchesValidatedRun": true,
+  "candMeta": {
+    "arm": "C3",
+    "label": "three-rung candidate: frozen two-branch stage exhaustion, E = A OR B, ladder [0.04 0.02 0.01]",
+    "nelx": 320,
+    "nely": 40,
+    "preset": "duOlhoffFixedPenaltySensitivityFiltered",
+    "upstreamPreset": "duOlhoffFrozenM4",
+    "baseArm": "two_branch_controller_validation cv_config('C')",
+    "singleFactor": "move.levels",
+    "levels": [
+      0.04,
+      0.02,
+      0.01
+    ],
+    "maxOuter": 1600
+  },
+  "prodCfgHash": "2a5b500991ff5931eef4919e768503d41fd558fe56ffbffe40c382c74d676cad",
+  "policy": [
+    {
+      "path": "move.policy",
+      "validated": "ladder",
+      "production": "ladder",
+      "same": true
+    },
+    {
+      "path": "move.levels",
+      "validated": "[0.040000000000000001 0.02 0.01]",
+      "production": "[0.040000000000000001 0.02 0.01 0.0050000000000000001]",
+      "same": false
+    },
+    {
+      "path": "move.continuation.signal",
+      "validated": "stageExhaustion",
+      "production": "boundVariable",
+      "same": false
+    },
+    {
+      "path": "move.continuation.window",
+      "validated": "10",
+      "production": "10",
+      "same": true
+    },
+    {
+      "path": "move.continuation.tolerance",
+      "validated": "0.0050000000000000001",
+      "production": "0.0050000000000000001",
+      "same": true
+    },
+    {
+      "path": "stop.rule",
+      "validated": "stageExhaustion",
+      "production": "designChange",
+      "same": false
+    },
+    {
+      "path": "stop.norm",
+      "validated": "l2",
+      "production": "l2",
+      "same": true
+    },
+    {
+      "path": "stop.tolerance",
+      "validated": "0.10000000000000001",
+      "production": "0.10000000000000001",
+      "same": true
+    },
+    {
+      "path": "stop.toleranceRule",
+      "validated": "meshScaled",
+      "production": "meshScaled",
+      "same": true
+    },
+    {
+      "path": "stop.guards.settledMove",
+      "validated": "true",
+      "production": "true",
+      "same": true
+    },
+    {
+      "path": "stop.guards.ladderExhausted",
+      "validated": "false",
+      "production": "false",
+      "same": true
+    },
+    {
+      "path": "stop.guards.maxDesignChange",
+      "validated": "false",
+      "production": "false",
+      "same": true
+    }
+  ],
+  "science": [
+    {
+      "path": "material.stiffness.p",
+      "validated": "3",
+      "production": "3",
+      "same": true
+    },
+    {
+      "path": "material.stiffness.continuation.enabled",
+      "validated": "false",
+      "production": "false",
+      "same": true
+    },
+    {
+      "path": "material.mass.model",
+      "validated": "eq4b",
+      "production": "eq4b",
+      "same": true
+    },
+    {
+      "path": "material.mass.q",
+      "validated": "1",
+      "production": "1",
+      "same": true
+    },
+    {
+      "path": "filter.type",
+      "validated": "sensitivity",
+      "production": "sensitivity",
+      "same": true
+    },
+    {
+      "path": "filter.applyTo",
+      "validated": "all",
+      "production": "all",
+      "same": true
+    },
+    {
+      "path": "filter.radiusPhysical",
+      "validated": "0.059999999999999998",
+      "production": "0.059999999999999998",
+      "same": true
+    },
+    {
+      "path": "projection.enabled",
+      "validated": "false",
+      "production": "false",
+      "same": true
+    },
+    {
+      "path": "multiplicity.method",
+      "validated": "subspace",
+      "production": "subspace",
+      "same": true
+    },
+    {
+      "path": "multiplicity.subspaceSize",
+      "validated": "2",
+      "production": "2",
+      "same": true
+    },
+    {
+      "path": "multiplicity.diagonalOffsets",
+      "validated": "true",
+      "production": "true",
+      "same": true
+    },
+    {
+      "path": "multiplicity.offDiagonal",
+      "validated": "true",
+      "production": "true",
+      "same": true
+    },
+    {
+      "path": "optimizer.inner.type",
+      "validated": "mma",
+      "production": "mma",
+      "same": true
+    },
+    {
+      "path": "optimizer.inner.variant",
+      "validated": "published",
+      "production": "published",
+      "same": true
+    },
+    {
+      "path": "optimizer.inner.variable",
+      "validated": "increment",
+      "production": "increment",
+      "same": true
+    },
+    {
+      "path": "design.initial",
+      "validated": "0.5",
+      "production": "0.5",
+      "same": true
+    },
+    {
+      "path": "design.minimum",
+      "validated": "0.001",
+      "production": "0.001",
+      "same": true
+    },
+    {
+      "path": "volume.fraction",
+      "validated": "[]",
+      "production": "[]",
+      "same": true
+    }
+  ],
+  "scienceAllSame": true,
+  "delta": [
+    {
+      "path": "move.levels",
+      "production": "[0.040000000000000001 0.02 0.01 0.0050000000000000001]",
+      "validated": "[0.040000000000000001 0.02 0.01]",
+      "class": "POLICY"
+    },
+    {
+      "path": "move.continuation.signal",
+      "production": "boundVariable",
+      "validated": "stageExhaustion",
+      "class": "POLICY"
+    },
+    {
+      "path": "stop.rule",
+      "production": "designChange",
+      "validated": "stageExhaustion",
+      "class": "POLICY"
+    },
+    {
+      "path": "runtime.maxOuter",
+      "production": "400",
+      "validated": "1600",
+      "class": "HARNESS_OR_LABEL"
+    },
+    {
+      "path": "runtime.diagnostics",
+      "production": "false",
+      "validated": "true",
+      "class": "HARNESS_OR_LABEL"
+    },
+    {
+      "path": "runtime.name",
+      "production": "OLHOFF_CURRENT_320x40",
+      "validated": "TR3_C_320x40",
+      "class": "HARNESS_OR_LABEL"
+    }
+  ],
+  "policyDelta": [
+    {
+      "path": "move.levels",
+      "production": "[0.040000000000000001 0.02 0.01 0.0050000000000000001]",
+      "validated": "[0.040000000000000001 0.02 0.01]",
+      "class": "POLICY"
+    },
+    {
+      "path": "move.continuation.signal",
+      "production": "boundVariable",
+      "validated": "stageExhaustion",
+      "class": "POLICY"
+    },
+    {
+      "path": "stop.rule",
+      "production": "designChange",
+      "validated": "stageExhaustion",
+      "class": "POLICY"
+    }
+  ],
+  "unexpectedDelta": [],
+  "minimalPromotion": true,
+  "abHashes": [
+    {
+      "path": "+impl/architecture/+olh/+move/exhaustion.m",
+      "sha256": "17b37a384b1aa5d987d9c861e16071d1140af130f92406ccc11cec4518bcae0c"
+    },
+    {
+      "path": "+impl/architecture/+olh/+move/limit.m",
+      "sha256": "61fa923d430121ead764a229b4f48dfd77617540b4ab6db883ccd9d5904b1c1e"
+    },
+    {
+      "path": "+impl/architecture/olhoffSolve.m",
+      "sha256": "1e5a114cbf91717e01e5592e86203f401ed5cdb3e5f5ce9a727b8163cdf2fba3"
+    }
+  ],
+  "abConstants": {
+    "W": 20,
+    "P": 20,
+    "Wnp": 10,
+    "tolRule": "meshScaled",
+    "tolAt320": 0.1,
+    "source": "+impl/architecture/+olh/+move/exhaustion.m",
+    "preregistration": "diagnostics/two_branch_maturity_240/PREREGISTRATION.md",
+    "preregSha256": "62748225253f85f6a2fbc1bad35489a2c201cd45ee64ff279601003354b73abd"
+  },
+  "dispatchOk": true,
+  "dispatchErr": "",
+  "dispatch": [
+    {
+      "name": "olh.move.exhaustion",
+      "resolvesTo": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/architecture/+olh/+move/exhaustion.m",
+      "underProduction": true
+    },
+    {
+      "name": "olh.move.limit",
+      "resolvesTo": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/architecture/+olh/+move/limit.m",
+      "underProduction": true
+    },
+    {
+      "name": "olhoffSolve",
+      "resolvesTo": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/architecture/olhoffSolve.m",
+      "underProduction": true
+    }
+  ],
+  "dispatchAllProduction": true,
+  "implTree": "edbfe47eb32109a2fb017f6f13d5327f2c240357caa96630064ffcf37ee152cb",
+  "validatedRunImplTree": "edbfe47eb32109a2fb017f6f13d5327f2c240357caa96630064ffcf37ee152cb",
+  "implTreeMatchesValidatedRun": true,
+  "legacy": {
+    "productionSignalToday": "boundVariable",
+    "productionStopRuleToday": "designChange",
+    "presetDefaultLevels": "[0.04 0.02 0.01 0.005]",
+    "schemaDefaultSignal": "boundVariable",
+    "schemaDefaultStopRule": "designChange",
+    "schemaDefaultLevels": "[0.04 0.02 0.01 0.005]"
+  }
+}

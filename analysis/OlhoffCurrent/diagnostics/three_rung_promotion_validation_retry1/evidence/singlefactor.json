@@ -1,0 +1,114 @@
+{
+  "nSchemaRows": 81,
+  "diffs": [
+    {
+      "path": "move.levels",
+      "four": "[0.040000000000000001 0.02 0.01 0.0050000000000000001]",
+      "three": "[0.040000000000000001 0.02 0.01]",
+      "class": "COMPUTATIONAL"
+    },
+    {
+      "path": "runtime.name",
+      "four": "CV_C_320x40",
+      "three": "TR3_C_320x40",
+      "class": "LABEL_ONLY"
+    }
+  ],
+  "computationalDiffs": {
+    "path": "move.levels",
+    "four": "[0.040000000000000001 0.02 0.01 0.0050000000000000001]",
+    "three": "[0.040000000000000001 0.02 0.01]",
+    "class": "COMPUTATIONAL"
+  },
+  "cfgHash4": "2359a1112fcec9edd0971aae9a89508cd703ea3899770e7e85c850138c2550f4",
+  "cfgHash3": "afad9ea4b27da576553f128d66a8329edee963066c1ef477b1df70f9232daaab",
+  "locks": [
+    {
+      "name": "material.stiffness.p",
+      "ok": true
+    },
+    {
+      "name": "material.stiffness.continuation.enabled",
+      "ok": true
+    },
+    {
+      "name": "material.mass.model",
+      "ok": true
+    },
+    {
+      "name": "material.mass.q",
+      "ok": true
+    },
+    {
+      "name": "filter.type",
+      "ok": true
+    },
+    {
+      "name": "filter.applyTo",
+      "ok": true
+    },
+    {
+      "name": "filter.radiusPhysical",
+      "ok": true
+    },
+    {
+      "name": "projection.enabled",
+      "ok": true
+    },
+    {
+      "name": "multiplicity.method",
+      "ok": true
+    },
+    {
+      "name": "multiplicity.subspaceSize",
+      "ok": true
+    },
+    {
+      "name": "multiplicity.diagonalOffsets",
+      "ok": true
+    },
+    {
+      "name": "multiplicity.offDiagonal",
+      "ok": true
+    },
+    {
+      "name": "optimizer.inner.variant",
+      "ok": true
+    },
+    {
+      "name": "move.policy",
+      "ok": true
+    },
+    {
+      "name": "move.continuation.signal",
+      "ok": true
+    },
+    {
+      "name": "stop.rule",
+      "ok": true
+    },
+    {
+      "name": "stop.tolerance",
+      "ok": true
+    },
+    {
+      "name": "runtime.maxOuter",
+      "ok": true
+    },
+    {
+      "name": "runtime.singleThread",
+      "ok": true
+    },
+    {
+      "name": "design.initial",
+      "ok": true
+    },
+    {
+      "name": "move.levels",
+      "ok": true
+    }
+  ],
+  "allLocksOk": true,
+  "pass": true,
+  "verdict": "THREE_RUNG_SINGLE_FACTOR_PASS"
+}

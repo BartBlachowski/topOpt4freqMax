@@ -1,0 +1,255 @@
+{
+  "schema": "olhoff_current_evidence/1",
+  "study": "three_rung_promotion_validation_retry1",
+  "generated": "2026-09-11T12:31:14+02:00",
+  "evidenceRoot": "analysis/OlhoffCurrent/evidence/three_rung_promotion_validation_retry1",
+  "implementation": "analysis/OlhoffCurrent",
+  "sourceTree": "edbfe47eb32109a2fb017f6f13d5327f2c240357caa96630064ffcf37ee152cb",
+  "matlab": "25.2.0.3042426 (R2025b) Update 1",
+  "implTree": "edbfe47eb32109a2fb017f6f13d5327f2c240357caa96630064ffcf37ee152cb",
+  "oracle_study": "two_branch_controller_validation arm C",
+  "oracle_doc_sha256": "d09579b80c0d187b3800e71e22538a1c482e60d79505d44457ffc9d57e8b82d9",
+  "scientific_runs": 1,
+  "candidate_cfg_hash": "afad9ea4b27da576553f128d66a8329edee963066c1ef477b1df70f9232daaab",
+  "four_rung_cfg_hash": "2359a1112fcec9edd0971aae9a89508cd703ea3899770e7e85c850138c2550f4",
+  "artifacts": [
+    {
+      "path": "C320x40_three_rung_trajectory.mat",
+      "class": "required",
+      "description": "THE one authorized scientific run: 320x40, ladder [0.04 0.02 0.01], frozen A OR B",
+      "bytes": 6.1179192E+7,
+      "sha256": "fb29817e1a5de7e3803fd00ef991c1b3cf23baca4aca48e50876b86ca5bbaffe",
+      "present": true,
+      "format": "MAT-file (v7.3 = HDF5) -- read with load()",
+      "variables": [
+        {
+          "name": "DRHO",
+          "size": [
+            12800,
+            352
+          ],
+          "class": "double",
+          "bytes": 3.60448E+7
+        },
+        {
+          "name": "RHO",
+          "size": [
+            12800,
+            352
+          ],
+          "class": "double",
+          "bytes": 3.60448E+7
+        },
+        {
+          "name": "cfg",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 20209
+        },
+        {
+          "name": "exh",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 2378
+        },
+        {
+          "name": "hist",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 129268
+        },
+        {
+          "name": "log",
+          "size": [
+            1,
+            5
+          ],
+          "class": "cell",
+          "bytes": 1520
+        },
+        {
+          "name": "meta",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 2696
+        },
+        {
+          "name": "move",
+          "size": [
+            352,
+            1
+          ],
+          "class": "double",
+          "bytes": 2816
+        }
+      ]
+    },
+    {
+      "path": "runs/C320x40_three_rung_iterations.csv",
+      "class": "required",
+      "description": "per-iteration telemetry of that run, 55 columns, cv_export format",
+      "bytes": 239508,
+      "sha256": "1fb031dad81a9426f5bb7d534f4ccd971f122108f23b0d02d0ac88e9e57c5b6e",
+      "present": true,
+      "format": "CSV, comma separated, header row"
+    },
+    {
+      "path": "runs/C320x40_three_rung_record.json",
+      "class": "required",
+      "description": "scalar record: status, event structure, digests",
+      "bytes": 3012,
+      "sha256": "fd57df3c9bfcdb46e5a8fb0f48a9e0ec2125b332d047a9866b2ba36b22d61603",
+      "present": true,
+      "format": "JSON"
+    },
+    {
+      "path": "evidence/oracle_C320x40_iterations_HEAD.csv",
+      "class": "required",
+      "description": "the frozen four-rung C320 oracle telemetry, extracted from git HEAD (ff570d6e...)",
+      "bytes": 1.138275E+6,
+      "sha256": "ff570d6e4d024f360974ab065c3042127404b7073a66ed972bfd8718563b356c",
+      "present": true,
+      "format": "CSV, comma separated, header row"
+    },
+    {
+      "path": "evidence/prefix_equivalence.json",
+      "class": "required",
+      "description": "Part E/F machine-readable comparison against the oracle",
+      "bytes": 15895,
+      "sha256": "5516ed82b5be121586afcd1bac182437ff5f328fee405d6ff8901a3c4e3419e4",
+      "present": true,
+      "format": "JSON"
+    },
+    {
+      "path": "evidence/singlefactor.json",
+      "class": "required",
+      "description": "Part C 81-leaf configuration diff",
+      "bytes": 2242,
+      "sha256": "3db2af69550ede9b737f7534ab8d4479afde9329500cdf9842db1fe90981cd0b",
+      "present": true,
+      "format": "JSON"
+    },
+    {
+      "path": "evidence/software_tests.json",
+      "class": "required",
+      "description": "Part C controller-mechanics suite",
+      "bytes": 4431,
+      "sha256": "12ab240b7cdebdd7103e76e35ad08201c43a95265ecd9cf5d9c7df05b4a27bb5",
+      "present": true,
+      "format": "JSON"
+    },
+    {
+      "path": "evidence/inventory.json",
+      "class": "required",
+      "description": "Part A0/A1 inventory and oracle re-verification",
+      "bytes": 7582,
+      "sha256": "911e80b112961acf76db69c46a6b76b5bf24bd7002d303c0d947f277a6dae07d",
+      "present": true,
+      "format": "JSON"
+    },
+    {
+      "path": "evidence/gates.json",
+      "class": "required",
+      "description": "Part H4 finalization gate output",
+      "bytes": 1380,
+      "sha256": "95b409e9331cce4c96e73e6f1d7c0217fb8f696e8eb6a8de5443176729c823e7",
+      "present": true,
+      "format": "JSON"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/evidence/two_branch_controller_validation/C320x40_trajectory.mat",
+      "class": "optional",
+      "description": "the four-rung C320 oracle container.  OPTIONAL by deliberate classification: its container digest is host-specific (Class A), while the scientific content this study consumes is verified against git-committed digests -- final rho 0348b288..., RHO[:,1:352] b8c0f18d..., omega(1:2,1:352) fd636083...",
+      "bytes": 2.83658112E+8,
+      "sha256": "4892c10ef17bca921063832d3edf1d08d15db10f739164ea9d388df143e52bf0",
+      "present": true,
+      "format": "MAT-file (v7.3 = HDF5) -- read with load()",
+      "variables": [
+        {
+          "name": "DRHO",
+          "size": [
+            12800,
+            1600
+          ],
+          "class": "double",
+          "bytes": 1.6384E+8
+        },
+        {
+          "name": "RHO",
+          "size": [
+            12800,
+            1600
+          ],
+          "class": "double",
+          "bytes": 1.6384E+8
+        },
+        {
+          "name": "cfg",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 19641
+        },
+        {
+          "name": "exh",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 2562
+        },
+        {
+          "name": "hist",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 568564
+        },
+        {
+          "name": "log",
+          "size": [
+            1,
+            4
+          ],
+          "class": "cell",
+          "bytes": 1240
+        },
+        {
+          "name": "meta",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 2816
+        },
+        {
+          "name": "move",
+          "size": [
+            1600,
+            1
+          ],
+          "class": "double",
+          "bytes": 12800
+        }
+      ]
+    }
+  ]
+}

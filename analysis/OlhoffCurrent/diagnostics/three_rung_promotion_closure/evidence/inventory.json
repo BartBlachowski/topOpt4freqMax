@@ -1,0 +1,175 @@
+{
+  "generated": "2026-09-11T12:45:13+02:00",
+  "matlab": "25.2.0.3042426 (R2025b) Update 1",
+  "threadsDefault": 10,
+  "computer": "MACA64",
+  "implTree": "edbfe47eb32109a2fb017f6f13d5327f2c240357caa96630064ffcf37ee152cb",
+  "implNFiles": 75,
+  "implOk": true,
+  "currentness": "CURRENT",
+  "prodCfgHash320": "2a5b500991ff5931eef4919e768503d41fd558fe56ffbffe40c382c74d676cad",
+  "prodPolicy": {
+    "levels": [
+      0.04,
+      0.02,
+      0.01,
+      0.005
+    ],
+    "signal": "boundVariable",
+    "stopRule": "designChange"
+  },
+  "presetName": "duOlhoffFixedPenaltySensitivityFiltered",
+  "upstreamPreset": "duOlhoffFrozenM4",
+  "controllerHashes": [
+    {
+      "path": "+impl/architecture/+olh/+move/exhaustion.m",
+      "sha256": "17b37a384b1aa5d987d9c861e16071d1140af130f92406ccc11cec4518bcae0c"
+    },
+    {
+      "path": "+impl/architecture/+olh/+move/limit.m",
+      "sha256": "61fa923d430121ead764a229b4f48dfd77617540b4ab6db883ccd9d5904b1c1e"
+    },
+    {
+      "path": "+impl/architecture/olhoffSolve.m",
+      "sha256": "1e5a114cbf91717e01e5592e86203f401ed5cdb3e5f5ce9a727b8163cdf2fba3"
+    },
+    {
+      "path": "+impl/architecture/+olh/+presets/duOlhoffFrozenM4.m",
+      "sha256": "6ed3624cd19b3569f55b23acad1d5a1038d9c625a7fae9935e801ffb765ac40e"
+    }
+  ],
+  "retry1": {
+    "dir": "analysis/OlhoffCurrent/diagnostics/three_rung_promotion_validation_retry1",
+    "gate": {
+      "ok": true,
+      "G1": true,
+      "G2": true,
+      "G3": true,
+      "G4": true,
+      "G5": true,
+      "missing": [],
+      "mismatched": []
+    },
+    "verdicts": {
+      "dependency_provenance": "DEPENDENCY_SPECIFIC_SCIENTIFIC_PROVENANCE_PASS",
+      "single_factor": "THREE_RUNG_SINGLE_FACTOR_PASS",
+      "software": "THREE_RUNG_SOFTWARE_VALIDATION_PASS",
+      "prefix": "C320_THREE_RUNG_PREFIX_EQUIVALENCE_PASS",
+      "termination": "C320_THREE_RUNG_TERMINATION_PASS",
+      "policy": "THREE_RUNG_PRODUCTION_POLICY_VALIDATED",
+      "promotion_provenance": "PROMOTION_PROVENANCE_BLOCKED",
+      "promotion": "PRODUCTION_THREE_RUNG_CONTROLLER_NOT_PROMOTED",
+      "campaign": "NINE_MESH_PERFORMANCE_CAMPAIGN_BLOCKED"
+    },
+    "scientificRuns": 1,
+    "run": {
+      "tag": "C320x40_three_rung",
+      "mesh": [
+        320,
+        40
+      ],
+      "NE": 12800,
+      "status": "CONVERGED",
+      "nOuter": 352,
+      "cap": 1600,
+      "levels": [
+        0.04,
+        0.02,
+        0.01
+      ],
+      "tol": 0.1,
+      "innerTotal": 6498,
+      "innerMax": 40,
+      "innerNonConv": 0,
+      "stage_final": 3,
+      "move_final": 0.01,
+      "wall_s": 1486.874875125,
+      "cfgHash": "afad9ea4b27da576553f128d66a8329edee963066c1ef477b1df70f9232daaab",
+      "implTree": "edbfe47eb32109a2fb017f6f13d5327f2c240357caa96630064ffcf37ee152cb",
+      "rho_sha256": "0c928dc01f56ee25f19b688e63b3844141f71e3130d3a03b3f9e4255659bb925"
+    },
+    "anchors": {
+      "rho": "b8c0f18d887c7f5a81ece452f0a4097a0cc1a67710a137d66e677fcfd78b5ba3",
+      "omega": "fd63608399edaede2c4f928a25d5478eacc3711f6d626ae770ad107e7f4c488d",
+      "rhoExpected": "b8c0f18d887c7f5a81ece452f0a4097a0cc1a67710a137d66e677fcfd78b5ba3",
+      "omegaExpected": "fd63608399edaede2c4f928a25d5478eacc3711f6d626ae770ad107e7f4c488d",
+      "rhoMatch": true,
+      "omegaMatch": true,
+      "rhoVsOracle": true,
+      "drhoVsOracle": true
+    },
+    "events": {
+      "S1": {
+        "declIter": 274,
+        "branch": "A",
+        "ok": true
+      },
+      "S2": {
+        "declIter": 313,
+        "branch": "B",
+        "ok": true
+      },
+      "S3": {
+        "declIter": 352,
+        "branch": "B",
+        "ok": true
+      },
+      "ok": true
+    },
+    "cost": {
+      "outerFour": 1600,
+      "outerThree": 352,
+      "innerFour": 76532,
+      "innerThree": 6498,
+      "outerSaved": 1248,
+      "outerSavedPct": 78,
+      "innerSaved": 70034,
+      "innerSavedPct": 91.509433962264154
+    }
+  },
+  "retry0": {
+    "dir": "analysis/OlhoffCurrent/diagnostics/three_rung_promotion_validation",
+    "files": [
+      {
+        "name": "C320_ORACLE.md",
+        "sha256": "d09579b80c0d187b3800e71e22538a1c482e60d79505d44457ffc9d57e8b82d9"
+      },
+      {
+        "name": "CONTROLLER_RECOVERY.md",
+        "sha256": "119082321bf5ba56ffc39a36c76f7608e18a9b2c645a033da70a76475261bdac"
+      },
+      {
+        "name": "DATA_MANIFEST.json",
+        "sha256": "97796babb16395dedd4ad43f06ac416384cffae3026cd5c8fcc8325048b8cf47"
+      },
+      {
+        "name": "EVIDENCE.json",
+        "sha256": "7cd57f6146f401c3bb4e8842775c6858648dd009bcdb9c7e5ba7516088af3fd5"
+      },
+      {
+        "name": "METRICS.json",
+        "sha256": "71c06e79846b19bdf2bd3782b3fc4d0f0c4e5bd1fdd85b9bb0fc5bca72eb445d"
+      },
+      {
+        "name": "PROVENANCE.md",
+        "sha256": "cf76d496b822c88cc49be610587f07fdcd3a4a3560e0188c16e04a46191fe0a5"
+      },
+      {
+        "name": "REPORT.md",
+        "sha256": "de2af57ad78e6967d93c5ec1c9942d2f2c7446a1a20c70b7edac790aec6bd7ef"
+      }
+    ]
+  },
+  "c240": {
+    "path": "analysis/OlhoffCurrent/evidence/three_rung_resolution_240/C240x30_trajectory.mat",
+    "parentDirExists": false,
+    "present": false,
+    "expectedSha256": "183d7ce60d512fc2c045c3cb575404b00c8f0e223adaf97db86c9eef1fd50b0d",
+    "expectedBytes": 1.31203128E+8,
+    "actualSha256": "",
+    "actualBytes": null,
+    "match": false
+  },
+  "reuseVerdict": "VALIDATED_C320_EVIDENCE_REUSE_PASS",
+  "c240Verdict": "ORIGINAL_C240_EVIDENCE_TRANSFER_FAIL"
+}

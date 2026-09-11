@@ -1,0 +1,54 @@
+{
+  "schema": "olhoff_current_evidence/1",
+  "study": "three_rung_promotion_validation",
+  "generated": "2026-09-10T09:20:00+02:00",
+  "implementation": "analysis/OlhoffCurrent",
+  "sourceTree": "edbfe47eb32109a2fb017f6f13d5327f2c240357caa96630064ffcf37ee152cb",
+  "impl_tree_sha256": "edbfe47eb32109a2fb017f6f13d5327f2c240357caa96630064ffcf37ee152cb",
+  "matlab": "25.2.0.3042426 (R2025b) Update 1",
+  "scientific_runs_executed": 0,
+  "scientific_runs_executed_note": "ZERO. The task stopped at Phase 1 on THREE_RUNG_PROMOTION_PROVENANCE_FAIL, before any preregistration was frozen and before the single authorized 320x40 run was started. This study declares NO raw scientific evidence because it generated none.",
+  "verdict": "THREE_RUNG_PROMOTION_PROVENANCE_FAIL",
+  "note": "Analysis-only study. It consumes prior evidence by immutable path and SHA-256 and produces no trajectory of its own. Its documents record (i) the verified C320 four-rung oracle and (ii) the exact recovered frozen A/B controller definition, so a re-attempt need not repeat that work.",
+  "evidence_gaps": [
+    "CONTEXT: the prior three_rung_resolution_240 task executed on a DIFFERENT MACHINE, and analysis/OlhoffCurrent/evidence/ is git-ignored wholesale ('*', re-admitting only .gitignore and README.md). Its .gitignore states the expected consequence outright: 'On a fresh clone this directory is empty and the gate reports REQUIRED_MISSING. That is the correct, honest answer.' The gate failures below are therefore evidence LOCALITY, not scientific damage.",
+    "BLOCKER, class (b): analysis/OlhoffCurrent/evidence/three_rung_resolution_240/C240x30_trajectory.mat (131203128 bytes, sha256 183d7ce60d512fc2c045c3cb575404b00c8f0e223adaf97db86c9eef1fd50b0d) is ABSENT ON THIS MACHINE. Not in Trash, absent from a full-disk search, no Time Machine backup on this host. It was produced on another machine and, being git-ignored, never transferred. NOT lost. Remedy: copy it across and verify against the digest already declared in that study's EVIDENCE.json. An earlier draft of these documents called this irrecoverable loss; that was wrong and is corrected.",
+    "BLOCKER, class (a): the two_branch_controller_validation C160x20/C320x40/C400x50 trajectory .mat container digests recorded by downstream studies are STALE on this machine, because these copies were regenerated locally rather than transferred. Scientific content VERIFIED UNCHANGED: each file's final RHO column reproduces the rho_sha256 committed in its runs/*_record.json.",
+    "BLOCKER, class (c), MACHINE-INDEPENDENT: two_branch_controller_validation/FINAL_SHA256.txt is stale against its own COMMITTED files. PROVENANCE.md, BASELINES.md and evidence/baselines.json are clean (identical to git HEAD) yet their recorded digests differ. Reproduces on any machine. Repairable by regenerating that one hash file; no scientific content involved.",
+    "PATH CONVENTION: two_branch_controller_validation/FINAL_SHA256.txt mixes bases (20 repo-relative among 71 digested entries), so a single-base 'shasum -c' cannot resolve it. Every gate result recorded here was produced by the repository's own olhoffcurrent_finalization_gate, which tries study, study/runs, repo and absolute bases. The recorded failures are CONTENT mismatches, not unresolved paths. three_rung_architecture (43) and three_rung_resolution_240 (50) are purely study-relative and their G4 passes here.",
+    "PRE-EXISTING DIRT: runs/C320x40_iterations.csv and runs/C320x40_record.json are modified relative to HEAD in wall-clock fields only (tOuter column; wall_s, trajectoryBytes, matlab version string). The 54-column scientific projection of the CSV is byte-identical to HEAD.",
+    "tests/test_preset_equivalence was NOT run: it executes a 160x20 optimization, and the task brief forbids running 160x20. All five non-optimization tests were run; four pass with 0 failures and test_finalization_gate reports 4 failures, which are classes (a)/(b)/(c) themselves."
+  ],
+  "artifacts": [
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/runs/C320x40_iterations.csv",
+      "class": "required",
+      "description": "THE C320 four-rung oracle telemetry, 1600 iterations x 55 columns. Consumed by immutable path. Presence-checked only, deliberately: the committed (git-HEAD) content hashes to ff570d6e... but the working tree carries a pre-existing timing-only modification, so a container digest here would fail on a difference that is provably non-scientific.",
+      "present": true,
+      "sha256": "",
+      "verified": {
+        "git_head_sha256": "ff570d6e4d024f360974ab065c3042127404b7073a66ed972bfd8718563b356c",
+        "worktree_sha256": "6ac72fa880f2e9fb545afcabbd092fe6be32bc132845e55d61b6d5baa4325a22",
+        "scientific_projection_sha256": "5f9f18960dfc4a990c15d1b101b256e006336a8d6ca41f560ec6d6b58f6bb53d",
+        "scientific_projection_note": "SHA-256 of the file with the final column (tOuter, per-iteration wall time) removed. IDENTICAL for git-HEAD and working tree across all 1600 rows and all 54 remaining columns."
+      }
+    },
+    {
+      "path": "analysis/OlhoffCurrent/evidence/two_branch_controller_validation/C320x40_trajectory.mat",
+      "class": "required",
+      "description": "THE C320 four-rung oracle raw trajectory. RHO/DRHO 12800 x 1600 double, plus cfg/exh/hist/log/meta/move. Git-ignored, so no committed copy exists to diff. Presence-checked only: the container digest recorded by downstream studies is STALE, while the scientific content is verified unchanged against the committed rho_sha256.",
+      "present": true,
+      "sha256": "",
+      "format": "MAT-file (v7.3 = HDF5) -- read with load()",
+      "verified": {
+        "convention": "SHA-256 over typecast(double(v(:)),'uint8'), column-major (the study's own local_vecHash)",
+        "final_rho_sha256": "0348b288da711f2bdcd89263f7feaae33ccaedcb73a133a1a5e941421795bfb3",
+        "final_rho_matches_committed_record": true,
+        "rho_prefix_1_352_sha256": "b8c0f18d887c7f5a81ece452f0a4097a0cc1a67710a137d66e677fcfd78b5ba3",
+        "omega12_prefix_1_352_sha256": "fd63608399edaede2c4f928a25d5478eacc3711f6d626ae770ad107e7f4c488d",
+        "cross_validation_vs_committed_csv": "maxAbs, omega1, omega2, move, stage, exE, cumInner all BITWISE identical across all 1600 iterations"
+      }
+    }
+  ],
+  "artifacts_note": "This study produced NO raw evidence of its own (zero scientific runs). The entries below are the PRIOR evidence it consumed, declared so the gate presence-checks them. Both carry an empty container sha256 on purpose, with the verified scientific digests recorded under 'verified'."
+}

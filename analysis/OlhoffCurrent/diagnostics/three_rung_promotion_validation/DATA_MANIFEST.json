@@ -1,0 +1,16 @@
+{
+  "schema": "olhoff_current_data_manifest/1",
+  "study": "three_rung_promotion_validation",
+  "verdict": "THREE_RUNG_PROMOTION_PROVENANCE_FAIL",
+  "raw_scientific_evidence_produced": false,
+  "note": "Analysis-only. No .mat, no runs/, no figures/, no scripts/ - the task stopped at Phase 1 before any run, so there is nothing to plot or script. Every artifact below is a document produced by this task and is hashed in FINAL_SHA256.txt.",
+  "artifacts": [
+    {"path": "PROVENANCE.md",          "class": "required", "description": "Phase 0/1 record: repo state, gate results, the two failure classes, and what must be repaired."},
+    {"path": "CONTROLLER_RECOVERY.md", "class": "required", "description": "The exact recovered frozen A/B rule, reset/indexing semantics, and the static proof that the three-rung change is configuration-only."},
+    {"path": "C320_ORACLE.md",         "class": "required", "description": "The C320 four-rung oracle, cryptographically verified, with frozen S1/S2/S3 events and the exact expected S3 state."},
+    {"path": "REPORT.md",              "class": "required", "description": "Verdict and answers to the brief's required questions as far as reached."},
+    {"path": "EVIDENCE.json",          "class": "required", "description": "Evidence declaration: zero raw artifacts produced; consumed prior evidence by path and digest; blockers recorded as evidence_gaps."},
+    {"path": "METRICS.json",           "class": "required", "description": "Machine-readable gate results, recovered controller constants, oracle events."},
+    {"path": "DATA_MANIFEST.json",     "class": "required", "description": "This file."}
+  ]
+}

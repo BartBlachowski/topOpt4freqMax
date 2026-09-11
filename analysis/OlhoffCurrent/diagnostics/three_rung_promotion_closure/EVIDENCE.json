@@ -1,0 +1,180 @@
+{
+  "schema": "olhoff_current_evidence/1",
+  "study": "three_rung_promotion_closure",
+  "generated": "2026-09-11T13:10:36+02:00",
+  "evidenceRoot": "analysis/OlhoffCurrent/evidence/three_rung_promotion_closure",
+  "implementation": "analysis/OlhoffCurrent",
+  "sourceTree": "edbfe47eb32109a2fb017f6f13d5327f2c240357caa96630064ffcf37ee152cb",
+  "matlab": "25.2.0.3042426 (R2025b) Update 1",
+  "implTree": "edbfe47eb32109a2fb017f6f13d5327f2c240357caa96630064ffcf37ee152cb",
+  "scientific_runs": 0,
+  "promoted": false,
+  "reused_verdict": "THREE_RUNG_PRODUCTION_POLICY_VALIDATED",
+  "reused_from": "diagnostics/three_rung_promotion_validation_retry1",
+  "artifacts": [
+    {
+      "path": "evidence/inventory.json",
+      "class": "required",
+      "description": "Phase 0/1/2 inventory, reuse check and C240 precondition",
+      "bytes": 5431,
+      "sha256": "963b15e4007d62a86c71a9b57040a96cdf509dcc4784e896d97625c49270a8ce",
+      "present": true,
+      "format": "JSON"
+    },
+    {
+      "path": "evidence/blockers.json",
+      "class": "required",
+      "description": "Phase 6 gate output and the enumerated remaining blockers",
+      "bytes": 3601,
+      "sha256": "1bea13654fb64caad37ee0e351e0e86fc1ce718de40c3d9795d483277b6c9eaa",
+      "present": true,
+      "format": "JSON"
+    },
+    {
+      "path": "evidence/policy_recovery.json",
+      "class": "required",
+      "description": "Phase 7/8/12 validated-policy recovery, promotion delta, dispatch",
+      "bytes": 8354,
+      "sha256": "54fb77ee0a7fb3240f20721850e2ec34e275ebf0b2ec6f8bf17cc00662ee6181",
+      "present": true,
+      "format": "JSON"
+    },
+    {
+      "path": "evidence/software_tests.json",
+      "class": "required",
+      "description": "Phase 15 test results, including the explicit skip",
+      "bytes": 5185,
+      "sha256": "2ee5f26ce2afd319d2192876552d59be23f2937e516793dc13cc9be60f79d791",
+      "present": true,
+      "format": "JSON"
+    },
+    {
+      "path": "evidence/two_branch_FINAL_SHA256.BEFORE.txt",
+      "class": "required",
+      "description": "the historical hash manifest exactly as found, archived before repair",
+      "bytes": 11399,
+      "sha256": "2fb9fc731d816e5c47c9835d5f777f8bb3be2fe61773ca00119049ed2bf5e0e0",
+      "present": true,
+      "format": ".txt"
+    },
+    {
+      "path": "evidence/preserved_working_copies/C320x40_iterations.WORKING_COPY.csv",
+      "class": "required",
+      "description": "timing-drifted working copy, archived before restoration (tOuter-only)",
+      "bytes": 1.138289E+6,
+      "sha256": "6ac72fa880f2e9fb545afcabbd092fe6be32bc132845e55d61b6d5baa4325a22",
+      "present": true,
+      "format": "CSV, comma separated, header row"
+    },
+    {
+      "path": "evidence/preserved_working_copies/C320x40_record.WORKING_COPY.json",
+      "class": "required",
+      "description": "timing-drifted working copy, archived before restoration (wall_s/bytes/matlab)",
+      "bytes": 2896,
+      "sha256": "765604214a4074ab133d131befec243d93fd502de404570be76d4a5e78c28e55",
+      "present": true,
+      "format": "JSON"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/three_rung_promotion_validation_retry1/METRICS.json",
+      "class": "required",
+      "description": "the REUSED validated scientific verdict -- no new run",
+      "bytes": 4885,
+      "sha256": "f6723dffc858ad28bf7f937e6052b067dcb8a25b033e1d6074e1fc9c43608d79",
+      "present": true,
+      "format": "JSON"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/three_rung_promotion_validation_retry1/FINAL_SHA256.txt",
+      "class": "required",
+      "description": "the reused study's self-verifying manifest",
+      "bytes": 4975,
+      "sha256": "f6bcf03f7f069dea91ece9482974abbc1b0ffb0502a3d1937f4e62dcf4a6d043",
+      "present": true,
+      "format": ".txt"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/evidence/three_rung_promotion_validation_retry1/C320x40_three_rung_trajectory.mat",
+      "class": "optional",
+      "description": "the validated C320 three-rung trajectory.  OPTIONAL here because this study reuses its VERDICT, verified via the retry's own gate, and never re-reads the raw container.",
+      "bytes": 6.1179192E+7,
+      "sha256": "fb29817e1a5de7e3803fd00ef991c1b3cf23baca4aca48e50876b86ca5bbaffe",
+      "present": true,
+      "format": "MAT-file (v7.3 = HDF5) -- read with load()",
+      "variables": [
+        {
+          "name": "DRHO",
+          "size": [
+            12800,
+            352
+          ],
+          "class": "double",
+          "bytes": 3.60448E+7
+        },
+        {
+          "name": "RHO",
+          "size": [
+            12800,
+            352
+          ],
+          "class": "double",
+          "bytes": 3.60448E+7
+        },
+        {
+          "name": "cfg",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 20209
+        },
+        {
+          "name": "exh",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 2378
+        },
+        {
+          "name": "hist",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 129268
+        },
+        {
+          "name": "log",
+          "size": [
+            1,
+            5
+          ],
+          "class": "cell",
+          "bytes": 1520
+        },
+        {
+          "name": "meta",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 2696
+        },
+        {
+          "name": "move",
+          "size": [
+            352,
+            1
+          ],
+          "class": "double",
+          "bytes": 2816
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+# FROZEN_BEFORE — hashes taken BEFORE the C320 three-rung run existed
+# generated: 2026-09-11T09:53:48Z
+# repo HEAD: 60f5b72519aeba942b650d5408339f7ffe6b978b
+#
+# proof the candidate result did not yet exist:
+#   runs/ entries              : 0
+#   evidence/three_rung_promotion_validation_retry1/ : 0 (directory absent or empty)
+#
+6b0638d987b244f6be609d2eb7cb619248bfab1b25ace15d6600b6107fa5345d  PREREGISTRATION.md
+71a2225fef458c6fc9aaed8d6381d1ee42b76dea7d6a7309c5ed733deaefa8c0  PROVENANCE.md
+3ad5dc7a34195886ee59e0ce48e70a7fa49e9e4c6e864eddbbd20f84c2503a1b  CONTROLLER_RECOVERY.md
+21551435739689151c4bc02f5b07e72e8e675fa8cc41067b789103a50fe984bf  C320_ORACLE_REUSE.md
+12d63762b3d96af623c4eba5519900ecca775417387d4c1fa1e3bcb8be37920c  SINGLE_FACTOR_AUDIT.md
+b2897b2a2ac75cc5e58fa5943a6c46cfc5e4afaf810432497eeecd41007342a2  scripts/tr_config.m
+a20d01946e3dd9e8d0f339f5e867f309c85c3a6c407e4d7b9c3ae502f3c7d418  scripts/tr_gates.m
+0806b6eff465d61c532cab363cb299a2afca188cf270d5a836e170e3fc0e5273  scripts/tr_inventory.m
+53f6e7fe38cf7e7752c160f7708bd18bcdeaabdcfbee96f36fa57921e4c084ba  scripts/tr_run.m
+51a53ef48eb98ff75e4020c4a2715725201eada42e8f0671805cd244ff0bf6be  scripts/tr_singlefactor.m
+6bc3364bd86ca504c3e139aa7e3c58a6536311a1e70a7dd2ce0555802782ac3f  scripts/tr_tests.m

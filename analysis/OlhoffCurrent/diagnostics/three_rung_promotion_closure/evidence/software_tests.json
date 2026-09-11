@@ -1,0 +1,174 @@
+{
+  "run": [
+    "test_currentness",
+    "test_source_integrity",
+    "test_path_isolation",
+    "test_evidence_retention",
+    "test_finalization_gate"
+  ],
+  "nFail": [
+    0,
+    0,
+    0,
+    0,
+    4
+  ],
+  "skipped": [
+    "test_preset_equivalence"
+  ],
+  "skipReason": "runs a 160x20 optimization (production preset vs frozen conference fixture); this task authorizes ZERO scientific optimization runs",
+  "mechanics": {
+    "tests": [
+      {
+        "name": "3-rung stage 1 (move 0.04): E declared -> descend=1 conv=0",
+        "ok": true,
+        "detail": "descended=1 conv=0 mv=0.02"
+      },
+      {
+        "name": "3-rung stage 1: E NOT declared -> hold, no stop",
+        "ok": true,
+        "detail": "mv=0.04 stage=1 conv=0"
+      },
+      {
+        "name": "3-rung stage 2 (move 0.02): E declared -> descend=1 conv=0",
+        "ok": true,
+        "detail": "descended=1 conv=0 mv=0.01"
+      },
+      {
+        "name": "3-rung stage 2: E NOT declared -> hold, no stop",
+        "ok": true,
+        "detail": "mv=0.02 stage=2 conv=0"
+      },
+      {
+        "name": "3-rung stage 3 (move 0.01): E declared -> descend=0 conv=1",
+        "ok": true,
+        "detail": "descended=0 conv=1 mv=0.01"
+      },
+      {
+        "name": "3-rung stage 3: E NOT declared -> hold, no stop",
+        "ok": true,
+        "detail": "mv=0.01 stage=3 conv=0"
+      },
+      {
+        "name": "4-rung stage 1 (move 0.04): E declared -> descend=1 conv=0",
+        "ok": true,
+        "detail": "descended=1 conv=0 mv=0.02"
+      },
+      {
+        "name": "4-rung stage 1: E NOT declared -> hold, no stop",
+        "ok": true,
+        "detail": "mv=0.04 stage=1 conv=0"
+      },
+      {
+        "name": "4-rung stage 2 (move 0.02): E declared -> descend=1 conv=0",
+        "ok": true,
+        "detail": "descended=1 conv=0 mv=0.01"
+      },
+      {
+        "name": "4-rung stage 2: E NOT declared -> hold, no stop",
+        "ok": true,
+        "detail": "mv=0.02 stage=2 conv=0"
+      },
+      {
+        "name": "4-rung stage 3 (move 0.01): E declared -> descend=1 conv=0",
+        "ok": true,
+        "detail": "descended=1 conv=0 mv=0.005"
+      },
+      {
+        "name": "4-rung stage 3: E NOT declared -> hold, no stop",
+        "ok": true,
+        "detail": "mv=0.01 stage=3 conv=0"
+      },
+      {
+        "name": "three-rung ladder never yields move 0.005",
+        "ok": true,
+        "detail": "reachable moves = [0.01 0.02]"
+      },
+      {
+        "name": "0.005 is absent from the three-rung level vector",
+        "ok": true,
+        "detail": "[0.04 0.02 0.01]"
+      },
+      {
+        "name": "beta stall cannot descend the ladder under stageExhaustion",
+        "ok": true,
+        "detail": "stage=1 mv=0.04"
+      },
+      {
+        "name": "beta stall cannot terminate under stageExhaustion",
+        "ok": true,
+        "detail": "admit(stage=1, declared=false) = false"
+      },
+      {
+        "name": "control: that same beta history DOES descend under boundVariable",
+        "ok": true,
+        "detail": "stage=2"
+      },
+      {
+        "name": "three-rung at terminal stage without declaration does not stop",
+        "ok": true,
+        "detail": "admit(stage=3, declared=false) = false"
+      },
+      {
+        "name": "detector is ladder-blind: identical state from identical input",
+        "ok": true,
+        "detail": "exhaustion.m takes no ladder argument"
+      },
+      {
+        "name": "Branch B declares at P=20 consecutive (synthetic coherent decay)",
+        "ok": true,
+        "detail": "declared=1 branch=B declIter=39 declBegin=20"
+      },
+      {
+        "name": "frozen constants unchanged: W=20 P=20 Wnp=10",
+        "ok": true,
+        "detail": "W=20 P=20 Wnp=10 tol=0.0125"
+      },
+      {
+        "name": "descent resets the detector window wholly to the new stage",
+        "ok": true,
+        "detail": "stage=2 stageStart=81 cntA=0 cntB=0 declared=0"
+      },
+      {
+        "name": "48x6: three-rung never visits move 0.005",
+        "ok": true,
+        "detail": "moves visited = [0.01 0.02 0.04]"
+      },
+      {
+        "name": "48x6: three-rung final stage <= 3",
+        "ok": true,
+        "detail": "maxStage=3"
+      },
+      {
+        "name": "48x6: ladder length is inert over the common prefix",
+        "ok": true,
+        "detail": "n3=171 (CONVERGED) n4=400 (CAP_HIT) common=171"
+      },
+      {
+        "name": "48x6: cap is honoured (status is one of CONVERGED / CAP_HIT)",
+        "ok": true,
+        "detail": "status=CONVERGED n=171"
+      },
+      {
+        "name": "48x6: CAP_HIT stays CAP_HIT under the three-rung ladder",
+        "ok": true,
+        "detail": "status=CAP_HIT n=5"
+      },
+      {
+        "name": "validation still couples stop.rule and the move signal",
+        "ok": true,
+        "detail": "stop.rule=stageExhaustion requires move.continuation.signal=stageExhaustion"
+      },
+      {
+        "name": "validation still rejects a non-descending ladder",
+        "ok": true,
+        "detail": "olh:config:ladderNotDescending"
+      }
+    ],
+    "nTests": 29,
+    "nPass": 29,
+    "pass": true,
+    "verdict": "THREE_RUNG_SOFTWARE_VALIDATION_PASS"
+  },
+  "totalFailures": 4
+}

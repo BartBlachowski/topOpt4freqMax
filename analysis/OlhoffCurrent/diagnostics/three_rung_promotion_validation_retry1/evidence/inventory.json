@@ -1,0 +1,217 @@
+{
+  "generated": "2026-09-11T11:32:24+02:00",
+  "matlab": "25.2.0.3042426 (R2025b) Update 1",
+  "threadsDefault": 10,
+  "computer": "MACA64",
+  "implTree": "edbfe47eb32109a2fb017f6f13d5327f2c240357caa96630064ffcf37ee152cb",
+  "implNFiles": 75,
+  "implOk": true,
+  "currentness": "CURRENT",
+  "currentnessDetail": "promoted source is intact and matches upstream architecture/canonical-config at 695f03bdac20c423a4e1d389cf9db9187597bcc3.",
+  "deps": [
+    {
+      "name": "prior_C320_ORACLE",
+      "path": "analysis/OlhoffCurrent/diagnostics/three_rung_promotion_validation/C320_ORACLE.md",
+      "sha256": "d09579b80c0d187b3800e71e22538a1c482e60d79505d44457ffc9d57e8b82d9",
+      "exists": true
+    },
+    {
+      "name": "prior_CONTROLLER_RECOVERY",
+      "path": "analysis/OlhoffCurrent/diagnostics/three_rung_promotion_validation/CONTROLLER_RECOVERY.md",
+      "sha256": "119082321bf5ba56ffc39a36c76f7608e18a9b2c645a033da70a76475261bdac",
+      "exists": true
+    },
+    {
+      "name": "prior_PROVENANCE",
+      "path": "analysis/OlhoffCurrent/diagnostics/three_rung_promotion_validation/PROVENANCE.md",
+      "sha256": "cf76d496b822c88cc49be610587f07fdcd3a4a3560e0188c16e04a46191fe0a5",
+      "exists": true
+    },
+    {
+      "name": "prior_REPORT",
+      "path": "analysis/OlhoffCurrent/diagnostics/three_rung_promotion_validation/REPORT.md",
+      "sha256": "de2af57ad78e6967d93c5ec1c9942d2f2c7446a1a20c70b7edac790aec6bd7ef",
+      "exists": true
+    },
+    {
+      "name": "exhaustion_m",
+      "path": "analysis/OlhoffCurrent/+impl/architecture/+olh/+move/exhaustion.m",
+      "sha256": "17b37a384b1aa5d987d9c861e16071d1140af130f92406ccc11cec4518bcae0c",
+      "exists": true
+    },
+    {
+      "name": "limit_m",
+      "path": "analysis/OlhoffCurrent/+impl/architecture/+olh/+move/limit.m",
+      "sha256": "61fa923d430121ead764a229b4f48dfd77617540b4ab6db883ccd9d5904b1c1e",
+      "exists": true
+    },
+    {
+      "name": "olhoffSolve_m",
+      "path": "analysis/OlhoffCurrent/+impl/architecture/olhoffSolve.m",
+      "sha256": "1e5a114cbf91717e01e5592e86203f401ed5cdb3e5f5ce9a727b8163cdf2fba3",
+      "exists": true
+    },
+    {
+      "name": "tb_branches_m",
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_maturity_240/scripts/tb_branches.m",
+      "sha256": "bc146572e3f1a7928914ea556a2f892ad3081d8037c7ec858c50d7ca7a06f3c2",
+      "exists": true
+    },
+    {
+      "name": "tb_PREREGISTRATION",
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_maturity_240/PREREGISTRATION.md",
+      "sha256": "62748225253f85f6a2fbc1bad35489a2c201cd45ee64ff279601003354b73abd",
+      "exists": true
+    },
+    {
+      "name": "cv_config_m",
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/scripts/cv_config.m",
+      "sha256": "b41fb5a5f496b75ff03ae4493feb4afc3127f64e74679807bbac22c868b96e20",
+      "exists": true
+    },
+    {
+      "name": "cv_run_m",
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/scripts/cv_run.m",
+      "sha256": "7cae23621c01dca72271eb487f465d3a9f8a9301ee142674e9d5bf34e0833d02",
+      "exists": true
+    },
+    {
+      "name": "cv_telemetry_m",
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/scripts/cv_telemetry.m",
+      "sha256": "dd69a6c5f03ddd117dd1488628ac5c5fbefd3563e2e76d62ed7b4cbcfa842806",
+      "exists": true
+    },
+    {
+      "name": "cv_export_m",
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/scripts/cv_export.m",
+      "sha256": "fb2f5099dcf31b560fe34b7cdc7979bf2b7b12ba7d58398803c1e035512ddf54",
+      "exists": true
+    },
+    {
+      "name": "C320_record_json",
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/runs/C320x40_record.json",
+      "sha256": "765604214a4074ab133d131befec243d93fd502de404570be76d4a5e78c28e55",
+      "exists": true
+    },
+    {
+      "name": "C320_iterations_csv",
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/runs/C320x40_iterations.csv",
+      "sha256": "6ac72fa880f2e9fb545afcabbd092fe6be32bc132845e55d61b6d5baa4325a22",
+      "exists": true
+    },
+    {
+      "name": "arch_PREREGISTRATION",
+      "path": "analysis/OlhoffCurrent/diagnostics/three_rung_architecture/PREREGISTRATION.md",
+      "sha256": "12c4bb960eeb6169521ea4b2e01b084a7bb3983d5387e94121e1729c2d71075c",
+      "exists": true
+    },
+    {
+      "name": "arch_REPORT",
+      "path": "analysis/OlhoffCurrent/diagnostics/three_rung_architecture/REPORT.md",
+      "sha256": "f064a26c3730f925882ac7edb1d466e520ed508d4f8c3f2969b2dbfa640ca725",
+      "exists": true
+    },
+    {
+      "name": "arch_THREE_RUNG_ANALYSIS",
+      "path": "analysis/OlhoffCurrent/diagnostics/three_rung_architecture/THREE_RUNG_ANALYSIS.md",
+      "sha256": "b71b4483a7a0e615f9b28fa3f3df99091ff2b4837cea4c8c37237cc920401deb",
+      "exists": true
+    },
+    {
+      "name": "r240_REPORT",
+      "path": "analysis/OlhoffCurrent/diagnostics/three_rung_resolution_240/REPORT.md",
+      "sha256": "b27e77a299657639d221736384074feaf8e519870bcb11487302cdeee96afc05",
+      "exists": true
+    },
+    {
+      "name": "r240_THRESHOLD_SPLITTING",
+      "path": "analysis/OlhoffCurrent/diagnostics/three_rung_resolution_240/THRESHOLD_SPLITTING_ANALYSIS.md",
+      "sha256": "6b8f6a350a8b8950d504b4ea36a7b54a3edefa0a69a3cfc57364255bb7399187",
+      "exists": true
+    },
+    {
+      "name": "r240_C240_ANALYSIS",
+      "path": "analysis/OlhoffCurrent/diagnostics/three_rung_resolution_240/C240_ANALYSIS.md",
+      "sha256": "c0fc2f4fec733494a4e4119fcfa697bda8322890fcc0f96291a41b25716613e3",
+      "exists": true
+    },
+    {
+      "name": "r240_RUNG4_MATERIALITY",
+      "path": "analysis/OlhoffCurrent/diagnostics/three_rung_resolution_240/RUNG4_MATERIALITY.md",
+      "sha256": "283401047ea793e7f606251e535663ca996fc82f2f149d50c9ec2d6dca3e2108",
+      "exists": true
+    }
+  ],
+  "oracleTrajectory": "analysis/OlhoffCurrent/evidence/two_branch_controller_validation/C320x40_trajectory.mat",
+  "oracleTrajectoryPresent": true,
+  "expected": {
+    "rho_final": "0348b288da711f2bdcd89263f7feaae33ccaedcb73a133a1a5e941421795bfb3",
+    "rho_prefix352": "b8c0f18d887c7f5a81ece452f0a4097a0cc1a67710a137d66e677fcfd78b5ba3",
+    "omega_prefix352": "fd63608399edaede2c4f928a25d5478eacc3711f6d626ae770ad107e7f4c488d"
+  },
+  "oracleTrajectoryBytes": 2.83658112E+8,
+  "oracleSize": [
+    12800,
+    1600
+  ],
+  "oracleImplTree": "edbfe47eb32109a2fb017f6f13d5327f2c240357caa96630064ffcf37ee152cb",
+  "got": {
+    "rho_final": "0348b288da711f2bdcd89263f7feaae33ccaedcb73a133a1a5e941421795bfb3",
+    "rho_prefix352": "b8c0f18d887c7f5a81ece452f0a4097a0cc1a67710a137d66e677fcfd78b5ba3",
+    "omega_prefix352": "fd63608399edaede2c4f928a25d5478eacc3711f6d626ae770ad107e7f4c488d"
+  },
+  "match": {
+    "rho_final": true,
+    "rho_prefix352": true,
+    "omega_prefix352": true
+  },
+  "stageStarts": [
+    1,
+    275,
+    314,
+    353
+  ],
+  "descents": [
+    [
+      275,
+      1,
+      274,
+      255
+    ],
+    [
+      314,
+      2,
+      313,
+      294
+    ],
+    [
+      353,
+      3,
+      352,
+      333
+    ]
+  ],
+  "exW": 20,
+  "exP": 20,
+  "exWnp": 10,
+  "exTol": 0.1,
+  "eventBranch": [
+    "A",
+    "B",
+    "B"
+  ],
+  "s3": {
+    "omega1": 166.42726927757769,
+    "omega2": 203.58101247948915,
+    "gap12": 0.22324312213489572,
+    "volume": 0.49999874883108736,
+    "move": 0.01,
+    "stage": 3,
+    "multN": 2,
+    "nInner": 19,
+    "innerConv": 1,
+    "cumInner": 6498
+  },
+  "oracleOk": true,
+  "verdict": "C320_ORACLE_DEPENDENCY_PASS"
+}

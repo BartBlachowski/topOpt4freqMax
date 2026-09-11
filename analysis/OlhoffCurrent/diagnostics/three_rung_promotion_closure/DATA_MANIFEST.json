@@ -1,0 +1,199 @@
+{
+  "manifest_schema": "olhoff_current_data_manifest/1",
+  "study": "three_rung_promotion_closure",
+  "generated": "2026-09-11T13:10:36+02:00",
+  "repo_head": "60f5b72519aeba942b650d5408339f7ffe6b978b",
+  "implTree": "edbfe47eb32109a2fb017f6f13d5327f2c240357caa96630064ffcf37ee152cb",
+  "scientific_runs": 0,
+  "promoted": false,
+  "files": [
+    {
+      "path": "C240_TRANSFER_VERIFICATION.md",
+      "bytes": 4988,
+      "sha256": "0438e98c9d9c4a64f2d6fa50a3e4a7dec4d20d2a2067262453b254631890e0bc",
+      "kind": "document"
+    },
+    {
+      "path": "CONFIG_EQUIVALENCE.md",
+      "bytes": 2412,
+      "sha256": "35efe3623addc0d19a110c06d5caebae31e257e8ebc06265b122a8e6da6666b2",
+      "kind": "document"
+    },
+    {
+      "path": "DISPATCH_EQUIVALENCE.md",
+      "bytes": 3193,
+      "sha256": "87061a0686cb3886e7d783568aeb394cdea20207338bc8081d9940426a46bc6e",
+      "kind": "document"
+    },
+    {
+      "path": "EVIDENCE.json",
+      "bytes": 5709,
+      "sha256": "2dbd70c441ff625cbd5fb530fc4a9b8da536d1f7ba34bcb5fc6a977d008d10f2",
+      "kind": "manifest"
+    },
+    {
+      "path": "HISTORICAL_HASH_REPAIR.md",
+      "bytes": 5562,
+      "sha256": "e73bd337272f060fa54e4e38142e2aef9f3a433ef8b35e3bd5d5828df9e55513",
+      "kind": "document"
+    },
+    {
+      "path": "METRICS.json",
+      "bytes": 16030,
+      "sha256": "bcf0f753e7a49fc6d2967cdd6e61e05676a93d1dbb0e820a7e863731524d4ead",
+      "kind": "manifest"
+    },
+    {
+      "path": "PERFORMANCE_READINESS.md",
+      "bytes": 3295,
+      "sha256": "f03009e48fc8b0f19ca3c49c6011dae28a1e58eefb4212b705b9c810147ecd2d",
+      "kind": "document"
+    },
+    {
+      "path": "PREREGISTRATION.md",
+      "bytes": 7363,
+      "sha256": "0c996cd8025141e66f4bd8a0830b736edf63bf9cd1ea482edc951d082c6fc462",
+      "kind": "document"
+    },
+    {
+      "path": "PRODUCTION_FREEZE.md",
+      "bytes": 3499,
+      "sha256": "8c77736c1456a4f32e08ecca1d7d70bae1ecf33ab7eb4c245ad4c61ffb5069b3",
+      "kind": "document"
+    },
+    {
+      "path": "PROMOTION.md",
+      "bytes": 2196,
+      "sha256": "e3227419c2cd651ba7bf0983be0b77f6861f2589e80b1b6065c85ed10a53c76d",
+      "kind": "document"
+    },
+    {
+      "path": "PROMOTION_DIFF_PLAN.md",
+      "bytes": 4744,
+      "sha256": "cb459b8f39cf233213a9be4e4c04f051b7764608ecfc3bf75b3f8c083e230ad6",
+      "kind": "document"
+    },
+    {
+      "path": "PROMOTION_PROVENANCE.md",
+      "bytes": 5894,
+      "sha256": "b1f226db88c8d0f4568aca2fa57a65116dec694e053e496846547ca457b4169d",
+      "kind": "document"
+    },
+    {
+      "path": "PROVENANCE.md",
+      "bytes": 5678,
+      "sha256": "b519cac063bfbe50901589b7c22cf9c2cf71eb67f854fc0a0624e8bdd57a094c",
+      "kind": "document"
+    },
+    {
+      "path": "PROVENANCE_REPAIR.md",
+      "bytes": 4892,
+      "sha256": "d7c7211c8f4c5350e4ae0024c07833d5f3cdc627cbae27a03ebfe49880d38eef",
+      "kind": "document"
+    },
+    {
+      "path": "REPORT.md",
+      "bytes": 14742,
+      "sha256": "608c328965b75f16c1fbb65860e92125c98a49e45a822c759dccf74c50de12dd",
+      "kind": "document"
+    },
+    {
+      "path": "SOFTWARE_VALIDATION.md",
+      "bytes": 4910,
+      "sha256": "1cf9ac006932757dbf834153291bd9a3228cc6a9d9712e06f6b16a0b7b25ffb3",
+      "kind": "document"
+    },
+    {
+      "path": "TIMING_TELEMETRY_AUDIT.md",
+      "bytes": 5172,
+      "sha256": "759ea96c0de0187db742a476ec460784b0022b7e1ae78cbcf22b0e42302c5ce4",
+      "kind": "document"
+    },
+    {
+      "path": "VALIDATED_POLICY_RECOVERY.md",
+      "bytes": 4366,
+      "sha256": "3d263a55e9e15b2c4572526b1d3a2deb1e3ab0a4e2a9fd0604ce3195b63a026c",
+      "kind": "document"
+    },
+    {
+      "path": "evidence/blockers.json",
+      "bytes": 3601,
+      "sha256": "1bea13654fb64caad37ee0e351e0e86fc1ce718de40c3d9795d483277b6c9eaa",
+      "kind": "evidence"
+    },
+    {
+      "path": "evidence/inventory.json",
+      "bytes": 5431,
+      "sha256": "963b15e4007d62a86c71a9b57040a96cdf509dcc4784e896d97625c49270a8ce",
+      "kind": "evidence"
+    },
+    {
+      "path": "evidence/policy_recovery.json",
+      "bytes": 8354,
+      "sha256": "54fb77ee0a7fb3240f20721850e2ec34e275ebf0b2ec6f8bf17cc00662ee6181",
+      "kind": "evidence"
+    },
+    {
+      "path": "evidence/preserved_working_copies/C320x40_iterations.WORKING_COPY.csv",
+      "bytes": 1.138289E+6,
+      "sha256": "6ac72fa880f2e9fb545afcabbd092fe6be32bc132845e55d61b6d5baa4325a22",
+      "kind": "evidence"
+    },
+    {
+      "path": "evidence/preserved_working_copies/C320x40_record.WORKING_COPY.json",
+      "bytes": 2896,
+      "sha256": "765604214a4074ab133d131befec243d93fd502de404570be76d4a5e78c28e55",
+      "kind": "evidence"
+    },
+    {
+      "path": "evidence/software_tests.json",
+      "bytes": 5185,
+      "sha256": "2ee5f26ce2afd319d2192876552d59be23f2937e516793dc13cc9be60f79d791",
+      "kind": "evidence"
+    },
+    {
+      "path": "evidence/two_branch_FINAL_SHA256.BEFORE.txt",
+      "bytes": 11399,
+      "sha256": "2fb9fc731d816e5c47c9835d5f777f8bb3be2fe61773ca00119049ed2bf5e0e0",
+      "kind": "evidence"
+    },
+    {
+      "path": "scripts/tr_blockers.m",
+      "bytes": 2902,
+      "sha256": "3fd5706efa342349a4ae52f0fc13e6df8c45d9428a0c418f14fae514f0826c4d",
+      "kind": "script"
+    },
+    {
+      "path": "scripts/tr_finalize.m",
+      "bytes": 8917,
+      "sha256": "bba9ee2614a0daf1cc6881bd3d815540404b8e42a66d15ca5e2a2a866c96550f",
+      "kind": "script"
+    },
+    {
+      "path": "scripts/tr_inventory.m",
+      "bytes": 6255,
+      "sha256": "b5d660129e8c4237a9322802e5af34ca357da2359b0bc17dcdd9e2672aed538f",
+      "kind": "script"
+    },
+    {
+      "path": "scripts/tr_policy_recovery.m",
+      "bytes": 8490,
+      "sha256": "092eac29e66e8b23512947ad992938aef89dcff755b2f5b87b84c8350eb8591d",
+      "kind": "script"
+    },
+    {
+      "path": "scripts/tr_tests.m",
+      "bytes": 2862,
+      "sha256": "4e47181fea217c6a612f320483f6c43045ee254c3ab3a90d4d53d2beab8070da",
+      "kind": "script"
+    },
+    {
+      "path": "scripts/tr_tests_retry.m",
+      "bytes": 12986,
+      "sha256": "6f2377e316680742639f374970288f677a7a54aa8d2a7bcd1e7c54e5a83059e0",
+      "kind": "script"
+    }
+  ],
+  "n_files": 31,
+  "note": "No runs/ directory: this study executed zero scientific runs. The validated C320 evidence it reuses lives in diagnostics/three_rung_promotion_validation_retry1 and is unmodified."
+}

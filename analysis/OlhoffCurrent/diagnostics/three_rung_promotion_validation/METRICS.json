@@ -1,0 +1,149 @@
+{
+  "study": "three_rung_promotion_validation",
+  "verdict": "THREE_RUNG_PROMOTION_PROVENANCE_FAIL",
+  "stopped_at_phase": 1,
+  "scientific_runs_executed": 0,
+  "production_changed": false,
+  "commit_created": false,
+  "branch": "benchmark-methodology-r2",
+  "head_start": "60f5b72519aeba942b650d5408339f7ffe6b978b",
+  "head_final": "60f5b72519aeba942b650d5408339f7ffe6b978b",
+  "impl_tree_start": "edbfe47eb32109a2fb017f6f13d5327f2c240357caa96630064ffcf37ee152cb",
+  "impl_tree_final": "edbfe47eb32109a2fb017f6f13d5327f2c240357caa96630064ffcf37ee152cb",
+  "matlab": "25.2.0.3042426 (R2025b) Update 1",
+  "maxNumCompThreads": 10,
+  "phase0": {
+    "currentness": "CURRENT",
+    "source_integrity": "PASS",
+    "dispatch": "PASS",
+    "published_mma_wins": true,
+    "sensitivity_filter_wins": true,
+    "forbidden_trees_blocked": true,
+    "c320_oracle_present_and_hash_valid": true,
+    "finalization_gate_operational": true,
+    "tests_pass": false
+  },
+  "finalization_gates": {
+    "two_branch_controller_validation": {
+      "G1": true,
+      "G2": false,
+      "G3": true,
+      "G4": false,
+      "G5": true,
+      "ok": false
+    },
+    "three_rung_architecture": {
+      "G1": true,
+      "G2": false,
+      "G3": true,
+      "G4": true,
+      "G5": true,
+      "ok": false
+    },
+    "three_rung_resolution_240": {
+      "G1": true,
+      "G2": false,
+      "G3": true,
+      "G4": true,
+      "G5": true,
+      "ok": false
+    }
+  },
+  "tests": {
+    "test_currentness": 0,
+    "test_source_integrity": 0,
+    "test_path_isolation": 0,
+    "test_evidence_retention": 0,
+    "test_finalization_gate": 4,
+    "test_preset_equivalence": "NOT RUN - would execute a 160x20 optimization, forbidden by the brief"
+  },
+  "controller_recovery": {
+    "status": "PASS",
+    "ambiguous": false,
+    "W": 20,
+    "P": 20,
+    "Wnp": 10,
+    "tol_rule": "0.05*sqrt(NE/3200)",
+    "tol_at_320x40": 0.1,
+    "A": "med20 cos < 0 AND med20 net < 0.5 AND amp >= tol",
+    "B": "amp < tol AND med20 cos > 0",
+    "E": "A OR B",
+    "online_impl": "+impl/architecture/+olh/+move/exhaustion.m",
+    "offline_impl": "diagnostics/two_branch_maturity_240/scripts/tb_branches.m",
+    "three_rung_change_is_config_only": true
+  },
+  "c320_oracle": {
+    "status": "CAP_HIT",
+    "nOuter": 1600,
+    "stage_final": 4,
+    "innerTotal": 76532,
+    "innerNonConv": 0,
+    "rho_sha256": "0348b288da711f2bdcd89263f7feaae33ccaedcb73a133a1a5e941421795bfb3",
+    "verified_intact": true,
+    "events": [
+      {
+        "event": "S1",
+        "declBegin": 255,
+        "declIter": 274,
+        "branch": "A",
+        "move": 0.04,
+        "descentApplied": 275
+      },
+      {
+        "event": "S2",
+        "declBegin": 294,
+        "declIter": 313,
+        "branch": "B",
+        "move": 0.02,
+        "descentApplied": 314
+      },
+      {
+        "event": "S3",
+        "declBegin": 333,
+        "declIter": 352,
+        "branch": "B",
+        "move": 0.01,
+        "descentApplied": 353
+      }
+    ],
+    "s3_state": {
+      "omega1": 166.4272692775777,
+      "omega2": 203.58101247948915,
+      "gap12": 0.22324312213489572,
+      "volume": 0.49999874883108736,
+      "Mnd": 12.940093529981478,
+      "gray": 0.15296875,
+      "mid": 0.03015625,
+      "move": 0.01,
+      "stage": 3,
+      "multN": 2,
+      "cumInner": 6498
+    }
+  },
+  "predicted_not_validated": {
+    "note": "Derived from EXISTING evidence and a static code audit. NOT a validated result - the authorized C320 three-rung run was never executed.",
+    "predicted_terminal": "CONVERGED @352",
+    "outer_iterations_eliminated": 1248,
+    "outer_percent_eliminated": 78.0,
+    "inner_mma_eliminated": 70034,
+    "inner_percent_eliminated": 91.51
+  },
+  "verdicts_issued": {
+    "THREE_RUNG_SINGLE_FACTOR": "NOT REACHED",
+    "C320_THREE_RUNG_PREFIX_EQUIVALENCE": "NOT REACHED",
+    "C320_THREE_RUNG_TERMINATION": "NOT REACHED",
+    "THREE_RUNG_PRODUCTION_POLICY": "NOT REACHED",
+    "PRODUCTION_THREE_RUNG_CONTROLLER": "NOT_PROMOTED",
+    "NINE_MESH_PERFORMANCE_CAMPAIGN": "BLOCKED"
+  },
+  "blocker_classification": {
+    "summary": "evidence locality on this host, plus one stale committed hash file. NOT scientific damage.",
+    "prior_task_ran_on_different_machine": true,
+    "evidence_dir_is_gitignored_wholesale": true,
+    "class_a": "C160/C320/C400 trajectories locally regenerated; container digests stale; science verified bit-identical against committed rho_sha256",
+    "class_b": "C240x30_trajectory.mat absent on this host because it was produced elsewhere and evidence/ is git-ignored; recoverable by file copy, NOT lost",
+    "class_c": "two_branch_controller_validation/FINAL_SHA256.txt stale against its own committed PROVENANCE.md, BASELINES.md, evidence/baselines.json; machine-independent; repairable by regenerating one hash file",
+    "gate_used": "olhoffcurrent_finalization_gate (resolves mixed study-relative/repo-relative bases); failures are content mismatches, not unresolved paths",
+    "c320_oracle_unaffected": true
+  }
+}

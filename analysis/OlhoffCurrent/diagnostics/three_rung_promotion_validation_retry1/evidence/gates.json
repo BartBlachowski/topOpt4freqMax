@@ -1,0 +1,57 @@
+[
+  {
+    "study": "two_branch_controller_validation",
+    "ok": false,
+    "G1": true,
+    "G2": false,
+    "G3": true,
+    "G4": false,
+    "G5": true,
+    "missing": [],
+    "mismatched": [
+      "PROVENANCE.md",
+      "BASELINES.md",
+      "evidence/baselines.json",
+      "runs/C320x40_iterations.csv",
+      "runs/C320x40_record.json",
+      "analysis/OlhoffCurrent/evidence/two_branch_controller_validation/C160x20_trajectory.mat",
+      "analysis/OlhoffCurrent/evidence/two_branch_controller_validation/C320x40_trajectory.mat",
+      "analysis/OlhoffCurrent/evidence/two_branch_controller_validation/C400x50_trajectory.mat",
+      "analysis/OlhoffCurrent/evidence/move_activity_400/F400_400x50_trajectory.mat",
+      "analysis/OlhoffCurrent/evidence/move_activity_400/P400_400x50_trajectory.mat"
+    ]
+  },
+  {
+    "study": "three_rung_architecture",
+    "ok": false,
+    "G1": true,
+    "G2": false,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "missing": [],
+    "mismatched": []
+  },
+  {
+    "study": "three_rung_resolution_240",
+    "ok": false,
+    "G1": true,
+    "G2": false,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "missing": [],
+    "mismatched": []
+  },
+  {
+    "study": "two_branch_maturity_240",
+    "ok": false,
+    "G1": false,
+    "G2": false,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "missing": [],
+    "mismatched": []
+  }
+]

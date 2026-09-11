@@ -1,0 +1,913 @@
+{
+  "nOuterNew": 352,
+  "nOuterOld": 1600,
+  "implTreeNew": "edbfe47eb32109a2fb017f6f13d5327f2c240357caa96630064ffcf37ee152cb",
+  "implTreeOld": "edbfe47eb32109a2fb017f6f13d5327f2c240357caa96630064ffcf37ee152cb",
+  "implTreeSame": true,
+  "anchors": {
+    "rho": "b8c0f18d887c7f5a81ece452f0a4097a0cc1a67710a137d66e677fcfd78b5ba3",
+    "omega": "fd63608399edaede2c4f928a25d5478eacc3711f6d626ae770ad107e7f4c488d",
+    "rhoExpected": "b8c0f18d887c7f5a81ece452f0a4097a0cc1a67710a137d66e677fcfd78b5ba3",
+    "omegaExpected": "fd63608399edaede2c4f928a25d5478eacc3711f6d626ae770ad107e7f4c488d",
+    "rhoMatch": true,
+    "omegaMatch": true,
+    "rhoVsOracle": true,
+    "drhoVsOracle": true
+  },
+  "hist": [
+    {
+      "field": "N",
+      "ok": true,
+      "nDiff": 0,
+      "maxAbsDev": 0,
+      "excluded": false
+    },
+    {
+      "field": "beta",
+      "ok": true,
+      "nDiff": 0,
+      "maxAbsDev": 0,
+      "excluded": false
+    },
+    {
+      "field": "cumInner",
+      "ok": true,
+      "nDiff": 0,
+      "maxAbsDev": 0,
+      "excluded": false
+    },
+    {
+      "field": "dBeta",
+      "ok": true,
+      "nDiff": 0,
+      "maxAbsDev": 0,
+      "excluded": false
+    },
+    {
+      "field": "degen",
+      "ok": true,
+      "nDiff": 0,
+      "maxAbsDev": 0,
+      "excluded": false
+    },
+    {
+      "field": "dxNorm2",
+      "ok": true,
+      "nDiff": 0,
+      "maxAbsDev": 0,
+      "excluded": false
+    },
+    {
+      "field": "dxOuter",
+      "ok": true,
+      "nDiff": 0,
+      "maxAbsDev": 0,
+      "excluded": false
+    },
+    {
+      "field": "dxPhys2",
+      "ok": true,
+      "nDiff": 0,
+      "maxAbsDev": 0,
+      "excluded": false
+    },
+    {
+      "field": "exA",
+      "ok": true,
+      "nDiff": 0,
+      "maxAbsDev": 0,
+      "excluded": false
+    },
+    {
+      "field": "exAmp",
+      "ok": true,
+      "nDiff": 0,
+      "maxAbsDev": 0,
+      "excluded": false
+    },
+    {
+      "field": "exB",
+      "ok": true,
+      "nDiff": 0,
+      "maxAbsDev": 0,
+      "excluded": false
+    },
+    {
+      "field": "exCos",
+      "ok": true,
+      "nDiff": 0,
+      "maxAbsDev": 0,
+      "excluded": false
+    },
+    {
+      "field": "exDecl",
+      "ok": true,
+      "nDiff": 0,
+      "maxAbsDev": 0,
+      "excluded": false
+    },
+    {
+      "field": "exE",
+      "ok": true,
+      "nDiff": 0,
+      "maxAbsDev": 0,
+      "excluded": false
+    },
+    {
+      "field": "exMedcos",
+      "ok": true,
+      "nDiff": 0,
+      "maxAbsDev": 0,
+      "excluded": false
+    },
+    {
+      "field": "exMednet",
+      "ok": true,
+      "nDiff": 0,
+      "maxAbsDev": 0,
+      "excluded": false
+    },
+    {
+      "field": "exNA",
+      "ok": true,
+      "nDiff": 0,
+      "maxAbsDev": 0,
+      "excluded": false
+    },
+    {
+      "field": "exNB",
+      "ok": true,
+      "nDiff": 0,
+      "maxAbsDev": 0,
+      "excluded": false
+    },
+    {
+      "field": "exNet",
+      "ok": true,
+      "nDiff": 0,
+      "maxAbsDev": 0,
+      "excluded": false
+    },
+    {
+      "field": "exStageStart",
+      "ok": true,
+      "nDiff": 0,
+      "maxAbsDev": 0,
+      "excluded": false
+    },
+    {
+      "field": "gap12",
+      "ok": true,
+      "nDiff": 0,
+      "maxAbsDev": 0,
+      "excluded": false
+    },
+    {
+      "field": "innerConv",
+      "ok": true,
+      "nDiff": 0,
+      "maxAbsDev": 0,
+      "excluded": false
+    },
+    {
+      "field": "massLow",
+      "ok": true,
+      "nDiff": 0,
+      "maxAbsDev": 0,
+      "excluded": false
+    },
+    {
+      "field": "move",
+      "ok": true,
+      "nDiff": 0,
+      "maxAbsDev": 0,
+      "excluded": false
+    },
+    {
+      "field": "multJ",
+      "ok": true,
+      "nDiff": 0,
+      "maxAbsDev": 0,
+      "excluded": false
+    },
+    {
+      "field": "nInner",
+      "ok": true,
+      "nDiff": 0,
+      "maxAbsDev": 0,
+      "excluded": false
+    },
+    {
+      "field": "omega",
+      "ok": true,
+      "nDiff": 0,
+      "maxAbsDev": 0,
+      "excluded": false
+    },
+    {
+      "field": "pEvent",
+      "ok": true,
+      "nDiff": 0,
+      "maxAbsDev": 0,
+      "excluded": false
+    },
+    {
+      "field": "pPen",
+      "ok": true,
+      "nDiff": 0,
+      "maxAbsDev": 0,
+      "excluded": false
+    },
+    {
+      "field": "pStage",
+      "ok": true,
+      "nDiff": 0,
+      "maxAbsDev": 0,
+      "excluded": false
+    },
+    {
+      "field": "projBeta",
+      "ok": true,
+      "nDiff": 0,
+      "maxAbsDev": 0,
+      "excluded": false
+    },
+    {
+      "field": "projEvent",
+      "ok": true,
+      "nDiff": 0,
+      "maxAbsDev": 0,
+      "excluded": false
+    },
+    {
+      "field": "projStage",
+      "ok": true,
+      "nDiff": 0,
+      "maxAbsDev": 0,
+      "excluded": false
+    },
+    {
+      "field": "stage",
+      "ok": true,
+      "nDiff": 0,
+      "maxAbsDev": 0,
+      "excluded": false
+    },
+    {
+      "field": "tEig",
+      "ok": false,
+      "nDiff": 352,
+      "maxAbsDev": 0.181152125,
+      "excluded": true
+    },
+    {
+      "field": "tGrad",
+      "ok": false,
+      "nDiff": 352,
+      "maxAbsDev": 0.091259833333333332,
+      "excluded": true
+    },
+    {
+      "field": "tInner",
+      "ok": false,
+      "nDiff": 352,
+      "maxAbsDev": 4.9704743333333337,
+      "excluded": true
+    },
+    {
+      "field": "tOuter",
+      "ok": false,
+      "nDiff": 352,
+      "maxAbsDev": 5.0703297083333325,
+      "excluded": true
+    },
+    {
+      "field": "vol",
+      "ok": true,
+      "nDiff": 0,
+      "maxAbsDev": 0,
+      "excluded": false
+    },
+    {
+      "field": "volErr",
+      "ok": true,
+      "nDiff": 0,
+      "maxAbsDev": 0,
+      "excluded": false
+    }
+  ],
+  "csv": [
+    {
+      "col": "outer",
+      "ok": true,
+      "nDiff": 0,
+      "maxAbsDev": 0,
+      "excluded": false
+    },
+    {
+      "col": "omega1",
+      "ok": true,
+      "nDiff": 0,
+      "maxAbsDev": 0,
+      "excluded": false
+    },
+    {
+      "col": "omega2",
+      "ok": true,
+      "nDiff": 0,
+      "maxAbsDev": 0,
+      "excluded": false
+    },
+    {
+      "col": "gap12",
+      "ok": true,
+      "nDiff": 0,
+      "maxAbsDev": 0,
+      "excluded": false
+    },
+    {
+      "col": "volume",
+      "ok": true,
+      "nDiff": 0,
+      "maxAbsDev": 0,
+      "excluded": false
+    },
+    {
+      "col": "volErr",
+      "ok": true,
+      "nDiff": 0,
+      "maxAbsDev": 0,
+      "excluded": false
+    },
+    {
+      "col": "Mnd",
+      "ok": true,
+      "nDiff": 0,
+      "maxAbsDev": 0,
+      "excluded": false
+    },
+    {
+      "col": "gray",
+      "ok": true,
+      "nDiff": 0,
+      "maxAbsDev": 0,
+      "excluded": false
+    },
+    {
+      "col": "mid",
+      "ok": true,
+      "nDiff": 0,
+      "maxAbsDev": 0,
+      "excluded": false
+    },
+    {
+      "col": "move",
+      "ok": true,
+      "nDiff": 0,
+      "maxAbsDev": 0,
+      "excluded": false
+    },
+    {
+      "col": "stage",
+      "ok": true,
+      "nDiff": 0,
+      "maxAbsDev": 0,
+      "excluded": false
+    },
+    {
+      "col": "moveChanged",
+      "ok": true,
+      "nDiff": 0,
+      "maxAbsDev": 0,
+      "excluded": false
+    },
+    {
+      "col": "descent",
+      "ok": true,
+      "nDiff": 0,
+      "maxAbsDev": 0,
+      "excluded": false
+    },
+    {
+      "col": "beta",
+      "ok": true,
+      "nDiff": 0,
+      "maxAbsDev": 0,
+      "excluded": false
+    },
+    {
+      "col": "betaStallRel",
+      "ok": true,
+      "nDiff": 0,
+      "maxAbsDev": 0,
+      "excluded": false
+    },
+    {
+      "col": "betaStallFires",
+      "ok": true,
+      "nDiff": 0,
+      "maxAbsDev": 0,
+      "excluded": false
+    },
+    {
+      "col": "prodStageShadow",
+      "ok": false,
+      "nDiff": 201,
+      "maxAbsDev": 1,
+      "excluded": true
+    },
+    {
+      "col": "prodMoveShadow",
+      "ok": false,
+      "nDiff": 201,
+      "maxAbsDev": 0.005,
+      "excluded": true
+    },
+    {
+      "col": "prodTol",
+      "ok": true,
+      "nDiff": 0,
+      "maxAbsDev": 0,
+      "excluded": false
+    },
+    {
+      "col": "prodStopRaw",
+      "ok": true,
+      "nDiff": 0,
+      "maxAbsDev": 0,
+      "excluded": false
+    },
+    {
+      "col": "prodSettled",
+      "ok": true,
+      "nDiff": 0,
+      "maxAbsDev": 0,
+      "excluded": false
+    },
+    {
+      "col": "prodStopAdmit",
+      "ok": true,
+      "nDiff": 0,
+      "maxAbsDev": 0,
+      "excluded": false
+    },
+    {
+      "col": "exA",
+      "ok": true,
+      "nDiff": 0,
+      "maxAbsDev": 0,
+      "excluded": false
+    },
+    {
+      "col": "exB",
+      "ok": true,
+      "nDiff": 0,
+      "maxAbsDev": 0,
+      "excluded": false
+    },
+    {
+      "col": "exE",
+      "ok": true,
+      "nDiff": 0,
+      "maxAbsDev": 0,
+      "excluded": false
+    },
+    {
+      "col": "exNA",
+      "ok": true,
+      "nDiff": 0,
+      "maxAbsDev": 0,
+      "excluded": false
+    },
+    {
+      "col": "exNB",
+      "ok": true,
+      "nDiff": 0,
+      "maxAbsDev": 0,
+      "excluded": false
+    },
+    {
+      "col": "exDecl",
+      "ok": true,
+      "nDiff": 0,
+      "maxAbsDev": 0,
+      "excluded": false
+    },
+    {
+      "col": "exAmp",
+      "ok": true,
+      "nDiff": 0,
+      "maxAbsDev": 0,
+      "excluded": false
+    },
+    {
+      "col": "exCos",
+      "ok": true,
+      "nDiff": 0,
+      "maxAbsDev": 0,
+      "excluded": false
+    },
+    {
+      "col": "exNet",
+      "ok": true,
+      "nDiff": 0,
+      "maxAbsDev": 0,
+      "excluded": false
+    },
+    {
+      "col": "exMedcos",
+      "ok": true,
+      "nDiff": 0,
+      "maxAbsDev": 0,
+      "excluded": false
+    },
+    {
+      "col": "exMednet",
+      "ok": true,
+      "nDiff": 0,
+      "maxAbsDev": 0,
+      "excluded": false
+    },
+    {
+      "col": "exTol",
+      "ok": true,
+      "nDiff": 0,
+      "maxAbsDev": 0,
+      "excluded": false
+    },
+    {
+      "col": "exStageStart",
+      "ok": true,
+      "nDiff": 0,
+      "maxAbsDev": 0,
+      "excluded": false
+    },
+    {
+      "col": "cosT",
+      "ok": true,
+      "nDiff": 0,
+      "maxAbsDev": 0,
+      "excluded": false
+    },
+    {
+      "col": "net_ratio",
+      "ok": true,
+      "nDiff": 0,
+      "maxAbsDev": 0,
+      "excluded": false
+    },
+    {
+      "col": "cosT_unsat",
+      "ok": true,
+      "nDiff": 0,
+      "maxAbsDev": 0,
+      "excluded": false
+    },
+    {
+      "col": "net_ratio_unsat",
+      "ok": true,
+      "nDiff": 0,
+      "maxAbsDev": 0,
+      "excluded": false
+    },
+    {
+      "col": "boundFrac",
+      "ok": true,
+      "nDiff": 0,
+      "maxAbsDev": 0,
+      "excluded": false
+    },
+    {
+      "col": "revFrac",
+      "ok": true,
+      "nDiff": 0,
+      "maxAbsDev": 0,
+      "excluded": false
+    },
+    {
+      "col": "maxAbs",
+      "ok": true,
+      "nDiff": 0,
+      "maxAbsDev": 0,
+      "excluded": false
+    },
+    {
+      "col": "ratio",
+      "ok": true,
+      "nDiff": 0,
+      "maxAbsDev": 0,
+      "excluded": false
+    },
+    {
+      "col": "l2",
+      "ok": true,
+      "nDiff": 0,
+      "maxAbsDev": 0,
+      "excluded": false
+    },
+    {
+      "col": "rms",
+      "ok": true,
+      "nDiff": 0,
+      "maxAbsDev": 0,
+      "excluded": false
+    },
+    {
+      "col": "stepNorm",
+      "ok": true,
+      "nDiff": 0,
+      "maxAbsDev": 0,
+      "excluded": false
+    },
+    {
+      "col": "path_W",
+      "ok": true,
+      "nDiff": 0,
+      "maxAbsDev": 0,
+      "excluded": false
+    },
+    {
+      "col": "net_W",
+      "ok": true,
+      "nDiff": 0,
+      "maxAbsDev": 0,
+      "excluded": false
+    },
+    {
+      "col": "nInner",
+      "ok": true,
+      "nDiff": 0,
+      "maxAbsDev": 0,
+      "excluded": false
+    },
+    {
+      "col": "cumInner",
+      "ok": true,
+      "nDiff": 0,
+      "maxAbsDev": 0,
+      "excluded": false
+    },
+    {
+      "col": "innerConv",
+      "ok": true,
+      "nDiff": 0,
+      "maxAbsDev": 0,
+      "excluded": false
+    },
+    {
+      "col": "multN",
+      "ok": true,
+      "nDiff": 0,
+      "maxAbsDev": 0,
+      "excluded": false
+    },
+    {
+      "col": "multJ",
+      "ok": true,
+      "nDiff": 0,
+      "maxAbsDev": 0,
+      "excluded": false
+    },
+    {
+      "col": "degen",
+      "ok": true,
+      "nDiff": 0,
+      "maxAbsDev": 0,
+      "excluded": false
+    },
+    {
+      "col": "tOuter",
+      "ok": false,
+      "nDiff": 352,
+      "maxAbsDev": 1.8092609166666667,
+      "excluded": true
+    }
+  ],
+  "csvIncludedOk": true,
+  "histIncludedOk": true,
+  "excludedReport": [
+    {
+      "col": "prodStageShadow",
+      "ok": false,
+      "nDiff": 201,
+      "maxAbsDev": 1,
+      "excluded": true
+    },
+    {
+      "col": "prodMoveShadow",
+      "ok": false,
+      "nDiff": 201,
+      "maxAbsDev": 0.005,
+      "excluded": true
+    },
+    {
+      "col": "tOuter",
+      "ok": false,
+      "nDiff": 352,
+      "maxAbsDev": 1.8092609166666667,
+      "excluded": true
+    }
+  ],
+  "descentsNew": [
+    [
+      275,
+      1,
+      274,
+      255
+    ],
+    [
+      314,
+      2,
+      313,
+      294
+    ]
+  ],
+  "descentsOld": [
+    [
+      275,
+      1,
+      274,
+      255
+    ],
+    [
+      314,
+      2,
+      313,
+      294
+    ],
+    [
+      353,
+      3,
+      352,
+      333
+    ]
+  ],
+  "branchesNew": [
+    "A",
+    "B"
+  ],
+  "branchesOld": [
+    "A",
+    "B",
+    "B"
+  ],
+  "stageStartsNew": [
+    1,
+    275,
+    314
+  ],
+  "stageStartsOld": [
+    1,
+    275,
+    314,
+    353
+  ],
+  "declIterNew": 352,
+  "declBranchNew": "B",
+  "declBeginNew": 333,
+  "declaredNew": true,
+  "S1": {
+    "declIter": 274,
+    "branch": "A",
+    "ok": true
+  },
+  "S2": {
+    "declIter": 313,
+    "branch": "B",
+    "ok": true
+  },
+  "S3": {
+    "declIter": 352,
+    "branch": "B",
+    "ok": true
+  },
+  "eventsOk": true,
+  "prefixPassLiteral": false,
+  "literalFailures": [
+    "tEig",
+    "tGrad",
+    "tInner"
+  ],
+  "prefixPassCategory": true,
+  "categoryFailures": [],
+  "prefixPass": true,
+  "timingOnlyDivergence": true,
+  "prefixVerdict": "C320_THREE_RUNG_PREFIX_EQUIVALENCE_PASS",
+  "terminal": [
+    {
+      "field": "omega1",
+      "oracle": 166.42726927757769,
+      "got": 166.42726927757769,
+      "ok": true,
+      "absDev": 0
+    },
+    {
+      "field": "omega2",
+      "oracle": 203.58101247948915,
+      "got": 203.58101247948915,
+      "ok": true,
+      "absDev": 0
+    },
+    {
+      "field": "gap12",
+      "oracle": 0.22324312213489572,
+      "got": 0.22324312213489572,
+      "ok": true,
+      "absDev": 0
+    },
+    {
+      "field": "volume",
+      "oracle": 0.49999874883108736,
+      "got": 0.49999874883108736,
+      "ok": true,
+      "absDev": 0
+    },
+    {
+      "field": "Mnd",
+      "oracle": 12.940093529981478,
+      "got": 12.940093529981478,
+      "ok": true,
+      "absDev": 0
+    },
+    {
+      "field": "gray",
+      "oracle": 0.15296875,
+      "got": 0.15296875,
+      "ok": true,
+      "absDev": 0
+    },
+    {
+      "field": "mid",
+      "oracle": 0.03015625,
+      "got": 0.03015625,
+      "ok": true,
+      "absDev": 0
+    },
+    {
+      "field": "move",
+      "oracle": 0.01,
+      "got": 0.01,
+      "ok": true,
+      "absDev": 0
+    },
+    {
+      "field": "stage",
+      "oracle": 3,
+      "got": 3,
+      "ok": true,
+      "absDev": 0
+    },
+    {
+      "field": "multN",
+      "oracle": 2,
+      "got": 2,
+      "ok": true,
+      "absDev": 0
+    },
+    {
+      "field": "nInner",
+      "oracle": 19,
+      "got": 19,
+      "ok": true,
+      "absDev": 0
+    },
+    {
+      "field": "innerConv",
+      "oracle": 1,
+      "got": 1,
+      "ok": true,
+      "absDev": 0
+    },
+    {
+      "field": "cumInner",
+      "oracle": 6498,
+      "got": 6498,
+      "ok": true,
+      "absDev": 0
+    }
+  ],
+  "terminalStateOk": true,
+  "status": "CONVERGED",
+  "nOuter": 352,
+  "innerNonConv": 0,
+  "capHit": false,
+  "visitedMoves": [
+    0.01,
+    0.02,
+    0.04
+  ],
+  "touched0005": false,
+  "maxStage": 3,
+  "terminationPass": true,
+  "terminationVerdict": "C320_THREE_RUNG_TERMINATION_PASS",
+  "cost": {
+    "outerFour": 1600,
+    "outerThree": 352,
+    "innerFour": 76532,
+    "innerThree": 6498,
+    "outerSaved": 1248,
+    "outerSavedPct": 78,
+    "innerSaved": 70034,
+    "innerSavedPct": 91.509433962264154
+  }
+}

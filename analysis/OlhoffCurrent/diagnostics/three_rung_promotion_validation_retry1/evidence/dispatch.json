@@ -1,0 +1,82 @@
+{
+  "dispatchOk": true,
+  "dispatchErr": "",
+  "controller": [
+    {
+      "path": "+impl/architecture/+olh/+move/exhaustion.m",
+      "sha256": "17b37a384b1aa5d987d9c861e16071d1140af130f92406ccc11cec4518bcae0c",
+      "resolvesTo": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/architecture/+olh/+move/exhaustion.m",
+      "isProduction": true
+    },
+    {
+      "path": "+impl/architecture/+olh/+move/limit.m",
+      "sha256": "61fa923d430121ead764a229b4f48dfd77617540b4ab6db883ccd9d5904b1c1e",
+      "resolvesTo": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/architecture/+olh/+move/limit.m",
+      "isProduction": true
+    },
+    {
+      "path": "+impl/architecture/olhoffSolve.m",
+      "sha256": "1e5a114cbf91717e01e5592e86203f401ed5cdb3e5f5ce9a727b8163cdf2fba3",
+      "resolvesTo": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/architecture/olhoffSolve.m",
+      "isProduction": true
+    }
+  ],
+  "controllerAllProduction": true,
+  "implTree": "edbfe47eb32109a2fb017f6f13d5327f2c240357caa96630064ffcf37ee152cb",
+  "productionVsCandidate": [
+    {
+      "path": "move.levels",
+      "production": "[0.040000000000000001 0.02 0.01 0.0050000000000000001]",
+      "candidate": "[0.040000000000000001 0.02 0.01]"
+    },
+    {
+      "path": "move.continuation.signal",
+      "production": "boundVariable",
+      "candidate": "stageExhaustion"
+    },
+    {
+      "path": "stop.rule",
+      "production": "designChange",
+      "candidate": "stageExhaustion"
+    },
+    {
+      "path": "runtime.maxOuter",
+      "production": "400",
+      "candidate": "1600"
+    },
+    {
+      "path": "runtime.diagnostics",
+      "production": "false",
+      "candidate": "true"
+    },
+    {
+      "path": "runtime.name",
+      "production": "OLHOFF_CURRENT_320x40",
+      "candidate": "TR3_C_320x40"
+    }
+  ],
+  "prodCfgHash": "2a5b500991ff5931eef4919e768503d41fd558fe56ffbffe40c382c74d676cad",
+  "candCfgHash": "afad9ea4b27da576553f128d66a8329edee963066c1ef477b1df70f9232daaab",
+  "promotionDelta": [
+    {
+      "path": "move.levels",
+      "production": "[0.040000000000000001 0.02 0.01 0.0050000000000000001]",
+      "candidate": "[0.040000000000000001 0.02 0.01]"
+    },
+    {
+      "path": "move.continuation.signal",
+      "production": "boundVariable",
+      "candidate": "stageExhaustion"
+    },
+    {
+      "path": "stop.rule",
+      "production": "designChange",
+      "candidate": "stageExhaustion"
+    }
+  ],
+  "promotionDeltaPaths": [
+    "move.levels",
+    "move.continuation.signal",
+    "stop.rule"
+  ]
+}

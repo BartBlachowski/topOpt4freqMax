@@ -27,10 +27,10 @@ PREREGISTRATION (frozen before implementation and before any candidate result)
 REPORTS
 ------------------------------------------------------------------------------
 97a3c6b1cd345f56a88cb93cfe41f198374d6507a9774968702e185200be1036  REPORT.md
-0e987a9bc7b39425661ffcee0cd81ebc5fa88010d35e094daff8d4df35459a33  PROVENANCE.md
+42037f8196cf9768477fb0473ec8eed45445c5da23dec2649774cb093ca90790  PROVENANCE.md
 d3b865e912a93dfbfe22ab475a6861399d7cd080cf61b46e76d063acd7b578ed  IMPLEMENTATION.md
 71ff23f5a9cdfe126df7393a6ba4a725220794224bf15818fce91a2f6fb17408  SINGLE_FACTOR_AUDIT.md
-2212a66a50c62f118c0a17047c8e2c8fa55bf88b9edfe0a2c21bcf50baa4f0df  BASELINES.md
+74629a1634bb5452ea1e91161e9e652acf51a5d431ee156767ee339dd2299b21  BASELINES.md
 746f152b40660772cca6a93e36a25aad7e4dd19d5d6c8cc3b231b490520564c0  CAUSAL_ANALYSIS.md
 e6e0fd777ceef6ae38b4ba7ca1112c18e2f79ced215cb9c2ec0a7f74fe50c9f4  PROMOTION.md
 935931bb064127a01db4d613d3dd2c334effc67d8a4eb8b93fccf13eb712caa3  PERFORMANCE_READINESS.md
@@ -44,7 +44,7 @@ fe2f3dfe9941d40070cb1ec6cafbdf4cfc34e84f18d6faa5a4031974062b4274  DATA_MANIFEST.
 EVIDENCE
 ------------------------------------------------------------------------------
 207d757a5b1c5ac88c2090c1779fafea58833dc7051e7b19387be2a9925f19b8  evidence/analysis.json
-a4b55671c26187bb2aaf7c466eb990bf1164a7d9fe14dddc1b5f4bd8738f420e  evidence/baselines.json
+08b48346da8685398e293a320f1124b5d069344a265209279571570710b4c571  evidence/baselines.json
 d18023d7dd2f2344e7a68757a2d61e25bc026f481293ef56378b2b5bed170c3e  evidence/figures.json
 98ebb52efc50404a89e03bd9c664778510f8f61410f91285f9060ff25c7453c1  evidence/provenance_final.json
 379634535f3a13ac68b17bfbf13b9f20745012ce15a26ef8a73f5ed62b57c7ba  evidence/provenance_start.json
