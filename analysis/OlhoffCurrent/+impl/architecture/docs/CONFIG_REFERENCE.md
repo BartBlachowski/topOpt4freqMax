@@ -11,11 +11,11 @@ The evidence for each letter is in `SCIENTIFIC_CONFIG_PROVENANCE.md`.
 
 | Class | Fields |
 |---|---|
-| **A** | 23 |
+| **A** | 24 |
 | **B** | 4 |
-| **C** | 41 |
+| **C** | 47 |
 | **D** | 12 |
-| total | 80 |
+| total | 87 |
 
 
 ## cfg.domain
@@ -40,7 +40,8 @@ The evidence for each letter is in `SCIENTIFIC_CONFIG_PROVENANCE.md`.
 | `material.solid.E` | double | `1e+07` | [0, Inf] | A | Young modulus |
 | `material.solid.nu` | double | `0.3` | [-1, 0.5] | A | Poisson ratio |
 | `material.solid.density` | double | `1` | [0, Inf] | A | solid mass density rho_m |
-| `material.stiffness.model` | enum | `'simp'` | `simp` | A | eq. (1): Ee = rho^p * Ee |
+| `material.stiffness.model` | enum | `'simp'` | `simp`, `pedersen` | A | eq. (1) SIMP rho^p; pedersen = Pedersen (2000) eq. (5), rho^p above the threshold and linear rho*rho0^(p-1) below it, named in sec. 2.2 as the alternative to the mass cut-off |
+| `material.stiffness.linearBelow` | double | `0.1` | [0, 1] | A | pedersen: threshold rho0 below which the stiffness is linear; Pedersen (2000) prints 0.1 ("one hundredth of the penalization of the mass") |
 | `material.stiffness.p` | double | `3` | [1, Inf] | A | penalization power of eq. (1) |
 | `material.stiffness.continuation.enabled` | logical | `false` | `true`, `false` | A | sec. 2.1: p is "normally assigned values increasing from 1 to 3" |
 | `material.stiffness.continuation.schedule` | vector | `[]` | numeric vector or `[]` | B | successive values of p; endpoints 1 and 3 are printed, the schedule is not |
@@ -109,6 +110,7 @@ The evidence for each letter is in `SCIENTIFIC_CONFIG_PROVENANCE.md`.
 | `optimizer.inner.type` | enum | `'mma'` | `mma`, `lp` | A | sec. 3.5.3: "the MMA method (Svanberg 1987) has been used" |
 | `optimizer.inner.variable` | enum | `'increment'` | `increment`, `design` | C | increment: MMA state reset each outer iteration; design: asymptotes persist |
 | `optimizer.inner.variant` | enum | `'published'` | `published`, `asfound` | B | published = Svanberg Sept-2007 constants; asfound = local lineage copy |
+| `optimizer.inner.asymptoteHistory` | enum | `'inner'` | `inner`, `outer` | C | with variable=design: which history adapts the MMA asymptotes -- the inner sub-iterate sequence, or the OUTER design sequence rho_k, rho_k-1, rho_k-2 with the asymptotes held during the inner loop (Svanberg 1987 usage across the nested scheme; the paper is silent) |
 | `optimizer.inner.tolerance` | double | `0.05` | [0, Inf] | C | relative inner step test; Fig. 1 gives no criterion |
 | `optimizer.inner.minIterations` | int | `5` | [0, Inf] | C | sub-iterates always taken |
 | `optimizer.inner.maxIterations` | int | `500` | [1, Inf] | C | inner iteration cap |
@@ -117,17 +119,19 @@ The evidence for each letter is in `SCIENTIFIC_CONFIG_PROVENANCE.md`.
 
 | Field | Type | Default | Admissible | Class | Meaning |
 |---|---|---|---|---|---|
-| `move.policy` | enum | `'ladder'` | `fixed`, `geometric`, `ladder`, `trustRatio` | C | the paper places NO bound on drho other than the box (25f) |
-| `move.initial` | double | `0.04` | [0, 1] | C | move limit, and the starting value for geometric/trustRatio |
+| `move.policy` | enum | `'ladder'` | `fixed`, `geometric`, `ladder`, `trustRatio`, `adaptive` | C | the paper places NO bound on drho other than the box (25f); adaptive = per-element box contracted/expanded by Svanberg's asymptote rule on the OUTER design history |
+| `move.initial` | double | `0.04` | [0, Inf] | C | move limit, and the starting value for geometric/trustRatio; Inf = no move box, the design is bounded by (25f) alone |
 | `move.minimum` | double | `0.002` | [0, 1] | C | floor for geometric/trustRatio |
 | `move.levels` | vector | `[0.04 0.02 0.01 0.005]` | numeric vector or `[]` | C | descending ladder levels |
 | `move.geometric.ratio` | double | `0.97` | [0, 1] | C | geometric contraction ratio |
+| `move.adaptive.grow` | double | `1.2` | [1, Inf] | C | adaptive: box growth factor for an element moving monotonically over the last two outer steps (Svanberg asyincr) |
+| `move.adaptive.shrink` | double | `0.7` | [0, 1] | C | adaptive: box contraction factor for an element that reversed direction (Svanberg asydecr); floor = move.minimum, ceiling = move.initial |
 | `move.geometric.afterCoalescence` | logical | `true` | `true`, `false` | C | start contracting only once N>=2 is first seen |
 | `move.trust.loRatio` | double | `0.3` | [0, Inf] | D | shrink below this realized/predicted gain ratio |
 | `move.trust.hiRatio` | double | `0.7` | [0, Inf] | D | grow above this ratio |
 | `move.trust.shrink` | double | `0.7` | [0, 1] | D | contraction factor |
 | `move.trust.grow` | double | `1.1` | [1, Inf] | D | expansion factor |
-| `move.continuation.signal` | enum | `'boundVariable'` | `boundVariable`, `designRms` | C | what the ladder stall detector watches: the bound variable beta of (25a), or ||drho||/sqrt(NE) |
+| `move.continuation.signal` | enum | `'boundVariable'` | `boundVariable`, `designRms`, `stageExhaustion` | C | what advances the ladder: the bound variable beta of (25a), ||drho||/sqrt(NE), or the frozen two-branch stage-exhaustion rule E = A OR B |
 | `move.continuation.window` | int | `10` | [1, Inf] | C | stall detector window W |
 | `move.continuation.tolerance` | double | `0.005` | [0, Inf] | C | relative-progress threshold below which a stall is declared |
 
@@ -135,11 +139,14 @@ The evidence for each letter is in `SCIENTIFIC_CONFIG_PROVENANCE.md`.
 
 | Field | Type | Default | Admissible | Class | Meaning |
 |---|---|---|---|---|---|
+| `stop.rule` | enum | `'designChange'` | `designChange`, `stageExhaustion` | C | what admits outer convergence: the sec. 3.5.1 design-increment test with its guards, or the frozen two-branch exhaustion rule at the last move level |
 | `stop.norm` | enum | `'l2'` | `l2`, `max` | B | sec. 3.5.1 writes "the norm" unqualified; l2 is the natural reading |
 | `stop.tolerance` | double | `0.05` | [0, Inf] | C | epsilon of Fig. 1; never given in the paper |
 | `stop.toleranceRule` | enum | `'meshScaled'` | `explicit`, `meshScaled` | C | meshScaled recomputes stop.tolerance as 0.05*sqrt(NE/3200) AFTER mesh overrides, so eps means the same RMS density change at every resolution |
 | `stop.field` | enum | `'designVariable'` | `designVariable` | A | sec. 3.5.1 monitors the DESIGN increment. Under projection that is dz, not d(rho_phys) |
 | `stop.guards.settledMove` | logical | `true` | `true`, `false` | C | assert convergence only when the move limit is unchanged from the previous iteration |
+| `stop.guards.settledWindow` | int | `1` | [1, Inf] | C | with settledMove: number of consecutive iterations the move limit must have been unchanged (1 = the previous iteration only) |
+| `stop.guards.boxInactiveFraction` | double | `0` | [0, Inf] | C | assert convergence only when max|drho| <= fraction * move limit, i.e. the step is small because the design stopped and not because the move box bound it; 0 = off |
 | `stop.guards.ladderExhausted` | logical | `false` | `true`, `false` | D | assert convergence only when no remaining ladder level exceeds epsilon/sqrt(NE) |
 | `stop.guards.maxDesignChange` | logical | `false` | `true`, `false` | D | assert convergence only when max|d(design)| < epsilon/sqrt(NE) |
 

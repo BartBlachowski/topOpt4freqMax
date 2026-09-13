@@ -53,6 +53,10 @@ else
     push('  stiffness         SIMP rho^p, p = %g FIXED  [%s]', ...
          g('material.stiffness.p'), cls('material.stiffness.p'));
 end
+if strcmp(g('material.stiffness.model'),'pedersen')
+    push('                    Pedersen (2000) eq. (5): linear rho*rho0^(p-1) below rho0 = %g  [%s]', ...
+         g('material.stiffness.linearBelow'), cls('material.stiffness.model'));
+end
 massName = struct('eq2','eq. (2) linear','eq4','eq. (4) discontinuous at the cut-off', ...
                   'eq4a','eq. (4a) C0','eq4b','eq. (4b) C1');
 push('  mass              %s  [%s]', massName.(g('material.mass.model')), cls('material.mass.model'));
@@ -121,19 +125,36 @@ push('');
 push('OPTIMIZER');
 push('  inner             %s, %s variant, on the %s  [%s]', upper(g('optimizer.inner.type')), ...
      g('optimizer.inner.variant'), g('optimizer.inner.variable'), cls('optimizer.inner.type'));
+if strcmp(g('optimizer.inner.variable'),'design')
+    push('  MMA asymptotes    adapted on the %s design history  [%s]', ...
+         upper(g('optimizer.inner.asymptoteHistory')), cls('optimizer.inner.asymptoteHistory'));
+end
 push('  inner exit        rel. step < %g, at least %d, at most %d  [%s]', ...
      g('optimizer.inner.tolerance'), g('optimizer.inner.minIterations'), ...
      g('optimizer.inner.maxIterations'), cls('optimizer.inner.tolerance'));
 push('');
 push('MOVE LIMIT   [the paper bounds drho ONLY by the box (25f)]');
 switch g('move.policy')
-    case 'fixed',      push('  policy            FIXED at %g  [%s]', g('move.initial'), cls('move.policy'));
+    case 'fixed'
+        if isinf(g('move.initial'))
+            push('  policy            NONE: the box (25f) alone  [A]');
+        else
+            push('  policy            FIXED at %g  [%s]', g('move.initial'), cls('move.policy'));
+        end
     case 'ladder',     push('  policy            LADDER %s  [%s]', mat2str(g('move.levels')), cls('move.policy'));
+        if strcmp(g('move.continuation.signal'),'stageExhaustion')
+                       push('  descends when     stage exhaustion E = A OR B holds for 20 consecutive iterations (windows 20/10, stage-local)  [%s]', ...
+                            cls('move.continuation.signal'));
+        else
                        push('  descends when     %s stalls over a window of %d, rel. progress < %g  [%s]', ...
                             g('move.continuation.signal'), g('move.continuation.window'), ...
                             g('move.continuation.tolerance'), cls('move.continuation.signal'));
+        end
     case 'geometric',  push('  policy            GEOMETRIC ratio %g, floor %g  [%s]', ...
                             g('move.geometric.ratio'), g('move.minimum'), cls('move.policy'));
+    case 'adaptive',   push('  policy            ADAPTIVE per-element box: start %g, floor %g, x%g on monotone / x%g on reversal (Svanberg rule on the OUTER history)  [%s]', ...
+                            g('move.initial'), g('move.minimum'), g('move.adaptive.grow'), ...
+                            g('move.adaptive.shrink'), cls('move.policy'));
     case 'trustRatio', push('  policy            TRUST RATIO band [%g, %g]  [D]', ...
                             g('move.trust.loRatio'), g('move.trust.hiRatio'));
 end
@@ -143,8 +164,17 @@ push('  metric            %s norm of the %s increment  [%s]', ...
      upper(g('stop.norm')), g('stop.field'), cls('stop.norm'));
 push('  threshold         eps = %.6g  (%s)  [%s]', g('stop.tolerance'), ...
      g('stop.toleranceRule'), cls('stop.tolerance'));
+if strcmp(g('stop.rule'),'stageExhaustion')
+    push('  rule              STAGE EXHAUSTION: stop only on the E declaration at the last move level; the test above and its guards are replaced  [%s]', ...
+         cls('stop.rule'));
+end
 gu = {};
-if g('stop.guards.settledMove'),     gu{end+1} = 'settledMove'; end
+if g('stop.guards.settledMove')
+    gu{end+1} = sprintf('settledMove(window %d)', g('stop.guards.settledWindow'));
+end
+if g('stop.guards.boxInactiveFraction') > 0
+    gu{end+1} = sprintf('boxInactive(max|drho| <= %g move)', g('stop.guards.boxInactiveFraction'));
+end
 if g('stop.guards.ladderExhausted'), gu{end+1} = 'ladderExhausted'; end
 if g('stop.guards.maxDesignChange'), gu{end+1} = 'maxDesignChange'; end
 if isempty(gu), push('  guards            none');

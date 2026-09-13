@@ -58,9 +58,10 @@ Additive, and nothing legacy reads them: `res.cfgCanonical`, `res.cfgWarnings`,
 | `move`, `moveMin`, `s2Levels` | `move.initial`, `.minimum`, `.levels` | |
 | `s1Gamma`, `s1AfterCoal` | `move.geometric.ratio`, `.afterCoalescence` | |
 | `s2Window`, `s2Tol` | `move.continuation.window`, `.tolerance` | |
-| `s2Signal` `'beta'\|'drms'` | `move.continuation.signal` `boundVariable\|designRms` | |
+| `s2Signal` `'beta'\|'drms'\|'exhaustion'` | `move.continuation.signal` `boundVariable\|designRms\|stageExhaustion` | |
 | `s3Lo/Hi/Down/Up` | `move.trust.loRatio/hiRatio/shrink/grow` | |
 | `outerNorm`, `tolOuter` | `stop.norm`, `stop.tolerance` | |
+| `stopRule` (absent = `'designChange'`) | `stop.rule` | written by `toLegacy` only when `stageExhaustion` |
 | `outerGuard` `'settledmove'` | `stop.guards.settledMove` (logical) | |
 | `restorationGuard` `'R1'` | `stop.guards.ladderExhausted` | **see §3** |
 | `restorationGuard` `'R2'` | `stop.guards.maxDesignChange` | **see §3** |

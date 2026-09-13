@@ -150,6 +150,17 @@ if ~isempty(re) && (~isscalar(re) || ~isnumeric(re) || re <= 0)
     error('olh:config:badFilterRadius','filter.radiusElements must be empty or a positive scalar.');
 end
 
+if strcmp(g('optimizer.inner.asymptoteHistory'),'outer') && ~strcmp(g('optimizer.inner.variable'),'design')
+    error('olh:config:asymptoteHistoryNeedsDesignVariable', ...
+       ['optimizer.inner.asymptoteHistory=''outer'' carries MMA asymptotes across outer ' ...
+        'iterations, which requires optimizer.inner.variable=''design'' (got ''%s'').'], ...
+        g('optimizer.inner.variable'));
+end
+if isinf(g('move.initial')) && ~strcmp(g('move.policy'),'fixed')
+    error('olh:config:infiniteMoveNeedsFixed', ...
+        'move.initial=Inf (no move box) is meaningful only with move.policy=''fixed''.');
+end
+
 if g('multiplicity.subspaceSize') > g('eigen.maxCluster')
     error('olh:config:subspaceTooLarge', ...
         'multiplicity.subspaceSize (%d) exceeds eigen.maxCluster (%d).', ...
@@ -161,6 +172,10 @@ if strcmp(g('multiplicity.method'),'hysteresis') ...
         'multiplicity.exitTolerance must exceed multiplicity.enterTolerance.');
 end
 
+if strcmp(g('move.policy'),'adaptive') && g('move.minimum') > g('move.initial')
+    error('olh:config:adaptiveFloorAboveCeiling', ...
+        'move.policy=''adaptive'' needs move.minimum <= move.initial.');
+end
 if strcmp(g('move.policy'),'ladder') && any(diff(g('move.levels')) > 0)
     error('olh:config:ladderNotDescending','move.levels must be non-increasing.');
 end

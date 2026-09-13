@@ -1,4 +1,4 @@
-function [mv, state] = limit(cfg, outer, hist, state)
+function [mv, state] = limit(cfg, outer, hist, state, rho)
 %LIMIT  The move-limit policy in force at this outer iteration.
 %
 %   EVIDENCE CLASSIFICATION
@@ -20,6 +20,16 @@ function [mv, state] = limit(cfg, outer, hist, state)
 %      Do not describe any of it as the authors'.
 %
 %   POLICIES  (cfg.move.policy)
+%     'adaptive'    a PER-ELEMENT box d_e, returned as a vector.  Svanberg's
+%                   asymptote rule (1987; asyincr/asydecr) applied to the
+%                   OUTER design history: an element whose last two outer
+%                   steps had the same sign gets d_e *= grow, one that reversed
+%                   gets d_e *= shrink, clamped to [move.minimum, move.initial].
+%                   The inner loop is unchanged (asymptotes reset per outer
+%                   iteration, so it converges as before); the outer damping
+%                   that MMA provides in a single-call architecture is carried
+%                   by the box instead.  Needs the 5th argument `rho` (the
+%                   current design).  RECONSTRUCTION, class C.
 %     'fixed'       mv = cfg.move.initial
 %     'geometric'   mv_k = max(minimum, initial * ratio^(k-1)), optionally
 %                   started only once coalescence is first detected, so the
@@ -37,7 +47,8 @@ function [mv, state] = limit(cfg, outer, hist, state)
 if isempty(state)
     state = struct('mv',cfg.move.initial,'stage',1,'lastBeta',NaN,'stall',0, ...
                    'ratioHist',[],'coalSeen',false,'lastStage',0, ...
-                   'lastRealized',NaN,'ex',[],'stageStarts',1,'descents',zeros(0,4));
+                   'lastRealized',NaN,'dvec',[],'rhoPrev1',[],'rhoPrev2',[], ...
+                   'ex',[],'stageStarts',1,'descents',zeros(0,4));
 end
 
 % has the pair coalesced yet?  (used by the geometric policy's optional trigger)
@@ -151,6 +162,26 @@ switch cfg.move.policy
         end
         mv = cfg.move.levels(state.stage);
 
+    case 'adaptive'
+        if nargin < 5 || isempty(rho)
+            error('olh:move:adaptiveNeedsRho','move.policy=''adaptive'' needs the current design as the 5th argument.');
+        end
+        rho = rho(:);
+        if ~isfield(state,'dvec') || isempty(state.dvec)
+            state.dvec = cfg.move.initial*ones(numel(rho),1);
+            state.rhoPrev1 = [];  state.rhoPrev2 = [];
+        end
+        if ~isempty(state.rhoPrev2)
+            zzz = (rho - state.rhoPrev1).*(state.rhoPrev1 - state.rhoPrev2);
+            f = ones(numel(rho),1);
+            f(zzz > 0) = cfg.move.adaptive.grow;
+            f(zzz < 0) = cfg.move.adaptive.shrink;
+            state.dvec = min(cfg.move.initial, max(cfg.move.minimum, f.*state.dvec));
+        end
+        state.rhoPrev2 = state.rhoPrev1;
+        state.rhoPrev1 = rho;
+        mv = state.dvec;
+
     case 'trustRatio'
         % Predicted-vs-realized gain in lambda_n over the LAST completed outer
         % step.  `predicted` is what the sub-problem promised at that step (beta
@@ -177,4 +208,4 @@ switch cfg.move.policy
 end
 
 state.mv = mv;
-end
+end  % (for 'adaptive', mv is NE x 1; every other policy returns a scalar)

@@ -1,0 +1,869 @@
+{
+  "standard": "bitwise (class+size+raw bytes for numeric/logical; recursive for struct/cell); excluded: tEig tGrad tInner tOuter wallclock provenance.resolvedAt",
+  "runs": {
+    "PRE_BETA": {
+      "side": "pre",
+      "case": "BETA",
+      "treeHash": "edbfe47eb32109a2fb017f6f13d5327f2c240357caa96630064ffcf37ee152cb",
+      "solver": "/Users/piotrek/Programming/topOpt4freqMax-migration-253069/analysis/OlhoffCurrent/+impl/architecture/olhoffSolve.m",
+      "status": "CONVERGED",
+      "nOuter": 91,
+      "innerTotal": 2241,
+      "innerMax": 51,
+      "innerNotConverged": 0,
+      "omega1": 169.49522702153845,
+      "omega2": 171.95999591815919,
+      "omega3": 357.77656854269514,
+      "gap12_pct": 1.4541818905068822,
+      "volume": 0.49999900877797954,
+      "Mnd_pct": 13.402499279526742,
+      "gray_fraction": 0.149375,
+      "mid_fraction": 0.025,
+      "rho_sha256_bytes": "22aa4447bc5f2855271f44f0661536f4ad6c86c5711cedcfe51ea6d97d0ff18b",
+      "final_move_max": 0.01,
+      "final_stage": 3,
+      "final_dxNorm2": 0.02358256321761374,
+      "final_dxOuter": 0.0058104442373706419,
+      "stage_starts": [
+        1,
+        79,
+        90
+      ],
+      "move_levels_at_starts": [
+        0.04,
+        0.02,
+        0.01
+      ],
+      "final_N": 2,
+      "log": [
+        "iter 8: omega_J (J=3) is itself multiple -- (25b) undefined",
+        "iter 12: omega_J (J=3) is itself multiple -- (25b) undefined",
+        "iter 90: ||drho|| below eps but the move limit just changed (0.02 -> 0.01); convergence NOT asserted",
+        "converged at outer iteration 91 (||drho||_2 = 2.358e-02, max|drho| = 5.810e-03)"
+      ],
+      "wall_s_nondeterministic": 123.233283875
+    },
+    "PRE_EX3": {
+      "side": "pre",
+      "case": "EX3",
+      "treeHash": "edbfe47eb32109a2fb017f6f13d5327f2c240357caa96630064ffcf37ee152cb",
+      "solver": "/Users/piotrek/Programming/topOpt4freqMax-migration-253069/analysis/OlhoffCurrent/+impl/architecture/olhoffSolve.m",
+      "status": "CONVERGED",
+      "nOuter": 180,
+      "innerTotal": 4283,
+      "innerMax": 53,
+      "innerNotConverged": 0,
+      "omega1": 169.97512028959605,
+      "omega2": 171.5158093818215,
+      "omega3": 360.80094056004907,
+      "gap12_pct": 0.90642035705019153,
+      "volume": 0.49999677036595458,
+      "Mnd_pct": 12.756141959540173,
+      "gray_fraction": 0.145,
+      "mid_fraction": 0.026875,
+      "rho_sha256_bytes": "b779f036154576cd210039366a176b67f46e9ac16ceb34b30e975e948fe5757b",
+      "final_move_max": 0.01,
+      "final_stage": 3,
+      "final_dxNorm2": 0.0051775971032311605,
+      "final_dxOuter": 0.0015547927189726097,
+      "stage_starts": [
+        1,
+        103,
+        142
+      ],
+      "move_levels_at_starts": [
+        0.04,
+        0.02,
+        0.01
+      ],
+      "final_N": 2,
+      "log": [
+        "iter 8: omega_J (J=3) is itself multiple -- (25b) undefined",
+        "iter 12: omega_J (J=3) is itself multiple -- (25b) undefined",
+        "iter 102: stage exhaustion declared (branch A, window 83-102) at move 0.04; ladder descends, not converged",
+        "iter 141: stage exhaustion declared (branch A, window 122-141) at move 0.02; ladder descends, not converged",
+        "iter 180: terminal stage exhaustion declared (branch B, window 161-180) at move 0.01, the last ladder level",
+        "converged at outer iteration 180 (||drho||_2 = 5.178e-03, max|drho| = 1.555e-03)"
+      ],
+      "wall_s_nondeterministic": 311.04160075,
+      "exhaustion": {
+        "stageStarts": [
+          1,
+          103,
+          142
+        ],
+        "descents": [
+          [
+            103,
+            1,
+            102,
+            83
+          ],
+          [
+            142,
+            2,
+            141,
+            122
+          ]
+        ],
+        "eventBranch": [
+          "A",
+          "A"
+        ],
+        "terminalDeclared": true,
+        "terminalDeclIter": 180,
+        "terminalDeclBegin": 161,
+        "terminalBranch": "B"
+      }
+    },
+    "POST_BETA": {
+      "side": "post",
+      "case": "BETA",
+      "treeHash": "4ba9a3ae10881344a0e60f2b8a8976c5ec9ceccf966bc2a3da4f37fb5aebffbf",
+      "solver": "/Users/piotrek/Programming/topOpt4freqMax-migration-253069/analysis/OlhoffCurrent/+impl/architecture/olhoffSolve.m",
+      "status": "CONVERGED",
+      "nOuter": 91,
+      "innerTotal": 2241,
+      "innerMax": 51,
+      "innerNotConverged": 0,
+      "omega1": 169.49522702153845,
+      "omega2": 171.95999591815919,
+      "omega3": 357.77656854269514,
+      "gap12_pct": 1.4541818905068822,
+      "volume": 0.49999900877797954,
+      "Mnd_pct": 13.402499279526742,
+      "gray_fraction": 0.149375,
+      "mid_fraction": 0.025,
+      "rho_sha256_bytes": "22aa4447bc5f2855271f44f0661536f4ad6c86c5711cedcfe51ea6d97d0ff18b",
+      "final_move_max": 0.01,
+      "final_stage": 3,
+      "final_dxNorm2": 0.02358256321761374,
+      "final_dxOuter": 0.0058104442373706419,
+      "stage_starts": [
+        1,
+        79,
+        90
+      ],
+      "move_levels_at_starts": [
+        0.04,
+        0.02,
+        0.01
+      ],
+      "final_N": 2,
+      "log": [
+        "iter 8: omega_J (J=3) is itself multiple -- (25b) undefined",
+        "iter 12: omega_J (J=3) is itself multiple -- (25b) undefined",
+        "iter 90: ||drho|| below eps but the move limit just changed (0.02 -> 0.01); convergence NOT asserted",
+        "converged at outer iteration 91 (||drho||_2 = 2.358e-02, max|drho| = 5.810e-03)"
+      ],
+      "wall_s_nondeterministic": 158.20051875,
+      "final_move_mean": 0.01
+    },
+    "POST_EX3": {
+      "side": "post",
+      "case": "EX3",
+      "treeHash": "4ba9a3ae10881344a0e60f2b8a8976c5ec9ceccf966bc2a3da4f37fb5aebffbf",
+      "solver": "/Users/piotrek/Programming/topOpt4freqMax-migration-253069/analysis/OlhoffCurrent/+impl/architecture/olhoffSolve.m",
+      "status": "CONVERGED",
+      "nOuter": 180,
+      "innerTotal": 4283,
+      "innerMax": 53,
+      "innerNotConverged": 0,
+      "omega1": 169.97512028959605,
+      "omega2": 171.5158093818215,
+      "omega3": 360.80094056004907,
+      "gap12_pct": 0.90642035705019153,
+      "volume": 0.49999677036595458,
+      "Mnd_pct": 12.756141959540173,
+      "gray_fraction": 0.145,
+      "mid_fraction": 0.026875,
+      "rho_sha256_bytes": "b779f036154576cd210039366a176b67f46e9ac16ceb34b30e975e948fe5757b",
+      "final_move_max": 0.01,
+      "final_stage": 3,
+      "final_dxNorm2": 0.0051775971032311605,
+      "final_dxOuter": 0.0015547927189726097,
+      "stage_starts": [
+        1,
+        103,
+        142
+      ],
+      "move_levels_at_starts": [
+        0.04,
+        0.02,
+        0.01
+      ],
+      "final_N": 2,
+      "log": [
+        "iter 8: omega_J (J=3) is itself multiple -- (25b) undefined",
+        "iter 12: omega_J (J=3) is itself multiple -- (25b) undefined",
+        "iter 102: stage exhaustion declared (branch A, window 83-102) at move 0.04; ladder descends, not converged",
+        "iter 141: stage exhaustion declared (branch A, window 122-141) at move 0.02; ladder descends, not converged",
+        "iter 180: terminal stage exhaustion declared (branch B, window 161-180) at move 0.01, the last ladder level",
+        "converged at outer iteration 180 (||drho||_2 = 5.178e-03, max|drho| = 1.555e-03)"
+      ],
+      "wall_s_nondeterministic": 370.24271675,
+      "final_move_mean": 0.01,
+      "exhaustion": {
+        "stageStarts": [
+          1,
+          103,
+          142
+        ],
+        "descents": [
+          [
+            103,
+            1,
+            102,
+            83
+          ],
+          [
+            142,
+            2,
+            141,
+            122
+          ]
+        ],
+        "eventBranch": [
+          "A",
+          "A"
+        ],
+        "terminalDeclared": true,
+        "terminalDeclIter": 180,
+        "terminalDeclBegin": 161,
+        "terminalBranch": "B"
+      }
+    },
+    "POST_EX4": {
+      "side": "post",
+      "case": "EX4",
+      "treeHash": "4ba9a3ae10881344a0e60f2b8a8976c5ec9ceccf966bc2a3da4f37fb5aebffbf",
+      "solver": "/Users/piotrek/Programming/topOpt4freqMax-migration-253069/analysis/OlhoffCurrent/+impl/architecture/olhoffSolve.m",
+      "status": "CONVERGED",
+      "nOuter": 219,
+      "innerTotal": 5074,
+      "innerMax": 53,
+      "innerNotConverged": 0,
+      "omega1": 170.01131577599028,
+      "omega2": 171.4282527572349,
+      "omega3": 360.91194600358438,
+      "gap12_pct": 0.83343686552699658,
+      "volume": 0.49999913419341135,
+      "Mnd_pct": 12.704121410327563,
+      "gray_fraction": 0.144375,
+      "mid_fraction": 0.026875,
+      "rho_sha256_bytes": "332c00a5181372bfd0fe82bbe8b7309496b1fb9f082d0a45945a61f0dcd2624a",
+      "final_move_max": 0.005,
+      "final_stage": 4,
+      "final_dxNorm2": 0.0023415365873046385,
+      "final_dxOuter": 0.00083577195035712374,
+      "stage_starts": [
+        1,
+        103,
+        142,
+        181
+      ],
+      "move_levels_at_starts": [
+        0.04,
+        0.02,
+        0.01,
+        0.005
+      ],
+      "final_N": 2,
+      "log": [
+        "iter 8: omega_J (J=3) is itself multiple -- (25b) undefined",
+        "iter 12: omega_J (J=3) is itself multiple -- (25b) undefined",
+        "iter 102: stage exhaustion declared (branch A, window 83-102) at move 0.04; ladder descends, not converged",
+        "iter 141: stage exhaustion declared (branch A, window 122-141) at move 0.02; ladder descends, not converged",
+        "iter 180: stage exhaustion declared (branch B, window 161-180) at move 0.01; ladder descends, not converged",
+        "iter 219: terminal stage exhaustion declared (branch B, window 200-219) at move 0.005, the last ladder level",
+        "converged at outer iteration 219 (||drho||_2 = 2.342e-03, max|drho| = 8.358e-04)"
+      ],
+      "wall_s_nondeterministic": 496.13305466666668,
+      "final_move_mean": 0.005,
+      "exhaustion": {
+        "stageStarts": [
+          1,
+          103,
+          142,
+          181
+        ],
+        "descents": [
+          [
+            103,
+            1,
+            102,
+            83
+          ],
+          [
+            142,
+            2,
+            141,
+            122
+          ],
+          [
+            181,
+            3,
+            180,
+            161
+          ]
+        ],
+        "eventBranch": [
+          "A",
+          "A",
+          "B"
+        ],
+        "terminalDeclared": true,
+        "terminalDeclIter": 219,
+        "terminalDeclBegin": 200,
+        "terminalBranch": "B"
+      }
+    },
+    "POST_PED": {
+      "side": "post",
+      "case": "PED",
+      "treeHash": "4ba9a3ae10881344a0e60f2b8a8976c5ec9ceccf966bc2a3da4f37fb5aebffbf",
+      "solver": "/Users/piotrek/Programming/topOpt4freqMax-migration-253069/analysis/OlhoffCurrent/+impl/architecture/olhoffSolve.m",
+      "status": "CONVERGED",
+      "nOuter": 121,
+      "innerTotal": 2369,
+      "innerMax": 38,
+      "innerNotConverged": 0,
+      "omega1": 169.21057638627477,
+      "omega2": 170.3999757559335,
+      "omega3": 321.3971454310124,
+      "gap12_pct": 0.70291077251788514,
+      "volume": 0.4999989839449725,
+      "Mnd_pct": 11.461565500445316,
+      "gray_fraction": 0.141875,
+      "mid_fraction": 0.016875,
+      "rho_sha256_bytes": "2a1c0d0afa18e76398671d9f2213cd07e3853ce990f8ba74fcc3ab3f28004719",
+      "final_move_max": 0.1,
+      "final_stage": 1,
+      "final_dxNorm2": 0.04744645552614743,
+      "final_dxOuter": 0.013575504672485991,
+      "stage_starts": 1,
+      "move_levels_at_starts": 0.1,
+      "final_N": 2,
+      "log": [
+        "iter 4: omega_J (J=3) is itself multiple -- (25b) undefined",
+        "converged at outer iteration 121 (||drho||_2 = 4.745e-02, max|drho| = 1.358e-02)"
+      ],
+      "wall_s_nondeterministic": 279.20761520833332,
+      "final_move_mean": 0.0084442061032017415
+    },
+    "UP_BETA": {
+      "side": "up",
+      "case": "BETA",
+      "treeHash": "git-archive 253069 (snapshot)",
+      "solver": "/private/tmp/claude-501/-Users-piotrek-Programming-topOpt4freqMax/0f7b4bbd-8b78-4751-ace2-9b1c6599be5c/scratchpad/mig/up253069/architecture/olhoffSolve.m",
+      "status": "CONVERGED",
+      "nOuter": 91,
+      "innerTotal": 2241,
+      "innerMax": 51,
+      "innerNotConverged": 0,
+      "omega1": 169.49522702153845,
+      "omega2": 171.95999591815919,
+      "omega3": 357.77656854269514,
+      "gap12_pct": 1.4541818905068822,
+      "volume": 0.49999900877797954,
+      "Mnd_pct": 13.402499279526742,
+      "gray_fraction": 0.149375,
+      "mid_fraction": 0.025,
+      "rho_sha256_bytes": "22aa4447bc5f2855271f44f0661536f4ad6c86c5711cedcfe51ea6d97d0ff18b",
+      "final_move_max": 0.01,
+      "final_stage": 3,
+      "final_dxNorm2": 0.02358256321761374,
+      "final_dxOuter": 0.0058104442373706419,
+      "stage_starts": [
+        1,
+        79,
+        90
+      ],
+      "move_levels_at_starts": [
+        0.04,
+        0.02,
+        0.01
+      ],
+      "final_N": 2,
+      "log": [
+        "iter 8: omega_J (J=3) is itself multiple -- (25b) undefined",
+        "iter 12: omega_J (J=3) is itself multiple -- (25b) undefined",
+        "iter 90: ||drho|| below eps but the move limit just changed (0.02 -> 0.01); convergence NOT asserted",
+        "converged at outer iteration 91 (||drho||_2 = 2.358e-02, max|drho| = 5.810e-03)"
+      ],
+      "wall_s_nondeterministic": 161.68304708333332,
+      "final_move_mean": 0.01
+    },
+    "UP_EX3": {
+      "side": "up",
+      "case": "EX3",
+      "treeHash": "git-archive 253069 (snapshot)",
+      "solver": "/private/tmp/claude-501/-Users-piotrek-Programming-topOpt4freqMax/0f7b4bbd-8b78-4751-ace2-9b1c6599be5c/scratchpad/mig/up253069/architecture/olhoffSolve.m",
+      "status": "CONVERGED",
+      "nOuter": 180,
+      "innerTotal": 4283,
+      "innerMax": 53,
+      "innerNotConverged": 0,
+      "omega1": 169.97512028959605,
+      "omega2": 171.5158093818215,
+      "omega3": 360.80094056004907,
+      "gap12_pct": 0.90642035705019153,
+      "volume": 0.49999677036595458,
+      "Mnd_pct": 12.756141959540173,
+      "gray_fraction": 0.145,
+      "mid_fraction": 0.026875,
+      "rho_sha256_bytes": "b779f036154576cd210039366a176b67f46e9ac16ceb34b30e975e948fe5757b",
+      "final_move_max": 0.01,
+      "final_stage": 3,
+      "final_dxNorm2": 0.0051775971032311605,
+      "final_dxOuter": 0.0015547927189726097,
+      "stage_starts": [
+        1,
+        103,
+        142
+      ],
+      "move_levels_at_starts": [
+        0.04,
+        0.02,
+        0.01
+      ],
+      "final_N": 2,
+      "log": [
+        "iter 8: omega_J (J=3) is itself multiple -- (25b) undefined",
+        "iter 12: omega_J (J=3) is itself multiple -- (25b) undefined",
+        "iter 102: stage exhaustion declared (branch A, window 83-102) at move 0.04; ladder descends, not converged",
+        "iter 141: stage exhaustion declared (branch A, window 122-141) at move 0.02; ladder descends, not converged",
+        "iter 180: terminal stage exhaustion declared (branch B, window 161-180) at move 0.01, the last ladder level",
+        "converged at outer iteration 180 (||drho||_2 = 5.178e-03, max|drho| = 1.555e-03)"
+      ],
+      "wall_s_nondeterministic": 370.27663970833333,
+      "final_move_mean": 0.01,
+      "exhaustion": {
+        "stageStarts": [
+          1,
+          103,
+          142
+        ],
+        "descents": [
+          [
+            103,
+            1,
+            102,
+            83
+          ],
+          [
+            142,
+            2,
+            141,
+            122
+          ]
+        ],
+        "eventBranch": [
+          "A",
+          "A"
+        ],
+        "terminalDeclared": true,
+        "terminalDeclIter": 180,
+        "terminalDeclBegin": 161,
+        "terminalBranch": "B"
+      }
+    },
+    "UP_PED": {
+      "side": "up",
+      "case": "PED",
+      "treeHash": "git-archive 253069 (snapshot)",
+      "solver": "/private/tmp/claude-501/-Users-piotrek-Programming-topOpt4freqMax/0f7b4bbd-8b78-4751-ace2-9b1c6599be5c/scratchpad/mig/up253069/architecture/olhoffSolve.m",
+      "status": "CONVERGED",
+      "nOuter": 121,
+      "innerTotal": 2369,
+      "innerMax": 38,
+      "innerNotConverged": 0,
+      "omega1": 169.21057638627477,
+      "omega2": 170.3999757559335,
+      "omega3": 321.3971454310124,
+      "gap12_pct": 0.70291077251788514,
+      "volume": 0.4999989839449725,
+      "Mnd_pct": 11.461565500445316,
+      "gray_fraction": 0.141875,
+      "mid_fraction": 0.016875,
+      "rho_sha256_bytes": "2a1c0d0afa18e76398671d9f2213cd07e3853ce990f8ba74fcc3ab3f28004719",
+      "final_move_max": 0.1,
+      "final_stage": 1,
+      "final_dxNorm2": 0.04744645552614743,
+      "final_dxOuter": 0.013575504672485991,
+      "stage_starts": 1,
+      "move_levels_at_starts": 0.1,
+      "final_N": 2,
+      "log": [
+        "iter 4: omega_J (J=3) is itself multiple -- (25b) undefined",
+        "converged at outer iteration 121 (||drho||_2 = 4.745e-02, max|drho| = 1.358e-02)"
+      ],
+      "wall_s_nondeterministic": 280.882745875,
+      "final_move_mean": 0.0084442061032017415
+    }
+  },
+  "metricDefinitions": {
+    "Mnd_pct": "100*mean(4*rho.*(1-rho))",
+    "gray_fraction": "mean(rho > 0.1 & rho < 0.9)  (upstream repro/run_repro.m greyFraction)",
+    "mid_fraction": "mean(rho > 0.4 & rho < 0.6)",
+    "check_vs_C160x20_record": {
+      "Mnd_pct": [
+        12.704121410327563,
+        12.704121410327563
+      ],
+      "gray": [
+        0.144375,
+        0.144375
+      ],
+      "mid_open_0p4_0p6": [
+        0.026875,
+        0.026875
+      ],
+      "mid_closed_0p4_0p6": [
+        0.026875,
+        0.026875
+      ],
+      "mid_open_0p25_0p75": [
+        0.065625,
+        0.026875
+      ]
+    }
+  },
+  "A_beta": {
+    "post_vs_pre": {
+      "differing": [],
+      "onlyInCandidate": [
+        "res.aux (only in candidate)"
+      ],
+      "onlyInReference": [
+        "res.hist.exA (only in reference)",
+        "res.hist.exB (only in reference)",
+        "res.hist.exE (only in reference)",
+        "res.hist.exNA (only in reference)",
+        "res.hist.exNB (only in reference)",
+        "res.hist.exDecl (only in reference)",
+        "res.hist.exCos (only in reference)",
+        "res.hist.exNet (only in reference)",
+        "res.hist.exMedcos (only in reference)",
+        "res.hist.exMednet (only in reference)",
+        "res.hist.exAmp (only in reference)",
+        "res.hist.exStageStart (only in reference)"
+      ],
+      "cfgRowsDiffering": [
+        "material.stiffness.linearBelow",
+        "optimizer.inner.asymptoteHistory",
+        "move.adaptive.grow",
+        "move.adaptive.shrink",
+        "stop.guards.settledWindow",
+        "stop.guards.boxInactiveFraction"
+      ],
+      "passDiffs": true,
+      "passStrict": false,
+      "passPrePost": false,
+      "passCommitted": false
+    },
+    "post_vs_campaign": {
+      "reference": "examples/Performance/conference_benchmark/campaign_9mesh_r2/benchmark_records.mat (olhoff, 160x20)",
+      "reference_sha256": "873125858df02664d9a7d37bd09e4e9b0b1ccff5c37940d088f9b1e424921fae",
+      "rho_bitwise": true,
+      "omega1_bitwise": true,
+      "volume_bitwise": true,
+      "outer": [
+        91,
+        91
+      ],
+      "inner": [
+        2241,
+        2241
+      ],
+      "status": [
+        "CONVERGED",
+        "NATIVE_CONVERGED"
+      ],
+      "effective_config_hash_recorded": "28756d22aacb59726be9f37583deca89fcfcecc93f9b867d46a49223ed1db697",
+      "pass": true
+    },
+    "post_vs_up": {
+      "differing": [],
+      "onlyInCandidate": [],
+      "onlyInReference": [],
+      "cfgRowsDiffering": [],
+      "passDiffs": true,
+      "passStrict": true,
+      "passPrePost": true,
+      "passCommitted": true
+    }
+  },
+  "A_ex3": {
+    "post_vs_pre": {
+      "differing": [],
+      "onlyInCandidate": [
+        "res.aux (only in candidate)"
+      ],
+      "onlyInReference": [],
+      "cfgRowsDiffering": [
+        "material.stiffness.linearBelow",
+        "optimizer.inner.asymptoteHistory",
+        "move.adaptive.grow",
+        "move.adaptive.shrink",
+        "stop.guards.settledWindow",
+        "stop.guards.boxInactiveFraction"
+      ],
+      "passDiffs": true,
+      "passStrict": false,
+      "passPrePost": false,
+      "passCommitted": false
+    },
+    "post_vs_targetAudit": {
+      "differing": [],
+      "onlyInCandidate": [],
+      "onlyInReference": [],
+      "cfgRowsDiffering": [],
+      "passDiffs": true,
+      "passStrict": true,
+      "passPrePost": true,
+      "passCommitted": true,
+      "reference": "Olhoff-upstream-capabilities-evidence/runs/case_TARGET_EX3_160.mat (OlhoffCurrent tree edbfe47, 2026-09-13)",
+      "reference_sha256": "4181e60ff51146ddd11cae49ce159f6bfe43b2fa56ca7a091893a7c5651ffa46"
+    },
+    "post_vs_up": {
+      "differing": [],
+      "onlyInCandidate": [],
+      "onlyInReference": [],
+      "cfgRowsDiffering": [],
+      "passDiffs": true,
+      "passStrict": true,
+      "passPrePost": true,
+      "passCommitted": true
+    },
+    "events": {
+      "stageStarts": [
+        1,
+        103,
+        142
+      ],
+      "descents": [
+        [
+          103,
+          1,
+          102,
+          83
+        ],
+        [
+          142,
+          2,
+          141,
+          122
+        ]
+      ],
+      "eventBranch": [
+        "A",
+        "A"
+      ],
+      "terminalDeclared": true,
+      "terminalDeclIter": 180,
+      "terminalDeclBegin": 161,
+      "terminalBranch": "B"
+    }
+  },
+  "A_ex4": {
+    "reference": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/runs/C160x20_record.json + _iterations.csv + evidence/two_branch_controller_validation/C160x20_trajectory.mat",
+    "trajectory_sha256": "4d11a2fdc1c985b15dea74cc234ed9d1f658960c1d42bfd8092770cc1b658832",
+    "rho_sha256_bytes": [
+      "332c00a5181372bfd0fe82bbe8b7309496b1fb9f082d0a45945a61f0dcd2624a",
+      "332c00a5181372bfd0fe82bbe8b7309496b1fb9f082d0a45945a61f0dcd2624a"
+    ],
+    "rho_equals_trajectory_last_column": true,
+    "omega5_exact": true,
+    "nOuter": [
+      219,
+      219
+    ],
+    "innerTotal": [
+      5074,
+      5074
+    ],
+    "innerMax": [
+      53,
+      53
+    ],
+    "volume_exact": true,
+    "status": [
+      "CONVERGED",
+      "CONVERGED"
+    ],
+    "hist_fields_vs_trajectory_differing": [],
+    "hist_fields_compared": 36,
+    "drho_all_iterations_bitwise": true,
+    "csv_columns_exact": {
+      "omega1": true,
+      "move": true,
+      "stage": true,
+      "beta": true,
+      "nInner": true,
+      "cumInner": true,
+      "multN": true,
+      "exA": true,
+      "exB": true,
+      "exE": true,
+      "exDecl": true,
+      "exAmp": true
+    },
+    "exhaustion_equal": true,
+    "exhaustion_record_isequaln": true,
+    "log_equal": true,
+    "record_log_equal": true,
+    "pass": true,
+    "events": {
+      "stageStarts": [
+        1,
+        103,
+        142,
+        181
+      ],
+      "descents": [
+        [
+          103,
+          1,
+          102,
+          83
+        ],
+        [
+          142,
+          2,
+          141,
+          122
+        ],
+        [
+          181,
+          3,
+          180,
+          161
+        ]
+      ],
+      "eventBranch": [
+        "A",
+        "A",
+        "B"
+      ],
+      "terminalDeclared": true,
+      "terminalDeclIter": 219,
+      "terminalDeclBegin": 200,
+      "terminalBranch": "B"
+    }
+  },
+  "B_ped": {
+    "committed": {
+      "artifact": "Olhoff repro/results/S160x20/res.mat",
+      "sha256": "de7b15764509a1797d8713495f37481004cefb7b33f248d9b3981a4a3450daa0"
+    },
+    "post_vs_committed": {
+      "differing": [],
+      "onlyInCandidate": [],
+      "onlyInReference": [],
+      "cfgRowsDiffering": [
+        "stop.rule",
+        "runtime.verbose",
+        "runtime.name"
+      ],
+      "passDiffs": true,
+      "passStrict": false,
+      "passPrePost": false,
+      "passCommitted": true
+    },
+    "post_vs_up": {
+      "differing": [],
+      "onlyInCandidate": [],
+      "onlyInReference": [],
+      "cfgRowsDiffering": [],
+      "passDiffs": true,
+      "passStrict": true,
+      "passPrePost": true,
+      "passCommitted": true
+    },
+    "box": {
+      "move_max_first5": [
+        0.1,
+        0.1,
+        0.1,
+        0.1,
+        0.1
+      ],
+      "move_max_last": 0.1,
+      "moveMean_first5": [
+        0.099999999999999659,
+        0.099999999999999659,
+        0.0942249999999998,
+        0.08826375000000071,
+        0.085213375000000438
+      ],
+      "moveMean_last": 0.0084442061032017415,
+      "move_max_equals_committed": true,
+      "moveMean_equals_committed": true,
+      "Mnd_equals_committed": true
+    }
+  },
+  "pcont": {
+    "A6": {
+      "label": "A6_pdecoupled160",
+      "nOuter": 250,
+      "status": "CAP_HIT",
+      "science_digest_target": "94f1751be86b907e392e81582a1701498380b90ab8bfb7fe1821763680bd58f0",
+      "science_digest_upstream_candidate": "94f1751be86b907e392e81582a1701498380b90ab8bfb7fe1821763680bd58f0",
+      "target_equals_upstream_candidate": true,
+      "target_equals_committed_reference": false,
+      "rho_equals_reference": true,
+      "omega_equals_reference": true,
+      "drho_equals_reference": true,
+      "hist_fields_differing_from_reference": [
+        "move"
+      ],
+      "move_history_differs_at": [
+        86,
+        97
+      ],
+      "pEvents": [
+        86,
+        97
+      ],
+      "move_differences_only_at_pEvents": true
+    },
+    "A7": {
+      "label": "A7_massp160",
+      "nOuter": 250,
+      "status": "CAP_HIT",
+      "science_digest_target": "635404f789d90733879629851f7c2c24ee8a263977f9a4c57b0ab3740c7c858a",
+      "science_digest_upstream_candidate": "635404f789d90733879629851f7c2c24ee8a263977f9a4c57b0ab3740c7c858a",
+      "target_equals_upstream_candidate": true,
+      "target_equals_committed_reference": false,
+      "rho_equals_reference": true,
+      "omega_equals_reference": true,
+      "drho_equals_reference": true,
+      "hist_fields_differing_from_reference": [
+        "move"
+      ],
+      "move_history_differs_at": [
+        61,
+        72
+      ],
+      "pEvents": [
+        61,
+        72
+      ],
+      "move_differences_only_at_pEvents": true
+    }
+  },
+  "pass": {
+    "beta_post_vs_pre": false,
+    "beta_post_vs_campaign": true,
+    "beta_post_vs_up": true,
+    "ex3_post_vs_pre": false,
+    "ex3_post_vs_targetAudit": true,
+    "ex3_post_vs_up": true,
+    "ex4_post_vs_committed_record": true,
+    "ped_post_vs_committed": true,
+    "ped_post_vs_up": true,
+    "pcont_A6_equals_upstream": true,
+    "pcont_A7_equals_upstream": true
+  }
+}

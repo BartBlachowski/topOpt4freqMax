@@ -1,39 +1,40 @@
 {
-  "manifest_schema": "olhoff_current_provenance/1",
+  "manifest_schema": "olhoff_current_provenance/2",
   "implementation": "analysis/OlhoffCurrent",
   "role": "PRODUCTION - the only Olhoff implementation production scripts may execute",
-  "promotion_date": "2026-09-07",
+  "promotion_date": "2026-09-13",
   "source": {
     "repository": "/Users/piotrek/Programming/Matlab/Olhoff",
     "role": "DEVELOPMENT / RESEARCH UPSTREAM",
-    "branch": "architecture/canonical-config",
-    "commit": "695f03bdac20c423a4e1d389cf9db9187597bcc3",
-    "commit_date": "2026-09-06T23:24:25+02:00",
-    "commit_subject": "Phase 24: final report -- 12/12 anchors bitwise, verdict VERIFIED",
-    "dirty_state": "clean (git status --porcelain empty at promotion time)",
-    "acceptance_evidence": "architecture/docs/OLHOFF_ARCHITECTURE_REFACTOR_REPORT.md, verdict OLHOFF_ARCHITECTURE_REFACTOR_VERIFIED"
+    "branch": "migration/upstream-olhoffcurrent-capabilities",
+    "commit": "253069262407885a8b759a9e721c4f0a7d3a397d",
+    "tree": "4571029f39b62181499ab3d4ffb6da89f1d30021",
+    "commit_date": "2026-09-13T19:00:09+02:00",
+    "commit_subject": "Promote optional stage-exhaustion controller and outer timing",
+    "parent_successful_science_commit": "6b0870850d7407a0f2fc31dbf0d0f318c2e5f2f7",
+    "parent_successful_science_branch": "repro/natural-convergence",
+    "parent_subject": "Nine resolution test - ultimate results",
+    "promotion_route": "byte copy from `git archive 253069...` (committed object), never from the upstream working tree",
+    "archive_sha256": "f911240340cab69b9806f98f9413d9038649fde5e14adf3bbe4d57f3ddb0dbeb",
+    "dirty_state": "The upstream working tree (checked out: repro/natural-convergence @ 6b08708) carried one uncommitted modification, repro/PLAN_OLHOFFCURRENT_UPDATE.md (the uncommitted section 7). It was not read by the promotion; only committed blobs of 253069 were copied.",
+    "acceptance_evidence": [
+      "upstream repro/audits/upstream_olhoffcurrent_capabilities (CLEAN_BASE_FROM_6B087085_PASS, SOURCE_DEFAULT_NONINTERFERENCE_PASS, STAGE_EXHAUSTION_CAPABILITY_PASS, TOUTER_TELEMETRY_PASS, SWEEP_EVIDENCE_UNCHANGED_PASS, UPSTREAM_CAPABILITY_PROMOTION_READY)",
+      "analysis/OlhoffCurrent/diagnostics/scientific_delta_olhoff_migration (OLHOFFCURRENT_MIGRATION_READY_WITH_NAMED_FORMULATION_SPLIT; untracked at 013cc48)",
+      "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration (this promotion: 160x20 gates)"
+    ]
   },
   "main_repository": {
     "path": "/Users/piotrek/Programming/topOpt4freqMax",
-    "branch": "benchmark-methodology-r2",
-    "commit_before_promotion": "9cd1c8eed109e1c1b02c67fc6d9bb81f87179d6a",
-    "state_before_promotion": "clean except four untracked historical Olhoff directories"
-  },
-  "production_preset": {
-    "name": "duOlhoffFixedPenaltySensitivityFiltered",
-    "delegates_to_upstream_preset": "duOlhoffFrozenM4",
-    "historical_aliases": [
-      "M4",
-      "TMA",
-      "B0",
-      "REG160",
-      "duOlhoffFrozenM4"
-    ],
-    "alias_policy": "Historical audit IDs are PROVENANCE ALIASES and experiment identifiers only. They are NOT canonical API terminology and no production script may use them."
+    "branch": "migration/olhoffcurrent-upstream-253069 (worktree /Users/piotrek/Programming/topOpt4freqMax-migration-253069)",
+    "commit_before_promotion": "013cc48451d33bed61c5c4eea174bbd898d548a2",
+    "source_branch_of_that_commit": "benchmark-methodology-r2",
+    "state_before_promotion": "no tracked changes; eight untracked diagnostic directories under analysis/OlhoffCurrent/diagnostics in the primary checkout, left untouched (the migration ran in a dedicated worktree)"
   },
   "promoted_content": {
-    "layout": "analysis/OlhoffCurrent/+impl/{algo,fem,filter,mma,mma_published,architecture}",
-    "verbatim": "All promoted files are byte-identical to the upstream commit EXCEPT the single adaptation recorded below.",
+    "layout": "analysis/OlhoffCurrent/+impl/{algo,fem,filter,mma,mma_published,architecture/{+olh,olhoffSolve.m,legacy,docs}}",
+    "n_files": 79,
+    "verbatim": "All 79 promoted files are byte-identical to upstream 253069262407885a8b759a9e721c4f0a7d3a397d. There are NO target-local adaptations.",
+    "promoted_by_this_event": "16 replaced + 4 added (the other 59 were already byte-identical); see diagnostics/upstream_253069_migration/PROMOTION_MAP.md",
     "excluded_from_promotion": [
       "audit_*/",
       "results/",
@@ -45,19 +46,154 @@
       "architecture/anchors/",
       "architecture/tests/",
       "top88.m (repo-root duplicate of filter/top88_reference.m)",
-      "setpaths.m (replaced by olhoffcurrent_paths.m)"
+      "setpaths.m (replaced by olhoffcurrent_paths.m)",
+      "architecture/README.md (excluded as at 695f03b)",
+      "repro/ (upstream sweep evidence and audits)"
     ],
     "exclusion_rationale": "Those are upstream evidence, upstream regression harness and upstream path setup. They remain upstream; production carries only the executable implementation plus its own repository-local gate."
   },
-  "adaptations": [
+  "adaptations": [],
+  "adaptations_note": "hist.tOuter (the former single documented adaptation) and the stage-exhaustion controller (the former undocumented six-file local divergence plus exhaustion.m) are now supplied by upstream 253069 itself.",
+  "presets": {
+    "registry": "analysis/OlhoffCurrent/olhoffcurrent_presets.m",
+    "selection_rule": "Every configuration resolution names its preset explicitly; there is no unnamed default. Compatibility aliases resolve only to the formulation they always named; historical audit codes are provenance aliases and are refused as names.",
+    "canonical": [
+      {
+        "name": "duOlhoffSimpEq4bBetaStallLadderSensitivityFiltered",
+        "upstream_preset": "duOlhoffFrozenM4",
+        "role": "HISTORICAL_FORMULATION",
+        "compatibility_aliases": [
+          "duOlhoffFixedPenaltySensitivityFiltered"
+        ],
+        "historical_aliases": [
+          "M4",
+          "TMA",
+          "B0",
+          "REG160",
+          "duOlhoffFrozenM4",
+          "A1_frozen160"
+        ]
+      },
+      {
+        "name": "duOlhoffSimpEq4bThreeRungStageExhaustionSensitivityFiltered",
+        "upstream_preset": "duOlhoffFrozenM4 + move.levels [0.04 0.02 0.01], move.continuation.signal stageExhaustion, stop.rule stageExhaustion; cap 1600",
+        "role": "HISTORICAL_DIAGNOSTIC (not production-eligible)",
+        "compatibility_aliases": [],
+        "historical_aliases": [
+          "TR3_C",
+          "TR3_C_320x40",
+          "CAN3_480x60",
+          "CAN3_800x100",
+          "EX3_160"
+        ]
+      },
+      {
+        "name": "duOlhoffPedersenAdaptiveBoxSensitivityFiltered",
+        "upstream_preset": "duOlhoffAdaptivePedersen",
+        "role": "DISTINCT_FORMULATION (production since 2026-09-13)",
+        "compatibility_aliases": [],
+        "historical_aliases": [
+          "duOlhoffAdaptivePedersen",
+          "S160x20",
+          "S240x30",
+          "S320x40",
+          "S400x50",
+          "S480x60",
+          "S560x70",
+          "S640x80",
+          "S720x90",
+          "S800x100"
+        ]
+      }
+    ]
+  },
+  "production_preset_events": [
     {
-      "file": "+impl/architecture/olhoffSolve.m",
-      "kind": "BENCHMARK TIMING INSTRUMENTATION",
-      "change": "Adds hist.tOuter: a tic at the top of the outer loop and a toc recorded after the convergence test and every guard.",
-      "why": "The conference benchmark's nested cost accounting (outer_time_excluding_inner_s) requires the wall time of a complete outer iteration. The frozen conference reconstruction carries exactly this instrumentation as analysis/OlhoffM4Reconstruction/patches/olhoffOpt.timing-instrumentation.diff; upstream olhoffSolve.m does not. Repointing production without it would silently break the benchmark's accounting.",
-      "trajectory_effect": "NONE. hist.tOuter is written and never read back by the solver. Proved empirically, not asserted: see the equivalence evidence below.",
-      "upstream_sha256": "9f80dd8ed504dc5cce5d8ab995cd4520e1e388ec6478f6446378cb8a464e2543",
-      "promoted_sha256": "5d4abd37c8b186a42d1a7ef5b7066c8bc2429d33ee91f20b0b844bace772324b"
+      "event": 1,
+      "date": "2026-09-07",
+      "kind": "INITIAL_PROMOTION (reconstructed from the provenance/1 record, preserved verbatim under history[0])",
+      "old_preset": null,
+      "new_preset": "duOlhoffSimpEq4bBetaStallLadderSensitivityFiltered",
+      "name_at_the_time": "duOlhoffFixedPenaltySensitivityFiltered",
+      "upstream_preset": "duOlhoffFrozenM4",
+      "upstream_commit": "695f03bdac20c423a4e1d389cf9db9187597bcc3",
+      "config_hash_schema": "81-row schema (pre-migration); 80 rows at 695f03b plus stop.rule from commit 1438aa3",
+      "config_hashes": {
+        "160x20": "28756d22aacb59726be9f37583deca89fcfcecc93f9b867d46a49223ed1db697",
+        "240x30": "0856b13d02e3f1065c0ab145213bb57afb1b98570e64c9b023851f696141196c",
+        "320x40": "2a5b500991ff5931eef4919e768503d41fd558fe56ffbffe40c382c74d676cad",
+        "400x50": "cec3cd6b89ad67bc5386093a0caaf1b05dc172ddb75f488c52088c69d55d0c20",
+        "480x60": "a49417d0571d3c2406d030cbab1fda58a1dad8d334991c5aaf22fa17f1d7f601",
+        "560x70": "3478f34841ce743457aac7d4ba1755f2989453a9f0d79ccfc4f961f89fb7fd64",
+        "640x80": "e5d868133d52a510797e6847b9f113ab3d5424849f8473f23c7827485bff300b",
+        "720x90": "7efe1ee908be54cefd2b9e63f911e337809b92870056c7b1854b46bd41a91078",
+        "800x100": "9321858983a3d7d33ca1a7b5bed9136fb7967e637b7ac5b40dadfad5ffdd4132"
+      },
+      "note": "Hashes as recorded by the 2026-09-11 campaign (examples/Performance/conference_benchmark/campaign_9mesh_r2). They remain valid identifiers of that historical evidence."
+    },
+    {
+      "event": 2,
+      "date": "2026-09-13",
+      "kind": "PRODUCTION_PRESET_CHANGE with upstream promotion",
+      "old_preset": "duOlhoffSimpEq4bBetaStallLadderSensitivityFiltered",
+      "old_preset_status": "retained unchanged and resolvable by its canonical name and by its compatibility alias duOlhoffFixedPenaltySensitivityFiltered",
+      "new_preset": "duOlhoffPedersenAdaptiveBoxSensitivityFiltered",
+      "upstream_preset": "duOlhoffAdaptivePedersen",
+      "upstream_commit": "253069262407885a8b759a9e721c4f0a7d3a397d",
+      "upstream_parent_successful_science_commit": "6b0870850d7407a0f2fc31dbf0d0f318c2e5f2f7",
+      "config_hash_schema": "87-row schema (upstream 253069)",
+      "config_hashes": {
+        "160x20": "b1a5744df798ad624fcd0b8b4306888eb99816ee5ce60f51040e39e03e90d4f4",
+        "240x30": "2fac1384239527b1a0108e1d34725021cdc7c5a26f1939b602239415b34847e1",
+        "320x40": "a1203d43efb240308cfcb520c92a6d9bc37a0c703c728fc2f3d298f779bc5f6e",
+        "400x50": "e40c6ba16c9addbb587d08ecab29669f7db560d09b980ca62c2096856b849280",
+        "480x60": "8e55d18251152ec2d26836593489c14f4842390d912d7c66f43f3b18730c83de",
+        "560x70": "8b2533a3caf8432d40a54dbcbd8958900e333c410527d5547c53699b9e373ccf",
+        "640x80": "cbe8dcf070d3e318a889867b5168fdbb09f1b6babfd46f981447d96e9a073aaf",
+        "720x90": "2893ad47136fc9a7775f1f4d9ff1dcba38e7fe14271dd12b5727ff4bd8bb54f3",
+        "800x100": "f9138743067afd0edce255ad26a6d7ae5c0f632a537516a4793eafecbacbe4cd"
+      },
+      "old_preset_config_hashes_under_new_schema": {
+        "160x20": "c0fe56ce897ce32ec8efc90ca1fb6bdd9c8326ee56700f5ce33adfb26bded17d",
+        "240x30": "6578c7846a6851ea8eb60a47abb59b4482432f324e3ee908092cabcae0dcf7ee",
+        "320x40": "7bc5b94f4a0b2aca4f66bbec9cc3664c5181cdaddca6b556eff0b506f8f07b08",
+        "400x50": "95d2400f000fbd145006524513147b4ace1d1c3f75c339d605a15caac155d84c",
+        "480x60": "11bcb9a9e4df3fdb2f53a82e84df1070cf1a3ce6c97be817a63249ecdb262450",
+        "560x70": "1a6c7b95f388afeb4789413f8ff4bd5cce347f210e2ef6c76b54285a7f891068",
+        "640x80": "36079c2f075ec7f49a31eeaf1fc27ae329ff9b590d52378235b280f0a4b9a235",
+        "720x90": "a338c98d5c2aa77c65d754bc03684d66b53ea5b2ccddce7b8ee56d4c9992a35c",
+        "800x100": "a37164f0895a0a2abb65f44e12ce05c4517088af638a7ca5a7322a094f39416a"
+      },
+      "rationale": "Per diagnostics/scientific_delta_olhoff_migration: the Pedersen/adaptive-box formulation is a distinct, scientifically defensible reconstruction whose committed nine-mesh R = 0.06 sweep terminates cleanly without localized-mode spikes; its success is primarily formulation stability, not a better KKT point; the historical eq.(4b) formulation remains reproducible under its own name. Per diagnostics/nine_mesh_campaign_audit the historical preset's cross-mesh termination was not credible. Not chosen for better-looking topology.",
+      "authorization": "Migration gate only (160x20). A new nine-mesh campaign requires separate owner authorization.",
+      "evidence": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration"
+    }
+  ],
+  "config_hash_transition": {
+    "schema_rows_before": 81,
+    "schema_rows_after": 87,
+    "added_rows": [
+      "material.stiffness.linearBelow",
+      "optimizer.inner.asymptoteHistory",
+      "move.adaptive.grow",
+      "move.adaptive.shrink",
+      "stop.guards.settledWindow",
+      "stop.guards.boxInactiveFraction"
+    ],
+    "explanation": "olhoffcurrent_config_hash iterates schema rows, so every configuration hash changes when rows are added, although no historical scientific value changes. All 81 old leaves are equal for every recorded historical configuration, and the 81-row hash recomputed from the migrated configuration reproduces every recorded hash exactly.",
+    "record": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/CONFIG_HASH_TRANSITION.md"
+  },
+  "known_preexisting_defects": [
+    {
+      "id": "PCONT_MOVE_HISTORY_LOGGED_BEFORE_RESET",
+      "introduced_upstream_at": "6b0870850d7407a0f2fc31dbf0d0f318c2e5f2f7 (present in 253069)",
+      "affected_presets": [
+        "pContinuationDecoupled",
+        "pMassCompatible"
+      ],
+      "effect": "hist.move (and log text / transitions derived from it) records the pre-reset move level at p-continuation event iterations; rho, omega and every drho are unaffected",
+      "status": "documented, deliberately NOT repaired in this migration",
+      "record": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/KNOWN_PREEXISTING_DEFECTS.md"
     }
   ],
   "relationships": {
@@ -66,6 +202,96 @@
     "analysis/OlhoffExperiments": "EXPERIMENTAL. Not created by this task; already blocked pre-emptively so it cannot become a production dependency by accident.",
     "other Olhoff trees": "HISTORICAL / AUDIT_ONLY. Classified in analysis/OLHOFF_IMPLEMENTATION_MAP.md and blocked by olhoffcurrent_forbidden_paths."
   },
-  "alias_statement": "Historical audit IDs (M4, S2, R2, P1, PD1, PM1, T800, TMA, B0, REG160) are provenance aliases, not canonical API terminology.",
-  "equivalence_evidence": "analysis/OLHOFF_CURRENT_PROMOTION_REPORT.md"
+  "alias_statement": "Historical audit IDs (M4, S2, R2, P1, PD1, PM1, T800, TMA, B0, REG160, TR3_C, CAN3_*, EX3_160, S160x20..S800x100) are provenance aliases, not canonical API terminology. The only compatibility alias is duOlhoffFixedPenaltySensitivityFiltered, which resolves exclusively to duOlhoffSimpEq4bBetaStallLadderSensitivityFiltered.",
+  "equivalence_evidence": [
+    "analysis/OLHOFF_CURRENT_PROMOTION_REPORT.md (2026-09-07 promotion)",
+    "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/REPORT.md (2026-09-13 promotion)"
+  ],
+  "lineage": [
+    {
+      "date": "2026-09-07",
+      "event": "promotion from upstream 695f03b, 74 files, one adaptation (hist.tOuter)"
+    },
+    {
+      "date": "2026-09-09",
+      "event": "target commit 1438aa3 added the stage-exhaustion controller locally: +impl became 75 files differing from 695f03b in seven (six edited + exhaustion.m); PROVENANCE.md was not updated"
+    },
+    {
+      "date": "2026-09-13",
+      "event": "upstream 253069 absorbed both local capabilities as default-off options on top of 6b08708; this promotion byte-copies it: 79 files, zero adaptations"
+    }
+  ],
+  "history": [
+    {
+      "manifest_schema": "olhoff_current_provenance/1",
+      "implementation": "analysis/OlhoffCurrent",
+      "role": "PRODUCTION - the only Olhoff implementation production scripts may execute",
+      "promotion_date": "2026-09-07",
+      "source": {
+        "repository": "/Users/piotrek/Programming/Matlab/Olhoff",
+        "role": "DEVELOPMENT / RESEARCH UPSTREAM",
+        "branch": "architecture/canonical-config",
+        "commit": "695f03bdac20c423a4e1d389cf9db9187597bcc3",
+        "commit_date": "2026-09-06T23:24:25+02:00",
+        "commit_subject": "Phase 24: final report -- 12/12 anchors bitwise, verdict VERIFIED",
+        "dirty_state": "clean (git status --porcelain empty at promotion time)",
+        "acceptance_evidence": "architecture/docs/OLHOFF_ARCHITECTURE_REFACTOR_REPORT.md, verdict OLHOFF_ARCHITECTURE_REFACTOR_VERIFIED"
+      },
+      "main_repository": {
+        "path": "/Users/piotrek/Programming/topOpt4freqMax",
+        "branch": "benchmark-methodology-r2",
+        "commit_before_promotion": "9cd1c8eed109e1c1b02c67fc6d9bb81f87179d6a",
+        "state_before_promotion": "clean except four untracked historical Olhoff directories"
+      },
+      "production_preset": {
+        "name": "duOlhoffFixedPenaltySensitivityFiltered",
+        "delegates_to_upstream_preset": "duOlhoffFrozenM4",
+        "historical_aliases": [
+          "M4",
+          "TMA",
+          "B0",
+          "REG160",
+          "duOlhoffFrozenM4"
+        ],
+        "alias_policy": "Historical audit IDs are PROVENANCE ALIASES and experiment identifiers only. They are NOT canonical API terminology and no production script may use them."
+      },
+      "promoted_content": {
+        "layout": "analysis/OlhoffCurrent/+impl/{algo,fem,filter,mma,mma_published,architecture}",
+        "verbatim": "All promoted files are byte-identical to the upstream commit EXCEPT the single adaptation recorded below.",
+        "excluded_from_promotion": [
+          "audit_*/",
+          "results/",
+          "runs/",
+          "docs/ (repo-root)",
+          "NOTES.md",
+          "CLAUDE.md",
+          "EVIDENCE_MANIFEST.sha256",
+          "architecture/anchors/",
+          "architecture/tests/",
+          "top88.m (repo-root duplicate of filter/top88_reference.m)",
+          "setpaths.m (replaced by olhoffcurrent_paths.m)"
+        ],
+        "exclusion_rationale": "Those are upstream evidence, upstream regression harness and upstream path setup. They remain upstream; production carries only the executable implementation plus its own repository-local gate."
+      },
+      "adaptations": [
+        {
+          "file": "+impl/architecture/olhoffSolve.m",
+          "kind": "BENCHMARK TIMING INSTRUMENTATION",
+          "change": "Adds hist.tOuter: a tic at the top of the outer loop and a toc recorded after the convergence test and every guard.",
+          "why": "The conference benchmark's nested cost accounting (outer_time_excluding_inner_s) requires the wall time of a complete outer iteration. The frozen conference reconstruction carries exactly this instrumentation as analysis/OlhoffM4Reconstruction/patches/olhoffOpt.timing-instrumentation.diff; upstream olhoffSolve.m does not. Repointing production without it would silently break the benchmark's accounting.",
+          "trajectory_effect": "NONE. hist.tOuter is written and never read back by the solver. Proved empirically, not asserted: see the equivalence evidence below.",
+          "upstream_sha256": "9f80dd8ed504dc5cce5d8ab995cd4520e1e388ec6478f6446378cb8a464e2543",
+          "promoted_sha256": "5d4abd37c8b186a42d1a7ef5b7066c8bc2429d33ee91f20b0b844bace772324b"
+        }
+      ],
+      "relationships": {
+        "analysis/OlhoffM4Reconstruction": "FROZEN_EVIDENCE. The frozen conference reconstruction, imported from the same upstream tree on 2026-09-04. It is the realization analysis/OlhoffCurrent's production preset must and does reproduce. It is NOT a production dependency and is hard-blocked from the production MATLAB path.",
+        "/Users/piotrek/Programming/Matlab/Olhoff": "DEVELOPMENT_UPSTREAM. Never an executable dependency of a production run. Blocked by absolute path in olhoffcurrent_forbidden_paths.",
+        "analysis/OlhoffExperiments": "EXPERIMENTAL. Not created by this task; already blocked pre-emptively so it cannot become a production dependency by accident.",
+        "other Olhoff trees": "HISTORICAL / AUDIT_ONLY. Classified in analysis/OLHOFF_IMPLEMENTATION_MAP.md and blocked by olhoffcurrent_forbidden_paths."
+      },
+      "alias_statement": "Historical audit IDs (M4, S2, R2, P1, PD1, PM1, T800, TMA, B0, REG160) are provenance aliases, not canonical API terminology.",
+      "equivalence_evidence": "analysis/OLHOFF_CURRENT_PROMOTION_REPORT.md"
+    }
+  ]
 }

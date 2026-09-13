@@ -63,19 +63,16 @@ hist = struct('omega',[],'N',[],'beta',[],'nInner',[],'dxOuter',[], ...
               'innerConv',[],'cumInner',[],'dxNorm2',[],'move',[],'gap12',[], ...
               'volErr',[],'dBeta',[],'stage',[],'pPen',[],'pStage',[],'pEvent',[],'massLow',[], ...
               'projBeta',[],'projStage',[],'projEvent',[],'dxPhys2',[], ...
-              ... % stage-exhaustion controller trace.  Written only when the
-              ... % controller is selected; all NaN/false otherwise.  Read back
-              ... % by nothing inside the solve.
-              'exA',[],'exB',[],'exE',[],'exNA',[],'exNB',[],'exDecl',[], ...
-              'exCos',[],'exNet',[],'exMedcos',[],'exMednet',[],'exAmp',[], ...
-              'exStageStart',[], ...
-              ... % BENCHMARK TIMING INSTRUMENTATION ONLY.  Carried forward from
-              ... % the frozen conference reconstruction, where it is recorded as
-              ... % patches/olhoffOpt.timing-instrumentation.diff.  tOuter is the
-              ... % wall time of one complete outer iteration, inner solve
-              ... % included; it is WRITTEN AND NEVER READ BACK, so the trajectory
-              ... % is unchanged.  See analysis/OlhoffCurrent/PROVENANCE.md sec.7.
+              ... % OUTER TIMING TELEMETRY.  Wall time of one complete outer
+              ... % iteration (see the toc at the end of the loop body).
+              ... % Nondeterministic, WRITTEN AND NEVER READ BACK: no decision,
+              ... % stopping test or reported science uses it, and anchorRecord
+              ... % already excludes it with tEig/tGrad/tInner.
               'tOuter',[]);
+% Additive per-iteration diagnostics kept OUT of hist so that the anchor digests
+% over hist stay bitwise: Mnd = 4*mean(rho.*(1-rho)) after the update (grey
+% measure), moveMean = mean of the per-element box (adaptive move policy).
+aux = struct('Mnd',[],'moveMean',[]);
 log = {};
 cumInner = 0;
 wantDiag = g('runtime.diagnostics');
@@ -121,10 +118,25 @@ stopNormL2    = strcmp(g('stop.norm'),'l2');
 exhaustMove   = strcmp(g('move.continuation.signal'),'stageExhaustion');
 exhaustStop   = strcmp(g('stop.rule'),'stageExhaustion');
 useExhaustion = exhaustMove || exhaustStop;
+if useExhaustion
+    % The controller trace is recorded in hist under the names OlhoffCurrent
+    % reads, but the fields EXIST ONLY when the controller is selected: the
+    % anchor standard hashes every non-timing hist field, so a configuration
+    % that selects neither switch must leave the hist field set exactly as the
+    % solver produced it before this option existed.
+    exFields = {'exA','exB','exE','exNA','exNB','exDecl','exCos','exNet', ...
+                'exMedcos','exMednet','exAmp','exStageStart'};
+    for k_ = 1:numel(exFields), hist.(exFields{k_}) = []; end
+end
 maxOuter      = g('runtime.maxOuter');
 verbose       = g('runtime.verbose');
 innerLP       = strcmp(g('optimizer.inner.type'),'lp');
 innerDesignVar= strcmp(g('optimizer.inner.variable'),'design');
+asyOuter      = strcmp(g('optimizer.inner.asymptoteHistory'),'outer');
+settledW      = g('stop.guards.settledWindow');
+boxFrac       = g('stop.guards.boxInactiveFraction');
+eigOpts       = struct('tol',g('eigen.tolerance'),'maxit',g('eigen.maxIterations'), ...
+                       'pFactor',g('eigen.krylovFactor'));
 massCfg       = g('material.mass');
 
 if verbose
@@ -164,7 +176,7 @@ if useProj
 end
 
 for outer = 1:maxOuter
-    tOuterTic = tic;   % BENCHMARK TIMING INSTRUMENTATION ONLY
+    tOuterTic = tic;   % OUTER TIMING TELEMETRY ONLY (hist.tOuter)
 
     % ---- SIMP penalization in force this iteration ----------------------
     % Sec. 2.1: p is "normally assigned values increasing from 1 to 3 during the
@@ -187,6 +199,9 @@ for outer = 1:maxOuter
     end
     hist.pPen(outer)   = pNow;
     hist.pStage(outer) = pStage;
+    % stiffness interpolation in force: SIMP with pNow, or Pedersen's scheme
+    stiffNow = struct('model', g('material.stiffness.model'), 'p', pNow, ...
+                      'linearBelow', g('material.stiffness.linearBelow'));
 
     % ---- mass model in force this iteration -----------------------------
     % The low-p model is in force exactly while p is below its final value, and
@@ -210,8 +225,8 @@ for outer = 1:maxOuter
 
     % ---- step 1: FE analysis + multiplicity detection -------------------
     te = tic;
-    [K,M] = assemble2D(mdl, rho, pNow, massNowCfg);
-    [w, Phi, lam] = eigSolve(K, M, Jcalc, g('eigen.solver'));
+    [K,M] = assemble2D(mdl, rho, stiffNow, massNowCfg);
+    [w, Phi, lam] = eigSolve(K, M, Jcalc, g('eigen.solver'), [], eigOpts);
     tEig = toc(te);
 
     [N, multState] = olh.multi.detect(cfg, w, n, Jcalc, multState);
@@ -231,7 +246,7 @@ for outer = 1:maxOuter
     % Sec. 3.5.1: "In the second step of the main loop, we set lambda~ = omega_n^2"
     % -- the FIRST eigenvalue of the cluster, NOT the cluster mean.
     lamTild = lam(n);
-    F       = genGrad(mdl, rho, pNow, massNowCfg, Phi, lamTild, idx);
+    F       = genGrad(mdl, rho, stiffNow, massNowCfg, Phi, lamTild, idx);
     % Diagonal-offset form: the subeigenvalue problem keeps the actual
     % separation lam(j)-lam(n), so the diagonal blocks use each mode's OWN
     % eigenvalue -- eq. (24) verbatim, f_jj with lambda_j.  The off-diagonals
@@ -239,14 +254,14 @@ for outer = 1:maxOuter
     % whole thing collapses onto (25d) as printed.
     if useOff
         for j = 1:N
-            Gj = genGrad(mdl, rho, pNow, massNowCfg, Phi, lam(idx(j)), idx(j));
+            Gj = genGrad(mdl, rho, stiffNow, massNowCfg, Phi, lam(idx(j)), idx(j));
             F(:,j,j) = Gj(:,1,1);
         end
         dOff = lam(idx) - lam(idx(1));
     else
         dOff = [];
     end
-    FJ      = genGrad(mdl, rho, pNow, massNowCfg, Phi, lam(J), J);
+    FJ      = genGrad(mdl, rho, stiffNow, massNowCfg, Phi, lam(J), J);
     fJJ     = FJ(:,1,1);
 
     % ---- sensitivity treatment ------------------------------------------
@@ -294,7 +309,10 @@ for outer = 1:maxOuter
     elseif ~isempty(mvState)
         mvState.lastRealized = NaN;
     end
-    [mvNow, mvState] = olh.move.limit(cfg, outer, hist, mvState);
+    [mvNow, mvState] = olh.move.limit(cfg, outer, hist, mvState, rho);
+    % Under the adaptive policy mvNow is a per-element VECTOR.  The inner loops
+    % take it elementwise; the record and the guards use its maximum.
+    mvMax = max(mvNow);
     % ---- p continuation on its own counter: intercept the stall event ---
     % A stall is detected here as a ladder stage increase.  While p has not
     % reached its final value that event is consumed by the p controller INSTEAD
@@ -328,7 +346,7 @@ for outer = 1:maxOuter
                  'move',mvNow,'maxInner',g('optimizer.inner.maxIterations'), ...
                  'tolInner',g('optimizer.inner.tolerance'), ...
                  'minInner',g('optimizer.inner.minIterations'), ...
-                 'offDiag',offDiag,'dOff',dOff);
+                 'offDiag',offDiag,'dOff',dOff,'asyOuter',asyOuter);
     if useProj
         % The optimization variable is z, so the MMA box and the move limit
         % bound dz:  max(0-z,-move) <= dz <= min(1-z,+move).  Passing z through
@@ -393,6 +411,7 @@ for outer = 1:maxOuter
             dg.Vrot(end+1) = NaN;
         end
     end
+    aux.Mnd(outer)       = 4*mean(rho.*(1-rho));
     hist.omega(:,outer)  = w(1:min(Jcalc,numel(w)));
     hist.N(outer)        = N;
     hist.beta(outer)     = st.beta;
@@ -408,7 +427,8 @@ for outer = 1:maxOuter
     hist.degen(outer)    = st.degenHits;
     hist.multJ(outer)    = multJ;
     hist.dxNorm2(outer)  = dxNorm2;
-    hist.move(outer)     = mvNow;
+    hist.move(outer)     = mvMax;
+    aux.moveMean(outer)  = mean(mvNow);
     hist.gap12(outer)    = (w(2)-w(1))/w(1);
     hist.volErr(outer)   = mean(rho) - volfrac;
     if outer > 1, hist.dBeta(outer) = st.beta - hist.beta(outer-1);
@@ -419,7 +439,7 @@ for outer = 1:maxOuter
     if verbose
         fprintf('%4d %9.2f %9.2f %9.2f %4d %9.2f %6d %6d %8.4f %9.4f %8.4f %9.3f %7s\n', ...
                 outer, w(1), w(2), w(min(3,end)), N, sqrt(max(st.beta,0)), ...
-                st.nInner, cumInner, dxOuter, dxNorm2, mvNow, mean(rho), ...
+                st.nInner, cumInner, dxOuter, dxNorm2, mvMax, mean(rho), ...
                 local_yesno(st.conv));
     end
 
@@ -463,13 +483,31 @@ for outer = 1:maxOuter
     % move limit mechanically reduces the measured step with no change in the
     % design's behaviour, and the criterion is uninterpretable there.
     if guardSettled && ~exhaustStop
-        moveSettled = outer >= 2 && hist.move(outer) == hist.move(outer-1);
+        % settledWindow = 1 is the historical test (previous iteration only).
+        moveSettled = outer >= settledW+1 && ...
+            all(hist.move(outer-settledW:outer) == hist.move(outer));
         if convOuter && ~moveSettled
             log{end+1} = sprintf(['iter %d: ||drho|| below eps but the move limit ' ...
                 'just changed (%.6g -> %.6g); convergence NOT asserted'], ...
                 outer, local_prevMove(hist,outer), hist.move(outer)); %#ok<AGROW>
         end
         convOuter = convOuter && moveSettled;
+    end
+
+    % ---- guard: the move box must not be what made the step small --------
+    % The printed test (sec. 3.5.1) presupposes that drho is bounded by (25f)
+    % alone.  Under a move limit, ||drho|| can be small because the box binds.
+    % Requiring max|drho| <= fraction*move asserts that the box is inactive,
+    % i.e. that the step is small because the design stopped moving.
+    % RECONSTRUCTION (class C); off when the fraction is 0 or the move is Inf.
+    if boxFrac > 0 && isfinite(mvMax) && ~exhaustStop
+        boxInactive = dxOuter <= boxFrac*mvMax;
+        if convOuter && ~boxInactive
+            log{end+1} = sprintf(['iter %d: ||drho|| below eps but max|drho| = %.3g is not below ' ...
+                '%g x move %.4g; the box is active, convergence NOT asserted'], ...
+                outer, dxOuter, boxFrac, mvMax); %#ok<AGROW>
+        end
+        convOuter = convOuter && boxInactive;
     end
 
     % ---- guards: additional conditions on admitting convergence ---------
@@ -548,13 +586,16 @@ for outer = 1:maxOuter
         convOuter = false;
     end
 
-    % BENCHMARK TIMING INSTRUMENTATION ONLY.  Placed after the convergence
-    % test and every guard, so the recorded outer-iteration time covers each
-    % computational region of the iteration -- FE assembly, eigenproblem, modal
-    % processing, sensitivities, filtering, the step controller, the nested
-    % inner solve, the design update, bookkeeping and the convergence test.
-    % The benchmark subtracts hist.tInner from it to obtain the outer-exclusive
-    % time.  Nothing reads it back.
+    % OUTER TIMING TELEMETRY.  Placed after the convergence test and every
+    % guard, immediately before the break test, so the recorded outer-iteration
+    % time covers each computational region of the iteration -- FE assembly,
+    % eigenproblem, modal processing, sensitivities, filtering, the step
+    % controller, the nested inner solve, the design update, bookkeeping, the
+    % diagnostics recorder and console output when those are enabled, and the
+    % convergence test.  tic and toc are unconditional.  A benchmark subtracts
+    % hist.tInner from it to obtain the outer-exclusive time.  Nothing reads it
+    % back.  (Promoted from analysis/OlhoffCurrent, where it was the documented
+    % benchmark timing adaptation.)
     hist.tOuter(outer) = toc(tOuterTic);
 
     if convOuter
@@ -568,14 +609,17 @@ end
 % stiffness.p whenever there is no schedule, and ALWAYS with the terminal mass
 % model, so that the final formulation matches the unscheduled baseline exactly.
 massFinalCfg = massCfg;  massFinalCfg.model = massTerminal;
-[K,M] = assemble2D(mdl, rho, pNow, massFinalCfg);
-[w, Phi, lam] = eigSolve(K, M, Jcalc, g('eigen.solver'));
+stiffFinal = struct('model', g('material.stiffness.model'), 'p', pNow, ...
+                    'linearBelow', g('material.stiffness.linearBelow'));
+[K,M] = assemble2D(mdl, rho, stiffFinal, massFinalCfg);
+[w, Phi, lam] = eigSolve(K, M, Jcalc, g('eigen.solver'), [], eigOpts);
 T = classifyModes(mdl, M, Phi, w);
 
 res = struct('cfg',cfg,'rho',rho,'omega',w,'lambda',lam,'hist',hist, ...
              'modeTable',T,'log',{log},'nOuter',numel(hist.N), ...
              'wallclock',toc(t0),'mdl',mdl);
 res.status = local_status(log, numel(hist.N), maxOuter);
+res.aux = aux;
 if useExhaustion
     res.exhaustion = struct( ...
         'W', mvState.ex.W, 'P', mvState.ex.P, 'Wnp', mvState.ex.Wnp, ...

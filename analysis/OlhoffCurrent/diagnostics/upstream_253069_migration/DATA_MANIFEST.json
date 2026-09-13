@@ -1,0 +1,581 @@
+{
+ "schema": "upstream_253069_migration_data_manifest/1",
+ "generated": "2026-09-13T20:33:06+02:00",
+ "artifacts": [
+  {
+   "path": "analysis/OlhoffCurrent/evidence/upstream_253069_migration/POST_A6.mat",
+   "bytes": 7265112,
+   "sha256": "818f0e391951b57d03c88ff4e35e09a52976d531cf3c59a0a93d4848fd169742",
+   "tracked": false,
+   "storage": "git-ignored durable evidence root (EVIDENCE_POLICY.md)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/evidence/upstream_253069_migration/POST_A7.mat",
+   "bytes": 7292600,
+   "sha256": "b379ca9bc96d946ff1ef768a51fb26fb892cf0196ed31bcf92b1b8125fd968b4",
+   "tracked": false,
+   "storage": "git-ignored durable evidence root (EVIDENCE_POLICY.md)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/evidence/upstream_253069_migration/POST_BETA.mat",
+   "bytes": 452115,
+   "sha256": "ed83ee179badc23ec4e16bdd55ed1d02339faf087fae17ef0e2d14a1655839c8",
+   "tracked": false,
+   "storage": "git-ignored durable evidence root (EVIDENCE_POLICY.md)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/evidence/upstream_253069_migration/POST_EX3.mat",
+   "bytes": 4716865,
+   "sha256": "3d590f62fc6f6779911e013c3a4e40647adb119995ed4d074f8715e0bab1f0f5",
+   "tracked": false,
+   "storage": "git-ignored durable evidence root (EVIDENCE_POLICY.md)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/evidence/upstream_253069_migration/POST_EX4.mat",
+   "bytes": 5637151,
+   "sha256": "d036f1e1e519c6e291787e665269aaf8d076a48902434a235f9598b1f9b2e71a",
+   "tracked": false,
+   "storage": "git-ignored durable evidence root (EVIDENCE_POLICY.md)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/evidence/upstream_253069_migration/POST_PED.mat",
+   "bytes": 464222,
+   "sha256": "af0ec95482bbb42b35790123b8c7e9649aacd8611c712633a01a57512b5ec8f3",
+   "tracked": false,
+   "storage": "git-ignored durable evidence root (EVIDENCE_POLICY.md)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/evidence/upstream_253069_migration/PRE_BETA.mat",
+   "bytes": 441691,
+   "sha256": "79bdeb55005e0dc4fe1e4267ed7c333de46716df7209651fb0acdb2a948a9ddd",
+   "tracked": false,
+   "storage": "git-ignored durable evidence root (EVIDENCE_POLICY.md)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/evidence/upstream_253069_migration/PRE_EX3.mat",
+   "bytes": 4693241,
+   "sha256": "0106ea70a6eca3c66341c0f12adbd8c3efaf9848f0a10e6992099878e1876a31",
+   "tracked": false,
+   "storage": "git-ignored durable evidence root (EVIDENCE_POLICY.md)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/evidence/upstream_253069_migration/T_baseline_finalization.mat",
+   "bytes": 217,
+   "sha256": "9337467ec612181e86d16e2582b3b2d33e4f684bd3aa7b30c1a949e094cf0875",
+   "tracked": false,
+   "storage": "git-ignored durable evidence root (EVIDENCE_POLICY.md)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/evidence/upstream_253069_migration/T_cost_reporting.mat",
+   "bytes": 339,
+   "sha256": "86fcb524b1601c5de212617a9bb5f77596233fadab6d6c4ef60999b0c900c290",
+   "tracked": false,
+   "storage": "git-ignored durable evidence root (EVIDENCE_POLICY.md)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/evidence/upstream_253069_migration/T_gates.mat",
+   "bytes": 473,
+   "sha256": "d11fa6526f7b4a5442022c56e06fc7ee774bf4a2486c411f216ad70bdd383f98",
+   "tracked": false,
+   "storage": "git-ignored durable evidence root (EVIDENCE_POLICY.md)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/evidence/upstream_253069_migration/T_named_pedersen.mat",
+   "bytes": 364,
+   "sha256": "63e925f9ea521e86d65d3fa5b086c3ee46924c698d53877fba9f674a5fd713fe",
+   "tracked": false,
+   "storage": "git-ignored durable evidence root (EVIDENCE_POLICY.md)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/evidence/upstream_253069_migration/T_named_stageExhaustion.mat",
+   "bytes": 369,
+   "sha256": "7f99e4266d6ceeebdb1968ed5c88058a950f399b09a0fa04f11fd27572096d64",
+   "tracked": false,
+   "storage": "git-ignored durable evidence root (EVIDENCE_POLICY.md)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/evidence/upstream_253069_migration/T_pedersen_adaptive_units.mat",
+   "bytes": 352,
+   "sha256": "829f8eb6d0225f61d7e66d43bafd872895bd955d08e40d9a475ffb607bb2cc04",
+   "tracked": false,
+   "storage": "git-ignored durable evidence root (EVIDENCE_POLICY.md)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/evidence/upstream_253069_migration/T_preset_equivalence.mat",
+   "bytes": 340,
+   "sha256": "91c425efc51d73b8d1cc180461e6530e41cec13e5bd1b9540ce01984430bbcbf",
+   "tracked": false,
+   "storage": "git-ignored durable evidence root (EVIDENCE_POLICY.md)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/evidence/upstream_253069_migration/T_preset_identity.mat",
+   "bytes": 336,
+   "sha256": "2f51e0a03604258915916ef013e8385066a27b12134ed048c92daeff33be9fd9",
+   "tracked": false,
+   "storage": "git-ignored durable evidence root (EVIDENCE_POLICY.md)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/evidence/upstream_253069_migration/T_upstream_suites.mat",
+   "bytes": 660,
+   "sha256": "28afc277fe4dc6023875f0ab8b12c65e08aec4b12fce3abbc20c775850854c68",
+   "tracked": false,
+   "storage": "git-ignored durable evidence root (EVIDENCE_POLICY.md)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/evidence/upstream_253069_migration/T_upstream_suites_snapshot.mat",
+   "bytes": 656,
+   "sha256": "a3184f76a3659aa8e42edff4d7005b4f73b97e8d084c82008dfadfc3158861c2",
+   "tracked": false,
+   "storage": "git-ignored durable evidence root (EVIDENCE_POLICY.md)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/evidence/upstream_253069_migration/UP_BETA.mat",
+   "bytes": 437923,
+   "sha256": "dcfe95aba5d592302ccfabe8401246e3a8507401fa7c82abbe9a90edc6377244",
+   "tracked": false,
+   "storage": "git-ignored durable evidence root (EVIDENCE_POLICY.md)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/evidence/upstream_253069_migration/UP_EX3.mat",
+   "bytes": 4704769,
+   "sha256": "c11a17e17bd398b59b669ca40dad1bbaf3816b70a2d618b0c36758a81621b220",
+   "tracked": false,
+   "storage": "git-ignored durable evidence root (EVIDENCE_POLICY.md)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/evidence/upstream_253069_migration/UP_PED.mat",
+   "bytes": 447638,
+   "sha256": "a3efba2f7473ab34b7582bf2a6cc6101542eac4bda58df77536eb194a6a3c421",
+   "tracked": false,
+   "storage": "git-ignored durable evidence root (EVIDENCE_POLICY.md)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/evidence/upstream_253069_migration/cfg_post.mat",
+   "bytes": 3132576,
+   "sha256": "eb4082cb2278d7f31049e7aab47228e767a70bf8760d8dae474cca94b6503be1",
+   "tracked": false,
+   "storage": "git-ignored durable evidence root (EVIDENCE_POLICY.md)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/evidence/upstream_253069_migration/cfg_pre.mat",
+   "bytes": 1732984,
+   "sha256": "a09131d29e86ec995ef734c46f0e87f4965d6c0ebf3eeb55811ca7dfbfa269cd",
+   "tracked": false,
+   "storage": "git-ignored durable evidence root (EVIDENCE_POLICY.md)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/evidence/upstream_253069_migration/cfg_up.mat",
+   "bytes": 2870664,
+   "sha256": "4d1445af2f3873912d232ecda40ee0eaeaa19a8df73ece5a219562bb4584c094",
+   "tracked": false,
+   "storage": "git-ignored durable evidence root (EVIDENCE_POLICY.md)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/evidence/upstream_253069_migration/harness_selftest.json",
+   "bytes": 3496,
+   "sha256": "0dbd63b6ad934258b9f92e73681a8078e6e01a6183a111ecbdbcc83f55d341b0",
+   "tracked": false,
+   "storage": "git-ignored durable evidence root (EVIDENCE_POLICY.md)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/evidence/upstream_253069_migration/harness_selftest_BASELINE_013cc48.json",
+   "bytes": 2945,
+   "sha256": "e22f101c762dff3a3ed756b64646e1fb34b64dc6db48a7084a3457342089835a",
+   "tracked": false,
+   "storage": "git-ignored durable evidence root (EVIDENCE_POLICY.md)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/BYTE_IDENTITY.md",
+   "bytes": 11252,
+   "sha256": "d085f568018d8c0eaf7507060573a3a280102c2335ff36f8ee80e42bf6be25cd",
+   "tracked": true
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/CAMPAIGN_GATE.md",
+   "bytes": 3216,
+   "sha256": "7b43688f13e113968a8af98ba13d808f04c2a64a06bed913b71c053dd9d29b57",
+   "tracked": true
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/CONFIG_HASH_TRANSITION.md",
+   "bytes": 8966,
+   "sha256": "e341697191cb4dcf053322a9edf465f0014af2e348805396a8beebd03aeea065",
+   "tracked": true
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/COST_REPORTING.md",
+   "bytes": 3659,
+   "sha256": "995a9b0a9672d6f961e65fe30aa14e506066b45d72ddb74e26d77c05a3ddd754",
+   "tracked": true
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/DIFF_AUDIT.md",
+   "bytes": 12848,
+   "sha256": "3c3de0da9ac1e02cbea1ac1eb2235b70165d6502c75115f41ddccca25d474253",
+   "tracked": true
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/EVIDENCE.json",
+   "bytes": 18442,
+   "sha256": "aea223835a6635693d71330c5da4ec0819d50f2c16262ffd1b8c5c94ebcf78ab",
+   "tracked": true
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/HARNESS_UPDATE.md",
+   "bytes": 8125,
+   "sha256": "804ba216491d80d5267f389a8d7acb0ede273aff94b5d74a38b17a88cc8ceb3d",
+   "tracked": true
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/HISTORICAL_PRESET.md",
+   "bytes": 3683,
+   "sha256": "f57f68e18c6a85b6f4c80fe6f22ad49331ec21573e82570e6903ffbc76d710e4",
+   "tracked": true
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/HISTORICAL_REPRODUCTION.md",
+   "bytes": 5590,
+   "sha256": "db67cdca086bd9f247db5199ba87925746cc777d4c28110ef9d5d524fe82e0c8",
+   "tracked": true
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/KNOWN_PREEXISTING_DEFECTS.md",
+   "bytes": 4953,
+   "sha256": "f67f725d397021668dcee06080163803284ec19ade6a7f4cb3a3749db8d0d5f9",
+   "tracked": true
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/MANIFEST_PROVENANCE.md",
+   "bytes": 3943,
+   "sha256": "3f3862143a13a387a118e6d66f419246d64b3465a42f34a42642232ba4bd0071",
+   "tracked": true
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/METRICS.json",
+   "bytes": 23286,
+   "sha256": "98fb7d1e1b5bb65fe0aaddf8bfe4767f81a993fb1490d24bd4ad97477fda8712",
+   "tracked": true
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/MIGRATION_HANDOFF.md",
+   "bytes": 4433,
+   "sha256": "0a132293ac777e15f35f926e338d09fbf3619909fcc521e8fe59dfd6b75ff1e0",
+   "tracked": true
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/MIGRATION_PREREGISTRATION.md",
+   "bytes": 10427,
+   "sha256": "8854fdb7d4b0ea793c99ccaaa44914c3df7494ab50d0f96b9fd30d61ec72a414",
+   "tracked": true
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/PEDERSEN_PRESET.md",
+   "bytes": 3512,
+   "sha256": "1333bd1b4ae825c560fbc41aee462b0f853e4c878383a6838734d6cbbbb44556",
+   "tracked": true
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/PEDERSEN_S160_REPRODUCTION.md",
+   "bytes": 2407,
+   "sha256": "c4aac5cf9ab3d22b64f78668e62f754c32361deeefb08a58a2763a4df5b75bb9",
+   "tracked": true
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/PREREGISTRATION_AMENDMENT_1.md",
+   "bytes": 3258,
+   "sha256": "101d28eeaf059ff40cafb4209765f964df4f42055416adbafdcca294648556cc",
+   "tracked": true
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/PRESET_IDENTITY.md",
+   "bytes": 5788,
+   "sha256": "de4e0cf6ff52cc1b71957fa109eebe0e1b1155fe20a5d4404c8e79d07cc2b8c6",
+   "tracked": true
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/PROMOTION_MAP.md",
+   "bytes": 4359,
+   "sha256": "a9c15250f5c999f7c664a33873bb18a6543ce31afab68050def20a5db4d2965a",
+   "tracked": true
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/REPORT.md",
+   "bytes": 13628,
+   "sha256": "fab4b011e05d36c79b3c50344ca8bac1ca9806d3e4cd5fe16fc2b5fbf8c61711",
+   "tracked": true
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/SHARED_IMPLEMENTATION_EQUIVALENCE.md",
+   "bytes": 3171,
+   "sha256": "37e8d30b5b2160daf1b07341a9efa59121bf8648844547f650e9dc97a372afed",
+   "tracked": true
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/SOURCE_IDENTITY.md",
+   "bytes": 2467,
+   "sha256": "cdb6008b07b4c68810eef272d24ee366d22e699d9d612b73f1afca6d3e9315c9",
+   "tracked": true
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/TARGET_START_STATE.md",
+   "bytes": 4318,
+   "sha256": "149e845eec9d81921f270124c418deb9bfb6d8a766aad4bc544b6c0bee597e75",
+   "tracked": true
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/TEST_REPORT.md",
+   "bytes": 9387,
+   "sha256": "13bd508cd1415102cd756273a79019eaf4d5fa401973eac18e5c16beb604e668",
+   "tracked": true
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/evidence/MIGRATION_PREREGISTRATION.frozen",
+   "bytes": 10427,
+   "sha256": "8854fdb7d4b0ea793c99ccaaa44914c3df7494ab50d0f96b9fd30d61ec72a414",
+   "tracked": true
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/evidence/byte_identity.json",
+   "bytes": 37285,
+   "sha256": "d2c831d66adb7521ac92aa3829fe9d89806461c3a6a9c68a91188e532846c904",
+   "tracked": true
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/evidence/comparisons.json",
+   "bytes": 26948,
+   "sha256": "afc5ebcee702055c2b0140036febb853ffa294b88fe50c62ddfb571271d99798",
+   "tracked": true
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/evidence/comparisons.run1.json",
+   "bytes": 26328,
+   "sha256": "bfe35b251b82b92c3ca4152d07a5d792ef7edf683b39ca565646bcc34e4d0888",
+   "tracked": true
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/evidence/config_transition.json",
+   "bytes": 20815,
+   "sha256": "e1a5ee873ec5ce668256ecb9018fc4b90ea50cf5a824bebfb0a90eb5735822c3",
+   "tracked": true
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/evidence/diff_audit.json",
+   "bytes": 30762,
+   "sha256": "2613a42cb188230a6864fd6baab544392e6a385e7f66d1bb976b722c6fec4a37",
+   "tracked": true
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/evidence/finalization_gate_affected.json",
+   "bytes": 2423,
+   "sha256": "94ac67ee0fd1fec9de1922bade6c3b0939207d3eef900507a552907ce25fa13c",
+   "tracked": true
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/evidence/harness_check.json",
+   "bytes": 14720,
+   "sha256": "7a3cd54ac3b229a060f1fbfc8c1f32fe5b9ccfa914112a2c34b254171594a031",
+   "tracked": true
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/evidence/manifest_provenance_check.json",
+   "bytes": 852,
+   "sha256": "b10426978735518df69f90e22d525c730a2be948bd6f0a5c4271d6fd3d867542",
+   "tracked": true
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/evidence/preregistration_sha256.txt",
+   "bytes": 130,
+   "sha256": "fa0c6509ecd729c95a46ee5df4948cc965900cbeaa6ea43f10e4e096220ef65a",
+   "tracked": true
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/evidence/promotion_copy_log.csv",
+   "bytes": 4616,
+   "sha256": "37bac8564f61f2f45c417ebe60d1b4ec66e45f03cbfa601a97f791d334eb9ce1",
+   "tracked": true
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/evidence/source_identity.json",
+   "bytes": 4683,
+   "sha256": "a6e7d70986822714ea8fbae2fc34b46a16ad187c99c692b60ab655530f386f57",
+   "tracked": true
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/evidence/target_start_state.json",
+   "bytes": 2453,
+   "sha256": "b2f8eae22d0a619a7fe1b392f1d26cede029a8c7afd075f31b705588bc8c227f",
+   "tracked": true
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/scripts/mig_anchor_cfg.m",
+   "bytes": 4953,
+   "sha256": "a92983885da22ccfbbe05a760be40083d8e84ed1af22aac8cd16d3da510f028c",
+   "tracked": true
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/scripts/mig_base_finalization.m",
+   "bytes": 545,
+   "sha256": "83000135c5e2abf74ddcefd37b53189a3182e5a2ed30ec55f769b3e36eebb222",
+   "tracked": true
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/scripts/mig_baseline_selftest.m",
+   "bytes": 945,
+   "sha256": "e96bfe267fe24f1644ff9c9362b0c41a7a1dcf65f7c3b3058e1b591bea4b6887",
+   "tracked": true
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/scripts/mig_case_cfg.m",
+   "bytes": 3104,
+   "sha256": "0a3ee89c90104be4b9a151352d46acd155667cfa55be34b0ccca1a1da7cd97bc",
+   "tracked": true
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/scripts/mig_compare.m",
+   "bytes": 17465,
+   "sha256": "244327f98b3ed1ab1b881a7fbf55822b2dbe66a0d3f190e88fb9ce6982b477b3",
+   "tracked": true
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/scripts/mig_config_analysis.m",
+   "bytes": 5817,
+   "sha256": "05c943807ec0b26791263be04d97cdbb1b9d9d5d328468e048a75c5cf7e1307c",
+   "tracked": true
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/scripts/mig_config_dump.m",
+   "bytes": 3466,
+   "sha256": "6012e0f4216abd2b9cb9b8effdeac0ad11cf3e304dbbd49c4cf86f2ebcb06662",
+   "tracked": true
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/scripts/mig_declare_evidence.m",
+   "bytes": 3583,
+   "sha256": "7876fc9737423fea9ad30b8483a01343bc1c131e9b83274cdfcacabdd151aeba",
+   "tracked": true
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/scripts/mig_diff_audit.py",
+   "bytes": 7287,
+   "sha256": "0302f44b268470aede5f92cdc3cd17f4b9b4209abfb3a5cca3b29f6d52dbcdcb",
+   "tracked": true
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/scripts/mig_docs.py",
+   "bytes": 11887,
+   "sha256": "7f6db902f5665150c6b04b659bebfa750c244c444c78e4c2350c4eaee8806cd4",
+   "tracked": true
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/scripts/mig_finalize.py",
+   "bytes": 8603,
+   "sha256": "c4c5dbe1b3248c464ba57cc1afce488638ceb8435c195399ac187dbe5cb8e3bc",
+   "tracked": true
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/scripts/mig_gate_diag.m",
+   "bytes": 732,
+   "sha256": "278a02ba017ec86d97a4d800b1bb383b4e06de5992b51bac747a9eea4791db54",
+   "tracked": true
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/scripts/mig_harness_check.m",
+   "bytes": 6057,
+   "sha256": "a4191c77f1f534b100d076ea5966c44f1a1bee29cf52e1eaac3f03a7fe15a215",
+   "tracked": true
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/scripts/mig_hash_rows.m",
+   "bytes": 1185,
+   "sha256": "990bec272ec31bc8476ea5420cf1645560f2d243764694112cfeab33832b4c50",
+   "tracked": true
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/scripts/mig_job.sh",
+   "bytes": 554,
+   "sha256": "6197fc7251e13f99bca8db4f39ccf7e358331647afef753fcf876270890432f1",
+   "tracked": true
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/scripts/mig_make_fixtures.m",
+   "bytes": 3888,
+   "sha256": "68f8cf7544d5de7c20ced97d38a5b26d4066660e0d2e935b3c1b215a83e46f58",
+   "tracked": true
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/scripts/mig_paths.m",
+   "bytes": 2623,
+   "sha256": "601973a2b144861e76fc9b5738664000e55d0b065ed512ccf757664e816b98b8",
+   "tracked": true
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/scripts/mig_run_case.m",
+   "bytes": 1964,
+   "sha256": "ac216a8fdf07fa1377020973a1f2f3ff58a3894a0e7392d9f855b5d954bc91ad",
+   "tracked": true
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/scripts/mig_run_suite.m",
+   "bytes": 3124,
+   "sha256": "f9432f0f400b0a72aad9456920d28eb5ed231d020c3c6c2a48d3943a263aa0a2",
+   "tracked": true
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/scripts/mig_smoke_wrappers.m",
+   "bytes": 1777,
+   "sha256": "0a4d32a3052dc16f66bb981bfe9dfbecaabd6d7c75ba0dd2ec6262dacc29510e",
+   "tracked": true
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/scripts/mig_use_snapshot.m",
+   "bytes": 1784,
+   "sha256": "ff1ac1cdf3822eabd1329d1242bd56d3a192a225ce97e4b56db2661a9a64ae93",
+   "tracked": true
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/scripts/mig_write_manifest.m",
+   "bytes": 1365,
+   "sha256": "3fb75e01978415efaffa6019a8099415011d99bf8c02c2dc7cb62846df73f233",
+   "tracked": true
+  }
+ ],
+ "external_inputs": [
+  {
+   "what": "upstream Olhoff commit (git archive)",
+   "id": "253069262407885a8b759a9e721c4f0a7d3a397d",
+   "archive_sha256": "f911240340cab69b9806f98f9413d9038649fde5e14adf3bbe4d57f3ddb0dbeb"
+  },
+  {
+   "what": "committed S160x20 result",
+   "id": "Olhoff 253069:repro/results/S160x20/res.mat (git blob 93c6550980f06fe3535cc1780bc0317517b6a0c0)",
+   "sha256": "de7b15764509a1797d8713495f37481004cefb7b33f248d9b3981a4a3450daa0"
+  },
+  {
+   "what": "upstream anchors A6/A7 committed references",
+   "id": "Olhoff 253069:architecture/anchors/reference/{A6_pdecoupled160,A7_massp160}"
+  },
+  {
+   "what": "frozen conference campaign records",
+   "id": "examples/Performance/conference_benchmark/campaign_9mesh_r2/benchmark_records.mat (git-ignored, primary checkout)",
+   "sha256": "873125858df02664d9a7d37bd09e4e9b0b1ccff5c37940d088f9b1e424921fae"
+  },
+  {
+   "what": "pre-migration target EX3_160 record (upstream capability audit)",
+   "id": "/Users/piotrek/Programming/Matlab/Olhoff-upstream-capabilities-evidence/runs/case_TARGET_EX3_160",
+   "sha256": "4181e60ff51146ddd11cae49ce159f6bfe43b2fa56ca7a091893a7c5651ffa46"
+  },
+  {
+   "what": "upstream capability audit A6/A7 candidate anchor records",
+   "id": "/Users/piotrek/Programming/Matlab/Olhoff-upstream-capabilities-evidence/runs/anchor_CAND_{A6_pdecoupled160,A7_massp160}"
+  },
+  {
+   "what": "committed two-branch C160x20 target trajectory",
+   "id": "analysis/OlhoffCurrent/evidence/two_branch_controller_validation/C160x20_trajectory (declared by that study)",
+   "sha256": "4d11a2fdc1c985b15dea74cc234ed9d1f658960c1d42bfd8092770cc1b658832"
+  },
+  {
+   "what": "scientific delta audit (untracked in the primary checkout)",
+   "id": "analysis/OlhoffCurrent/diagnostics/scientific_delta_olhoff_migration"
+  }
+ ]
+}

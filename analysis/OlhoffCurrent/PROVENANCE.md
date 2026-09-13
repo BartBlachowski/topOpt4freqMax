@@ -4,7 +4,8 @@ Where this implementation came from, exactly, and what was changed on the way in
 
 The machine-readable form of everything below is [`PROVENANCE.json`](PROVENANCE.json);
 it is what `olhoffcurrent_provenance()` returns and what every production result
-embeds.
+embeds. The previous record (the 2026-09-07 promotion) is preserved verbatim in
+`PROVENANCE.json` under `history[0]`.
 
 ---
 
@@ -14,48 +15,25 @@ embeds.
 |---|---|
 | Source repository | `/Users/piotrek/Programming/Matlab/Olhoff` |
 | Its role | **DEVELOPMENT / RESEARCH UPSTREAM** |
-| Source branch | `architecture/canonical-config` |
-| Source commit | `695f03bdac20c423a4e1d389cf9db9187597bcc3` |
-| Commit date | 2026-09-06 23:24:25 +0200 |
-| Commit subject | `Phase 24: final report -- 12/12 anchors bitwise, verdict VERIFIED` |
-| **Source dirty state at promotion** | **clean** — `git status --porcelain` was empty |
-| Acceptance evidence | `architecture/docs/OLHOFF_ARCHITECTURE_REFACTOR_REPORT.md`, verdict `OLHOFF_ARCHITECTURE_REFACTOR_VERIFIED` |
-| Promotion date | **2026-09-07** |
-
-There was no ambiguity about which upstream commit to promote: the branch has a
-single head, the tree was clean, and `695f03b` is the commit whose report
-carries the acceptance verdict.
-
-### Verified before promoting, not assumed
-
-The brief requires the reported behaviour to be *verified* rather than trusted.
-Two read-only checks were run against the upstream tree:
-
-* `anchorReport()` recomputed both digests for all twelve stored regression
-  anchors — **0 of 12 failed** the equality standard;
-* anchor `A1_frozen160` — the frozen conference realization, the one that
-  matters here — was **re-executed live from source** under this machine's
-  MATLAB and its digest recomputed in memory:
-
-  ```
-  LIVE  A1_frozen160  outer=91 inner=2241 status=CONVERGED omega1=169.495227021538
-  science digest  1afe4b7e0cf86a860482e34adf08ad20af47d070494d2147e0eedfdf1cca9001
-  reference       1afe4b7e0cf86a860482e34adf08ad20af47d070494d2147e0eedfdf1cca9001
-  VERDICT science=IDENTICAL  logShape=IDENTICAL
-  ```
-
-Nothing was written into the upstream repository to obtain this.
+| Source branch (recorded) | `migration/upstream-olhoffcurrent-capabilities` |
+| **Source commit** | `253069262407885a8b759a9e721c4f0a7d3a397d` (tree `4571029f39b62181499ab3d4ffb6da89f1d30021`) |
+| Commit subject | `Promote optional stage-exhaustion controller and outer timing` |
+| **Parent successful-science commit** | `6b0870850d7407a0f2fc31dbf0d0f318c2e5f2f7` (`repro/natural-convergence`, "Nine resolution test - ultimate results") |
+| Promotion route | byte copy from `git archive 253069…` (tar SHA-256 `f911240340cab69b9806f98f9413d9038649fde5e14adf3bbe4d57f3ddb0dbeb`), every blob verified against the commit; never from the upstream working tree |
+| Upstream working tree at promotion | checked out `repro/natural-convergence @ 6b08708`, one uncommitted file (`repro/PLAN_OLHOFFCURRENT_UPDATE.md`, the uncommitted §7). **Not read** by the promotion. |
+| Acceptance evidence | upstream `repro/audits/upstream_olhoffcurrent_capabilities` (`UPSTREAM_CAPABILITY_PROMOTION_READY`); `diagnostics/scientific_delta_olhoff_migration` (`OLHOFFCURRENT_MIGRATION_READY_WITH_NAMED_FORMULATION_SPLIT`); `diagnostics/upstream_253069_migration` (this promotion's 160×20 gates) |
+| Promotion date | **2026-09-13** |
 
 ## 2. Main repository at promotion
 
 | | |
 |---|---|
 | Path | `/Users/piotrek/Programming/topOpt4freqMax` |
-| Branch | `benchmark-methodology-r2` |
-| **Commit before promotion** | `9cd1c8eed109e1c1b02c67fc6d9bb81f87179d6a` |
-| State | clean, except four untracked historical Olhoff directories (recorded as debt in `analysis/OLHOFF_SOURCE_LINEAGE_AUDIT.md` §4.1) |
+| Commit before promotion | `013cc48451d33bed61c5c4eea174bbd898d548a2` (`benchmark-methodology-r2`) |
+| Where the promotion was made | dedicated worktree, branch `migration/olhoffcurrent-upstream-253069` |
+| State | no tracked changes; eight untracked diagnostic directories in the primary checkout, left untouched |
 
-## 3. What was promoted
+## 3. What is promoted
 
 ```
 analysis/OlhoffCurrent/+impl/
@@ -63,8 +41,12 @@ analysis/OlhoffCurrent/+impl/
     mma/             mma_published/  architecture/{+olh/, olhoffSolve.m, legacy/, docs/}
 ```
 
-**74 files.** All are byte-identical to upstream `695f03b` **except the single
-adaptation in §7**.
+**79 files. All 79 are byte-identical to upstream `253069`. There are no local
+adaptations.**
+
+This event replaced 16 files and added 4; the other 59 were already identical.
+The per-file record is `diagnostics/upstream_253069_migration/PROMOTION_MAP.md`
+and `BYTE_IDENTITY.md`.
 
 The sibling layout is preserved exactly as upstream, because it is load-bearing:
 `algo/useMMA.m` locates the MMA variants as
@@ -74,117 +56,136 @@ The sibling layout is preserved exactly as upstream, because it is load-bearing:
 
 | Excluded | Why |
 |---|---|
-| `audit_*/`, `results/`, `runs/`, `NOTES.md`, `CLAUDE.md`, `EVIDENCE_MANIFEST.sha256` | upstream scientific evidence; it stays upstream and is not executable production code |
-| `architecture/anchors/`, `architecture/tests/` | upstream's own regression harness for the refactor; it validates *upstream*, and its files hard-code the upstream absolute root |
-| `setpaths.m` | replaced by `olhoffcurrent_paths.m`, which additionally *proves* the resolution instead of only setting it |
-| `top88.m` (repo root) | a byte-identical duplicate of `filter/top88_reference.m`; upstream classifies it `ARCHIVE` |
+| `audit_*/`, `results/`, `runs/`, `repro/`, `NOTES.md`, `CLAUDE.md`, `EVIDENCE_MANIFEST.sha256` | upstream scientific evidence and audits; not executable production code |
+| `architecture/anchors/`, `architecture/tests/` | upstream's own regression harness; several files hard-code the upstream absolute root |
+| `architecture/README.md` | excluded at 695f03b as well; not part of the executable layout |
+| `setpaths.m` | replaced by `olhoffcurrent_paths.m`, which additionally *proves* the resolution |
+| `top88.m` (repo root) | a byte-identical duplicate of `filter/top88_reference.m` |
 
 ## 4. Integrity manifest
 
 | | |
 |---|---|
 | File | [`SOURCE_MANIFEST.json`](SOURCE_MANIFEST.json) |
-| Files covered | 74 |
-| **Source tree SHA-256** | `c1455374d5f8e256c2678a679a5fc7955d9a8a77c410a41cd30f1c189910208c` |
+| Files covered | **79** |
+| **Source tree SHA-256** | `4ba9a3ae10881344a0e60f2b8a8976c5ec9ceccf966bc2a3da4f37fb5aebffbf` |
 
 The tree hash is the SHA-256 of the sorted `<relative path>  <sha256>` lines, so
 it changes if any file changes, is added or is removed, and does not depend on
-filesystem ordering. Verify with `olhoffcurrent_source_manifest()`.
+filesystem ordering. Verify with `olhoffcurrent_source_manifest()`. It was
+computed independently (Python, before MATLAB saw the tree) and by
+`olhoffcurrent_source_manifest('Write', true)`; the two agree.
 
-## 5. Canonical production preset
+## 5. Presets: shared implementation, named formulations
 
-```
-duOlhoffFixedPenaltySensitivityFiltered
-```
+The solver is shared; science is selected by an **explicitly named preset**
+(`olhoffcurrent_presets.m`). Every configuration call names its preset —
+`olhoffcurrent_config(nelx, nely, 'Preset', name)` — and an unnamed call is
+refused, so no call can change formulation silently when production changes.
 
-Delegates to the promoted upstream preset `olh.presets.duOlhoffFrozenM4`, so
-there is exactly one definition of the mathematics and production cannot drift
-from it. Resolved per mesh by `olhoffcurrent_config(nelx, nely)`; the mesh is
-applied as an override *before* the derived rules run, so the mesh-scaled outer
-tolerance `eps = 0.05·sqrt(NE/3200)` is re-derived rather than retyped.
+| canonical preset | delegates to | role |
+|---|---|---|
+| `duOlhoffPedersenAdaptiveBoxSensitivityFiltered` | `duOlhoffAdaptivePedersen` | **production** since 2026-09-13; a distinct formulation |
+| `duOlhoffSimpEq4bBetaStallLadderSensitivityFiltered` | `duOlhoffFrozenM4` | historical formulation (production 2026-09-07 … 2026-09-13) |
+| `duOlhoffSimpEq4bThreeRungStageExhaustionSensitivityFiltered` | `duOlhoffFrozenM4` + 3 policy overrides, cap 1600 | historical diagnostic; not production-eligible |
 
-### Historical audit IDs are provenance aliases, not canonical API terminology
+The only **compatibility alias** is `duOlhoffFixedPenaltySensitivityFiltered`,
+the pre-2026-09-13 production name. It resolves to the historical β-stall
+preset and to nothing else.
 
-**M4**, **TMA**, **B0**, **REG160**, **S2**, **R1**, **R2**, **P1**, **PD1**,
-**PM1**, **T800** and the upstream preset name `duOlhoffFrozenM4` are
-**provenance aliases and experiment identifiers**. They exist so historical
-evidence can be matched to new runs. They are **not** user-facing API names, and
-no production script uses them.
+**Historical audit IDs are provenance aliases, not API.** M4, TMA, B0, REG160,
+`duOlhoffFrozenM4`, TR3_C, CAN3_*, EX3_160, `duOlhoffAdaptivePedersen` and
+S160x20 … S800x100 match old evidence to a preset. They are refused as preset
+names.
 
-## 6. Relationships
+### Production selection is a recorded event
+
+`PROVENANCE.json → production_preset_events` is append-only:
+
+1. **2026-09-07** — initial promotion from `695f03b`: `duOlhoffFixedPenaltySensitivityFiltered`
+   (now canonically `duOlhoffSimpEq4bBetaStallLadderSensitivityFiltered`),
+   config hashes as recorded by the 2026-09-11 campaign (81-row schema).
+2. **2026-09-13** — production changes to `duOlhoffPedersenAdaptiveBoxSensitivityFiltered`
+   (upstream `duOlhoffAdaptivePedersen` @ `253069`, parent `6b08708`). The
+   historical preset is retained unchanged and stays resolvable. New config
+   hashes are recorded for both presets under the 87-row schema.
+
+`olhoffcurrent_production_preset()` reads the latest event.
+
+## 6. Configuration hashes
+
+The schema grew from 81 to 87 rows. `olhoffcurrent_config_hash` iterates schema
+rows, so **every configuration hash changed** without any historical scientific
+value changing. For all 14 recorded historical configurations, the 81 old leaves
+are equal, and the 81-row hash recomputed from the migrated configuration
+reproduces the recorded hash exactly. Old hashes remain valid identifiers of
+the evidence that recorded them. Details:
+`diagnostics/upstream_253069_migration/CONFIG_HASH_TRANSITION.md`.
+
+## 7. Adaptations: none
+
+Until 2026-09-13 this file claimed "74 files, one adaptation" (`hist.tOuter`).
+That had been stale since commit `1438aa3` (2026-09-09), which added the
+stage-exhaustion controller locally. From then on the tree held 75 files and
+differed from its promoted base in seven. `SOURCE_MANIFEST.json` was correct
+throughout.
+
+Upstream `253069` now carries both capabilities as default-off options:
+
+- `hist.tOuter` — tic first in the outer loop body, toc after every stopping decision;
+- `move.continuation.signal = stageExhaustion` together with `stop.rule = stageExhaustion`.
+
+Both reproduce the former local code bitwise (upstream audit T5/T8; this
+migration's EX3/EX4 runs). OlhoffCurrent therefore needs no private
+solver/controller edits.
+
+## 8. Known pre-existing defect carried by the promotion
+
+`pContinuationDecoupled` and `pMassCompatible` record `hist.move` before the
+p-controller reset at p-event iterations. The design trajectory is unaffected.
+The defect was introduced upstream at `6b08708` and is deliberately **not
+repaired** here; no production or historical preset uses p continuation. See
+`diagnostics/upstream_253069_migration/KNOWN_PREEXISTING_DEFECTS.md`.
+
+## 9. Relationships
 
 | Tree | Relationship |
 |---|---|
-| `analysis/OlhoffM4Reconstruction` | **FROZEN_EVIDENCE.** The frozen conference reconstruction, imported from the *same* upstream tree on 2026-09-04. It is the realization this production preset must reproduce — and does, bitwise, at 160×20 and 320×40. It is **not** a production dependency and is hard-blocked from the production MATLAB path. |
-| `/Users/piotrek/Programming/Matlab/Olhoff` | **DEVELOPMENT_UPSTREAM.** Never an executable dependency of a production run: it is where experiments happen, it is not pinned by this repository's history, and a run that reached it could not be reproduced from this repository alone. Blocked by absolute path. |
-| `analysis/OlhoffExperiments` | **EXPERIMENTAL.** Not created by this task. Blocked pre-emptively so it cannot become a production dependency by accident. |
+| `analysis/OlhoffM4Reconstruction` | **FROZEN_EVIDENCE.** The frozen conference reconstruction. Reproduced bitwise at 160×20 by the historical β-stall preset. Not a production dependency; hard-blocked from the production MATLAB path. |
+| `/Users/piotrek/Programming/Matlab/Olhoff` | **DEVELOPMENT_UPSTREAM.** Never an executable dependency of a production run. Blocked by absolute path. |
+| `analysis/OlhoffExperiments` | **EXPERIMENTAL.** Blocked pre-emptively. |
 | all other Olhoff trees | **HISTORICAL / AUDIT_ONLY**, classified in `analysis/OLHOFF_IMPLEMENTATION_MAP.md` and blocked. |
 
-## 7. The one adaptation
-
-Everything promoted is byte-identical to upstream except **one file**.
-
-| | |
-|---|---|
-| File | `+impl/architecture/olhoffSolve.m` |
-| Kind | **BENCHMARK TIMING INSTRUMENTATION** |
-| Upstream SHA-256 | `9f80dd8ed504dc5cce5d8ab995cd4520e1e388ec6478f6446378cb8a464e2543` |
-| Promoted SHA-256 | `5d4abd37c8b186a42d1a7ef5b7066c8bc2429d33ee91f20b0b844bace772324b` |
-
-**The change.** Adds `hist.tOuter`: a `tic` at the top of the outer loop, and a
-`toc` recorded after the convergence test and every guard.
-
-**Why it is necessary.** The conference benchmark's nested cost accounting
-reports `outer_time_excluding_inner_s`, which requires the wall time of one
-*complete* outer iteration. The frozen conference reconstruction carries exactly
-this instrumentation — recorded upstream as
-`analysis/OlhoffM4Reconstruction/patches/olhoffOpt.timing-instrumentation.diff` —
-and upstream's `olhoffSolve.m` does not. Repointing production without it would
-have silently broken the benchmark's accounting. It is the same modification,
-already audited in its previous home, carried forward to the same effect.
-
-**Effect on the trajectory: none.** `hist.tOuter` is written and never read back
-by the solver.
-
-**And that is proved, not asserted.** `A1_frozen160` was executed live against
-**uninstrumented** upstream code and produced
-`omega1 = 169.495227021538`, `outer = 91`, `inner = 2241`. The **instrumented**
-promoted code at 160×20 produces `omega1 = 169.49522702153845`, `outer = 91`,
-`inner = 2241`, and reproduces the frozen conference design vector bitwise. The
-instrumentation is therefore demonstrably inert across an
-instrumented/uninstrumented boundary, not merely argued to be.
-
-## 8. Currentness — and why "upstream is ahead" is not "obsolete"
+## 10. Currentness — and why "upstream is ahead" is not "obsolete"
 
 `olhoffcurrent_currentness()` reports exactly one of:
 
 | State | Meaning |
 |---|---|
-| `CURRENT` | promoted source intact and matching the upstream commit it came from |
-| `LOCAL_MODIFIED` | `+impl/` no longer hashes to `SOURCE_MANIFEST.json`. **The most serious state** — the recorded provenance no longer describes the code on disk |
-| `UPSTREAM_AHEAD` | upstream has commits after the promoted one. **Informational** |
-| `PROVENANCE_MISMATCH` | the promoted commit is not an ancestor of upstream HEAD — history rewritten, or the branch moved |
+| `CURRENT` | promoted source intact, and the promoted commit is the head of the recorded upstream branch |
+| `LOCAL_MODIFIED` | `+impl/` no longer hashes to `SOURCE_MANIFEST.json`. **The most serious state** |
+| `UPSTREAM_AHEAD` | the recorded upstream branch has commits after the promoted one. **Informational** |
+| `PROVENANCE_MISMATCH` | the recorded branch is missing, or the promoted commit is not in its history |
 | `UPSTREAM_UNREACHABLE` | the development repository is absent; local integrity was still checked |
 
-The upstream repository is a **development** tree. Experimental commits land
-there constantly and most will never be promoted — they are audits, spikes and
-abandoned branches. So an upstream commit that nobody has accepted does **not**
-make production stale; it makes production *different from a draft*.
+Since 2026-09-13 the upstream comparison is made against the **recorded branch**
+(`source.branch`), not against whatever the development checkout has checked
+out. The promoted commit lives on a branch that is not the checkout's current
+branch, and currentness must not depend on that.
 
 **Production currentness changes on exactly one event: a human explicitly
-accepts an upstream state and promotes it.** Accordingly
-`olhoffcurrent_currentness()` never updates anything. It reports; a person
-decides.
+accepts an upstream state and promotes it.** `olhoffcurrent_currentness()`
+never updates anything.
 
-## 9. The promotion workflow
+## 11. The promotion workflow
 
 ```
 external development
     -> experiment / audit
     -> accepted committed state
-    -> explicit promotion into OlhoffCurrent
-    -> regression verification  (path isolation, currentness, preset equivalence)
-    -> production
+    -> explicit promotion into OlhoffCurrent (byte copy from the committed object)
+    -> regression verification  (path isolation, currentness, named-preset reproduction)
+    -> production (a recorded production_preset_events entry)
 ```
 
 Production scripts must **never** execute directly from the external repository.

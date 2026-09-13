@@ -52,6 +52,7 @@ The four sentences that carry most of the class-A weight:
 | Field | Value(s) used | Class | Basis |
 |---|---|---|---|
 | stiffness law `ρ^p Kₑ` | fixed | **A** | Eq. (1), Eq. (3). |
+| stiffness model `pedersen` (Pedersen 2000, eq. 5) | tested 2026-09-13 | **B** model / **A** value | §2.2 names "the method of Pedersen (2000) of linearizing the element stiffness" as the alternative to the mass cut-off. Implemented as printed: ρ^p above `linearBelow`, linear ρ·ρ₀^(p−1) below (ρ/100 at the printed ρ₀ = 0.1, p = 3), mass left linear (eq. 2). Pedersen's second ingredient, ignoring low-density nodes in the eigenvector convergence test of his inverse iteration, has no counterpart in a LAPACK/ARPACK solve and is not implemented. Any ρ₀ other than 0.1 is class C. |
 | `p` | 3 | **A/C** | **A**: p is the penalization power of Eq. (1), p≥1, and §2.2 states p "is kept unchanged at a value about p=3". **C**: *holding it fixed* contradicts (P1); the reconstruction fixed p=3 because the reported initial eigenfrequencies (68.7/104.1/146.1) are only consistent with p=3, and p=1 is off by ≈2×. Recorded in `CLAUDE.md` §2. |
 | p continuation, existence | `[1 2 3]` | **A** | (P1) states increasing p from 1 to 3 is the *normal* practice. Running p-continuation is therefore closer to the paper's stated practice than fixed p=3 — a point the audit programme reached independently. |
 | p schedule *values* | `[1 2 3]` | **B** | The endpoints 1 and 3 are printed; the integer step is the obvious reading. No schedule is given. |
@@ -125,6 +126,7 @@ The four sentences that carry most of the class-A weight:
 | MMA hyper-constants `a₀=1,a=0,c=1000,d=0` | — | **C** | Not stated by Du & Olhoff; conventional MMA usage. |
 | independent variables = β and Δρ_e | yes | **A** | §3.5.2 explicitly; Δ(ω_j²) are *dependent*. |
 | `innerVar='drho'` (MMA state reset per outer iteration) | frozen | **C** | The paper's inner loop is per-outer-iteration; whether MMA asymptote history persists is unstated. |
+| `optimizer.inner.asymptoteHistory` (`inner` / `outer`) | `outer` in duOlhoffOuterAsymptotes | **C** | With `variable=design`: which history adapts the MMA asymptotes. `inner` = the sub-iterate sequence on a global counter (the outer reversal ρ_{k+1}−ρ_k is invisible to Svanberg's rule, because every inner loop starts at x = xold1). `outer` = Svanberg's rule on ρ_k, ρ_{k−1}, ρ_{k−2}, asymptotes held during the inner loop — the standard use of MMA (Svanberg 1987) across an outer loop. The paper names MMA and the nested loop and does not say how they are joined. |
 | inner convergence criterion | `max|dx|/max|Δρ| < tolInner` | **C** | Fig. 1 says only "Increments Δρ_e converged?". The relative form was chosen because an absolute test degenerates as the move limit shrinks. |
 | `tolInner`, `minInner`, `maxInner` | 0.05, 5, 500 | **C** | — |
 | β scaled by λ_n; `xmax(β)=5` | — | **C** | Numerical conditioning, not in the source. |
@@ -135,12 +137,15 @@ The four sentences that carry most of the class-A weight:
 |---|---|---|---|
 | existence of any move limit | S2 ladder | **B** | **The only bound printed on Δρ is the box (25f).** "move limit", "trust region", "step size" occur **0 times** in either paper. The *justification* is class B via Krog & Olhoff (CISM Eq. 103): the multiple-eigenvalue model is a first-order directional expansion valid only for increments of restricted magnitude. No numeric value exists anywhere in the lineage. |
 | policy family (`S0…S3`) | `S2` frozen, `S0` no-descent | **C** | Every functional form is reconstruction. |
+| policy `adaptive` (per-element box, Svanberg rule on the outer history) | duOlhoffAdaptiveMove | **C** | Functional form is reconstruction. The grow/shrink factors 1.2/0.7 are Svanberg's published asyincr/asydecr (class B for the *values*). Motivation: the nested loop solves the frozen sub-problem to convergence at every outer iteration and so has no outer damping; MMA's own damping lives in its asymptote history, which the nested loop resets. Applying that history rule to the box restores the damping without touching the inner loop. |
 | `move` initial, `s2Levels`, `moveMin` | 0.04, `[0.04 0.02 0.01 0.005]`, 0.002 | **C** | — |
+| `move.initial = Inf` | duOlhoffOuterAsymptotes sweep | **A** | No move box: Δρ bounded by (25f) alone, which is the only bound the paper prints. Admissible only with `move.policy = fixed`. |
 | stall window `W=10`, `tol=5e-3` | — | **C** | — |
 | stall detector shape (mean-of-window vs mean-of-previous-window) | — | **C** | Chosen because a max−min test cannot fire while the signal oscillates. |
 | re-arm dwell `(k − lastStage) > W` | — | **C** | — |
 | stall **signal** `beta` | frozen | **C** | — |
 | stall signal `drms` | tested, **not adopted** | **D** | `audit_s2_design_continuation` verdict `S2_LADDER_ITSELF_DEFECTIVE`; the drms trigger was **not** adopted. |
+| ladder signal `stageExhaustion` | option, default off; no preset selects it | **C** | The frozen two-branch rule E = A ∨ B of OlhoffCurrent (`olh.move.exhaustion`): A = med₂₀ cos < 0 ∧ med₂₀ net < 0.5 ∧ ‖Δρ‖₂ ≥ ε; B = ‖Δρ‖₂ < ε ∧ med₂₀ cos > 0; declaration after P = 20 consecutive iterations; windows stage-local. A statement about the design's dynamics; every constant is reconstruction. Promoted upstream from `analysis/OlhoffCurrent` without change (`repro/audits/upstream_olhoffcurrent_capabilities`). |
 | S3 gain-ratio band | not run | **D** | Lineage-*derived*, not lineage-specified. |
 
 ## 8. Stopping
@@ -152,7 +157,10 @@ The four sentences that carry most of the class-A weight:
 | which norm | `l2` | **B** | (P4) writes "the norm" unqualified; the Euclidean norm is the natural reading of the unqualified symbol. `max` is kept as a labelled alternative. |
 | ε value | `0.05·√(NE/3200)` | **C** | Never given. |
 | ε mesh-scaling law | — | **C** | A reconstruction policy so that ε means the same RMS density change at every mesh. Not the authors'. |
+| `stop.rule` | `designChange` (default, every preset) / `stageExhaustion` (option) | **A** / **C** | `designChange` is the (P4) test with the guards below. `stageExhaustion` replaces it wholesale: convergence only on the E declaration at the last `move.levels` rung; requires `move.policy = ladder` and `move.continuation.signal = stageExhaustion`; refused under projection. |
 | guard `settledMove` | frozen | **C** | Necessary *because of* the reconstruction's own move ladder, which the paper does not have. Under a ladder, an iteration that lowers the move limit mechanically lowers ‖Δρ‖, so (P4) is uninterpretable there. |
+| guard `settledWindow` | 1 | **C** | Generalises `settledMove`: the move limit must have been unchanged for this many consecutive iterations. 1 reproduces the historical test bitwise. |
+| guard `boxInactiveFraction` | 0 frozen / 0.5 in duOlhoffOuterAsymptotes | **C** | (P4) presupposes Δρ bounded by (25f) alone. Under a move limit ‖Δρ‖ can be small because the box binds; requiring `max|Δρ| <= fraction·move` asserts the step is small because the design stopped. Off at 0 or when the move is Inf. |
 | guard `ladderExhausted` (R1) | R1 run | **D** | Preregistered stopping safeguard, `audit_m4_topology_restoration`. |
 | guard `maxDesignChange` (R2) | all mature runs | **D** | As above. `ε_RMS = ε/√NE`. |
 | iteration cap `maxOuter` | 200/400/600/1200 | **C** | Safety cap; reaching it is a distinct status, not convergence. |

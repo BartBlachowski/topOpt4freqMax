@@ -29,10 +29,15 @@ There is exactly one `PRODUCTION` entry in it.
 ```matlab
 addpath('<repo>/analysis/OlhoffCurrent');
 
-out = olhoffcurrent_run(160, 20);      % installs the gate, resolves the
-                                       % production preset, solves, and
-                                       % returns the nested cost accounting
+prod = olhoffcurrent_production_preset();          % the recorded production choice
+out  = olhoffcurrent_run(160, 20, 'Preset', prod.name);
+                                       % installs the gate, resolves the NAMED
+                                       % preset, solves, and returns the nested
+                                       % cost accounting (total AND per outer iteration)
 ```
+
+A preset name is **required**. `olhoffcurrent_run(160, 20)` without one is
+refused, so a call can never change formulation silently when production changes.
 
 `olhoffcurrent_run` installs the fail-closed path guard **before** it solves,
 so the implementation that produced a number is proved rather than assumed.
@@ -41,42 +46,46 @@ To inspect the formulation without running anything:
 
 ```matlab
 guard = olhoffcurrent_paths();          %#ok<NASGU>  keep the guard alive
-cfg   = olhoffcurrent_config(320, 40);
+cfg   = olhoffcurrent_config(320, 40, 'Preset', ...
+            'duOlhoffPedersenAdaptiveBoxSensitivityFiltered');
 olh.config.describe(cfg);               % the mathematics, in scientific terms,
                                         % with the provenance class of every choice
 ```
 
-## 3. The production preset
+## 3. Presets — one shared solver, named formulations
 
-There is exactly one, and it has a name:
+The solver in `+impl/` is byte-identical to upstream Olhoff `253069`. Scientific
+behaviour is selected by an **explicitly named preset**
+([`olhoffcurrent_presets.m`](olhoffcurrent_presets.m)); nothing is selected by
+editing the solver.
 
-```
-duOlhoffFixedPenaltySensitivityFiltered
-```
+| canonical preset | material law | controller / stop | role |
+|---|---|---|---|
+| `duOlhoffPedersenAdaptiveBoxSensitivityFiltered` | Pedersen (2000) low-density stiffness, linear mass eq. (2) | per-element adaptive move box; natural ‖Δρ‖₂ < ε stop, no guards | **production** (since 2026-09-13) |
+| `duOlhoffSimpEq4bBetaStallLadderSensitivityFiltered` | SIMP ρ³, eq. (4b) mass | four-rung ladder on the β stall; settled-move design-change stop | historical formulation (production until 2026-09-13; the 2026-09-11 campaign) |
+| `duOlhoffSimpEq4bThreeRungStageExhaustionSensitivityFiltered` | SIMP ρ³, eq. (4b) mass | three-rung ladder and terminal stop by stage exhaustion | historical diagnostic, not production-eligible |
 
-* **FixedPenalty** — SIMP `p = 3` held **constant**, no `p` continuation.
-  (Du & Olhoff §2.1 says `p` is "normally assigned values increasing from 1 to
-  3"; fixing it is a **reconstruction ruling**, made because the reported
-  initial eigenfrequencies fit `p = 3` and not `p = 1`.)
-* **SensitivityFiltered** — Sigmund (1997) **sensitivity** filter applied to
-  every `f_sk`, at a fixed **physical** radius `R = 0.06·b`. No density filter,
-  no Heaviside projection.
+All three share p = 3 fixed, the Sigmund sensitivity filter on every `f_sk` at a
+fixed physical R = 0.06, fixed subspace N = 2 with offsets and off-diagonals,
+and published MMA on the increment.
 
-The preset does **not** restate the fields it needs. It delegates to the
-promoted upstream preset `olh.presets.duOlhoffFrozenM4`, so the production
-realization cannot silently drift from the accepted canonical one.
+**The Pedersen preset is a distinct formulation, not a bug fix of the eq. (4b)
+presets.** See `olhoffcurrent_caveat(name)` for each preset's caveat.
 
-Production scripts **name the preset**. They never rebuild a historical
-realization out of a handful of switches.
+**Production** is the latest entry of `PROVENANCE.json → production_preset_events`,
+read by `olhoffcurrent_production_preset()`. Changing it means appending an
+event; earlier events are never edited, and every preset stays resolvable by
+name.
 
-### Historical codes are provenance, never API
+### Aliases
 
-The same realization appears in the historical record as **M4**, **TMA**,
-**B0**, **REG160**, and upstream as the preset name `duOlhoffFrozenM4`. Those
-are **provenance aliases and experiment identifiers**. They are recorded so old
-evidence can be matched to new runs. They are **not** canonical user-facing
-terminology, and no production script should use them. The same applies to
-`S2`, `R1`, `R2`, `P1`, `PD1`, `PM1` and `T800`.
+* `duOlhoffFixedPenaltySensitivityFiltered` — the pre-2026-09-13 production name —
+  is the **only compatibility alias**. It resolves to
+  `duOlhoffSimpEq4bBetaStallLadderSensitivityFiltered` and to nothing else.
+* **M4**, **TMA**, **B0**, **REG160**, `duOlhoffFrozenM4`, **TR3_C**, **CAN3_***,
+  **EX3_160**, `duOlhoffAdaptivePedersen` and **S160x20 … S800x100** are
+  **provenance aliases**. They are refused as preset names. The same holds for
+  `S2`, `R1`, `R2`, `P1`, `PD1`, `PM1` and `T800`.
 
 ## 4. Why the core lives under `+impl/`
 
@@ -139,32 +148,41 @@ reports exactly one of `CURRENT`, `UPSTREAM_AHEAD`, `LOCAL_MODIFIED`,
 *development* tree; experimental commits land there constantly and most will
 never be promoted. Production currentness changes on one event only: a human
 explicitly **accepts** an upstream state and promotes it. See
-[`PROVENANCE.md`](PROVENANCE.md) §8.
+[`PROVENANCE.md`](PROVENANCE.md) §10.
 
 ## 7. Tests
 
 ```matlab
 test_path_isolation()          % TEST A–E, including helper shadowing
-test_currentness()             % provenance, integrity, state model
-test_preset_equivalence()      % 160x20 vs the frozen conference realization
-test_preset_equivalence([160 20; 320 40])
+test_currentness()             % provenance, integrity, state model, preset registry
+test_source_integrity()        % artifacts ignored, source changes block
+test_preset_identity()         % named presets, aliases, formulations, historical hashes (no solve)
+test_preset_equivalence()      % historical beta-stall preset, 160x20 vs the frozen conference record
+test_named_preset_reproduction('pedersen')         % 160x20 vs committed upstream S160x20
+test_named_preset_reproduction('stageExhaustion')  % 160x20 vs pre-migration OlhoffCurrent
+test_cost_reporting()          % total and per-outer-iteration cost fields
+test_pedersen_adaptive_units() % adaptive move-box rule and Pedersen stiffness law (no solve)
+test_evidence_retention(), test_finalization_gate()
 ```
 
 ## 8. What is here
 
 | Path | What |
 |---|---|
-| `+impl/` | the promoted implementation, byte-identical to upstream `695f03b` except one documented adaptation |
+| `+impl/` | the promoted implementation, 79 files, byte-identical to upstream `253069` (no adaptations) |
 | `+impl/architecture/+olh/` | the canonical configuration package: schema, validation, presets |
 | `+impl/architecture/olhoffSolve.m` | the canonical solver — branches on no experiment identifier |
 | `+impl/architecture/docs/` | upstream's configuration reference, presets, terminology, field-level provenance |
 | `olhoffcurrent_run.m` | **the production entry point** |
-| `olhoffcurrent_config.m` / `olhoffcurrent_preset.m` | the production preset, resolved per mesh |
+| `olhoffcurrent_presets.m` / `olhoffcurrent_preset.m` | the named-preset registry and lookup |
+| `olhoffcurrent_config.m` | a named preset, resolved per mesh |
+| `olhoffcurrent_production_preset.m` | the recorded production choice |
+| `olhoffcurrent_caveat.m` | the caveat of each preset |
 | `olhoffcurrent_paths.m` / `_assert_dispatch.m` / `_forbidden_paths.m` | the fail-closed path gate |
 | `olhoffcurrent_currentness.m` / `_provenance.m` / `_source_manifest.m` | provenance and integrity |
 | `PROVENANCE.md` / `PROVENANCE.json` | where this came from, exactly |
 | `SOURCE_MANIFEST.json` | integrity manifest over `+impl/` |
-| `tests/` | path isolation, currentness, preset equivalence |
+| `tests/` | path isolation, currentness, integrity, preset identity and reproduction, cost reporting, evidence gates |
 
 ## 9. Changing it
 

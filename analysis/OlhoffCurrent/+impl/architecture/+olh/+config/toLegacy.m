@@ -62,7 +62,7 @@ flat.offDiag  = g('multiplicity.offDiagonal');
 % ---- move ----------------------------------------------------------------
 flat.move        = g('move.initial');
 flat.moveFamily  = local_rev(g('move.policy'), ...
-                    {'fixed','geometric','ladder','trustRatio'}, {'S0','S1','S2','S3'});
+                    {'fixed','geometric','ladder','trustRatio','adaptive'}, {'S0','S1','S2','S3','SA'});
 flat.moveMin     = g('move.minimum');
 flat.s1Gamma     = g('move.geometric.ratio');
 flat.s1AfterCoal = g('move.geometric.afterCoalescence');
@@ -88,7 +88,6 @@ flat.minInner = g('optimizer.inner.minIterations');
 flat.maxOuter  = g('runtime.maxOuter');
 flat.tolOuter  = g('stop.tolerance');
 flat.outerNorm = g('stop.norm');
-flat.stopRule  = g('stop.rule');
 if g('stop.guards.settledMove'), flat.outerGuard = 'settledmove';
 else,                            flat.outerGuard = 'none'; end
 
@@ -114,6 +113,16 @@ if g('projection.enabled')
     flat.projection = struct('on',true, ...
         'betaSchedule', g('projection.beta.levels'), 'eta', g('projection.eta'));
 end
+if strcmp(g('material.stiffness.model'),'pedersen')
+    flat.stiffModel = 'pedersen';  flat.stiffLinearBelow = g('material.stiffness.linearBelow');
+end
+if strcmp(g('optimizer.inner.asymptoteHistory'),'outer'), flat.innerAsy = 'outer'; end
+if strcmp(g('move.policy'),'adaptive')
+    flat.sAGrow = g('move.adaptive.grow');  flat.sAShrink = g('move.adaptive.shrink');
+end
+if g('stop.guards.settledWindow') > 1, flat.settledWindow = g('stop.guards.settledWindow'); end
+if g('stop.guards.boxInactiveFraction') > 0, flat.boxInactive = g('stop.guards.boxInactiveFraction'); end
+if strcmp(g('stop.rule'),'stageExhaustion'), flat.stopRule = 'stageExhaustion'; end
 if g('runtime.diagnostics'), flat.diag = true; end
 if ~isempty(g('runtime.name')), flat.name = g('runtime.name'); end
 end

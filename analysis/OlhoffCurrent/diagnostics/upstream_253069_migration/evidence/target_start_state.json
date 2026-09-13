@@ -1,0 +1,44 @@
+{
+ "captured_at": "2026-09-13T19:12:42+0200",
+ "repository": "/Users/piotrek/Programming/topOpt4freqMax",
+ "branch": "benchmark-methodology-r2",
+ "head": "013cc48451d33bed61c5c4eea174bbd898d548a2",
+ "head_subject": "Nine test passed",
+ "porcelain": [
+  "?? analysis/OlhoffCurrent/diagnostics/c480_socp_causal_run/",
+  "?? analysis/OlhoffCurrent/diagnostics/filtered_subproblem_integrability_audit/",
+  "?? analysis/OlhoffCurrent/diagnostics/frozen_inner_solver_study/",
+  "?? analysis/OlhoffCurrent/diagnostics/frozen_problem25_reference/",
+  "?? analysis/OlhoffCurrent/diagnostics/gray_kkt_forensic_audit/",
+  "?? analysis/OlhoffCurrent/diagnostics/nine_mesh_campaign_audit/",
+  "?? analysis/OlhoffCurrent/diagnostics/scientific_delta_olhoff_migration/",
+  "?? analysis/OlhoffCurrent/diagnostics/three_rung_canary_preflight/"
+ ],
+ "tracked_changes": [],
+ "impl_live_n_files": 75,
+ "impl_live_tree_sha256": "edbfe47eb32109a2fb017f6f13d5327f2c240357caa96630064ffcf37ee152cb",
+ "impl_artifacts_skipped": [
+  ".DS_Store"
+ ],
+ "manifest_n_files": 75,
+ "manifest_tree_sha256": "edbfe47eb32109a2fb017f6f13d5327f2c240357caa96630064ffcf37ee152cb",
+ "manifest_generated": "2026-09-08T21:23:27+02:00",
+ "manifest_matches_live": true,
+ "file_sha256": {
+  "SOURCE_MANIFEST.json": "431e7b3084507cd8b53862847b828cfd9f8948172e349bbae0c72749e8134aeb",
+  "PROVENANCE.json": "2e8224e816ddf8b6ddd25fc05a20c3b05453452d5f561e941b8ac00e0c38452e",
+  "PROVENANCE.md": "21dbbfc11916a16935cc486679b88560dcfd78dd1064c8140101f3aba28c7759",
+  "README.md": "821e4a091e6d1f8cff32dc53af70971d5a89424485477bc0148b1b86d8e3c5cc",
+  "olhoffcurrent_preset.m": "301349abf03190768f51a3b66f75cd894e73e677025bee1a3d386044af3cdadf",
+  "olhoffcurrent_config.m": "16b431039ec47a9131a5b9365d1e4e28628507cc88e986684bf982c28e462b50",
+  "olhoffcurrent_config_hash.m": "830f7344527f3b6f04e49eb664f06b16e655c15c936ae0458fce5f06e9ecd4d4",
+  "olhoffcurrent_caveat.m": "340143f8290a5ccedc4eb26c7037a848b1741abcadc56999e3946752d72b5ba5",
+  "olhoffcurrent_run.m": "45e788eb83692e96f40313f05461e88911162abafd4041bea58840ff53b55adb",
+  "olhoffcurrent_currentness.m": "60e07f288a133fff8198d0bcc3a836b45bd876faae3d42101af0a0fc983e9b5c",
+  "olhoffcurrent_provenance.m": "47ffc5427d9bf1b9eccf444296a1c1ad93c5641c966e64dc030f8037ca26f4e9"
+ },
+ "impl_git_tree_at_head": "ef4cb5f7cb771bf35b3bc04d4cf244af57afa5fa",
+ "worktrees": [
+  "/Users/piotrek/Programming/topOpt4freqMax  013cc48 [benchmark-methodology-r2]"
+ ]
+}

@@ -1,14 +1,21 @@
 function nFail = test_preset_equivalence(meshes)
-%TEST_PRESET_EQUIVALENCE  The production preset must reproduce the frozen
-%   conference realization.
+%TEST_PRESET_EQUIVALENCE  The HISTORICAL beta-stall preset must reproduce the
+%   frozen conference realization.
+%
+%   The preset under test is NAMED: duOlhoffSimpEq4bBetaStallLadderSensitivityFiltered
+%   (compatibility alias duOlhoffFixedPenaltySensitivityFiltered), the realization
+%   the saved campaign ran.  Since 2026-09-13 it is no longer the production
+%   preset, so this test must not follow the production choice; its reference and
+%   its bitwise standard are unchanged.
 %
 %   nFail = TEST_PRESET_EQUIVALENCE()              160x20 only (about 2 min)
 %   nFail = TEST_PRESET_EQUIVALENCE([160 20;320 40])  both promotion meshes
 %
 %   The reference is the SAVED conference campaign,
 %   examples/Performance/conference_benchmark/campaign_9mesh_r2/benchmark_records.mat,
-%   produced by analysis/OlhoffM4Reconstruction -- the realization that is
-%   production today.  Existing evidence is reused rather than regenerated.
+%   produced by analysis/OlhoffCurrent at this preset (and bitwise equal to
+%   analysis/OlhoffM4Reconstruction).  Existing evidence is reused rather than
+%   regenerated.
 %
 %   The comparison standard is BITWISE on the design vector: rho is compared
 %   with isequal on doubles, not with a tolerance.  A tolerance here would
@@ -33,7 +40,7 @@ rec = R.records(strcmp({R.records.method_key},'olhoff'));
 
 maxNumCompThreads(1);
 nFail = 0;
-fprintf('\n%s\nTEST_PRESET_EQUIVALENCE  (production preset vs frozen conference)\n%s\n', ...
+fprintf('\n%s\nTEST_PRESET_EQUIVALENCE  (historical beta-stall preset vs frozen conference)\n%s\n', ...
     repmat('=',1,72), repmat('=',1,72));
 
 for r = 1:size(meshes,1)
@@ -49,7 +56,8 @@ for r = 1:size(meshes,1)
     ref = rec(j);
 
     guard = olhoffcurrent_paths(); %#ok<NASGU>
-    cfg = olhoffcurrent_config(nelx, nely);
+    cfg = olhoffcurrent_config(nelx, nely, 'Preset', ...
+        'duOlhoffSimpEq4bBetaStallLadderSensitivityFiltered');
     res = olhoffSolve(cfg);
 
     got = struct('rho', double(res.rho(:)), 'omega1', double(res.omega(1)), ...

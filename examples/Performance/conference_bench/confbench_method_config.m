@@ -13,18 +13,21 @@ function [mcfg, profileId, profile] = confbench_method_config(methodKey, nelx, n
 %               profile proposed_practical_move02_tol001
 %     Yuksel    the same manifest, profile yuksel_practical_move01_tol001
 %     Olhoff    analysis/OlhoffCurrent, the SOLE production Du-Olhoff
-%               implementation, resolved at its named production preset
-%               duOlhoffFixedPenaltySensitivityFiltered
+%               implementation, resolved at the preset the benchmark names in
+%               confbench_olhoff_preset (currently
+%               duOlhoffPedersenAdaptiveBoxSensitivityFiltered, which the
+%               preflight also requires to be the recorded production preset)
 %
 %   The Olhoff branch deliberately does NOT read
 %   analysis/olhoff_stabilization_audit/final_campaign_profile.json.  That file
 %   names the SUPERSEDED fixed-1600-iteration S1 profile; the conference
 %   benchmark must not depend on it, even to read another method's entry.
 %
-%   It also does not read analysis/OlhoffM4Reconstruction, which is now frozen
-%   historical evidence rather than production.  The production preset
-%   reproduces that realization bitwise at 160x20 and 320x40 -- see
-%   analysis/OLHOFF_CURRENT_PROMOTION_REPORT.md.
+%   It also does not read analysis/OlhoffM4Reconstruction, which is frozen
+%   historical evidence.  That realization is reproduced bitwise by the
+%   HISTORICAL preset duOlhoffSimpEq4bBetaStallLadderSensitivityFiltered, which
+%   is no longer the benchmark's Olhoff preset -- see
+%   analysis/OlhoffCurrent/diagnostics/upstream_253069_migration.
 %
 %   See also CONFBENCH_RUN_CASE, OLHOFFCURRENT_CONFIG, OLHOFFCURRENT_PRESET.
 
@@ -42,8 +45,8 @@ switch methodKey
         % invisible to genpath.  The guard is released when this function
         % returns; confbench_run_case installs its own for the solve.
         guard = olhoffcurrent_paths(); %#ok<NASGU>
-        preset = olhoffcurrent_preset();
-        cfg = olhoffcurrent_config(nelx, nely);
+        preset = olhoffcurrent_preset(confbench_olhoff_preset());
+        cfg = olhoffcurrent_config(nelx, nely, 'Preset', preset.name);
 
         % mcfg carries BOTH renderings.  The canonical cfg is the
         % configuration; the flat view exists only so that checks and manifests
@@ -53,20 +56,28 @@ switch methodKey
         mcfg.nelx = nelx;
         mcfg.nely = nely;
         mcfg.canonical = cfg;
+        mcfg.olhoff_preset = preset.name;
 
         profileId = preset.name;
         profile = struct( ...
             'label',                preset.label, ...
+            'display_name',         preset.displayName, ...
             'production_preset',    preset.name, ...
+            'preset_role',          preset.role, ...
             'upstream_preset',      preset.upstreamPreset, ...
+            'upstream_commit',      preset.upstreamCommit, ...
             'classification',       preset.classification, ...
+            'formulation',          preset.formulation, ...
+            'compatibility_aliases', {preset.compatibilityAliases}, ...
             'historical_aliases',   {preset.historicalAliases}, ...
             'must_not_be_labelled', preset.mustNotBeLabelled, ...
             'epistemic_class',      preset.epistemicClass, ...
-            'caveat',               olhoffcurrent_caveat(), ...
+            'distinct_from',        preset.distinctFrom, ...
+            'caveat',               olhoffcurrent_caveat(preset.name), ...
             'source_implementation', ...
                 'analysis/OlhoffCurrent/+impl/architecture/olhoffSolve.m', ...
-            'frozen_by_file', 'analysis/OlhoffCurrent/olhoffcurrent_preset.m', ...
+            'frozen_by_file', 'analysis/OlhoffCurrent/olhoffcurrent_presets.m', ...
+            'selected_by_file', 'examples/Performance/conference_bench/confbench_olhoff_preset.m', ...
             'effective_config_hash', olhoffcurrent_config_hash(cfg));
         return
 

@@ -14,6 +14,9 @@ function T = list()
 T = {
 % name                      classification        historical label(s)
 'duOlhoffFrozenM4',        'SCIENTIFIC_PRESET',  'TMA / B0 / REG160 / "frozen M4" / the conference realization'
+'duOlhoffOuterAsymptotes', 'SCIENTIFIC_PRESET',  'outer-history MMA asymptotes, fixed move, no ladder (2026-09-12)'
+'duOlhoffAdaptiveMove',    'SCIENTIFIC_PRESET',  'per-element adaptive move box, Svanberg rule on the outer history, no ladder (2026-09-12)'
+'duOlhoffAdaptivePedersen','SCIENTIFIC_PRESET',  'adaptive box + Pedersen (2000) stiffness + linear mass, physical radius 0.06 (2026-09-13)'
 'duOlhoffMatureM4',        'EXPERIMENT_PRESET',  'Bmature / R2'
 'restorationLadderGuard',  'EXPERIMENT_PRESET',  'R1'
 'noDescentFixedMove',      'EXPERIMENT_PRESET',  'nodescent / S0'

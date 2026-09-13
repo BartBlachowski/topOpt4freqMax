@@ -27,6 +27,23 @@ function [drho, st, state] = innerLoopRho(ctx, state)
 %   [drho, st, state] = innerLoopRho(ctx, state)
 %     state : [] on the first outer iteration, then the struct returned by
 %             the previous call.  Fields: itG, low, upp, xold1, xold2.
+%
+%   ctx.asyOuter (optional, default false) selects WHICH history adapts the
+%   asymptotes:
+%     false  the inner sub-iterate sequence, global counter (the behaviour
+%            described above; the outer reversal rho_k+1 - rho_k is invisible
+%            to Svanberg's rule because every inner loop starts at x = xold1).
+%     true   the OUTER design sequence: at the first sub-iterate of outer
+%            iteration k the asymptotes are formed by Svanberg's rule from
+%            rho_k, rho_k-1, rho_k-2 and the asymptotes used at rho_k-1; they
+%            are then HELD for the remaining sub-iterates of the frozen
+%            sub-problem (xold1 = xold2 = x makes the update factor 1, only
+%            the published clamps about the current iterate still act).  This
+%            is the standard use of Svanberg (1987) across an outer loop and
+%            is the mechanism by which ||drho|| can decay to zero near a
+%            stationary point.  RECONSTRUCTION (class C): the paper names MMA
+%            and the nested loop, and does not say how the two are joined.
+%            state fields added: kOuter, rhoPrev1, rhoPrev2.
 
 NE = numel(ctx.rho);
 N  = numel(ctx.lam);
@@ -41,11 +58,24 @@ xmax = [hi; 5];
 
 x = [ctx.rho; 1];                      % start at drho = 0, beta = lamref
 
+asyOuter = isfield(ctx,'asyOuter') && ~isempty(ctx.asyOuter) && ctx.asyOuter;
 if isempty(state) || ~isfield(state, 'itG')
-    state = struct('itG', 0, 'low', xmin, 'upp', xmax, 'xold1', x, 'xold2', x);
+    state = struct('itG', 0, 'low', xmin, 'upp', xmax, 'xold1', x, 'xold2', x, ...
+                   'kOuter', 0, 'rhoPrev1', [], 'rhoPrev2', []);
 end
-xold1 = state.xold1;  xold2 = state.xold2;
+if ~isfield(state,'kOuter'), state.kOuter = 0; state.rhoPrev1 = []; state.rhoPrev2 = []; end
 low   = state.low;    upp   = state.upp;
+if asyOuter
+    kOut = state.kOuter + 1;               % this outer iteration, Svanberg's `iter`
+    if kOut >= 3
+        xold1 = [state.rhoPrev1; 1];  xold2 = [state.rhoPrev2; 1];
+    else
+        xold1 = x;  xold2 = x;
+    end
+    asyLow = low;  asyUpp = upp;
+else
+    xold1 = state.xold1;  xold2 = state.xold2;
+end
 
 if ctx.offDiag
     m = N + 2;                         % (25c) x N, (25b), (25e)
@@ -100,13 +130,25 @@ for it = 1:ctx.maxInner
     f0val  = -bs;
     df0dx  = zeros(nvar,1); df0dx(nvar) = -1;
 
-    itG = state.itG + it;              % GLOBAL counter: asymptotes persist
-    [xmma,~,~,~,~,~,~,~,~,low,upp] = mmasub(m,nvar,itG,x,xmin,xmax, ...
+    if asyOuter
+        if it == 1
+            itArg = kOut;                  % outer history forms the asymptotes
+        else
+            itArg = 3;  xold1 = x;  xold2 = x;   % factor 1: asymptotes HELD
+        end
+    else
+        itArg = state.itG + it;            % GLOBAL counter: asymptotes persist
+    end
+    [xmma,~,~,~,~,~,~,~,~,low,upp] = mmasub(m,nvar,itArg,x,xmin,xmax, ...
         xold1,xold2,f0val,df0dx,fval,dfdx,low,upp,a0,aMMA,cMMA,dMMA);
+    if asyOuter && it == 1
+        asyLow = low;  asyUpp = upp;       % the asymptotes formed AT rho_k
+    end
 
     dx = max(abs(xmma(1:NE)-x(1:NE)));
     st.dxHist(end+1) = dx;                                          %#ok<AGROW>
-    xold2 = xold1; xold1 = x; x = xmma;
+    if ~asyOuter, xold2 = xold1; xold1 = x; end
+    x = xmma;
     st.nInner = it;
     relStep = dx / max(max(abs(x(1:NE)-ctx.rho)), 1e-12);
     st.relHist(end+1) = relStep;                                    %#ok<AGROW>
@@ -120,6 +162,14 @@ drho    = x(1:NE) - ctx.rho;
 st.beta = x(end)*lamref;
 
 state.itG   = state.itG + st.nInner;
-state.low   = low;    state.upp   = upp;
-state.xold1 = xold1;  state.xold2 = xold2;
+if asyOuter
+    state.kOuter   = kOut;
+    state.rhoPrev2 = state.rhoPrev1;
+    state.rhoPrev1 = ctx.rho;              % the design this outer iteration started from
+    state.low = asyLow;  state.upp = asyUpp;
+    state.xold1 = x;     state.xold2 = x;
+else
+    state.low   = low;    state.upp   = upp;
+    state.xold1 = xold1;  state.xold2 = xold2;
+end
 end

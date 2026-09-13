@@ -35,8 +35,13 @@ function st = olhoffcurrent_currentness(varargin)
 %   Options:
 %     'Verbose'  (default true)  print the report
 %
+%   The upstream comparison is made against the branch recorded in
+%   PROVENANCE.json (source.branch), never against the development checkout's
+%   current HEAD.
+%
 %   st fields: state, detail, localOk, upstream (repo/branch/head/promoted/
-%   commitsAhead/promotedIsAncestor), manifest.
+%   commitsAhead/promotedIsAncestor/branchExists/checkedOutBranch/
+%   checkedOutHead), manifest.
 
 p = inputParser();
 p.addParameter('Verbose', true, @(v) islogical(v) && isscalar(v));
@@ -54,20 +59,31 @@ st.manifest = man;
 st.localOk  = man.ok;
 
 % ---- 2. upstream state ---------------------------------------------------
+% Measured against the branch PROVENANCE.json records, not against whatever the
+% development checkout happens to have checked out: upstream moves between
+% branches constantly, and "is the promoted commit in the history of the branch
+% it was promoted from?" must not depend on that.  The checked-out branch and
+% HEAD are reported for information only.
 up = struct('repo', prov.source.repository, 'reachable', false, ...
-            'branch','', 'head','', 'promoted', prov.source.commit, ...
-            'commitsAhead', NaN, 'promotedIsAncestor', false, 'dirty', '');
+            'branch', prov.source.branch, 'head','', 'promoted', prov.source.commit, ...
+            'commitsAhead', NaN, 'promotedIsAncestor', false, 'branchExists', false, ...
+            'checkedOutBranch', '', 'checkedOutHead', '', 'dirty', '');
 if exist(prov.source.repository, 'dir') == 7
     up.reachable = true;
-    up.branch = local_git(prov.source.repository, 'rev-parse --abbrev-ref HEAD');
-    up.head   = local_git(prov.source.repository, 'rev-parse HEAD');
+    ref = ['refs/heads/' prov.source.branch];
+    up.head = local_git(prov.source.repository, sprintf('rev-parse --verify --quiet %s', ref));
+    up.branchExists = ~isempty(up.head);
+    up.checkedOutBranch = local_git(prov.source.repository, 'rev-parse --abbrev-ref HEAD');
+    up.checkedOutHead   = local_git(prov.source.repository, 'rev-parse HEAD');
     up.dirty  = local_git(prov.source.repository, 'status --porcelain');
-    anc = local_gitStatus(prov.source.repository, ...
-        sprintf('merge-base --is-ancestor %s HEAD', prov.source.commit));
-    up.promotedIsAncestor = (anc == 0);
-    n = local_git(prov.source.repository, ...
-        sprintf('rev-list --count %s..HEAD', prov.source.commit));
-    if ~isempty(n); up.commitsAhead = str2double(n); end
+    if up.branchExists
+        anc = local_gitStatus(prov.source.repository, ...
+            sprintf('merge-base --is-ancestor %s %s', prov.source.commit, ref));
+        up.promotedIsAncestor = (anc == 0);
+        n = local_git(prov.source.repository, ...
+            sprintf('rev-list --count %s..%s', prov.source.commit, ref));
+        if ~isempty(n); up.commitsAhead = str2double(n); end
+    end
 end
 st.upstream = up;
 
@@ -83,12 +99,17 @@ elseif ~up.reachable
     st.detail = sprintf(['%s is not present on this machine. Local integrity ' ...
         'PASSED, so production is internally consistent; upstream comparison ' ...
         'could not be made.'], prov.source.repository);
+elseif ~up.branchExists
+    st.state  = 'PROVENANCE_MISMATCH';
+    st.detail = sprintf(['the recorded upstream branch %s does not exist in %s. The ' ...
+        'branch was deleted or renamed. Investigate before promoting anything further.'], ...
+        up.branch, prov.source.repository);
 elseif ~up.promotedIsAncestor
     st.state  = 'PROVENANCE_MISMATCH';
-    st.detail = sprintf(['the promoted commit %s is not an ancestor of upstream ' ...
-        'HEAD %s on branch %s. Upstream history was rewritten, or the branch ' ...
+    st.detail = sprintf(['the promoted commit %s is not an ancestor of the recorded ' ...
+        'upstream branch %s (head %s). Upstream history was rewritten, or the branch ' ...
         'moved. Investigate before promoting anything further.'], ...
-        prov.source.commit, up.head, up.branch);
+        prov.source.commit, up.branch, up.head);
 elseif up.commitsAhead > 0
     st.state  = 'UPSTREAM_AHEAD';
     st.detail = sprintf(['upstream has %d commit(s) after the promoted state on ' ...
@@ -112,9 +133,11 @@ if p.Results.Verbose
     end
     fprintf('  promoted commit  : %s\n', prov.source.commit);
     if up.reachable
-        fprintf('  upstream branch  : %s\n', up.branch);
-        fprintf('  upstream HEAD    : %s\n', up.head);
+        fprintf('  upstream branch  : %s (recorded)\n', up.branch);
+        fprintf('  branch head      : %s\n', up.head);
         fprintf('  commits ahead    : %d\n', up.commitsAhead);
+        fprintf('  checked out      : %s @ %s (information only)\n', ...
+            up.checkedOutBranch, up.checkedOutHead);
         if ~isempty(strtrim(up.dirty))
             fprintf('  upstream dirty   : YES (development tree; not a gate)\n');
         end

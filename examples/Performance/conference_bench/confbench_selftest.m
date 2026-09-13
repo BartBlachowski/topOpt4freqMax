@@ -26,6 +26,10 @@ function report = confbench_selftest(outFile)
 %     T11 SOLVER_FAILURE outranks CAP_HIT when both conditions hold
 %     T12 confbench_scaling_fit excludes every non-ok row and reports exactly
 %         which meshes it used
+%     T13 the Olhoff benchmark assertions accept only their own preset's
+%         formulation (cross-applied to the other preset they fail)
+%     T14 the per-outer-iteration cost fit uses the same ok rows and only
+%         methods whose records carry an outer count
 %
 %   See also PERFORMANCE_COMPARISON, CONFBENCH_PREFLIGHT.
 
@@ -150,7 +154,7 @@ report = addT(report, 'T5', 'no memory column in the exported tables', isempty(m
 rejected = false; msg6 = '';
 try
     g6 = olhoffcurrent_paths(); %#ok<NASGU>
-    olhoffcurrent_config(160, 21);
+    olhoffcurrent_config(160, 21, 'Preset', confbench_olhoff_preset());
 catch ME
     rejected = strcmp(ME.identifier, 'olhoffcurrent_config:OddNely');
     msg6 = firstLine(ME.message);
@@ -225,6 +229,66 @@ catch ME
         false, ['raised: ' ME.message]);
 end
 
+% ---- T13: Olhoff benchmark assertions are formulation-specific ------------
+% No solve.  Resolves the benchmark preset and the historical beta-stall preset
+% at 160x20 and cross-applies the assertion sets: each passes on its own
+% configuration and FAILS on the other's; a preset without assertions (the
+% historical stage-exhaustion diagnostic) is refused.
+try
+    g13 = olhoffcurrent_paths(); %#ok<NASGU>
+    PED  = 'duOlhoffPedersenAdaptiveBoxSensitivityFiltered';
+    BETA = 'duOlhoffSimpEq4bBetaStallLadderSensitivityFiltered';
+    EX3  = 'duOlhoffSimpEq4bThreeRungStageExhaustionSensitivityFiltered';
+    mk13 = @(name) local_olhoffMc(name, 160, 20);
+    mP = mk13(PED); mB = mk13(BETA); mE = mk13(EX3);
+    own  = all([confbench_olhoff_assertions(PED, mP).pass]) && all([confbench_olhoff_assertions(BETA, mB).pass]);
+    crossPB = confbench_olhoff_assertions(PED, mB);  crossBP = confbench_olhoff_assertions(BETA, mP);
+    refusedE = ~all([confbench_olhoff_assertions(EX3, mE).pass]);
+    okc = own && ~all([crossPB.pass]) && ~all([crossBP.pass]) && refusedE && ...
+        strcmp(confbench_olhoff_preset(), PED);
+    report = addT(report, 'T13', 'Olhoff preset assertions accept only their own formulation', okc, ...
+        sprintf(['own sets pass=%d; Pedersen set on beta-stall cfg fails %d check(s); beta-stall set ' ...
+            'on Pedersen cfg fails %d check(s); stage-exhaustion diagnostic refused=%d'], own, ...
+            sum(~[crossPB.pass]), sum(~[crossBP.pass]), refusedE));
+    clear g13
+catch ME
+    report = addT(report, 'T13', 'Olhoff preset assertions accept only their own formulation', false, ...
+        ['raised: ' ME.message]);
+end
+
+% ---- T14: per-outer-iteration cost fit ----------------------------------------
+% Synthetic records only.  A method whose records carry outer counts and
+% per-outer times gets a per-outer fit over the SAME ok rows; a method without
+% outer counts gets none; the total-time fit is unchanged.
+try
+    mkO = @(ne, nOut, t, okFlag, st) struct('method_key','olhoff','method','Du-Olhoff', ...
+        'mesh',[ne/20 20],'ok',okFlag,'status',st, ...
+        'counts',struct('outer_iterations',nOut), ...
+        'times',struct('total_wall_time_s',t,'total_wall_time_per_outer_s',t/nOut, ...
+            'outer_time_excluding_inner_per_outer_mean_s',0.1*t/nOut,'eigen_time_per_outer_mean_s',0.05*t/nOut, ...
+            'inner_time_per_outer_mean_s',0.9*t/nOut,'inner_time_per_inner_iteration_mean_s',0.04*t/nOut));
+    mkY = @(ne, t) struct('method_key','yuksel','method','Yuksel','mesh',[ne/20 20],'ok',true, ...
+        'status','NATIVE_CONVERGED','counts',struct('stage1_iterations',10),'times',struct('total_wall_time_s',t));
+    recsO = [mkO(3200,121,270,true,'NATIVE_CONVERGED'), mkO(7200,111,600,true,'NATIVE_CONVERGED'), ...
+             mkO(12800,101,1000,true,'NATIVE_CONVERGED'), mkO(20000,93,1500,true,'NATIVE_CONVERGED'), ...
+             mkO(28800,400,9000,false,'CAP_HIT')];
+    recsY = [mkY(3200,4), mkY(7200,9), mkY(12800,28)];
+    scfg = struct('fitScaling',true,'performanceCampaign',true,'scientificEvidence',true);
+    sc = confbench_scaling_fit(scfg, recsO);
+    sc2 = confbench_scaling_fit(scfg, recsY);
+    po = sc.per_outer.methods;
+    q1 = po(strcmp({po.quantity}, 'total_wall_time_per_outer_s'));
+    okc = sc.fitted && numel(po) == 5 && all([po.n] == 4) && ~isempty(q1) && ...
+        abs(q1.p - polyfitSlope([3200 7200 12800 20000], [270/121 600/111 1000/101 1500/93])) < 1e-10 && ...
+        isempty(sc2.per_outer.methods) && sc2.methods(1).n == 3;
+    report = addT(report, 'T14', 'per-outer-iteration cost fit uses the ok rows and only methods with outer counts', ...
+        okc, sprintf('per-outer quantities=%d n=%s p(total/outer)=%.4f; Yuksel per-outer fits=%d', ...
+            numel(po), mat2str([po.n]), q1.p, numel(sc2.per_outer.methods)));
+catch ME
+    report = addT(report, 'T14', 'per-outer-iteration cost fit uses the ok rows and only methods with outer counts', ...
+        false, ['raised: ' ME.message]);
+end
+
 fid = fopen(outFile,'w'); cl = onCleanup(@() fclose(fid)); %#ok<NASGU>
 fprintf(fid, '%s\n', jsonencode(report, 'PrettyPrint', true));
 
@@ -236,6 +300,18 @@ for i = 1:numel(report.tests)
 end
 fprintf('  RESULT: %s   (scientific_evidence=false, performance_campaign=false)\n', pf(report.pass));
 fprintf('  written to %s\n', outFile);
+end
+
+function mc = local_olhoffMc(name, nelx, nely)
+%LOCAL_OLHOFFMC  The Olhoff method-config shape of CONFBENCH_METHOD_CONFIG, for any preset.
+cfg = olhoffcurrent_config(nelx, nely, 'Preset', name);
+mc = olhoffcurrent_legacy_view(cfg);
+mc.nelx = nelx; mc.nely = nely; mc.canonical = cfg; mc.olhoff_preset = name;
+end
+
+function p = polyfitSlope(ne, t)
+b = [ones(numel(ne),1), log(ne(:))] \ log(t(:));
+p = b(2);
 end
 
 function r = addT(r, id, name, ok, detail)

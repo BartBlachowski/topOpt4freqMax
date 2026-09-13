@@ -1,11 +1,12 @@
 function out = olhoffcurrent_run(nelx, nely, varargin)
 %OLHOFFCURRENT_RUN  THE production entry point for Du-Olhoff eigenfrequency runs.
 %
-%   out = OLHOFFCURRENT_RUN(nelx, nely) installs the fail-closed path guard,
-%   PROVES that analysis/OlhoffCurrent is the only Olhoff implementation MATLAB
-%   can see, resolves the production preset at that mesh, runs it through the
-%   canonical route (olh.config.resolve -> olhoffSolve) and returns the
-%   method-native computational decomposition the conference benchmark reports.
+%   out = OLHOFFCURRENT_RUN(nelx, nely, 'Preset', name) installs the fail-closed
+%   path guard, PROVES that analysis/OlhoffCurrent is the only Olhoff
+%   implementation MATLAB can see, resolves the NAMED preset at that mesh, runs it
+%   through the canonical route (olh.config.resolve -> olhoffSolve) and returns
+%   the method-native computational decomposition the conference benchmark
+%   reports.  The preset must be named; see OLHOFFCURRENT_PRESETS.
 %
 %   The method is NESTED.  Its cost is therefore not one iteration count:
 %
@@ -26,21 +27,35 @@ function out = olhoffcurrent_run(nelx, nely, varargin)
 %                                         classification, result assembly
 %     total_wall_time_s                   caller-side, around the solve only
 %
+%   PER-OUTER-ITERATION COST.  The outer count is not monotone in the mesh for
+%   every preset (the adaptive-box sweep gives 121, 111, 101, 93, 112, ... outer
+%   iterations from 160x20 upward), so total wall time alone cannot be read as a
+%   scaling law.  The accounting therefore ALSO reports, from the same timers:
+%
+%     outer_time_total_s                  sum(hist.tOuter)
+%     outer_time_per_outer_mean_s         sum(hist.tOuter) / outer_iterations
+%     outer_time_per_outer_median_s       median(hist.tOuter)
+%     outer_time_excluding_inner_per_outer_mean_s
+%     eigen_time_per_outer_mean_s         sum(hist.tEig) / outer_iterations
+%     gradient_time_per_outer_mean_s      sum(hist.tGrad) / outer_iterations
+%     total_wall_time_per_outer_s         total_wall_time_s / outer_iterations
+%
 %   N_outer + N_inner is NOT reported as a generic iteration count: they are
 %   different objects and adding them is meaningless.
 %
-%   TIMING BOUNDARY.  The timed region is exactly the solver call, as before:
-%   the path guard and the configuration resolve happen OUTSIDE tCall, so the
-%   measured quantity is unchanged by the promotion.
+%   TIMING BOUNDARY.  The timed region is exactly the solver call: the path
+%   guard and the configuration resolve happen OUTSIDE tCall.
 %
-%   Name/value options are forwarded to OLHOFFCURRENT_CONFIG, plus:
+%   Name/value options are forwarded to OLHOFFCURRENT_CONFIG ('Preset' is
+%   required there), plus:
 %     'Label'   free text recorded in the result
 %     'Warmup'  true marks the result as a discarded warm-up
 %
-%   See also OLHOFFCURRENT_CONFIG, OLHOFFCURRENT_PATHS, OLHOFFCURRENT_PRESET.
+%   See also OLHOFFCURRENT_CONFIG, OLHOFFCURRENT_PATHS, OLHOFFCURRENT_PRESETS.
 
 p = inputParser();
 p.KeepUnmatched = true;
+p.addParameter('Preset', '', @(v) ischar(v) || isstring(v));
 p.addParameter('Label', '', @(v) ischar(v) || isstring(v));
 p.addParameter('Warmup', false, @(v) islogical(v) && isscalar(v));
 p.parse(varargin{:});
@@ -50,14 +65,28 @@ fwdArgs = {};
 fn = fieldnames(fwd);
 for i = 1:numel(fn); fwdArgs = [fwdArgs, {fn{i}, fwd.(fn{i})}]; end %#ok<AGROW>
 
-preset = olhoffcurrent_preset();
+presetName = char(string(p.Results.Preset));
+if isempty(presetName)
+    error('olhoffcurrent_run:PresetRequired', ...
+        ['olhoffcurrent_run requires ''Preset'', name. Registered presets: %s. ' ...
+         'The current production choice is olhoffcurrent_production_preset().name.'], ...
+        strjoin({olhoffcurrent_presets().name}, ', '));
+end
+preset = olhoffcurrent_preset(presetName);
+fwdArgs = [{'Preset', preset.name}, fwdArgs];
 
 out = struct();
 out.method = 'Olhoff';
 out.method_label = preset.label;
+out.display_name = preset.displayName;
 out.implementation = 'analysis/OlhoffCurrent';
-out.production_preset = preset.name;
+out.preset = preset.name;
+out.preset_requested_name = preset.requestedName;
+out.preset_role = preset.role;
+out.production_preset = '';          % filled below: the preset name iff it is the recorded production choice
 out.upstream_preset = preset.upstreamPreset;
+out.upstream_commit = preset.upstreamCommit;
+out.formulation_summary = preset.formulation;
 out.mesh = [nelx nely];
 out.is_warmup = logical(p.Results.Warmup);
 out.label = char(string(p.Results.Label));
@@ -67,7 +96,7 @@ out.ok = false;
 out.error = '';
 out.x = [];
 out.omega = NaN(3,1);
-out.caveat = olhoffcurrent_caveat();
+out.caveat = olhoffcurrent_caveat(preset.name);
 
 % ---- fail-closed dispatch: prove WHICH implementation runs ---------------
 % Held for the life of this function; the path is restored on return, including
@@ -78,6 +107,8 @@ out.resolved_implementation = gate.resolved;
 % ---- provenance of THIS result, before anything is solved ---------------
 prov = olhoffcurrent_provenance();
 out.provenance = prov;
+out.is_production_preset = strcmp(prov.production_preset, preset.name);
+if out.is_production_preset; out.production_preset = preset.name; end
 
 try
     % Configuration resolution is OUTSIDE the timed region.
@@ -124,13 +155,14 @@ try
         'The outer loop (%.6f s) exceeds the timed solver call (%.6f s).', ...
         sum(tOuter), callWall);
 
+    nO = max(nOuter, 1);
     acc = struct();
     acc.outer_iterations                   = nOuter;
     acc.inner_iterations_total             = sum(nInner);
-    acc.inner_iterations_per_outer_mean    = sum(nInner)/max(nOuter,1);
+    acc.inner_iterations_per_outer_mean    = sum(nInner)/nO;
     acc.outer_time_excluding_inner_s       = sum(tOuter) - sum(tInner);
     acc.inner_time_total_s                 = sum(tInner);
-    acc.inner_time_per_outer_mean_s        = sum(tInner)/max(nOuter,1);
+    acc.inner_time_per_outer_mean_s        = sum(tInner)/nO;
     acc.inner_time_per_inner_iteration_mean_s = sum(tInner)/max(sum(nInner),1);
     acc.total_wall_time_s                  = callWall;
     acc.overhead_time_s                    = callWall - sum(tOuter);
@@ -144,18 +176,34 @@ try
         acc.timing_accounting_residual_s/max(callWall, eps);
     acc.solver_self_report_wall_s = res.wallclock;
     acc.solver_self_report_residual_s = callWall - res.wallclock;
+    % per-outer-iteration cost, from the same timers (see header)
+    acc.outer_time_total_s                          = sum(tOuter);
+    acc.outer_time_per_outer_mean_s                 = sum(tOuter)/nO;
+    acc.outer_time_per_outer_median_s               = medianOr(tOuter);
+    acc.outer_time_excluding_inner_per_outer_mean_s = (sum(tOuter) - sum(tInner))/nO;
+    acc.eigen_time_per_outer_mean_s                 = sum(tEig)/nO;
+    acc.gradient_time_per_outer_mean_s              = sum(tGrad)/nO;
+    acc.total_wall_time_per_outer_s                 = callWall/nO;
     out.accounting = acc;
+
+    stageEx = strcmp(olh.config.getPath(cfg, 'stop.rule'), 'stageExhaustion');
+    settled = logical(olh.config.getPath(cfg, 'stop.guards.settledMove'));
+    adaptive = strcmp(olh.config.getPath(cfg, 'move.policy'), 'adaptive');
 
     out.stopping = struct( ...
         'outer_iterations', nOuter, ...
         'max_outer', maxOuter, ...
         'converged', any(contains(res.log, 'converged at outer')), ...
+        'stop_rule', olh.config.getPath(cfg, 'stop.rule'), ...
+        'move_policy', olh.config.getPath(cfg, 'move.policy'), ...
         'final_max_density_change', lastOr(h.dxOuter), ...
         'final_l2_density_change', lastOr(h.dxNorm2), ...
         'final_rms_density_change', lastOr(h.dxNorm2)/sqrt(nelx*nely), ...
         'eps_l2', tolOuter, ...
         'eps_rms', tolOuter/sqrt(nelx*nely), ...
         'final_move_limit', lastOr(h.move), ...
+        'final_move_limit_meaning', moveMeaning(adaptive), ...
+        'final_move_mean', auxLast(res, 'moveMean'), ...
         'final_ladder_stage', lastOr(h.stage), ...
         'final_multiplicity', lastOr(h.N), ...
         'final_inner_converged', lastOr(h.innerConv), ...
@@ -169,9 +217,19 @@ try
         out.status_note = 'nonfinite design or nonpositive first eigenfrequency';
     elseif out.stopping.converged
         out.status = 'NATIVE_CONVERGED';
-        out.status_note = sprintf(['||drho||_2 = %.3e < eps = %.3e with the ' ...
-            'move limit settled at %.4g'], out.stopping.final_l2_density_change, ...
-            tolOuter, out.stopping.final_move_limit);
+        if stageEx
+            out.status_note = sprintf(['terminal stage-exhaustion declaration at the last ' ...
+                'move level %.4g (||drho||_2 = %.3e)'], out.stopping.final_move_limit, ...
+                out.stopping.final_l2_density_change);
+        elseif settled
+            out.status_note = sprintf(['||drho||_2 = %.3e < eps = %.3e with the ' ...
+                'move limit settled at %.4g'], out.stopping.final_l2_density_change, ...
+                tolOuter, out.stopping.final_move_limit);
+        else
+            out.status_note = sprintf(['||drho||_2 = %.3e < eps = %.3e, no stop guard; ' ...
+                'largest per-element move box %.4g'], out.stopping.final_l2_density_change, ...
+                tolOuter, out.stopping.final_move_limit);
+        end
         out.ok = true;
     elseif nOuter >= maxOuter
         out.status = 'CAP_HIT';
@@ -197,4 +255,23 @@ end
 function v = lastOr(a)
 a = a(:);
 if isempty(a); v = NaN; else; v = double(a(end)); end
+end
+
+function v = medianOr(a)
+if isempty(a); v = NaN; else; v = median(double(a(:))); end
+end
+
+function v = auxLast(res, name)
+v = NaN;
+if isfield(res, 'aux') && isstruct(res.aux) && isfield(res.aux, name) && ~isempty(res.aux.(name))
+    v = double(res.aux.(name)(end));
+end
+end
+
+function s = moveMeaning(adaptive)
+if adaptive
+    s = 'largest per-element move box of the last outer iteration (hist.move = max box)';
+else
+    s = 'the global move limit of the last outer iteration';
+end
 end

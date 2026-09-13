@@ -1,0 +1,323 @@
+{
+  "when": "13-Sep-2026 19:55:06",
+  "selftest": {
+    "tests": [
+      {
+        "id": "T1",
+        "name": "a raising solver yields RUN_ERROR, not a crash",
+        "pass": true,
+        "detail": "status=RUN_ERROR ok=0 note=run_topopt_from_json:UnsupportedOurFilter: Unsupported optimization.filter.type \"no_such_filter\" for ourApproach. | warm-up or overridden budget; NOT a benchmark observation"
+      },
+      {
+        "id": "T2",
+        "name": "dispatch gate refuses a shadowing non-production implementation",
+        "pass": false,
+        "detail": "refused=0, guard then resolves correctly=1 | olhoffcurrent_paths must be called with an output argument the caller keeps alive:  guard = olhoffcurrent_paths();  Discarding the guard restores the path immediately and leaves the solver unreachable."
+      },
+      {
+        "id": "T3",
+        "name": "all three methods produce the same record field set",
+        "pass": true,
+        "detail": "26 fields, struct array built=1. "
+      },
+      {
+        "id": "T4",
+        "name": "timing-accounting identity passes and TIMING_ACCOUNTING_FAIL fires",
+        "pass": true,
+        "detail": "consistent: residual 0.000e+00, fail=0 | inconsistent: residual -4.000e-01, fail=1"
+      },
+      {
+        "id": "T5",
+        "name": "no memory column in the exported tables",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "id": "T6",
+        "name": "the production Olhoff configuration rejects an odd nely",
+        "pass": true,
+        "detail": "The simply-supported idealization pins the supports at MID HEIGHT, which requires an even nely (got 21)."
+      },
+      {
+        "id": "T7",
+        "name": "preflight refuses a mesh above 160x20 without acknowledgement",
+        "pass": true,
+        "detail": "check present=1, refused=1, overall preflight pass=0"
+      },
+      {
+        "id": "T8",
+        "name": "Stage-1 at cap + Stage-2 tolerance stop => CAP_HIT",
+        "pass": true,
+        "detail": "n1=1000/1000 n2=966/5000 -> CAP_HIT (ok=0), want CAP_HIT"
+      },
+      {
+        "id": "T9",
+        "name": "Stage-2 at cap => CAP_HIT",
+        "pass": true,
+        "detail": "n1=300/5000 n2=5000/5000 -> CAP_HIT (ok=0), want CAP_HIT"
+      },
+      {
+        "id": "T10",
+        "name": "both stages below cap + tolerance stop => NATIVE_CONVERGED",
+        "pass": true,
+        "detail": "n1=300/5000 n2=400/5000 -> NATIVE_CONVERGED (ok=1), want NATIVE_CONVERGED"
+      },
+      {
+        "id": "T11",
+        "name": "failed subproblem outranks a cap state => SOLVER_FAILURE",
+        "pass": true,
+        "detail": "n1=5000/5000 n2=5000/5000 -> SOLVER_FAILURE (ok=0), want SOLVER_FAILURE"
+      },
+      {
+        "id": "T12",
+        "name": "scaling fit excludes CAP_HIT and names the points used",
+        "pass": true,
+        "detail": "n=4 meshes={160x20,360x20,640x20,1000x20} C=8.486e-06 p=1.5956"
+      },
+      {
+        "id": "T13",
+        "name": "Olhoff preset assertions accept only their own formulation",
+        "pass": true,
+        "detail": "own sets pass=1; Pedersen set on beta-stall cfg fails 5 check(s); beta-stall set on Pedersen cfg fails 4 check(s); stage-exhaustion diagnostic refused=1"
+      },
+      {
+        "id": "T14",
+        "name": "per-outer-iteration cost fit uses the ok rows and only methods with outer counts",
+        "pass": true,
+        "detail": "per-outer quantities=5 n=[4 4 4 4 4] p(total/outer)=1.0771; Yuksel per-outer fits=0"
+      }
+    ],
+    "all_pass": false,
+    "failed_ids": [
+      "T2"
+    ],
+    "reported_pass_field": false,
+    "note": "report.pass in confbench_selftest is computed before T8..T14 are appended (pre-existing ordering); all_pass is recomputed over every test here"
+  },
+  "preflight": {
+    "pass": true,
+    "checks": [
+      {
+        "name": "cfg.resolutions is a non-empty N-by-2 integer matrix",
+        "pass": true,
+        "detail": "1 mesh(es): 160x20"
+      },
+      {
+        "name": "every nely is even (mid-height supports)",
+        "pass": true,
+        "detail": "odd nely at row(s): []"
+      },
+      {
+        "name": "no duplicate resolutions",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "at least one method enabled",
+        "pass": true,
+        "detail": "proposed=1 yuksel=1 olhoff=1"
+      },
+      {
+        "name": "scientific_evidence derived from cfg, not declared",
+        "pass": true,
+        "detail": "scientific_evidence=1 (min NE = 3200, floor 3200 = 160x20; override=[]; yuksel budget 5000 vs frozen 1000)"
+      },
+      {
+        "name": "a performance campaign is also scientific evidence",
+        "pass": true,
+        "detail": "performance_campaign=0"
+      },
+      {
+        "name": "meshes above 160x20 are explicitly acknowledged",
+        "pass": true,
+        "detail": "0 mesh(es) exceed 160x20. Set cfg.confirmLongCampaign = true in performance_comparison.m to run them."
+      },
+      {
+        "name": "single-threaded execution is in force",
+        "pass": true,
+        "detail": "maxNumCompThreads = 1, requested single thread = 1"
+      },
+      {
+        "name": "promoted Olhoff source hashes to SOURCE_MANIFEST.json",
+        "pass": true,
+        "detail": "79 files re-hashed; tree 4ba9a3ae10881344a0e60f2b8a8976c5ec9ceccf966bc2a3da4f37fb5aebffbf"
+      },
+      {
+        "name": "promoted Olhoff source is not modified in place",
+        "pass": true,
+        "detail": "currentness state = CURRENT"
+      },
+      {
+        "name": "Olhoff provenance is consistent with its upstream",
+        "pass": true,
+        "detail": "promoted source is intact and matches upstream migration/upstream-olhoffcurrent-capabilities at 253069262407885a8b759a9e721c4f0a7d3a397d."
+      },
+      {
+        "name": "exactly one Olhoff implementation is visible to MATLAB",
+        "pass": true,
+        "detail": "all 32 production-owned symbols resolve inside analysis/OlhoffCurrent/+impl, with no shadow candidate anywhere else (checked with which -all)"
+      },
+      {
+        "name": "the benchmark names a canonical, production-eligible Olhoff preset",
+        "pass": true,
+        "detail": "duOlhoffPedersenAdaptiveBoxSensitivityFiltered (role DISTINCT_FORMULATION, eligible 1, resolved via canonical)"
+      },
+      {
+        "name": "the benchmark Olhoff preset is the recorded production preset",
+        "pass": true,
+        "detail": "benchmark duOlhoffPedersenAdaptiveBoxSensitivityFiltered, PROVENANCE.json production duOlhoffPedersenAdaptiveBoxSensitivityFiltered"
+      },
+      {
+        "name": "Olhoff 160x20: method config carries the benchmark preset",
+        "pass": true,
+        "detail": "mcfg.olhoff_preset=duOlhoffPedersenAdaptiveBoxSensitivityFiltered"
+      },
+      {
+        "name": "Olhoff 160x20: resolved from the named preset duOlhoffPedersenAdaptiveBoxSensitivityFiltered",
+        "pass": true,
+        "detail": "cfg.provenance.olhoffCurrentPreset=duOlhoffPedersenAdaptiveBoxSensitivityFiltered"
+      },
+      {
+        "name": "Olhoff 160x20: genuine nested MMA sub-optimization",
+        "pass": true,
+        "detail": "innerSolver=mma innerVar=drho mmaVariant=published offDiag=1"
+      },
+      {
+        "name": "Olhoff 160x20: fixed subspace multiplicity, subN = 2",
+        "pass": true,
+        "detail": "multRule=subspace subN=2 (no threshold classifier)"
+      },
+      {
+        "name": "Olhoff 160x20: fixed physical filter R = 0.06 on all f_sk",
+        "pass": true,
+        "detail": "rminPhys=0.06 -> rminEl=1.2 (derived at run time), filterMode=all"
+      },
+      {
+        "name": "Olhoff 160x20: tolInner = 0.05, 5..500",
+        "pass": true,
+        "detail": "tolInner=0.05 maxInner=500 minInner=5"
+      },
+      {
+        "name": "Olhoff 160x20: p = 3 fixed, rho_min = 1e-3, maxCluster = 4",
+        "pass": true,
+        "detail": "p=3 pSchedule=0 rhomin=0.001 Nmax=4"
+      },
+      {
+        "name": "Olhoff 160x20: Pedersen low-density stiffness, threshold 0.1",
+        "pass": true,
+        "detail": "material.stiffness.model=pedersen linearBelow=0.1"
+      },
+      {
+        "name": "Olhoff 160x20: linear mass, eq. (2)",
+        "pass": true,
+        "detail": "material.mass.model=eq2 massInterp=lin"
+      },
+      {
+        "name": "Olhoff 160x20: adaptive per-element move box 0.10 / 0.002 / x1.2 / x0.7",
+        "pass": true,
+        "detail": "move.policy=adaptive moveFamily=SA move0=0.1 moveMin=0.002 grow=1.2 shrink=0.7"
+      },
+      {
+        "name": "Olhoff 160x20: stage exhaustion disabled (move and stop)",
+        "pass": true,
+        "detail": "move.continuation.signal=boundVariable stop.rule=designChange"
+      },
+      {
+        "name": "Olhoff 160x20: natural design-change stop, no guards",
+        "pass": true,
+        "detail": "||drho||_2 < 0.05, i.e. per-element RMS < 8.838834765e-04 (constant across meshes); guard=none"
+      },
+      {
+        "name": "Olhoff 160x20: outer cap 400, no projection, inner asymptotes reset per outer",
+        "pass": true,
+        "detail": "maxOuter=400 projection=0 asymptoteHistory=inner"
+      },
+      {
+        "name": "Olhoff 160x20: single thread and diagnostics off",
+        "pass": true,
+        "detail": "threads=1 diag=0 (the per-iteration recorder is proved bitwise inert and is off so it is not timed)"
+      },
+      {
+        "name": "no non-production Olhoff directory is on the MATLAB path",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "no Olhoff-family name resolves OR SHADOWS into a non-production tree",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "run_topopt_from_json is the repository tool copy",
+        "pass": true,
+        "detail": "/Users/piotrek/Programming/topOpt4freqMax-migration-253069/tools/Matlab/run_topopt_from_json.m"
+      },
+      {
+        "name": "the common E1/E2/E3 evaluator is the frozen study copy",
+        "pass": true,
+        "detail": "/Users/piotrek/Programming/topOpt4freqMax-migration-253069/analysis/three_method_parametric_study/study_evaluate_design.m"
+      },
+      {
+        "name": "Proposed runs its frozen profile",
+        "pass": true,
+        "detail": "proposed_practical_move02_tol001"
+      },
+      {
+        "name": "Yuksel runs its frozen profile",
+        "pass": true,
+        "detail": "yuksel_practical_move01_tol001"
+      },
+      {
+        "name": "no memory instrumentation is requested",
+        "pass": true,
+        "detail": "memory is not measured and not reported. Reliable, method-independent peak-memory measurement was not available in the MATLAB environment; memory was omitted rather than reported with inconsistent semantics."
+      },
+      {
+        "name": "output directory does not overwrite earlier evidence",
+        "pass": true,
+        "detail": "outputDir = /private/var/folders/6b/jnh3zrqx6rb4k17mvvy0wb6m0000gn/T/tp475d5453_0818_47b8_a22b_1767d61ac8a9"
+      },
+      {
+        "name": "timing schema is defined for every enabled method",
+        "pass": true,
+        "detail": "Count and time columns represent method-native computational stages and are not mathematically identical across methods. Total wall time is the common performance quantity."
+      },
+      {
+        "name": "the Du-Olhoff caveat is defined and non-empty",
+        "pass": true,
+        "detail": "Du-Olhoff RECONSTRUCTION, Pedersen/adaptive-box formulation (class C controller and filter radius, class B/D material law): SIMP p = 3 with the Pedersen (2000) linearized low-density stiffness (rho*rho0^(p-1) below rho0 = 0.1) and LINEAR mass, eq. (2); a per-element ADAPTIVE move box (initial 0.10, floor 0.002, x1.2 on monotone / x0.7 on reversing outer steps); NATURAL termination by ||drho||_2 < 0.05*sqrt(NE/3200) with no guards and no persistence, a heuristic design-change stop and not a KKT certificate; Sigmund sensitivity filter on all f_sk at a FIXED PHYSICAL radius R = 0.06 (1.2 elements at 160x20, 6 at 800x100). This is a DISTINCT formulation from the historical SIMP + eq. (4b) OlhoffCurrent reconstruction (duOlhoffSimpEq4bBetaStallLadderSensitivityFiltered), not a bug fix of it; Pedersen stiffness is the alternative Du & Olhoff sec. 2.2 name, not their choice. Terminal bimodality is NOT expected beyond coarse meshes: in the committed R = 0.06 sweep the optimum is bimodal only at 160x20 (native gap12 0.7 %) and native gap12 is 11.8-24.5 % from 240x30 to 800x100. Native eigenfrequencies are those of the Pedersen/linear-mass model; any cross-method table must name its evaluator model. Must NOT be labelled \"Olhoff 2007\". Field-level provenance (A/B/C/D) is documented in analysis/OlhoffCurrent/+impl/architecture/docs/SCIENTIFIC_CONFIG_PROVENANCE.md and is printed per run by olh.config.describe."
+      }
+    ],
+    "notes": [
+      "production Olhoff: analysis/OlhoffCurrent, production preset duOlhoffPedersenAdaptiveBoxSensitivityFiltered (event 2026-09-13), promoted from /Users/piotrek/Programming/Matlab/Olhoff migration/upstream-olhoffcurrent-capabilities @ 253069262407885a8b759a9e721c4f0a7d3a397d",
+      "  promoted source tree sha256: 4ba9a3ae10881344a0e60f2b8a8976c5ec9ceccf966bc2a3da4f37fb5aebffbf (79 files)",
+      "  external development repository (PROVENANCE ONLY, not a gate, FORBIDDEN on the production path): recorded branch migration/upstream-olhoffcurrent-capabilities, head 253069262407885a8b759a9e721c4f0a7d3a397d, 0 commit(s) ahead of the promoted state"
+    ],
+    "olhoff_preset": "duOlhoffPedersenAdaptiveBoxSensitivityFiltered",
+    "n_checks": 38,
+    "n_failed": 0,
+    "failed": []
+  },
+  "smoke": {
+    "status": "CAP_HIT",
+    "ok": false,
+    "production_preset": "duOlhoffPedersenAdaptiveBoxSensitivityFiltered",
+    "method": "Du-Olhoff reconstruction (Pedersen stiffness + linear mass, adaptive box)",
+    "effective_config_hash": "40fdaa629162102d8ab82d1f0bfeca77ce67aeacf44777e3911e1cbeeb29958e",
+    "times_fields_present": true,
+    "outer_iterations": 3,
+    "caveat_head": "Du-Olhoff RECONSTRUCTION, Pedersen/adaptive-box formulation (class C controller and filter radius, class B/D material law): SIMP p = 3 with the Pedersen (2000) "
+  },
+  "export": {
+    "detailed_has_per_outer_columns": true,
+    "detailed_preset_cell": true,
+    "notes_has_cost_per_outer_table": true,
+    "notes_header_is_formulation_label": true,
+    "no_M4_label_in_new_outputs": true,
+    "timing_schema_key": true,
+    "timing_schema_preset": "duOlhoffPedersenAdaptiveBoxSensitivityFiltered",
+    "manifest_benchmark_preset": "duOlhoffPedersenAdaptiveBoxSensitivityFiltered",
+    "manifest_production_preset": "duOlhoffPedersenAdaptiveBoxSensitivityFiltered"
+  },
+  "pass": false
+}

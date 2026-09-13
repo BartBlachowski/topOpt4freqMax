@@ -1,9 +1,9 @@
 {
   "manifest_schema": "olhoff_current_source_manifest/1",
-  "generated": "2026-09-08T21:23:27+02:00",
+  "generated": "2026-09-13T19:32:19+02:00",
   "root": "analysis/OlhoffCurrent/+impl",
-  "n_files": 75,
-  "tree_sha256": "edbfe47eb32109a2fb017f6f13d5327f2c240357caa96630064ffcf37ee152cb",
+  "n_files": 79,
+  "tree_sha256": "4ba9a3ae10881344a0e60f2b8a8976c5ec9ceccf966bc2a3da4f37fb5aebffbf",
   "files": [
     {
       "path": "algo/compareHistory.m",
@@ -27,7 +27,7 @@
     },
     {
       "path": "algo/genGrad.m",
-      "sha256": "13f2ab8541b2f626e340a592b99730ee4cba101e4f978a214dd7227adaeb5208"
+      "sha256": "6176f68ba89120e2354f84ab3e849b907dc53c84a11dd6423aef7fcf765eb084"
     },
     {
       "path": "algo/imresizeNN.m",
@@ -43,7 +43,7 @@
     },
     {
       "path": "algo/innerLoopRho.m",
-      "sha256": "aded1849467e93201d2a8c78effaa303300e71da4e192cefad4649f55cab35e5"
+      "sha256": "f892f720c29e6ca1c4bd25b33d7e67ba2ab31b7a316e20896da2228e0cd7fcab"
     },
     {
       "path": "algo/moveControl.m",
@@ -83,7 +83,7 @@
     },
     {
       "path": "architecture/+olh/+config/describe.m",
-      "sha256": "e089721ba2b91f5f3968ec9842c3dc857556b69023df1a753910bf8ac33e242f"
+      "sha256": "ba09e574bde8d46d2d9504e7b59d187f797249771c00bdd2999f536825256185"
     },
     {
       "path": "architecture/+olh/+config/epsilonForMesh.m",
@@ -91,7 +91,7 @@
     },
     {
       "path": "architecture/+olh/+config/fromLegacy.m",
-      "sha256": "7d0bad832c906c5304acb2ebf84304739fe3531281a0e007aa395fd58ae96ff8"
+      "sha256": "36fdb3339c39697def1a85d53fbf51031c0c41fc6a1eb25dda473d5937dfc407"
     },
     {
       "path": "architecture/+olh/+config/getPath.m",
@@ -107,7 +107,7 @@
     },
     {
       "path": "architecture/+olh/+config/schema.m",
-      "sha256": "d7a808995d9a34810442ddf17f15de980aa1e62efe90b3563f3e474ae5f5cf67"
+      "sha256": "3fa03435a0fc54f2863c537b3e926d00023d2df7bbb6eb00001e0ce05eb6584b"
     },
     {
       "path": "architecture/+olh/+config/setPath.m",
@@ -115,15 +115,19 @@
     },
     {
       "path": "architecture/+olh/+config/toLegacy.m",
-      "sha256": "685caacbd3db2bd19e14cc4fe3be0098b7bba423fe2b4a91f0cb83a3e4a21a04"
+      "sha256": "38fd269c0372c1c1b1da3c1b2658bcebfd4a1b41540816d4b1a0a2b08f7a08fe"
     },
     {
       "path": "architecture/+olh/+config/validate.m",
-      "sha256": "30e495ea8bcc25193de2c64f04984549870e213f9f9df871e52cc4c906cab141"
+      "sha256": "10493fbe6717cfce186e93257e239e1acacb7d4826638b527c54a8d604373e22"
     },
     {
       "path": "architecture/+olh/+material/massInterpolation.m",
       "sha256": "1b8fd4e887f08b5b61c5a4f72578a8b29c99748fcb545c68534325e6e52deab3"
+    },
+    {
+      "path": "architecture/+olh/+material/stiffnessInterpolation.m",
+      "sha256": "6dfedb07f21c06ed3476a7979e1c83f1eb2100ccb9b823242124556c84eccd58"
     },
     {
       "path": "architecture/+olh/+move/exhaustion.m",
@@ -131,7 +135,7 @@
     },
     {
       "path": "architecture/+olh/+move/limit.m",
-      "sha256": "61fa923d430121ead764a229b4f48dfd77617540b4ab6db883ccd9d5904b1c1e"
+      "sha256": "f1d519c81395669393467d44750fdad884f7435aae75113f167ca18f6d4e4773"
     },
     {
       "path": "architecture/+olh/+multi/detect.m",
@@ -142,6 +146,14 @@
       "sha256": "daed58374c507ff140b542483d6c51c6b12dac9bf9e764925b7e19c124a2f7ba"
     },
     {
+      "path": "architecture/+olh/+presets/duOlhoffAdaptiveMove.m",
+      "sha256": "3e7962dc0ad0a148c3b5a267ec6a25d6ff3ef578d637c685b2d8349f3037b7f3"
+    },
+    {
+      "path": "architecture/+olh/+presets/duOlhoffAdaptivePedersen.m",
+      "sha256": "94e924e6ce46ea40e6ed87af9596fb44f5049ef9f20b4da44f2c5e45b1d2ae75"
+    },
+    {
       "path": "architecture/+olh/+presets/duOlhoffFrozenM4.m",
       "sha256": "6ed3624cd19b3569f55b23acad1d5a1038d9c625a7fae9935e801ffb765ac40e"
     },
@@ -150,12 +162,16 @@
       "sha256": "0445fbc560ad2e99738be9cc72501cf5acb8e196256fdd5f028cdc4b23e14102"
     },
     {
+      "path": "architecture/+olh/+presets/duOlhoffOuterAsymptotes.m",
+      "sha256": "59d154c1198001f536129612851f10132f9aa195467687aa2db188b43698844e"
+    },
+    {
       "path": "architecture/+olh/+presets/legacyBinaryDiagonal.m",
       "sha256": "b26bdaa0e5183a9d1cd107708b61d295f9a7d39a4d66a6251e812b112f26eade"
     },
     {
       "path": "architecture/+olh/+presets/list.m",
-      "sha256": "d30b9ab76114e39af56e4938f365867cda101d1447389baf3bfbca0ed72610a8"
+      "sha256": "2593695f8801b4eb5c7bb7da61010edd819c8405d43ad2b197f065a89e1c9109"
     },
     {
       "path": "architecture/+olh/+presets/noDescentFixedMove.m",
@@ -195,7 +211,7 @@
     },
     {
       "path": "architecture/docs/CONFIG_REFERENCE.md",
-      "sha256": "397939c66043ef012d0f8fa6e383c7224a54724d4b62fea1a2fad79eb617a14b"
+      "sha256": "94a05f13413892aedd7237b47e423f4c06c389723f09dcdf19620883ebc3edca"
     },
     {
       "path": "architecture/docs/FILE_CLASSIFICATION.md",
@@ -203,7 +219,7 @@
     },
     {
       "path": "architecture/docs/MIGRATION_FROM_LEGACY.md",
-      "sha256": "1808da8b98cafc8704183cdbb631d25835c0c4ffbae9c40cb89e856b5f8ce4b5"
+      "sha256": "dd2c9cabf6d82319ebaea209bd0de641753a892e36d77f4ebc537f442137e7ac"
     },
     {
       "path": "architecture/docs/OLHOFF_ARCHITECTURE_REFACTOR_PLAN.md",
@@ -215,7 +231,7 @@
     },
     {
       "path": "architecture/docs/PRESETS.md",
-      "sha256": "5fc61dde76f71d627249c76f78c4171606ce18db92c4365a7c0b08a52e4ee86d"
+      "sha256": "de0baa086173b00df046beb73e5f7426b3886c95c42482ff78948ef930ae700d"
     },
     {
       "path": "architecture/docs/PYMORPHOGEN_PORT_MAP.md",
@@ -223,7 +239,7 @@
     },
     {
       "path": "architecture/docs/SCIENTIFIC_CONFIG_PROVENANCE.md",
-      "sha256": "22cd312905fe4589b566884614e5b0b8aa2dc91f69e383fdd6f929ef977e8d97"
+      "sha256": "deb3c90cad72b39d7d12304d7badb39d3d52229056bf316b7860183e12fb332c"
     },
     {
       "path": "architecture/docs/TERMINOLOGY.md",
@@ -235,11 +251,11 @@
     },
     {
       "path": "architecture/olhoffSolve.m",
-      "sha256": "1e5a114cbf91717e01e5592e86203f401ed5cdb3e5f5ce9a727b8163cdf2fba3"
+      "sha256": "6c891b42a6c3bbdd80e3d1035f05f626bd8e73a2beaa3540532a68ec6e3cd7f7"
     },
     {
       "path": "fem/assemble2D.m",
-      "sha256": "7b2f1e10228d57237d962689909297351c879c9b613f311500f23dd37bd00878"
+      "sha256": "ebf543df22d774598053fc99d50dbbce33f7d679084e14202d2999cb09da264f"
     },
     {
       "path": "fem/classifyModes.m",
@@ -247,7 +263,7 @@
     },
     {
       "path": "fem/eigSolve.m",
-      "sha256": "b0784ceeb15fafe164ba138b963c3ab4dc5a466fc2953c79786809edd16159cd"
+      "sha256": "1f7181e45b57b0db95c1e9faaf2cd6babb1ccd2cad5abaea247c10ae9d029856"
     },
     {
       "path": "fem/elemMats2D.m",

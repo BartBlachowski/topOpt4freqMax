@@ -1,4 +1,4 @@
-function [omega, Phi, lambda, info] = eigSolve(K, M, J, solver, v0)
+function [omega, Phi, lambda, info] = eigSolve(K, M, J, solver, v0, opts)
 %EIGSOLVE  Lowest J eigenpairs of K*phi = lambda*M*phi on the reduced system.
 %
 %   [omega,Phi,lambda,info] = EIGSOLVE(K,M,J,solver,v0)
@@ -11,10 +11,18 @@ function [omega, Phi, lambda, info] = eigSolve(K, M, J, solver, v0)
 %                     study is about.  If v0 is not supplied a fixed
 %                     deterministic vector is generated here.
 %
+%   opts (optional) for 'eigs': fields tol (default 1e-12), maxit (5000) and
+%   pFactor (4, Krylov size p = max(20, pFactor*J)).  The defaults are the
+%   constants this function always used, so omitting opts is bitwise identical.
+%
 %   Modes are returned M-orthonormalised: Phi'*M*Phi = I, so that the
 %   generalized gradients f_sk of eq. (19) can be formed directly.
 
 if nargin < 4 || isempty(solver), solver = 'dense'; end
+if nargin < 6 || isempty(opts), opts = struct(); end
+eigTol   = local_opt(opts, 'tol',     1e-12);
+eigMaxit = local_opt(opts, 'maxit',   5000);
+eigPfac  = local_opt(opts, 'pFactor', 4);
 n = size(K,1);
 t0 = tic;
 
@@ -33,9 +41,9 @@ switch lower(solver)
             % deterministic, reproducible, and not orthogonal to the low modes
             v0 = sin((1:n)'*0.7071067811865476) + 0.5;
         end
-        opts = struct('v0', v0, 'tol', 1e-12, 'maxit', 5000, ...
-                      'p', min(n, max(20, 4*J)));
-        [V, Dm, flag] = eigs(K, M, J, 'smallestabs', opts);
+        eopts = struct('v0', v0, 'tol', eigTol, 'maxit', eigMaxit, ...
+                       'p', min(n, max(20, eigPfac*J)));
+        [V, Dm, flag] = eigs(K, M, J, 'smallestabs', eopts);
         if flag ~= 0
             error('eigSolve:noconv','eigs did not converge (flag=%d)',flag);
         end
@@ -60,4 +68,8 @@ lambda = lambda(:);
 omega  = sqrt(max(lambda,0));
 info.time = toc(t0);
 info.J = J;
+end
+
+function v = local_opt(s, name, dflt)
+if isfield(s, name) && ~isempty(s.(name)), v = s.(name); else, v = dflt; end
 end

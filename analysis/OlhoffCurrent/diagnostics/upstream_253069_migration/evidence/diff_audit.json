@@ -1,0 +1,987 @@
+{
+ "base": "013cc48451d33bed61c5c4eea174bbd898d548a2",
+ "n_paths": 121,
+ "by_class": {
+  "PROMOTED_BYTE_COPY": 20,
+  "PROVENANCE_DOCS": 4,
+  "PROVENANCE": 1,
+  "STUDY_RECORD": 61,
+  "PRESET_LAYER": 6,
+  "PROVENANCE_CODE": 2,
+  "EVIDENCE_GATE": 1,
+  "OLHOFFCURRENT_TESTS": 12,
+  "OLHOFF_HARNESS": 14
+ },
+ "unauthorized": [],
+ "phase6_paths": [],
+ "rows": [
+  {
+   "path": "analysis/OlhoffCurrent/+impl/algo/genGrad.m",
+   "status": "M",
+   "added": "4",
+   "deleted": "2",
+   "cls": "PROMOTED_BYTE_COPY",
+   "reason": "byte-identical to upstream 253069 (BYTE_IDENTITY.md)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/+impl/algo/innerLoopRho.m",
+   "status": "M",
+   "added": "57",
+   "deleted": "7",
+   "cls": "PROMOTED_BYTE_COPY",
+   "reason": "byte-identical to upstream 253069 (BYTE_IDENTITY.md)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/+impl/architecture/+olh/+config/describe.m",
+   "status": "M",
+   "added": "32",
+   "deleted": "2",
+   "cls": "PROMOTED_BYTE_COPY",
+   "reason": "byte-identical to upstream 253069 (BYTE_IDENTITY.md)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/+impl/architecture/+olh/+config/fromLegacy.m",
+   "status": "M",
+   "added": "8",
+   "deleted": "1",
+   "cls": "PROMOTED_BYTE_COPY",
+   "reason": "byte-identical to upstream 253069 (BYTE_IDENTITY.md)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/+impl/architecture/+olh/+config/schema.m",
+   "status": "M",
+   "added": "9",
+   "deleted": "3",
+   "cls": "PROMOTED_BYTE_COPY",
+   "reason": "byte-identical to upstream 253069 (BYTE_IDENTITY.md)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/+impl/architecture/+olh/+config/toLegacy.m",
+   "status": "M",
+   "added": "11",
+   "deleted": "2",
+   "cls": "PROMOTED_BYTE_COPY",
+   "reason": "byte-identical to upstream 253069 (BYTE_IDENTITY.md)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/+impl/architecture/+olh/+config/validate.m",
+   "status": "M",
+   "added": "15",
+   "deleted": "0",
+   "cls": "PROMOTED_BYTE_COPY",
+   "reason": "byte-identical to upstream 253069 (BYTE_IDENTITY.md)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/+impl/architecture/+olh/+material/stiffnessInterpolation.m",
+   "status": "A",
+   "added": "43",
+   "deleted": "0",
+   "cls": "PROMOTED_BYTE_COPY",
+   "reason": "byte-identical to upstream 253069 (BYTE_IDENTITY.md)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/+impl/architecture/+olh/+move/limit.m",
+   "status": "M",
+   "added": "34",
+   "deleted": "3",
+   "cls": "PROMOTED_BYTE_COPY",
+   "reason": "byte-identical to upstream 253069 (BYTE_IDENTITY.md)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/+impl/architecture/+olh/+presets/duOlhoffAdaptiveMove.m",
+   "status": "A",
+   "added": "43",
+   "deleted": "0",
+   "cls": "PROMOTED_BYTE_COPY",
+   "reason": "byte-identical to upstream 253069 (BYTE_IDENTITY.md)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/+impl/architecture/+olh/+presets/duOlhoffAdaptivePedersen.m",
+   "status": "A",
+   "added": "33",
+   "deleted": "0",
+   "cls": "PROMOTED_BYTE_COPY",
+   "reason": "byte-identical to upstream 253069 (BYTE_IDENTITY.md)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/+impl/architecture/+olh/+presets/duOlhoffOuterAsymptotes.m",
+   "status": "A",
+   "added": "44",
+   "deleted": "0",
+   "cls": "PROMOTED_BYTE_COPY",
+   "reason": "byte-identical to upstream 253069 (BYTE_IDENTITY.md)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/+impl/architecture/+olh/+presets/list.m",
+   "status": "M",
+   "added": "3",
+   "deleted": "0",
+   "cls": "PROMOTED_BYTE_COPY",
+   "reason": "byte-identical to upstream 253069 (BYTE_IDENTITY.md)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/+impl/architecture/docs/CONFIG_REFERENCE.md",
+   "status": "M",
+   "added": "14",
+   "deleted": "7",
+   "cls": "PROMOTED_BYTE_COPY",
+   "reason": "byte-identical to upstream 253069 (BYTE_IDENTITY.md)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/+impl/architecture/docs/MIGRATION_FROM_LEGACY.md",
+   "status": "M",
+   "added": "2",
+   "deleted": "1",
+   "cls": "PROMOTED_BYTE_COPY",
+   "reason": "byte-identical to upstream 253069 (BYTE_IDENTITY.md)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/+impl/architecture/docs/PRESETS.md",
+   "status": "M",
+   "added": "45",
+   "deleted": "0",
+   "cls": "PROMOTED_BYTE_COPY",
+   "reason": "byte-identical to upstream 253069 (BYTE_IDENTITY.md)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/+impl/architecture/docs/SCIENTIFIC_CONFIG_PROVENANCE.md",
+   "status": "M",
+   "added": "8",
+   "deleted": "0",
+   "cls": "PROMOTED_BYTE_COPY",
+   "reason": "byte-identical to upstream 253069 (BYTE_IDENTITY.md)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/+impl/architecture/olhoffSolve.m",
+   "status": "M",
+   "added": "76",
+   "deleted": "32",
+   "cls": "PROMOTED_BYTE_COPY",
+   "reason": "byte-identical to upstream 253069 (BYTE_IDENTITY.md)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/+impl/fem/assemble2D.m",
+   "status": "M",
+   "added": "5",
+   "deleted": "2",
+   "cls": "PROMOTED_BYTE_COPY",
+   "reason": "byte-identical to upstream 253069 (BYTE_IDENTITY.md)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/+impl/fem/eigSolve.m",
+   "status": "M",
+   "added": "16",
+   "deleted": "4",
+   "cls": "PROMOTED_BYTE_COPY",
+   "reason": "byte-identical to upstream 253069 (BYTE_IDENTITY.md)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/EVIDENCE_POLICY.md",
+   "status": "M",
+   "added": "11",
+   "deleted": "0",
+   "cls": "PROVENANCE_DOCS",
+   "reason": "provenance/policy/readme for the promotion and named presets"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/PROVENANCE.json",
+   "status": "M",
+   "added": "262",
+   "deleted": "36",
+   "cls": "PROVENANCE_DOCS",
+   "reason": "provenance/policy/readme for the promotion and named presets"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/PROVENANCE.md",
+   "status": "M",
+   "added": "115",
+   "deleted": "114",
+   "cls": "PROVENANCE_DOCS",
+   "reason": "provenance/policy/readme for the promotion and named presets"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/README.md",
+   "status": "M",
+   "added": "53",
+   "deleted": "35",
+   "cls": "PROVENANCE_DOCS",
+   "reason": "provenance/policy/readme for the promotion and named presets"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/SOURCE_MANIFEST.json",
+   "status": "M",
+   "added": "35",
+   "deleted": "19",
+   "cls": "PROVENANCE",
+   "reason": "regenerated integrity manifest (79 files, tree 4ba9a3ae...)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/BYTE_IDENTITY.md",
+   "status": "A",
+   "added": "93",
+   "deleted": "0",
+   "cls": "STUDY_RECORD",
+   "reason": "this migration study (docs, scripts, compact evidence)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/CAMPAIGN_GATE.md",
+   "status": "A",
+   "added": "41",
+   "deleted": "0",
+   "cls": "STUDY_RECORD",
+   "reason": "this migration study (docs, scripts, compact evidence)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/CONFIG_HASH_TRANSITION.md",
+   "status": "A",
+   "added": "83",
+   "deleted": "0",
+   "cls": "STUDY_RECORD",
+   "reason": "this migration study (docs, scripts, compact evidence)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/COST_REPORTING.md",
+   "status": "A",
+   "added": "47",
+   "deleted": "0",
+   "cls": "STUDY_RECORD",
+   "reason": "this migration study (docs, scripts, compact evidence)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/DATA_MANIFEST.json",
+   "status": "A",
+   "added": "581",
+   "deleted": "0",
+   "cls": "STUDY_RECORD",
+   "reason": "this migration study (docs, scripts, compact evidence)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/DIFF_AUDIT.md",
+   "status": "A",
+   "added": "108",
+   "deleted": "0",
+   "cls": "STUDY_RECORD",
+   "reason": "this migration study (docs, scripts, compact evidence)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/EVIDENCE.json",
+   "status": "A",
+   "added": "733",
+   "deleted": "0",
+   "cls": "STUDY_RECORD",
+   "reason": "this migration study (docs, scripts, compact evidence)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/FINAL_SHA256.txt",
+   "status": "A",
+   "added": "84",
+   "deleted": "0",
+   "cls": "STUDY_RECORD",
+   "reason": "this migration study (docs, scripts, compact evidence)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/HARNESS_UPDATE.md",
+   "status": "A",
+   "added": "80",
+   "deleted": "0",
+   "cls": "STUDY_RECORD",
+   "reason": "this migration study (docs, scripts, compact evidence)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/HISTORICAL_PRESET.md",
+   "status": "A",
+   "added": "57",
+   "deleted": "0",
+   "cls": "STUDY_RECORD",
+   "reason": "this migration study (docs, scripts, compact evidence)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/HISTORICAL_REPRODUCTION.md",
+   "status": "A",
+   "added": "82",
+   "deleted": "0",
+   "cls": "STUDY_RECORD",
+   "reason": "this migration study (docs, scripts, compact evidence)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/KNOWN_PREEXISTING_DEFECTS.md",
+   "status": "A",
+   "added": "69",
+   "deleted": "0",
+   "cls": "STUDY_RECORD",
+   "reason": "this migration study (docs, scripts, compact evidence)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/MANIFEST_PROVENANCE.md",
+   "status": "A",
+   "added": "59",
+   "deleted": "0",
+   "cls": "STUDY_RECORD",
+   "reason": "this migration study (docs, scripts, compact evidence)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/METRICS.json",
+   "status": "A",
+   "added": "866",
+   "deleted": "0",
+   "cls": "STUDY_RECORD",
+   "reason": "this migration study (docs, scripts, compact evidence)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/MIGRATION_HANDOFF.md",
+   "status": "A",
+   "added": "49",
+   "deleted": "0",
+   "cls": "STUDY_RECORD",
+   "reason": "this migration study (docs, scripts, compact evidence)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/MIGRATION_PREREGISTRATION.md",
+   "status": "A",
+   "added": "133",
+   "deleted": "0",
+   "cls": "STUDY_RECORD",
+   "reason": "this migration study (docs, scripts, compact evidence)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/PEDERSEN_PRESET.md",
+   "status": "A",
+   "added": "41",
+   "deleted": "0",
+   "cls": "STUDY_RECORD",
+   "reason": "this migration study (docs, scripts, compact evidence)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/PEDERSEN_S160_REPRODUCTION.md",
+   "status": "A",
+   "added": "36",
+   "deleted": "0",
+   "cls": "STUDY_RECORD",
+   "reason": "this migration study (docs, scripts, compact evidence)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/PREREGISTRATION_AMENDMENT_1.md",
+   "status": "A",
+   "added": "37",
+   "deleted": "0",
+   "cls": "STUDY_RECORD",
+   "reason": "this migration study (docs, scripts, compact evidence)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/PRESET_IDENTITY.md",
+   "status": "A",
+   "added": "51",
+   "deleted": "0",
+   "cls": "STUDY_RECORD",
+   "reason": "this migration study (docs, scripts, compact evidence)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/PROMOTION_MAP.md",
+   "status": "A",
+   "added": "52",
+   "deleted": "0",
+   "cls": "STUDY_RECORD",
+   "reason": "this migration study (docs, scripts, compact evidence)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/REPORT.md",
+   "status": "A",
+   "added": "138",
+   "deleted": "0",
+   "cls": "STUDY_RECORD",
+   "reason": "this migration study (docs, scripts, compact evidence)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/SHARED_IMPLEMENTATION_EQUIVALENCE.md",
+   "status": "A",
+   "added": "36",
+   "deleted": "0",
+   "cls": "STUDY_RECORD",
+   "reason": "this migration study (docs, scripts, compact evidence)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/SOURCE_IDENTITY.md",
+   "status": "A",
+   "added": "36",
+   "deleted": "0",
+   "cls": "STUDY_RECORD",
+   "reason": "this migration study (docs, scripts, compact evidence)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/TARGET_START_STATE.md",
+   "status": "A",
+   "added": "50",
+   "deleted": "0",
+   "cls": "STUDY_RECORD",
+   "reason": "this migration study (docs, scripts, compact evidence)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/TEST_REPORT.md",
+   "status": "A",
+   "added": "101",
+   "deleted": "0",
+   "cls": "STUDY_RECORD",
+   "reason": "this migration study (docs, scripts, compact evidence)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/evidence/MIGRATION_PREREGISTRATION.frozen",
+   "status": "A",
+   "added": "133",
+   "deleted": "0",
+   "cls": "STUDY_RECORD",
+   "reason": "this migration study (docs, scripts, compact evidence)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/evidence/byte_identity.json",
+   "status": "A",
+   "added": "805",
+   "deleted": "0",
+   "cls": "STUDY_RECORD",
+   "reason": "this migration study (docs, scripts, compact evidence)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/evidence/comparisons.json",
+   "status": "A",
+   "added": "883",
+   "deleted": "0",
+   "cls": "STUDY_RECORD",
+   "reason": "this migration study (docs, scripts, compact evidence)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/evidence/comparisons.run1.json",
+   "status": "A",
+   "added": "869",
+   "deleted": "0",
+   "cls": "STUDY_RECORD",
+   "reason": "this migration study (docs, scripts, compact evidence)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/evidence/config_transition.json",
+   "status": "A",
+   "added": "549",
+   "deleted": "0",
+   "cls": "STUDY_RECORD",
+   "reason": "this migration study (docs, scripts, compact evidence)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/evidence/diff_audit.json",
+   "status": "A",
+   "added": "971",
+   "deleted": "0",
+   "cls": "STUDY_RECORD",
+   "reason": "this migration study (docs, scripts, compact evidence)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/evidence/finalization_gate_affected.json",
+   "status": "A",
+   "added": "68",
+   "deleted": "0",
+   "cls": "STUDY_RECORD",
+   "reason": "this migration study (docs, scripts, compact evidence)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/evidence/harness_check.json",
+   "status": "A",
+   "added": "323",
+   "deleted": "0",
+   "cls": "STUDY_RECORD",
+   "reason": "this migration study (docs, scripts, compact evidence)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/evidence/manifest_provenance_check.json",
+   "status": "A",
+   "added": "24",
+   "deleted": "0",
+   "cls": "STUDY_RECORD",
+   "reason": "this migration study (docs, scripts, compact evidence)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/evidence/preregistration_sha256.txt",
+   "status": "A",
+   "added": "2",
+   "deleted": "0",
+   "cls": "STUDY_RECORD",
+   "reason": "this migration study (docs, scripts, compact evidence)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/evidence/promotion_copy_log.csv",
+   "status": "A",
+   "added": "21",
+   "deleted": "0",
+   "cls": "STUDY_RECORD",
+   "reason": "this migration study (docs, scripts, compact evidence)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/evidence/source_identity.json",
+   "status": "A",
+   "added": "81",
+   "deleted": "0",
+   "cls": "STUDY_RECORD",
+   "reason": "this migration study (docs, scripts, compact evidence)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/evidence/target_start_state.json",
+   "status": "A",
+   "added": "44",
+   "deleted": "0",
+   "cls": "STUDY_RECORD",
+   "reason": "this migration study (docs, scripts, compact evidence)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/scripts/mig_anchor_cfg.m",
+   "status": "A",
+   "added": "100",
+   "deleted": "0",
+   "cls": "STUDY_RECORD",
+   "reason": "this migration study (docs, scripts, compact evidence)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/scripts/mig_base_finalization.m",
+   "status": "A",
+   "added": "9",
+   "deleted": "0",
+   "cls": "STUDY_RECORD",
+   "reason": "this migration study (docs, scripts, compact evidence)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/scripts/mig_baseline_selftest.m",
+   "status": "A",
+   "added": "17",
+   "deleted": "0",
+   "cls": "STUDY_RECORD",
+   "reason": "this migration study (docs, scripts, compact evidence)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/scripts/mig_case_cfg.m",
+   "status": "A",
+   "added": "61",
+   "deleted": "0",
+   "cls": "STUDY_RECORD",
+   "reason": "this migration study (docs, scripts, compact evidence)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/scripts/mig_compare.m",
+   "status": "A",
+   "added": "300",
+   "deleted": "0",
+   "cls": "STUDY_RECORD",
+   "reason": "this migration study (docs, scripts, compact evidence)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/scripts/mig_config_analysis.m",
+   "status": "A",
+   "added": "113",
+   "deleted": "0",
+   "cls": "STUDY_RECORD",
+   "reason": "this migration study (docs, scripts, compact evidence)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/scripts/mig_config_dump.m",
+   "status": "A",
+   "added": "68",
+   "deleted": "0",
+   "cls": "STUDY_RECORD",
+   "reason": "this migration study (docs, scripts, compact evidence)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/scripts/mig_declare_evidence.m",
+   "status": "A",
+   "added": "50",
+   "deleted": "0",
+   "cls": "STUDY_RECORD",
+   "reason": "this migration study (docs, scripts, compact evidence)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/scripts/mig_diff_audit.py",
+   "status": "A",
+   "added": "82",
+   "deleted": "0",
+   "cls": "STUDY_RECORD",
+   "reason": "this migration study (docs, scripts, compact evidence)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/scripts/mig_docs.py",
+   "status": "A",
+   "added": "138",
+   "deleted": "0",
+   "cls": "STUDY_RECORD",
+   "reason": "this migration study (docs, scripts, compact evidence)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/scripts/mig_finalize.py",
+   "status": "A",
+   "added": "115",
+   "deleted": "0",
+   "cls": "STUDY_RECORD",
+   "reason": "this migration study (docs, scripts, compact evidence)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/scripts/mig_gate_diag.m",
+   "status": "A",
+   "added": "13",
+   "deleted": "0",
+   "cls": "STUDY_RECORD",
+   "reason": "this migration study (docs, scripts, compact evidence)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/scripts/mig_harness_check.m",
+   "status": "A",
+   "added": "86",
+   "deleted": "0",
+   "cls": "STUDY_RECORD",
+   "reason": "this migration study (docs, scripts, compact evidence)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/scripts/mig_hash_rows.m",
+   "status": "A",
+   "added": "28",
+   "deleted": "0",
+   "cls": "STUDY_RECORD",
+   "reason": "this migration study (docs, scripts, compact evidence)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/scripts/mig_job.sh",
+   "status": "A",
+   "added": "11",
+   "deleted": "0",
+   "cls": "STUDY_RECORD",
+   "reason": "this migration study (docs, scripts, compact evidence)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/scripts/mig_make_fixtures.m",
+   "status": "A",
+   "added": "72",
+   "deleted": "0",
+   "cls": "STUDY_RECORD",
+   "reason": "this migration study (docs, scripts, compact evidence)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/scripts/mig_paths.m",
+   "status": "A",
+   "added": "43",
+   "deleted": "0",
+   "cls": "STUDY_RECORD",
+   "reason": "this migration study (docs, scripts, compact evidence)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/scripts/mig_run_case.m",
+   "status": "A",
+   "added": "42",
+   "deleted": "0",
+   "cls": "STUDY_RECORD",
+   "reason": "this migration study (docs, scripts, compact evidence)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/scripts/mig_run_suite.m",
+   "status": "A",
+   "added": "56",
+   "deleted": "0",
+   "cls": "STUDY_RECORD",
+   "reason": "this migration study (docs, scripts, compact evidence)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/scripts/mig_smoke_wrappers.m",
+   "status": "A",
+   "added": "32",
+   "deleted": "0",
+   "cls": "STUDY_RECORD",
+   "reason": "this migration study (docs, scripts, compact evidence)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/scripts/mig_use_snapshot.m",
+   "status": "A",
+   "added": "27",
+   "deleted": "0",
+   "cls": "STUDY_RECORD",
+   "reason": "this migration study (docs, scripts, compact evidence)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/scripts/mig_write_manifest.m",
+   "status": "A",
+   "added": "23",
+   "deleted": "0",
+   "cls": "STUDY_RECORD",
+   "reason": "this migration study (docs, scripts, compact evidence)"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/olhoffcurrent_caveat.m",
+   "status": "M",
+   "added": "55",
+   "deleted": "16",
+   "cls": "PRESET_LAYER",
+   "reason": "named-preset registry, lookup, resolution, production event reader, per-preset caveat"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/olhoffcurrent_config.m",
+   "status": "M",
+   "added": "40",
+   "deleted": "16",
+   "cls": "PRESET_LAYER",
+   "reason": "named-preset registry, lookup, resolution, production event reader, per-preset caveat"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/olhoffcurrent_currentness.m",
+   "status": "M",
+   "added": "39",
+   "deleted": "16",
+   "cls": "PROVENANCE_CODE",
+   "reason": "production preset from the event log; currentness against the recorded upstream branch"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/olhoffcurrent_finalization_gate.m",
+   "status": "M",
+   "added": "60",
+   "deleted": "1",
+   "cls": "EVIDENCE_GATE",
+   "reason": "SUPERSEDED_PRODUCTION_SOURCE rule for pinned production source across a promotion"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/olhoffcurrent_preset.m",
+   "status": "M",
+   "added": "55",
+   "deleted": "47",
+   "cls": "PRESET_LAYER",
+   "reason": "named-preset registry, lookup, resolution, production event reader, per-preset caveat"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/olhoffcurrent_presets.m",
+   "status": "A",
+   "added": "171",
+   "deleted": "0",
+   "cls": "PRESET_LAYER",
+   "reason": "named-preset registry, lookup, resolution, production event reader, per-preset caveat"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/olhoffcurrent_production_preset.m",
+   "status": "A",
+   "added": "27",
+   "deleted": "0",
+   "cls": "PRESET_LAYER",
+   "reason": "named-preset registry, lookup, resolution, production event reader, per-preset caveat"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/olhoffcurrent_provenance.m",
+   "status": "M",
+   "added": "13",
+   "deleted": "8",
+   "cls": "PROVENANCE_CODE",
+   "reason": "production preset from the event log; currentness against the recorded upstream branch"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/olhoffcurrent_run.m",
+   "status": "M",
+   "added": "95",
+   "deleted": "18",
+   "cls": "PRESET_LAYER",
+   "reason": "named preset required; per-outer-iteration cost fields; preset-aware status notes"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/tests/fixtures/EX3_160_reference.json",
+   "status": "A",
+   "added": "111",
+   "deleted": "0",
+   "cls": "OLHOFFCURRENT_TESTS",
+   "reason": "updated or new OlhoffCurrent tests and fixtures"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/tests/fixtures/S160x20_reference.json",
+   "status": "A",
+   "added": "89",
+   "deleted": "0",
+   "cls": "OLHOFFCURRENT_TESTS",
+   "reason": "updated or new OlhoffCurrent tests and fixtures"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/tests/fixtures/schema_rows_pre_253069.json",
+   "status": "A",
+   "added": "87",
+   "deleted": "0",
+   "cls": "OLHOFFCURRENT_TESTS",
+   "reason": "updated or new OlhoffCurrent tests and fixtures"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/tests/olhoffcurrent_test_digest.m",
+   "status": "A",
+   "added": "94",
+   "deleted": "0",
+   "cls": "OLHOFFCURRENT_TESTS",
+   "reason": "updated or new OlhoffCurrent tests and fixtures"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/tests/test_cost_reporting.m",
+   "status": "A",
+   "added": "54",
+   "deleted": "0",
+   "cls": "OLHOFFCURRENT_TESTS",
+   "reason": "updated or new OlhoffCurrent tests and fixtures"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/tests/test_currentness.m",
+   "status": "M",
+   "added": "15",
+   "deleted": "7",
+   "cls": "OLHOFFCURRENT_TESTS",
+   "reason": "updated or new OlhoffCurrent tests and fixtures"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/tests/test_finalization_gate.m",
+   "status": "M",
+   "added": "44",
+   "deleted": "0",
+   "cls": "OLHOFFCURRENT_TESTS",
+   "reason": "updated or new OlhoffCurrent tests and fixtures"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/tests/test_named_preset_reproduction.m",
+   "status": "A",
+   "added": "110",
+   "deleted": "0",
+   "cls": "OLHOFFCURRENT_TESTS",
+   "reason": "updated or new OlhoffCurrent tests and fixtures"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/tests/test_pedersen_adaptive_units.m",
+   "status": "A",
+   "added": "96",
+   "deleted": "0",
+   "cls": "OLHOFFCURRENT_TESTS",
+   "reason": "updated or new OlhoffCurrent tests and fixtures"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/tests/test_preset_equivalence.m",
+   "status": "M",
+   "added": "14",
+   "deleted": "6",
+   "cls": "OLHOFFCURRENT_TESTS",
+   "reason": "updated or new OlhoffCurrent tests and fixtures"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/tests/test_preset_identity.m",
+   "status": "A",
+   "added": "189",
+   "deleted": "0",
+   "cls": "OLHOFFCURRENT_TESTS",
+   "reason": "updated or new OlhoffCurrent tests and fixtures"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/tests/test_source_integrity.m",
+   "status": "M",
+   "added": "2",
+   "deleted": "2",
+   "cls": "OLHOFFCURRENT_TESTS",
+   "reason": "updated or new OlhoffCurrent tests and fixtures"
+  },
+  {
+   "path": "examples/Performance/conference_bench/confbench_caveats.m",
+   "status": "M",
+   "added": "29",
+   "deleted": "13",
+   "cls": "OLHOFF_HARNESS",
+   "reason": "Olhoff-specific benchmark harness compatibility (HARNESS_UPDATE.md)"
+  },
+  {
+   "path": "examples/Performance/conference_bench/confbench_display_name.m",
+   "status": "M",
+   "added": "7",
+   "deleted": "5",
+   "cls": "OLHOFF_HARNESS",
+   "reason": "Olhoff-specific benchmark harness compatibility (HARNESS_UPDATE.md)"
+  },
+  {
+   "path": "examples/Performance/conference_bench/confbench_export.m",
+   "status": "M",
+   "added": "45",
+   "deleted": "3",
+   "cls": "OLHOFF_HARNESS",
+   "reason": "Olhoff-specific benchmark harness compatibility (HARNESS_UPDATE.md)"
+  },
+  {
+   "path": "examples/Performance/conference_bench/confbench_frozen_budget.m",
+   "status": "M",
+   "added": "3",
+   "deleted": "2",
+   "cls": "OLHOFF_HARNESS",
+   "reason": "Olhoff-specific benchmark harness compatibility (HARNESS_UPDATE.md)"
+  },
+  {
+   "path": "examples/Performance/conference_bench/confbench_manifest.m",
+   "status": "M",
+   "added": "9",
+   "deleted": "1",
+   "cls": "OLHOFF_HARNESS",
+   "reason": "Olhoff-specific benchmark harness compatibility (HARNESS_UPDATE.md)"
+  },
+  {
+   "path": "examples/Performance/conference_bench/confbench_method_config.m",
+   "status": "M",
+   "added": "21",
+   "deleted": "10",
+   "cls": "OLHOFF_HARNESS",
+   "reason": "Olhoff-specific benchmark harness compatibility (HARNESS_UPDATE.md)"
+  },
+  {
+   "path": "examples/Performance/conference_bench/confbench_olhoff_assertions.m",
+   "status": "A",
+   "added": "128",
+   "deleted": "0",
+   "cls": "OLHOFF_HARNESS",
+   "reason": "Olhoff-specific benchmark harness compatibility (HARNESS_UPDATE.md)"
+  },
+  {
+   "path": "examples/Performance/conference_bench/confbench_olhoff_preset.m",
+   "status": "A",
+   "added": "23",
+   "deleted": "0",
+   "cls": "OLHOFF_HARNESS",
+   "reason": "Olhoff-specific benchmark harness compatibility (HARNESS_UPDATE.md)"
+  },
+  {
+   "path": "examples/Performance/conference_bench/confbench_preflight.m",
+   "status": "M",
+   "added": "34",
+   "deleted": "51",
+   "cls": "OLHOFF_HARNESS",
+   "reason": "Olhoff-specific benchmark harness compatibility (HARNESS_UPDATE.md)"
+  },
+  {
+   "path": "examples/Performance/conference_bench/confbench_run_case.m",
+   "status": "M",
+   "added": "12",
+   "deleted": "3",
+   "cls": "OLHOFF_HARNESS",
+   "reason": "Olhoff-specific benchmark harness compatibility (HARNESS_UPDATE.md)"
+  },
+  {
+   "path": "examples/Performance/conference_bench/confbench_scaling_fit.m",
+   "status": "M",
+   "added": "36",
+   "deleted": "0",
+   "cls": "OLHOFF_HARNESS",
+   "reason": "Olhoff-specific benchmark harness compatibility (HARNESS_UPDATE.md)"
+  },
+  {
+   "path": "examples/Performance/conference_bench/confbench_selftest.m",
+   "status": "M",
+   "added": "77",
+   "deleted": "1",
+   "cls": "OLHOFF_HARNESS",
+   "reason": "Olhoff-specific benchmark harness compatibility (HARNESS_UPDATE.md)"
+  },
+  {
+   "path": "examples/Performance/conference_bench/confbench_timing_schema.m",
+   "status": "M",
+   "added": "18",
+   "deleted": "3",
+   "cls": "OLHOFF_HARNESS",
+   "reason": "Olhoff-specific benchmark harness compatibility (HARNESS_UPDATE.md)"
+  },
+  {
+   "path": "examples/Performance/performance_comparison.m",
+   "status": "M",
+   "added": "40",
+   "deleted": "5",
+   "cls": "OLHOFF_HARNESS",
+   "reason": "Olhoff-specific benchmark harness compatibility (HARNESS_UPDATE.md)"
+  }
+ ]
+}

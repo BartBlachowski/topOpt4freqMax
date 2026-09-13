@@ -70,6 +70,8 @@ put('material.solid.density', take('rhom', 1));
 
 % ---- stiffness -----------------------------------------------------------
 put('material.stiffness.p', take('p', 3));
+put('material.stiffness.model', lower(take('stiffModel','simp')));
+put('material.stiffness.linearBelow', take('stiffLinearBelow', 0.1));
 hasP = has('pSchedule');
 put('material.stiffness.continuation.enabled', hasP);
 if hasP
@@ -165,12 +167,13 @@ iv = lower(take('innerVar','drho'));
 if ~isfield(ivMap, iv), error('olh:config:legacyInnerVar','unknown legacy innerVar ''%s''', iv); end
 put('optimizer.inner.variable',      ivMap.(iv));
 put('optimizer.inner.variant',       lower(take('mmaVariant','published')));
+put('optimizer.inner.asymptoteHistory', lower(take('innerAsy','inner')));
 put('optimizer.inner.tolerance',     take('tolInner', 1e-2));
 put('optimizer.inner.minIterations', take('minInner', 5));
 put('optimizer.inner.maxIterations', take('maxInner', 300));
 
 % ---- move ----------------------------------------------------------------
-mfMap = struct('S0','fixed','S1','geometric','S2','ladder','S3','trustRatio');
+mfMap = struct('S0','fixed','S1','geometric','S2','ladder','S3','trustRatio','SA','adaptive');
 mf = upper(take('moveFamily','S0'));
 if ~isfield(mfMap, mf), error('olh:config:legacyMoveFamily','unknown legacy moveFamily ''%s''', mf); end
 put('move.policy',  mfMap.(mf));
@@ -178,6 +181,8 @@ put('move.initial', take('move', 0.05));
 put('move.minimum', take('moveMin', 0.002));
 put('move.levels',  take('s2Levels', [0.05 0.02 0.01 0.005]));
 put('move.geometric.ratio',            take('s1Gamma', 0.97));
+put('move.adaptive.grow',              take('sAGrow', 1.2));
+put('move.adaptive.shrink',            take('sAShrink', 0.7));
 put('move.geometric.afterCoalescence', logical(take('s1AfterCoal', true)));
 put('move.trust.loRatio', take('s3Lo', 0.30));
 put('move.trust.hiRatio', take('s3Hi', 0.70));
@@ -206,6 +211,8 @@ switch og
 end
 rg = upper(char(take('restorationGuard','')));
 seen{end+1} = 'restorationGuard';
+put('stop.guards.settledWindow',       take('settledWindow', 1));
+put('stop.guards.boxInactiveFraction', take('boxInactive', 0));
 put('stop.guards.ladderExhausted', strcmp(rg,'R1'));
 put('stop.guards.maxDesignChange', strcmp(rg,'R2'));
 if ~isempty(rg) && ~any(strcmp(rg,{'R1','R2'}))

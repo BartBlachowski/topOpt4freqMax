@@ -42,6 +42,21 @@ function st = olhoffcurrent_finalization_gate(studyDir, varargin)
 %   G1 is the one that closes the hole: "declares nothing" is not a passing
 %   state, because that is precisely the state the lost studies were in.
 %
+%   PINNED PRODUCTION SOURCE ACROSS A PROMOTION
+%   -------------------------------------------
+%   Some studies hash PRODUCTION SOURCE files in their FINAL_SHA256.txt
+%   (analysis/OlhoffCurrent/+impl/** or analysis/OlhoffCurrent/SOURCE_MANIFEST.json)
+%   to record which code they ran.  A legitimate promotion replaces those files,
+%   so such a line can never verify against the working tree again.  G4 accepts
+%   it ONLY as SUPERSEDED_PRODUCTION_SOURCE, and only when BOTH hold:
+%     - the recorded digest is the content of that path in a commit reachable
+%       from HEAD (a real historical production state, found with git), and
+%     - the current +impl verifies against SOURCE_MANIFEST.json (the change is a
+%       recorded promotion, never a local edit).
+%   A digest that never existed in history still fails; lines naming anything
+%   outside production source are verified against the working tree as before.
+%   Superseded lines are listed in st.supersededSource and printed.
+%
 %   SCIENTIFICALLY INERT.  This function reads files and hashes them.  It lives
 %   outside +impl/, so it cannot change the canonical tree hash, and it never
 %   touches the optimizer, a configuration, or a trajectory.
@@ -68,6 +83,7 @@ studyDir = char(studyDir);
 st = struct('ok', false, 'studyDir', studyDir, ...
             'gates', struct('G1', false, 'G2', false, 'G3', false, 'G4', false, 'G5', false), ...
             'detail', '', 'missing', {{}}, 'mismatched', {{}}, ...
+            'supersededSource', struct('path', {}, 'recorded', {}, 'commit', {}), ...
             'nHashed', 0, 'nRequired', 0);
 
 % ---- G1: the study must declare its raw evidence -------------------------
@@ -88,7 +104,9 @@ fs = fullfile(studyDir, 'FINAL_SHA256.txt');
 st.gates.G3 = exist(fs, 'file') == 2;
 if st.gates.G3
     [nOk, missing, mism] = local_verifyHashFile(fs, studyDir, repo);
-    st.nHashed = nOk + numel(missing) + numel(mism);
+    [mism, superseded] = local_supersededSource(mism, fs, repo);
+    st.supersededSource = superseded;
+    st.nHashed = nOk + numel(superseded) + numel(missing) + numel(mism);
     st.missing = missing;
     st.mismatched = mism;
     st.gates.G4 = isempty(missing) && isempty(mism);
@@ -121,6 +139,10 @@ if verbose
     end
     for i = 1:numel(st.missing);    fprintf('        MISSING   %s\n', st.missing{i}); end
     for i = 1:numel(st.mismatched); fprintf('        MISMATCH  %s\n', st.mismatched{i}); end
+    for i = 1:numel(st.supersededSource)
+        fprintf('        SUPERSEDED_PRODUCTION_SOURCE  %s (recorded digest = content at commit %s; +impl manifest-verified)\n', ...
+            st.supersededSource(i).path, st.supersededSource(i).commit(1:min(12,end)));
+    end
     for i = 1:numel(absent);        fprintf('        ABSENT .mat  %s\n', absent{i}); end
     fprintf('  RESULT: %s\n\n', local_pf(st.ok));
 end
@@ -147,6 +169,43 @@ for i = 1:numel(lines)
         nOk = nOk + 1;
     end
 end
+end
+
+function [mism, superseded] = local_supersededSource(mism, fs, repo)
+%LOCAL_SUPERSEDEDSOURCE  Separate pinned production-source lines that a recorded
+%   promotion superseded from genuine mismatches (see the header).
+superseded = struct('path', {}, 'recorded', {}, 'commit', {});
+isSrc = startsWith(mism, 'analysis/OlhoffCurrent/+impl/') | ...
+        strcmp(mism, 'analysis/OlhoffCurrent/SOURCE_MANIFEST.json');
+if ~any(isSrc); return; end
+man = olhoffcurrent_source_manifest('Verify', true);
+if ~man.ok; return; end                    % a local edit is never "superseded"
+rec = containers.Map();
+lines = strsplit(fileread(fs), newline);
+for i = 1:numel(lines)
+    tok = regexp(lines{i}, '^([0-9a-f]{64})\s+(\S+)', 'tokens', 'once');
+    if ~isempty(tok); rec(tok{2}) = tok{1}; end
+end
+keep = true(size(mism));
+for k = find(isSrc)
+    p = mism{k};
+    if ~isKey(rec, p); continue; end
+    [stc, out] = system(sprintf('git --no-pager -C "%s" log --format=%%H HEAD -- "%s" 2>/dev/null', repo, p));
+    if stc ~= 0; continue; end
+    commits = strsplit(strtrim(out));
+    for c = 1:numel(commits)
+        if isempty(commits{c}); continue; end
+        [sth, h] = system(sprintf('git --no-pager -C "%s" show "%s:%s" 2>/dev/null | shasum -a 256', ...
+            repo, commits{c}, p));
+        h = strtok(strtrim(h));
+        if sth == 0 && strcmp(h, rec(p))
+            superseded(end+1) = struct('path', p, 'recorded', rec(p), 'commit', commits{c}); %#ok<AGROW>
+            keep(k) = false;
+            break
+        end
+    end
+end
+mism = mism(keep);
 end
 
 function fp = local_resolvePath(rel, studyDir, repo)

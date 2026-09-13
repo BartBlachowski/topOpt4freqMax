@@ -4,7 +4,8 @@ function F = genGrad(mdl, rho, p, massInterp, Phi, lamTilde, idx)
 %   F = GENGRAD(mdl,rho,p,massInterp,Phi,lamTilde,idx)
 %
 %   f_sk,e = phi_s^T ( dK/drho_e  -  lamTilde * dM/drho_e ) phi_k
-%          = p*rho_e^(p-1) * (phi_s^e)' K0 (phi_k^e)
+%          = g_K'(rho_e) * (phi_s^e)' K0 (phi_k^e)      [g_K = rho^p for SIMP;
+%            p may be a struct selecting the Pedersen (2000) scheme]
 %            - lamTilde * g'(rho_e) * (phi_s^e)' M0 (phi_k^e)
 %
 %   Phi      : reduced-dof modes (columns), M-orthonormal
@@ -24,7 +25,8 @@ Ufull = zeros(mdl.ndof, nI);
 Ufull(mdl.free,:) = Phi(:, idx);
 
 [~, dg] = massScale(rho, massInterp);
-sK = p * rho(:).^(p-1);
+[~, sK] = olh.material.stiffnessInterpolation(rho, p);
+sK = sK(:);
 sM = lamTilde * dg(:);
 
 F = zeros(NE, nI, nI);

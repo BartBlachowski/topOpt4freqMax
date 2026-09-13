@@ -1,0 +1,89 @@
+{
+  "rho": "084753ff5a462c4ae3552dad6422f6e3ef16918bb04850b6bb196e9b9e0f252c",
+  "omega": "2a34670472ea03ddcedf20b635c474bea861793f524e863fb9cb7670c30452b2",
+  "lambda": "68dc8000cd741e315da38eae1dad82b8b7da8a2ae4c5e67e55eba642b5ba6c19",
+  "nOuter": 121,
+  "innerTotal": 2369,
+  "status": "CONVERGED",
+  "log": "b2b6ed3aa1c41bd98592fa42f9626e93550d491d8dac0669bfe6fe84bb92b648",
+  "logLines": [
+    "iter 4: omega_J (J=3) is itself multiple -- (25b) undefined",
+    "converged at outer iteration 121 (||drho||_2 = 4.745e-02, max|drho| = 1.358e-02)"
+  ],
+  "histFields": [
+    "N",
+    "beta",
+    "cumInner",
+    "dBeta",
+    "degen",
+    "dxNorm2",
+    "dxOuter",
+    "dxPhys2",
+    "gap12",
+    "innerConv",
+    "massLow",
+    "move",
+    "multJ",
+    "nInner",
+    "omega",
+    "pEvent",
+    "pPen",
+    "pStage",
+    "projBeta",
+    "projEvent",
+    "projStage",
+    "stage",
+    "vol",
+    "volErr"
+  ],
+  "hist": {
+    "N": "b8c9c36de73fa3b40e2fdabd233373a2c90cca2790407ee60811afb22b722890",
+    "beta": "5e422c00ba3bc08d5ce7d36581885627fe6053238428cad6f157e5e6b1f37197",
+    "cumInner": "3d4cfd8d7285585364c93521e169eee7db3dcd8cfe0ad857444a3b1a81daeb66",
+    "dBeta": "942015af989b384493cd298ffbab3599d84ec0e718c7b057d83059d6e4e7c7bc",
+    "degen": "62838506d22eaa3ffa53b201a1d8d5372ba1553e51b620fc2954309f65010c6e",
+    "dxNorm2": "f77d31cd38636049bab6d28262b20aab4751261786dc3cd0b7209db542d854df",
+    "dxOuter": "5ebe304e00dfd8d1653e394efe7ff76720c3d118d559c000ba73fc9ddcb6602a",
+    "dxPhys2": "4c2aa48f60744c992187c3236a5a1a3def2f0664721f3cdc34eee62c75e90eb1",
+    "gap12": "2e40da155c590ebf84646db597067ceca7eaf7d99596a18589f4b7ec82a49040",
+    "innerConv": "62838506d22eaa3ffa53b201a1d8d5372ba1553e51b620fc2954309f65010c6e",
+    "massLow": "c7ce2b7a8c0fddea42a1a2ba8921f4b46205a49d5eb2695b1d12972992623c14",
+    "move": "0705d501f4053010a9bca780fa0e31a71ab29e3fd7ed749a3b77cd2bc18eafb1",
+    "multJ": "76ba4189bd9c2a958902612db3df5175d2ce1da7dc8e1d4af9833683d9b18c5d",
+    "nInner": "c08180d1c23e94da95437e4a833b6e424cdf20467e80b03497058e796ce26279",
+    "omega": "a9719ea872779939ab72db1ee927e19f9c21494f68f3b0f5a96e8226775276f2",
+    "pEvent": "c7ce2b7a8c0fddea42a1a2ba8921f4b46205a49d5eb2695b1d12972992623c14",
+    "pPen": "95d18007bcd36437a48ac1ee7f0da096fdc2b5b8ee4b92393a1d08818e962126",
+    "pStage": "62838506d22eaa3ffa53b201a1d8d5372ba1553e51b620fc2954309f65010c6e",
+    "projBeta": "c7ce2b7a8c0fddea42a1a2ba8921f4b46205a49d5eb2695b1d12972992623c14",
+    "projEvent": "c7ce2b7a8c0fddea42a1a2ba8921f4b46205a49d5eb2695b1d12972992623c14",
+    "projStage": "62838506d22eaa3ffa53b201a1d8d5372ba1553e51b620fc2954309f65010c6e",
+    "stage": "62838506d22eaa3ffa53b201a1d8d5372ba1553e51b620fc2954309f65010c6e",
+    "vol": "9e354b9ad288182738fb1d84bf95d4b30c0f8e037f2652fbd1fc1e4cfd1c1dbc",
+    "volErr": "691d00bb00f03d268cf1a53fddd3e1ed53e0b07a49144506ba82f461153d9bc8"
+  },
+  "aux": {
+    "Mnd": "b62f6143a7b3b296de8acb8473b9d070b4b001351ca15092188c6903281556e4",
+    "moveMean": "fd5c233306ec54bf2b69c8a795182a013b3570b45526751342cb277677f7bb92"
+  },
+  "rho_sha256_bytes": "2a1c0d0afa18e76398671d9f2213cd07e3853ce990f8ba74fcc3ab3f28004719",
+  "omega_17g": [
+    "169.21057638627477",
+    "170.3999757559335",
+    "321.3971454310124",
+    "524.97914010812167",
+    "738.97888584802695"
+  ],
+  "source": {
+    "artifact": "Olhoff repro/results/S160x20/res.mat",
+    "git_blob": "93c6550980f06fe3535cc1780bc0317517b6a0c0",
+    "commits": [
+      "6b0870850d7407a0f2fc31dbf0d0f318c2e5f2f7",
+      "253069262407885a8b759a9e721c4f0a7d3a397d"
+    ],
+    "file_sha256": "de7b15764509a1797d8713495f37481004cefb7b33f248d9b3981a4a3450daa0",
+    "upstream_preset": "duOlhoffAdaptivePedersen",
+    "olhoffcurrent_preset": "duOlhoffPedersenAdaptiveBoxSensitivityFiltered",
+    "note": "committed with runtime.verbose = true and runtime.name = S160x20; neither is a scientific field. hist.tOuter did not exist at 6b08708 and is excluded anyway."
+  }
+}

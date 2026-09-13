@@ -1,0 +1,549 @@
+{
+  "schema": {
+    "oldRows": 81,
+    "newRows": 87,
+    "added": [
+      "material.stiffness.linearBelow",
+      "optimizer.inner.asymptoteHistory",
+      "move.adaptive.grow",
+      "move.adaptive.shrink",
+      "stop.guards.settledWindow",
+      "stop.guards.boxInactiveFraction"
+    ],
+    "removed": [],
+    "oldOrderPreserved": true
+  },
+  "addedRowNeutralValues": {
+    "material_stiffness_model": "simp",
+    "optimizer_inner_asymptoteHistory": "inner",
+    "stop_guards_settledWindow": 1,
+    "stop_guards_boxInactiveFraction": 0
+  },
+  "historical": [
+    {
+      "case": "BETA",
+      "mesh": [
+        160,
+        20
+      ],
+      "recordedHash": "28756d22aacb59726be9f37583deca89fcfcecc93f9b867d46a49223ed1db697",
+      "recordedSource": "examples/Performance/conference_benchmark/campaign_9mesh_r2/benchmark_results.json",
+      "preHash": "28756d22aacb59726be9f37583deca89fcfcecc93f9b867d46a49223ed1db697",
+      "postHash": "c0fe56ce897ce32ec8efc90ca1fb6bdd9c8326ee56700f5ce33adfb26bded17d",
+      "postOldSchemaHash": "28756d22aacb59726be9f37583deca89fcfcecc93f9b867d46a49223ed1db697",
+      "preHashEqualsRecorded": true,
+      "oldSchemaHashFromPostEqualsRecorded": true,
+      "oldLeavesEqual": true,
+      "differingOldLeaves": [],
+      "addedLeaves": {
+        "material_stiffness_linearBelow": 0.1,
+        "optimizer_inner_asymptoteHistory": "inner",
+        "move_adaptive_grow": 1.2,
+        "move_adaptive_shrink": 0.7,
+        "stop_guards_settledWindow": 1,
+        "stop_guards_boxInactiveFraction": 0
+      },
+      "addedLeavesNeutral": true,
+      "postEqualsUpstreamAllLeaves": true,
+      "upHash": "c0fe56ce897ce32ec8efc90ca1fb6bdd9c8326ee56700f5ce33adfb26bded17d"
+    },
+    {
+      "case": "BETA",
+      "mesh": [
+        240,
+        30
+      ],
+      "recordedHash": "0856b13d02e3f1065c0ab145213bb57afb1b98570e64c9b023851f696141196c",
+      "recordedSource": "examples/Performance/conference_benchmark/campaign_9mesh_r2/benchmark_results.json",
+      "preHash": "0856b13d02e3f1065c0ab145213bb57afb1b98570e64c9b023851f696141196c",
+      "postHash": "6578c7846a6851ea8eb60a47abb59b4482432f324e3ee908092cabcae0dcf7ee",
+      "postOldSchemaHash": "0856b13d02e3f1065c0ab145213bb57afb1b98570e64c9b023851f696141196c",
+      "preHashEqualsRecorded": true,
+      "oldSchemaHashFromPostEqualsRecorded": true,
+      "oldLeavesEqual": true,
+      "differingOldLeaves": [],
+      "addedLeaves": {
+        "material_stiffness_linearBelow": 0.1,
+        "optimizer_inner_asymptoteHistory": "inner",
+        "move_adaptive_grow": 1.2,
+        "move_adaptive_shrink": 0.7,
+        "stop_guards_settledWindow": 1,
+        "stop_guards_boxInactiveFraction": 0
+      },
+      "addedLeavesNeutral": true,
+      "postEqualsUpstreamAllLeaves": true,
+      "upHash": "6578c7846a6851ea8eb60a47abb59b4482432f324e3ee908092cabcae0dcf7ee"
+    },
+    {
+      "case": "BETA",
+      "mesh": [
+        320,
+        40
+      ],
+      "recordedHash": "2a5b500991ff5931eef4919e768503d41fd558fe56ffbffe40c382c74d676cad",
+      "recordedSource": "examples/Performance/conference_benchmark/campaign_9mesh_r2/benchmark_results.json",
+      "preHash": "2a5b500991ff5931eef4919e768503d41fd558fe56ffbffe40c382c74d676cad",
+      "postHash": "7bc5b94f4a0b2aca4f66bbec9cc3664c5181cdaddca6b556eff0b506f8f07b08",
+      "postOldSchemaHash": "2a5b500991ff5931eef4919e768503d41fd558fe56ffbffe40c382c74d676cad",
+      "preHashEqualsRecorded": true,
+      "oldSchemaHashFromPostEqualsRecorded": true,
+      "oldLeavesEqual": true,
+      "differingOldLeaves": [],
+      "addedLeaves": {
+        "material_stiffness_linearBelow": 0.1,
+        "optimizer_inner_asymptoteHistory": "inner",
+        "move_adaptive_grow": 1.2,
+        "move_adaptive_shrink": 0.7,
+        "stop_guards_settledWindow": 1,
+        "stop_guards_boxInactiveFraction": 0
+      },
+      "addedLeavesNeutral": true,
+      "postEqualsUpstreamAllLeaves": true,
+      "upHash": "7bc5b94f4a0b2aca4f66bbec9cc3664c5181cdaddca6b556eff0b506f8f07b08"
+    },
+    {
+      "case": "BETA",
+      "mesh": [
+        400,
+        50
+      ],
+      "recordedHash": "cec3cd6b89ad67bc5386093a0caaf1b05dc172ddb75f488c52088c69d55d0c20",
+      "recordedSource": "examples/Performance/conference_benchmark/campaign_9mesh_r2/benchmark_results.json",
+      "preHash": "cec3cd6b89ad67bc5386093a0caaf1b05dc172ddb75f488c52088c69d55d0c20",
+      "postHash": "95d2400f000fbd145006524513147b4ace1d1c3f75c339d605a15caac155d84c",
+      "postOldSchemaHash": "cec3cd6b89ad67bc5386093a0caaf1b05dc172ddb75f488c52088c69d55d0c20",
+      "preHashEqualsRecorded": true,
+      "oldSchemaHashFromPostEqualsRecorded": true,
+      "oldLeavesEqual": true,
+      "differingOldLeaves": [],
+      "addedLeaves": {
+        "material_stiffness_linearBelow": 0.1,
+        "optimizer_inner_asymptoteHistory": "inner",
+        "move_adaptive_grow": 1.2,
+        "move_adaptive_shrink": 0.7,
+        "stop_guards_settledWindow": 1,
+        "stop_guards_boxInactiveFraction": 0
+      },
+      "addedLeavesNeutral": true,
+      "postEqualsUpstreamAllLeaves": true,
+      "upHash": "95d2400f000fbd145006524513147b4ace1d1c3f75c339d605a15caac155d84c"
+    },
+    {
+      "case": "BETA",
+      "mesh": [
+        480,
+        60
+      ],
+      "recordedHash": "a49417d0571d3c2406d030cbab1fda58a1dad8d334991c5aaf22fa17f1d7f601",
+      "recordedSource": "examples/Performance/conference_benchmark/campaign_9mesh_r2/benchmark_results.json",
+      "preHash": "a49417d0571d3c2406d030cbab1fda58a1dad8d334991c5aaf22fa17f1d7f601",
+      "postHash": "11bcb9a9e4df3fdb2f53a82e84df1070cf1a3ce6c97be817a63249ecdb262450",
+      "postOldSchemaHash": "a49417d0571d3c2406d030cbab1fda58a1dad8d334991c5aaf22fa17f1d7f601",
+      "preHashEqualsRecorded": true,
+      "oldSchemaHashFromPostEqualsRecorded": true,
+      "oldLeavesEqual": true,
+      "differingOldLeaves": [],
+      "addedLeaves": {
+        "material_stiffness_linearBelow": 0.1,
+        "optimizer_inner_asymptoteHistory": "inner",
+        "move_adaptive_grow": 1.2,
+        "move_adaptive_shrink": 0.7,
+        "stop_guards_settledWindow": 1,
+        "stop_guards_boxInactiveFraction": 0
+      },
+      "addedLeavesNeutral": true,
+      "postEqualsUpstreamAllLeaves": true,
+      "upHash": "11bcb9a9e4df3fdb2f53a82e84df1070cf1a3ce6c97be817a63249ecdb262450"
+    },
+    {
+      "case": "BETA",
+      "mesh": [
+        560,
+        70
+      ],
+      "recordedHash": "3478f34841ce743457aac7d4ba1755f2989453a9f0d79ccfc4f961f89fb7fd64",
+      "recordedSource": "examples/Performance/conference_benchmark/campaign_9mesh_r2/benchmark_results.json",
+      "preHash": "3478f34841ce743457aac7d4ba1755f2989453a9f0d79ccfc4f961f89fb7fd64",
+      "postHash": "1a6c7b95f388afeb4789413f8ff4bd5cce347f210e2ef6c76b54285a7f891068",
+      "postOldSchemaHash": "3478f34841ce743457aac7d4ba1755f2989453a9f0d79ccfc4f961f89fb7fd64",
+      "preHashEqualsRecorded": true,
+      "oldSchemaHashFromPostEqualsRecorded": true,
+      "oldLeavesEqual": true,
+      "differingOldLeaves": [],
+      "addedLeaves": {
+        "material_stiffness_linearBelow": 0.1,
+        "optimizer_inner_asymptoteHistory": "inner",
+        "move_adaptive_grow": 1.2,
+        "move_adaptive_shrink": 0.7,
+        "stop_guards_settledWindow": 1,
+        "stop_guards_boxInactiveFraction": 0
+      },
+      "addedLeavesNeutral": true,
+      "postEqualsUpstreamAllLeaves": true,
+      "upHash": "1a6c7b95f388afeb4789413f8ff4bd5cce347f210e2ef6c76b54285a7f891068"
+    },
+    {
+      "case": "BETA",
+      "mesh": [
+        640,
+        80
+      ],
+      "recordedHash": "e5d868133d52a510797e6847b9f113ab3d5424849f8473f23c7827485bff300b",
+      "recordedSource": "examples/Performance/conference_benchmark/campaign_9mesh_r2/benchmark_results.json",
+      "preHash": "e5d868133d52a510797e6847b9f113ab3d5424849f8473f23c7827485bff300b",
+      "postHash": "36079c2f075ec7f49a31eeaf1fc27ae329ff9b590d52378235b280f0a4b9a235",
+      "postOldSchemaHash": "e5d868133d52a510797e6847b9f113ab3d5424849f8473f23c7827485bff300b",
+      "preHashEqualsRecorded": true,
+      "oldSchemaHashFromPostEqualsRecorded": true,
+      "oldLeavesEqual": true,
+      "differingOldLeaves": [],
+      "addedLeaves": {
+        "material_stiffness_linearBelow": 0.1,
+        "optimizer_inner_asymptoteHistory": "inner",
+        "move_adaptive_grow": 1.2,
+        "move_adaptive_shrink": 0.7,
+        "stop_guards_settledWindow": 1,
+        "stop_guards_boxInactiveFraction": 0
+      },
+      "addedLeavesNeutral": true,
+      "postEqualsUpstreamAllLeaves": true,
+      "upHash": "36079c2f075ec7f49a31eeaf1fc27ae329ff9b590d52378235b280f0a4b9a235"
+    },
+    {
+      "case": "BETA",
+      "mesh": [
+        720,
+        90
+      ],
+      "recordedHash": "7efe1ee908be54cefd2b9e63f911e337809b92870056c7b1854b46bd41a91078",
+      "recordedSource": "examples/Performance/conference_benchmark/campaign_9mesh_r2/benchmark_results.json",
+      "preHash": "7efe1ee908be54cefd2b9e63f911e337809b92870056c7b1854b46bd41a91078",
+      "postHash": "a338c98d5c2aa77c65d754bc03684d66b53ea5b2ccddce7b8ee56d4c9992a35c",
+      "postOldSchemaHash": "7efe1ee908be54cefd2b9e63f911e337809b92870056c7b1854b46bd41a91078",
+      "preHashEqualsRecorded": true,
+      "oldSchemaHashFromPostEqualsRecorded": true,
+      "oldLeavesEqual": true,
+      "differingOldLeaves": [],
+      "addedLeaves": {
+        "material_stiffness_linearBelow": 0.1,
+        "optimizer_inner_asymptoteHistory": "inner",
+        "move_adaptive_grow": 1.2,
+        "move_adaptive_shrink": 0.7,
+        "stop_guards_settledWindow": 1,
+        "stop_guards_boxInactiveFraction": 0
+      },
+      "addedLeavesNeutral": true,
+      "postEqualsUpstreamAllLeaves": true,
+      "upHash": "a338c98d5c2aa77c65d754bc03684d66b53ea5b2ccddce7b8ee56d4c9992a35c"
+    },
+    {
+      "case": "BETA",
+      "mesh": [
+        800,
+        100
+      ],
+      "recordedHash": "9321858983a3d7d33ca1a7b5bed9136fb7967e637b7ac5b40dadfad5ffdd4132",
+      "recordedSource": "examples/Performance/conference_benchmark/campaign_9mesh_r2/benchmark_results.json",
+      "preHash": "9321858983a3d7d33ca1a7b5bed9136fb7967e637b7ac5b40dadfad5ffdd4132",
+      "postHash": "a37164f0895a0a2abb65f44e12ce05c4517088af638a7ca5a7322a094f39416a",
+      "postOldSchemaHash": "9321858983a3d7d33ca1a7b5bed9136fb7967e637b7ac5b40dadfad5ffdd4132",
+      "preHashEqualsRecorded": true,
+      "oldSchemaHashFromPostEqualsRecorded": true,
+      "oldLeavesEqual": true,
+      "differingOldLeaves": [],
+      "addedLeaves": {
+        "material_stiffness_linearBelow": 0.1,
+        "optimizer_inner_asymptoteHistory": "inner",
+        "move_adaptive_grow": 1.2,
+        "move_adaptive_shrink": 0.7,
+        "stop_guards_settledWindow": 1,
+        "stop_guards_boxInactiveFraction": 0
+      },
+      "addedLeavesNeutral": true,
+      "postEqualsUpstreamAllLeaves": true,
+      "upHash": "a37164f0895a0a2abb65f44e12ce05c4517088af638a7ca5a7322a094f39416a"
+    },
+    {
+      "case": "EX3",
+      "mesh": [
+        320,
+        40
+      ],
+      "recordedHash": "afad9ea4b27da576553f128d66a8329edee963066c1ef477b1df70f9232daaab",
+      "recordedSource": "diagnostics/three_rung_promotion_validation_retry1/METRICS.json (TR3_C_320x40)",
+      "preHash": "afad9ea4b27da576553f128d66a8329edee963066c1ef477b1df70f9232daaab",
+      "postHash": "a068b77bfb7d05d2898e7100da32a562aa6dab3bac1bcbb068d96b2a2c15cd4b",
+      "postOldSchemaHash": "afad9ea4b27da576553f128d66a8329edee963066c1ef477b1df70f9232daaab",
+      "preHashEqualsRecorded": true,
+      "oldSchemaHashFromPostEqualsRecorded": true,
+      "oldLeavesEqual": true,
+      "differingOldLeaves": [],
+      "addedLeaves": {
+        "material_stiffness_linearBelow": 0.1,
+        "optimizer_inner_asymptoteHistory": "inner",
+        "move_adaptive_grow": 1.2,
+        "move_adaptive_shrink": 0.7,
+        "stop_guards_settledWindow": 1,
+        "stop_guards_boxInactiveFraction": 0
+      },
+      "addedLeavesNeutral": true,
+      "postEqualsUpstreamAllLeaves": true,
+      "upHash": "a068b77bfb7d05d2898e7100da32a562aa6dab3bac1bcbb068d96b2a2c15cd4b"
+    },
+    {
+      "case": "EX3",
+      "mesh": [
+        480,
+        60
+      ],
+      "recordedHash": "03097a28b0ad7fdb0d977985d3b5fd279dd74553c9dd5dfbd3cc035ac2a1782e",
+      "recordedSource": "diagnostics/three_rung_canary_preflight/EFFECTIVE_CONFIG.json (CAN3_480x60)",
+      "preHash": "03097a28b0ad7fdb0d977985d3b5fd279dd74553c9dd5dfbd3cc035ac2a1782e",
+      "postHash": "7e17eaad4b1b83b94142de7ef82a5c8bee1e7c7af4da9343d94fb7e90fb0dbfe",
+      "postOldSchemaHash": "03097a28b0ad7fdb0d977985d3b5fd279dd74553c9dd5dfbd3cc035ac2a1782e",
+      "preHashEqualsRecorded": true,
+      "oldSchemaHashFromPostEqualsRecorded": true,
+      "oldLeavesEqual": true,
+      "differingOldLeaves": [],
+      "addedLeaves": {
+        "material_stiffness_linearBelow": 0.1,
+        "optimizer_inner_asymptoteHistory": "inner",
+        "move_adaptive_grow": 1.2,
+        "move_adaptive_shrink": 0.7,
+        "stop_guards_settledWindow": 1,
+        "stop_guards_boxInactiveFraction": 0
+      },
+      "addedLeavesNeutral": true,
+      "postEqualsUpstreamAllLeaves": true,
+      "upHash": "7e17eaad4b1b83b94142de7ef82a5c8bee1e7c7af4da9343d94fb7e90fb0dbfe"
+    },
+    {
+      "case": "EX3",
+      "mesh": [
+        800,
+        100
+      ],
+      "recordedHash": "7724af5ed26786e16132c30fbae840f5d8679d5ea798fc75d5c48eefd0e50ffe",
+      "recordedSource": "diagnostics/three_rung_canary_preflight/EFFECTIVE_CONFIG.json (CAN3_800x100)",
+      "preHash": "7724af5ed26786e16132c30fbae840f5d8679d5ea798fc75d5c48eefd0e50ffe",
+      "postHash": "a8e21e92117fc75d8be1f9afc6a89bd38c3ee6a06ddb1eab1b18d0ffcfa62653",
+      "postOldSchemaHash": "7724af5ed26786e16132c30fbae840f5d8679d5ea798fc75d5c48eefd0e50ffe",
+      "preHashEqualsRecorded": true,
+      "oldSchemaHashFromPostEqualsRecorded": true,
+      "oldLeavesEqual": true,
+      "differingOldLeaves": [],
+      "addedLeaves": {
+        "material_stiffness_linearBelow": 0.1,
+        "optimizer_inner_asymptoteHistory": "inner",
+        "move_adaptive_grow": 1.2,
+        "move_adaptive_shrink": 0.7,
+        "stop_guards_settledWindow": 1,
+        "stop_guards_boxInactiveFraction": 0
+      },
+      "addedLeavesNeutral": true,
+      "postEqualsUpstreamAllLeaves": true,
+      "upHash": "a8e21e92117fc75d8be1f9afc6a89bd38c3ee6a06ddb1eab1b18d0ffcfa62653"
+    },
+    {
+      "case": "EX4",
+      "mesh": [
+        160,
+        20
+      ],
+      "recordedHash": "31d2ef382746a942a4036d07dd6a1012742432cba0497d2de5ec24b51d2b5904",
+      "recordedSource": "diagnostics/two_branch_controller_validation/runs/C160x20_record.json",
+      "preHash": "31d2ef382746a942a4036d07dd6a1012742432cba0497d2de5ec24b51d2b5904",
+      "postHash": "75e5d6527ed5317fabaae6f8a56a71b780c869703bbea888dcb62b69846ff2bb",
+      "postOldSchemaHash": "31d2ef382746a942a4036d07dd6a1012742432cba0497d2de5ec24b51d2b5904",
+      "preHashEqualsRecorded": true,
+      "oldSchemaHashFromPostEqualsRecorded": true,
+      "oldLeavesEqual": true,
+      "differingOldLeaves": [],
+      "addedLeaves": {
+        "material_stiffness_linearBelow": 0.1,
+        "optimizer_inner_asymptoteHistory": "inner",
+        "move_adaptive_grow": 1.2,
+        "move_adaptive_shrink": 0.7,
+        "stop_guards_settledWindow": 1,
+        "stop_guards_boxInactiveFraction": 0
+      },
+      "addedLeavesNeutral": true,
+      "postEqualsUpstreamAllLeaves": true,
+      "upHash": "75e5d6527ed5317fabaae6f8a56a71b780c869703bbea888dcb62b69846ff2bb"
+    },
+    {
+      "case": "EX4",
+      "mesh": [
+        320,
+        40
+      ],
+      "recordedHash": "2359a1112fcec9edd0971aae9a89508cd703ea3899770e7e85c850138c2550f4",
+      "recordedSource": "diagnostics/two_branch_controller_validation/runs/C320x40_record.json",
+      "preHash": "2359a1112fcec9edd0971aae9a89508cd703ea3899770e7e85c850138c2550f4",
+      "postHash": "910f92554c6ef52a7d6558a244689944b3e2e918f9641a3a6b36bcaa49127171",
+      "postOldSchemaHash": "2359a1112fcec9edd0971aae9a89508cd703ea3899770e7e85c850138c2550f4",
+      "preHashEqualsRecorded": true,
+      "oldSchemaHashFromPostEqualsRecorded": true,
+      "oldLeavesEqual": true,
+      "differingOldLeaves": [],
+      "addedLeaves": {
+        "material_stiffness_linearBelow": 0.1,
+        "optimizer_inner_asymptoteHistory": "inner",
+        "move_adaptive_grow": 1.2,
+        "move_adaptive_shrink": 0.7,
+        "stop_guards_settledWindow": 1,
+        "stop_guards_boxInactiveFraction": 0
+      },
+      "addedLeavesNeutral": true,
+      "postEqualsUpstreamAllLeaves": true,
+      "upHash": "910f92554c6ef52a7d6558a244689944b3e2e918f9641a3a6b36bcaa49127171"
+    }
+  ],
+  "pedersen": [
+    {
+      "mesh": [
+        160,
+        20
+      ],
+      "postHash": "b1a5744df798ad624fcd0b8b4306888eb99816ee5ce60f51040e39e03e90d4f4",
+      "upHash": "b1a5744df798ad624fcd0b8b4306888eb99816ee5ce60f51040e39e03e90d4f4",
+      "postEqualsUpstreamAllLeaves": true,
+      "committedSweepRun": "S160x20",
+      "differingLeavesVsCommitted": [
+        "stop.rule",
+        "runtime.verbose",
+        "runtime.name"
+      ]
+    },
+    {
+      "mesh": [
+        240,
+        30
+      ],
+      "postHash": "2fac1384239527b1a0108e1d34725021cdc7c5a26f1939b602239415b34847e1",
+      "upHash": "2fac1384239527b1a0108e1d34725021cdc7c5a26f1939b602239415b34847e1",
+      "postEqualsUpstreamAllLeaves": true,
+      "committedSweepRun": "S240x30",
+      "differingLeavesVsCommitted": [
+        "stop.rule",
+        "runtime.verbose",
+        "runtime.name"
+      ]
+    },
+    {
+      "mesh": [
+        320,
+        40
+      ],
+      "postHash": "a1203d43efb240308cfcb520c92a6d9bc37a0c703c728fc2f3d298f779bc5f6e",
+      "upHash": "a1203d43efb240308cfcb520c92a6d9bc37a0c703c728fc2f3d298f779bc5f6e",
+      "postEqualsUpstreamAllLeaves": true,
+      "committedSweepRun": "S320x40",
+      "differingLeavesVsCommitted": [
+        "stop.rule",
+        "runtime.verbose",
+        "runtime.name"
+      ]
+    },
+    {
+      "mesh": [
+        400,
+        50
+      ],
+      "postHash": "e40c6ba16c9addbb587d08ecab29669f7db560d09b980ca62c2096856b849280",
+      "upHash": "e40c6ba16c9addbb587d08ecab29669f7db560d09b980ca62c2096856b849280",
+      "postEqualsUpstreamAllLeaves": true,
+      "committedSweepRun": "S400x50",
+      "differingLeavesVsCommitted": [
+        "stop.rule",
+        "runtime.verbose",
+        "runtime.name"
+      ]
+    },
+    {
+      "mesh": [
+        480,
+        60
+      ],
+      "postHash": "8e55d18251152ec2d26836593489c14f4842390d912d7c66f43f3b18730c83de",
+      "upHash": "8e55d18251152ec2d26836593489c14f4842390d912d7c66f43f3b18730c83de",
+      "postEqualsUpstreamAllLeaves": true,
+      "committedSweepRun": "S480x60",
+      "differingLeavesVsCommitted": [
+        "stop.rule",
+        "runtime.verbose",
+        "runtime.name"
+      ]
+    },
+    {
+      "mesh": [
+        560,
+        70
+      ],
+      "postHash": "8b2533a3caf8432d40a54dbcbd8958900e333c410527d5547c53699b9e373ccf",
+      "upHash": "8b2533a3caf8432d40a54dbcbd8958900e333c410527d5547c53699b9e373ccf",
+      "postEqualsUpstreamAllLeaves": true,
+      "committedSweepRun": "S560x70",
+      "differingLeavesVsCommitted": [
+        "stop.rule",
+        "runtime.verbose",
+        "runtime.name"
+      ]
+    },
+    {
+      "mesh": [
+        640,
+        80
+      ],
+      "postHash": "cbe8dcf070d3e318a889867b5168fdbb09f1b6babfd46f981447d96e9a073aaf",
+      "upHash": "cbe8dcf070d3e318a889867b5168fdbb09f1b6babfd46f981447d96e9a073aaf",
+      "postEqualsUpstreamAllLeaves": true,
+      "committedSweepRun": "S640x80",
+      "differingLeavesVsCommitted": [
+        "stop.rule",
+        "runtime.verbose",
+        "runtime.name"
+      ]
+    },
+    {
+      "mesh": [
+        720,
+        90
+      ],
+      "postHash": "2893ad47136fc9a7775f1f4d9ff1dcba38e7fe14271dd12b5727ff4bd8bb54f3",
+      "upHash": "2893ad47136fc9a7775f1f4d9ff1dcba38e7fe14271dd12b5727ff4bd8bb54f3",
+      "postEqualsUpstreamAllLeaves": true,
+      "committedSweepRun": "S720x90",
+      "differingLeavesVsCommitted": [
+        "stop.rule",
+        "runtime.verbose",
+        "runtime.name"
+      ]
+    },
+    {
+      "mesh": [
+        800,
+        100
+      ],
+      "postHash": "f9138743067afd0edce255ad26a6d7ae5c0f632a537516a4793eafecbacbe4cd",
+      "upHash": "f9138743067afd0edce255ad26a6d7ae5c0f632a537516a4793eafecbacbe4cd",
+      "postEqualsUpstreamAllLeaves": true,
+      "committedSweepRun": "S800x100",
+      "differingLeavesVsCommitted": [
+        "stop.rule",
+        "runtime.verbose",
+        "runtime.name"
+      ]
+    }
+  ],
+  "checks": {
+    "allPreHashesReproduceRecorded": true,
+    "allOldLeavesEqual": true,
+    "allOldSchemaHashesFromPostReproduceRecorded": true,
+    "allAddedLeavesNeutral": true,
+    "allHistoricalPostEqualsUpstream": true,
+    "allPedersenPostEqualsUpstream": true,
+    "schemaOnlyGrew": true
+  },
+  "pass": true
+}

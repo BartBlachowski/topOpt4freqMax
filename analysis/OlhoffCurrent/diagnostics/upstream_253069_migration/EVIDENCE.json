@@ -1,0 +1,733 @@
+{
+  "schema": "olhoff_current_evidence/1",
+  "study": "upstream_253069_migration",
+  "generated": "2026-09-13T20:32:44+02:00",
+  "evidenceRoot": "analysis/OlhoffCurrent/evidence/upstream_253069_migration",
+  "implementation": "analysis/OlhoffCurrent",
+  "sourceTree": "4ba9a3ae10881344a0e60f2b8a8976c5ec9ceccf966bc2a3da4f37fb5aebffbf",
+  "matlab": "25.2.0.2998904 (R2025b)",
+  "preregistration_sha256": "8854fdb7d4b0ea793c99ccaaa44914c3df7494ab50d0f96b9fd30d61ec72a414",
+  "upstream_commit": "253069262407885a8b759a9e721c4f0a7d3a397d",
+  "upstream_parent": "6b0870850d7407a0f2fc31dbf0d0f318c2e5f2f7",
+  "mesh": [
+    160,
+    20
+  ],
+  "NE": 3200,
+  "no_mesh_above_160x20_solved": true,
+  "external_inputs_note": "External references are identified in DATA_MANIFEST.json (external_inputs) by content hash; they are not re-declared here because they belong to other studies or to the upstream repository.",
+  "artifacts": [
+    {
+      "path": "PRE_BETA.mat",
+      "class": "required",
+      "description": "pre-migration OlhoffCurrent (tree edbfe47) historical beta-stall preset, 160x20: full olhoffSolve result + cfg + meta",
+      "bytes": 441691,
+      "sha256": "79bdeb55005e0dc4fe1e4267ed7c333de46716df7209651fb0acdb2a948a9ddd",
+      "present": true,
+      "format": "MAT-file (v7.3 = HDF5) -- read with load()",
+      "variables": [
+        {
+          "name": "cfg",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 20042
+        },
+        {
+          "name": "meta",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 2052
+        },
+        {
+          "name": "res",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 3.702867E+6
+        }
+      ]
+    },
+    {
+      "path": "PRE_EX3.mat",
+      "class": "required",
+      "description": "pre-migration OlhoffCurrent three-rung stage-exhaustion configuration, 160x20, diagnostics on (includes every drho)",
+      "bytes": 4.693241E+6,
+      "sha256": "0106ea70a6eca3c66341c0f12adbd8c3efaf9848f0a10e6992099878e1876a31",
+      "present": true,
+      "format": "MAT-file (v7.3 = HDF5) -- read with load()",
+      "variables": [
+        {
+          "name": "cfg",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 19551
+        },
+        {
+          "name": "meta",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 2048
+        },
+        {
+          "name": "res",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 8.440212E+6
+        }
+      ]
+    },
+    {
+      "path": "POST_BETA.mat",
+      "class": "required",
+      "description": "migrated OlhoffCurrent (tree 4ba9a3ae) duOlhoffSimpEq4bBetaStallLadderSensitivityFiltered, 160x20",
+      "bytes": 452115,
+      "sha256": "ed83ee179badc23ec4e16bdd55ed1d02339faf087fae17ef0e2d14a1655839c8",
+      "present": true,
+      "format": "MAT-file (v7.3 = HDF5) -- read with load()",
+      "variables": [
+        {
+          "name": "cfg",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 22410
+        },
+        {
+          "name": "meta",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 2054
+        },
+        {
+          "name": "res",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 3.705343E+6
+        }
+      ]
+    },
+    {
+      "path": "POST_EX3.mat",
+      "class": "required",
+      "description": "migrated duOlhoffSimpEq4bThreeRungStageExhaustionSensitivityFiltered, 160x20, diagnostics on",
+      "bytes": 4.716865E+6,
+      "sha256": "3d590f62fc6f6779911e013c3a4e40647adb119995ed4d074f8715e0bab1f0f5",
+      "present": true,
+      "format": "MAT-file (v7.3 = HDF5) -- read with load()",
+      "variables": [
+        {
+          "name": "cfg",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 23032
+        },
+        {
+          "name": "meta",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 2050
+        },
+        {
+          "name": "res",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 8.446987E+6
+        }
+      ]
+    },
+    {
+      "path": "POST_EX4.mat",
+      "class": "required",
+      "description": "migrated beta-stall preset + stage exhaustion (four rungs), cap 1600, diagnostics on, 160x20",
+      "bytes": 5.637151E+6,
+      "sha256": "d036f1e1e519c6e291787e665269aaf8d076a48902434a235f9598b1f9b2e71a",
+      "present": true,
+      "format": "MAT-file (v7.3 = HDF5) -- read with load()",
+      "variables": [
+        {
+          "name": "cfg",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 20312
+        },
+        {
+          "name": "meta",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 2050
+        },
+        {
+          "name": "res",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 9.475957E+6
+        }
+      ]
+    },
+    {
+      "path": "POST_PED.mat",
+      "class": "required",
+      "description": "migrated duOlhoffPedersenAdaptiveBoxSensitivityFiltered through the production wrapper, 160x20",
+      "bytes": 464222,
+      "sha256": "af0ec95482bbb42b35790123b8c7e9649aacd8611c712633a01a57512b5ec8f3",
+      "present": true,
+      "format": "MAT-file (v7.3 = HDF5) -- read with load()",
+      "variables": [
+        {
+          "name": "cfg",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 22808
+        },
+        {
+          "name": "meta",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 2050
+        },
+        {
+          "name": "res",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 3.713923E+6
+        }
+      ]
+    },
+    {
+      "path": "UP_BETA.mat",
+      "class": "required",
+      "description": "read-only Olhoff 253069 snapshot, duOlhoffFrozenM4 with the same runtime fields, 160x20",
+      "bytes": 437923,
+      "sha256": "dcfe95aba5d592302ccfabe8401246e3a8507401fa7c82abbe9a90edc6377244",
+      "present": true,
+      "format": "MAT-file (v7.3 = HDF5) -- read with load()",
+      "variables": [
+        {
+          "name": "cfg",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 19696
+        },
+        {
+          "name": "meta",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 2136
+        },
+        {
+          "name": "res",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 3.702629E+6
+        }
+      ]
+    },
+    {
+      "path": "UP_EX3.mat",
+      "class": "required",
+      "description": "read-only Olhoff 253069 snapshot, three-rung stage-exhaustion overrides, 160x20",
+      "bytes": 4.704769E+6,
+      "sha256": "c11a17e17bd398b59b669ca40dad1bbaf3816b70a2d618b0c36758a81621b220",
+      "present": true,
+      "format": "MAT-file (v7.3 = HDF5) -- read with load()",
+      "variables": [
+        {
+          "name": "cfg",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 20590
+        },
+        {
+          "name": "meta",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 2132
+        },
+        {
+          "name": "res",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 8.444545E+6
+        }
+      ]
+    },
+    {
+      "path": "UP_PED.mat",
+      "class": "required",
+      "description": "read-only Olhoff 253069 snapshot, duOlhoffAdaptivePedersen, 160x20",
+      "bytes": 447638,
+      "sha256": "a3efba2f7473ab34b7582bf2a6cc6101542eac4bda58df77536eb194a6a3c421",
+      "present": true,
+      "format": "MAT-file (v7.3 = HDF5) -- read with load()",
+      "variables": [
+        {
+          "name": "cfg",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 19722
+        },
+        {
+          "name": "meta",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 2132
+        },
+        {
+          "name": "res",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 3.710837E+6
+        }
+      ]
+    },
+    {
+      "path": "POST_A6.mat",
+      "class": "required",
+      "description": "migrated OlhoffCurrent, upstream anchor A6_pdecoupled160 (legacy route), 250 outer CAP_HIT, diagnostics on",
+      "bytes": 7.265112E+6,
+      "sha256": "818f0e391951b57d03c88ff4e35e09a52976d531cf3c59a0a93d4848fd169742",
+      "present": true,
+      "format": "MAT-file (v7.3 = HDF5) -- read with load()",
+      "variables": [
+        {
+          "name": "cfg",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 8432
+        },
+        {
+          "name": "meta",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 3004
+        },
+        {
+          "name": "res",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 1.0314538E+7
+        }
+      ]
+    },
+    {
+      "path": "POST_A7.mat",
+      "class": "required",
+      "description": "migrated OlhoffCurrent, upstream anchor A7_massp160 (legacy route), 250 outer CAP_HIT, diagnostics on",
+      "bytes": 7.2926E+6,
+      "sha256": "b379ca9bc96d946ff1ef768a51fb26fb892cf0196ed31bcf92b1b8125fd968b4",
+      "present": true,
+      "format": "MAT-file (v7.3 = HDF5) -- read with load()",
+      "variables": [
+        {
+          "name": "cfg",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 8564
+        },
+        {
+          "name": "meta",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 2740
+        },
+        {
+          "name": "res",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 1.0314816E+7
+        }
+      ]
+    },
+    {
+      "path": "cfg_pre.mat",
+      "class": "required",
+      "description": "pre-migration resolution of the 14 recorded historical configurations (81-row schema)",
+      "bytes": 1.732984E+6,
+      "sha256": "a09131d29e86ec995ef734c46f0e87f4965d6c0ebf3eeb55811ca7dfbfa269cd",
+      "present": true,
+      "format": "MAT-file (v7.3 = HDF5) -- read with load()",
+      "variables": [
+        {
+          "name": "D",
+          "size": [
+            1,
+            14
+          ],
+          "class": "struct",
+          "bytes": 499827
+        },
+        {
+          "name": "meta",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 911
+        },
+        {
+          "name": "rows",
+          "size": [
+            81,
+            1
+          ],
+          "class": "cell",
+          "bytes": 13092
+        }
+      ]
+    },
+    {
+      "path": "cfg_post.mat",
+      "class": "required",
+      "description": "migrated resolution of the same configurations plus the Pedersen preset at nine meshes (87-row schema)",
+      "bytes": 3.132576E+6,
+      "sha256": "eb4082cb2278d7f31049e7aab47228e767a70bf8760d8dae474cca94b6503be1",
+      "present": true,
+      "format": "MAT-file (v7.3 = HDF5) -- read with load()",
+      "variables": [
+        {
+          "name": "D",
+          "size": [
+            1,
+            23
+          ],
+          "class": "struct",
+          "bytes": 906134
+        },
+        {
+          "name": "meta",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 27258
+        },
+        {
+          "name": "rows",
+          "size": [
+            87,
+            1
+          ],
+          "class": "cell",
+          "bytes": 14124
+        }
+      ]
+    },
+    {
+      "path": "cfg_up.mat",
+      "class": "required",
+      "description": "upstream 253069 resolution of the same configurations",
+      "bytes": 2.870664E+6,
+      "sha256": "4d1445af2f3873912d232ecda40ee0eaeaa19a8df73ece5a219562bb4584c094",
+      "present": true,
+      "format": "MAT-file (v7.3 = HDF5) -- read with load()",
+      "variables": [
+        {
+          "name": "D",
+          "size": [
+            1,
+            23
+          ],
+          "class": "struct",
+          "bytes": 846608
+        },
+        {
+          "name": "meta",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 645
+        },
+        {
+          "name": "rows",
+          "size": [
+            87,
+            1
+          ],
+          "class": "cell",
+          "bytes": 14124
+        }
+      ]
+    },
+    {
+      "path": "T_preset_equivalence.mat",
+      "class": "optional",
+      "description": "suite result",
+      "bytes": 340,
+      "sha256": "91c425efc51d73b8d1cc180461e6530e41cec13e5bd1b9540ce01984430bbcbf",
+      "present": true,
+      "format": "MAT-file (v7.3 = HDF5) -- read with load()",
+      "variables": {
+        "name": "R",
+        "size": [
+          1,
+          1
+        ],
+        "class": "struct",
+        "bytes": 1156
+      }
+    },
+    {
+      "path": "T_named_pedersen.mat",
+      "class": "optional",
+      "description": "suite result",
+      "bytes": 364,
+      "sha256": "63e925f9ea521e86d65d3fa5b086c3ee46924c698d53877fba9f674a5fd713fe",
+      "present": true,
+      "format": "MAT-file (v7.3 = HDF5) -- read with load()",
+      "variables": {
+        "name": "R",
+        "size": [
+          1,
+          1
+        ],
+        "class": "struct",
+        "bytes": 1220
+      }
+    },
+    {
+      "path": "T_named_stageExhaustion.mat",
+      "class": "optional",
+      "description": "suite result",
+      "bytes": 369,
+      "sha256": "7f99e4266d6ceeebdb1968ed5c88058a950f399b09a0fa04f11fd27572096d64",
+      "present": true,
+      "format": "MAT-file (v7.3 = HDF5) -- read with load()",
+      "variables": {
+        "name": "R",
+        "size": [
+          1,
+          1
+        ],
+        "class": "struct",
+        "bytes": 1248
+      }
+    },
+    {
+      "path": "T_preset_identity.mat",
+      "class": "optional",
+      "description": "suite result",
+      "bytes": 336,
+      "sha256": "2f51e0a03604258915916ef013e8385066a27b12134ed048c92daeff33be9fd9",
+      "present": true,
+      "format": "MAT-file (v7.3 = HDF5) -- read with load()",
+      "variables": {
+        "name": "R",
+        "size": [
+          1,
+          1
+        ],
+        "class": "struct",
+        "bytes": 1144
+      }
+    },
+    {
+      "path": "T_cost_reporting.mat",
+      "class": "optional",
+      "description": "suite result",
+      "bytes": 339,
+      "sha256": "86fcb524b1601c5de212617a9bb5f77596233fadab6d6c4ef60999b0c900c290",
+      "present": true,
+      "format": "MAT-file (v7.3 = HDF5) -- read with load()",
+      "variables": {
+        "name": "R",
+        "size": [
+          1,
+          1
+        ],
+        "class": "struct",
+        "bytes": 1140
+      }
+    },
+    {
+      "path": "T_pedersen_adaptive_units.mat",
+      "class": "optional",
+      "description": "suite result",
+      "bytes": 352,
+      "sha256": "829f8eb6d0225f61d7e66d43bafd872895bd955d08e40d9a475ffb607bb2cc04",
+      "present": true,
+      "format": "MAT-file (v7.3 = HDF5) -- read with load()",
+      "variables": {
+        "name": "R",
+        "size": [
+          1,
+          1
+        ],
+        "class": "struct",
+        "bytes": 1176
+      }
+    },
+    {
+      "path": "T_upstream_suites.mat",
+      "class": "optional",
+      "description": "suite result (six upstream suites against the migrated +impl)",
+      "bytes": 660,
+      "sha256": "28afc277fe4dc6023875f0ab8b12c65e08aec4b12fce3abbc20c775850854c68",
+      "present": true,
+      "format": "MAT-file (v7.3 = HDF5) -- read with load()",
+      "variables": {
+        "name": "R",
+        "size": [
+          1,
+          1
+        ],
+        "class": "struct",
+        "bytes": 3531
+      }
+    },
+    {
+      "path": "T_upstream_suites_snapshot.mat",
+      "class": "optional",
+      "description": "suite result (same suites against the 253069 snapshot)",
+      "bytes": 656,
+      "sha256": "a3184f76a3659aa8e42edff4d7005b4f73b97e8d084c82008dfadfc3158861c2",
+      "present": true,
+      "format": "MAT-file (v7.3 = HDF5) -- read with load()",
+      "variables": {
+        "name": "R",
+        "size": [
+          1,
+          1
+        ],
+        "class": "struct",
+        "bytes": 3607
+      }
+    },
+    {
+      "path": "T_gates.mat",
+      "class": "optional",
+      "description": "suite result (path isolation, currentness, integrity, evidence and finalization gates)",
+      "bytes": 473,
+      "sha256": "d11fa6526f7b4a5442022c56e06fc7ee774bf4a2486c411f216ad70bdd383f98",
+      "present": true,
+      "format": "MAT-file (v7.3 = HDF5) -- read with load()",
+      "variables": {
+        "name": "R",
+        "size": [
+          1,
+          1
+        ],
+        "class": "struct",
+        "bytes": 2410
+      }
+    },
+    {
+      "path": "harness_selftest.json",
+      "class": "optional",
+      "description": "confbench_selftest after migration",
+      "bytes": 3496,
+      "sha256": "0dbd63b6ad934258b9f92e73681a8078e6e01a6183a111ecbdbcc83f55d341b0",
+      "present": true,
+      "format": "JSON"
+    },
+    {
+      "path": "harness_selftest_BASELINE_013cc48.json",
+      "class": "optional",
+      "description": "confbench_selftest on a pristine git archive of 013cc48",
+      "bytes": 2945,
+      "sha256": "e22f101c762dff3a3ed756b64646e1fb34b64dc6db48a7084a3457342089835a",
+      "present": true,
+      "format": "JSON"
+    }
+  ]
+}

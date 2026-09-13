@@ -1,56 +1,64 @@
-function info = olhoffcurrent_preset()
-%OLHOFFCURRENT_PRESET  THE production preset of the Olhoff implementation.
+function info = olhoffcurrent_preset(name)
+%OLHOFFCURRENT_PRESET  One named OlhoffCurrent preset, looked up by NAME.
 %
-%   There is exactly one, it has a name, and production scripts name it rather
-%   than reassembling it from a handful of switches.
+%   info = OLHOFFCURRENT_PRESET(name) returns the registry entry (see
+%   OLHOFFCURRENT_PRESETS) for a canonical preset name or one of its declared
+%   compatibility aliases, plus
 %
-%       duOlhoffFixedPenaltySensitivityFiltered
+%     info.requestedName   the name that was passed
+%     info.resolvedVia     'canonical' | 'compatibilityAlias'
 %
-%   The name is descriptive of the MATHEMATICS, not of our audit history.  The
-%   two axes in it are the two that distinguish this realization from every
-%   other preset in the family:
+%   A NAME IS REQUIRED.  There is no unnamed default: an unnamed lookup would
+%   silently change formulation whenever the production preset changes.  The
+%   production choice is read explicitly with OLHOFFCURRENT_PRODUCTION_PRESET.
 %
-%     FixedPenalty          SIMP p = 3 held CONSTANT, no p continuation.
-%                           (Du & Olhoff sec. 2.1 says p is "normally assigned
-%                           values increasing from 1 to 3"; fixing it is a
-%                           RECONSTRUCTION RULING, made because the reported
-%                           initial eigenfrequencies fit p = 3 and not p = 1.)
-%     SensitivityFiltered   Sigmund (1997) SENSITIVITY filter, applied to every
-%                           f_sk rather than the diagonal only, at a fixed
-%                           PHYSICAL radius R = 0.06*b.  No density filter, no
-%                           Heaviside projection.
+%   Historical audit codes and run labels (M4, TMA, S160x20, ...) are provenance
+%   aliases, not API, and are refused with a pointer to the preset they belong to.
 %
-%   Full formulation, in scientific terms and with the provenance class of every
-%   choice, is printed by
+%   Canonical presets:
+%     duOlhoffSimpEq4bBetaStallLadderSensitivityFiltered   (compatibility alias
+%                                          duOlhoffFixedPenaltySensitivityFiltered)
+%     duOlhoffSimpEq4bThreeRungStageExhaustionSensitivityFiltered
+%     duOlhoffPedersenAdaptiveBoxSensitivityFiltered
 %
-%       olh.config.describe(olhoffcurrent_config(nelx, nely))
+%   Full formulation of a resolved configuration, in scientific terms:
+%       olh.config.describe(olhoffcurrent_config(nelx, nely, 'Preset', name))
 %
-%   and needs no knowledge of this project's audit history to read.
-%
-%   HISTORICAL ALIASES -- PROVENANCE ONLY, NEVER API
-%   ------------------------------------------------
-%   The same realization appears in the historical record under the audit codes
-%   M4, TMA, B0 and REG160, and upstream as the preset name duOlhoffFrozenM4.
-%   Those are provenance aliases and experiment identifiers.  They are recorded
-%   so old evidence can be matched to new runs; they are NOT canonical
-%   user-facing terminology and no production script should use them.
-%
-%   NO SEPARATE COPY OF THE MATHEMATICS
-%   -----------------------------------
-%   This preset does not restate the ~30 fields it needs.  It DELEGATES to the
-%   promoted upstream preset olh.presets.duOlhoffFrozenM4, so the production
-%   realization cannot silently drift from the accepted canonical one: there is
-%   only one definition, and it is the promoted one.
-%
-%   See also OLHOFFCURRENT_CONFIG, OLHOFFCURRENT_RUN.
+%   See also OLHOFFCURRENT_PRESETS, OLHOFFCURRENT_CONFIG, OLHOFFCURRENT_PRODUCTION_PRESET.
 
-info = struct( ...
-    'name',            'duOlhoffFixedPenaltySensitivityFiltered', ...
-    'upstreamPreset',  'duOlhoffFrozenM4', ...
-    'classification',  'SCIENTIFIC_PRESET', ...
-    'label',           'Du-Olhoff reconstruction, fixed penalty, sensitivity filtered', ...
-    'mustNotBeLabelled', 'Olhoff 2007', ...
-    'epistemicClass',  ['reconstruction (class C): internally coherent, ' ...
-                        'not a claimed historical implementation'], ...
-    'historicalAliases', {{'M4', 'TMA', 'B0', 'REG160', 'duOlhoffFrozenM4'}});
+R = olhoffcurrent_presets();
+canonical = {R.name};
+
+if nargin < 1 || isempty(name)
+    error('olhoffcurrent_preset:NameRequired', ...
+        ['An OlhoffCurrent preset must be named explicitly; there is no unnamed ' ...
+         'default. Registered presets: %s. The current production choice is ' ...
+         'olhoffcurrent_production_preset().name.'], strjoin(canonical, ', '));
+end
+name = char(string(name));
+
+i = find(strcmp(name, canonical), 1);
+via = 'canonical';
+if isempty(i)
+    for k = 1:numel(R)
+        if any(strcmp(name, R(k).compatibilityAliases)), i = k; via = 'compatibilityAlias'; break; end
+    end
+end
+if isempty(i)
+    owner = '';
+    for k = 1:numel(R)
+        if any(strcmp(name, R(k).historicalAliases)), owner = R(k).name; break; end
+    end
+    if ~isempty(owner)
+        error('olhoffcurrent_preset:ProvenanceAlias', ...
+            ['"%s" is a historical PROVENANCE alias of %s, not a preset name. ' ...
+             'Name the canonical preset.'], name, owner);
+    end
+    error('olhoffcurrent_preset:Unknown', ...
+        'Unknown OlhoffCurrent preset "%s". Registered presets: %s.', name, strjoin(canonical, ', '));
+end
+
+info = R(i);
+info.requestedName = name;
+info.resolvedVia   = via;
 end

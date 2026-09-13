@@ -72,6 +72,17 @@ asks *"is the scientific evidence still on disk?"*. The gate lives outside
    machine cannot verify these studies", and `EVIDENCE.json` names exactly what
    is needed.
 
+7. **Pinned production source survives a promotion only as history, never as a
+   pass-through.** A study's `FINAL_SHA256.txt` may hash production source
+   (`+impl/**`, `SOURCE_MANIFEST.json`) to record which code it ran. After a
+   recorded promotion such a line is accepted by the finalization gate only as
+   `SUPERSEDED_PRODUCTION_SOURCE`: its digest must equal that path's content in a
+   commit reachable from HEAD, and the current `+impl` must verify against its
+   manifest. A fabricated digest, or a historical digest of any non-source file,
+   still fails. (Added 2026-09-13 with the upstream `253069` promotion, which
+   superseded seven such lines in `two_branch_controller_validation`; that
+   study's hash file was not edited.)
+
 ## Required evidence for a move/activity-class study
 
 At minimum:

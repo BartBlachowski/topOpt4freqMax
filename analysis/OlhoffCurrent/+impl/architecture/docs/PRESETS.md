@@ -18,6 +18,8 @@ automatically rescales ε.
 | Preset | Classification | Historical label(s) |
 |---|---|---|
 | `duOlhoffFrozenM4` | SCIENTIFIC_PRESET | TMA, B0, REG160, "frozen M4", the conference realization |
+| `duOlhoffOuterAsymptotes` | SCIENTIFIC_PRESET | outer-history MMA asymptotes, fixed move, no ladder (2026-09-12) |
+| `duOlhoffAdaptiveMove` | SCIENTIFIC_PRESET | per-element adaptive move box, Svanberg rule on the outer history, no ladder (2026-09-12) |
 | `duOlhoffMatureM4` | EXPERIMENT_PRESET | Bmature, R2 |
 | `restorationLadderGuard` | EXPERIMENT_PRESET | R1 |
 | `noDescentFixedMove` | EXPERIMENT_PRESET | nodescent |
@@ -75,6 +77,49 @@ It also carries a **known deficiency deliberately**: under a move ladder,
 measured step with no change in the design. `settledMove` suppresses the symptom;
 it does not remove the cause (`audit_termination_mesh_admission`, verdict
 `S2_CONTINUATION_DEFECT`). **Fix architecture, not history.**
+
+## duOlhoffOuterAsymptotes
+
+```
+parent:           duOlhoffFrozenM4
+departure:        optimizer.inner.variable = design                          [C]
+                  optimizer.inner.asymptoteHistory = outer                   [C]
+                  move.policy = fixed, move.initial = 0.04 (Inf = box (25f) only) [C]
+                  stop.guards.settledMove = false                            [C]
+                  stop.guards.boxInactiveFraction = 0.5                      [C]
+classification:   SCIENTIFIC_PRESET, reconstruction (2026-09-12)
+```
+Same formulation as the frozen realization and the same genuine nested inner
+loop with the erratum form of (25d) live.  The MMA asymptotes are formed from
+the **outer** design sequence `rho_k, rho_k-1, rho_k-2` by Svanberg's rule and
+held during the inner loop, so an element that reverses direction between outer
+iterations has its asymptotes contracted and the outer step decays.  That is the
+convergence mechanism of Svanberg (1987) applied across the nested scheme, and it
+is what lets the printed test ‖Δρ‖ < ε fire without a move ladder.  The
+`boxInactive` guard asserts convergence only when `max|Δρ| <= 0.5·move`, i.e.
+when the step is small because the design stopped and not because the move box
+bound it.  The paper names MMA and the nested loop and does not say how the two
+are joined: class C.
+
+## duOlhoffAdaptiveMove
+
+```
+parent:           duOlhoffFrozenM4
+departure:        move.policy = adaptive, move.initial = 0.04, move.minimum = 0.002 [C]
+                  move.adaptive.grow = 1.2, move.adaptive.shrink = 0.7        [C, values = Svanberg asyincr/asydecr]
+                  stop.guards.settledMove = false                            [C]
+classification:   SCIENTIFIC_PRESET, reconstruction (2026-09-12)
+```
+The inner loop is the frozen one (increment coordinates, asymptotes reset per
+outer iteration, so it converges as before).  The move ladder is replaced by a
+**per-element** box `d_e` updated on the outer design history by Svanberg's
+asymptote rule: an element whose last two outer steps agree in sign gets
+`d_e *= 1.2`, one that reversed gets `d_e *= 0.7`, clamped to
+`[move.minimum, move.initial]`.  Oscillating elements therefore lose their step
+while evolving elements keep it, so ‖Δρ‖ decays and the printed test fires
+without a schedule.  This is the damping MMA supplies in a single-call
+architecture, carried by the box instead of the asymptotes so that the genuine
+nested loop with (25d) stays intact.  Class C.
 
 ## duOlhoffMatureM4
 

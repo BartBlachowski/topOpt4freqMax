@@ -8,7 +8,8 @@ function nFail = test_currentness()
 %     3. olhoffcurrent_currentness() reports a state from the declared model
 %     4. LOCAL_MODIFIED is REACHABLE -- proved by perturbing a temporary copy
 %        of the manifest rather than by trusting the branch to work
-%     5. the production preset delegates to the upstream preset it claims
+%     5. every registered preset delegates to an upstream preset that exists,
+%        and the recorded production preset is registered and eligible
 
 here = fileparts(mfilename('fullpath'));
 root = fileparts(here);
@@ -54,13 +55,20 @@ nFail = nFail + rep('restoring the manifest restores the state', ...
     strcmp(st3.state, st.state), st3.state);
 
 % ---- 5. preset delegation ------------------------------------------------
-info = olhoffcurrent_preset();
+% Every registered OlhoffCurrent preset delegates to a promoted upstream preset,
+% none is named by an audit code, and production is a registered, eligible one.
+R = olhoffcurrent_presets();
 T = olh.presets.list();
-nFail = nFail + rep('the upstream preset it delegates to exists', ...
-    any(strcmp(info.upstreamPreset, T(:,1))), info.upstreamPreset);
-nFail = nFail + rep('the production preset name is not an audit code', ...
-    ~any(strcmpi(info.name, {'M4','S2','R2','P1','PD1','PM1','T800','TMA','B0','REG160'})), ...
-    info.name);
+codes = {'M4','S2','R2','P1','PD1','PM1','T800','TMA','B0','REG160'};
+for k = 1:numel(R)
+    nFail = nFail + rep(sprintf('%s: upstream preset exists', R(k).name), ...
+        any(strcmp(R(k).upstreamPreset, T(:,1))), R(k).upstreamPreset);
+    nFail = nFail + rep(sprintf('%s: name is not an audit code', R(k).name), ...
+        ~any(strcmpi(R(k).name, codes)), R(k).name);
+end
+prod = olhoffcurrent_production_preset();
+nFail = nFail + rep('the production preset is registered and eligible', ...
+    any(strcmp(prod.name, {R.name})) && prod.productionEligible, prod.name);
 
 fprintf('%s\n  failures: %d\n\n', repmat('-',1,72), nFail);
 end

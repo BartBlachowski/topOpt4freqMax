@@ -52,4 +52,40 @@ for i = 1:numel(keys)
 end
 scaling.fitted = true;
 scaling.caveat = confbench_caveats().scaling;
+
+% ---- per-outer-iteration cost, for methods whose records carry an outer count
+% (the Du-Olhoff reconstruction).  Same rows as the total-time fit.  The outer
+% count need not be monotone in the mesh, so total time alone is not a
+% per-iteration scaling law; both are reported.
+scaling.per_outer = struct('model', 'T/N_outer (Ne) = C * Ne^p', ...
+    'methods', struct('method', {}, 'quantity', {}, 'C', {}, 'p', {}, 'R2', {}, 'n', {}, 'meshes', {}));
+for i = 1:numel(keys)
+    sel = records(strcmp({records.method_key}, keys{i}));
+    ok = sel(logical([sel.ok]));
+    if isempty(ok) || ~all(arrayfun(@(r) isfield(r, 'counts') && isfield(r.counts, 'outer_iterations') && ...
+            isfield(r, 'times') && isfield(r.times, 'total_wall_time_per_outer_s'), ok))
+        continue
+    end
+    Ne = arrayfun(@(r) r.mesh(1)*r.mesh(2), ok).';
+    meshes = arrayfun(@(r) sprintf('%dx%d', r.mesh(1), r.mesh(2)), ok, 'UniformOutput', false);
+    Q = {'total_wall_time_per_outer_s', 'outer_time_excluding_inner_per_outer_mean_s', ...
+         'eigen_time_per_outer_mean_s', 'inner_time_per_outer_mean_s', 'inner_time_per_inner_iteration_mean_s'};
+    for q = 1:numel(Q)
+        y = arrayfun(@(r) r.times.(Q{q}), ok).';
+        [C, p, R2, n] = local_powerFit(Ne, y);
+        scaling.per_outer.methods(end+1) = struct('method', confbench_display_name(keys{i}), ...
+            'quantity', Q{q}, 'C', C, 'p', p, 'R2', R2, 'n', n, 'meshes', {meshes}); %#ok<AGROW>
+    end
+end
+end
+
+function [C, p, R2, n] = local_powerFit(Ne, T)
+good = isfinite(Ne) & isfinite(T) & Ne > 0 & T > 0;
+Ne = Ne(good); T = T(good); n = numel(Ne);
+if n < 3, C = NaN; p = NaN; R2 = NaN; return; end
+A = [ones(n,1), log(Ne)];
+beta = A\log(T);
+pred = A*beta;
+R2 = 1 - sum((log(T)-pred).^2)/max(sum((log(T)-mean(log(T))).^2), eps);
+C = exp(beta(1)); p = beta(2);
 end

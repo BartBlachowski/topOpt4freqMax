@@ -412,6 +412,14 @@ if scaling.fitted
         fprintf('  %-30s C = %.6e   p = %.4f   R^2 = %.4f   (%d points)\n', ...
             s.method, s.C, s.p, s.R2, s.n);
     end
+    if isfield(scaling, 'per_outer') && ~isempty(scaling.per_outer.methods)
+        fprintf('  per outer iteration, %s:\n', scaling.per_outer.model);
+        for i = 1:numel(scaling.per_outer.methods)
+            s = scaling.per_outer.methods(i);
+            fprintf('    %-30s %-44s C = %.6e   p = %.4f   R^2 = %.4f   (%d points)\n', ...
+                s.method, s.quantity, s.C, s.p, s.R2, s.n);
+        end
+    end
     fprintf('\n');
 else
     fprintf('Scaling fit NOT performed: %s\n\n', scaling.reason);
@@ -595,18 +603,36 @@ for m = 1:numel(methodKeys)
     fprintf('  %s\n', confbench_display_name(methodKeys{m}));
     switch methodKeys{m}
         case 'olhoff'
+            k = mc.canonical;
+            gp = @(q) dotGet(k, q);   % plain field access: the olh package is not on the path here
+            pr = olhoffcurrent_preset(mc.olhoff_preset);
+            fprintf('    preset: %s (%s; upstream %s @ %s)\n', pr.name, pr.role, ...
+                pr.upstreamPreset, pr.upstreamCommit(1:7));
+            fprintf('    stiffness: %s\n', pr.formulation.stiffness);
+            fprintf('    mass:      %s\n', pr.formulation.mass);
+            fprintf('    resolved:  material.stiffness.model=%s linearBelow=%g, material.mass.model=%s\n', ...
+                gp('material.stiffness.model'), gp('material.stiffness.linearBelow'), gp('material.mass.model'));
             fprintf(['    nested MMA (innerSolver=%s innerVar=%s variant=%s offDiag=%d ' ...
                 'tolInner=%g maxInner=%d)\n'], mc.innerSolver, mc.innerVar, ...
                 mc.mmaVariant, mc.offDiag, mc.tolInner, mc.maxInner);
-            fprintf('    M4 multiplicity: multRule=%s subN=%d (no threshold classifier)\n', ...
+            fprintf('    multiplicity: multRule=%s subN=%d (no threshold classifier)\n', ...
                 mc.multRule, mc.subN);
             fprintf('    filter: physical R=%g -> rminEl=%g derived, mode=%s\n', ...
                 mc.rminPhys, mc.rminPhys/(mc.b/mc.nely), mc.filterMode);
-            fprintf(['    outer stop: %s norm < %.6g  (per-element RMS %.6e), ' ...
-                'guard=%s, cap=%d\n'], mc.outerNorm, mc.tolOuter, ...
+            switch gp('move.policy')
+                case 'adaptive'
+                    fprintf(['    move: ADAPTIVE per-element box, initial %g, floor %g, ' ...
+                        'x%g monotone / x%g reversal; stage exhaustion %s\n'], mc.move, mc.moveMin, ...
+                        mc.sAGrow, mc.sAShrink, onOff(strcmp(gp('move.continuation.signal'),'stageExhaustion')));
+                case 'ladder'
+                    fprintf('    move: global ladder %s, signal %s, window %d, tol %g\n', ...
+                        mat2str(mc.s2Levels), gp('move.continuation.signal'), mc.s2Window, mc.s2Tol);
+                otherwise
+                    fprintf('    move: policy %s, initial %g\n', gp('move.policy'), mc.move);
+            end
+            fprintf(['    outer stop: rule=%s, %s norm < %.6g  (per-element RMS %.6e), ' ...
+                'guard=%s, cap=%d\n'], gp('stop.rule'), mc.outerNorm, mc.tolOuter, ...
                 mc.tolOuter/sqrt(mc.nelx*mc.nely), mc.outerGuard, mc.maxOuter);
-            fprintf('    continuation: %s ladder %s, window %d, tol %g, signal beta (legacy)\n', ...
-                mc.moveFamily, mat2str(mc.s2Levels), mc.s2Window, mc.s2Tol);
             fprintf('    threads=%d, diagnostics recorder=%d\n', mc.threads, mc.diag);
         otherwise
             o = mc.optimization;
@@ -623,6 +649,15 @@ for m = 1:numel(methodKeys)
             end
     end
 end
+end
+
+function v = dotGet(S, dotted)
+parts = strsplit(dotted, '.');
+v = getfield(S, parts{:}); %#ok<GFLD>
+end
+
+function s = onOff(tf)
+if tf; s = 'ON'; else; s = 'off'; end
 end
 
 function writeJsonFile(path, s)

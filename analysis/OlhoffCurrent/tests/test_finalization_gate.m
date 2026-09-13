@@ -12,6 +12,9 @@ function nFail = test_finalization_gate()
 %   TEST E  no FINAL_SHA256.txt                            -> FAIL
 %   TEST F  FINAL_SHA256.txt gone stale (one digest wrong) -> FAIL
 %   TEST G  FINAL_SHA256.txt names an absent .mat          -> FAIL
+%   TEST J  pinned production source superseded by a promotion:
+%           historical digest -> PASS; fabricated digest -> FAIL;
+%           historical digest of a non-source file -> FAIL
 %   TEST H  the three compliant real studies               -> PASS
 %   TEST I  the known-deficient legacy set has not GROWN   -> ledger check
 %
@@ -87,6 +90,37 @@ nFail = nFail + chk('G  names an absent .mat                    -> FAIL', ...
     local_ok(study, repo), false);
 local_write(fs, hbak);
 
+% ---- J: pinned PRODUCTION SOURCE across a promotion -----------------------
+% A study that hashed a production source file records which code it ran.  After
+% a promotion that line is accepted ONLY if its digest is that file's content in
+% a commit reachable from HEAD; a fabricated digest, or a historical digest of a
+% NON-source file, still fails.
+src = 'analysis/OlhoffCurrent/+impl/architecture/olhoffSolve.m';
+nonSrc = 'analysis/OlhoffCurrent/README.md';
+hOld = local_firstCommitDigest(repo, src);
+hNonOld = local_firstCommitDigest(repo, nonSrc);
+curSrc = olhoffcurrent_sha256_file(fullfile(repo, src));
+curNon = olhoffcurrent_sha256_file(fullfile(repo, nonSrc));
+if ~isempty(hOld) && ~strcmp(hOld, curSrc)
+    local_write(fs, [hbak sprintf('\n%s  %s\n', hOld, src)]);
+    stJ = olhoffcurrent_finalization_gate(study, 'Verbose', false, 'RepoRoot', repo);
+    nFail = nFail + chk('J1 historical production-source pin        -> PASS (superseded)', ...
+        stJ.ok && numel(stJ.supersededSource) == 1, true);
+    local_write(fs, [hbak sprintf('\n%s  %s\n', repmat('c',1,64), src)]);
+    nFail = nFail + chk('J2 fabricated production-source digest     -> FAIL', ...
+        local_ok(study, repo), false);
+else
+    fprintf('  [SKIP] J1/J2: %s has no superseded historical content in this history\n', src);
+end
+if ~isempty(hNonOld) && ~strcmp(hNonOld, curNon)
+    local_write(fs, [hbak sprintf('\n%s  %s\n', hNonOld, nonSrc)]);
+    nFail = nFail + chk('J3 historical digest of a NON-source file   -> FAIL', ...
+        local_ok(study, repo), false);
+else
+    fprintf('  [SKIP] J3: %s unchanged since its first commit\n', nonSrc);
+end
+local_write(fs, hbak);
+
 % ---- H: the real compliant studies -------------------------------------
 DIAG = fullfile(root, 'diagnostics');
 for s = {'move_activity_400', 'beta_transition_mechanism', 'two_branch_controller_validation'}
@@ -141,6 +175,16 @@ for i = 1:numel(files)
     lines{end+1} = sprintf('%s  %s', olhoffcurrent_sha256_file(files{i}), [b e]); %#ok<AGROW>
 end
 local_write(fullfile(study,'FINAL_SHA256.txt'), strjoin(unique(lines), newline));
+end
+
+function h = local_firstCommitDigest(repo, p)
+%LOCAL_FIRSTCOMMITDIGEST  SHA-256 of p's content in the first commit that added it.
+h = '';
+[st, out] = system(sprintf('git --no-pager -C "%s" log --reverse --format=%%H HEAD -- "%s" 2>/dev/null', repo, p));
+if st ~= 0 || isempty(strtrim(out)); return; end
+c = strtok(strtrim(out));
+[st2, o2] = system(sprintf('git --no-pager -C "%s" show "%s:%s" 2>/dev/null | shasum -a 256', repo, c, p));
+if st2 == 0; h = strtok(strtrim(o2)); end
 end
 
 function s = local_join(c)
