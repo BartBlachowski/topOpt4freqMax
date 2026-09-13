@@ -1,0 +1,40 @@
+{
+  "kind": "tests",
+  "repo": "/Users/piotrek/Programming/topOpt4freqMax-migration-253069",
+  "head": "adf86a3f8126e2099436b068ed3bd8a1921a2405",
+  "when": "13-Sep-2026 22:16:47",
+  "matlab": "25.2.0.2998904 (R2025b)",
+  "gate": "/Users/piotrek/Programming/topOpt4freqMax-migration-253069/analysis/OlhoffCurrent/olhoffcurrent_finalization_gate.m",
+  "suites": [
+    {
+      "name": "test_path_isolation",
+      "nFail": 0,
+      "error": ""
+    },
+    {
+      "name": "test_currentness",
+      "nFail": 0,
+      "error": ""
+    },
+    {
+      "name": "test_source_integrity",
+      "nFail": 0,
+      "error": ""
+    },
+    {
+      "name": "test_evidence_retention",
+      "nFail": 0,
+      "error": ""
+    },
+    {
+      "name": "test_preset_identity",
+      "nFail": 0,
+      "error": ""
+    },
+    {
+      "name": "test_finalization_gate",
+      "nFail": 2,
+      "error": ""
+    }
+  ]
+}

@@ -64,11 +64,9 @@ function st = olhoffcurrent_finalization_gate(studyDir, varargin)
 %        BEFORE it is read, and the SHA-256 of that blob equals THIS LINE's
 %        digest.  Every line is checked alone: a valid duplicate never rescues
 %        an invalid line, and a missing object never hashes as "empty".
-%   Production-source lines resolve only at <repo>/<path> (never study-local) and
-%   must be canonical.  A line that names production source in any spelling (case,
-%   //, ./, .., backslashes) without being a canonical digest line, or a line whose
-%   file resolves (links followed) into +impl or SOURCE_MANIFEST.json, is
-%   MALFORMED_SOURCE_LINE and fails.
+%   Production-source lines resolve only at <repo>/<path> (never study-local),
+%   must be canonical, and a line that names production source without being a
+%   well-formed digest line is MALFORMED_SOURCE_LINE and fails.
 %
 %   CURRENT_SOURCE_HASH_VERIFIED -- G6, for every study.  HEAD is the root of
 %   trust, not the editable manifest: every +impl blob of HEAD must equal the
@@ -77,9 +75,7 @@ function st = olhoffcurrent_finalization_gate(studyDir, varargin)
 %   edit); no extra non-artifact source file and no symlink may exist;
 %   SOURCE_MANIFEST.json must equal its HEAD blob and agree row for row and in
 %   tree hash with HEAD; and PROVENANCE.md's "Source tree SHA-256" row must be
-%   that tree.  A locally edited +impl with a regenerated manifest fails.  Every
-%   git call runs with --no-replace-objects and without GIT_DIR/GIT_WORK_TREE/...
-%   in its environment, so replace refs and redirection cannot substitute objects.
+%   that tree.  A locally edited +impl with a regenerated manifest fails.
 %
 %   SCIENTIFICALLY INERT.  This function reads files and git objects and hashes
 %   them.  It lives outside +impl/, so it cannot change the canonical tree hash,
@@ -168,11 +164,6 @@ if st.gates.G3
             fp = local_resolvePath(e.path, studyDir, repo);
             if isempty(fp)
                 v = 'MISSING';
-            elseif local_resolvesIntoProduction(fp, repo)
-                % production source may be referenced ONLY by its canonical path
-                v = 'MALFORMED';
-                st.malformedSourceLines(end+1) = struct('lineNo', e.lineNo, 'text', e.path, ...
-                    'reason', 'resolves to production source through a non-canonical path or link');
             elseif ~strcmp(olhoffcurrent_sha256_file(fp), e.digest)
                 v = 'MISMATCH';
             else
@@ -190,7 +181,7 @@ if st.gates.G3
         st.duplicatePaths = u(accumarray(k(:), 1) > 1);
     end
     st.nHashed = numel(E);
-    st.gates.G4 = isempty(st.missing) && isempty(st.mismatched) && isempty(st.malformedSourceLines);
+    st.gates.G4 = isempty(st.missing) && isempty(st.mismatched) && isempty(malformed);
     if nAttempted > 0
         st.historicalSource.freezeCommit = ctx.freezeCommit;
         st.historicalSource.declaredTree = ctx.declaredTree;
@@ -274,16 +265,17 @@ malformed = struct('lineNo', {}, 'text', {}, 'reason', {});
 lines = strsplit(fileread(fs), newline);
 for i = 1:numel(lines)
     ln = lines{i};
+    norm = lower(strrep(ln, '\', '/'));
+    namesSource = contains(norm, 'olhoffcurrent/+impl') || contains(norm, 'olhoffcurrent/source_manifest.json');
     tok = regexp(ln, '^([0-9a-f]{64})\s+(\S+)', 'tokens', 'once');
     if isempty(tok)
-        if local_namesSource(local_textNorm(ln))
+        if namesSource
             malformed(end+1) = struct('lineNo', i, 'text', strtrim(ln), ...
                 'reason', 'names production source but is not a <64 lowercase hex> <path> line'); %#ok<AGROW>
         end
         continue
     end
     isSrc = local_isCanonicalSource(tok{2});
-    namesSource = local_namesSource(local_textNorm(ln)) || local_namesSource(local_logicalNorm(tok{2}));
     if namesSource && ~isSrc
         malformed(end+1) = struct('lineNo', i, 'text', strtrim(ln), ...
             'reason', 'names production source through a non-canonical path'); %#ok<AGROW>
@@ -299,48 +291,8 @@ tf = false;
 if strcmp(p, 'analysis/OlhoffCurrent/SOURCE_MANIFEST.json'); tf = true; return; end
 if ~startsWith(p, 'analysis/OlhoffCurrent/+impl/'); return; end
 if isempty(regexp(p, '^[A-Za-z0-9_+./-]+$', 'once')); return; end
-seg = strsplit(p, '/', 'CollapseDelimiters', false);
+seg = strsplit(p, '/');
 tf = ~any(cellfun(@isempty, seg)) && ~any(strcmp(seg, '.')) && ~any(strcmp(seg, '..'));
-end
-
-function tf = local_namesSource(normalized)
-tf = contains(normalized, 'olhoffcurrent/+impl') || contains(normalized, 'olhoffcurrent/source_manifest.json');
-end
-
-function t = local_textNorm(txt)
-%LOCAL_TEXTNORM  Free text, lower-cased, with \ -> /, repeated / collapsed, ./ dropped.
-t = regexprep(lower(strrep(txt, '\', '/')), '/+', '/');
-prev = '';
-while ~strcmp(prev, t); prev = t; t = regexprep(t, '(^|/)\./', '$1'); end
-end
-
-function n = local_logicalNorm(p)
-%LOCAL_LOGICALNORM  A path token as a logical path: lower-cased, \ -> /, empty and
-%   . segments dropped, .. resolved.
-seg = strsplit(lower(strrep(p, '\', '/')), '/', 'CollapseDelimiters', false);
-out = {};
-for k = 1:numel(seg)
-    s = seg{k};
-    if isempty(s) || strcmp(s, '.'); continue; end
-    if strcmp(s, '..') && ~isempty(out) && ~strcmp(out{end}, '..')
-        out(end) = [];
-    else
-        out{end+1} = s; %#ok<AGROW>
-    end
-end
-n = strjoin(out, '/');
-end
-
-function tf = local_resolvesIntoProduction(fp, repo)
-%LOCAL_RESOLVESINTOPRODUCTION  Does a resolved file (links followed) lie in +impl or
-%   is it SOURCE_MANIFEST.json?  Case-insensitive where the filesystem usually is.
-tf = false;
-c = local_canon(fp);
-impl = local_canon(fullfile(repo, 'analysis', 'OlhoffCurrent', '+impl'));
-man = local_canon(fullfile(repo, 'analysis', 'OlhoffCurrent', 'SOURCE_MANIFEST.json'));
-if isempty(c) || isempty(impl); return; end
-if ismac || ispc; c = lower(c); impl = lower(impl); man = lower(man); end
-tf = startsWith(c, [impl filesep]) || (~isempty(man) && strcmp(c, man));
 end
 
 function ctx = local_historicalContext(studyDir, fs, repo)
@@ -517,8 +469,8 @@ function [ok, tree, why, rows] = local_treeAt(repo, commit)
 %   algorithm), from git objects only.
 ok = false; tree = ''; why = ''; rows = struct('rel', {}, 'sha', {});
 tmp = [tempname() '.lstree']; c = onCleanup(@() local_delete(tmp));
-s = system(sprintf('%s ls-tree -r %s -- analysis/OlhoffCurrent/+impl > "%s" 2>/dev/null', ...
-    local_gitPrefix(repo), commit, tmp));
+s = system(sprintf('git --no-pager -C "%s" ls-tree -r %s -- analysis/OlhoffCurrent/+impl > "%s" 2>/dev/null', ...
+    repo, commit, tmp));
 if s ~= 0 || ~isfile(tmp); why = 'git ls-tree failed'; return; end
 L = splitlines(strtrim(fileread(tmp)));
 L = L(~cellfun(@isempty, L));
@@ -552,7 +504,7 @@ ok = false; why = ''; shas = cell(size(oids));
 in = [tempname() '.in']; out = [tempname() '.out'];
 c = onCleanup(@() cellfun(@local_delete, {in, out}));
 fid = fopen(in, 'w'); fprintf(fid, '%s\n', oids{:}); fclose(fid);
-s = system(sprintf('%s cat-file --batch < "%s" > "%s" 2>/dev/null', local_gitPrefix(repo), in, out));
+s = system(sprintf('git --no-pager -C "%s" cat-file --batch < "%s" > "%s" 2>/dev/null', repo, in, out));
 if s ~= 0 || ~isfile(out); why = 'git cat-file --batch failed'; return; end
 fid = fopen(out, 'r'); B = fread(fid, Inf, '*uint8'); fclose(fid);
 pos = 1;
@@ -588,24 +540,14 @@ if local_git(repo, sprintf('cat-file -e "%s"', spec)) ~= 0; return; end
 [s, t] = local_git(repo, sprintf('cat-file -t "%s"', spec));
 if s ~= 0 || ~strcmp(strtrim(t), 'blob'); return; end
 tmp = [tempname() '.blob']; c = onCleanup(@() local_delete(tmp));
-s = system(sprintf('%s cat-file blob "%s" > "%s" 2>/dev/null', local_gitPrefix(repo), spec, tmp));
+s = system(sprintf('git --no-pager -C "%s" cat-file blob "%s" > "%s" 2>/dev/null', repo, spec, tmp));
 if s ~= 0 || ~isfile(tmp); return; end
 fid = fopen(tmp, 'r'); bytes = fread(fid, Inf, '*uint8'); fclose(fid);
 ok = true;
 end
 
 function [s, out] = local_git(repo, args)
-[s, out] = system(sprintf('%s %s 2>/dev/null', local_gitPrefix(repo), args));
-end
-
-function c = local_gitPrefix(repo)
-%LOCAL_GITPREFIX  Every git call reads the repository it NAMES, as COMMITTED: the
-%   environment cannot redirect it (GIT_DIR & co.), replace refs cannot substitute
-%   objects, and no pager can block on MATLAB's TTY.
-c = sprintf(['env -u GIT_DIR -u GIT_WORK_TREE -u GIT_INDEX_FILE -u GIT_OBJECT_DIRECTORY ' ...
-             '-u GIT_ALTERNATE_OBJECT_DIRECTORIES -u GIT_COMMON_DIR -u GIT_NAMESPACE ' ...
-             '-u GIT_REPLACE_REF_BASE -u GIT_CONFIG_PARAMETERS -u GIT_CONFIG_COUNT ' ...
-             'git --no-pager --no-replace-objects -C "%s"'], repo);
+[s, out] = system(sprintf('git --no-pager -C "%s" %s 2>/dev/null', repo, args));
 end
 
 function h = local_sha(bytes)

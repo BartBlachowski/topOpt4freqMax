@@ -1,0 +1,71 @@
+  probe P0   expected=1 actual=1
+  probe P1   expected=1 actual=1
+  probe P2   expected=0 actual=0
+  probe P3   expected=0 actual=0
+  probe P4   expected=0 actual=0
+  probe P5   expected=0 actual=0
+  probe P6   expected=0 actual=0
+  probe P7   expected=0 actual=0
+  probe P8   expected=0 actual=0
+  probe P9   expected=0 actual=0
+  probe P10  expected=0 actual=0
+  probe P11  expected=1 actual=1
+  probe P12  expected=0 actual=0
+  probe P13  expected=0 actual=0
+  probe P14  expected=0 actual=0
+  probe P15  expected=0 actual=0
+  probe P16  expected=0 actual=0
+  probe P17  expected=0 actual=0
+  probe P18  expected=0 actual=0
+  probe P19  expected=1 actual=1
+  probe P20  expected=0 actual=0
+  probe P21  expected=0 actual=0
+  probe P22  expected=0 actual=0
+  probe P23  expected=0 actual=0
+  probe P24  expected=0 actual=0
+  probe P25  expected=0 actual=0
+  probe P26  expected=0 actual=0
+  probe P27  expected=0 actual=0
+  probe P28  HARNESS ERROR: skip-worktree did not hide the edit from git status
+  probe P29  expected=0 actual=0
+  probe P30  expected=0 actual=0
+P0   exp=1 act=1 true  hist=NO_HISTORICAL_SOURCE_LINES           cur=CURRENT_SOURCE_HASH_VERIFIED      G1-G6=111111
+P1   exp=1 act=1 true  hist=HISTORICAL_SOURCE_HASH_VERIFIED      cur=CURRENT_SOURCE_HASH_VERIFIED      line 2 HISTORICAL_VERIFIED: digest = blob at freeze commit 41367da50d3d (path last changed in 9b30ec45b038) | G1-G6=111111
+P2   exp=0 act=0 true  hist=HISTORICAL_SOURCE_HASH_NOT_VERIFIED  cur=CURRENT_SOURCE_HASH_VERIFIED      line 2 MISMATCH: DIGEST_IS_NOT_THIS_PATH_AT_THE_FREEZE_COMMIT | G1-G6=111011
+P3   exp=0 act=0 true  hist=HISTORICAL_SOURCE_HASH_NOT_VERIFIED  cur=CURRENT_SOURCE_HASH_VERIFIED      line 2 MISMATCH: DIGEST_IS_NOT_THIS_PATH_AT_THE_FREEZE_COMMIT | G1-G6=111011
+P4   exp=0 act=0 true  hist=NO_HISTORICAL_SOURCE_LINES           cur=CURRENT_SOURCE_HASH_VERIFIED      NON-SOURCE MISMATCH/MISSING: analysis/OlhoffCurrent/README.md | G1-G6=111011
+P5   exp=0 act=0 true  hist=HISTORICAL_SOURCE_HASH_NOT_VERIFIED  cur=CURRENT_SOURCE_HASH_VERIFIED      line 2 MISMATCH: DIGEST_IS_NOT_THIS_PATH_AT_THE_FREEZE_COMMIT | line 3 HISTORICAL_VERIFIED: digest = blob at freeze commit af5530cd053d (path last changed in 9b30ec45b038) | DUPLICATE_PATHS: analysis/OlhoffCurrent/+impl/architecture/olhoffSolve.m | G1-G6=111011
+P6   exp=0 act=0 true  hist=HISTORICAL_SOURCE_HASH_NOT_VERIFIED  cur=CURRENT_SOURCE_HASH_VERIFIED      line 2 HISTORICAL_VERIFIED: digest = blob at freeze commit 903238d2b89c (path last changed in 9b30ec45b038) | line 3 MISMATCH: DIGEST_IS_NOT_THIS_PATH_AT_THE_FREEZE_COMMIT | DUPLICATE_PATHS: analysis/OlhoffCurrent/+impl/architecture/olhoffSolve.m | G1-G6=111011
+P7   exp=0 act=0 true  hist=HISTORICAL_SOURCE_HASH_NOT_VERIFIED  cur=CURRENT_SOURCE_HASH_VERIFIED      line 2 MISMATCH: DIGEST_IS_NOT_THIS_PATH_AT_THE_FREEZE_COMMIT | G1-G6=111011
+P8   exp=0 act=0 true  hist=HISTORICAL_SOURCE_HASH_VERIFIED      cur=CURRENT_SOURCE_HASH_NOT_VERIFIED  line 2 HISTORICAL_VERIFIED: digest = blob at freeze commit 914a4c5d6705 (path last changed in 9b30ec45b038) | CURRENT: MODIFIED_IN_WORKING_TREE: architecture/olhoffSolve.m | G1-G6=111110
+P9   exp=0 act=0 true  hist=HISTORICAL_SOURCE_HASH_NOT_VERIFIED  cur=CURRENT_SOURCE_HASH_VERIFIED      line 2 MISMATCH: HISTORICAL_PATH_ABSENT_AT_FREEZE_COMMIT | G1-G6=111011
+P10  exp=0 act=0 true  hist=HISTORICAL_SOURCE_HASH_VERIFIED      cur=CURRENT_SOURCE_HASH_NOT_VERIFIED  line 2 HISTORICAL_VERIFIED: digest = blob at freeze commit 6799cf4d29bd (path last changed in 9b30ec45b038) | CURRENT: MODIFIED_IN_WORKING_TREE: architecture/olhoffSolve.m; SOURCE_MANIFEST_DIFFERS_FROM_HEAD; SOURCE_MANIFEST_ROWS_DISAGREE_WITH_HEAD; SOURCE_MANIFEST_TREE_DISAGREES_WITH_HEAD | G1-G6=111110
+P11  exp=1 act=1 true  hist=HISTORICAL_SOURCE_HASH_VERIFIED      cur=CURRENT_SOURCE_HASH_VERIFIED      line 2 HISTORICAL_VERIFIED: digest = blob at freeze commit 497096e6e476 (path last changed in 9b30ec45b038) | line 3 HISTORICAL_VERIFIED: digest = blob at freeze commit 497096e6e476 (path last changed in 9b30ec45b038) | DUPLICATE_PATHS: analysis/OlhoffCurrent/+impl/architecture/olhoffSolve.m | G1-G6=111111
+P12  exp=0 act=0 true  hist=HISTORICAL_SOURCE_HASH_NOT_VERIFIED  cur=CURRENT_SOURCE_HASH_VERIFIED      line 2 MISMATCH: DIGEST_IS_NOT_THIS_PATH_AT_THE_FREEZE_COMMIT | G1-G6=111011
+P13  exp=0 act=0 true  hist=HISTORICAL_SOURCE_HASH_NOT_VERIFIED  cur=CURRENT_SOURCE_HASH_VERIFIED      line 2 MISMATCH: DIGEST_IS_NOT_THIS_PATH_AT_THE_FREEZE_COMMIT | G1-G6=111011
+P14  exp=0 act=0 true  hist=NO_HISTORICAL_SOURCE_LINES           cur=CURRENT_SOURCE_HASH_VERIFIED      MALFORMED line 2: names production source but is not a <64 lowercase hex> <path> line | G1-G6=111011
+P15  exp=0 act=0 true  hist=NO_HISTORICAL_SOURCE_LINES           cur=CURRENT_SOURCE_HASH_VERIFIED      MALFORMED line 2: names production source but is not a <64 lowercase hex> <path> line | G1-G6=111011
+P16  exp=0 act=0 true  hist=NO_HISTORICAL_SOURCE_LINES           cur=CURRENT_SOURCE_HASH_VERIFIED      MALFORMED line 2: names production source through a non-canonical path | G1-G6=111011
+P17  exp=0 act=0 true  hist=NO_HISTORICAL_SOURCE_LINES           cur=CURRENT_SOURCE_HASH_VERIFIED      line 2 MISSING: production-source path absent from the repository working tree | G1-G6=111011
+P18  exp=0 act=0 true  hist=HISTORICAL_SOURCE_HASH_NOT_VERIFIED  cur=CURRENT_SOURCE_HASH_VERIFIED      line 2 MISMATCH: HISTORICAL_PATH_ABSENT_AT_FREEZE_COMMIT | G1-G6=111011
+P19  exp=1 act=1 true  hist=HISTORICAL_SOURCE_HASH_VERIFIED      cur=CURRENT_SOURCE_HASH_VERIFIED      line 2 HISTORICAL_VERIFIED: digest = blob at freeze commit d0182f7eadd6 (path last changed in b0e1fe52a882) | G1-G6=111111
+P20  exp=0 act=0 true  hist=HISTORICAL_SOURCE_HASH_NOT_VERIFIED  cur=CURRENT_SOURCE_HASH_VERIFIED      line 2 MISMATCH: DIGEST_IS_NOT_THIS_PATH_AT_THE_FREEZE_COMMIT | G1-G6=111011
+P21  exp=0 act=0 true  hist=HISTORICAL_SOURCE_HASH_NOT_VERIFIED  cur=CURRENT_SOURCE_HASH_VERIFIED      line 2 MISMATCH: DIGEST_IS_NOT_THIS_PATH_AT_THE_FREEZE_COMMIT | G1-G6=111011
+P22  exp=0 act=0 true  hist=HISTORICAL_SOURCE_HASH_NOT_VERIFIED  cur=CURRENT_SOURCE_HASH_VERIFIED      line 2 MISMATCH: NO_DECLARED_SOURCE_TREE | G1-G6=111011
+P23  exp=0 act=0 true  hist=HISTORICAL_SOURCE_HASH_NOT_VERIFIED  cur=CURRENT_SOURCE_HASH_VERIFIED      line 2 MISMATCH: DECLARED_SOURCE_TREE_IS_NOT_THE_TREE_AT_THE_FREEZE_COMMIT | G1-G6=111011
+P24  exp=0 act=0 true  hist=HISTORICAL_SOURCE_HASH_NOT_VERIFIED  cur=CURRENT_SOURCE_HASH_VERIFIED      line 2 MISMATCH: HASH_FILE_NOT_COMMITTED_UNMODIFIED_AT_HEAD | DUPLICATE_PATHS: EVIDENCE.json | G1-G6=111011
+P25  exp=0 act=0 true  hist=NO_HISTORICAL_SOURCE_LINES           cur=CURRENT_SOURCE_HASH_NOT_VERIFIED  CURRENT: SOURCE_MANIFEST_DIFFERS_FROM_HEAD; SOURCE_MANIFEST_ROWS_DISAGREE_WITH_HEAD; SOURCE_MANIFEST_TREE_DISAGREES_WITH_HEAD | G1-G6=111110
+P26  exp=0 act=0 true  hist=NO_HISTORICAL_SOURCE_LINES           cur=CURRENT_SOURCE_HASH_NOT_VERIFIED  CURRENT: NOT_IN_HEAD: architecture/extra_probe.m; SOURCE_MANIFEST_DIFFERS_FROM_HEAD; SOURCE_MANIFEST_ROWS_DISAGREE_WITH_HEAD; SOURCE_MANIFEST_TREE_DISAGREES_WITH_HEAD | G1-G6=111110
+P27  exp=0 act=0 true  hist=NO_HISTORICAL_SOURCE_LINES           cur=CURRENT_SOURCE_HASH_NOT_VERIFIED  CURRENT: MISSING_IN_WORKING_TREE: architecture/+olh/+move/limit.m | G1-G6=111110
+P28  exp=0 act=NaN false hist=                                     cur=                                  HARNESS ERROR: skip-worktree did not hide the edit from git status
+P29  exp=0 act=0 true  hist=NO_HISTORICAL_SOURCE_LINES           cur=CURRENT_SOURCE_HASH_NOT_VERIFIED  CURRENT: PROVENANCE_MD_SOURCE_TREE_DISAGREES_WITH_HEAD | G1-G6=111110
+P30  exp=0 act=0 true  hist=NO_HISTORICAL_SOURCE_LINES           cur=CURRENT_SOURCE_HASH_VERIFIED      MALFORMED line 2: names production source through a non-canonical path | G1-G6=111011
+                          repo: '/Users/piotrek/Programming/topOpt4freqMax-migration-253069'
+                          head: '9b30ec45b038fb36e7cf20d57679b71cfd099fb3'
+                         clone: '/private/var/folders/6b/jnh3zrqx6rb4k17mvvy0wb6m0000gn/T/tp1c4cc130_f790_4e11_8f83_35df10b4a9c7_gateprobe'
+    repoTrackedStatusUnchanged: 1
+             repoHeadUnchanged: 1
+                       nProbes: 31
+                   nAsExpected: 30
+                          gate: '/Users/piotrek/Programming/topOpt4freqMax-migration-253069/analysis/OlhoffCurrent/olhoffcurrent_finalization_gate.m'
+

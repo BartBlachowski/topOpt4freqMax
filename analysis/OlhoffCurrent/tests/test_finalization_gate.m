@@ -12,10 +12,12 @@ function nFail = test_finalization_gate()
 %   TEST E  no FINAL_SHA256.txt                            -> FAIL
 %   TEST F  FINAL_SHA256.txt gone stale (one digest wrong) -> FAIL
 %   TEST G  FINAL_SHA256.txt names an absent .mat          -> FAIL
-%   TEST J  pinned production source superseded by a promotion:
-%           historical digest -> PASS; fabricated digest -> FAIL;
-%           historical digest of a non-source file -> FAIL
+%   TEST J  historical production source vs current source: the preregistered
+%           adversarial probes P0-P38 (gate_provenance_probes) in a throwaway
+%           committed clone -- every probe exactly as expected
 %   TEST H  the three compliant real studies               -> PASS
+%   TEST H2 the seven legitimate superseded lines of two_branch_controller_validation
+%           verify at their freeze commit, separately from current source
 %   TEST I  the known-deficient legacy set has not GROWN   -> ledger check
 %
 %   Scientifically inert: nothing here touches the optimizer, a configuration or
@@ -90,36 +92,22 @@ nFail = nFail + chk('G  names an absent .mat                    -> FAIL', ...
     local_ok(study, repo), false);
 local_write(fs, hbak);
 
-% ---- J: pinned PRODUCTION SOURCE across a promotion -----------------------
-% A study that hashed a production source file records which code it ran.  After
-% a promotion that line is accepted ONLY if its digest is that file's content in
-% a commit reachable from HEAD; a fabricated digest, or a historical digest of a
-% NON-source file, still fails.
-src = 'analysis/OlhoffCurrent/+impl/architecture/olhoffSolve.m';
-nonSrc = 'analysis/OlhoffCurrent/README.md';
-hOld = local_firstCommitDigest(repo, src);
-hNonOld = local_firstCommitDigest(repo, nonSrc);
-curSrc = olhoffcurrent_sha256_file(fullfile(repo, src));
-curNon = olhoffcurrent_sha256_file(fullfile(repo, nonSrc));
-if ~isempty(hOld) && ~strcmp(hOld, curSrc)
-    local_write(fs, [hbak sprintf('\n%s  %s\n', hOld, src)]);
-    stJ = olhoffcurrent_finalization_gate(study, 'Verbose', false, 'RepoRoot', repo);
-    nFail = nFail + chk('J1 historical production-source pin        -> PASS (superseded)', ...
-        stJ.ok && numel(stJ.supersededSource) == 1, true);
-    local_write(fs, [hbak sprintf('\n%s  %s\n', repmat('c',1,64), src)]);
-    nFail = nFail + chk('J2 fabricated production-source digest     -> FAIL', ...
-        local_ok(study, repo), false);
-else
-    fprintf('  [SKIP] J1/J2: %s has no superseded historical content in this history\n', src);
+% ---- J: historical production source vs current source (hardened rule) ------
+% A study that hashed production source records which code it ran; a promotion
+% replaces that code.  The full preregistered adversarial suite
+% (diagnostics/provenance_gate_hardening/PREREGISTRATION.md section 4) runs in a
+% throwaway COMMITTED clone of this repository's HEAD: legitimate superseded lines
+% pass; fabricated, duplicated, empty-stream, wrong-path, wrong-commit, malformed
+% and shadowed lines fail; a dirty +impl fails even with a regenerated manifest.
+[TJ, metaJ] = gate_provenance_probes(repo);
+for i = 1:numel(TJ)
+    nFail = nFail + chk(sprintf('J  %-4s %-66s -> %s', TJ(i).probe, ...
+        TJ(i).desc(1:min(66, end)), local_pf(TJ(i).expected)), ...
+        isequal(TJ(i).actual, TJ(i).expected), true);
 end
-if ~isempty(hNonOld) && ~strcmp(hNonOld, curNon)
-    local_write(fs, [hbak sprintf('\n%s  %s\n', hNonOld, nonSrc)]);
-    nFail = nFail + chk('J3 historical digest of a NON-source file   -> FAIL', ...
-        local_ok(study, repo), false);
-else
-    fprintf('  [SKIP] J3: %s unchanged since its first commit\n', nonSrc);
-end
-local_write(fs, hbak);
+nFail = nFail + chk('J  all 39 probes ran (P0-P38)', numel(TJ) == 39, true);
+nFail = nFail + chk('J  probe suite left this repository untouched', ...
+    metaJ.repoTrackedStatusUnchanged && metaJ.repoHeadUnchanged, true);
 
 % ---- H: the real compliant studies -------------------------------------
 DIAG = fullfile(root, 'diagnostics');
@@ -127,6 +115,28 @@ for s = {'move_activity_400', 'beta_transition_mechanism', 'two_branch_controlle
     nFail = nFail + chk(sprintf('H  real compliant study %-28s -> PASS', s{1}), ...
         local_ok(fullfile(DIAG, s{1}), repo), true);
 end
+
+% ---- H2: the seven legitimate superseded lines, exactly as recorded ----------
+% two_branch_controller_validation froze its FINAL_SHA256.txt at bba45e7 with the
+% +impl tree it declares (edbfe47e); seven production-source lines were later
+% superseded by the 253069 promotion and last changed in 1438aa3.
+stR = olhoffcurrent_finalization_gate(fullfile(DIAG, 'two_branch_controller_validation'), ...
+    'Verbose', false, 'RepoRoot', repo);
+hv = stR.sourceLines(strcmp({stR.sourceLines.verdict}, 'HISTORICAL_VERIFIED'));
+want7 = strcat('analysis/OlhoffCurrent/', {'SOURCE_MANIFEST.json', '+impl/architecture/olhoffSolve.m', ...
+    '+impl/architecture/+olh/+move/limit.m', '+impl/architecture/+olh/+config/schema.m', ...
+    '+impl/architecture/+olh/+config/validate.m', '+impl/architecture/+olh/+config/toLegacy.m', ...
+    '+impl/architecture/+olh/+config/fromLegacy.m'});
+nFail = nFail + chk('H2 7 superseded lines HISTORICAL_VERIFIED: same paths, freeze bba45e7, source 1438aa3', ...
+    stR.ok && numel(hv) == 7 && isempty(setxor({hv.path}, want7)) && ...
+    all(strcmp({hv.freezeCommit}, 'bba45e72ea18eca7615315fcc543572d42a436bc')) && ...
+    all(strcmp({hv.sourceCommit}, '1438aa3f4bd934f5b588587ef65f4f2ca35bac1c')) && ...
+    strcmp(stR.historicalSource.declaredTree, 'edbfe47eb32109a2fb017f6f13d5327f2c240357caa96630064ffcf37ee152cb') && ...
+    strcmp(stR.historicalSource.freezeTree, stR.historicalSource.declaredTree), true);
+nFail = nFail + chk('H2 historical and current statuses reported separately, both VERIFIED', ...
+    strcmp(stR.historicalSource.status, 'HISTORICAL_SOURCE_HASH_VERIFIED') && ...
+    strcmp(stR.currentSource.status, 'CURRENT_SOURCE_HASH_VERIFIED') && ...
+    ~strcmp(stR.historicalSource.freezeTree, stR.currentSource.treeHash), true);
 
 % ---- I: the known-deficient legacy set must not GROW -------------------
 % History is NOT rewritten.  These five studies predate EVIDENCE_POLICY.md and
@@ -175,16 +185,6 @@ for i = 1:numel(files)
     lines{end+1} = sprintf('%s  %s', olhoffcurrent_sha256_file(files{i}), [b e]); %#ok<AGROW>
 end
 local_write(fullfile(study,'FINAL_SHA256.txt'), strjoin(unique(lines), newline));
-end
-
-function h = local_firstCommitDigest(repo, p)
-%LOCAL_FIRSTCOMMITDIGEST  SHA-256 of p's content in the first commit that added it.
-h = '';
-[st, out] = system(sprintf('git --no-pager -C "%s" log --reverse --format=%%H HEAD -- "%s" 2>/dev/null', repo, p));
-if st ~= 0 || isempty(strtrim(out)); return; end
-c = strtok(strtrim(out));
-[st2, o2] = system(sprintf('git --no-pager -C "%s" show "%s:%s" 2>/dev/null | shasum -a 256', repo, c, p));
-if st2 == 0; h = strtok(strtrim(o2)); end
 end
 
 function s = local_join(c)

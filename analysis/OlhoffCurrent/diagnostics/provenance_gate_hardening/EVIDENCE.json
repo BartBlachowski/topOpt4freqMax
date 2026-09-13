@@ -1,0 +1,51 @@
+{
+  "schema": "olhoff_current_evidence/1",
+  "study": "provenance_gate_hardening",
+  "generated": "2026-09-13T22:21:33+02:00",
+  "evidenceRoot": "analysis/OlhoffCurrent/diagnostics/provenance_gate_hardening/evidence",
+  "implementation": "analysis/OlhoffCurrent",
+  "sourceTree": "4ba9a3ae10881344a0e60f2b8a8976c5ec9ceccf966bc2a3da4f37fb5aebffbf",
+  "matlab": "25.2.0.2998904 (R2025b)",
+  "preregistration_sha256": "de82b1a02e6f1907d11a438b52512ae849ffc97210164cdb3a7376bdee939833",
+  "migration_commit": "9b30ec45b038fb36e7cf20d57679b71cfd099fb3",
+  "upstream_commit": "253069262407885a8b759a9e721c4f0a7d3a397d",
+  "no_scientific_run": true,
+  "artifacts": [
+    {
+      "path": "discrimination.json",
+      "class": "required",
+      "description": "hardening audit evidence (probe table / suite results / real-study verdicts)",
+      "bytes": 31778,
+      "sha256": "bc9c356388fcfc5025bfd6730b3ed84d939ccf6c4c8a3aa95496dfbcb1e23e44",
+      "present": true,
+      "format": "JSON"
+    },
+    {
+      "path": "probes.json",
+      "class": "required",
+      "description": "hardening audit evidence (probe table / suite results / real-study verdicts)",
+      "bytes": 17387,
+      "sha256": "c030570dd0e5271195f288394c0846c96dff621184a08d0c6d832f9247ad31a6",
+      "present": true,
+      "format": "JSON"
+    },
+    {
+      "path": "real.json",
+      "class": "required",
+      "description": "hardening audit evidence (probe table / suite results / real-study verdicts)",
+      "bytes": 9394,
+      "sha256": "f2e028cb2ddf76dd14478bbc6f35c72d2f41d7b518426bbca5f358a1389d6a87",
+      "present": true,
+      "format": "JSON"
+    },
+    {
+      "path": "tests.json",
+      "class": "required",
+      "description": "hardening audit evidence (probe table / suite results / real-study verdicts)",
+      "bytes": 890,
+      "sha256": "26e8c1d704c19c749a76de7bf930e94cbce78c06b299b3cd5ac192669ba4e065",
+      "present": true,
+      "format": "JSON"
+    }
+  ]
+}

@@ -18,10 +18,20 @@
     "archive_sha256": "f911240340cab69b9806f98f9413d9038649fde5e14adf3bbe4d57f3ddb0dbeb",
     "dirty_state": "The upstream working tree (checked out: repro/natural-convergence @ 6b08708) carried one uncommitted modification, repro/PLAN_OLHOFFCURRENT_UPDATE.md (the uncommitted section 7). It was not read by the promotion; only committed blobs of 253069 were copied.",
     "acceptance_evidence": [
-      "upstream repro/audits/upstream_olhoffcurrent_capabilities (CLEAN_BASE_FROM_6B087085_PASS, SOURCE_DEFAULT_NONINTERFERENCE_PASS, STAGE_EXHAUSTION_CAPABILITY_PASS, TOUTER_TELEMETRY_PASS, SWEEP_EVIDENCE_UNCHANGED_PASS, UPSTREAM_CAPABILITY_PROMOTION_READY)",
-      "analysis/OlhoffCurrent/diagnostics/scientific_delta_olhoff_migration (OLHOFFCURRENT_MIGRATION_READY_WITH_NAMED_FORMULATION_SPLIT; untracked at 013cc48)",
-      "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration (this promotion: 160x20 gates)"
-    ]
+      "upstream Olhoff@253069262407885a8b759a9e721c4f0a7d3a397d:repro/audits/upstream_olhoffcurrent_capabilities (CLEAN_BASE_FROM_6B087085_PASS, SOURCE_DEFAULT_NONINTERFERENCE_PASS, STAGE_EXHAUSTION_CAPABILITY_PASS, TOUTER_TELEMETRY_PASS, SWEEP_EVIDENCE_UNCHANGED_PASS, UPSTREAM_CAPABILITY_PROMOTION_READY)",
+      "upstream Olhoff@6b0870850d7407a0f2fc31dbf0d0f318c2e5f2f7:repro/results/S160x20..S800x100 and SWEEP_R06.md (Pedersen/adaptive-box nine-mesh R = 0.06 sweep)",
+      "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration (this promotion: 160x20 gates; production decision in HARNESS_UPDATE.md; committed)",
+      "analysis/OlhoffCurrent/diagnostics/provenance_gate_hardening (finalization-gate provenance repair; committed)"
+    ],
+    "supplementary_local_evidence_not_required": {
+      "paths": [
+        "analysis/OlhoffCurrent/diagnostics/scientific_delta_olhoff_migration (OLHOFFCURRENT_MIGRATION_READY_WITH_NAMED_FORMULATION_SPLIT)",
+        "analysis/OlhoffCurrent/diagnostics/nine_mesh_campaign_audit (TERMINATION_CROSS_MESH_NOT_CREDIBLE)",
+        "analysis/OlhoffCurrent/diagnostics/three_rung_canary_preflight (historical three-rung canaries)"
+      ],
+      "status": "untracked in the primary checkout at 013cc48; absent from a clean clone",
+      "policy": "Analyses that informed decisions. No claim needed to reproduce or validate this promotion depends on them: identity, byte copy, 160x20 reproduction and the production decision are carried by the committed acceptance_evidence above. Recorded 2026-09-13 by diagnostics/provenance_gate_hardening; no scientific statement changed."
+    }
   },
   "main_repository": {
     "path": "/Users/piotrek/Programming/topOpt4freqMax",
@@ -164,7 +174,7 @@
         "720x90": "a338c98d5c2aa77c65d754bc03684d66b53ea5b2ccddce7b8ee56d4c9992a35c",
         "800x100": "a37164f0895a0a2abb65f44e12ce05c4517088af638a7ca5a7322a094f39416a"
       },
-      "rationale": "Per diagnostics/scientific_delta_olhoff_migration: the Pedersen/adaptive-box formulation is a distinct, scientifically defensible reconstruction whose committed nine-mesh R = 0.06 sweep terminates cleanly without localized-mode spikes; its success is primarily formulation stability, not a better KKT point; the historical eq.(4b) formulation remains reproducible under its own name. Per diagnostics/nine_mesh_campaign_audit the historical preset's cross-mesh termination was not credible. Not chosen for better-looking topology.",
+      "rationale": "Decision recorded in the committed diagnostics/upstream_253069_migration/HARNESS_UPDATE.md; the sweep it rests on is committed upstream (Olhoff@6b0870850d7407a0f2fc31dbf0d0f318c2e5f2f7 repro/results, SWEEP_R06.md). The Pedersen/adaptive-box formulation is a distinct, scientifically defensible reconstruction whose committed nine-mesh R = 0.06 sweep terminates cleanly without localized-mode spikes; its success is primarily formulation stability, not a better KKT point; the historical eq.(4b) formulation remains reproducible under its own name. The historical preset's cross-mesh termination was not credible (TERMINATION_CROSS_MESH_NOT_CREDIBLE). Not chosen for better-looking topology. Supporting local analyses scientific_delta_olhoff_migration and nine_mesh_campaign_audit are supplementary and uncommitted (source.supplementary_local_evidence_not_required).",
       "authorization": "Migration gate only (160x20). A new nine-mesh campaign requires separate owner authorization.",
       "evidence": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration"
     }

@@ -1,0 +1,12 @@
+probes exit=0 secs=34 end=21:50:26
+tests exit=0 secs=95 end=21:52:36
+real exit=0 secs=50 end=21:53:36
+discrimination exit=0 secs=58 end=22:08:51
+# first repair commit adf86a3 runs (31 probes) superseded by the ADDENDUM_1 re-runs below; their results are summarised in REPORT.md §7
+probes exit=0 secs=42 end=22:10:18
+tests exit=0 secs=104 end=22:12:02
+real exit=0 secs=51 end=22:12:53
+tests exit=0 secs=103 end=22:15:06
+real exit=0 secs=51 end=22:16:06
+tests exit=0 secs=104 end=22:18:27
+real exit=0 secs=50 end=22:19:26

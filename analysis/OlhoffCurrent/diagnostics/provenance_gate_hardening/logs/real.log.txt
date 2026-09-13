@@ -1,0 +1,57 @@
+
+========================================================================
+FINALIZATION GATE  /Users/piotrek/Programming/topOpt4freqMax-migration-253069/analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation
+========================================================================
+  [PASS] G1  declares raw evidence (EVIDENCE.json)
+  [PASS] G2  required declared artifacts present + hash-valid
+  [PASS] G3  FINAL_SHA256.txt present
+  [PASS] G4  every FINAL_SHA256.txt line verifies on its own
+  [PASS] G5  no .mat named by its manifests is absent
+  [PASS] G6  current production source = committed HEAD
+  HISTORICAL SOURCE: HISTORICAL_SOURCE_HASH_VERIFIED
+        line 103 HISTORICAL_VERIFIED  analysis/OlhoffCurrent/SOURCE_MANIFEST.json  digest = blob at freeze commit bba45e72ea18 (path last changed in 1438aa3f4bd9)
+        line 105 HISTORICAL_VERIFIED  analysis/OlhoffCurrent/+impl/architecture/+olh/+move/limit.m  digest = blob at freeze commit bba45e72ea18 (path last changed in 1438aa3f4bd9)
+        line 106 HISTORICAL_VERIFIED  analysis/OlhoffCurrent/+impl/architecture/olhoffSolve.m  digest = blob at freeze commit bba45e72ea18 (path last changed in 1438aa3f4bd9)
+        line 107 HISTORICAL_VERIFIED  analysis/OlhoffCurrent/+impl/architecture/+olh/+config/schema.m  digest = blob at freeze commit bba45e72ea18 (path last changed in 1438aa3f4bd9)
+        line 108 HISTORICAL_VERIFIED  analysis/OlhoffCurrent/+impl/architecture/+olh/+config/validate.m  digest = blob at freeze commit bba45e72ea18 (path last changed in 1438aa3f4bd9)
+        line 109 HISTORICAL_VERIFIED  analysis/OlhoffCurrent/+impl/architecture/+olh/+config/toLegacy.m  digest = blob at freeze commit bba45e72ea18 (path last changed in 1438aa3f4bd9)
+        line 110 HISTORICAL_VERIFIED  analysis/OlhoffCurrent/+impl/architecture/+olh/+config/fromLegacy.m  digest = blob at freeze commit bba45e72ea18 (path last changed in 1438aa3f4bd9)
+  CURRENT SOURCE:    CURRENT_SOURCE_HASH_VERIFIED (HEAD adf86a3f8126, 79 files, tree 4ba9a3ae1088)
+  RESULT: PASS
+
+STUDY admission_rule                                ok=0 G=001111 NO_HISTORICAL_SOURCE_LINES CURRENT_SOURCE_HASH_VERIFIED
+STUDY beta_transition_mechanism                     ok=1 G=111111 NO_HISTORICAL_SOURCE_LINES CURRENT_SOURCE_HASH_VERIFIED
+STUDY controller_architecture_offline               ok=0 G=000011 NO_HISTORICAL_SOURCE_LINES CURRENT_SOURCE_HASH_VERIFIED
+STUDY dynamical_regime                              ok=0 G=001001 NO_HISTORICAL_SOURCE_LINES CURRENT_SOURCE_HASH_VERIFIED
+STUDY fixedmove_400_dynamics                        ok=0 G=001001 NO_HISTORICAL_SOURCE_LINES CURRENT_SOURCE_HASH_VERIFIED
+STUDY move_activity_400                             ok=0 G=101011 NO_HISTORICAL_SOURCE_LINES CURRENT_SOURCE_HASH_VERIFIED
+STUDY move_activity_offline                         ok=0 G=001111 NO_HISTORICAL_SOURCE_LINES CURRENT_SOURCE_HASH_VERIFIED
+STUDY move_ladder_necessity                         ok=0 G=111011 NO_HISTORICAL_SOURCE_LINES CURRENT_SOURCE_HASH_VERIFIED
+STUDY move_stop                                     ok=0 G=001001 NO_HISTORICAL_SOURCE_LINES CURRENT_SOURCE_HASH_VERIFIED
+STUDY move_transition                               ok=0 G=001111 NO_HISTORICAL_SOURCE_LINES CURRENT_SOURCE_HASH_VERIFIED
+STUDY provenance_gate_hardening                     ok=1 G=111111 NO_HISTORICAL_SOURCE_LINES CURRENT_SOURCE_HASH_VERIFIED
+STUDY three_rung_architecture                       ok=0 G=101111 NO_HISTORICAL_SOURCE_LINES CURRENT_SOURCE_HASH_VERIFIED
+STUDY three_rung_promotion_closure                  ok=0 G=111001 NO_HISTORICAL_SOURCE_LINES CURRENT_SOURCE_HASH_VERIFIED
+STUDY three_rung_promotion_validation               ok=1 G=111111 NO_HISTORICAL_SOURCE_LINES CURRENT_SOURCE_HASH_VERIFIED
+STUDY three_rung_promotion_validation_retry1        ok=0 G=101001 NO_HISTORICAL_SOURCE_LINES CURRENT_SOURCE_HASH_VERIFIED
+STUDY three_rung_resolution_240                     ok=1 G=111111 NO_HISTORICAL_SOURCE_LINES CURRENT_SOURCE_HASH_VERIFIED
+STUDY topology_maturity_transition                  ok=0 G=001001 NO_HISTORICAL_SOURCE_LINES CURRENT_SOURCE_HASH_VERIFIED
+STUDY two_branch_controller_validation              ok=1 G=111111 HISTORICAL_SOURCE_HASH_VERIFIED CURRENT_SOURCE_HASH_VERIFIED
+STUDY two_branch_maturity_240                       ok=0 G=001001 NO_HISTORICAL_SOURCE_LINES CURRENT_SOURCE_HASH_VERIFIED
+STUDY two_rung_architecture                         ok=0 G=101111 NO_HISTORICAL_SOURCE_LINES CURRENT_SOURCE_HASH_VERIFIED
+STUDY upstream_253069_migration                     ok=1 G=111111 NO_HISTORICAL_SOURCE_LINES CURRENT_SOURCE_HASH_VERIFIED
+
+ans = 
+
+  struct with fields:
+
+       kind: 'real'
+       repo: '/Users/piotrek/Programming/topOpt4freqMax-migration-253069'
+       head: 'adf86a3f8126e2099436b068ed3bd8a1921a2405'
+       when: '13-Sep-2026 22:18:40'
+     matlab: '25.2.0.2998904 (R2025b)'
+       gate: '/Users/piotrek/Programming/topOpt4freqMax-migration-253069/analysis/OlhoffCurrent/olhoffcurrent_finalization_gate.m'
+         R1: [1×1 struct]
+         R2: [1×21 struct]
+    failing: {1×15 cell}
+

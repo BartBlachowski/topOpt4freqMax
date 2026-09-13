@@ -73,15 +73,29 @@ asks *"is the scientific evidence still on disk?"*. The gate lives outside
    is needed.
 
 7. **Pinned production source survives a promotion only as history, never as a
-   pass-through.** A study's `FINAL_SHA256.txt` may hash production source
-   (`+impl/**`, `SOURCE_MANIFEST.json`) to record which code it ran. After a
-   recorded promotion such a line is accepted by the finalization gate only as
-   `SUPERSEDED_PRODUCTION_SOURCE`: its digest must equal that path's content in a
-   commit reachable from HEAD, and the current `+impl` must verify against its
-   manifest. A fabricated digest, or a historical digest of any non-source file,
-   still fails. (Added 2026-09-13 with the upstream `253069` promotion, which
-   superseded seven such lines in `two_branch_controller_validation`; that
-   study's hash file was not edited.)
+   pass-through, and history never stands in for the current source.** A study's
+   `FINAL_SHA256.txt` may hash production source (`+impl/**`,
+   `SOURCE_MANIFEST.json`) to record which code it ran. The finalization gate
+   keeps two facts apart:
+   - `HISTORICAL_SOURCE_HASH_VERIFIED`, per line. A superseded line passes only
+     if the hash file and `EVIDENCE.json` are committed and unmodified; the one
+     admissible commit is the study's freeze commit (the last commit that
+     changed its `FINAL_SHA256.txt`); the declared `sourceTree` /
+     `impl_tree_sha256` is the `+impl` tree at that commit; and
+     `<freeze>:<path>` is proved to exist as a blob before its SHA-256 is
+     compared with **that line's** digest. Every line validates alone,
+     duplicates included. Source lines resolve only at `<repo>/<path>`, must be
+     canonical, and malformed source lines fail.
+   - `CURRENT_SOURCE_HASH_VERIFIED` (gate G6, every study). Every `+impl` blob of
+     HEAD equals the working tree byte for byte, with no extra source and no
+     symlink. `SOURCE_MANIFEST.json` equals its HEAD blob and HEAD's rows and
+     tree. `PROVENANCE.md`'s source-tree row is that tree. The manifest is a
+     consistency check, never the root of trust.
+
+   (Added 2026-09-13 with the upstream `253069` promotion, which superseded seven
+   such lines in `two_branch_controller_validation`, whose hash file was not
+   edited. Hardened the same day by `diagnostics/provenance_gate_hardening` after
+   the first rule was shown not to be fail-closed.)
 
 ## Required evidence for a move/activity-class study
 

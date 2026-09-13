@@ -1,0 +1,274 @@
+{
+  "kind": "real",
+  "repo": "/Users/piotrek/Programming/topOpt4freqMax-migration-253069",
+  "head": "adf86a3f8126e2099436b068ed3bd8a1921a2405",
+  "when": "13-Sep-2026 22:18:40",
+  "matlab": "25.2.0.2998904 (R2025b)",
+  "gate": "/Users/piotrek/Programming/topOpt4freqMax-migration-253069/analysis/OlhoffCurrent/olhoffcurrent_finalization_gate.m",
+  "R1": {
+    "ok": true,
+    "gates": {
+      "G1": true,
+      "G2": true,
+      "G3": true,
+      "G4": true,
+      "G5": true,
+      "G6": true
+    },
+    "historicalSource": {
+      "status": "HISTORICAL_SOURCE_HASH_VERIFIED",
+      "freezeCommit": "bba45e72ea18eca7615315fcc543572d42a436bc",
+      "declaredTree": "edbfe47eb32109a2fb017f6f13d5327f2c240357caa96630064ffcf37ee152cb",
+      "freezeTree": "edbfe47eb32109a2fb017f6f13d5327f2c240357caa96630064ffcf37ee152cb",
+      "reason": ""
+    },
+    "currentSource": {
+      "status": "CURRENT_SOURCE_HASH_VERIFIED",
+      "ok": true,
+      "head": "adf86a3f8126e2099436b068ed3bd8a1921a2405",
+      "treeHash": "4ba9a3ae10881344a0e60f2b8a8976c5ec9ceccf966bc2a3da4f37fb5aebffbf",
+      "nFiles": 79
+    },
+    "currentReasons": [],
+    "sourceLines": [
+      {
+        "lineNo": 103,
+        "path": "analysis/OlhoffCurrent/SOURCE_MANIFEST.json",
+        "digest": "431e7b3084507cd8b53862847b828cfd9f8948172e349bbae0c72749e8134aeb",
+        "verdict": "HISTORICAL_VERIFIED",
+        "freezeCommit": "bba45e72ea18eca7615315fcc543572d42a436bc",
+        "sourceCommit": "1438aa3f4bd934f5b588587ef65f4f2ca35bac1c",
+        "reason": "digest = blob at freeze commit bba45e72ea18 (path last changed in 1438aa3f4bd9)"
+      },
+      {
+        "lineNo": 104,
+        "path": "analysis/OlhoffCurrent/+impl/architecture/+olh/+move/exhaustion.m",
+        "digest": "17b37a384b1aa5d987d9c861e16071d1140af130f92406ccc11cec4518bcae0c",
+        "verdict": "CURRENT_MATCH",
+        "freezeCommit": "",
+        "sourceCommit": "",
+        "reason": ""
+      },
+      {
+        "lineNo": 105,
+        "path": "analysis/OlhoffCurrent/+impl/architecture/+olh/+move/limit.m",
+        "digest": "61fa923d430121ead764a229b4f48dfd77617540b4ab6db883ccd9d5904b1c1e",
+        "verdict": "HISTORICAL_VERIFIED",
+        "freezeCommit": "bba45e72ea18eca7615315fcc543572d42a436bc",
+        "sourceCommit": "1438aa3f4bd934f5b588587ef65f4f2ca35bac1c",
+        "reason": "digest = blob at freeze commit bba45e72ea18 (path last changed in 1438aa3f4bd9)"
+      },
+      {
+        "lineNo": 106,
+        "path": "analysis/OlhoffCurrent/+impl/architecture/olhoffSolve.m",
+        "digest": "1e5a114cbf91717e01e5592e86203f401ed5cdb3e5f5ce9a727b8163cdf2fba3",
+        "verdict": "HISTORICAL_VERIFIED",
+        "freezeCommit": "bba45e72ea18eca7615315fcc543572d42a436bc",
+        "sourceCommit": "1438aa3f4bd934f5b588587ef65f4f2ca35bac1c",
+        "reason": "digest = blob at freeze commit bba45e72ea18 (path last changed in 1438aa3f4bd9)"
+      },
+      {
+        "lineNo": 107,
+        "path": "analysis/OlhoffCurrent/+impl/architecture/+olh/+config/schema.m",
+        "digest": "d7a808995d9a34810442ddf17f15de980aa1e62efe90b3563f3e474ae5f5cf67",
+        "verdict": "HISTORICAL_VERIFIED",
+        "freezeCommit": "bba45e72ea18eca7615315fcc543572d42a436bc",
+        "sourceCommit": "1438aa3f4bd934f5b588587ef65f4f2ca35bac1c",
+        "reason": "digest = blob at freeze commit bba45e72ea18 (path last changed in 1438aa3f4bd9)"
+      },
+      {
+        "lineNo": 108,
+        "path": "analysis/OlhoffCurrent/+impl/architecture/+olh/+config/validate.m",
+        "digest": "30e495ea8bcc25193de2c64f04984549870e213f9f9df871e52cc4c906cab141",
+        "verdict": "HISTORICAL_VERIFIED",
+        "freezeCommit": "bba45e72ea18eca7615315fcc543572d42a436bc",
+        "sourceCommit": "1438aa3f4bd934f5b588587ef65f4f2ca35bac1c",
+        "reason": "digest = blob at freeze commit bba45e72ea18 (path last changed in 1438aa3f4bd9)"
+      },
+      {
+        "lineNo": 109,
+        "path": "analysis/OlhoffCurrent/+impl/architecture/+olh/+config/toLegacy.m",
+        "digest": "685caacbd3db2bd19e14cc4fe3be0098b7bba423fe2b4a91f0cb83a3e4a21a04",
+        "verdict": "HISTORICAL_VERIFIED",
+        "freezeCommit": "bba45e72ea18eca7615315fcc543572d42a436bc",
+        "sourceCommit": "1438aa3f4bd934f5b588587ef65f4f2ca35bac1c",
+        "reason": "digest = blob at freeze commit bba45e72ea18 (path last changed in 1438aa3f4bd9)"
+      },
+      {
+        "lineNo": 110,
+        "path": "analysis/OlhoffCurrent/+impl/architecture/+olh/+config/fromLegacy.m",
+        "digest": "7d0bad832c906c5304acb2ebf84304739fe3531281a0e007aa395fd58ae96ff8",
+        "verdict": "HISTORICAL_VERIFIED",
+        "freezeCommit": "bba45e72ea18eca7615315fcc543572d42a436bc",
+        "sourceCommit": "1438aa3f4bd934f5b588587ef65f4f2ca35bac1c",
+        "reason": "digest = blob at freeze commit bba45e72ea18 (path last changed in 1438aa3f4bd9)"
+      }
+    ]
+  },
+  "R2": [
+    {
+      "name": "admission_rule",
+      "ok": false,
+      "G": "001111",
+      "historical": "NO_HISTORICAL_SOURCE_LINES",
+      "current": "CURRENT_SOURCE_HASH_VERIFIED"
+    },
+    {
+      "name": "beta_transition_mechanism",
+      "ok": true,
+      "G": "111111",
+      "historical": "NO_HISTORICAL_SOURCE_LINES",
+      "current": "CURRENT_SOURCE_HASH_VERIFIED"
+    },
+    {
+      "name": "controller_architecture_offline",
+      "ok": false,
+      "G": "000011",
+      "historical": "NO_HISTORICAL_SOURCE_LINES",
+      "current": "CURRENT_SOURCE_HASH_VERIFIED"
+    },
+    {
+      "name": "dynamical_regime",
+      "ok": false,
+      "G": "001001",
+      "historical": "NO_HISTORICAL_SOURCE_LINES",
+      "current": "CURRENT_SOURCE_HASH_VERIFIED"
+    },
+    {
+      "name": "fixedmove_400_dynamics",
+      "ok": false,
+      "G": "001001",
+      "historical": "NO_HISTORICAL_SOURCE_LINES",
+      "current": "CURRENT_SOURCE_HASH_VERIFIED"
+    },
+    {
+      "name": "move_activity_400",
+      "ok": false,
+      "G": "101011",
+      "historical": "NO_HISTORICAL_SOURCE_LINES",
+      "current": "CURRENT_SOURCE_HASH_VERIFIED"
+    },
+    {
+      "name": "move_activity_offline",
+      "ok": false,
+      "G": "001111",
+      "historical": "NO_HISTORICAL_SOURCE_LINES",
+      "current": "CURRENT_SOURCE_HASH_VERIFIED"
+    },
+    {
+      "name": "move_ladder_necessity",
+      "ok": false,
+      "G": "111011",
+      "historical": "NO_HISTORICAL_SOURCE_LINES",
+      "current": "CURRENT_SOURCE_HASH_VERIFIED"
+    },
+    {
+      "name": "move_stop",
+      "ok": false,
+      "G": "001001",
+      "historical": "NO_HISTORICAL_SOURCE_LINES",
+      "current": "CURRENT_SOURCE_HASH_VERIFIED"
+    },
+    {
+      "name": "move_transition",
+      "ok": false,
+      "G": "001111",
+      "historical": "NO_HISTORICAL_SOURCE_LINES",
+      "current": "CURRENT_SOURCE_HASH_VERIFIED"
+    },
+    {
+      "name": "provenance_gate_hardening",
+      "ok": true,
+      "G": "111111",
+      "historical": "NO_HISTORICAL_SOURCE_LINES",
+      "current": "CURRENT_SOURCE_HASH_VERIFIED"
+    },
+    {
+      "name": "three_rung_architecture",
+      "ok": false,
+      "G": "101111",
+      "historical": "NO_HISTORICAL_SOURCE_LINES",
+      "current": "CURRENT_SOURCE_HASH_VERIFIED"
+    },
+    {
+      "name": "three_rung_promotion_closure",
+      "ok": false,
+      "G": "111001",
+      "historical": "NO_HISTORICAL_SOURCE_LINES",
+      "current": "CURRENT_SOURCE_HASH_VERIFIED"
+    },
+    {
+      "name": "three_rung_promotion_validation",
+      "ok": true,
+      "G": "111111",
+      "historical": "NO_HISTORICAL_SOURCE_LINES",
+      "current": "CURRENT_SOURCE_HASH_VERIFIED"
+    },
+    {
+      "name": "three_rung_promotion_validation_retry1",
+      "ok": false,
+      "G": "101001",
+      "historical": "NO_HISTORICAL_SOURCE_LINES",
+      "current": "CURRENT_SOURCE_HASH_VERIFIED"
+    },
+    {
+      "name": "three_rung_resolution_240",
+      "ok": true,
+      "G": "111111",
+      "historical": "NO_HISTORICAL_SOURCE_LINES",
+      "current": "CURRENT_SOURCE_HASH_VERIFIED"
+    },
+    {
+      "name": "topology_maturity_transition",
+      "ok": false,
+      "G": "001001",
+      "historical": "NO_HISTORICAL_SOURCE_LINES",
+      "current": "CURRENT_SOURCE_HASH_VERIFIED"
+    },
+    {
+      "name": "two_branch_controller_validation",
+      "ok": true,
+      "G": "111111",
+      "historical": "HISTORICAL_SOURCE_HASH_VERIFIED",
+      "current": "CURRENT_SOURCE_HASH_VERIFIED"
+    },
+    {
+      "name": "two_branch_maturity_240",
+      "ok": false,
+      "G": "001001",
+      "historical": "NO_HISTORICAL_SOURCE_LINES",
+      "current": "CURRENT_SOURCE_HASH_VERIFIED"
+    },
+    {
+      "name": "two_rung_architecture",
+      "ok": false,
+      "G": "101111",
+      "historical": "NO_HISTORICAL_SOURCE_LINES",
+      "current": "CURRENT_SOURCE_HASH_VERIFIED"
+    },
+    {
+      "name": "upstream_253069_migration",
+      "ok": true,
+      "G": "111111",
+      "historical": "NO_HISTORICAL_SOURCE_LINES",
+      "current": "CURRENT_SOURCE_HASH_VERIFIED"
+    }
+  ],
+  "failing": [
+    "admission_rule",
+    "controller_architecture_offline",
+    "dynamical_regime",
+    "fixedmove_400_dynamics",
+    "move_activity_400",
+    "move_activity_offline",
+    "move_ladder_necessity",
+    "move_stop",
+    "move_transition",
+    "three_rung_architecture",
+    "three_rung_promotion_closure",
+    "three_rung_promotion_validation_retry1",
+    "topology_maturity_transition",
+    "two_branch_maturity_240",
+    "two_rung_architecture"
+  ]
+}

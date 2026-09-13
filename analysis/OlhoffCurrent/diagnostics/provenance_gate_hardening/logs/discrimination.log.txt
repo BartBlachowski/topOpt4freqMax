@@ -1,0 +1,93 @@
+  probe P0   expected=1 actual=1
+  probe P1   expected=1 actual=1
+  probe P2   expected=0 actual=0
+  probe P3   expected=0 actual=0
+  probe P4   expected=0 actual=0
+  probe P5   expected=0 actual=1
+  probe P6   expected=0 actual=0
+  probe P7   expected=0 actual=0
+  probe P8   expected=0 actual=1
+  probe P9   expected=0 actual=1
+  probe P10  expected=0 actual=1
+  probe P11  expected=1 actual=1
+  probe P12  expected=0 actual=1
+  probe P13  expected=0 actual=0
+  probe P14  expected=0 actual=1
+  probe P15  expected=0 actual=1
+  probe P16  expected=0 actual=0
+  probe P17  expected=0 actual=0
+  probe P18  expected=0 actual=0
+  probe P19  expected=1 actual=1
+  probe P20  expected=0 actual=0
+  probe P21  expected=0 actual=1
+  probe P22  expected=0 actual=1
+  probe P23  expected=0 actual=1
+  probe P24  expected=0 actual=1
+  probe P25  expected=0 actual=1
+  probe P26  expected=0 actual=1
+  probe P27  expected=0 actual=1
+  probe P28  expected=0 actual=1
+  probe P29  expected=0 actual=1
+  probe P30  expected=0 actual=1
+  probe P31  expected=0 actual=1
+  probe P32  expected=0 actual=1
+  probe P33  expected=0 actual=1
+  probe P34  expected=0 actual=0
+  probe P35  expected=0 actual=1
+  probe P36  expected=0 actual=1
+  probe P37  expected=0 actual=1
+  probe P38  expected=0 actual=1
+DISCRIMINATION 9b30ec4: 15/39 probes as expected by the REPAIRED rule
+  probe P0   expected=1 actual=1
+  probe P1   expected=1 actual=1
+  probe P2   expected=0 actual=0
+  probe P3   expected=0 actual=0
+  probe P4   expected=0 actual=0
+  probe P5   expected=0 actual=0
+  probe P6   expected=0 actual=0
+  probe P7   expected=0 actual=0
+  probe P8   expected=0 actual=0
+  probe P9   expected=0 actual=0
+  probe P10  expected=0 actual=0
+  probe P11  expected=1 actual=1
+  probe P12  expected=0 actual=0
+  probe P13  expected=0 actual=0
+  probe P14  expected=0 actual=0
+  probe P15  expected=0 actual=0
+  probe P16  expected=0 actual=0
+  probe P17  expected=0 actual=0
+  probe P18  expected=0 actual=0
+  probe P19  expected=1 actual=1
+  probe P20  expected=0 actual=0
+  probe P21  expected=0 actual=0
+  probe P22  expected=0 actual=0
+  probe P23  expected=0 actual=0
+  probe P24  expected=0 actual=0
+  probe P25  expected=0 actual=0
+  probe P26  expected=0 actual=0
+  probe P27  expected=0 actual=0
+  probe P28  expected=0 actual=0
+  probe P29  expected=0 actual=0
+  probe P30  expected=0 actual=0
+  probe P31  expected=0 actual=1
+  probe P32  expected=0 actual=1
+  probe P33  expected=0 actual=1
+  probe P34  expected=0 actual=0
+  probe P35  expected=0 actual=0
+  probe P36  expected=0 actual=1
+  probe P37  expected=0 actual=1
+  probe P38  expected=0 actual=1
+DISCRIMINATION adf86a3: 33/39 probes as expected by the REPAIRED rule
+
+ans = 
+
+  struct with fields:
+
+        kind: 'discrimination'
+        repo: '/Users/piotrek/Programming/topOpt4freqMax-migration-253069'
+        head: 'adf86a3f8126e2099436b068ed3bd8a1921a2405'
+        when: '13-Sep-2026 22:07:57'
+      matlab: '25.2.0.2998904 (R2025b)'
+        gate: '/Users/piotrek/Programming/topOpt4freqMax-migration-253069/analysis/OlhoffCurrent/olhoffcurrent_finalization_gate.m'
+    versions: [1×2 struct]
+
