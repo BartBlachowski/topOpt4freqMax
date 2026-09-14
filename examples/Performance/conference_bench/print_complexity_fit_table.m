@@ -39,9 +39,9 @@ if nargin >= 8 && ~isempty(csvPath)
     fprintf(fid, 'Method,C,exp,R2,NPoints\n');
     for m = 1:nMethods
         if isnan(expOut(m))
-            fprintf(fid, '%s,,,,%d\n', displayNames{m}, nValid(m));
+            fprintf(fid, '"%s",,,,%d\n', strrep(displayNames{m}, '"', '""'), nValid(m));
         else
-            fprintf(fid, '%s,%.6e,%.4f,%.4f,%d\n', displayNames{m}, C(m), expOut(m), R2(m), nValid(m));
+            fprintf(fid, '"%s",%.6e,%.4f,%.4f,%d\n', strrep(displayNames{m}, '"', '""'), C(m), expOut(m), R2(m), nValid(m));
         end
     end
     fclose(fid);

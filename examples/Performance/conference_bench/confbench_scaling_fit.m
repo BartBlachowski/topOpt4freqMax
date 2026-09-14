@@ -10,6 +10,9 @@ function scaling = confbench_scaling_fit(cfg, records)
 %
 %   See also CONFBENCH_EXPORT, CONFBENCH_CAVEATS.
 
+% Accept both JSON-decoded column records and driver-produced row records.
+records = records(:).';
+
 scaling = struct('fitted', false, 'reason', '', 'model', 'T(Ne) = C * Ne^p', ...
     'methods', struct('method', {}, 'C', {}, 'p', {}, 'R2', {}, 'n', {}, 'meshes', {}));
 
@@ -52,6 +55,22 @@ for i = 1:numel(keys)
 end
 scaling.fitted = true;
 scaling.caveat = confbench_caveats().scaling;
+
+% Stage-time fits support the complexity figures; keep wall-time fits above.
+scaling.stage_time = struct('quantity', 'time1 + time2', ...
+    'model', 'T_stage(Ne) = C * Ne^p', 'methods', scaling.methods([]));
+for i = 1:numel(keys)
+    sel = records(strcmp({records.method_key}, keys{i}));
+    ok = sel(logical([sel.ok]));
+    Ne = arrayfun(@(r) prod(r.mesh), ok).';
+    T = arrayfun(@(r) confbench_stage_time(r.times), ok).';
+    good = isfinite(Ne) & isfinite(T) & Ne > 0 & T > 0;
+    [C, p, R2, n] = local_powerFit(Ne, T);
+    meshes = arrayfun(@(r) sprintf('%dx%d', r.mesh(1), r.mesh(2)), ...
+        ok(good), 'UniformOutput', false);
+    scaling.stage_time.methods(end+1) = struct('method', sel(1).method, ...
+        'C', C, 'p', p, 'R2', R2, 'n', n, 'meshes', {meshes}); %#ok<AGROW>
+end
 
 % ---- per-outer-iteration cost, for methods whose records carry an outer count
 % (the Du-Olhoff reconstruction).  Same rows as the total-time fit.  The outer

@@ -12,7 +12,10 @@
 %
 %   The three methods are architecturally different and are NOT forced into one
 %   iteration count.  Total wall time is the common performance quantity; the
-%   counts and component times explain the architecture behind it.  See
+%   counts and component times explain the architecture behind it. The table
+%   reports Stage time = Time 1 + Time 2, Other, and Total wall time; Other
+%   includes setup and final eigenanalysis. No solver timer is changed by
+%   these derived columns. See
 %   conference_bench/confbench_timing_schema.m, written out as timing_schema.json.
 %
 %   Memory is deliberately absent.  Reliable, method-independent peak-memory

@@ -1,4 +1,4 @@
-function plot_table1_complexity(Ne, methodLabels, tTotal_all, complexity_C, complexity_exp, outDir, filePrefix, titleBase, fitMask)
+function plot_table1_complexity(Ne, methodLabels, tTotal_all, complexity_C, complexity_exp, outDir, filePrefix, titleBase, fitMask, timeLabel)
 % PLOT_TABLE1_COMPLEXITY  Plot measured Table 1 run times together with the
 % fitted power-law curves C * N_e^exp, both on log-log and linear axes.
 %
@@ -35,6 +35,8 @@ if nargin < 9 || isempty(fitMask)
     fitMask = true(size(tTotal_all));
 end
 
+if nargin < 10 || isempty(timeLabel); timeLabel = 'Total run time T (s)'; end
+
 colors  = [0.0000, 0.4470, 0.7410; ...
            0.8500, 0.3250, 0.0980; ...
            0.4660, 0.6740, 0.1880];
@@ -47,7 +49,7 @@ hold(ax1, 'on');
 plotSeries(ax1, Ne, tTotal_all, methodLabels, complexity_C, complexity_exp, colors, markers, fitMask);
 set(ax1, 'XScale', 'log', 'YScale', 'log');
 xlabel(ax1, 'Number of elements N_e', 'FontSize', 12);
-ylabel(ax1, 'Total run time T (s)', 'FontSize', 12);
+ylabel(ax1, timeLabel, 'FontSize', 12);
 title(ax1, [titleBase, '  (log-log)'], 'Interpreter', 'tex', 'FontSize', 12);
 grid(ax1, 'on');
 box(ax1, 'on');
@@ -68,7 +70,7 @@ ax2 = axes('Parent', fig2);
 hold(ax2, 'on');
 plotSeries(ax2, Ne, tTotal_all, methodLabels, complexity_C, complexity_exp, colors, markers, fitMask);
 xlabel(ax2, 'Number of elements N_e', 'FontSize', 12);
-ylabel(ax2, 'Total run time T (s)', 'FontSize', 12);
+ylabel(ax2, timeLabel, 'FontSize', 12);
 title(ax2, [titleBase, '  (linear)'], 'Interpreter', 'tex', 'FontSize', 12);
 grid(ax2, 'on');
 box(ax2, 'on');

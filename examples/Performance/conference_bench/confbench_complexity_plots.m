@@ -14,12 +14,9 @@ function plotFiles = confbench_complexity_plots(cfg, records, scaling)
 %   WHICH ROWS ARE FITTED.  Exactly the rows CONFBENCH_SCALING_FIT accepts:
 %   the ok runs.  A censored row (CAP_HIT) is measured data and is plotted, but
 %   it is a LOWER BOUND on the run time that method would have needed, so
-%   fitting through it biases the exponent downwards.  Such rows are drawn as
-%   hollow markers labelled "(excluded from fit)".  Fitting the same rows as
-%   confbench_scaling_fit is what keeps the exponent printed on these figures
-%   identical to the one in BENCHMARK_NOTES.md and benchmark_results.json --
-%   two different exponents for one method across two artifacts of one campaign
-%   is a defect, not a nuance.
+%   fitting through it biases the exponent downwards. Such rows are hollow.
+%   These plots fit Stage time = Time 1 + Time 2, not total wall time.
+%   The wall-time scaling table remains a separate, explicitly named measure.
 %
 %   WHEN THE CAMPAIGN REFUSES A FIT.  The four figures are ALWAYS produced --
 %   a preflight or smoke run gets them too, because measured time against mesh
@@ -81,12 +78,12 @@ fitMask      = false(nRes, nMethods);
 methodLabels = cell(1, nMethods);
 
 for m = 1:nMethods
-    methodLabels{m} = confbench_display_name(keys{m});
     sel = records(strcmp({records.method_key}, keys{m}));
+    methodLabels{m} = sel(1).method;
     for i = 1:numel(sel)
         r = find(Ne == sel(i).mesh(1)*sel(i).mesh(2), 1);
         if isempty(r); continue; end
-        t = sel(i).times.total_wall_time_s;
+        t = confbench_stage_time(sel(i).times);
         tTotal_all(r, m) = t;
         if sel(i).ok
             tTotal_fit(r, m) = t;
@@ -100,10 +97,10 @@ fixedExp = 1.5;
 [C_free, exp_free, R2_free, n_free] = fit_complexity_model(Ne, tTotal_fit, 'free');
 [C_fix,  exp_fix,  R2_fix,  n_fix ] = fit_complexity_model(Ne, tTotal_fit, 'fixed', fixedExp);
 
-titleFree  = 'Computational complexity fit:  T(N_e) = C \cdot N_e^{exp}';
-titleFixed = sprintf('Fixed-exponent fit (C estimated only):  T(N_e) = C \\cdot N_e^{%.2f}', fixedExp);
-noteFree   = 'Fitted rows = the ok rows only, identical to BENCHMARK_NOTES.md.';
-noteFixed  = 'Fitted rows = the ok rows only.';
+titleFree  = 'Stage-time complexity fit:  T(N_e) = C \cdot N_e^{exp}';
+titleFixed = sprintf('Stage-time fixed-exponent fit (C estimated only):  T(N_e) = C \\cdot N_e^{%.2f}', fixedExp);
+noteFree   = 'T = Time 1 + Time 2 (stage time); fitted rows = ok rows only.';
+noteFixed  = 'T = Time 1 + Time 2 (stage time); fitted rows = ok rows only.';
 
 if ~fitAllowed
     % Discard the numbers rather than draw them.  NaN suppresses the curve in
@@ -111,7 +108,7 @@ if ~fitAllowed
     % the measured points survive and the fit does not.
     C_free(:) = NaN;  exp_free(:) = NaN;  R2_free(:) = NaN;
     C_fix(:)  = NaN;  exp_fix(:)  = NaN;  R2_fix(:)  = NaN;
-    titleFree  = ['Measured run time (NO FIT: ', refusalReason, ')'];
+    titleFree  = ['Measured stage time (NO FIT: ', refusalReason, ')'];
     titleFixed = titleFree;
     noteFree   = ['NOT FITTED: ', refusalReason];
     noteFixed  = noteFree;
@@ -119,21 +116,21 @@ end
 
 csvFree = fullfile(cfg.outputDir, 'table1_complexity_fit.csv');
 print_complexity_fit_table(methodLabels, methodLabels, C_free, exp_free, R2_free, n_free, ...
-    {'Computational complexity fit  T(N_e) = C * N_e^exp', ...
+    {'Stage-time complexity fit  T(N_e) = C * N_e^exp', ...
      '(least-squares fit of log(T) vs log(N_e); N_e = nelx*nely)', noteFree}, csvFree);
 
 csvFixed = fullfile(cfg.outputDir, 'table1_complexity_fit_fixedexp.csv');
 print_complexity_fit_table(methodLabels, methodLabels, C_fix, exp_fix, R2_fix, n_fix, ...
-    {sprintf('Fixed-exponent complexity fit  T(N_e) = C * N_e^%.2f', fixedExp), ...
+    {sprintf('Stage-time fixed-exponent complexity fit  T(N_e) = C * N_e^%.2f', fixedExp), ...
      '(exponent held fixed; only C estimated by linear-space least squares on T, i.e. minimizing', ...
      'absolute run-time error sum((T - C*N_e^exp)^2); R^2 is on T, not log(T))', noteFixed}, csvFixed);
 
 % ---- The four figures ---------------------------------------------------
 plot_table1_complexity(Ne, methodLabels, tTotal_all, C_free, exp_free, ...
-    cfg.outputDir, 'table1_complexity_fit', titleFree, fitMask);
+    cfg.outputDir, 'table1_complexity_fit', titleFree, fitMask, 'Stage time T = Time 1 + Time 2 (s)');
 
 plot_table1_complexity(Ne, methodLabels, tTotal_all, C_fix, exp_fix, ...
-    cfg.outputDir, 'table1_complexity_fit_fixedexp', titleFixed, fitMask);
+    cfg.outputDir, 'table1_complexity_fit_fixedexp', titleFixed, fitMask, 'Stage time T = Time 1 + Time 2 (s)');
 
 plotFiles.complexity_fit_png        = fullfile(cfg.outputDir, 'table1_complexity_fit.png');
 plotFiles.complexity_fit_lin_png    = fullfile(cfg.outputDir, 'table1_complexity_fit_linear.png');
@@ -142,20 +139,39 @@ plotFiles.complexity_fixed_lin_png  = fullfile(cfg.outputDir, 'table1_complexity
 plotFiles.complexity_fit_csv        = csvFree;
 plotFiles.complexity_fixed_csv      = csvFixed;
 
-% The free-exponent figure and the campaign's own scaling table must agree.
+% Full-precision fit metadata makes the time quantity and fit spaces explicit.
+metadata = struct('quantity', 'stage_time_s = time1 + time2', ...
+    'fit_allowed', fitAllowed, 'refusal_reason', refusalReason, ...
+    'generated_by', 'confbench_complexity_plots.m', ...
+    'methods', {methodLabels}, 'elements', Ne, 'stage_time_s', tTotal_all, ...
+    'fit_mask', fitMask, ...
+    'free', struct('C', C_free, 'p', exp_free, 'R2', R2_free, 'n', n_free, ...
+        'fit_space', 'log(stage time)'), ...
+    'fixed', struct('C', C_fix, 'p', exp_fix, 'R2', R2_fix, 'n', n_fix, ...
+        'fit_space', 'stage time'));
+plotFiles.complexity_metadata_json = fullfile(cfg.outputDir, 'complexity_stage_time_metadata.json');
+fid = fopen(plotFiles.complexity_metadata_json, 'w');
+cleanup = onCleanup(@() fclose(fid)); %#ok<NASGU>
+fprintf(fid, '%s\n', jsonencode(metadata, 'PrettyPrint', true));
+
+% Supplementary native-cost and validation assessment from the same records.
+diagnostics = confbench_complexity_diagnostics(cfg, records, scaling);
+plotFiles.complexity_diagnostics_dir = diagnostics.directory;
+
+% Compare only against the stage-time fit, never the total-wall-time fit.
 % They are computed by different code paths on purpose, so disagreement is a
 % real defect and is reported rather than left for a reader to notice.
-if fitAllowed
+if fitAllowed && isfield(scaling, 'stage_time')
     for m = 1:nMethods
-        k = find(strcmp({scaling.methods.method}, methodLabels{m}), 1);
-        if isempty(k) || ~isfinite(scaling.methods(k).p) || ~isfinite(exp_free(m))
+        k = find(strcmp({scaling.stage_time.methods.method}, methodLabels{m}), 1);
+        if isempty(k) || ~isfinite(scaling.stage_time.methods(k).p) || ~isfinite(exp_free(m))
             continue
         end
-        if abs(scaling.methods(k).p - exp_free(m)) > 1e-6
+        if abs(scaling.stage_time.methods(k).p - exp_free(m)) > 1e-6
             warning('confbench_complexity_plots:ExponentMismatch', ...
                 ['%s: exponent on the figure (%.4f) differs from the campaign ' ...
                  'scaling table (%.4f).  The two fits no longer see the same rows.'], ...
-                methodLabels{m}, exp_free(m), scaling.methods(k).p);
+                methodLabels{m}, exp_free(m), scaling.stage_time.methods(k).p);
         end
     end
 end

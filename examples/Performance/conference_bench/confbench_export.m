@@ -1,7 +1,9 @@
-function files = confbench_export(cfg, records, manifest, scaling)
+function files = confbench_export(cfg, records, manifest, scaling, opts)
 %CONFBENCH_EXPORT  Write every benchmark artifact.  Runs OUTSIDE all solver timing.
 %
 %   files = CONFBENCH_EXPORT(cfg, records, manifest, scaling)
+%   Optional opts.tables_only writes just CSV/LaTeX views; opts.caveats carries
+%   the recorded method descriptions when refreshing a historical campaign.
 %
 %   Produces, in cfg.outputDir:
 %     conference_performance_table.csv       the primary, method-native table
@@ -14,11 +16,11 @@ function files = confbench_export(cfg, records, manifest, scaling)
 %
 %   Table columns (timing schema 2):
 %     Count 1, Count 2, Time 1, Time 2   method-native stages (see the schema)
-%     Other                              overhead_time_s, defined identically
-%                                        for every method: setup, final modal
-%                                        analysis, dispatch
-%     Total                              caller-side wall time;
-%                                        Time 1 + Time 2 + Other = Total
+%     Stage time                         Time 1 + Time 2
+%     Other                              work inside the solver timer but
+%                                        outside the two named stages
+%     Total wall time                    caller-side wall time;
+%                                        Stage time + Other = Total wall time
 %     omega_1 native                     the solver's own material model; a
 %                                        dagger marks a value that deviates
 %                                        from E1 by more than the tolerance in
@@ -29,9 +31,15 @@ function files = confbench_export(cfg, records, manifest, scaling)
 %   There is no memory column anywhere.  See CONFBENCH_CAVEATS.
 
 if nargin < 4; scaling = struct(); end
+% Table-only refreshes preserve the original campaign evidence and caveats.
+if nargin < 5; opts = struct(); end
 od = cfg.outputDir;
 if exist(od, 'dir') ~= 7; mkdir(od); end
 cav = confbench_caveats();
+if isfield(opts, 'caveats'); cav = opts.caveats; end
+for i = 1:numel(records)
+    records(i).times.stage_time_s = confbench_stage_time(records(i).times);
+end
 files = struct();
 
 files.primary_csv  = fullfile(od, 'conference_performance_table.csv');
@@ -45,6 +53,10 @@ files.notes_md     = fullfile(od, 'BENCHMARK_NOTES.md');
 writePrimaryCsv(files.primary_csv, records, cav);
 writeLatex(files.primary_tex, records, cav);
 writeDetailedCsv(files.detailed_csv, records, cav);
+if isfield(opts, 'tables_only') && opts.tables_only
+    files = rmfield(files, {'results_json','manifest_json','schema_json','notes_md'});
+    return
+end
 writeResultsJson(files.results_json, cfg, records, scaling, cav);
 writeJson(files.manifest_json, manifest);
 writeJson(files.schema_json, confbench_timing_schema());
@@ -60,13 +72,13 @@ fprintf(fid, '# %s\n', cav.other_column);
 fprintf(fid, '# %s\n', cav.omega1_columns);
 fprintf(fid, '# %s\n', cav.olhoff_label);
 fprintf(fid, '# Memory: %s\n', cav.memory);
-fprintf(fid, ['Method,Mesh,Count1,Count2,Time1_s,Time2_s,Other_s,Total_s,' ...
+fprintf(fid, ['Method,Mesh,Count1,Count2,Time1_s,Time2_s,Stage_time_s,Other_s,Total_s,' ...
     'omega1_native,omega1_native_flag,omega1_common_E1,' ...
     'Count1_meaning,Count2_meaning,Time1_meaning,Time2_meaning,' ...
     'Olhoff_inner_per_outer,Olhoff_inner_time_share_pct,Status\n']);
 for i = 1:numel(R)
     r = R(i);
-    [c1, c2, t1, t2, ov, tt] = primaryCells(r);
+    [c1, c2, t1, t2, st, ov, tt] = primaryCells(r);
     [nat, e1, flagged] = omega1Cells(r, cav.omega1_native_flag_tol, '%.10g');
     if strcmp(r.method_key, 'olhoff') && isfield(r.counts, 'inner_iterations_per_outer_mean')
         ipo = num(r.counts.inner_iterations_per_outer_mean, '%.4f');
@@ -74,8 +86,8 @@ for i = 1:numel(R)
     else
         ipo = 'N/A'; shr = 'N/A';
     end
-    fprintf(fid, '%s,%dx%d,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s\n', ...
-        csvText(r.method), r.mesh(1), r.mesh(2), c1, c2, t1, t2, ov, tt, ...
+    fprintf(fid, '%s,%dx%d,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s\n', ...
+        csvText(r.method), r.mesh(1), r.mesh(2), c1, c2, t1, t2, st, ov, tt, ...
         nat, flagText(flagged), e1, ...
         csvText(nameOr(r.counts, 'count1_name')), csvText(nameOr(r.counts, 'count2_name')), ...
         csvText(nameOr(r.times, 'time1_name')),  csvText(nameOr(r.times, 'time2_name')), ...
@@ -92,18 +104,18 @@ fprintf(fid, '%% %s\n', cav.olhoff_label);
 fprintf(fid, '%% Columns: %s\n', cav.other_column);
 fprintf(fid, '%% omega_1: %s\n', cav.omega1_columns);
 fprintf(fid, '\\begin{table}[t]\n\\centering\n');
-fprintf(fid, '\\begin{tabular}{llrrrrrrrr}\n\\hline\n');
+fprintf(fid, '\\begingroup\n\\setlength{\\tabcolsep}{3pt}\n\\scriptsize\n\\begin{tabular}{llrrrrrrrrr}\n\\hline\n');
 fprintf(fid, ['Method & Mesh & Count 1 & Count 2 & Time 1 [s] & Time 2 [s] & ' ...
-    'Other [s] & Total [s] & $\\omega_1$ native & $\\omega_1$ E1 \\\\\n\\hline\n']);
+    'Stage time [s] & Other [s] & Total wall time [s] & $\\omega_1$ native & $\\omega_1$ E1 \\\\\n\\hline\n']);
 for i = 1:numel(R)
     r = R(i);
-    [c1, c2, t1, t2, ov, tt] = primaryCells(r, '%.2f');
+    [c1, c2, t1, t2, st, ov, tt] = primaryCells(r, '%.2f');
     [nat, e1, flagged] = omega1Cells(r, cav.omega1_native_flag_tol, '%.2f');
     if flagged; nat = [nat '\textsuperscript{\textdagger}']; end
-    fprintf(fid, '%s & $%d\\times%d$ & %s & %s & %s & %s & %s & %s & %s & %s \\\\\n', ...
-        texEscape(r.method), r.mesh(1), r.mesh(2), c1, c2, t1, t2, ov, tt, nat, e1);
+    fprintf(fid, '%s & $%d\\times%d$ & %s & %s & %s & %s & %s & %s & %s & %s & %s \\\\\n', ...
+        texEscape(r.method), r.mesh(1), r.mesh(2), c1, c2, t1, t2, st, ov, tt, nat, e1);
 end
-fprintf(fid, '\\hline\n\\end{tabular}\n');
+fprintf(fid, '\\hline\n\\end{tabular}\n\\endgroup\n');
 % Column semantics go in a notes block under the tabular, not in the caption:
 % LaTeX's \@makecaption measures the caption as ONE line, and a caption longer
 % than about 16000 pt (the Olhoff caveat plus these notes) raises "Dimension
@@ -120,7 +132,7 @@ fprintf(fid, '\\label{tab:conference-performance}\n\\end{table}\n');
 % Olhoff-specific exposure, required alongside the primary table.
 olh = R(strcmp({R.method_key}, 'olhoff'));
 if ~isempty(olh)
-    fprintf(fid, '\n%% Nested-scheme detail for the %s:\n', confbench_display_name('olhoff'));
+    fprintf(fid, '\n%% Nested-scheme detail for the %s:\n', olh(1).method);
     for i = 1:numel(olh)
         r = olh(i);
         if isfield(r.counts, 'inner_iterations_per_outer_mean')
@@ -168,7 +180,7 @@ fprintf(fid, ['method,method_key,nelx,nely,n_elements,status,status_note,ok,' ..
     'olhoff_outer_time_per_outer_median_s,olhoff_outer_time_excluding_inner_per_outer_mean_s,' ...
     'olhoff_eigen_time_per_outer_mean_s,olhoff_gradient_time_per_outer_mean_s,' ...
     'olhoff_total_wall_time_per_outer_s,' ...
-    'time1_s,time2_s,overhead_time_s,total_wall_time_s,' ...
+    'time1_s,time2_s,stage_time_s,overhead_time_s,total_wall_time_s,' ...
     'timing_accounting_residual_s,timing_accounting_relative_residual,' ...
     'timing_accounting_fail,independent_crosscheck_residual_s,' ...
     'independent_crosscheck_fail,' ...
@@ -213,7 +225,7 @@ for i = 1:numel(R)
         g(isO,T,'outer_time_per_outer_median_s'), g(isO,T,'outer_time_excluding_inner_per_outer_mean_s'), ...
         g(isO,T,'eigen_time_per_outer_mean_s'), g(isO,T,'gradient_time_per_outer_mean_s'), ...
         g(isO,T,'total_wall_time_per_outer_s'));
-    fprintf(fid, '%s,%s,%s,%s,', f(T,'time1'), f(T,'time2'), f(T,'overhead_time_s'), f(T,'total_wall_time_s'));
+    fprintf(fid, '%s,%s,%s,%s,%s,', f(T,'time1'), f(T,'time2'), f(T,'stage_time_s'), f(T,'overhead_time_s'), f(T,'total_wall_time_s'));
     fprintf(fid, '%s,%s,%d,%s,%d,', f(A,'timing_accounting_residual_s'), ...
         f(A,'timing_accounting_relative_residual'), logicalOr(A,'timing_accounting_fail'), ...
         f(A,'independent_crosscheck_residual_s'), logicalOr(A,'independent_crosscheck_fail'));
@@ -324,15 +336,15 @@ end
 writePerIterationSection(fid, R, cav);
 
 fprintf(fid, '## Results\n\n');
-fprintf(fid, '| Method | Mesh | Count 1 | Count 2 | Time 1 [s] | Time 2 [s] | Other [s] | Total [s] | omega1 native | omega1 E1 | Status |\n');
-fprintf(fid, '|---|---|---|---|---|---|---|---|---|---|---|\n');
+fprintf(fid, '| Method | Mesh | Count 1 | Count 2 | Time 1 [s] | Time 2 [s] | Stage time [s] | Other [s] | Total wall time [s] | omega1 native | omega1 E1 | Status |\n');
+fprintf(fid, '|---|---|---|---|---|---|---|---|---|---|---|---|\n');
 for i = 1:numel(R)
     r = R(i);
-    [c1, c2, t1, t2, ov, tt] = primaryCells(r, '%.3f');
+    [c1, c2, t1, t2, st, ov, tt] = primaryCells(r, '%.3f');
     [nat, e1, flagged] = omega1Cells(r, cav.omega1_native_flag_tol, '%.4f');
     if flagged; nat = [nat ' †']; end
-    fprintf(fid, '| %s | %dx%d | %s | %s | %s | %s | %s | %s | %s | %s | %s |\n', ...
-        r.method, r.mesh(1), r.mesh(2), c1, c2, t1, t2, ov, tt, nat, e1, r.status);
+    fprintf(fid, '| %s | %dx%d | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s |\n', ...
+        r.method, r.mesh(1), r.mesh(2), c1, c2, t1, t2, st, ov, tt, nat, e1, r.status);
 end
 fprintf(fid, '\n† native omega1 deviates from E1 by more than %g%% (see "Native omega_1 values flagged").\n\n', ...
     100*cav.omega1_native_flag_tol);
@@ -432,12 +444,13 @@ s = f(r.times, name, '%.4f');
 end
 
 % =========================================================================
-function [c1, c2, t1, t2, ov, tt] = primaryCells(r, tfmt)
+function [c1, c2, t1, t2, st, ov, tt] = primaryCells(r, tfmt)
 if nargin < 2; tfmt = '%.9g'; end
 c1 = f(r.counts, 'count1', '%.6g');
 c2 = f(r.counts, 'count2', '%.6g');
 t1 = f(r.times, 'time1', tfmt);
 t2 = f(r.times, 'time2', tfmt);
+st = f(r.times, 'stage_time_s', tfmt);
 ov = f(r.times, 'overhead_time_s', tfmt);
 tt = f(r.times, 'total_wall_time_s', tfmt);
 end
@@ -506,7 +519,8 @@ if any(strcmp(keys,'yuksel'))
         'iteration counts, Time 1 and Time 2 the corresponding stage times.'];
 end
 if any(strcmp(keys,'olhoff'))
-    parts{end+1} = [confbench_display_name('olhoff') ': Count 1 = outer iterations, ' ...
+    olhoffRows = R(strcmp({R.method_key}, 'olhoff'));
+    parts{end+1} = [olhoffRows(1).method ': Count 1 = outer iterations, ' ...
         'Count 2 = cumulative nested MMA iterations, Time 1 = outer work ' ...
         'excluding the nested MMA solve (FE assembly, the eigenproblem, ' ...
         'sensitivities, filtering, the design update), Time 2 = nested MMA ' ...

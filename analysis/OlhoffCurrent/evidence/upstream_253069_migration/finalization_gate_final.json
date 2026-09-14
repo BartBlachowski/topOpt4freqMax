@@ -1,0 +1,68 @@
+{
+  "two_branch_controller_validation": {
+    "ok": true,
+    "detail": "G1 declares=1 G2 required=1 G3 hashfile=1 G4 selfverify=1 G5 nomissingmat=1",
+    "gates": {
+      "G1": true,
+      "G2": true,
+      "G3": true,
+      "G4": true,
+      "G5": true
+    },
+    "missing": [],
+    "mismatched": [],
+    "supersededSource": [
+      {
+        "path": "analysis/OlhoffCurrent/SOURCE_MANIFEST.json",
+        "recorded": "431e7b3084507cd8b53862847b828cfd9f8948172e349bbae0c72749e8134aeb",
+        "commit": "1438aa3f4bd934f5b588587ef65f4f2ca35bac1c"
+      },
+      {
+        "path": "analysis/OlhoffCurrent/+impl/architecture/+olh/+move/limit.m",
+        "recorded": "61fa923d430121ead764a229b4f48dfd77617540b4ab6db883ccd9d5904b1c1e",
+        "commit": "1438aa3f4bd934f5b588587ef65f4f2ca35bac1c"
+      },
+      {
+        "path": "analysis/OlhoffCurrent/+impl/architecture/olhoffSolve.m",
+        "recorded": "1e5a114cbf91717e01e5592e86203f401ed5cdb3e5f5ce9a727b8163cdf2fba3",
+        "commit": "1438aa3f4bd934f5b588587ef65f4f2ca35bac1c"
+      },
+      {
+        "path": "analysis/OlhoffCurrent/+impl/architecture/+olh/+config/schema.m",
+        "recorded": "d7a808995d9a34810442ddf17f15de980aa1e62efe90b3563f3e474ae5f5cf67",
+        "commit": "1438aa3f4bd934f5b588587ef65f4f2ca35bac1c"
+      },
+      {
+        "path": "analysis/OlhoffCurrent/+impl/architecture/+olh/+config/validate.m",
+        "recorded": "30e495ea8bcc25193de2c64f04984549870e213f9f9df871e52cc4c906cab141",
+        "commit": "1438aa3f4bd934f5b588587ef65f4f2ca35bac1c"
+      },
+      {
+        "path": "analysis/OlhoffCurrent/+impl/architecture/+olh/+config/toLegacy.m",
+        "recorded": "685caacbd3db2bd19e14cc4fe3be0098b7bba423fe2b4a91f0cb83a3e4a21a04",
+        "commit": "1438aa3f4bd934f5b588587ef65f4f2ca35bac1c"
+      },
+      {
+        "path": "analysis/OlhoffCurrent/+impl/architecture/+olh/+config/fromLegacy.m",
+        "recorded": "7d0bad832c906c5304acb2ebf84304739fe3531281a0e007aa395fd58ae96ff8",
+        "commit": "1438aa3f4bd934f5b588587ef65f4f2ca35bac1c"
+      }
+    ],
+    "nHashed": 71
+  },
+  "upstream_253069_migration": {
+    "ok": true,
+    "detail": "G1 declares=1 G2 required=1 G3 hashfile=1 G4 selfverify=1 G5 nomissingmat=1",
+    "gates": {
+      "G1": true,
+      "G2": true,
+      "G3": true,
+      "G4": true,
+      "G5": true
+    },
+    "missing": [],
+    "mismatched": [],
+    "supersededSource": [],
+    "nHashed": 84
+  }
+}

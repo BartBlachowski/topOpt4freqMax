@@ -2,41 +2,50 @@
 % The Olhoff column is labelled "Du-Olhoff reconstruction, fixed penalty, sensitivity filtered" and must not be labelled "Olhoff 2007". It is produced by analysis/OlhoffCurrent at its named production preset duOlhoffFixedPenaltySensitivityFiltered; the historical audit code for the same realization is M4.
 \begin{table}[t]
 \centering
-\begin{tabular}{llrrrrrr}
+\begingroup
+\setlength{\tabcolsep}{3pt}
+\scriptsize
+\begin{tabular}{llrrrrrrrrr}
 \hline
-Method & Mesh & Count 1 & Count 2 & Time 1 [s] & Time 2 [s] & Total [s] & $\omega_1$ \\
+Method & Mesh & Count 1 & Count 2 & Time 1 [s] & Time 2 [s] & Stage time [s] & Other [s] & Total wall time [s] & $\omega_1$ native & $\omega_1$ E1 \\
 \hline
-Proposed & $160\times20$ & 1 & 107 & 0.43 & 1.34 & 1.95 & 109.05 \\
-Yuksel & $160\times20$ & 121 & 123 & 1.47 & 2.36 & 4.29 & 157.28 \\
-Du-Olhoff reconstruction (M4) & $160\times20$ & 91 & 2241 & 2.78 & 116.88 & 119.76 & 169.50 \\
-Proposed & $240\times30$ & 1 & 236 & 0.26 & 6.42 & 6.93 & 108.78 \\
-Yuksel & $240\times30$ & 168 & 152 & 4.07 & 4.94 & 9.39 & 159.49 \\
-Du-Olhoff reconstruction (M4) & $240\times30$ & 104 & 2334 & 6.64 & 207.64 & 214.41 & 167.07 \\
-Proposed & $320\times40$ & 1 & 207 & 0.27 & 10.64 & 11.30 & 158.76 \\
-Yuksel & $320\times40$ & 252 & 320 & 10.38 & 16.64 & 27.57 & 160.75 \\
-Du-Olhoff reconstruction (M4) & $320\times40$ & 131 & 2614 & 14.89 & 320.65 & 335.71 & 165.95 \\
-Proposed & $400\times50$ & 1 & 182 & 0.34 & 14.94 & 15.73 & 159.52 \\
-Yuksel & $400\times50$ & 315 & 417 & 19.65 & 33.19 & 53.66 & 160.06 \\
-Du-Olhoff reconstruction (M4) & $400\times50$ & 139 & 2918 & 25.88 & 517.46 & 543.59 & 162.89 \\
-Proposed & $480\times60$ & 1 & 219 & 0.43 & 26.04 & 27.11 & 160.25 \\
-Yuksel & $480\times60$ & 586 & 615 & 52.61 & 69.02 & 122.68 & 160.60 \\
-Du-Olhoff reconstruction (M4) & $480\times60$ & 164 & 3463 & 46.43 & 851.47 & 898.26 & 161.91 \\
-Proposed & $560\times70$ & 1 & 256 & 0.53 & 42.87 & 44.27 & 160.72 \\
-Yuksel & $560\times70$ & 833 & 771 & 104.31 & 117.67 & 223.54 & 160.39 \\
-Du-Olhoff reconstruction (M4) & $560\times70$ & 190 & 3922 & 73.27 & 1261.16 & 1334.93 & 161.03 \\
-Proposed & $640\times80$ & 1 & 309 & 0.68 & 68.88 & 70.70 & 160.85 \\
-Yuksel & $640\times80$ & 1542 & 2000 & 256.82 & 400.20 & 658.92 & 160.88 \\
-Du-Olhoff reconstruction (M4) & $640\times80$ & 199 & 4324 & 106.19 & 1666.95 & 1773.79 & 159.73 \\
-Proposed & $720\times90$ & 1 & 297 & 1.12 & 163.77 & 166.85 & 161.07 \\
-Yuksel & $720\times90$ & 1162 & 907 & 339.01 & 371.12 & 713.05 & 160.62 \\
-Du-Olhoff reconstruction (M4) & $720\times90$ & 223 & 4831 & 211.46 & 2185.03 & 2397.57 & 159.09 \\
-Proposed & $800\times100$ & 1 & 330 & 1.46 & 239.20 & 243.22 & 161.36 \\
-Yuksel & $800\times100$ & 1150 & 1171 & 417.75 & 597.60 & 1018.94 & 160.89 \\
-Du-Olhoff reconstruction (M4) & $800\times100$ & 170 & 3713 & 195.61 & 1790.09 & 1987.06 & 153.30 \\
+Proposed & $160\times20$ & 1 & 107 & 0.03 & 1.34 & 1.37 & 0.58 & 1.95 & 109.05\textsuperscript{\textdagger} & 153.68 \\
+Yuksel & $160\times20$ & 121 & 123 & 1.47 & 2.36 & 3.83 & 0.45 & 4.29 & 157.28 & 157.17 \\
+Du-Olhoff reconstruction (M4) & $160\times20$ & 91 & 2241 & 2.78 & 116.88 & 119.67 & 0.09 & 119.76 & 169.50 & 168.79 \\
+Proposed & $240\times30$ & 1 & 236 & 0.06 & 6.42 & 6.48 & 0.45 & 6.93 & 108.78\textsuperscript{\textdagger} & 157.64 \\
+Yuksel & $240\times30$ & 168 & 152 & 4.07 & 4.94 & 9.00 & 0.39 & 9.39 & 159.49 & 159.44 \\
+Du-Olhoff reconstruction (M4) & $240\times30$ & 104 & 2334 & 6.64 & 207.64 & 214.28 & 0.12 & 214.41 & 167.07 & 166.70 \\
+Proposed & $320\times40$ & 1 & 207 & 0.11 & 10.64 & 10.75 & 0.55 & 11.30 & 158.76 & 158.76 \\
+Yuksel & $320\times40$ & 252 & 320 & 10.38 & 16.64 & 27.01 & 0.56 & 27.57 & 160.75 & 160.69 \\
+Du-Olhoff reconstruction (M4) & $320\times40$ & 131 & 2614 & 14.89 & 320.65 & 335.54 & 0.17 & 335.71 & 165.95 & 165.63 \\
+Proposed & $400\times50$ & 1 & 182 & 0.19 & 14.94 & 15.13 & 0.61 & 15.73 & 159.52 & 159.52 \\
+Yuksel & $400\times50$ & 315 & 417 & 19.65 & 33.19 & 52.85 & 0.82 & 53.66 & 160.06 & 159.97 \\
+Du-Olhoff reconstruction (M4) & $400\times50$ & 139 & 2918 & 25.88 & 517.46 & 543.33 & 0.26 & 543.59 & 162.89 & 162.58 \\
+Proposed & $480\times60$ & 1 & 219 & 0.26 & 26.04 & 26.31 & 0.81 & 27.11 & 160.25 & 160.25 \\
+Yuksel & $480\times60$ & 586 & 615 & 52.61 & 69.02 & 121.63 & 1.05 & 122.68 & 160.60 & 160.55 \\
+Du-Olhoff reconstruction (M4) & $480\times60$ & 164 & 3463 & 46.43 & 851.47 & 897.90 & 0.36 & 898.26 & 161.91 & 161.59 \\
+Proposed & $560\times70$ & 1 & 256 & 0.36 & 42.87 & 43.23 & 1.04 & 44.27 & 160.72 & 160.72 \\
+Yuksel & $560\times70$ & 833 & 771 & 104.31 & 117.67 & 221.98 & 1.57 & 223.54 & 160.39 & 160.34 \\
+Du-Olhoff reconstruction (M4) & $560\times70$ & 190 & 3922 & 73.27 & 1261.16 & 1334.43 & 0.50 & 1334.93 & 161.03 & 160.67 \\
+Proposed & $640\times80$ & 1 & 309 & 0.49 & 68.88 & 69.38 & 1.32 & 70.70 & 160.85 & 160.85 \\
+Yuksel & $640\times80$ & 1542 & 2000 & 256.82 & 400.20 & 657.02 & 1.90 & 658.92 & 160.88 & 160.85 \\
+Du-Olhoff reconstruction (M4) & $640\times80$ & 199 & 4324 & 106.19 & 1666.95 & 1773.14 & 0.64 & 1773.79 & 159.73 & 159.35 \\
+Proposed & $720\times90$ & 1 & 297 & 0.94 & 163.77 & 164.71 & 2.14 & 166.85 & 161.07 & 161.07 \\
+Yuksel & $720\times90$ & 1162 & 907 & 339.01 & 371.12 & 710.12 & 2.93 & 713.05 & 160.62 & 160.60 \\
+Du-Olhoff reconstruction (M4) & $720\times90$ & 223 & 4831 & 211.46 & 2185.03 & 2396.49 & 1.09 & 2397.57 & 159.09 & 158.67 \\
+Proposed & $800\times100$ & 1 & 330 & 1.26 & 239.20 & 240.46 & 2.76 & 243.22 & 161.36 & 161.36 \\
+Yuksel & $800\times100$ & 1150 & 1171 & 417.75 & 597.60 & 1015.35 & 3.58 & 1018.94 & 160.89 & 160.86 \\
+Du-Olhoff reconstruction (M4) & $800\times100$ & 170 & 3713 & 195.61 & 1790.09 & 1985.69 & 1.37 & 1987.06 & 153.30 & 152.97 \\
 \hline
 \end{tabular}
+\endgroup
+\par\vspace{2pt}\begin{minipage}{\linewidth}\footnotesize
+Stage time = Time 1 + Time 2; Total wall time = Stage time + Other. Sums are calculated before rounding. Other includes setup, final modal analysis and result assembly, so it also includes computational work. The original timing boundaries are retained: Du--Olhoff configuration resolution precedes its timer.
+\par This table was refreshed from recorded timers without recomputation. Proposed preparation is moved from the original Time 1 into Other; total wall times are unchanged. The source JSON, manifest and notes retain their original timing schema.
+\par $\omega_1$ native is the recorded solver frequency; $\omega_1$ E1 is the recorded common-evaluator frequency. A dagger marks a native value differing from E1 by more than 5 percent.
+\end{minipage}
 \caption{Count/time columns represent method-native computational stages and are not mathematically identical across methods. Total wall time is the common performance quantity.
-Proposed: Count 1 = reference eigenanalysis solves (always 1, not an optimization iteration), Count 2 = SIMP iterations, Time 1 = eigenanalysis and preparation, Time 2 = SIMP. Yuksel: Count 1 and Count 2 are the Stage-1 and Stage-2 iteration counts, Time 1 and Time 2 the corresponding stage times. Du-Olhoff reconstruction (M4): Count 1 = outer iterations, Count 2 = cumulative nested MMA iterations, Time 1 = outer work excluding the nested MMA solve, Time 2 = nested MMA total. The two counts are never added.
+Proposed: Count 1 = reference eigenanalysis solves (always 1, not an optimization iteration), Count 2 = SIMP iterations, Time 1 = reference eigenanalysis alone (preparation is in Other), Time 2 = SIMP. Yuksel: Count 1 and Count 2 are the Stage-1 and Stage-2 iteration counts, Time 1 and Time 2 the corresponding stage times. Du-Olhoff reconstruction (M4): Count 1 = outer iterations, Count 2 = cumulative nested MMA iterations, Time 1 = outer work excluding the nested MMA solve, Time 2 = nested MMA total. The two counts are never added.
 Du-Olhoff RECONSTRUCTION (class C): internally coherent and fully documented, but not a claimed historical implementation. Numerical continuation, filter radius, multiplicity tolerance and inner-loop convergence are not specified in Du \& Olhoff (2007) and are reconstruction choices here. Must NOT be labelled "Olhoff 2007". Field-level provenance (A/B/C/D) is documented in analysis/OlhoffCurrent/+impl/architecture/docs/SCIENTIFIC\_CONFIG\_PROVENANCE.md and is printed per-run by olh.config.describe.}
 \label{tab:conference-performance}
 \end{table}

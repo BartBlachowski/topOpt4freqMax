@@ -90,6 +90,7 @@ catch ME
 end
 
 % ---- explicit timing accounting, identical shape for every method -------
+rec.times.stage_time_s = confbench_stage_time(rec.times);
 rec.accounting = confbench_accounting(rec.times, tolAbs, tolRel, xTolRel);
 rec = orderfields(rec);
 
