@@ -22,7 +22,8 @@ function [x, omega, tIter, nIter, mem_usage, nIterStage, telemetry] = run_topopt
 %                raw native record it was derived from; and
 %                telemetry.solver_config, the effective solver-side
 %                configuration for dispatch cases whose solver reports one
-%                (currently OlhoffDu2007Repro), empty otherwise.
+%                (none of the supported approaches does at present), empty
+%                otherwise.
 %                telemetry.timing also carries eigensolve_time / gradient_time /
 %                subproblem_time where the solver reports a component split, and
 %                NaN where it does not.
@@ -259,242 +260,22 @@ function [x, omega, tIter, nIter, mem_usage, nIterStage, telemetry] = run_topopt
     wrapperInitializationTime = toc(runnerWallTic);
 
     switch lower(strtrim(approach))
-        case 'olhoff'
-            addpath(fullfile(repoRoot, 'analysis', 'OlhoffApproach', 'Matlab'));
-
-            cfgO = struct();
-            cfgO.L = L;
-            cfgO.H = H;
-            cfgO.nelx = nelx;
-            cfgO.nely = nely;
-            cfgO.t = thickness;
-            cfgO.volfrac = volfrac;
-            cfgO.penal = penal;
-            cfgO.rmin = rmin_phys; % Olhoff solver expects physical units.
-            cfgO.maxiter = maxiter;
-            cfgO.conv_tol = convTol;
-            cfgO.supportType = supportCode;
-            cfgO.E0 = E0;
-            cfgO.Emin = Emin;
-            cfgO.rho0 = rho0;
-            cfgO.rho_min = rho_min;
-            cfgO.nu = nu;
-            cfgO.move = move;
-            cfgO.extraFixedDofs = extraFixedDofs;
-            cfgO.pasS = pasS;
-            cfgO.pasV = pasV;
-            cfgO.record_history = recordHistory;
-            cfgO.extend_beyond_native_stop = extendBeyondNativeStop;
-            cfgO.use_heaviside = useHeaviside;
-            cfgO.beta_continuous = useHeaviside;  % smooth beta ramp when Heaviside is on
-
-            optsO = struct('doDiagnostic', benchmarkDiagnosticsEnabled, ...
-                'diagnosticOnly', false, 'diagModes', 5);
-            optsO.approach_name = approach;
-            optsO.save_frq_iterations = postproc.saveFrequencyIterations;
-            optsO.visualization_quality = postproc.visualizeQuality;
-            if ~isempty(postproc.visualizeLive)
-                optsO.visualize_live = postproc.visualizeLive;
-            end
-
-            [~, xPhys, diagnostics] = topFreqOptimization_MMA(cfgO, optsO);
-            x = xPhys(:);
-            if isfield(diagnostics, 'final') && isfield(diagnostics.final, 'omega')
-                omega = toVec3(diagnostics.final.omega(:));
-            elseif isfield(diagnostics, 'final') && isfield(diagnostics.final, 'freq')
-                omega = toVec3(2*pi*diagnostics.final.freq(:));
-            end
-            if isfield(diagnostics, 'history')
-                solverHistory = diagnostics.history;
-            end
-            if isfield(diagnostics, 'extension')
-                solverExtension = diagnostics.extension;
-            end
-            if isfield(diagnostics, 't_iter')
-                tIter = diagnostics.t_iter;
-            end
-            if isfield(diagnostics, 'iterations')
-                nIter = diagnostics.iterations;
-            end
-            if isfield(diagnostics, 'timing'), solverTiming = diagnostics.timing; end
-            if isfield(diagnostics, 'stopping'), solverStopping = diagnostics.stopping; end
-            objectiveFinal = omega(1);
-            if postproc.saveFrequencyIterations && isfield(diagnostics, 'freq_iter_omega')
-                freqIterOmega = diagnostics.freq_iter_omega;
-            end
-
-        case 'olhoffexact'
-            addpath(fullfile(repoRoot, 'analysis', 'OlhoffApproachExact', 'Matlab'));
-
-            cfgE = struct();
-            cfgE.L              = L;
-            cfgE.H              = H;
-            cfgE.nelx           = nelx;
-            cfgE.nely           = nely;
-            cfgE.t              = thickness;
-            cfgE.volfrac        = volfrac;
-            cfgE.penal          = penal;
-            cfgE.rmin_elem      = rmin_elem;
-            cfgE.outer_max_iter = maxiter;
-            cfgE.outer_tol      = convTol;
-            cfgE.E0             = E0;
-            cfgE.nu             = nu;
-            cfgE.rho0           = rho0;
-            cfgE.rho_min        = rho_min;
-            if any(strcmpi(supportCode, {'SS','CS','CC'}))
-                cfgE.support_type = supportCode;
-            elseif ~isempty(extraFixedDofs)
-                cfgE.fixed_dofs = extraFixedDofs;
-            else
-                error('run_topopt_from_json:OlhoffExactUnsupportedBC', ...
-                    ['OlhoffExact: could not determine boundary conditions. ' ...
-                     'Use SS/CS/CC support types or closest_point bc entries.']);
-            end
-
-            t0 = tic;
-            [xPhys, histE] = topopt_freq_exact(cfgE);
-            tTotal = toc(t0);
-
-            x     = xPhys(:);
-            ni    = histE.outer_iters;
-            nIter = ni;
-            if ni > 0
-                omega = toVec3(histE.omega(ni, :)');
-                tIter = tTotal / ni;
-            end
-
-        case {'olhoffdu2007repro', 'olhoff2007repro', 'reproduction2007'}
-            % Du-Olhoff 2007 clean-room benchmark reproduction (Eq. 22 LP route).
-            %
-            % This implementation lives at Matlab/reproduction2007/, OUTSIDE
-            % analysis/, so that no addpath(genpath(analysis)) sweep can reach
-            % it and shadow another approach.  Only its runner/ directory is
-            % added here; RUN_REPRO2007 installs the rest on an isolated path,
-            % asserts that every function resolves inside its own root, and
-            % restores the previous path on return.  See
-            % Matlab/reproduction2007/runner/repro2007_paths.m.
-            addpath(fullfile(repoRoot, 'Matlab', 'reproduction2007', 'runner'));
-
-            runCfg = struct();
-            runCfg.config        = 'fig3a_best';
-            runCfg.nelx          = nelx;
-            runCfg.nely          = nely;
-            runCfg.volfrac       = volfrac;
-            runCfg.penal         = penal;
-            runCfg.rmin_elem     = rmin_elem;   % this solver works in element units
-            runCfg.move          = move;
-            runCfg.max_outer     = maxiter;
-            runCfg.L             = L;
-            runCfg.H             = H;
-            runCfg.thickness     = thickness;
-            runCfg.E0            = E0;
-            runCfg.nu            = nu;
-            runCfg.rho_m         = rho0;   % material density -> cfg.rhom
-
-            % NOT INHERITED FROM THE SHARED BLOCK -- see
-            % DIAGNOSTIC_REPRO2007_BENCHMARK.md.
-            %
-            %   rho_min : void_material.rho_min is this benchmark's void
-            %       MATERIAL DENSITY floor (1e-6).  The reproduction's
-            %       cfg.rhomin is a different quantity -- the DESIGN VARIABLE
-            %       lower bound of Du & Olhoff (2007) eq. (7e), whose value is
-            %       1e-3.  Mapping one onto the other drove void elements to
-            %       rho^3 = 1e-18 stiffness and rho^6 = 1e-36 mass, made the
-            %       (K,M) pencil singular to working precision (eigs reported
-            %       RCOND = 1.6e-19), and produced spurious omega_1 = 0 modes
-            %       from outer iteration 101 onward at 240x30.
-            %
-            %   tol_outer : optimization.convergence_tol is the benchmark's
-            %       shared stopping tolerance (3e-3).  The reproduction's
-            %       documented outer tolerance is 1e-3.  Silently substituting
-            %       one for the other changes where this method stops.
-            %
-            % Both now come from the reproduction's own configuration, and are
-            % overridable only through the explicit optimization.repro2007
-            % block below, so that any deviation is visible in the task file.
-            % Boundary conditions.  This solver does NOT consume a DOF list: it
-            % builds the paper's Fig. 2 supports itself from bc/support/axial,
-            % because which idealization is used is one of the reproduction's
-            % findings (NOTES.md section 2) and must stay explicit.  A JSON that
-            % specifies its BCs as closest_point entries yields supportCode
-            % 'NONE'; rather than quietly defaulting to simply supported, demand
-            % that the caller name the case.
-            if any(strcmpi(supportCode, {'SS','CS','CC'}))
-                runCfg.support_type = supportCode;
-            elseif hasFieldPath(cfg, {'optimization','repro2007','support_type'})
-                runCfg.support_type = getFieldPath(cfg, ...
-                    {'optimization','repro2007','support_type'});
-            else
-                error('run_topopt_from_json:Repro2007UnsupportedBC', ...
-                    ['OlhoffDu2007Repro: boundary conditions are "%s".  This ' ...
-                     'implementation reproduces the Du & Olhoff (2007) Fig. 2 ' ...
-                     'beam and constructs its own supports; it cannot consume ' ...
-                     'an arbitrary fixed-DOF list.  Either use hinge/clamp ' ...
-                     'supports (SS/CS/CC), or state the case explicitly as ' ...
-                     'optimization.repro2007.support_type = "SS" | "CS" | "CC".'], ...
-                    supportCode);
-            end
-            runCfg.approach_name = approach;
-            runCfg.record_history = recordHistory;
-            if ~isempty(postproc.visualizeLive) && postproc.visualizeLive
-                runCfg.verbose = true;
-            end
-
-            % Optional block: everything the paper leaves unstated, exposed for
-            % the parametric study.  Absent keys keep the documented
-            % reproduction defaults -- none of them is silently invented here.
-            optionalKeys = { ...
-                'target_mode',  'target_mode'
-                'move',         'move'
-                'max_outer',    'max_outer'
-                'tol_outer',    'tol_outer'
-                'rho_min',      'rho_min'
-                'volfrac',      'volfrac'
-                'tol_mult',     'tol_mult'
-                'filter_mode',  'filter_mode'
-                'mass_interp',  'mass_interp'
-                'inner_solver', 'inner_solver'
-                'off_diag',     'off_diag'
-                'n_modes_max',  'n_modes_max'
-                'rmin_phys',    'rmin_phys'
-                'support',      'support'
-                'axial',        'axial'
-                'elem_type',    'elem_type'
-                'mass_type',    'mass_type'
-                'eig_solver',   'eig_solver'
-                'config',       'config'};
-            for oi = 1:size(optionalKeys, 1)
-                p = {'optimization', 'repro2007', optionalKeys{oi,1}};
-                if hasFieldPath(cfg, p)
-                    runCfg.(optionalKeys{oi,2}) = getFieldPath(cfg, p);
-                end
-            end
-
-            [xOut, omegaOut, tOut, itOut, infoR] = run_repro2007(runCfg);
-            x     = xOut(:);
-            omega = toVec3(omegaOut(:));   % already rad/s
-            tIter = tOut;
-            nIter = itOut;
-            if isfield(infoR, 'history'),  solverHistory = infoR.history;  end
-            if isfield(infoR, 'timing'),   solverTiming = infoR.timing;    end
-            if isfield(infoR, 'stopping'), solverStopping = infoR.stopping; end
-            % The configuration OLHOFFOPT actually ran with, verbatim.  Reported
-            % rather than reconstructed: the benchmark-path equivalence check
-            % must compare what executed, not what this dispatcher intended.
-            if isfield(infoR, 'cfg'),      solverConfig = infoR.cfg;       end
-            if isfield(infoR, 'iterations')
-                % Outer/inner split.  Deliberately NOT folded into nIterStage:
-                % that field means Yuksel's two native stages, and overloading
-                % it would make "stage1" mean different things per method.
-                solverIterations = infoR.iterations;
-            end
-            if isfield(infoR, 'objective_history')
-                objectiveHistory = infoR.objective_history(:);
-            end
-            if isfield(infoR, 'last_obj'), objectiveFinal = infoR.last_obj; end
+        case {'olhoff', 'olhoffexact', 'olhoffdu2007repro', 'olhoff2007repro', 'reproduction2007'}
+            % Retired 2026-09-14 by the repository cleanup.  These keys dispatched
+            % the superseded bound-formulation MMA, the "exact Olhoff 2014" line and
+            % the 2007 clean-room reproduction, which are archived outside the
+            % supported code (see development/README.md).  The supported Du-Olhoff
+            % implementation is analysis/Olhoff and is run with a named preset
+            % through olhoffcurrent_run, not through this dispatcher.  The
+            % pre-cleanup dispatcher is preserved byte-for-byte in the archive.
+            error('run_topopt_from_json:RetiredApproach', ...
+                ['optimization.approach "%s" was retired from the supported dispatcher. ' ...
+                 'Run the supported Du-Olhoff implementation with ' ...
+                 'olhoffcurrent_run(nelx, nely, ''Preset'', name) from analysis/Olhoff. ' ...
+                 'Historical implementations are archived; see README.md.'], approach);
 
         case 'yuksel'
-            addpath(fullfile(repoRoot, 'analysis', 'YukselApproach', 'Matlab'));
+            addpath(fullfile(repoRoot, 'analysis', 'Yuksel', 'Matlab'));
 
             bcType = mapSupportCodeToYuksel(supportCode);
             [ft, ftBC] = mapFilterToYuksel(filterType, filterBC);
@@ -643,7 +424,7 @@ function [x, omega, tIter, nIter, mem_usage, nIterStage, telemetry] = run_topopt
             end
 
         case 'ourapproach'
-            addpath(fullfile(repoRoot, 'analysis', 'ourApproach', 'Matlab'));
+            addpath(fullfile(repoRoot, 'analysis', 'Proposed', 'Matlab'));
 
             ft = mapFilterToOurApproach(filterType);
             runCfg = struct();
@@ -729,9 +510,8 @@ function [x, omega, tIter, nIter, mem_usage, nIterStage, telemetry] = run_topopt
 
         otherwise
             error('run_topopt_from_json:UnknownApproach', ...
-                ['Unknown optimization.approach "%s". Use "Olhoff", "OlhoffExact", ' ...
-                 '"OlhoffDu2007Repro", "Yuksel", "ourApproach", "elastic2D", ' ...
-                 'or "elastc2D".'], approach);
+                ['Unknown optimization.approach "%s". Use "Yuksel", "ourApproach", ' ...
+                 '"elastic2D" or "elastc2D".'], approach);
     end
     runnerPostprocessingTic = tic;
 

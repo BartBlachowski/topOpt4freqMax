@@ -33,8 +33,7 @@ function [mcfg, profileId, profile] = confbench_method_config(methodKey, nelx, n
 
 here = fileparts(mfilename('fullpath'));
 repo = fileparts(fileparts(fileparts(here)));
-study = fullfile(repo, 'analysis', 'three_method_parametric_study');
-freezePath = fullfile(study, 'results', 'profile_freeze_manifest.json');
+freezePath = fullfile(repo, 'examples', 'Performance', 'benchmark_profile', 'profile_freeze_manifest.json');
 
 methodKey = lower(char(string(methodKey)));
 
@@ -75,8 +74,8 @@ switch methodKey
             'distinct_from',        preset.distinctFrom, ...
             'caveat',               olhoffcurrent_caveat(preset.name), ...
             'source_implementation', ...
-                'analysis/OlhoffCurrent/+impl/architecture/olhoffSolve.m', ...
-            'frozen_by_file', 'analysis/OlhoffCurrent/olhoffcurrent_presets.m', ...
+                'analysis/Olhoff/+impl/architecture/olhoffSolve.m', ...
+            'frozen_by_file', 'analysis/Olhoff/olhoffcurrent_presets.m', ...
             'selected_by_file', 'examples/Performance/conference_bench/confbench_olhoff_preset.m', ...
             'effective_config_hash', olhoffcurrent_config_hash(cfg));
         return
@@ -107,7 +106,7 @@ end
 
 % ---- dispatched methods only, from here down ---------------------------
 mcfg.meta.profile_id = profileId;
-mcfg.meta.frozen_by = 'analysis/three_method_parametric_study/results/profile_freeze_manifest.json';
+mcfg.meta.frozen_by = 'examples/Performance/benchmark_profile/profile_freeze_manifest.json';
 mcfg.meta.source_implementation = char(profile.source_implementation);
 mcfg.meta.threads_per_run = 1;
 mcfg.postprocessing.visualize_live = false;

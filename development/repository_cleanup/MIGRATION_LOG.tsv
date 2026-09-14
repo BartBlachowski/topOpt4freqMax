@@ -1,0 +1,184 @@
+2026-09-14T14:30:17	git mv	analysis/OlhoffCurrent/tests/gate_provenance_probes.m	development/reconstruction/OlhoffCurrent_study_governance/tests/gate_provenance_probes.m
+2026-09-14T14:30:17	git mv	analysis/OlhoffCurrent/tests/test_evidence_retention.m	development/reconstruction/OlhoffCurrent_study_governance/tests/test_evidence_retention.m
+2026-09-14T14:30:17	git mv	analysis/OlhoffCurrent/tests/test_finalization_gate.m	development/reconstruction/OlhoffCurrent_study_governance/tests/test_finalization_gate.m
+2026-09-14T14:30:17	git mv	analysis/three_method_parametric_study/results/profile_freeze_manifest.json	examples/Performance/benchmark_profile/profile_freeze_manifest.json
+2026-09-14T14:30:17	mv	examples/Performance/conference_benchmark/campaign_9mesh	development/benchmark_history/examples_Performance/conference_benchmark/campaign_9mesh
+2026-09-14T14:30:17	git mv	examples/Performance/conference_benchmark/smoke_nine_mesh_pedersen_b21483b	development/benchmark_history/examples_Performance/conference_benchmark/smoke_nine_mesh_pedersen_b21483b
+2026-09-14T14:30:17	git mv	analysis/OlhoffCurrent/EVIDENCE_POLICY.md	development/reconstruction/OlhoffCurrent_study_governance/EVIDENCE_POLICY.md
+2026-09-14T14:30:17	git mv	analysis/OlhoffCurrent/diagnostics	development/reconstruction/OlhoffCurrent_diagnostics
+2026-09-14T14:30:17	git mv	analysis/OlhoffCurrent/evidence	development/reconstruction/OlhoffCurrent_evidence
+2026-09-14T14:30:17	git mv	analysis/OlhoffCurrent/olhoffcurrent_evidence_declare.m	development/reconstruction/OlhoffCurrent_study_governance/olhoffcurrent_evidence_declare.m
+2026-09-14T14:30:17	git mv	analysis/OlhoffCurrent/olhoffcurrent_evidence_gate.m	development/reconstruction/OlhoffCurrent_study_governance/olhoffcurrent_evidence_gate.m
+2026-09-14T14:30:17	git mv	analysis/OlhoffCurrent/olhoffcurrent_finalization_gate.m	development/reconstruction/OlhoffCurrent_study_governance/olhoffcurrent_finalization_gate.m
+2026-09-14T14:30:17	git mv	analysis/three_method_parametric_study/study_base_config.m	examples/Performance/benchmark_profile/study_base_config.m
+2026-09-14T14:30:17	git mv	analysis/three_method_parametric_study/study_evaluate_design.m	examples/Performance/benchmark_profile/study_evaluate_design.m
+2026-09-14T14:30:17	git mv	examples/Performance/CONFERENCE_BENCHMARK_PREFLIGHT.md	development/benchmark_history/examples_Performance/CONFERENCE_BENCHMARK_PREFLIGHT.md
+2026-09-14T14:30:18	git mv	examples/Performance/CONFERENCE_DRIVER_FINAL_AUDIT.md	development/benchmark_history/examples_Performance/CONFERENCE_DRIVER_FINAL_AUDIT.md
+2026-09-14T14:30:18	git mv	examples/Performance/FINAL_CAMPAIGN_PREFLIGHT.md	development/benchmark_history/examples_Performance/FINAL_CAMPAIGN_PREFLIGHT.md
+2026-09-14T14:30:18	git mv	examples/Performance/PLAN_two_table_redesign.md	development/benchmark_history/examples_Performance/PLAN_two_table_redesign.md
+2026-09-14T14:30:18	git mv	examples/Performance/STOP_RULE_AUDIT.md	development/benchmark_history/examples_Performance/STOP_RULE_AUDIT.md
+2026-09-14T14:30:18	git mv	examples/Performance/WP0A_VISUALIZATION_FIX.md	development/benchmark_history/examples_Performance/WP0A_VISUALIZATION_FIX.md
+2026-09-14T14:30:18	git mv	examples/Performance/benchmark_protocol_r3.json	development/benchmark_history/examples_Performance/benchmark_protocol_r3.json
+2026-09-14T14:30:18	git mv	examples/Performance/benchmark_results.json	development/benchmark_history/examples_Performance/benchmark_results.json
+2026-09-14T14:30:18	git mv	examples/Performance/determinism_validation.json	development/benchmark_history/examples_Performance/determinism_validation.json
+2026-09-14T14:30:18	git mv	examples/Performance/diagnostic_yuksel_table1	development/benchmark_history/examples_Performance/diagnostic_yuksel_table1
+2026-09-14T14:30:18	git mv	examples/Performance/equivalence	development/benchmark_history/examples_Performance/equivalence
+2026-09-14T14:30:18	git mv	examples/Performance/extension_invariance_validation.json	development/benchmark_history/examples_Performance/extension_invariance_validation.json
+2026-09-14T14:30:18	git mv	examples/Performance/final_campaign	development/benchmark_history/examples_Performance/final_campaign
+2026-09-14T14:30:18	git mv	examples/Performance/final_campaign_config.m	development/benchmark_history/examples_Performance/final_campaign_config.m
+2026-09-14T14:30:18	git mv	examples/Performance/final_campaign_preflight.m	development/benchmark_history/examples_Performance/final_campaign_preflight.m
+2026-09-14T14:30:18	git mv	examples/Performance/final_campaign_run_case.m	development/benchmark_history/examples_Performance/final_campaign_run_case.m
+2026-09-14T14:30:18	git mv	examples/Performance/fit_complexity_model.m	development/benchmark_history/examples_Performance/fit_complexity_model.m
+2026-09-14T14:30:18	git mv	examples/Performance/history_logging_validation.json	development/benchmark_history/examples_Performance/history_logging_validation.json
+2026-09-14T14:30:18	git mv	examples/Performance/instrumentation_validation.json	development/benchmark_history/examples_Performance/instrumentation_validation.json
+2026-09-14T14:30:18	git mv	examples/Performance/ledger	development/benchmark_history/examples_Performance/ledger
+2026-09-14T14:30:18	git mv	examples/Performance/legacy_r3	development/benchmark_history/examples_Performance/legacy_r3
+2026-09-14T14:30:18	git mv	examples/Performance/olhoff_benchmark_path_hash.m	development/benchmark_history/examples_Performance/olhoff_benchmark_path_hash.m
+2026-09-14T14:30:18	git mv	examples/Performance/olhoff_equivalence_gate.m	development/benchmark_history/examples_Performance/olhoff_equivalence_gate.m
+2026-09-14T14:30:18	git mv	examples/Performance/olhoff_equivalence_report.m	development/benchmark_history/examples_Performance/olhoff_equivalence_report.m
+2026-09-14T14:30:18	git mv	examples/Performance/olhoff_preflight.m	development/benchmark_history/examples_Performance/olhoff_preflight.m
+2026-09-14T14:30:18	git mv	examples/Performance/performance_benchmark_profile.m	development/benchmark_history/examples_Performance/performance_benchmark_profile.m
+2026-09-14T14:30:18	git mv	examples/Performance/performance_comparison.json	development/benchmark_history/examples_Performance/performance_comparison.json
+2026-09-14T14:30:18	mv	examples/Performance/performance_log.txt	development/benchmark_history/examples_Performance/performance_log.txt
+2026-09-14T14:30:18	git mv	examples/Performance/plot_table1_complexity.m	development/benchmark_history/examples_Performance/plot_table1_complexity.m
+2026-09-14T14:30:19	git mv	examples/Performance/print_complexity_fit_table.m	development/benchmark_history/examples_Performance/print_complexity_fit_table.m
+2026-09-14T14:30:19	git mv	examples/Performance/print_table1_paper_style.m	development/benchmark_history/examples_Performance/print_table1_paper_style.m
+2026-09-14T14:30:19	git mv	examples/Performance/regenerate_from_csv.m	development/benchmark_history/examples_Performance/regenerate_from_csv.m
+2026-09-14T14:30:19	git mv	examples/Performance/repro2007_direct_cfg.m	development/benchmark_history/examples_Performance/repro2007_direct_cfg.m
+2026-09-14T14:30:19	git mv	examples/Performance/repro2007_normalized_config.m	development/benchmark_history/examples_Performance/repro2007_normalized_config.m
+2026-09-14T14:30:19	git mv	examples/Performance/repro2007_tree_hash.m	development/benchmark_history/examples_Performance/repro2007_tree_hash.m
+2026-09-14T14:30:19	git mv	examples/Performance/sha256_hex.m	development/benchmark_history/examples_Performance/sha256_hex.m
+2026-09-14T14:30:19	mv	examples/Performance/table1_complexity_fit.csv	development/benchmark_history/examples_Performance/table1_complexity_fit.csv
+2026-09-14T14:30:19	mv	examples/Performance/table1_complexity_fit.png	development/benchmark_history/examples_Performance/table1_complexity_fit.png
+2026-09-14T14:30:19	mv	examples/Performance/table1_complexity_fit_fixedexp.csv	development/benchmark_history/examples_Performance/table1_complexity_fit_fixedexp.csv
+2026-09-14T14:30:19	mv	examples/Performance/table1_complexity_fit_fixedexp.png	development/benchmark_history/examples_Performance/table1_complexity_fit_fixedexp.png
+2026-09-14T14:30:19	mv	examples/Performance/table1_complexity_fit_fixedexp_linear.png	development/benchmark_history/examples_Performance/table1_complexity_fit_fixedexp_linear.png
+2026-09-14T14:30:19	mv	examples/Performance/table1_complexity_fit_linear.png	development/benchmark_history/examples_Performance/table1_complexity_fit_linear.png
+2026-09-14T14:30:19	mv	examples/Performance/table1_paper_style.pdf	development/benchmark_history/examples_Performance/table1_paper_style.pdf
+2026-09-14T14:30:19	git mv	examples/Performance/table1_paper_style.tex	development/benchmark_history/examples_Performance/table1_paper_style.tex
+2026-09-14T14:30:19	mv	examples/Performance/table1_performance.csv	development/benchmark_history/examples_Performance/table1_performance.csv
+2026-09-14T14:30:19	git mv	examples/Performance/test_shared_topology_renderer.m	development/benchmark_history/examples_Performance/test_shared_topology_renderer.m
+2026-09-14T14:30:19	git mv	examples/Performance/validate_determinism.m	development/benchmark_history/examples_Performance/validate_determinism.m
+2026-09-14T14:30:19	git mv	examples/Performance/validate_extension_invariance.m	development/benchmark_history/examples_Performance/validate_extension_invariance.m
+2026-09-14T14:30:19	git mv	examples/Performance/validate_history_logging.m	development/benchmark_history/examples_Performance/validate_history_logging.m
+2026-09-14T14:30:19	git mv	examples/Performance/validate_instrumentation_invariance.m	development/benchmark_history/examples_Performance/validate_instrumentation_invariance.m
+2026-09-14T14:30:19	git mv	examples/Performance/verify_repro2007_benchmark_equivalence.m	development/benchmark_history/examples_Performance/verify_repro2007_benchmark_equivalence.m
+2026-09-14T14:30:19	git mv	analysis/LabandaApproach	development/experiments/LabandaApproach
+2026-09-14T14:30:19	git mv	analysis/OLHOFF_CURRENT_EFFECTIVE_CONFIG_AUDIT.md	development/migration_history/olhoff_current_promotion/OLHOFF_CURRENT_EFFECTIVE_CONFIG_AUDIT.md
+2026-09-14T14:30:19	git mv	analysis/OLHOFF_CURRENT_PROMOTION_REPORT.md	development/migration_history/olhoff_current_promotion/OLHOFF_CURRENT_PROMOTION_REPORT.md
+2026-09-14T14:30:19	git mv	analysis/OLHOFF_IMPLEMENTATION_MAP.md	development/migration_history/olhoff_current_promotion/OLHOFF_IMPLEMENTATION_MAP.md
+2026-09-14T14:30:19	git mv	analysis/OLHOFF_IMPLEMENTATION_STATUS.md	development/migration_history/olhoff_current_promotion/OLHOFF_IMPLEMENTATION_STATUS.md
+2026-09-14T14:30:19	git mv	analysis/OLHOFF_SOURCE_LINEAGE_AUDIT.md	development/migration_history/olhoff_current_promotion/OLHOFF_SOURCE_LINEAGE_AUDIT.md
+2026-09-14T14:30:19	git mv	analysis/OlhoffApproach	development/legacy_implementations/OlhoffApproach
+2026-09-14T14:30:19	git mv	analysis/OlhoffApproachExact	development/legacy_implementations/OlhoffApproachExact
+2026-09-14T14:30:19	mv	analysis/OlhoffArchive.zip	development/legacy_implementations/OlhoffArchive.zip
+2026-09-14T14:30:19	git mv	analysis/OlhoffCurrent	analysis/Olhoff
+2026-09-14T14:30:20	git mv	analysis/OlhoffM4Reconstruction	development/reconstruction/OlhoffM4Reconstruction
+2026-09-14T14:30:20	git mv	analysis/OlhoffRegularized	development/experiments/OlhoffRegularized
+2026-09-14T14:30:20	git mv	analysis/OlhoffReproduced2007	development/reconstruction/OlhoffReproduced2007
+2026-09-14T14:30:20	git mv	analysis/YukselApproach	analysis/Yuksel
+2026-09-14T14:30:20	git mv	analysis/iteration_count_audit	development/audits/iteration_count_audit
+2026-09-14T14:30:20	git mv	analysis/iteration_efficiency_evaluator_discontinuity_audit	development/experiments/iteration_efficiency/iteration_efficiency_evaluator_discontinuity_audit
+2026-09-14T14:30:20	git mv	analysis/iteration_efficiency_final	development/experiments/iteration_efficiency/iteration_efficiency_final
+2026-09-14T14:30:20	git mv	analysis/iteration_efficiency_final_audit	development/experiments/iteration_efficiency/iteration_efficiency_final_audit
+2026-09-14T14:30:20	git mv	analysis/iteration_efficiency_final_blocker_fix	development/experiments/iteration_efficiency/iteration_efficiency_final_blocker_fix
+2026-09-14T14:30:20	git mv	analysis/iteration_efficiency_methodology_audit	development/experiments/iteration_efficiency/iteration_efficiency_methodology_audit
+2026-09-14T14:30:20	git mv	analysis/iteration_efficiency_methodology_delta_audit	development/experiments/iteration_efficiency/iteration_efficiency_methodology_delta_audit
+2026-09-14T14:30:20	git mv	analysis/iteration_efficiency_methodology_final_recheck	development/experiments/iteration_efficiency/iteration_efficiency_methodology_final_recheck
+2026-09-14T14:30:20	git mv	analysis/iteration_efficiency_phase2a	development/experiments/iteration_efficiency/iteration_efficiency_phase2a
+2026-09-14T14:30:20	git mv	analysis/iteration_efficiency_phase2b_precision	development/experiments/iteration_efficiency/iteration_efficiency_phase2b_precision
+2026-09-14T14:30:20	git mv	analysis/iteration_efficiency_phase2b_recheck	development/experiments/iteration_efficiency/iteration_efficiency_phase2b_recheck
+2026-09-14T14:30:20	git mv	analysis/iteration_efficiency_phase2d_delta_audit	development/experiments/iteration_efficiency/iteration_efficiency_phase2d_delta_audit
+2026-09-14T14:30:20	git mv	analysis/iteration_efficiency_phase2d_evaluator_amendment	development/experiments/iteration_efficiency/iteration_efficiency_phase2d_evaluator_amendment
+2026-09-14T14:30:20	git mv	analysis/iteration_efficiency_phase2f_evaluator_redesign	development/experiments/iteration_efficiency/iteration_efficiency_phase2f_evaluator_redesign
+2026-09-14T14:30:20	git mv	analysis/iteration_efficiency_phase2g_evaluator_selection_audit	development/experiments/iteration_efficiency/iteration_efficiency_phase2g_evaluator_selection_audit
+2026-09-14T14:30:20	git mv	analysis/iteration_efficiency_phase2h_c_refreeze	development/experiments/iteration_efficiency/iteration_efficiency_phase2h_c_refreeze
+2026-09-14T14:30:20	git mv	analysis/iteration_efficiency_phase2i_precision_qualification	development/experiments/iteration_efficiency/iteration_efficiency_phase2i_precision_qualification
+2026-09-14T14:30:20	git mv	analysis/iteration_efficiency_study_design	development/experiments/iteration_efficiency/iteration_efficiency_study_design
+2026-09-14T14:30:20	git mv	analysis/olhoff_fixed_budget_audit	development/audits/olhoff_fixed_budget_audit
+2026-09-14T14:30:20	git mv	analysis/olhoff_native_convergence	development/audits/olhoff_native_convergence
+2026-09-14T14:30:20	git mv	analysis/olhoff_nested_mma_route_audit	development/audits/olhoff_nested_mma_route_audit
+2026-09-14T14:30:20	git mv	analysis/olhoff_practical_convergence_audit	development/audits/olhoff_practical_convergence_audit
+2026-09-14T14:30:20	git mv	analysis/olhoff_stabilization_audit	development/audits/olhoff_stabilization_audit
+2026-09-14T14:30:21	git mv	analysis/ourApproach	analysis/Proposed
+2026-09-14T14:30:21	git mv	analysis/performance_campaign_forensic_audit	development/audits/performance_campaign_forensic_audit
+2026-09-14T14:30:21	git mv	analysis/performance_campaign_targeted_replays	development/benchmark_history/performance_campaign_targeted_replays
+2026-09-14T14:30:21	git mv	analysis/three_method_parametric_study	development/benchmark_history/three_method_parametric_study
+2026-09-14T14:30:21	mv	references	paper/references
+2026-09-14T14:30:21	mv	docs/(Kennedy2021)TopologyOptimizationBenchmarkProblemsforAssessingthePerformanceofOptimizationAlgorithms.pdf.pdf	paper/references/library/(Kennedy2021)TopologyOptimizationBenchmarkProblemsforAssessingthePerformanceofOptimizationAlgorithms.pdf.pdf
+2026-09-14T14:30:21	mv	docs/(Labanda2014)Benchmarking_optimization_solvers for_structural_topology.pdf	paper/references/library/(Labanda2014)Benchmarking_optimization_solvers for_structural_topology.pdf
+2026-09-14T14:30:21	mv	docs/(Nocedal)_Numerical_Optimisation.pdf	paper/references/library/(Nocedal)_Numerical_Optimisation.pdf
+2026-09-14T14:30:21	mv	docs/ARPACK.pdf	paper/references/library/ARPACK.pdf
+2026-09-14T14:30:21	mv	docs/Angelucci (2022) - Topology optimization of multi‑story buildings under fully non‑stationary stochastic seismic ground motion.pdf	paper/references/library/Angelucci (2022) - Topology optimization of multi‑story buildings under fully non‑stationary stochastic seismic ground motion.pdf
+2026-09-14T14:30:21	mv	docs/Arora and Wang - 2005 - Review of formulations for structural and mechanic.pdf	paper/references/library/Arora and Wang - 2005 - Review of formulations for structural and mechanic.pdf
+2026-09-14T14:30:21	mv	docs/Bau_Numerical_linear_Algebra_BOOK.pdf	paper/references/library/Bau_Numerical_linear_Algebra_BOOK.pdf
+2026-09-14T14:30:21	mv	docs/Chung (2018) - Implementation of topology optimization using openMDAO.pdf	paper/references/library/Chung (2018) - Implementation of topology optimization using openMDAO.pdf
+2026-09-14T14:30:21	mv	docs/Chung (2018) - Topology optimization in OpenMDAO.pdf	paper/references/library/Chung (2018) - Topology optimization in OpenMDAO.pdf
+2026-09-14T14:30:21	mv	docs/DatasetDacl10kLink copy.txt	development/historical_documents/docs/DatasetDacl10kLink copy.txt
+2026-09-14T14:30:21	mv	docs/DatasetDacl10kLink.txt	development/historical_documents/docs/DatasetDacl10kLink.txt
+2026-09-14T14:30:21	mv	docs/Gao(2020)_Level-set_topology_optimization_review.pdf	paper/references/library/Gao(2020)_Level-set_topology_optimization_review.pdf
+2026-09-14T14:30:21	mv	docs/Giga-voxel_computation_morphogenesis_for_structural_design.pdf	paper/references/library/Giga-voxel_computation_morphogenesis_for_structural_design.pdf
+2026-09-14T14:30:21	mv	docs/Gomez (2019) - Topology optimization framework for structures subjected to stationary stochastic dynamic loads.pdf	paper/references/library/Gomez (2019) - Topology optimization framework for structures subjected to stationary stochastic dynamic loads.pdf
+2026-09-14T14:30:21	mv	docs/Gray (2019) - OpenMDAO-an open-source framework for multidisciplinary design, analysis, and optimization.pdf	paper/references/library/Gray (2019) - OpenMDAO-an open-source framework for multidisciplinary design, analysis, and optimization.pdf
+2026-09-14T14:30:21	mv	docs/Holmberg(2013)-Stress constrained topology optimization.pdf	paper/references/library/Holmberg(2013)-Stress constrained topology optimization.pdf
+2026-09-14T14:30:21	mv	docs/Huang(2009)_Evolutionary_topological_optimisation_of_vibrationg_continuum_structures_for_natural_frequencies.pdf	paper/references/library/Huang(2009)_Evolutionary_topological_optimisation_of_vibrationg_continuum_structures_for_natural_frequencies.pdf
+2026-09-14T14:30:21	mv	docs/Klarbring(2009) - An Introduction to Structural Optimisation.pdf	paper/references/library/Klarbring(2009) - An Introduction to Structural Optimisation.pdf
+2026-09-14T14:30:21	mv	docs/Li(2021)-Topology optimization of vibrating structures with frequency band constraints.pdf	paper/references/library/Li(2021)-Topology optimization of vibrating structures with frequency band constraints.pdf
+2026-09-14T14:30:21	mv	docs/Lin(2022)_A multi-step relay implementation of the successive iteration of analysis and design method for large-scale natural frequency-related topology optimization - s00466-023-02372-1.pdf	paper/references/library/Lin(2022)_A multi-step relay implementation of the successive iteration of analysis and design method for large-scale natural frequency-related topology optimization - s00466-023-02372-1.pdf
+2026-09-14T14:30:21	mv	docs/Nguyen (2015) - Isogeometric analysis; An overview and computer implementation aspects.pdf	paper/references/library/Nguyen (2015) - Isogeometric analysis; An overview and computer implementation aspects.pdf
+2026-09-14T14:30:21	git mv	docs/Nlpql.f	development/historical_documents/docs/Nlpql.f
+2026-09-14T14:30:21	mv	docs/Pozo (2023) - TopSTO; a 115-line code for topology optimization of structures under stationary stochastic dynamic loading.pdf	paper/references/library/Pozo (2023) - TopSTO; a 115-line code for topology optimization of structures under stationary stochastic dynamic loading.pdf
+2026-09-14T14:30:21	mv	docs/Rojas(2015)_DTU_Mathematical_programming_methods.pdf	paper/references/library/Rojas(2015)_DTU_Mathematical_programming_methods.pdf
+2026-09-14T14:30:21	mv	docs/SQP_(Labanda2016)An_efficient_second-order_SQP_method.pdf	paper/references/library/SQP_(Labanda2016)An_efficient_second-order_SQP_method.pdf
+2026-09-14T14:30:21	mv	docs/SQP_(Morales2012)A_sequential_quadratic_programming_algorithm_with_an_additional_equality_constrained_phase_a-sequential-quadratic-programming-algorithm-with-an-5ckaoebdch.pdf	paper/references/library/SQP_(Morales2012)A_sequential_quadratic_programming_algorithm_with_an_additional_equality_constrained_phase_a-sequential-quadratic-programming-algorithm-with-an-5ckaoebdch.pdf
+2026-09-14T14:30:21	mv	docs/SQP_(Murray2005)_SNOPT_Large-scale.pdf	paper/references/library/SQP_(Murray2005)_SNOPT_Large-scale.pdf
+2026-09-14T14:30:21	mv	docs/Shin(2023)_Topology optimization via machine learning.pdf	paper/references/library/Shin(2023)_Topology optimization via machine learning.pdf
+2026-09-14T14:30:21	mv	docs/Teimouri (2109) - Multi-objective BESO topology optimization for stiffness and frequency of continuum structures.pdf	paper/references/library/Teimouri (2109) - Multi-objective BESO topology optimization for stiffness and frequency of continuum structures.pdf
+2026-09-14T14:30:21	mv	docs/Wang (2021) - A comprehensive review of educational articles on structural and multidisciplinary optimization.pdf	paper/references/library/Wang (2021) - A comprehensive review of educational articles on structural and multidisciplinary optimization.pdf
+2026-09-14T14:30:21	mv	docs/Xu(2019)_Level-set_topology_optimization.pdf	paper/references/library/Xu(2019)_Level-set_topology_optimization.pdf
+2026-09-14T14:30:21	mv	docs/Xue(2019)-Topology optimization under finite deformation via Moving Morphable Void (MMV) approach.pdf	paper/references/library/Xue(2019)-Topology optimization under finite deformation via Moving Morphable Void (MMV) approach.pdf
+2026-09-14T14:30:21	mv	docs/bimodality_gap	development/experiments/bimodality_gap
+2026-09-14T14:30:21	mv	docs/ec-03-2025-0278en.pdf	paper/references/library/ec-03-2025-0278en.pdf
+2026-09-14T14:30:21	git mv	docs/olhoff_audit.md	development/historical_documents/docs/olhoff_audit.md
+2026-09-14T14:30:21	git mv	docs/olhoff_implementation_analysis.tex	development/historical_documents/docs/olhoff_implementation_analysis.tex
+2026-09-14T14:30:21	git mv	docs/olhoff_penalty_continuation_experiment.md	development/historical_documents/docs/olhoff_penalty_continuation_experiment.md
+2026-09-14T14:30:21	mv	docs/s00158-007-0101-y.pdf	paper/references/library/s00158-007-0101-y.pdf
+2026-09-14T14:30:21	mv	docs/s00158-007-0167-6.pdf	paper/references/library/s00158-007-0167-6.pdf
+2026-09-14T14:30:21	mv	docs/s00158-010-0594-7.pdf	paper/references/library/s00158-010-0594-7.pdf
+2026-09-14T14:30:21	mv	docs/s00158-018-2159-0.pdf	paper/references/library/s00158-018-2159-0.pdf
+2026-09-14T14:30:21	mv	docs/s00158-025-04186-6.pdf	paper/references/library/s00158-025-04186-6.pdf
+2026-09-14T14:30:21	mv	docs/s001580050130.pdf	paper/references/library/s001580050130.pdf
+2026-09-14T14:30:21	mv	docs/s11831-021-09544-3.pdf	paper/references/library/s11831-021-09544-3.pdf
+2026-09-14T14:30:21	mv	docs/sequential_approximation_rationale.aux	development/historical_documents/docs/sequential_approximation_rationale.aux
+2026-09-14T14:30:21	mv	docs/sequential_approximation_rationale.log	development/historical_documents/docs/sequential_approximation_rationale.log
+2026-09-14T14:30:22	mv	docs/sequential_approximation_rationale.pdf	development/historical_documents/docs/sequential_approximation_rationale.pdf
+2026-09-14T14:30:22	mv	docs/topcut.pdf	paper/references/library/topcut.pdf
+2026-09-14T14:30:22	git mv	examples/Revision_v1	development/experiments/Revision_v1
+2026-09-14T14:30:22	git mv	examples/check_edof_and_harmonic_sensitivity_optionB.m	development/legacy_examples/examples_root/check_edof_and_harmonic_sensitivity_optionB.m
+2026-09-14T14:30:22	mv	examples/conference_benchmark.zip	development/benchmark_history/conference_benchmark.zip
+2026-09-14T14:30:22	git mv	examples/conference_benchmark_v1	development/benchmark_history/conference_benchmark_v1
+2026-09-14T14:30:22	git mv	examples/demo_final_visualization_quality.m	development/legacy_examples/examples_root/demo_final_visualization_quality.m
+2026-09-14T14:30:22	git mv	examples/test_multi_load_cases_ourApproach.m	development/legacy_examples/examples_root/test_multi_load_cases_ourApproach.m
+2026-09-14T14:30:22	git mv	examples/test_new_bc_types.m	development/legacy_examples/examples_root/test_new_bc_types.m
+2026-09-14T14:30:22	git mv	examples/test_passive_regions_rect.m	development/legacy_examples/examples_root/test_passive_regions_rect.m
+2026-09-14T14:30:22	mv	examples/topopt_config_correlation.csv	development/legacy_examples/examples_root/topopt_config_correlation.csv
+2026-09-14T14:30:22	mv	tests/__pycache__	development/experiments/Revision_v1_tests_pycache
+2026-09-14T14:30:22	git mv	BENCHMARK_FAIRNESS_AUDIT.md	development/historical_documents/repository_root/BENCHMARK_FAIRNESS_AUDIT.md
+2026-09-14T14:30:22	git mv	BENCHMARK_PROTOCOL_R3.md	development/historical_documents/repository_root/BENCHMARK_PROTOCOL_R3.md
+2026-09-14T14:30:22	git mv	DIAGNOSTIC_REPRO2007_BENCHMARK.md	development/historical_documents/repository_root/DIAGNOSTIC_REPRO2007_BENCHMARK.md
+2026-09-14T14:30:22	git mv	MIGRATION_REPRODUCTION2007_REPORT.md	development/historical_documents/repository_root/MIGRATION_REPRODUCTION2007_REPORT.md
+2026-09-14T14:30:22	git mv	Matlab	development/reconstruction/Matlab
+2026-09-14T14:30:22	git mv	OLHOFF_BENCHMARK_EQUIVALENCE_REPORT.md	development/historical_documents/repository_root/OLHOFF_BENCHMARK_EQUIVALENCE_REPORT.md
+2026-09-14T14:30:22	git mv	OLHOFF_NATIVE_CONVERGENCE_DETECTOR.md	development/historical_documents/repository_root/OLHOFF_NATIVE_CONVERGENCE_DETECTOR.md
+2026-09-14T14:30:22	git mv	OLHOFF_PRACTICAL_CONVERGENCE_AUDIT.md	development/historical_documents/repository_root/OLHOFF_PRACTICAL_CONVERGENCE_AUDIT.md
+2026-09-14T14:30:22	mv	OlhoffFable.txt	development/historical_documents/repository_root/OlhoffFable.txt
+2026-09-14T14:30:22	git mv	PROPOSED_NATIVE_PROFILE_AUDIT.md	development/historical_documents/repository_root/PROPOSED_NATIVE_PROFILE_AUDIT.md
+2026-09-14T14:30:22	git mv	THREE_METHOD_PARAMETRIC_STUDY.md	development/historical_documents/repository_root/THREE_METHOD_PARAMETRIC_STUDY.md
+2026-09-14T14:30:22	mv	main.log	development/historical_documents/repository_root/main.log
+2026-09-14T14:30:22	mv	phase5_evidence	development/experiments/Revision_v1_phase5_evidence
+2026-09-14T14:30:22	mv	results	development/legacy_examples/results
+2026-09-14T14:30:22	mv	scripts	development/experiments/Revision_v1_scripts
+2026-09-14T14:30:22	git mv	source_of_truth	development/legacy_implementations/source_of_truth
+2026-09-14T14:30:22	git mv	study_preregistration.json	development/historical_documents/repository_root/study_preregistration.json
+2026-09-14T14:30:22	mv	texput.log	development/historical_documents/repository_root/texput.log
+2026-09-14T14:38:14	mv	examples/Performance/conference_benchmark.zip	development/benchmark_history/examples_Performance/conference_benchmark.zip

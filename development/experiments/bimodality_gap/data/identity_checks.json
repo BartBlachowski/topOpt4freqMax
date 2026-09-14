@@ -1,0 +1,37 @@
+[
+  {
+    "check": "budget400_160x20_prefix_bitwise_vs_campaign",
+    "pass": true,
+    "detail": "prefix length 121 (campaign stop); Mnd at k_stop: new 0.114616, campaign 0.114616"
+  },
+  {
+    "check": "budget400_240x30_prefix_bitwise_vs_campaign",
+    "pass": true,
+    "detail": "prefix length 111 (campaign stop); Mnd at k_stop: new 0.122668, campaign 0.122668"
+  },
+  {
+    "check": "budget400_320x40_prefix_bitwise_vs_campaign",
+    "pass": true,
+    "detail": "prefix length 101 (campaign stop); Mnd at k_stop: new 0.140618, campaign 0.140618"
+  },
+  {
+    "check": "budget400_400x50_prefix_bitwise_vs_campaign",
+    "pass": true,
+    "detail": "prefix length 93 (campaign stop); Mnd at k_stop: new 0.121592, campaign 0.121592"
+  },
+  {
+    "check": "budget400_640x80_prefix_bitwise_vs_campaign",
+    "pass": true,
+    "detail": "prefix length 156 (campaign stop); Mnd at k_stop: new 0.132972, campaign 0.132972"
+  },
+  {
+    "check": "budget400_800x100_prefix_bitwise_vs_campaign",
+    "pass": true,
+    "detail": "prefix length 246 (campaign stop); Mnd at k_stop: new 0.164540, campaign 0.164540"
+  },
+  {
+    "check": "filterEl3_400x50_rho_bitwise_vs_campaign",
+    "pass": true,
+    "detail": "max|drho| = 0.000e+00, rminEl(new) = 3"
+  }
+]

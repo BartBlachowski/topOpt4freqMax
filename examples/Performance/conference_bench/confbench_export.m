@@ -12,6 +12,20 @@ function files = confbench_export(cfg, records, manifest, scaling)
 %     timing_schema.json                     what each count and time means
 %     BENCHMARK_NOTES.md                     the caveats, ready to paste
 %
+%   Table columns (timing schema 2):
+%     Count 1, Count 2, Time 1, Time 2   method-native stages (see the schema)
+%     Other                              overhead_time_s, defined identically
+%                                        for every method: setup, final modal
+%                                        analysis, dispatch
+%     Total                              caller-side wall time;
+%                                        Time 1 + Time 2 + Other = Total
+%     omega_1 native                     the solver's own material model; a
+%                                        dagger marks a value that deviates
+%                                        from E1 by more than the tolerance in
+%                                        CONFBENCH_CAVEATS
+%     omega_1 E1                         the frozen common evaluator, the only
+%                                        omega_1 comparable across methods
+%
 %   There is no memory column anywhere.  See CONFBENCH_CAVEATS.
 
 if nargin < 4; scaling = struct(); end
@@ -30,7 +44,7 @@ files.notes_md     = fullfile(od, 'BENCHMARK_NOTES.md');
 
 writePrimaryCsv(files.primary_csv, records, cav);
 writeLatex(files.primary_tex, records, cav);
-writeDetailedCsv(files.detailed_csv, records);
+writeDetailedCsv(files.detailed_csv, records, cav);
 writeResultsJson(files.results_json, cfg, records, scaling, cav);
 writeJson(files.manifest_json, manifest);
 writeJson(files.schema_json, confbench_timing_schema());
@@ -42,23 +56,27 @@ function writePrimaryCsv(path, R, cav)
 fid = fopen(path, 'w');
 c = onCleanup(@() fclose(fid));
 fprintf(fid, '# %s\n', cav.table_caption);
+fprintf(fid, '# %s\n', cav.other_column);
+fprintf(fid, '# %s\n', cav.omega1_columns);
 fprintf(fid, '# %s\n', cav.olhoff_label);
 fprintf(fid, '# Memory: %s\n', cav.memory);
-fprintf(fid, ['Method,Mesh,Count1,Count2,Time1_s,Time2_s,Total_s,omega1,' ...
+fprintf(fid, ['Method,Mesh,Count1,Count2,Time1_s,Time2_s,Other_s,Total_s,' ...
+    'omega1_native,omega1_native_flag,omega1_common_E1,' ...
     'Count1_meaning,Count2_meaning,Time1_meaning,Time2_meaning,' ...
     'Olhoff_inner_per_outer,Olhoff_inner_time_share_pct,Status\n']);
 for i = 1:numel(R)
     r = R(i);
-    [c1, c2, t1, t2, tt] = primaryCells(r);
+    [c1, c2, t1, t2, ov, tt] = primaryCells(r);
+    [nat, e1, flagged] = omega1Cells(r, cav.omega1_native_flag_tol, '%.10g');
     if strcmp(r.method_key, 'olhoff') && isfield(r.counts, 'inner_iterations_per_outer_mean')
         ipo = num(r.counts.inner_iterations_per_outer_mean, '%.4f');
         shr = num(r.times.inner_time_share_pct, '%.4f');
     else
         ipo = 'N/A'; shr = 'N/A';
     end
-    fprintf(fid, '%s,%dx%d,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s\n', ...
-        csvText(r.method), r.mesh(1), r.mesh(2), c1, c2, t1, t2, tt, ...
-        num(r.omega1_native, '%.10g'), ...
+    fprintf(fid, '%s,%dx%d,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s\n', ...
+        csvText(r.method), r.mesh(1), r.mesh(2), c1, c2, t1, t2, ov, tt, ...
+        nat, flagText(flagged), e1, ...
         csvText(nameOr(r.counts, 'count1_name')), csvText(nameOr(r.counts, 'count2_name')), ...
         csvText(nameOr(r.times, 'time1_name')),  csvText(nameOr(r.times, 'time2_name')), ...
         ipo, shr, csvText(r.status));
@@ -71,18 +89,29 @@ fid = fopen(path, 'w');
 c = onCleanup(@() fclose(fid));
 fprintf(fid, '%% Conference performance table -- generated, do not edit by hand.\n');
 fprintf(fid, '%% %s\n', cav.olhoff_label);
+fprintf(fid, '%% Columns: %s\n', cav.other_column);
+fprintf(fid, '%% omega_1: %s\n', cav.omega1_columns);
 fprintf(fid, '\\begin{table}[t]\n\\centering\n');
-fprintf(fid, '\\begin{tabular}{llrrrrrr}\n\\hline\n');
+fprintf(fid, '\\begin{tabular}{llrrrrrrrr}\n\\hline\n');
 fprintf(fid, ['Method & Mesh & Count 1 & Count 2 & Time 1 [s] & Time 2 [s] & ' ...
-    'Total [s] & $\\omega_1$ \\\\\n\\hline\n']);
+    'Other [s] & Total [s] & $\\omega_1$ native & $\\omega_1$ E1 \\\\\n\\hline\n']);
 for i = 1:numel(R)
     r = R(i);
-    [c1, c2, t1, t2, tt] = primaryCells(r, '%.2f');
-    fprintf(fid, '%s & $%d\\times%d$ & %s & %s & %s & %s & %s & %s \\\\\n', ...
-        texEscape(r.method), r.mesh(1), r.mesh(2), c1, c2, t1, t2, tt, ...
-        num(r.omega1_native, '%.2f'));
+    [c1, c2, t1, t2, ov, tt] = primaryCells(r, '%.2f');
+    [nat, e1, flagged] = omega1Cells(r, cav.omega1_native_flag_tol, '%.2f');
+    if flagged; nat = [nat '\textsuperscript{\textdagger}']; end
+    fprintf(fid, '%s & $%d\\times%d$ & %s & %s & %s & %s & %s & %s & %s & %s \\\\\n', ...
+        texEscape(r.method), r.mesh(1), r.mesh(2), c1, c2, t1, t2, ov, tt, nat, e1);
 end
 fprintf(fid, '\\hline\n\\end{tabular}\n');
+% Column semantics go in a notes block under the tabular, not in the caption:
+% LaTeX's \@makecaption measures the caption as ONE line, and a caption longer
+% than about 16000 pt (the Olhoff caveat plus these notes) raises "Dimension
+% too large".
+fprintf(fid, '\\par\\vspace{2pt}\\begin{minipage}{\\linewidth}\\footnotesize\n');
+fprintf(fid, '%s\n\n', texEscape(cav.other_column));
+fprintf(fid, '%s\n', texEscape(cav.omega1_columns));
+fprintf(fid, '\\end{minipage}\n');
 fprintf(fid, '\\caption{%s\n', texEscape(cav.table_caption));
 fprintf(fid, '%s\n', texEscape(interpretationSentence(R)));
 fprintf(fid, '%s}\n', texEscape(cav.olhoff));
@@ -101,10 +130,23 @@ if ~isempty(olh)
         end
     end
 end
+
+% Flagged native omega_1 values, so the fragment carries its own audit trail.
+fl = flaggedRows(R, cav.omega1_native_flag_tol);
+if ~isempty(fl)
+    fprintf(fid, '\n%% Native omega_1 values marked with a dagger (deviation from E1 > %g%%):\n', ...
+        100*cav.omega1_native_flag_tol);
+    for i = 1:numel(fl)
+        r = fl(i);
+        fprintf(fid, '%%   %s %dx%d: native omega_1..3 = %s | E1 omega_1 = %s (selected mode void-KE share %s)\n', ...
+            r.method, r.mesh(1), r.mesh(2), omegaTriple(r, '%.2f'), num(e1Of(r), '%.2f'), num(voidKEOf(r), '%.3f'));
+    end
+end
+fprintf(fid, '\n%% Scaling caveat: %s\n', cav.sparse_step);
 end
 
 % =========================================================================
-function writeDetailedCsv(path, R)
+function writeDetailedCsv(path, R, cav)
 %WRITEDETAILEDCSV  Explicit method-specific field names, full precision.
 fid = fopen(path, 'w');
 c = onCleanup(@() fclose(fid));
@@ -112,7 +154,8 @@ fprintf(fid, ['method,method_key,nelx,nely,n_elements,status,status_note,ok,' ..
     'scientific_observation,' ...
     'omega1_native,omega2_native,omega3_native,' ...
     'proposed_stage1_solves,proposed_stage2_iterations,' ...
-    'proposed_stage1_time_s,proposed_stage1_reference_eigen_time_s,proposed_stage2_time_s,' ...
+    'proposed_stage1_time_s,proposed_stage1_reference_eigen_time_s,' ...
+    'proposed_stage1_preparation_time_s,proposed_stage2_time_s,' ...
     'yuksel_stage1_iterations,yuksel_stage2_iterations,yuksel_iterations_total,' ...
     'yuksel_stage1_time_s,yuksel_stage2_time_s,' ...
     'olhoff_outer_iterations,olhoff_inner_iterations_total,' ...
@@ -125,17 +168,19 @@ fprintf(fid, ['method,method_key,nelx,nely,n_elements,status,status_note,ok,' ..
     'olhoff_outer_time_per_outer_median_s,olhoff_outer_time_excluding_inner_per_outer_mean_s,' ...
     'olhoff_eigen_time_per_outer_mean_s,olhoff_gradient_time_per_outer_mean_s,' ...
     'olhoff_total_wall_time_per_outer_s,' ...
-    'overhead_time_s,total_wall_time_s,' ...
+    'time1_s,time2_s,overhead_time_s,total_wall_time_s,' ...
     'timing_accounting_residual_s,timing_accounting_relative_residual,' ...
     'timing_accounting_fail,independent_crosscheck_residual_s,' ...
     'independent_crosscheck_fail,' ...
     'stop_reason,volume,grayness,' ...
     'omega1_common_raw_E1,omega1_common_raw_E2,omega1_common_raw_E3,' ...
+    'omega1_native_vs_E1_rel_dev,omega1_native_flag,E1_selected_mode_voidKE,' ...
     'max_ram_mb_DEPRECATED_UNMEASURED\n']);
 for i = 1:numel(R)
     r = R(i);
     C = r.counts; T = r.times; A = r.accounting;
     ev = evalOr(r);
+    [~, ~, flagged, dev] = omega1Cells(r, cav.omega1_native_flag_tol);
     % The method-specific blocks are GATED on the method.  Proposed and Yuksel
     % both carry a field called stage2_iterations and both carry stage1_time_s,
     % and they mean different things; without the gate a Yuksel row would fill
@@ -147,8 +192,9 @@ for i = 1:numel(R)
         r.mesh(1), r.mesh(2), r.mesh(1)*r.mesh(2), csvText(r.status), ...
         csvText(r.status_note), r.ok, isfield(r,'scientific_observation') && r.scientific_observation);
     fprintf(fid, '%s,%s,%s,', num(r.omega(1)), num(vecOr(r.omega,2)), num(vecOr(r.omega,3)));
-    fprintf(fid, '%s,%s,%s,%s,%s,', g(isP,C,'stage1_solves'), g(isP,C,'stage2_iterations'), ...
-        g(isP,T,'stage1_time_s'), g(isP,T,'stage1_reference_eigen_time_s'), g(isP,T,'stage2_time_s'));
+    fprintf(fid, '%s,%s,%s,%s,%s,%s,', g(isP,C,'stage1_solves'), g(isP,C,'stage2_iterations'), ...
+        g(isP,T,'stage1_time_s'), g(isP,T,'stage1_reference_eigen_time_s'), ...
+        g(isP,T,'stage1_preparation_time_s'), g(isP,T,'stage2_time_s'));
     fprintf(fid, '%s,%s,%s,%s,%s,', g(isY,C,'stage1_iterations'), g(isY,C,'stage2_iterations'), ...
         g(isY,C,'iterations_total_generic'), g(isY,T,'stage1_time_s'), g(isY,T,'stage2_time_s'));
     fprintf(fid, '%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,', ...
@@ -167,13 +213,14 @@ for i = 1:numel(R)
         g(isO,T,'outer_time_per_outer_median_s'), g(isO,T,'outer_time_excluding_inner_per_outer_mean_s'), ...
         g(isO,T,'eigen_time_per_outer_mean_s'), g(isO,T,'gradient_time_per_outer_mean_s'), ...
         g(isO,T,'total_wall_time_per_outer_s'));
-    fprintf(fid, '%s,%s,', f(T,'overhead_time_s'), f(T,'total_wall_time_s'));
+    fprintf(fid, '%s,%s,%s,%s,', f(T,'time1'), f(T,'time2'), f(T,'overhead_time_s'), f(T,'total_wall_time_s'));
     fprintf(fid, '%s,%s,%d,%s,%d,', f(A,'timing_accounting_residual_s'), ...
         f(A,'timing_accounting_relative_residual'), logicalOr(A,'timing_accounting_fail'), ...
         f(A,'independent_crosscheck_residual_s'), logicalOr(A,'independent_crosscheck_fail'));
     fprintf(fid, '%s,%s,%s,', csvText(f(r.stopping,'stop_reason')), ...
         f(r.stopping,'volume'), f(r.stopping,'final_grayness'));
     fprintf(fid, '%s,%s,%s,', ev.E1, ev.E2, ev.E3);
+    fprintf(fid, '%s,%s,%s,', num(dev), flagText(flagged), num(voidKEOf(r)));
     fprintf(fid, 'NOT_MEASURED\n');
 end
 end
@@ -181,7 +228,7 @@ end
 % =========================================================================
 function writeResultsJson(path, cfg, R, scaling, cav)
 out = struct();
-out.schema = 'conference_performance_benchmark_results/1';
+out.schema = 'conference_performance_benchmark_results/2';
 out.generated = char(string(datetime('now','TimeZone','local','Format','yyyy-MM-dd''T''HH:mm:ssXXX')));
 out.run_label = cfg.runLabel;
 out.scientific_evidence = cfg.scientificEvidence;
@@ -196,6 +243,10 @@ for i = 1:numel(R)
     if isfield(r, 'x'); r = rmfield(r, 'x'); end
     if isfield(r, 'telemetry'); r = rmfield(r, 'telemetry'); end
     if isfield(r, 'effective_config'); r = rmfield(r, 'effective_config'); end
+    [~, ~, flagged, dev] = omega1Cells(r, cav.omega1_native_flag_tol);
+    r.omega1_common_E1 = e1Of(r);
+    r.omega1_native_vs_E1_rel_dev = dev;
+    r.omega1_native_flag = flagged;
     recs{i} = r;
 end
 out.runs = recs;
@@ -213,10 +264,16 @@ fprintf(fid, '- run label: `%s`\n', cfg.runLabel);
 fprintf(fid, '- scientific evidence: **%s**\n', tf(cfg.scientificEvidence));
 fprintf(fid, '- performance campaign: **%s**\n', tf(cfg.performanceCampaign));
 fprintf(fid, '- resolutions: %s\n', meshList(cfg.resolutions));
-fprintf(fid, '- threads: %d\n\n', manifest.environment.max_num_comp_threads);
+fprintf(fid, '- threads: %d\n', manifest.environment.max_num_comp_threads);
+fprintf(fid, '- timing schema: `%s`\n\n', confbench_timing_schema().schema_version);
 
 fprintf(fid, '## How to read the table\n\n%s\n\n', cav.table_caption);
 fprintf(fid, '%s\n\n', interpretationSentence(R));
+fprintf(fid, '%s\n\n', cav.other_column);
+fprintf(fid, '%s\n\n', cav.omega1_columns);
+
+writeProposedStage1Section(fid, R, cav);
+writeFlaggedOmegaSection(fid, R, cav);
 
 fprintf(fid, '## %s\n\n', confbench_display_name('olhoff'));
 fprintf(fid, '%s\n\n', cav.olhoff_label);
@@ -264,28 +321,175 @@ if isfield(scaling, 'fitted') && scaling.fitted
 else
     fprintf(fid, '_No scaling fit was performed for this run: %s_\n\n', scalingReason(scaling));
 end
+writePerIterationSection(fid, R, cav);
 
 fprintf(fid, '## Results\n\n');
-fprintf(fid, '| Method | Mesh | Count 1 | Count 2 | Time 1 [s] | Time 2 [s] | Total [s] | omega1 | Status |\n');
-fprintf(fid, '|---|---|---|---|---|---|---|---|---|\n');
+fprintf(fid, '| Method | Mesh | Count 1 | Count 2 | Time 1 [s] | Time 2 [s] | Other [s] | Total [s] | omega1 native | omega1 E1 | Status |\n');
+fprintf(fid, '|---|---|---|---|---|---|---|---|---|---|---|\n');
 for i = 1:numel(R)
     r = R(i);
-    [c1, c2, t1, t2, tt] = primaryCells(r, '%.3f');
-    fprintf(fid, '| %s | %dx%d | %s | %s | %s | %s | %s | %s | %s |\n', ...
-        r.method, r.mesh(1), r.mesh(2), c1, c2, t1, t2, tt, ...
-        num(r.omega1_native, '%.4f'), r.status);
+    [c1, c2, t1, t2, ov, tt] = primaryCells(r, '%.3f');
+    [nat, e1, flagged] = omega1Cells(r, cav.omega1_native_flag_tol, '%.4f');
+    if flagged; nat = [nat ' †']; end
+    fprintf(fid, '| %s | %dx%d | %s | %s | %s | %s | %s | %s | %s | %s | %s |\n', ...
+        r.method, r.mesh(1), r.mesh(2), c1, c2, t1, t2, ov, tt, nat, e1, r.status);
+end
+fprintf(fid, '\n† native omega1 deviates from E1 by more than %g%% (see "Native omega_1 values flagged").\n\n', ...
+    100*cav.omega1_native_flag_tol);
+end
+
+% =========================================================================
+function writeProposedStage1Section(fid, R, cav)
+P = R(strcmp({R.method_key}, 'proposed'));
+P = P(arrayfun(@(r) isfield(r.times, 'stage1_preparation_time_s'), P));
+if isempty(P); return; end
+fprintf(fid, '### Proposed Stage 1: eigenanalysis versus preparation\n\n%s\n\n', cav.proposed_preparation);
+fprintf(fid, '| Mesh | Initialization incl. eigenanalysis [s] | Time 1 = reference eigenanalysis [s] | Preparation [s] (in Other) | Other [s] | Total [s] |\n');
+fprintf(fid, '|---|---|---|---|---|---|\n');
+prep = zeros(1, numel(P));
+for i = 1:numel(P)
+    r = P(i); T = r.times; prep(i) = T.stage1_preparation_time_s;
+    fprintf(fid, '| %dx%d | %s | %s | %s | %s | %s |\n', r.mesh(1), r.mesh(2), ...
+        f(T,'stage1_time_s','%.3f'), f(T,'time1','%.3f'), f(T,'stage1_preparation_time_s','%.3f'), ...
+        f(T,'overhead_time_s','%.3f'), f(T,'total_wall_time_s','%.3f'));
+end
+[pmax, imax] = max(prep);
+rest = prep; rest(imax) = [];
+if numel(rest) >= 1
+    fprintf(fid, ['\nThe largest preparation value, %.3f s at %dx%d, is the first measured row of its ' ...
+        'session; the other %d rows lie between %.3f and %.3f s, independent of the mesh.\n\n'], ...
+        pmax, P(imax).mesh(1), P(imax).mesh(2), numel(rest), min(rest), max(rest));
+else
+    fprintf(fid, '\n');
+end
+end
+
+% =========================================================================
+function writeFlaggedOmegaSection(fid, R, cav)
+fl = flaggedRows(R, cav.omega1_native_flag_tol);
+fprintf(fid, '### Native omega_1 values flagged\n\n');
+if isempty(fl)
+    fprintf(fid, 'No native omega_1 deviates from its E1 value by more than %g%%.\n\n', ...
+        100*cav.omega1_native_flag_tol);
+    return
+end
+fprintf(fid, ['%d row(s) carry a native omega_1 that deviates from E1 by more than %g%%. ' ...
+    'For each, the first three native modes and the E1 selected structural mode are listed; a ' ...
+    'cluster of native modes within a few percent of each other, and an E1 mode whose kinetic ' ...
+    'energy in elements with rho < 0.1 (void-KE share) is near zero, is the signature of ' ...
+    'localized near-void modes in the native model, not of a different structure.\n\n'], ...
+    numel(fl), 100*cav.omega1_native_flag_tol);
+fprintf(fid, '| Method | Mesh | native omega_1, omega_2, omega_3 | E1 omega_1 | deviation | E1 selected mode void-KE share |\n');
+fprintf(fid, '|---|---|---|---|---|---|\n');
+for i = 1:numel(fl)
+    r = fl(i);
+    [~, ~, ~, dev] = omega1Cells(r, cav.omega1_native_flag_tol);
+    fprintf(fid, '| %s | %dx%d | %s | %s | %.1f%% | %s |\n', r.method, r.mesh(1), r.mesh(2), ...
+        omegaTriple(r, '%.2f'), num(e1Of(r), '%.2f'), 100*dev, num(voidKEOf(r), '%.3f'));
 end
 fprintf(fid, '\n');
 end
 
 % =========================================================================
-function [c1, c2, t1, t2, tt] = primaryCells(r, tfmt)
+function writePerIterationSection(fid, R, cav)
+M = zeros(0, 2);
+for i = 1:numel(R)
+    if ~ismember(R(i).mesh(:).', M, 'rows'); M(end+1, :) = R(i).mesh(:).'; end %#ok<AGROW>
+end
+if isempty(M); return; end
+fprintf(fid, '### Per-iteration cost across meshes\n\n%s\n\n', cav.sparse_step);
+fprintf(fid, '| Mesh | DOFs | Proposed SIMP [s/it] | Yuksel Stage 1 [s/it] | Yuksel Stage 2 [s/it] | Du-Olhoff eig+assembly [s/outer] | Du-Olhoff inner MMA [s/it] |\n');
+fprintf(fid, '|---|---|---|---|---|---|---|\n');
+for k = 1:size(M, 1)
+    nelx = M(k, 1); nely = M(k, 2);
+    p = pickRow(R, 'proposed', M(k, :)); y = pickRow(R, 'yuksel', M(k, :)); o = pickRow(R, 'olhoff', M(k, :));
+    fprintf(fid, '| %dx%d | %d | %s | %s | %s | %s | %s |\n', nelx, nely, 2*(nelx+1)*(nely+1), ...
+        perIter(p, 'time2', 'count2'), perIter(y, 'time1', 'count1'), perIter(y, 'time2', 'count2'), ...
+        rowField(o, 'eigen_time_per_outer_mean_s'), rowField(o, 'inner_time_per_inner_iteration_mean_s'));
+end
+fprintf(fid, '\n');
+end
+
+function r = pickRow(R, key, mesh)
+r = [];
+for i = 1:numel(R)
+    if strcmp(R(i).method_key, key) && isequal(R(i).mesh(:).', mesh(:).'); r = R(i); return; end
+end
+end
+
+function s = perIter(r, tname, cname)
+s = 'N/A';
+if isempty(r) || ~isfield(r.times, tname) || ~isfield(r.counts, cname); return; end
+n = r.counts.(cname);
+if ~isnumeric(n) || ~isfinite(n) || n <= 0; return; end
+s = num(r.times.(tname)/n, '%.4f');
+end
+
+function s = rowField(r, name)
+s = 'N/A';
+if isempty(r); return; end
+s = f(r.times, name, '%.4f');
+end
+
+% =========================================================================
+function [c1, c2, t1, t2, ov, tt] = primaryCells(r, tfmt)
 if nargin < 2; tfmt = '%.9g'; end
 c1 = f(r.counts, 'count1', '%.6g');
 c2 = f(r.counts, 'count2', '%.6g');
 t1 = f(r.times, 'time1', tfmt);
 t2 = f(r.times, 'time2', tfmt);
+ov = f(r.times, 'overhead_time_s', tfmt);
 tt = f(r.times, 'total_wall_time_s', tfmt);
+end
+
+function [nat, e1, flagged, dev] = omega1Cells(r, tol, fmt)
+%OMEGA1CELLS  Native omega_1, common-evaluator E1 omega_1, and the dagger rule.
+if nargin < 3; fmt = '%.17g'; end
+nat = num(r.omega1_native, fmt);
+v1 = e1Of(r);
+e1 = num(v1, fmt);
+dev = NaN; flagged = false;
+if isnumeric(r.omega1_native) && isfinite(r.omega1_native) && isfinite(v1) && v1 > 0
+    dev = abs(r.omega1_native - v1)/v1;
+    flagged = dev > tol;
+end
+end
+
+function fl = flaggedRows(R, tol)
+keep = false(1, numel(R));
+for i = 1:numel(R)
+    [~, ~, keep(i)] = omega1Cells(R(i), tol);
+end
+fl = R(keep);
+end
+
+function v = e1Of(r)
+%E1OF  The E1 classifier-selected structural omega_1, NaN when the evaluator did not run.
+v = NaN;
+if isfield(r, 'evaluator') && isstruct(r.evaluator) && isfield(r.evaluator, 'selected_omega_raw_E1')
+    x = r.evaluator.selected_omega_raw_E1;
+    if isnumeric(x) && ~isempty(x); v = double(x(1)); end
+end
+end
+
+function v = voidKEOf(r)
+%VOIDKEOF  Void kinetic-energy share of the E1 selected mode, NaN when absent.
+v = NaN;
+if isfield(r, 'evaluator') && isstruct(r.evaluator) && isfield(r.evaluator, 'modal_raw_E1') ...
+        && isstruct(r.evaluator.modal_raw_E1) && isfield(r.evaluator.modal_raw_E1, 'selected_voidKE')
+    x = r.evaluator.modal_raw_E1.selected_voidKE;
+    if isnumeric(x) && ~isempty(x); v = double(x(1)); end
+end
+end
+
+function s = omegaTriple(r, fmt)
+parts = cell(1, 3);
+for k = 1:3; parts{k} = num(vecOr(r.omega, k), fmt); end
+s = strjoin(parts, ', ');
+end
+
+function s = flagText(flagged)
+if flagged; s = 'DAGGER'; else; s = ''; end
 end
 
 function s = interpretationSentence(R)
@@ -294,7 +498,8 @@ parts = {};
 if any(strcmp(keys,'proposed'))
     parts{end+1} = ['Proposed: Count 1 = reference eigenanalysis solves (always 1, ' ...
         'not an optimization iteration), Count 2 = SIMP iterations, Time 1 = ' ...
-        'eigenanalysis and preparation, Time 2 = SIMP.'];
+        'that single eigenanalysis (K0/M0 assembly and the eigensolve, nothing ' ...
+        'else; solver preparation is in Other), Time 2 = SIMP.'];
 end
 if any(strcmp(keys,'yuksel'))
     parts{end+1} = ['Yuksel: Count 1 and Count 2 are the Stage-1 and Stage-2 ' ...
@@ -303,8 +508,9 @@ end
 if any(strcmp(keys,'olhoff'))
     parts{end+1} = [confbench_display_name('olhoff') ': Count 1 = outer iterations, ' ...
         'Count 2 = cumulative nested MMA iterations, Time 1 = outer work ' ...
-        'excluding the nested MMA solve, Time 2 = nested MMA total. The two ' ...
-        'counts are never added.'];
+        'excluding the nested MMA solve (FE assembly, the eigenproblem, ' ...
+        'sensitivities, filtering, the design update), Time 2 = nested MMA ' ...
+        'total. The two counts are never added.'];
 end
 s = strjoin(parts, ' ');
 end

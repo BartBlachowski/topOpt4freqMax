@@ -1,0 +1,33 @@
+{
+  "name": "BG_R012_400x50",
+  "arm": "R012",
+  "mesh": [
+    400,
+    50
+  ],
+  "upstreamPreset": "duOlhoffAdaptivePedersen",
+  "overrides": [
+    "filter.radiusPhysical",
+    0.12
+  ],
+  "maxOuter": 400,
+  "cfgHash": "b411acae48b08cfba0d343c595d3a8caa7b741d999cb504ab601733fef5f344e",
+  "rminEl": 6,
+  "eps": 0.125,
+  "status": "CONVERGED",
+  "nOuter": 124,
+  "wall_s": 1690.2281813333334,
+  "solver_wall_s": 1690.1991089583332,
+  "matlab_version": "25.2.0.3042426 (R2025b) Update 1",
+  "threads": 1,
+  "repo_head": "05919933f3f4af68b36c1981e66130709a263593-dirty",
+  "impl_tree_sha256": "4ba9a3ae10881344a0e60f2b8a8976c5ec9ceccf966bc2a3da4f37fb5aebffbf",
+  "impl_n_files": 79,
+  "resolved_mmasub": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/mma_published/mmasub.m",
+  "timestamp": "2026-09-14T10:42:53",
+  "Mnd_final": 0.2636963495546521,
+  "gray_final": 0.3051,
+  "omega1": 159.0461669466664,
+  "omega2": 176.5042691488934,
+  "gap12": 0.10976751302709038
+}

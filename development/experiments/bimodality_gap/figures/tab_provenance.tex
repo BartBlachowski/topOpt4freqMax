@@ -1,0 +1,36 @@
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{llp{6.2cm}lrrrl}
+\toprule
+arm & mesh & overrides on the upstream preset & cfg hash & $k$ & $\omega_1$ & wall [s] & status \\
+\midrule
+simpAdaptive & 160x20 & \code{stiffness.model=simp, mass.model=eq4b} & \code{b2f91fb99676} & 200 & 170.341 & 640 & CONVERGED \\
+simpAdaptive & 240x30 & \code{stiffness.model=simp, mass.model=eq4b} & \code{ed9b88915d6a} & 84 & 163.953 & 410 & CONVERGED \\
+simpAdaptive & 320x40 & \code{stiffness.model=simp, mass.model=eq4b} & \code{d7913af7155e} & 138 & 165.811 & 1487 & CONVERGED \\
+simpAdaptive & 400x50 & \code{stiffness.model=simp, mass.model=eq4b} & \code{816fa90736ec} & 141 & 166.349 & 1946 & CONVERGED \\
+simpAdaptive & 480x60 & \code{stiffness.model=simp, mass.model=eq4b} & \code{d4a05920c16c} & 64 & 34.357 & 960 & CONVERGED \\
+pedersenLadder & 160x20 & \code{stiffness.model=pedersen, stiffness.linearBelow=0.1, mass.model=eq2} & \code{9fad1d9a750e} & 86 & 168.674 & 169 & CONVERGED \\
+pedersenLadder & 240x30 & \code{stiffness.model=pedersen, stiffness.linearBelow=0.1, mass.model=eq2} & \code{b5e229c8c664} & 102 & 165.985 & 323 & CONVERGED \\
+pedersenLadder & 320x40 & \code{stiffness.model=pedersen, stiffness.linearBelow=0.1, mass.model=eq2} & \code{e74c5af2f096} & 130 & 165.412 & 697 & CONVERGED \\
+pedersenLadder & 400x50 & \code{stiffness.model=pedersen, stiffness.linearBelow=0.1, mass.model=eq2} & \code{755b73fa62d3} & 139 & 162.923 & 1383 & CONVERGED \\
+pedersenLadder & 480x60 & \code{stiffness.model=pedersen, stiffness.linearBelow=0.1, mass.model=eq2} & \code{72a067402291} & 162 & 161.556 & 2190 & CONVERGED \\
+filterEl3 & 160x20 & \code{radiusPhysical=[\,], radiusElements=3} & \code{a8c50eb45fb5} & 400 & 156.211 & 865 & CAP\_HIT \\
+filterEl3 & 240x30 & \code{radiusPhysical=[\,], radiusElements=3} & \code{a509ecdf18b7} & 86 & 161.918 & 428 & CONVERGED \\
+filterEl3 & 320x40 & \code{radiusPhysical=[\,], radiusElements=3} & \code{6533a3eb2b6c} & 92 & 164.263 & 856 & CONVERGED \\
+filterEl3 & 400x50 & \code{radiusPhysical=[\,], radiusElements=3} & \code{77a126313aab} & 93 & 166.455 & 1409 & CONVERGED \\
+R012 & 160x20 & \code{radiusPhysical=0.12} & \code{fd8bb3c58468} & 167 & 159.364 & 362 & CONVERGED \\
+R012 & 240x30 & \code{radiusPhysical=0.12} & \code{4682e1d2e8a4} & 84 & 159.396 & 367 & CONVERGED \\
+R012 & 320x40 & \code{radiusPhysical=0.12} & \code{b867f1d33722} & 129 & 159.028 & 1119 & CONVERGED \\
+R012 & 400x50 & \code{radiusPhysical=0.12} & \code{b411acae48b0} & 124 & 159.046 & 1690 & CONVERGED \\
+budget400 & 160x20 & \code{toleranceRule=explicit, tolerance=0} & \code{3fb657cf4b8f} & 400 & 169.189 & 1588 & CAP\_HIT \\
+budget400 & 240x30 & \code{toleranceRule=explicit, tolerance=0} & \code{43aa62adbbd4} & 400 & 167.320 & 2805 & CAP\_HIT \\
+budget400 & 320x40 & \code{toleranceRule=explicit, tolerance=0} & \code{34f4d3bf3b67} & 400 & 165.668 & 3644 & CAP\_HIT \\
+budget400 & 400x50 & \code{toleranceRule=explicit, tolerance=0} & \code{743af4ed164d} & 400 & 166.307 & 5782 & CAP\_HIT \\
+budget400 & 640x80 & \code{toleranceRule=explicit, tolerance=0} & \code{c13acd36f1da} & 400 & 165.466 & 8806 & CAP\_HIT \\
+budget400 & 800x100 & \code{toleranceRule=explicit, tolerance=0} & \code{caa7d7f54f49} & 400 & 165.254 & 10176 & CAP\_HIT \\
+box02 & 160x20 & \code{move.initial=0.2} & \code{e8cd0f6a31f6} & 229 & 167.624 & 804 & CONVERGED \\
+box02 & 320x40 & \code{move.initial=0.2} & \code{75c1d6fa9644} & 84 & 166.816 & 706 & CONVERGED \\
+box02 & 400x50 & \code{move.initial=0.2} & \code{21d103f0db23} & 67 & 166.719 & 685 & CONVERGED \\
+box005 & 320x40 & \code{move.initial=0.05} & \code{542cdd39d622} & 158 & 166.305 & 1631 & CONVERGED \\
+box005 & 400x50 & \code{move.initial=0.05} & \code{a3a5cd58964e} & 205 & 166.182 & 2727 & CONVERGED \\
+\bottomrule
+\end{tabular}

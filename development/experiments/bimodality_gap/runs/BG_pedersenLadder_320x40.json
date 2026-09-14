@@ -1,0 +1,37 @@
+{
+  "name": "BG_pedersenLadder_320x40",
+  "arm": "pedersenLadder",
+  "mesh": [
+    320,
+    40
+  ],
+  "upstreamPreset": "duOlhoffFrozenM4",
+  "overrides": [
+    "material.stiffness.model",
+    "pedersen",
+    "material.stiffness.linearBelow",
+    0.1,
+    "material.mass.model",
+    "eq2"
+  ],
+  "maxOuter": 400,
+  "cfgHash": "e74c5af2f0964747928b0c864ef999d77b19e491722f05e2e9ed40428d78b969",
+  "rminEl": 2.4,
+  "eps": 0.1,
+  "status": "CONVERGED",
+  "nOuter": 130,
+  "wall_s": 696.881557,
+  "solver_wall_s": 696.85509416666662,
+  "matlab_version": "25.2.0.3042426 (R2025b) Update 1",
+  "threads": 1,
+  "repo_head": "05919933f3f4af68b36c1981e66130709a263593-dirty",
+  "impl_tree_sha256": "4ba9a3ae10881344a0e60f2b8a8976c5ec9ceccf966bc2a3da4f37fb5aebffbf",
+  "impl_n_files": 79,
+  "resolved_mmasub": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/mma_published/mmasub.m",
+  "timestamp": "2026-09-14T10:35:06",
+  "Mnd_final": 0.24624045776037934,
+  "gray_final": 0.2775,
+  "omega1": 165.41166887154489,
+  "omega2": 181.812319802139,
+  "gap12": 0.099150507594059162
+}

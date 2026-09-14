@@ -118,26 +118,24 @@ repoRoot  = fileparts(fileparts(scriptDir));
 addpath(scriptDir);
 addpath(fullfile(scriptDir, 'conference_bench'));
 addpath(fullfile(repoRoot, 'tools', 'Matlab'));
-addpath(fullfile(repoRoot, 'analysis', 'three_method_parametric_study'));
-% THE production Du-Olhoff implementation.  analysis/OlhoffCurrent is the ONLY
-% Olhoff implementation this driver -- or any production script -- may execute
-% (analysis/OLHOFF_IMPLEMENTATION_MAP.md).  Its solver core lives under +impl/
-% and is reachable ONLY through olhoffcurrent_paths(), which proves that exactly
-% one Olhoff implementation is visible before anything runs.  No historical
-% analysis/Olhoff* tree, no analysis/OlhoffM4Reconstruction, and no
-% Matlab/reproduction2007 path is added here, by design.
-addpath(fullfile(repoRoot, 'analysis', 'OlhoffCurrent'));
+addpath(fullfile(scriptDir, 'benchmark_profile'));   % frozen Proposed/Yuksel profile, base config, common evaluator
+% THE production Du-Olhoff implementation.  analysis/Olhoff (named
+% analysis/OlhoffCurrent until the 2026-09-14 repository cleanup) is the ONLY
+% Olhoff implementation this driver -- or any production script -- may execute.
+% Its solver core lives under +impl/ and is reachable ONLY through
+% olhoffcurrent_paths(), which proves that exactly one Olhoff implementation is
+% visible before anything runs.  No historical Olhoff tree is added here, by
+% design; all of them are archived under development/, which the gate forbids.
+addpath(fullfile(repoRoot, 'analysis', 'Olhoff'));
 
 % Not adding a superseded implementation is not enough: MATLAB paths are
-% session state, and other scripts in this repository (examples/Revision_v1/*.m,
-% Matlab/reproduction2007/runner/repro2007_verify_isolation.m) call
-% addpath(genpath(<repo>/analysis)), which leaves analysis/Olhoff* and
-% Matlab/reproduction2007 on the path for the rest of the session.  olhoffOpt
-% then resolves to whichever of the realizations came first -- a run that looks
-% fine and is scientifically void.  This driver curates its own path, so it
-% REMOVES what the session handed it rather than inheriting it.  The preflight
-% below re-checks the result independently, so a scrub that missed something
-% still fails closed; the scrub is recorded in the benchmark manifest.
+% session state, and archived scripts call addpath(genpath(...)), which can
+% leave historical Olhoff trees on the path for the rest of the session.
+% olhoffOpt then resolves to whichever of the realizations came first -- a run
+% that looks fine and is scientifically void.  This driver curates its own
+% path, so it REMOVES what the session handed it rather than inheriting it.  The
+% preflight below re-checks the result independently, so a scrub that missed
+% something still fails closed; the scrub is recorded in the benchmark manifest.
 pathScrub = olhoffcurrent_scrub_forbidden_paths(repoRoot);
 if ~isempty(pathScrub)
     fprintf('Removed %d non-production Olhoff path entr%s inherited from this MATLAB session.\n', ...
@@ -463,7 +461,7 @@ manifest.path_scrub.rationale = ['Non-production Olhoff implementations ' ...
     'inherited from this MATLAB session were removed from the path before ' ...
     'preflight, so dispatch is a property of this driver rather than of ' ...
     'whatever ran earlier in the session. The sole production implementation ' ...
-    'is analysis/OlhoffCurrent.'];
+    'is analysis/Olhoff.'];
 
 files = confbench_export(cfg, records, manifest, scaling);
 save(fullfile(cfg.outputDir, 'benchmark_records.mat'), 'records', 'cfg', ...
@@ -581,7 +579,8 @@ map = { ...
     'stage2_iterations',                        'stage2Iters'; ...
     'outer_iterations',                         'outerIters'; ...
     'inner_mma_iterations_total',               'innerMMA'; ...
-    'stage1_eigenanalysis_and_preparation_s',   'T_prep+eig'; ...
+    'stage1_eigenanalysis_and_preparation_s',   'T_prep+eig'; ...   % timing schema 1 (recorded campaigns)
+    'stage1_reference_eigenanalysis_s',         'T_eig'; ...        % timing schema 2
     'stage2_simp_time_s',                       'T_simp'; ...
     'stage1_time_s',                            'T_stage1'; ...
     'stage2_time_s',                            'T_stage2'; ...

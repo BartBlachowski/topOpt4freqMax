@@ -87,5 +87,5 @@ cfg.provenance.upstreamPreset       = info.upstreamPreset;
 cfg.provenance.upstreamCommit       = info.upstreamCommit;
 cfg.provenance.compatibilityAliases = info.compatibilityAliases;
 cfg.provenance.historicalAliases    = info.historicalAliases;
-cfg.provenance.implementation       = 'analysis/OlhoffCurrent';
+cfg.provenance.implementation       = 'analysis/Olhoff';
 end

@@ -20,8 +20,8 @@ function n = confbench_frozen_budget(methodKey)
 
 here = fileparts(mfilename('fullpath'));
 repo = fileparts(fileparts(fileparts(here)));
-freezePath = fullfile(repo, 'analysis', 'three_method_parametric_study', ...
-    'results', 'profile_freeze_manifest.json');
+freezePath = fullfile(repo, 'examples', 'Performance', 'benchmark_profile', ...
+    'profile_freeze_manifest.json');
 
 switch lower(char(string(methodKey)))
     case 'yuksel';                    field = 'yuksel_practical';

@@ -548,7 +548,7 @@ def run_topopt_from_json(json_input: str | dict) -> tuple[np.ndarray, np.ndarray
         run_cfg["load_cases"] = load_cases
 
     # ---- Call solver ----
-    solver_dir = os.path.join(_REPO_ROOT, "analysis", "ourApproach", "Python")
+    solver_dir = os.path.join(_REPO_ROOT, "analysis", "Proposed", "Python")
     if solver_dir not in sys.path:
         sys.path.insert(0, solver_dir)
     from topopt_freq import topopt_freq

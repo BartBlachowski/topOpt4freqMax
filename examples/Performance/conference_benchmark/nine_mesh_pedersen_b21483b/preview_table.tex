@@ -1,0 +1,28 @@
+% Standalone preview wrapper for conference_performance_table.tex.
+%
+% The generated table file is a FRAGMENT: a bare \begin{table}...\end{table}
+% block meant to be \input{} into your paper.  Running pdflatex on it directly
+% fails with "Environment table undefined" because it has no document class.
+% This wrapper supplies one, so:
+%
+%     pdflatex preview_table.tex
+%
+% Nothing here is part of the benchmark evidence -- it only renders the table.
+%
+% The caption of this run contains an unescaped "^" (rho*rho0^(p-1)), which
+% confbench_export.m does not escape.  The sealed fragment is not edited;
+% instead "^" is made an ordinary character for the \input below, and T1
+% encoding makes "|" and "<" in the caption print as themselves.
+\documentclass[11pt]{article}
+\usepackage[a4paper,landscape,margin=15mm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsmath}
+\pagestyle{empty}
+\begin{document}
+\small
+\begingroup
+\catcode`\^=12
+\input{conference_performance_table.tex}
+\endgroup
+\end{document}

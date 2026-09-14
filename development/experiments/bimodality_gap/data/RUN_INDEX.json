@@ -1,0 +1,893 @@
+[
+ {
+  "name": "BG_R012_160x20",
+  "arm": "R012",
+  "mesh": [
+   160,
+   20
+  ],
+  "upstreamPreset": "duOlhoffAdaptivePedersen",
+  "overrides": [
+   "filter.radiusPhysical",
+   0.12
+  ],
+  "cfgHash": "fd8bb3c58468c91ebc4c7b855189f1473fe721d4c4914b6353c274ce2f2d0d24",
+  "rminEl": 2.4,
+  "eps": 0.05,
+  "status": "CONVERGED",
+  "nOuter": 167,
+  "omega1": 159.36398707611554,
+  "omega2": 177.09777478108091,
+  "Mnd_final": 0.26089048714202606,
+  "gray_final": 0.2971875,
+  "wall_s": 361.61656841666667,
+  "repo_head": "05919933f3f4af68b36c1981e66130709a263593-dirty",
+  "impl_tree_sha256": "4ba9a3ae10881344a0e60f2b8a8976c5ec9ceccf966bc2a3da4f37fb5aebffbf",
+  "matlab": "25.2.0.3042426 (R2025b) Update 1",
+  "threads": 1,
+  "timestamp": "2026-09-14T10:52:08",
+  "mat_sha256": "76fee775e4418f96245bfee1142daf980f2ca157ad79060d6af3ba3a40c3d192"
+ },
+ {
+  "name": "BG_R012_240x30",
+  "arm": "R012",
+  "mesh": [
+   240,
+   30
+  ],
+  "upstreamPreset": "duOlhoffAdaptivePedersen",
+  "overrides": [
+   "filter.radiusPhysical",
+   0.12
+  ],
+  "cfgHash": "4682e1d2e8a4902fac1309071291c5ec30c788f773e3bf9001ad1661fa5e1edd",
+  "rminEl": 3.6,
+  "eps": 0.07500000000000001,
+  "status": "CONVERGED",
+  "nOuter": 84,
+  "omega1": 159.39584144881223,
+  "omega2": 176.6611226433265,
+  "Mnd_final": 0.26269277453571066,
+  "gray_final": 0.30416666666666664,
+  "wall_s": 366.5366842083333,
+  "repo_head": "05919933f3f4af68b36c1981e66130709a263593-dirty",
+  "impl_tree_sha256": "4ba9a3ae10881344a0e60f2b8a8976c5ec9ceccf966bc2a3da4f37fb5aebffbf",
+  "matlab": "25.2.0.3042426 (R2025b) Update 1",
+  "threads": 1,
+  "timestamp": "2026-09-14T10:49:14",
+  "mat_sha256": "b5076d2bfeaaccbe59514297b08b255ff8dd88d3c13bdc3b6a7b7263b9648ebd"
+ },
+ {
+  "name": "BG_R012_320x40",
+  "arm": "R012",
+  "mesh": [
+   320,
+   40
+  ],
+  "upstreamPreset": "duOlhoffAdaptivePedersen",
+  "overrides": [
+   "filter.radiusPhysical",
+   0.12
+  ],
+  "cfgHash": "b867f1d3372233229bd68ed79ec3b09e7410438e8c62e75919fdcc2a1e653b97",
+  "rminEl": 4.8,
+  "eps": 0.1,
+  "status": "CONVERGED",
+  "nOuter": 129,
+  "omega1": 159.02789476730425,
+  "omega2": 176.86307757276683,
+  "Mnd_final": 0.26243340706524376,
+  "gray_final": 0.30421875,
+  "wall_s": 1118.703097625,
+  "repo_head": "05919933f3f4af68b36c1981e66130709a263593-dirty",
+  "impl_tree_sha256": "4ba9a3ae10881344a0e60f2b8a8976c5ec9ceccf966bc2a3da4f37fb5aebffbf",
+  "matlab": "25.2.0.3042426 (R2025b) Update 1",
+  "threads": 1,
+  "timestamp": "2026-09-14T10:49:47",
+  "mat_sha256": "8192e78e79a3a3ce3ed412e7dc6afe17abdc66b5a3306ab4844c88ad645fd90a"
+ },
+ {
+  "name": "BG_R012_400x50",
+  "arm": "R012",
+  "mesh": [
+   400,
+   50
+  ],
+  "upstreamPreset": "duOlhoffAdaptivePedersen",
+  "overrides": [
+   "filter.radiusPhysical",
+   0.12
+  ],
+  "cfgHash": "b411acae48b08cfba0d343c595d3a8caa7b741d999cb504ab601733fef5f344e",
+  "rminEl": 6,
+  "eps": 0.125,
+  "status": "CONVERGED",
+  "nOuter": 124,
+  "omega1": 159.0461669466664,
+  "omega2": 176.5042691488934,
+  "Mnd_final": 0.2636963495546521,
+  "gray_final": 0.3051,
+  "wall_s": 1690.2281813333334,
+  "repo_head": "05919933f3f4af68b36c1981e66130709a263593-dirty",
+  "impl_tree_sha256": "4ba9a3ae10881344a0e60f2b8a8976c5ec9ceccf966bc2a3da4f37fb5aebffbf",
+  "matlab": "25.2.0.3042426 (R2025b) Update 1",
+  "threads": 1,
+  "timestamp": "2026-09-14T10:42:53",
+  "mat_sha256": "8f516645fec29a7fc9ae865f7a4ea4bdae5ab54b291e6abf9f496f0d7097aad5"
+ },
+ {
+  "name": "BG_box005_320x40",
+  "arm": "box005",
+  "mesh": [
+   320,
+   40
+  ],
+  "upstreamPreset": "duOlhoffAdaptivePedersen",
+  "overrides": [
+   "move.initial",
+   0.05
+  ],
+  "cfgHash": "542cdd39d6225b9de6d4064b99e4e9532d6fcf33420597d0a66e6946f4a195ae",
+  "rminEl": 2.4,
+  "eps": 0.1,
+  "status": "CONVERGED",
+  "nOuter": 158,
+  "omega1": 166.3049691316419,
+  "omega2": 202.63599496464897,
+  "Mnd_final": 0.1285081712316944,
+  "gray_final": 0.15109375,
+  "wall_s": 1631.10916075,
+  "repo_head": "05919933f3f4af68b36c1981e66130709a263593-dirty",
+  "impl_tree_sha256": "4ba9a3ae10881344a0e60f2b8a8976c5ec9ceccf966bc2a3da4f37fb5aebffbf",
+  "matlab": "25.2.0.3042426 (R2025b) Update 1",
+  "threads": 1,
+  "timestamp": "2026-09-14T11:33:30",
+  "mat_sha256": "d7b6a1c345762664eafcde5c23b76214dedea27f5cef52ea8218850a5904d95c"
+ },
+ {
+  "name": "BG_box005_400x50",
+  "arm": "box005",
+  "mesh": [
+   400,
+   50
+  ],
+  "upstreamPreset": "duOlhoffAdaptivePedersen",
+  "overrides": [
+   "move.initial",
+   0.05
+  ],
+  "cfgHash": "a3a5cd58964e0cb1c10c8e024b93f3c66de356dbcc9f3c5790ef63aa9008f989",
+  "rminEl": 3,
+  "eps": 0.125,
+  "status": "CONVERGED",
+  "nOuter": 205,
+  "omega1": 166.1823969319098,
+  "omega2": 205.25149460512532,
+  "Mnd_final": 0.12865670985948133,
+  "gray_final": 0.152,
+  "wall_s": 2726.9431885416666,
+  "repo_head": "05919933f3f4af68b36c1981e66130709a263593-dirty",
+  "impl_tree_sha256": "4ba9a3ae10881344a0e60f2b8a8976c5ec9ceccf966bc2a3da4f37fb5aebffbf",
+  "matlab": "25.2.0.3042426 (R2025b) Update 1",
+  "threads": 1,
+  "timestamp": "2026-09-14T11:51:45",
+  "mat_sha256": "bb1f4e30272a5384fd7f96ebbb9f8ca3763dfa43856abbc74317ff2de9fe1ba2"
+ },
+ {
+  "name": "BG_box02_160x20",
+  "arm": "box02",
+  "mesh": [
+   160,
+   20
+  ],
+  "upstreamPreset": "duOlhoffAdaptivePedersen",
+  "overrides": [
+   "move.initial",
+   0.2
+  ],
+  "cfgHash": "e8cd0f6a31f609b72c12c049f8c23912a01f9a994bb7d0aecb245d8c7251f7d8",
+  "rminEl": 1.2,
+  "eps": 0.05,
+  "status": "CONVERGED",
+  "nOuter": 229,
+  "omega1": 167.62360894410915,
+  "omega2": 168.05218082610608,
+  "Mnd_final": 0.11675156878222506,
+  "gray_final": 0.13875,
+  "wall_s": 804.4862140833334,
+  "repo_head": "05919933f3f4af68b36c1981e66130709a263593-dirty",
+  "impl_tree_sha256": "4ba9a3ae10881344a0e60f2b8a8976c5ec9ceccf966bc2a3da4f37fb5aebffbf",
+  "matlab": "25.2.0.3042426 (R2025b) Update 1",
+  "threads": 1,
+  "timestamp": "2026-09-14T11:19:43",
+  "mat_sha256": "3ab88c68585b2991b8cb01f30cecf91953c84a36840c66c8d85761c95613a17d"
+ },
+ {
+  "name": "BG_box02_320x40",
+  "arm": "box02",
+  "mesh": [
+   320,
+   40
+  ],
+  "upstreamPreset": "duOlhoffAdaptivePedersen",
+  "overrides": [
+   "move.initial",
+   0.2
+  ],
+  "cfgHash": "75c1d6fa9644fd6db3333535a6294987786684ef6730d9305208b1a0bb1ffebe",
+  "rminEl": 2.4,
+  "eps": 0.1,
+  "status": "CONVERGED",
+  "nOuter": 84,
+  "omega1": 166.8155715979722,
+  "omega2": 195.0684502023099,
+  "Mnd_final": 0.120974297805176,
+  "gray_final": 0.1378125,
+  "wall_s": 705.7494087916666,
+  "repo_head": "05919933f3f4af68b36c1981e66130709a263593-dirty",
+  "impl_tree_sha256": "4ba9a3ae10881344a0e60f2b8a8976c5ec9ceccf966bc2a3da4f37fb5aebffbf",
+  "matlab": "25.2.0.3042426 (R2025b) Update 1",
+  "threads": 1,
+  "timestamp": "2026-09-14T11:18:04",
+  "mat_sha256": "9456e8d876e3b321910c2dbc1d08732288462a08b9d8f2d99b70ce0ddcaa5687"
+ },
+ {
+  "name": "BG_box02_400x50",
+  "arm": "box02",
+  "mesh": [
+   400,
+   50
+  ],
+  "upstreamPreset": "duOlhoffAdaptivePedersen",
+  "overrides": [
+   "move.initial",
+   0.2
+  ],
+  "cfgHash": "21d103f0db23a0768b61ef50d3c725ff9d9c12a6d9f7dab585e88305cdcb7b2f",
+  "rminEl": 3,
+  "eps": 0.125,
+  "status": "CONVERGED",
+  "nOuter": 67,
+  "omega1": 166.71857175545134,
+  "omega2": 191.28338375808391,
+  "Mnd_final": 0.11900284607860329,
+  "gray_final": 0.1342,
+  "wall_s": 684.9411020416667,
+  "repo_head": "05919933f3f4af68b36c1981e66130709a263593-dirty",
+  "impl_tree_sha256": "4ba9a3ae10881344a0e60f2b8a8976c5ec9ceccf966bc2a3da4f37fb5aebffbf",
+  "matlab": "25.2.0.3042426 (R2025b) Update 1",
+  "threads": 1,
+  "timestamp": "2026-09-14T11:17:43",
+  "mat_sha256": "3c1d52b0c24aadf27de52c396ba13f680386a209de1e615deb224a425183a3b1"
+ },
+ {
+  "name": "BG_budget400_160x20",
+  "arm": "budget400",
+  "mesh": [
+   160,
+   20
+  ],
+  "upstreamPreset": "duOlhoffAdaptivePedersen",
+  "overrides": [
+   "stop.toleranceRule",
+   "explicit",
+   "stop.tolerance",
+   0
+  ],
+  "cfgHash": "3fb657cf4b8fa6aecfdf739a77675cc8e345767cd4f5c45802a7493073722e1d",
+  "rminEl": 1.2,
+  "eps": 0,
+  "status": "CAP_HIT",
+  "nOuter": 400,
+  "omega1": 169.1892769188578,
+  "omega2": 169.66050829116105,
+  "Mnd_final": 0.1161724107526365,
+  "gray_final": 0.141875,
+  "wall_s": 1588.383622875,
+  "repo_head": "05919933f3f4af68b36c1981e66130709a263593-dirty",
+  "impl_tree_sha256": "4ba9a3ae10881344a0e60f2b8a8976c5ec9ceccf966bc2a3da4f37fb5aebffbf",
+  "matlab": "25.2.0.3042426 (R2025b) Update 1",
+  "threads": 1,
+  "timestamp": "2026-09-14T10:48:15",
+  "mat_sha256": "651cf1eb79b4fd11413e7f0ee87a5ee36f919239599d24097ec9aa043b05a378"
+ },
+ {
+  "name": "BG_budget400_240x30",
+  "arm": "budget400",
+  "mesh": [
+   240,
+   30
+  ],
+  "upstreamPreset": "duOlhoffAdaptivePedersen",
+  "overrides": [
+   "stop.toleranceRule",
+   "explicit",
+   "stop.tolerance",
+   0
+  ],
+  "cfgHash": "43aa62adbbd47a184001f99e5b44745259df8647285716e8f0e0bfa838ce168d",
+  "rminEl": 1.8,
+  "eps": 0,
+  "status": "CAP_HIT",
+  "nOuter": 400,
+  "omega1": 167.3195590259279,
+  "omega2": 188.92274413171845,
+  "Mnd_final": 0.1219216456237453,
+  "gray_final": 0.1411111111111111,
+  "wall_s": 2805.0240622916667,
+  "repo_head": "05919933f3f4af68b36c1981e66130709a263593-dirty",
+  "impl_tree_sha256": "4ba9a3ae10881344a0e60f2b8a8976c5ec9ceccf966bc2a3da4f37fb5aebffbf",
+  "matlab": "25.2.0.3042426 (R2025b) Update 1",
+  "threads": 1,
+  "timestamp": "2026-09-14T10:45:12",
+  "mat_sha256": "bc3521911a8e8fc9d60c24f52c2b3c9f145f2c8e58254d2ccf20088934ac63ca"
+ },
+ {
+  "name": "BG_budget400_320x40",
+  "arm": "budget400",
+  "mesh": [
+   320,
+   40
+  ],
+  "upstreamPreset": "duOlhoffAdaptivePedersen",
+  "overrides": [
+   "stop.toleranceRule",
+   "explicit",
+   "stop.tolerance",
+   0
+  ],
+  "cfgHash": "34f4d3bf3b677831ec2de5ed26882011e153b052d644dcda3c519286eb6f26b3",
+  "rminEl": 2.4,
+  "eps": 0,
+  "status": "CAP_HIT",
+  "nOuter": 400,
+  "omega1": 165.6679022276608,
+  "omega2": 193.38897486045067,
+  "Mnd_final": 0.14250284798208437,
+  "gray_final": 0.1665625,
+  "wall_s": 3644.319832458333,
+  "repo_head": "05919933f3f4af68b36c1981e66130709a263593-dirty",
+  "impl_tree_sha256": "4ba9a3ae10881344a0e60f2b8a8976c5ec9ceccf966bc2a3da4f37fb5aebffbf",
+  "matlab": "25.2.0.3042426 (R2025b) Update 1",
+  "threads": 1,
+  "timestamp": "2026-09-14T10:59:12",
+  "mat_sha256": "674c83f40acd2481be718935c45da51a9b12989d01a7fa0ef3b9dcdb2b095645"
+ },
+ {
+  "name": "BG_budget400_400x50",
+  "arm": "budget400",
+  "mesh": [
+   400,
+   50
+  ],
+  "upstreamPreset": "duOlhoffAdaptivePedersen",
+  "overrides": [
+   "stop.toleranceRule",
+   "explicit",
+   "stop.tolerance",
+   0
+  ],
+  "cfgHash": "743af4ed164da346f54f46a23ec284592ad3ba3c1960bacf889978e9b6aa41d3",
+  "rminEl": 3,
+  "eps": 0,
+  "status": "CAP_HIT",
+  "nOuter": 400,
+  "omega1": 166.30724662599624,
+  "omega2": 202.56540017910427,
+  "Mnd_final": 0.12262114694392458,
+  "gray_final": 0.1433,
+  "wall_s": 5782.145357416666,
+  "repo_head": "05919933f3f4af68b36c1981e66130709a263593-dirty",
+  "impl_tree_sha256": "4ba9a3ae10881344a0e60f2b8a8976c5ec9ceccf966bc2a3da4f37fb5aebffbf",
+  "matlab": "25.2.0.3042426 (R2025b) Update 1",
+  "threads": 1,
+  "timestamp": "2026-09-14T11:34:50",
+  "mat_sha256": "00ba836d4145e32d581049ffdebb1956b0a2f2c9f369a4cc626ba9b4bbca8135"
+ },
+ {
+  "name": "BG_budget400_640x80",
+  "arm": "budget400",
+  "mesh": [
+   640,
+   80
+  ],
+  "upstreamPreset": "duOlhoffAdaptivePedersen",
+  "overrides": [
+   "stop.toleranceRule",
+   "explicit",
+   "stop.tolerance",
+   0
+  ],
+  "cfgHash": "c13acd36f1da739bf396d31d4b757df1d30dff34db1d9d85d64614d58e137cfc",
+  "rminEl": 4.8,
+  "eps": 0,
+  "status": "CAP_HIT",
+  "nOuter": 400,
+  "omega1": 165.46615961749944,
+  "omega2": 205.79893196825319,
+  "Mnd_final": 0.13608880243963434,
+  "gray_final": 0.15640625,
+  "wall_s": 8806.184266833334,
+  "repo_head": "05919933f3f4af68b36c1981e66130709a263593-dirty",
+  "impl_tree_sha256": "4ba9a3ae10881344a0e60f2b8a8976c5ec9ceccf966bc2a3da4f37fb5aebffbf",
+  "matlab": "25.2.0.3042426 (R2025b) Update 1",
+  "threads": 1,
+  "timestamp": "2026-09-14T13:27:52",
+  "mat_sha256": "e8646726e6ee9a3c53af73d077534790b14e61fc910342862b62f21ad51287b0"
+ },
+ {
+  "name": "BG_budget400_800x100",
+  "arm": "budget400",
+  "mesh": [
+   800,
+   100
+  ],
+  "upstreamPreset": "duOlhoffAdaptivePedersen",
+  "overrides": [
+   "stop.toleranceRule",
+   "explicit",
+   "stop.tolerance",
+   0
+  ],
+  "cfgHash": "caa7d7f54f49b4f7d302870f6b5ea5edc878e2425a51df171ec4968c6be1b5a7",
+  "rminEl": 6,
+  "eps": 0,
+  "status": "CAP_HIT",
+  "nOuter": 400,
+  "omega1": 165.2538596462035,
+  "omega2": 193.5626741382825,
+  "Mnd_final": 0.15876031728487097,
+  "gray_final": 0.18145,
+  "wall_s": 10176.194880333333,
+  "repo_head": "05919933f3f4af68b36c1981e66130709a263593-dirty",
+  "impl_tree_sha256": "4ba9a3ae10881344a0e60f2b8a8976c5ec9ceccf966bc2a3da4f37fb5aebffbf",
+  "matlab": "25.2.0.3042426 (R2025b) Update 1",
+  "threads": 1,
+  "timestamp": "2026-09-14T13:50:42",
+  "mat_sha256": "c80a6a5152f131b992e615ef2862395de31f6f6a07d81fc0d19fea4e064e4919"
+ },
+ {
+  "name": "BG_filterEl3_160x20",
+  "arm": "filterEl3",
+  "mesh": [
+   160,
+   20
+  ],
+  "upstreamPreset": "duOlhoffAdaptivePedersen",
+  "overrides": [
+   "filter.radiusPhysical",
+   [],
+   "filter.radiusElements",
+   3
+  ],
+  "cfgHash": "a8c50eb45fb5505bb78de0c19adeb2cea3806f77ac7d1a2111d93b9c367e4583",
+  "rminEl": 3,
+  "eps": 0.05,
+  "status": "CAP_HIT",
+  "nOuter": 400,
+  "omega1": 156.21126475313397,
+  "omega2": 158.1848337007321,
+  "Mnd_final": 0.29686375617112476,
+  "gray_final": 0.355625,
+  "wall_s": 864.6971359166666,
+  "repo_head": "05919933f3f4af68b36c1981e66130709a263593-dirty",
+  "impl_tree_sha256": "4ba9a3ae10881344a0e60f2b8a8976c5ec9ceccf966bc2a3da4f37fb5aebffbf",
+  "matlab": "25.2.0.3042426 (R2025b) Update 1",
+  "threads": 1,
+  "timestamp": "2026-09-14T10:59:51",
+  "mat_sha256": "19062b5838877868c079999e8992659def333ecdbaf870349f9b9f770a54b792"
+ },
+ {
+  "name": "BG_filterEl3_240x30",
+  "arm": "filterEl3",
+  "mesh": [
+   240,
+   30
+  ],
+  "upstreamPreset": "duOlhoffAdaptivePedersen",
+  "overrides": [
+   "filter.radiusPhysical",
+   [],
+   "filter.radiusElements",
+   3
+  ],
+  "cfgHash": "a509ecdf18b73238daf0935143a94704640fa68b4e8a32236287eaddfced37d7",
+  "rminEl": 3,
+  "eps": 0.07500000000000001,
+  "status": "CONVERGED",
+  "nOuter": 86,
+  "omega1": 161.91803484009657,
+  "omega2": 183.49059375173755,
+  "Mnd_final": 0.21509989163919493,
+  "gray_final": 0.25277777777777777,
+  "wall_s": 427.69130954166667,
+  "repo_head": "05919933f3f4af68b36c1981e66130709a263593-dirty",
+  "impl_tree_sha256": "4ba9a3ae10881344a0e60f2b8a8976c5ec9ceccf966bc2a3da4f37fb5aebffbf",
+  "matlab": "25.2.0.3042426 (R2025b) Update 1",
+  "threads": 1,
+  "timestamp": "2026-09-14T10:48:06",
+  "mat_sha256": "c9229efdfd9cde938269e8c2f643471482f55c965b1760285dbe911667cbd9c0"
+ },
+ {
+  "name": "BG_filterEl3_320x40",
+  "arm": "filterEl3",
+  "mesh": [
+   320,
+   40
+  ],
+  "upstreamPreset": "duOlhoffAdaptivePedersen",
+  "overrides": [
+   "filter.radiusPhysical",
+   [],
+   "filter.radiusElements",
+   3
+  ],
+  "cfgHash": "6533a3eb2b6cad7b6e29a048ba2488d2c5426bbb60f99d3ae878db6323ea52a6",
+  "rminEl": 3,
+  "eps": 0.1,
+  "status": "CONVERGED",
+  "nOuter": 92,
+  "omega1": 164.262672262127,
+  "omega2": 197.43769845782055,
+  "Mnd_final": 0.16344913275035153,
+  "gray_final": 0.19265625,
+  "wall_s": 856.1229600833333,
+  "repo_head": "05919933f3f4af68b36c1981e66130709a263593-dirty",
+  "impl_tree_sha256": "4ba9a3ae10881344a0e60f2b8a8976c5ec9ceccf966bc2a3da4f37fb5aebffbf",
+  "matlab": "25.2.0.3042426 (R2025b) Update 1",
+  "threads": 1,
+  "timestamp": "2026-09-14T10:43:35",
+  "mat_sha256": "4752d554e8d2359c63140f07f90eedb45a5c4b05f99d6ff41fc96b6a8c98c90a"
+ },
+ {
+  "name": "BG_filterEl3_400x50",
+  "arm": "filterEl3",
+  "mesh": [
+   400,
+   50
+  ],
+  "upstreamPreset": "duOlhoffAdaptivePedersen",
+  "overrides": [
+   "filter.radiusPhysical",
+   [],
+   "filter.radiusElements",
+   3
+  ],
+  "cfgHash": "77a126313aaba2a71833f65a2c2447e05bad915878b4893e4057f6bf9b66ac4e",
+  "rminEl": 3,
+  "eps": 0.125,
+  "status": "CONVERGED",
+  "nOuter": 93,
+  "omega1": 166.45517595539582,
+  "omega2": 198.13178070908705,
+  "Mnd_final": 0.12159224228406212,
+  "gray_final": 0.1397,
+  "wall_s": 1408.73731225,
+  "repo_head": "05919933f3f4af68b36c1981e66130709a263593-dirty",
+  "impl_tree_sha256": "4ba9a3ae10881344a0e60f2b8a8976c5ec9ceccf966bc2a3da4f37fb5aebffbf",
+  "matlab": "25.2.0.3042426 (R2025b) Update 1",
+  "threads": 1,
+  "timestamp": "2026-09-14T10:21:56",
+  "mat_sha256": "cd84f4864e18068522340e5b268ec4b23dd1c5390081db13f246641c7b12dc8f"
+ },
+ {
+  "name": "BG_pedersenLadder_160x20",
+  "arm": "pedersenLadder",
+  "mesh": [
+   160,
+   20
+  ],
+  "upstreamPreset": "duOlhoffFrozenM4",
+  "overrides": [
+   "material.stiffness.model",
+   "pedersen",
+   "material.stiffness.linearBelow",
+   0.1,
+   "material.mass.model",
+   "eq2"
+  ],
+  "cfgHash": "9fad1d9a750e653cd4d02eed119ff1546e722f590081adebaabbeedd1c0e37a4",
+  "rminEl": 1.2,
+  "eps": 0.05,
+  "status": "CONVERGED",
+  "nOuter": 86,
+  "omega1": 168.67449888861918,
+  "omega2": 172.37785306779224,
+  "Mnd_final": 0.13710768985302552,
+  "gray_final": 0.165625,
+  "wall_s": 168.587160125,
+  "repo_head": "05919933f3f4af68b36c1981e66130709a263593-dirty",
+  "impl_tree_sha256": "4ba9a3ae10881344a0e60f2b8a8976c5ec9ceccf966bc2a3da4f37fb5aebffbf",
+  "matlab": "25.2.0.3042426 (R2025b) Update 1",
+  "threads": 1,
+  "timestamp": "2026-09-14T10:46:38",
+  "mat_sha256": "4756b00629845e26f8bf72fe2a6e72528cdaed7045925842e433e6633a7739d4"
+ },
+ {
+  "name": "BG_pedersenLadder_240x30",
+  "arm": "pedersenLadder",
+  "mesh": [
+   240,
+   30
+  ],
+  "upstreamPreset": "duOlhoffFrozenM4",
+  "overrides": [
+   "material.stiffness.model",
+   "pedersen",
+   "material.stiffness.linearBelow",
+   0.1,
+   "material.mass.model",
+   "eq2"
+  ],
+  "cfgHash": "b5e229c8c6644d8ff61302844f3ef8110e82b527e712731c12d77dd19f83b968",
+  "rminEl": 1.8,
+  "eps": 0.07500000000000001,
+  "status": "CONVERGED",
+  "nOuter": 102,
+  "omega1": 165.98524710668843,
+  "omega2": 187.69566612951274,
+  "Mnd_final": 0.20551766676964198,
+  "gray_final": 0.23805555555555555,
+  "wall_s": 322.74542529166666,
+  "repo_head": "05919933f3f4af68b36c1981e66130709a263593-dirty",
+  "impl_tree_sha256": "4ba9a3ae10881344a0e60f2b8a8976c5ec9ceccf966bc2a3da4f37fb5aebffbf",
+  "matlab": "25.2.0.3042426 (R2025b) Update 1",
+  "threads": 1,
+  "timestamp": "2026-09-14T10:40:44",
+  "mat_sha256": "495530d1baabcf1e33e31b017c628bd3cc5edee43da8373c3365d9177ae30f96"
+ },
+ {
+  "name": "BG_pedersenLadder_320x40",
+  "arm": "pedersenLadder",
+  "mesh": [
+   320,
+   40
+  ],
+  "upstreamPreset": "duOlhoffFrozenM4",
+  "overrides": [
+   "material.stiffness.model",
+   "pedersen",
+   "material.stiffness.linearBelow",
+   0.1,
+   "material.mass.model",
+   "eq2"
+  ],
+  "cfgHash": "e74c5af2f0964747928b0c864ef999d77b19e491722f05e2e9ed40428d78b969",
+  "rminEl": 2.4,
+  "eps": 0.1,
+  "status": "CONVERGED",
+  "nOuter": 130,
+  "omega1": 165.4116688715449,
+  "omega2": 181.812319802139,
+  "Mnd_final": 0.24624045776037934,
+  "gray_final": 0.2775,
+  "wall_s": 696.881557,
+  "repo_head": "05919933f3f4af68b36c1981e66130709a263593-dirty",
+  "impl_tree_sha256": "4ba9a3ae10881344a0e60f2b8a8976c5ec9ceccf966bc2a3da4f37fb5aebffbf",
+  "matlab": "25.2.0.3042426 (R2025b) Update 1",
+  "threads": 1,
+  "timestamp": "2026-09-14T10:35:06",
+  "mat_sha256": "4978e43f3e774cb707a64fa72348c9c682d9adc13d2104edf68fd085ffc0dff0"
+ },
+ {
+  "name": "BG_pedersenLadder_400x50",
+  "arm": "pedersenLadder",
+  "mesh": [
+   400,
+   50
+  ],
+  "upstreamPreset": "duOlhoffFrozenM4",
+  "overrides": [
+   "material.stiffness.model",
+   "pedersen",
+   "material.stiffness.linearBelow",
+   0.1,
+   "material.mass.model",
+   "eq2"
+  ],
+  "cfgHash": "755b73fa62d367276c056d5a5032fabd7a79a66d9e59d45856e886d4b4a55efd",
+  "rminEl": 3,
+  "eps": 0.125,
+  "status": "CONVERGED",
+  "nOuter": 139,
+  "omega1": 162.9229933821972,
+  "omega2": 176.58396914248428,
+  "Mnd_final": 0.31645319639381053,
+  "gray_final": 0.3457,
+  "wall_s": 1382.5040807083333,
+  "repo_head": "05919933f3f4af68b36c1981e66130709a263593-dirty",
+  "impl_tree_sha256": "4ba9a3ae10881344a0e60f2b8a8976c5ec9ceccf966bc2a3da4f37fb5aebffbf",
+  "matlab": "25.2.0.3042426 (R2025b) Update 1",
+  "threads": 1,
+  "timestamp": "2026-09-14T10:21:30",
+  "mat_sha256": "6e313c18928fe80c4101eab2ef131aa11829ab088cfbb8f3a6b15a4fdf5072a1"
+ },
+ {
+  "name": "BG_pedersenLadder_480x60",
+  "arm": "pedersenLadder",
+  "mesh": [
+   480,
+   60
+  ],
+  "upstreamPreset": "duOlhoffFrozenM4",
+  "overrides": [
+   "material.stiffness.model",
+   "pedersen",
+   "material.stiffness.linearBelow",
+   0.1,
+   "material.mass.model",
+   "eq2"
+  ],
+  "cfgHash": "72a0674022912b9c8068e13f0c8425d901f09014052b2fbb9667ba0f40f7fb7e",
+  "rminEl": 3.6,
+  "eps": 0.15000000000000002,
+  "status": "CONVERGED",
+  "nOuter": 162,
+  "omega1": 161.5558441242544,
+  "omega2": 172.96604404915814,
+  "Mnd_final": 0.35102663558103736,
+  "gray_final": 0.3763888888888889,
+  "wall_s": 2190.1847354583333,
+  "repo_head": "05919933f3f4af68b36c1981e66130709a263593-dirty",
+  "impl_tree_sha256": "4ba9a3ae10881344a0e60f2b8a8976c5ec9ceccf966bc2a3da4f37fb5aebffbf",
+  "matlab": "25.2.0.3042426 (R2025b) Update 1",
+  "threads": 1,
+  "timestamp": "2026-09-14T10:34:58",
+  "mat_sha256": "7f03c6377ee1d0db46393d28cccfeb4cef45a3301afd862ae7feeb646f2125d1"
+ },
+ {
+  "name": "BG_simpAdaptive_160x20",
+  "arm": "simpAdaptive",
+  "mesh": [
+   160,
+   20
+  ],
+  "upstreamPreset": "duOlhoffAdaptivePedersen",
+  "overrides": [
+   "material.stiffness.model",
+   "simp",
+   "material.mass.model",
+   "eq4b"
+  ],
+  "cfgHash": "b2f91fb996760829ae632a7bcfffd3bf28fbc5472619445f2e22d66d624ad95f",
+  "rminEl": 1.2,
+  "eps": 0.05,
+  "status": "CONVERGED",
+  "nOuter": 200,
+  "omega1": 170.34051349263132,
+  "omega2": 171.81872779903108,
+  "Mnd_final": 0.10860635697226187,
+  "gray_final": 0.115,
+  "wall_s": 639.8967613333333,
+  "repo_head": "05919933f3f4af68b36c1981e66130709a263593-dirty",
+  "impl_tree_sha256": "4ba9a3ae10881344a0e60f2b8a8976c5ec9ceccf966bc2a3da4f37fb5aebffbf",
+  "matlab": "25.2.0.3042426 (R2025b) Update 1",
+  "threads": 1,
+  "timestamp": "2026-09-14T10:45:52",
+  "mat_sha256": "9a71e4eb8454ef7f78daeffbe4a410bbb34151f91d642f2547d42515f1216ce6"
+ },
+ {
+  "name": "BG_simpAdaptive_240x30",
+  "arm": "simpAdaptive",
+  "mesh": [
+   240,
+   30
+  ],
+  "upstreamPreset": "duOlhoffAdaptivePedersen",
+  "overrides": [
+   "material.stiffness.model",
+   "simp",
+   "material.mass.model",
+   "eq4b"
+  ],
+  "cfgHash": "ed9b88915d6a3f0eade579ea8565e53e3b038a92d5d60208ae0fdbf23676938b",
+  "rminEl": 1.8,
+  "eps": 0.07500000000000001,
+  "status": "CONVERGED",
+  "nOuter": 84,
+  "omega1": 163.95298292963355,
+  "omega2": 167.67893342045636,
+  "Mnd_final": 0.14818160828334545,
+  "gray_final": 0.16236111111111112,
+  "wall_s": 410.494185375,
+  "repo_head": "05919933f3f4af68b36c1981e66130709a263593-dirty",
+  "impl_tree_sha256": "4ba9a3ae10881344a0e60f2b8a8976c5ec9ceccf966bc2a3da4f37fb5aebffbf",
+  "matlab": "25.2.0.3042426 (R2025b) Update 1",
+  "threads": 1,
+  "timestamp": "2026-09-14T10:29:03",
+  "mat_sha256": "ebe265c591f5ebdf568828acabb0488ca00b0a7f99cf9adcddfd2a520b37ed57"
+ },
+ {
+  "name": "BG_simpAdaptive_320x40",
+  "arm": "simpAdaptive",
+  "mesh": [
+   320,
+   40
+  ],
+  "upstreamPreset": "duOlhoffAdaptivePedersen",
+  "overrides": [
+   "material.stiffness.model",
+   "simp",
+   "material.mass.model",
+   "eq4b"
+  ],
+  "cfgHash": "d7913af7155e6359202b3929a2d648b92a957ba6a2efd1b7829a7575507a6686",
+  "rminEl": 2.4,
+  "eps": 0.1,
+  "status": "CONVERGED",
+  "nOuter": 138,
+  "omega1": 165.81132630030436,
+  "omega2": 175.23348776748392,
+  "Mnd_final": 0.2291156143938781,
+  "gray_final": 0.248828125,
+  "wall_s": 1486.6592087083334,
+  "repo_head": "05919933f3f4af68b36c1981e66130709a263593-dirty",
+  "impl_tree_sha256": "4ba9a3ae10881344a0e60f2b8a8976c5ec9ceccf966bc2a3da4f37fb5aebffbf",
+  "matlab": "25.2.0.3042426 (R2025b) Update 1",
+  "threads": 1,
+  "timestamp": "2026-09-14T10:23:15",
+  "mat_sha256": "07242859c2eabb11eb72e0069c6e581b06569c40d30cf3100e8ba7596b2aa8e9"
+ },
+ {
+  "name": "BG_simpAdaptive_400x50",
+  "arm": "simpAdaptive",
+  "mesh": [
+   400,
+   50
+  ],
+  "upstreamPreset": "duOlhoffAdaptivePedersen",
+  "overrides": [
+   "material.stiffness.model",
+   "simp",
+   "material.mass.model",
+   "eq4b"
+  ],
+  "cfgHash": "816fa90736ecc7c8e5e99c7def0546a152c4543de9fc8c8e721a8759e03bdde5",
+  "rminEl": 3,
+  "eps": 0.125,
+  "status": "CONVERGED",
+  "nOuter": 141,
+  "omega1": 166.34906998982976,
+  "omega2": 167.07076437491352,
+  "Mnd_final": 0.18542446264758503,
+  "gray_final": 0.20035,
+  "wall_s": 1946.33792225,
+  "repo_head": "05919933f3f4af68b36c1981e66130709a263593-dirty",
+  "impl_tree_sha256": "4ba9a3ae10881344a0e60f2b8a8976c5ec9ceccf966bc2a3da4f37fb5aebffbf",
+  "matlab": "25.2.0.3042426 (R2025b) Update 1",
+  "threads": 1,
+  "timestamp": "2026-09-14T10:30:54",
+  "mat_sha256": "9187ad04f775e532e55710cd1b506d435ab992519c9d8fc94e3af524b655fbc4"
+ },
+ {
+  "name": "BG_simpAdaptive_480x60",
+  "arm": "simpAdaptive",
+  "mesh": [
+   480,
+   60
+  ],
+  "upstreamPreset": "duOlhoffAdaptivePedersen",
+  "overrides": [
+   "material.stiffness.model",
+   "simp",
+   "material.mass.model",
+   "eq4b"
+  ],
+  "cfgHash": "d4a05920c16c8efcf956f59b92d6d3ffa9a0a4739eba0924dd241d947b28be5e",
+  "rminEl": 3.6,
+  "eps": 0.15000000000000002,
+  "status": "CONVERGED",
+  "nOuter": 64,
+  "omega1": 34.357105801711924,
+  "omega2": 34.4050378341317,
+  "Mnd_final": 0.2854609802980778,
+  "gray_final": 0.31798611111111114,
+  "wall_s": 960.0643465,
+  "repo_head": "05919933f3f4af68b36c1981e66130709a263593-dirty",
+  "impl_tree_sha256": "4ba9a3ae10881344a0e60f2b8a8976c5ec9ceccf966bc2a3da4f37fb5aebffbf",
+  "matlab": "25.2.0.3042426 (R2025b) Update 1",
+  "threads": 1,
+  "timestamp": "2026-09-14T10:14:28",
+  "mat_sha256": "ebb2cfe253d351baa130616ac5adb604f545705ced6c0d83d3c7c7568859f21f"
+ }
+]

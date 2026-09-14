@@ -1,0 +1,37 @@
+path	substring	reason
+# Every row excuses the lines of ONE file that contain the substring. A row that matches nothing fails the check.
+# ---- the firewall itself: the run-time gate must NAME what it forbids -------------------------------------------
+analysis/Olhoff/olhoffcurrent_forbidden_paths.m	fullfile('development')	run-time gate: forbids every MATLAB path entry below development/ (blacklist, not a dependency)
+analysis/Olhoff/olhoffcurrent_forbidden_paths.m	fullfile('analysis', 'Olhoff	run-time gate: pre-2026-09-14 locations of historical Olhoff trees stay blacklisted so a re-created tree still fails closed
+analysis/Olhoff/olhoffcurrent_forbidden_paths.m	fullfile('analysis', 'olhoff_	run-time gate: pre-2026-09-14 locations of the olhoff_* audit trees (blacklist)
+analysis/Olhoff/olhoffcurrent_forbidden_paths.m	fullfile('Matlab',   'reproduction2007')	run-time gate: pre-2026-09-14 location of reproduction2007 (blacklist)
+tools/Matlab/run_topopt_from_json.m	case {'olhoff', 'olhoffexact', 'olhoffdu2007repro', 'olhoff2007repro', 'reproduction2007'}	retired JSON approach keys: the branch only raises run_topopt_from_json:RetiredApproach
+# ---- negative isolation tests: an archived tree is put on the path ON PURPOSE to prove the gate refuses it ------
+analysis/Olhoff/tests/test_path_isolation.m	fullfile(repo,'development','reconstruction'	TEST B/D/E contaminant: proves the gate BLOCKS an archived Olhoff tree; the test asserts refusal, it does not use the code
+analysis/Olhoff/tests/test_path_isolation.m	check('B  + archived OlhoffM4Reconstruction -> BLOCK'	label of TEST B
+analysis/Olhoff/tests/test_path_isolation.m	check('D  + archived Matlab/reproduction2007 -> BLOCK'	label of TEST D
+analysis/Olhoff/tests/test_source_integrity.m	fullfile(repo,'development','reconstruction'	TEST I contaminant: competing Olhoff implementation on the path must BLOCK
+examples/Performance/conference_bench/confbench_selftest.m	superseded = fullfile(repo, 'development', 'reconstruction', 'Matlab', 'reproduction2007', 'algo');	selftest T2 contaminant: fail-closed dispatch must refuse an archived tree
+# ---- the word "development" meaning the external upstream research repository, not this directory ---------------
+analysis/Olhoff/PROVENANCE.json	DEVELOPMENT / RESEARCH UPSTREAM	role label of the external upstream repository (recorded provenance)
+analysis/Olhoff/olhoffcurrent_currentness.m	(development tree; not a gate)	message about the external upstream repository
+analysis/Olhoff/tests/test_path_isolation.m	external development repository not present on this machine	message about the external upstream repository (TEST C skip)
+examples/Performance/conference_bench/confbench_preflight.m	external development repository	message about the external upstream repository
+# ---- recorded provenance: strings describing where evidence lived; never opened by current code -----------------
+analysis/Olhoff/PROVENANCE.json	analysis/OlhoffCurrent	promotion record (moved byte-for-byte); paths are the locations at promotion time
+analysis/Olhoff/PROVENANCE.json	analysis/OlhoffM4Reconstruction	promotion record: classification of the frozen reconstruction at promotion time
+analysis/Olhoff/PROVENANCE.json	analysis/OlhoffExperiments	promotion record: pre-emptive classification at promotion time
+analysis/Olhoff/SOURCE_MANIFEST.json	"root": "analysis/OlhoffCurrent/+impl"	integrity manifest (moved byte-for-byte); verification is relative to +impl/ and never reads root
+analysis/Olhoff/tests/fixtures/EX3_160_reference.json	analysis/OlhoffCurrent/evidence/upstream_253069_migration/PRE_EX3.mat	fixture metadata naming where the reference was taken from; the test reads only the fixture's numbers
+analysis/Olhoff/olhoffcurrent_presets.m	'analysis/OlhoffM4Reconstruction (frozen conference realization	evidence citation string of a historical preset (metadata, not file access)
+analysis/Olhoff/olhoffcurrent_presets.m	'analysis/OlhoffCurrent/diagnostics/	evidence citation strings of the presets (metadata, not file access)
+examples/Performance/benchmark_profile/profile_freeze_manifest.json	"source_implementation":	frozen, hash-pinned profile record (2026-08-27); source paths as they were when frozen
+examples/Performance/benchmark_profile/profile_freeze_manifest.json	analysis/olhoff_native_convergence/results/native_convergence_config.json	frozen profile record: provenance of the olhoff_* profiles, which current code never reads
+examples/Performance/compose_nine_mesh_comparison.m	'analysis/ourApproach/Matlab/topopt_freq.m'	key into the two recorded pre-cleanup campaign manifests (never opened)
+examples/Performance/compose_nine_mesh_comparison.m	'analysis/YukselApproach/Matlab/top99neo_inertial_freq.m'	key into the recorded campaign manifests (never opened)
+examples/Performance/compose_nine_mesh_comparison.m	'analysis/three_method_parametric_study/	keys into the recorded campaign manifests (never opened)
+# ---- pre-existing dangling optional import (mma.py never existed in git or on disk at baseline 0591993) ----------
+analysis/Proposed/Python/topopt_freq.py	'OlhoffApproach', 'Python'	PRE-EXISTING DEFECT: optional import of a non-existent mma.py; try/except leaves mmasub=None, behaviour unchanged by the migration; not fixed here
+analysis/Proposed/Python/topopt_freq.py	Ensure OlhoffApproach/Python/mma.py is accessible	PRE-EXISTING DEFECT: message of the same optional import
+analysis/elastic2D/Python/topopt_elastic2D.py	"OlhoffApproach", "Python"	PRE-EXISTING DEFECT: optional import of a non-existent mma.py (same as Proposed)
+analysis/elastic2D/Python/topopt_elastic2D.py	"analysis/OlhoffApproach/Python/."	PRE-EXISTING DEFECT: message of the same optional import

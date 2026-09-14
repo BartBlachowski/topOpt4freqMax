@@ -1,0 +1,998 @@
+{
+  "manifest_schema": "conference_performance_composite/1",
+  "generated_datetime": "2026-09-14T17:03:53+02:00",
+  "generated_by": "examples/Performance/compose_nine_mesh_comparison.m",
+  "manifest_role": "OUTPUT. A composition of two recorded campaigns; nothing was re-solved or re-timed. The source manifests remain authoritative for what each row ran.",
+  "composition_note": "Rows are composed from two recorded campaigns run on the same host (PMS.local, MATLAB 2025b, Apple Accelerate BLAS (ILP64), 1 thread): Proposed and Yuksel from campaign_9mesh_r2 (generated 2026-09-11T23:51:04+02:00), the Du-Olhoff reconstruction (Pedersen stiffness + linear mass, adaptive box) from nine_mesh_pedersen_b21483b (generated 2026-09-14T05:34:28+02:00). Nothing was re-solved or re-timed. The Proposed/Yuksel rows and the Du-Olhoff rows were timed in separate MATLAB sessions, not interleaved mesh by mesh in one session. The historical \"Du-Olhoff reconstruction (M4)\" rows of campaign_9mesh_r2 are not used. The Proposed rows are re-accounted to timing schema 2 from their recorded timers: Time 1 is the reference eigenanalysis alone and the solver preparation is in Other, as for the other two methods.",
+  "configuration": {
+    "resolutions": [
+      [
+        160,
+        20
+      ],
+      [
+        240,
+        30
+      ],
+      [
+        320,
+        40
+      ],
+      [
+        400,
+        50
+      ],
+      [
+        480,
+        60
+      ],
+      [
+        560,
+        70
+      ],
+      [
+        640,
+        80
+      ],
+      [
+        720,
+        90
+      ],
+      [
+        800,
+        100
+      ]
+    ],
+    "confirmLongCampaign": true,
+    "maxOuterOverride": [],
+    "yukselMaxIters": 5000,
+    "methods": {
+      "proposed": true,
+      "yuksel": true,
+      "olhoff": true
+    },
+    "singleThread": true,
+    "runWarmup": true,
+    "runEvaluator": true,
+    "fitScaling": true,
+    "writeCSV": true,
+    "writeJSON": true,
+    "writeLaTeX": true,
+    "outputDir": "/Users/piotrek/Programming/topOpt4freqMax/examples/Performance/conference_benchmark/nine_mesh_comparison_pedersen_b21483b",
+    "runLabel": "nine_mesh_comparison_pedersen_b21483b",
+    "timingTolAbs": 1E-6,
+    "timingTolRel": 1E-9,
+    "crosscheckTolRel": 0.05,
+    "scientificEvidence": true,
+    "performanceCampaign": true
+  },
+  "active_resolutions": [
+    [
+      160,
+      20
+    ],
+    [
+      240,
+      30
+    ],
+    [
+      320,
+      40
+    ],
+    [
+      400,
+      50
+    ],
+    [
+      480,
+      60
+    ],
+    [
+      560,
+      70
+    ],
+    [
+      640,
+      80
+    ],
+    [
+      720,
+      90
+    ],
+    [
+      800,
+      100
+    ]
+  ],
+  "active_resolutions_count": 9,
+  "active_methods": [
+    "proposed",
+    "yuksel",
+    "olhoff"
+  ],
+  "element_counts": [
+    3200,
+    7200,
+    12800,
+    20000,
+    28800,
+    39200,
+    51200,
+    64800,
+    80000
+  ],
+  "sources": [
+    {
+      "label": "campaign_9mesh_r2",
+      "dir": "examples/Performance/conference_benchmark/campaign_9mesh_r2",
+      "methods_taken": "Proposed; Yuksel",
+      "campaign_generated": "2026-09-11T23:51:04+02:00",
+      "repository_head": "bba45e72ea18eca7615315fcc543572d42a436bc",
+      "repository_dirty": true,
+      "records_sha256": "873125858df02664d9a7d37bd09e4e9b0b1ccff5c37940d088f9b1e424921fae",
+      "manifest_sha256": "33885187c04dbb59f3a0fd9631537da4517ef70a1c1cb9ecae0c2dc42596ec1f"
+    },
+    {
+      "label": "nine_mesh_pedersen_b21483b",
+      "dir": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b",
+      "methods_taken": "Du-Olhoff reconstruction (Pedersen stiffness + linear mass, adaptive box)",
+      "campaign_generated": "2026-09-14T05:34:28+02:00",
+      "repository_head": "b21483b158f58e05e7b56957f2fbe8e1d2891395",
+      "repository_dirty": true,
+      "records_sha256": "261bf8fc94a1efb7da223aae64ac72da336a4d8f48341f0d8bf79b0a4d2abe82",
+      "manifest_sha256": "be45b6283fe6078e83c63c550a89dc0acf112adc4f6f1e81147781b996dd8386"
+    }
+  ],
+  "row_origin": [
+    {
+      "method": "Proposed",
+      "mesh": "160x20",
+      "source": "campaign_9mesh_r2"
+    },
+    {
+      "method": "Yuksel",
+      "mesh": "160x20",
+      "source": "campaign_9mesh_r2"
+    },
+    {
+      "method": "Du-Olhoff reconstruction (Pedersen stiffness + linear mass, adaptive box)",
+      "mesh": "160x20",
+      "source": "nine_mesh_pedersen_b21483b"
+    },
+    {
+      "method": "Proposed",
+      "mesh": "240x30",
+      "source": "campaign_9mesh_r2"
+    },
+    {
+      "method": "Yuksel",
+      "mesh": "240x30",
+      "source": "campaign_9mesh_r2"
+    },
+    {
+      "method": "Du-Olhoff reconstruction (Pedersen stiffness + linear mass, adaptive box)",
+      "mesh": "240x30",
+      "source": "nine_mesh_pedersen_b21483b"
+    },
+    {
+      "method": "Proposed",
+      "mesh": "320x40",
+      "source": "campaign_9mesh_r2"
+    },
+    {
+      "method": "Yuksel",
+      "mesh": "320x40",
+      "source": "campaign_9mesh_r2"
+    },
+    {
+      "method": "Du-Olhoff reconstruction (Pedersen stiffness + linear mass, adaptive box)",
+      "mesh": "320x40",
+      "source": "nine_mesh_pedersen_b21483b"
+    },
+    {
+      "method": "Proposed",
+      "mesh": "400x50",
+      "source": "campaign_9mesh_r2"
+    },
+    {
+      "method": "Yuksel",
+      "mesh": "400x50",
+      "source": "campaign_9mesh_r2"
+    },
+    {
+      "method": "Du-Olhoff reconstruction (Pedersen stiffness + linear mass, adaptive box)",
+      "mesh": "400x50",
+      "source": "nine_mesh_pedersen_b21483b"
+    },
+    {
+      "method": "Proposed",
+      "mesh": "480x60",
+      "source": "campaign_9mesh_r2"
+    },
+    {
+      "method": "Yuksel",
+      "mesh": "480x60",
+      "source": "campaign_9mesh_r2"
+    },
+    {
+      "method": "Du-Olhoff reconstruction (Pedersen stiffness + linear mass, adaptive box)",
+      "mesh": "480x60",
+      "source": "nine_mesh_pedersen_b21483b"
+    },
+    {
+      "method": "Proposed",
+      "mesh": "560x70",
+      "source": "campaign_9mesh_r2"
+    },
+    {
+      "method": "Yuksel",
+      "mesh": "560x70",
+      "source": "campaign_9mesh_r2"
+    },
+    {
+      "method": "Du-Olhoff reconstruction (Pedersen stiffness + linear mass, adaptive box)",
+      "mesh": "560x70",
+      "source": "nine_mesh_pedersen_b21483b"
+    },
+    {
+      "method": "Proposed",
+      "mesh": "640x80",
+      "source": "campaign_9mesh_r2"
+    },
+    {
+      "method": "Yuksel",
+      "mesh": "640x80",
+      "source": "campaign_9mesh_r2"
+    },
+    {
+      "method": "Du-Olhoff reconstruction (Pedersen stiffness + linear mass, adaptive box)",
+      "mesh": "640x80",
+      "source": "nine_mesh_pedersen_b21483b"
+    },
+    {
+      "method": "Proposed",
+      "mesh": "720x90",
+      "source": "campaign_9mesh_r2"
+    },
+    {
+      "method": "Yuksel",
+      "mesh": "720x90",
+      "source": "campaign_9mesh_r2"
+    },
+    {
+      "method": "Du-Olhoff reconstruction (Pedersen stiffness + linear mass, adaptive box)",
+      "mesh": "720x90",
+      "source": "nine_mesh_pedersen_b21483b"
+    },
+    {
+      "method": "Proposed",
+      "mesh": "800x100",
+      "source": "campaign_9mesh_r2"
+    },
+    {
+      "method": "Yuksel",
+      "mesh": "800x100",
+      "source": "campaign_9mesh_r2"
+    },
+    {
+      "method": "Du-Olhoff reconstruction (Pedersen stiffness + linear mass, adaptive box)",
+      "mesh": "800x100",
+      "source": "nine_mesh_pedersen_b21483b"
+    }
+  ],
+  "composition_checks": [
+    {
+      "name": "campaign_9mesh_r2 records hash to the pinned SHA-256",
+      "pass": true,
+      "detail": "873125858df02664d9a7d37bd09e4e9b0b1ccff5c37940d088f9b1e424921fae"
+    },
+    {
+      "name": "campaign_9mesh_r2 is a complete performance campaign",
+      "pass": true,
+      "detail": "performanceCampaign=1 scientificEvidence=1"
+    },
+    {
+      "name": "campaign_9mesh_r2 ran single-threaded",
+      "pass": true,
+      "detail": "max_num_comp_threads=1"
+    },
+    {
+      "name": "nine_mesh_pedersen_b21483b records hash to the pinned SHA-256",
+      "pass": true,
+      "detail": "261bf8fc94a1efb7da223aae64ac72da336a4d8f48341f0d8bf79b0a4d2abe82"
+    },
+    {
+      "name": "nine_mesh_pedersen_b21483b is a complete performance campaign",
+      "pass": true,
+      "detail": "performanceCampaign=1 scientificEvidence=1"
+    },
+    {
+      "name": "nine_mesh_pedersen_b21483b ran single-threaded",
+      "pass": true,
+      "detail": "max_num_comp_threads=1"
+    },
+    {
+      "name": "environment.hostname identical (campaign_9mesh_r2 vs nine_mesh_pedersen_b21483b)",
+      "pass": true,
+      "detail": "PMS.local | PMS.local"
+    },
+    {
+      "name": "environment.computer identical (campaign_9mesh_r2 vs nine_mesh_pedersen_b21483b)",
+      "pass": true,
+      "detail": "MACA64 | MACA64"
+    },
+    {
+      "name": "environment.matlab_version identical (campaign_9mesh_r2 vs nine_mesh_pedersen_b21483b)",
+      "pass": true,
+      "detail": "25.2.0.2998904 (R2025b) | 25.2.0.2998904 (R2025b)"
+    },
+    {
+      "name": "environment.blas_library identical (campaign_9mesh_r2 vs nine_mesh_pedersen_b21483b)",
+      "pass": true,
+      "detail": "Apple Accelerate BLAS (ILP64) | Apple Accelerate BLAS (ILP64)"
+    },
+    {
+      "name": "environment.max_num_comp_threads identical (campaign_9mesh_r2 vs nine_mesh_pedersen_b21483b)",
+      "pass": true,
+      "detail": "1 | 1"
+    },
+    {
+      "name": "identical run settings and meshes (campaign_9mesh_r2 vs nine_mesh_pedersen_b21483b)",
+      "pass": true,
+      "detail": "[160 20;240 30;320 40;400 50;480 60;560 70;640 80;720 90;800 100]"
+    },
+    {
+      "name": "analysis/ourApproach/Matlab/topopt_freq.m unchanged (campaign_9mesh_r2 vs nine_mesh_pedersen_b21483b)",
+      "pass": true,
+      "detail": "284630992697de9c565aa511cbfd4389d4464e951e23436927bd0e150a53c09b | 284630992697de9c565aa511cbfd4389d4464e951e23436927bd0e150a53c09b"
+    },
+    {
+      "name": "analysis/YukselApproach/Matlab/top99neo_inertial_freq.m unchanged (campaign_9mesh_r2 vs nine_mesh_pedersen_b21483b)",
+      "pass": true,
+      "detail": "5afc3d16b4ed6af05793df461b541ed3b2ea62a6da8836f38301a9a3917e6ba2 | 5afc3d16b4ed6af05793df461b541ed3b2ea62a6da8836f38301a9a3917e6ba2"
+    },
+    {
+      "name": "analysis/three_method_parametric_study/results/profile_freeze_manifest.json unchanged (campaign_9mesh_r2 vs nine_mesh_pedersen_b21483b)",
+      "pass": true,
+      "detail": "b55e31d87d18e90e8c0b8d278bd4111d494610b62f253194ea16cfcf78252eca | b55e31d87d18e90e8c0b8d278bd4111d494610b62f253194ea16cfcf78252eca"
+    },
+    {
+      "name": "analysis/three_method_parametric_study/study_base_config.m unchanged (campaign_9mesh_r2 vs nine_mesh_pedersen_b21483b)",
+      "pass": true,
+      "detail": "2b3903144e1f2cd69795a1d24e1e93105e3ea89768c8f5f3aa7553dddeda39ba | 2b3903144e1f2cd69795a1d24e1e93105e3ea89768c8f5f3aa7553dddeda39ba"
+    },
+    {
+      "name": "analysis/three_method_parametric_study/study_evaluate_design.m unchanged (campaign_9mesh_r2 vs nine_mesh_pedersen_b21483b)",
+      "pass": true,
+      "detail": "e14a21efe0bb2d9b9d7f3187b4c3f671ec089f6ff96773074b8f3b56cacd79e9 | e14a21efe0bb2d9b9d7f3187b4c3f671ec089f6ff96773074b8f3b56cacd79e9"
+    },
+    {
+      "name": "tools/Matlab/run_topopt_from_json.m unchanged (campaign_9mesh_r2 vs nine_mesh_pedersen_b21483b)",
+      "pass": true,
+      "detail": "3418b25e1c970041e5c28d0c58b58d959c47f239a2132bd90314ff9b72550a2b | 3418b25e1c970041e5c28d0c58b58d959c47f239a2132bd90314ff9b72550a2b"
+    },
+    {
+      "name": "proposed 160x20 present exactly once in campaign_9mesh_r2",
+      "pass": true,
+      "detail": "1 row(s)"
+    },
+    {
+      "name": "proposed 160x20 carries the current display name",
+      "pass": true,
+      "detail": "Proposed"
+    },
+    {
+      "name": "yuksel 160x20 present exactly once in campaign_9mesh_r2",
+      "pass": true,
+      "detail": "1 row(s)"
+    },
+    {
+      "name": "yuksel 160x20 carries the current display name",
+      "pass": true,
+      "detail": "Yuksel"
+    },
+    {
+      "name": "olhoff 160x20 present exactly once in nine_mesh_pedersen_b21483b",
+      "pass": true,
+      "detail": "1 row(s)"
+    },
+    {
+      "name": "olhoff 160x20 carries the current display name",
+      "pass": true,
+      "detail": "Du-Olhoff reconstruction (Pedersen stiffness + linear mass, adaptive box)"
+    },
+    {
+      "name": "proposed 240x30 present exactly once in campaign_9mesh_r2",
+      "pass": true,
+      "detail": "1 row(s)"
+    },
+    {
+      "name": "proposed 240x30 carries the current display name",
+      "pass": true,
+      "detail": "Proposed"
+    },
+    {
+      "name": "yuksel 240x30 present exactly once in campaign_9mesh_r2",
+      "pass": true,
+      "detail": "1 row(s)"
+    },
+    {
+      "name": "yuksel 240x30 carries the current display name",
+      "pass": true,
+      "detail": "Yuksel"
+    },
+    {
+      "name": "olhoff 240x30 present exactly once in nine_mesh_pedersen_b21483b",
+      "pass": true,
+      "detail": "1 row(s)"
+    },
+    {
+      "name": "olhoff 240x30 carries the current display name",
+      "pass": true,
+      "detail": "Du-Olhoff reconstruction (Pedersen stiffness + linear mass, adaptive box)"
+    },
+    {
+      "name": "proposed 320x40 present exactly once in campaign_9mesh_r2",
+      "pass": true,
+      "detail": "1 row(s)"
+    },
+    {
+      "name": "proposed 320x40 carries the current display name",
+      "pass": true,
+      "detail": "Proposed"
+    },
+    {
+      "name": "yuksel 320x40 present exactly once in campaign_9mesh_r2",
+      "pass": true,
+      "detail": "1 row(s)"
+    },
+    {
+      "name": "yuksel 320x40 carries the current display name",
+      "pass": true,
+      "detail": "Yuksel"
+    },
+    {
+      "name": "olhoff 320x40 present exactly once in nine_mesh_pedersen_b21483b",
+      "pass": true,
+      "detail": "1 row(s)"
+    },
+    {
+      "name": "olhoff 320x40 carries the current display name",
+      "pass": true,
+      "detail": "Du-Olhoff reconstruction (Pedersen stiffness + linear mass, adaptive box)"
+    },
+    {
+      "name": "proposed 400x50 present exactly once in campaign_9mesh_r2",
+      "pass": true,
+      "detail": "1 row(s)"
+    },
+    {
+      "name": "proposed 400x50 carries the current display name",
+      "pass": true,
+      "detail": "Proposed"
+    },
+    {
+      "name": "yuksel 400x50 present exactly once in campaign_9mesh_r2",
+      "pass": true,
+      "detail": "1 row(s)"
+    },
+    {
+      "name": "yuksel 400x50 carries the current display name",
+      "pass": true,
+      "detail": "Yuksel"
+    },
+    {
+      "name": "olhoff 400x50 present exactly once in nine_mesh_pedersen_b21483b",
+      "pass": true,
+      "detail": "1 row(s)"
+    },
+    {
+      "name": "olhoff 400x50 carries the current display name",
+      "pass": true,
+      "detail": "Du-Olhoff reconstruction (Pedersen stiffness + linear mass, adaptive box)"
+    },
+    {
+      "name": "proposed 480x60 present exactly once in campaign_9mesh_r2",
+      "pass": true,
+      "detail": "1 row(s)"
+    },
+    {
+      "name": "proposed 480x60 carries the current display name",
+      "pass": true,
+      "detail": "Proposed"
+    },
+    {
+      "name": "yuksel 480x60 present exactly once in campaign_9mesh_r2",
+      "pass": true,
+      "detail": "1 row(s)"
+    },
+    {
+      "name": "yuksel 480x60 carries the current display name",
+      "pass": true,
+      "detail": "Yuksel"
+    },
+    {
+      "name": "olhoff 480x60 present exactly once in nine_mesh_pedersen_b21483b",
+      "pass": true,
+      "detail": "1 row(s)"
+    },
+    {
+      "name": "olhoff 480x60 carries the current display name",
+      "pass": true,
+      "detail": "Du-Olhoff reconstruction (Pedersen stiffness + linear mass, adaptive box)"
+    },
+    {
+      "name": "proposed 560x70 present exactly once in campaign_9mesh_r2",
+      "pass": true,
+      "detail": "1 row(s)"
+    },
+    {
+      "name": "proposed 560x70 carries the current display name",
+      "pass": true,
+      "detail": "Proposed"
+    },
+    {
+      "name": "yuksel 560x70 present exactly once in campaign_9mesh_r2",
+      "pass": true,
+      "detail": "1 row(s)"
+    },
+    {
+      "name": "yuksel 560x70 carries the current display name",
+      "pass": true,
+      "detail": "Yuksel"
+    },
+    {
+      "name": "olhoff 560x70 present exactly once in nine_mesh_pedersen_b21483b",
+      "pass": true,
+      "detail": "1 row(s)"
+    },
+    {
+      "name": "olhoff 560x70 carries the current display name",
+      "pass": true,
+      "detail": "Du-Olhoff reconstruction (Pedersen stiffness + linear mass, adaptive box)"
+    },
+    {
+      "name": "proposed 640x80 present exactly once in campaign_9mesh_r2",
+      "pass": true,
+      "detail": "1 row(s)"
+    },
+    {
+      "name": "proposed 640x80 carries the current display name",
+      "pass": true,
+      "detail": "Proposed"
+    },
+    {
+      "name": "yuksel 640x80 present exactly once in campaign_9mesh_r2",
+      "pass": true,
+      "detail": "1 row(s)"
+    },
+    {
+      "name": "yuksel 640x80 carries the current display name",
+      "pass": true,
+      "detail": "Yuksel"
+    },
+    {
+      "name": "olhoff 640x80 present exactly once in nine_mesh_pedersen_b21483b",
+      "pass": true,
+      "detail": "1 row(s)"
+    },
+    {
+      "name": "olhoff 640x80 carries the current display name",
+      "pass": true,
+      "detail": "Du-Olhoff reconstruction (Pedersen stiffness + linear mass, adaptive box)"
+    },
+    {
+      "name": "proposed 720x90 present exactly once in campaign_9mesh_r2",
+      "pass": true,
+      "detail": "1 row(s)"
+    },
+    {
+      "name": "proposed 720x90 carries the current display name",
+      "pass": true,
+      "detail": "Proposed"
+    },
+    {
+      "name": "yuksel 720x90 present exactly once in campaign_9mesh_r2",
+      "pass": true,
+      "detail": "1 row(s)"
+    },
+    {
+      "name": "yuksel 720x90 carries the current display name",
+      "pass": true,
+      "detail": "Yuksel"
+    },
+    {
+      "name": "olhoff 720x90 present exactly once in nine_mesh_pedersen_b21483b",
+      "pass": true,
+      "detail": "1 row(s)"
+    },
+    {
+      "name": "olhoff 720x90 carries the current display name",
+      "pass": true,
+      "detail": "Du-Olhoff reconstruction (Pedersen stiffness + linear mass, adaptive box)"
+    },
+    {
+      "name": "proposed 800x100 present exactly once in campaign_9mesh_r2",
+      "pass": true,
+      "detail": "1 row(s)"
+    },
+    {
+      "name": "proposed 800x100 carries the current display name",
+      "pass": true,
+      "detail": "Proposed"
+    },
+    {
+      "name": "yuksel 800x100 present exactly once in campaign_9mesh_r2",
+      "pass": true,
+      "detail": "1 row(s)"
+    },
+    {
+      "name": "yuksel 800x100 carries the current display name",
+      "pass": true,
+      "detail": "Yuksel"
+    },
+    {
+      "name": "olhoff 800x100 present exactly once in nine_mesh_pedersen_b21483b",
+      "pass": true,
+      "detail": "1 row(s)"
+    },
+    {
+      "name": "olhoff 800x100 carries the current display name",
+      "pass": true,
+      "detail": "Du-Olhoff reconstruction (Pedersen stiffness + linear mass, adaptive box)"
+    },
+    {
+      "name": "Olhoff rows ran the preset the benchmark names",
+      "pass": true,
+      "detail": "duOlhoffPedersenAdaptiveBoxSensitivityFiltered"
+    },
+    {
+      "name": "proposed 160x20 carries the recorded timers schema 2 needs",
+      "pass": true,
+      "detail": "stage1_time_s, stage1_reference_eigen_time_s, stage2_time_s, total_wall_time_s, solver_self_report_wall_s"
+    },
+    {
+      "name": "proposed 160x20 re-accounted to schema 2: identity and cross-check hold",
+      "pass": true,
+      "detail": "time1 0.4336 -> 0.0278 s, overhead 0.1756 -> 0.5814 s, residual 0.0e+00 s"
+    },
+    {
+      "name": "proposed 240x30 carries the recorded timers schema 2 needs",
+      "pass": true,
+      "detail": "stage1_time_s, stage1_reference_eigen_time_s, stage2_time_s, total_wall_time_s, solver_self_report_wall_s"
+    },
+    {
+      "name": "proposed 240x30 re-accounted to schema 2: identity and cross-check hold",
+      "pass": true,
+      "detail": "time1 0.2588 -> 0.0606 s, overhead 0.2508 -> 0.4491 s, residual 0.0e+00 s"
+    },
+    {
+      "name": "proposed 320x40 carries the recorded timers schema 2 needs",
+      "pass": true,
+      "detail": "stage1_time_s, stage1_reference_eigen_time_s, stage2_time_s, total_wall_time_s, solver_self_report_wall_s"
+    },
+    {
+      "name": "proposed 320x40 re-accounted to schema 2: identity and cross-check hold",
+      "pass": true,
+      "detail": "time1 0.2674 -> 0.1089 s, overhead 0.3922 -> 0.5507 s, residual 0.0e+00 s"
+    },
+    {
+      "name": "proposed 400x50 carries the recorded timers schema 2 needs",
+      "pass": true,
+      "detail": "stage1_time_s, stage1_reference_eigen_time_s, stage2_time_s, total_wall_time_s, solver_self_report_wall_s"
+    },
+    {
+      "name": "proposed 400x50 re-accounted to schema 2: identity and cross-check hold",
+      "pass": true,
+      "detail": "time1 0.3403 -> 0.1870 s, overhead 0.4537 -> 0.6071 s, residual 0.0e+00 s"
+    },
+    {
+      "name": "proposed 480x60 carries the recorded timers schema 2 needs",
+      "pass": true,
+      "detail": "stage1_time_s, stage1_reference_eigen_time_s, stage2_time_s, total_wall_time_s, solver_self_report_wall_s"
+    },
+    {
+      "name": "proposed 480x60 re-accounted to schema 2: identity and cross-check hold",
+      "pass": true,
+      "detail": "time1 0.4297 -> 0.2635 s, overhead 0.6396 -> 0.8057 s, residual 0.0e+00 s"
+    },
+    {
+      "name": "proposed 560x70 carries the recorded timers schema 2 needs",
+      "pass": true,
+      "detail": "stage1_time_s, stage1_reference_eigen_time_s, stage2_time_s, total_wall_time_s, solver_self_report_wall_s"
+    },
+    {
+      "name": "proposed 560x70 re-accounted to schema 2: identity and cross-check hold",
+      "pass": true,
+      "detail": "time1 0.5303 -> 0.3622 s, overhead 0.8724 -> 1.0405 s, residual 0.0e+00 s"
+    },
+    {
+      "name": "proposed 640x80 carries the recorded timers schema 2 needs",
+      "pass": true,
+      "detail": "stage1_time_s, stage1_reference_eigen_time_s, stage2_time_s, total_wall_time_s, solver_self_report_wall_s"
+    },
+    {
+      "name": "proposed 640x80 re-accounted to schema 2: identity and cross-check hold",
+      "pass": true,
+      "detail": "time1 0.6774 -> 0.4949 s, overhead 1.1361 -> 1.3186 s, residual 0.0e+00 s"
+    },
+    {
+      "name": "proposed 720x90 carries the recorded timers schema 2 needs",
+      "pass": true,
+      "detail": "stage1_time_s, stage1_reference_eigen_time_s, stage2_time_s, total_wall_time_s, solver_self_report_wall_s"
+    },
+    {
+      "name": "proposed 720x90 re-accounted to schema 2: identity and cross-check hold",
+      "pass": true,
+      "detail": "time1 1.1240 -> 0.9382 s, overhead 1.9565 -> 2.1423 s, residual 0.0e+00 s"
+    },
+    {
+      "name": "proposed 800x100 carries the recorded timers schema 2 needs",
+      "pass": true,
+      "detail": "stage1_time_s, stage1_reference_eigen_time_s, stage2_time_s, total_wall_time_s, solver_self_report_wall_s"
+    },
+    {
+      "name": "proposed 800x100 re-accounted to schema 2: identity and cross-check hold",
+      "pass": true,
+      "detail": "time1 1.4594 -> 1.2623 s, overhead 2.5674 -> 2.7646 s, residual 0.0e+00 s"
+    }
+  ],
+  "unchanged_sources": [
+    "analysis/ourApproach/Matlab/topopt_freq.m",
+    "analysis/YukselApproach/Matlab/top99neo_inertial_freq.m",
+    "analysis/three_method_parametric_study/results/profile_freeze_manifest.json",
+    "analysis/three_method_parametric_study/study_base_config.m",
+    "analysis/three_method_parametric_study/study_evaluate_design.m",
+    "tools/Matlab/run_topopt_from_json.m"
+  ],
+  "environment": {
+    "matlab_version": "25.2.0.2998904 (R2025b)",
+    "matlab_release": "2025b",
+    "computer": "MACA64",
+    "max_num_comp_threads": 1,
+    "single_thread_requested": true,
+    "blas_library": "Apple Accelerate BLAS (ILP64)",
+    "hostname": "PMS.local"
+  },
+  "olhoff_implementation": {
+    "implementation": "analysis/OlhoffCurrent",
+    "role": "PRODUCTION - the only Olhoff implementation production may execute",
+    "production_preset": "duOlhoffPedersenAdaptiveBoxSensitivityFiltered",
+    "production_preset_event_date": "2026-09-13",
+    "benchmark_olhoff_preset": "duOlhoffPedersenAdaptiveBoxSensitivityFiltered",
+    "registered_presets": [
+      "duOlhoffSimpEq4bBetaStallLadderSensitivityFiltered",
+      "duOlhoffSimpEq4bThreeRungStageExhaustionSensitivityFiltered",
+      "duOlhoffPedersenAdaptiveBoxSensitivityFiltered"
+    ],
+    "upstream_preset_alias": "duOlhoffAdaptivePedersen",
+    "promoted_from_parent_successful_science_commit": "6b0870850d7407a0f2fc31dbf0d0f318c2e5f2f7",
+    "promoted_from_repository": "/Users/piotrek/Programming/Matlab/Olhoff",
+    "promoted_from_branch": "migration/upstream-olhoffcurrent-capabilities",
+    "promoted_from_commit": "253069262407885a8b759a9e721c4f0a7d3a397d",
+    "promotion_date": "2026-09-13",
+    "source_tree_sha256": "4ba9a3ae10881344a0e60f2b8a8976c5ec9ceccf966bc2a3da4f37fb5aebffbf",
+    "source_n_files": 79,
+    "source_integrity_ok": true,
+    "currentness_state": "CURRENT",
+    "main_repo_commit": "b21483b158f58e05e7b56957f2fbe8e1d2891395-dirty",
+    "epistemic_status": "Du-Olhoff RECONSTRUCTION, Pedersen/adaptive-box formulation (class C controller and filter radius, class B/D material law): SIMP p = 3 with the Pedersen (2000) linearized low-density stiffness (rho*rho0^(p-1) below rho0 = 0.1) and LINEAR mass, eq. (2); a per-element ADAPTIVE move box (initial 0.10, floor 0.002, x1.2 on monotone / x0.7 on reversing outer steps); NATURAL termination by ||drho||_2 < 0.05*sqrt(NE/3200) with no guards and no persistence, a heuristic design-change stop and not a KKT certificate; Sigmund sensitivity filter on all f_sk at a FIXED PHYSICAL radius R = 0.06 (1.2 elements at 160x20, 6 at 800x100). This is a DISTINCT formulation from the historical SIMP + eq. (4b) OlhoffCurrent reconstruction (duOlhoffSimpEq4bBetaStallLadderSensitivityFiltered), not a bug fix of it; Pedersen stiffness is the alternative Du & Olhoff sec. 2.2 name, not their choice. Terminal bimodality is NOT expected beyond coarse meshes: in the committed R = 0.06 sweep the optimum is bimodal only at 160x20 (native gap12 0.7 %) and native gap12 is 11.8-24.5 % from 240x30 to 800x100. Native eigenfrequencies are those of the Pedersen/linear-mass model; any cross-method table must name its evaluator model. Must NOT be labelled \"Olhoff 2007\". Field-level provenance (A/B/C/D) is documented in analysis/OlhoffCurrent/+impl/architecture/docs/SCIENTIFIC_CONFIG_PROVENANCE.md and is printed per run by olh.config.describe.",
+    "implementation_map": "analysis/OLHOFF_IMPLEMENTATION_MAP.md"
+  },
+  "caveats": {
+    "table_caption": "Count/time columns represent method-native computational stages and are not mathematically identical across methods. Total wall time is the common performance quantity.",
+    "olhoff": "Du-Olhoff RECONSTRUCTION, Pedersen/adaptive-box formulation (class C controller and filter radius, class B/D material law): SIMP p = 3 with the Pedersen (2000) linearized low-density stiffness (rho*rho0^(p-1) below rho0 = 0.1) and LINEAR mass, eq. (2); a per-element ADAPTIVE move box (initial 0.10, floor 0.002, x1.2 on monotone / x0.7 on reversing outer steps); NATURAL termination by ||drho||_2 < 0.05*sqrt(NE/3200) with no guards and no persistence, a heuristic design-change stop and not a KKT certificate; Sigmund sensitivity filter on all f_sk at a FIXED PHYSICAL radius R = 0.06 (1.2 elements at 160x20, 6 at 800x100). This is a DISTINCT formulation from the historical SIMP + eq. (4b) OlhoffCurrent reconstruction (duOlhoffSimpEq4bBetaStallLadderSensitivityFiltered), not a bug fix of it; Pedersen stiffness is the alternative Du & Olhoff sec. 2.2 name, not their choice. Terminal bimodality is NOT expected beyond coarse meshes: in the committed R = 0.06 sweep the optimum is bimodal only at 160x20 (native gap12 0.7 %) and native gap12 is 11.8-24.5 % from 240x30 to 800x100. Native eigenfrequencies are those of the Pedersen/linear-mass model; any cross-method table must name its evaluator model. Must NOT be labelled \"Olhoff 2007\". Field-level provenance (A/B/C/D) is documented in analysis/Olhoff/+impl/architecture/docs/SCIENTIFIC_CONFIG_PROVENANCE.md and is printed per run by olh.config.describe.",
+    "olhoff_label": "The Olhoff column is labelled \"Du-Olhoff reconstruction (Pedersen stiffness + linear mass, adaptive box)\" and must not be labelled \"Olhoff 2007\". It is produced by analysis/Olhoff at the named preset duOlhoffPedersenAdaptiveBoxSensitivityFiltered (upstream preset duOlhoffAdaptivePedersen @ 2530692). It is NOT the historical SIMP + eq. (4b) realization that earlier campaigns labelled \"Du-Olhoff reconstruction (M4)\" (preset duOlhoffSimpEq4bBetaStallLadderSensitivityFiltered): the two differ in the low-density material law and the outer controller.",
+    "other_column": "Other [s] is overhead_time_s: everything inside the timed solve but outside the two named stages -- configuration dispatch, model build, filter preparation, the final modal analysis of the converged design and result assembly. It is defined identically for the three methods, and on every row Time 1 + Time 2 + Other = Total.",
+    "omega1_native_flag_tol": 0.05,
+    "omega1_columns": "omega_1 native is the first eigenfrequency of the converged design under the solver's own material model, which differs per method (Proposed: SIMP p = 3, E_min = 1e-9 E_0, linear mass, rho_min = 1e-9, design floor 0; Yuksel: SIMP p = 3, E_min = 1e-9 E_0, mass linear above rho = 0.1 and proportional to the sixth power of rho below it; Du-Olhoff: Pedersen stiffness, linear mass). omega_1 E1 is the same design under the frozen common evaluator E1 (SIMP p = 3, E_min = 1e-6 E_0, linear mass), classifier-selected structural mode, computed outside every timer; it is the only omega_1 that is comparable across methods. A dagger marks a native value that deviates from E1 by more than 5%: the native model then returns a localized mode of near-void elements, not the structural frequency.",
+    "proposed_preparation": "Proposed Stage 1 preparation (initialization minus the reference eigenanalysis) is one-off setup and is reported in Other, never in Time 1. It is a fixed cost that does not scale with the mesh; the first measured row of a session also carries that session's first-call costs.",
+    "sparse_step": "Per-iteration cost of all three methods steps up between 640x80 and 720x90 while the Du-Olhoff inner MMA, which does no sparse assembly, does not. The step coincides with the number of DOFs crossing 2^17 = 131072 (103842 at 640x80, 131222 at 720x90). All three solvers assemble K and M with MATLAB sparse(i,j,v,n,n) every iteration, and in isolation that call measured about 4x slower for n >= 131072 (MATLAB R2025b, Apple silicon, 1 thread, 2026-09-14: 0.086 s at n = 131000, 0.382 s at n = 131072, 4e6 triplets), whereas backslash, decomposition and eigs scale smoothly across the same sizes. Exponents fitted across this boundary include the step: they describe the assembly primitive as much as the methods.",
+    "memory": "Reliable, method-independent peak-memory measurement was not available in the MATLAB environment; memory was omitted rather than reported with inconsistent semantics.",
+    "olhoff_iteration_counts": "The outer iteration count of the Du-Olhoff reconstruction is set by its per-element adaptive move box and its mesh-scaled design-change tolerance, neither of which the original publication specifies, and it is NOT monotone in the mesh (committed R = 0.06 sweep: 121, 111, 101, 93, 112, 130, 156, 204, 246 outer iterations from 160x20 to 800x100). Per-outer-iteration cost is therefore reported next to total wall time.",
+    "scaling": "Scaling exponents may be fitted only to complete campaign data and never to smoke or preflight runs. For the Du-Olhoff reconstruction the outer iteration count is a property of the reconstruction's controller and stop, not of the published method, and need not be monotone in the mesh; a total-time exponent mixes per-iteration cost with that count, so the per-outer-iteration cost fit is reported alongside it. Either exponent describes this reconstruction, not the published method."
+  },
+  "timing_schema": {
+    "schema_version": "conference_benchmark_timing/2",
+    "schema_history": {
+      "v1": "Proposed time1 = solver initialization INCLUDING the reference eigenanalysis (stage1_eigenanalysis_and_preparation_s).",
+      "v2": "2026-09-14: Proposed time1 = the reference eigenanalysis ALONE (stage1_reference_eigenanalysis_s); the preparation moved to overhead_time_s, where the Yuksel and Du-Olhoff records already place their setup, so that the Other column means the same thing on every row. Recorded v1 rows are brought to v2 by confbench_proposed_times from their recorded sub-interval timers (stage1_time_s, stage1_reference_eigen_time_s); nothing is re-timed."
+    },
+    "common": {
+      "total_wall_time_s": "Caller-side tic/toc around the solve and nothing else. CSV/JSON/MAT writing, plotting, table formatting, LaTeX generation, the common E1/E2/E3 evaluator and topology rendering are all outside it.",
+      "overhead_time_s": "Whatever the solve spends outside the two named stages: configuration dispatch, model build, filter preparation, the final modal analysis and result assembly. It exists so that no microsecond has to be forced into a named stage. Printed in the table as the \"Other [s]\" column, for every method alike.",
+      "identity": "total_wall_time_s = time1 + time2 + overhead_time_s  (Total = Time 1 + Time 2 + Other on every table row)",
+      "timing_accounting_residual_s": "total_wall_time_s minus (time1 + time2 + overhead_time_s).",
+      "timing_accounting_fail": "TIMING_ACCOUNTING_FAIL: set when the residual exceeds the predeclared tolerance recorded alongside it.",
+      "independent_crosscheck_residual_s": "A SECOND, independent measurement of the same interval: the caller-side total minus the solver's own self-reported wall time. Unlike the identity above it is not an algebraic tautology, so it detects a mis-nested timer.",
+      "threads": "All runs are single-threaded (maxNumCompThreads(1)).",
+      "memory": "NOT MEASURED and NOT REPORTED. Reliable, method-independent peak-memory measurement was not available in the MATLAB environment; memory was omitted rather than reported with inconsistent semantics."
+    },
+    "methods": {
+      "Proposed": {
+        "architecture": "one reference eigenanalysis, then a SIMP topology optimization",
+        "count1": {
+          "name": "eigenanalysis_solves",
+          "value": "always 1",
+          "meaning": "The number of reference eigenanalyses performed. This is a SOLVE count. It is NOT an optimization iteration and must not be read as one."
+        },
+        "count2": {
+          "name": "simp_iterations",
+          "meaning": "SIMP topology-optimization iterations."
+        },
+        "time1": {
+          "name": "stage1_reference_eigenanalysis_s",
+          "boundary": "the single reference eigenanalysis of the solid domain and NOTHING else: assembly of K0 and M0, the eigensolve, extraction of the frozen mode(s). Solver preparation (mesh, element matrices, connectivity, filter, boundary conditions) is NOT in it; it is in overhead_time_s. The detailed CSV keeps stage1_time_s (initialization including the eigenanalysis, the schema-1 Time 1) and stage1_preparation_time_s = stage1_time_s - time1."
+        },
+        "time2": {
+          "name": "stage2_simp_time_s",
+          "boundary": "the SIMP optimization loop only."
+        },
+        "assertions": [
+          "stage1_reference_eigen_solves == 1",
+          "time1 <= stage1_time_s (the eigenanalysis is a sub-interval of the initialization)",
+          "overhead_time_s = total_wall_time_s - time1 - time2 (preparation + final modal analysis + dispatch)"
+        ]
+      },
+      "Yuksel": {
+        "architecture": "two sequential optimization stages",
+        "count1": {
+          "name": "stage1_iterations",
+          "meaning": "Stage-1 optimization iterations."
+        },
+        "count2": {
+          "name": "stage2_iterations",
+          "meaning": "Stage-2 optimization iterations."
+        },
+        "time1": {
+          "name": "stage1_time_s",
+          "boundary": "the Stage-1 loop only."
+        },
+        "time2": {
+          "name": "stage2_time_s",
+          "boundary": "the Stage-2 loop only; disjoint from Stage 1."
+        },
+        "assertions": [
+          "N_total = N1 + N2",
+          "T1 + T2 = optimization_loop_time (non-overlapping timers)"
+        ]
+      },
+      "DuOlhoffReconstruction": {
+        "label": "Du-Olhoff reconstruction (Pedersen stiffness + linear mass, adaptive box)",
+        "preset": "duOlhoffPedersenAdaptiveBoxSensitivityFiltered",
+        "upstream_preset": "duOlhoffAdaptivePedersen",
+        "upstream_commit": "253069262407885a8b759a9e721c4f0a7d3a397d",
+        "architecture": "NESTED: an outer loop, each of whose iterations contains a complete MMA sub-optimization.",
+        "count1": {
+          "name": "outer_iterations",
+          "meaning": "Fig. 1 outer iterations."
+        },
+        "count2": {
+          "name": "inner_mma_iterations_total",
+          "meaning": "cumulative nested MMA sub-iterations over the whole run."
+        },
+        "time1": {
+          "name": "outer_time_excluding_inner_s",
+          "boundary": "every computational region of an outer iteration EXCEPT the nested MMA solve: FE assembly, the eigenproblem, modal processing, generalized-gradient sensitivities, sensitivity filtering, local subproblem construction, the step controller, the design update, bookkeeping and the convergence test. Measured as sum(t_outer) - sum(t_inner) from per-iteration timers, so the nested solve cannot be double-counted."
+        },
+        "time2": {
+          "name": "inner_mma_time_total_s",
+          "boundary": "the nested MMA loop, and only that."
+        },
+        "derived": [
+          "inner_iterations_per_outer_mean",
+          "inner_time_per_outer_mean_s",
+          "inner_time_per_inner_iteration_mean_s",
+          "inner_time_share_pct"
+        ],
+        "per_outer_iteration_cost": {
+          "why": "the outer iteration count need not be monotone in the mesh, so total wall time alone cannot be read as a per-iteration scaling law",
+          "fields": [
+            "outer_time_total_s = sum(t_outer)",
+            "outer_time_per_outer_mean_s = sum(t_outer)/N_outer",
+            "outer_time_per_outer_median_s = median(t_outer)",
+            "outer_time_excluding_inner_per_outer_mean_s = (sum(t_outer)-sum(t_inner))/N_outer",
+            "eigen_time_per_outer_mean_s = sum(t_eig)/N_outer (FE assembly + eigensolve)",
+            "gradient_time_per_outer_mean_s = sum(t_grad)/N_outer",
+            "total_wall_time_per_outer_s = total_wall_time_s/N_outer",
+            "inner_time_per_outer_mean_s, inner_time_per_inner_iteration_mean_s"
+          ]
+        },
+        "prohibited": "N_outer + N_inner must NEVER be reported as a generic iteration count: the two are different objects.",
+        "caveat": "Du-Olhoff RECONSTRUCTION, Pedersen/adaptive-box formulation (class C controller and filter radius, class B/D material law): SIMP p = 3 with the Pedersen (2000) linearized low-density stiffness (rho*rho0^(p-1) below rho0 = 0.1) and LINEAR mass, eq. (2); a per-element ADAPTIVE move box (initial 0.10, floor 0.002, x1.2 on monotone / x0.7 on reversing outer steps); NATURAL termination by ||drho||_2 < 0.05*sqrt(NE/3200) with no guards and no persistence, a heuristic design-change stop and not a KKT certificate; Sigmund sensitivity filter on all f_sk at a FIXED PHYSICAL radius R = 0.06 (1.2 elements at 160x20, 6 at 800x100). This is a DISTINCT formulation from the historical SIMP + eq. (4b) OlhoffCurrent reconstruction (duOlhoffSimpEq4bBetaStallLadderSensitivityFiltered), not a bug fix of it; Pedersen stiffness is the alternative Du & Olhoff sec. 2.2 name, not their choice. Terminal bimodality is NOT expected beyond coarse meshes: in the committed R = 0.06 sweep the optimum is bimodal only at 160x20 (native gap12 0.7 %) and native gap12 is 11.8-24.5 % from 240x30 to 800x100. Native eigenfrequencies are those of the Pedersen/linear-mass model; any cross-method table must name its evaluator model. Must NOT be labelled \"Olhoff 2007\". Field-level provenance (A/B/C/D) is documented in analysis/Olhoff/+impl/architecture/docs/SCIENTIFIC_CONFIG_PROVENANCE.md and is printed per run by olh.config.describe."
+      }
+    },
+    "cross_method_warning": "Count and time columns represent method-native computational stages and are not mathematically identical across methods. Total wall time is the common performance quantity."
+  },
+  "timing_reaccounting": {
+    "rule": "Proposed rows recorded under timing schema 1 are brought to schema 2 by confbench_proposed_times: time1 = stage1_reference_eigen_time_s, overhead_time_s = total_wall_time_s - time1 - stage2_time_s. Inputs are recorded timers; nothing was re-timed. Identity and cross-check re-run and gated.",
+    "rows": [
+      {
+        "method": "Proposed",
+        "mesh": "160x20",
+        "time1_before_s": 0.43358954166666686,
+        "time1_after_s": 0.027804125,
+        "overhead_before_s": 0.17559920833333331,
+        "overhead_after_s": 0.5813846250000001,
+        "total_s": 1.950791375
+      },
+      {
+        "method": "Proposed",
+        "mesh": "240x30",
+        "time1_before_s": 0.2588243333333331,
+        "time1_after_s": 0.060553291666666668,
+        "overhead_before_s": 0.250836416666667,
+        "overhead_after_s": 0.44910745833333365,
+        "total_s": 6.9335078333333335
+      },
+      {
+        "method": "Proposed",
+        "mesh": "320x40",
+        "time1_before_s": 0.26740570833333221,
+        "time1_after_s": 0.10893595833333333,
+        "overhead_before_s": 0.39218079166666797,
+        "overhead_after_s": 0.55065054166666627,
+        "total_s": 11.30397975
+      },
+      {
+        "method": "Proposed",
+        "mesh": "400x50",
+        "time1_before_s": 0.340342666666668,
+        "time1_after_s": 0.18698141666666668,
+        "overhead_before_s": 0.45371137499999925,
+        "overhead_after_s": 0.6070726250000007,
+        "total_s": 15.733815625
+      },
+      {
+        "method": "Proposed",
+        "mesh": "480x60",
+        "time1_before_s": 0.42966287499999956,
+        "time1_after_s": 0.26348533333333335,
+        "overhead_before_s": 0.63957129166666959,
+        "overhead_after_s": 0.805748833333336,
+        "total_s": 27.1111715
+      },
+      {
+        "method": "Proposed",
+        "mesh": "560x70",
+        "time1_before_s": 0.5303239583333379,
+        "time1_after_s": 0.362197875,
+        "overhead_before_s": 0.87241970833332516,
+        "overhead_after_s": 1.0405457916666663,
+        "total_s": 44.268446875
+      },
+      {
+        "method": "Proposed",
+        "mesh": "640x80",
+        "time1_before_s": 0.67741104166666366,
+        "time1_after_s": 0.49491654166666665,
+        "overhead_before_s": 1.1361185416666757,
+        "overhead_after_s": 1.3186130416666657,
+        "total_s": 70.695612666666662
+      },
+      {
+        "method": "Proposed",
+        "mesh": "720x90",
+        "time1_before_s": 1.1240071666666376,
+        "time1_after_s": 0.93819291666666671,
+        "overhead_before_s": 1.956506583333379,
+        "overhead_after_s": 2.1423208333333434,
+        "total_s": 166.85304970833334
+      },
+      {
+        "method": "Proposed",
+        "mesh": "800x100",
+        "time1_before_s": 1.4594137916666832,
+        "time1_after_s": 1.2622773333333333,
+        "overhead_before_s": 2.56743791666662,
+        "overhead_after_s": 2.7645743749999667,
+        "total_s": 243.22339754166666
+      }
+    ]
+  },
+  "cap_summary": {
+    "any_cap_hit": false,
+    "n_not_ok": 0,
+    "n_records": 27
+  }
+}

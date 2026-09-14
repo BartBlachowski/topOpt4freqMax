@@ -1,0 +1,334 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[margin=2.2cm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{siunitx}
+\usepackage{xcolor}
+\usepackage{caption}
+\usepackage{enumitem}
+\usepackage{microtype}
+\usepackage[hidelinks]{hyperref}
+\captionsetup{font=small,labelfont=bf}
+\emergencystretch=2em
+\setlist{nosep,leftmargin=*}
+\newcommand{\Mnd}{M_{\mathrm{nd}}}
+\newcommand{\fgray}{f_{0.1\text{--}0.9}}
+\newcommand{\code}[1]{\texttt{\small #1}}
+\newcommand{\fact}[1]{\textbf{[F#1]}}
+\newcommand{\todo}[1]{\textcolor{red}{\texttt{\detokenize{[[#1]]}}}}
+\newcommand{\interp}[1]{\textbf{[I#1]}}
+\newcommand{\hyp}[1]{\textbf{[H#1]}}
+\graphicspath{{figures/}}
+
+\title{Mesh refinement and the bimodality gap of the terminal density field\\ in the Olhoff eigenfrequency implementation\\[3pt]\large An evidence-driven diagnosis on \code{analysis/OlhoffCurrent}}
+\author{topOpt4freqMax, \code{docs/bimodality\_gap}}
+\date{2026-09-14}
+
+\begin{document}
+\maketitle
+\vspace{-1.5em}
+\noindent\textbf{Reading guide.} Statements are labelled \fact{n} (observed fact, from a recorded run or a computation on recorded data), \interp{n} (interpretation supported by a controlled experiment in which one factor was changed), or \hyp{n} (plausible but not demonstrated). Every number is traceable to a file under \code{docs/bimodality\_gap/data} or to a recorded campaign artefact named in Appendix~\ref{app:prov}.
+
+\paragraph{Answer in brief.}
+\begin{itemize}
+\item \textbf{No loss of intermediate densities with refinement.} In neither formulation does refinement reduce any measure of intermediate content (\fact{1}).
+\item \textbf{Production (Pedersen, adaptive box): the gray is a fixed-width interface band.} Its width is $\approx0.65$ filter radii in \emph{physical} units, so it is mesh-invariant (\interp{2}).
+\item \textbf{A residual $+22\,\%$ step at the two finest meshes is only partly explained.} It is carried by coreless gray members in a different layout. It is neither a stop artefact nor an elements-per-radius threshold (\interp{6}).
+\item \textbf{Historical formulation (SIMP, ladder): causal mechanism established.} Its strong growth of grayness with refinement is caused by the move ladder stopping the run before the gray clears (\interp{1}). The material law is excluded (\interp{3}).
+\item \textbf{The only way to lose gray with refinement is to change the physics.} A refinement-driven loss appears only when the filter radius is held in element units, which changes the physical problem (\fact{11}).
+\end{itemize}
+
+\section{Problem and definition of the bimodality-gap metric}
+
+\begingroup\sloppy
+\paragraph{Object of study.} The production Du--Olhoff reconstruction \code{analysis/OlhoffCurrent} (solver \code{+impl/architecture/\allowbreak olhoffSolve.m}, byte-identical to upstream \code{253069}), in its two named formulations:
+\begin{itemize}
+\item \textbf{P} (production since 2026-09-13): preset \code{duOlhoffPedersen\allowbreak AdaptiveBox\allowbreak SensitivityFiltered}: SIMP $\rho^3$ stiffness above $\rho_0=0.1$ and Pedersen (2000) linear stiffness $\rho\,\rho_0^{2}$ below it; linear mass, eq.~(2); per-element adaptive move box (ceiling $0.10$, floor $0.002$, $\times1.2$/$\times0.7$); stop when $\|\Delta\rho\|_2<\varepsilon$, no guards.
+\item \textbf{S} (historical, production until 2026-09-13): preset \code{duOlhoffSimpEq4b\allowbreak BetaStallLadder\allowbreak SensitivityFiltered} --- SIMP $\rho^3$ at every density; eq.~(4b) $C^1$ mass cut-off below $0.1$; global move ladder $[0.04,0.02,0.01,0.005]$ descending on a stall of the bound variable $\beta$; the same $\|\Delta\rho\|_2<\varepsilon$ stop, asserted only on a settled move.
+\end{itemize}
+Both share: beam $a\times b=8\times1$, simply supported at mid-height, volume fraction $0.5$, uniform start $\rho=0.5$, $\rho_{\min}=10^{-3}$, $p=3$ fixed, Sigmund (1997) \emph{sensitivity} filter on every $f_{sk}$ with a \emph{fixed physical} radius $R=0.06$, fixed $N=2$ subspace with diagonal offsets, published MMA on the increment, and the mesh-scaled tolerance $\varepsilon=0.05\sqrt{N_E/3200}$ (constant RMS change per element, $8.84\times10^{-4}$).
+\endgroup
+
+\paragraph{Metric.} The repository's canonical discreteness measure is Sigmund's measure of non-discreteness, recorded per outer iteration by the solver (\code{aux.Mnd}) and per run by the benchmark (\code{final\_grayness}):
+\begin{equation}
+\Mnd=\frac{1}{N_E}\sum_{e=1}^{N_E}4\rho_e(1-\rho_e)\in[0,1],\qquad \Mnd=0 \iff \rho\in\{0,1\}^{N_E}.
+\end{equation}
+The ``bimodality gap'' of this note is the departure of the terminal density field from a two-valued field; $\Mnd$ is its primary measure. Because $\Mnd$ weights $\rho=0.5$ most and is blind to \emph{where} the intermediate material is, it is supplemented by: the intermediate fraction $\fgray=\#\{0.1<\rho_e<0.9\}/N_E$ and its physical area $A_{\mathrm{gray}}=\fgray\,ab$; the mid fraction $f_{0.4\text{--}0.6}$; the 20-bin histogram; the length $L$ of the $\rho=0.5$ iso-contour of the element-centroid field (physical units, \code{contourc}); the mean \emph{gray-band width} $w=A_{\mathrm{gray}}/L$ (physical) and $w/h$ (elements, $h=b/n_{\mathrm{ely}}$); and the share of intermediate elements lying within one filter radius of both a solid ($\rho\ge0.9$) and a void ($\rho\le0.1$) element (``band'' share). All are computed by \code{scripts/bg\_metrics.m}. A field whose intermediate material is a fixed-width \emph{physical} interface band has constant $\fgray$ under refinement; one whose interface is a fixed number of \emph{elements} wide has $\fgray\propto h$, i.e.\ a genuine loss of intermediate densities under refinement.
+
+\paragraph{Terminology caveat.} The prompt speaks of an ``increase of the bimodality gap / loss of intermediate densities'' with refinement. Under the definition above a \emph{larger} $\Mnd$ means a \emph{smaller} degree of bimodality. The evidence below shows that no measure of intermediate-density content \emph{decreases} with refinement in either formulation; the hypothesis is therefore tested in the direction the data actually take. (The repository also uses ``bimodal'' for the \emph{eigenvalue} sense $\omega_1=\omega_2$; that quantity, gap$_{12}$, is reported in \S\ref{sec:mult} and is distinct.)
+
+\section{Empirical mesh-resolution evidence}\label{sec:emp}
+
+Two recorded nine-mesh campaigns, one per formulation, were analysed without re-solving (Appendix~\ref{app:prov}): P from \code{nine\_mesh\_pedersen\_b21483b} (2026-09-14, all nine NATIVE\_CONVERGED) and S from \code{campaign\_9mesh\_r2} (2026-09-11, all nine NATIVE\_CONVERGED). Table~\ref{tab:P}, Table~\ref{tab:S} and Figs.~\ref{fig:trend}--\ref{fig:fields}.
+
+\begin{table}[htb]\centering\footnotesize
+\caption{Formulation P (Pedersen + linear mass, adaptive box), recorded campaign. $R/h$: filter radius in elements; $k_{\mathrm{stop}}$: outer iterations; $L$: length of the $\rho=0.5$ contour (domain length 8); $w=A_{\mathrm{gray}}/L$; band: share of intermediate elements within one filter radius of both phases.}
+\label{tab:P}
+\input{figures/tab_campaign_P.tex}
+\end{table}
+\begin{table}[htb]\centering\footnotesize
+\caption{Formulation S (SIMP + eq.~(4b) mass, $\beta$-stall ladder), recorded campaign. Columns as in Table~\ref{tab:P}.}
+\label{tab:S}
+\input{figures/tab_campaign_S.tex}
+\end{table}
+
+\begin{figure}[htb]\centering
+\includegraphics[width=\textwidth]{fig1_campaign_trend.pdf}
+\caption{Terminal discreteness measures versus number of elements for the two recorded campaigns. Every measure of intermediate-density content is flat or increasing with refinement.}
+\label{fig:trend}
+\end{figure}
+\begin{figure}[htb]\centering
+\includegraphics[width=\textwidth]{fig2_histograms.pdf}
+\caption{Density histograms (bin width 0.05, log scale) at three meshes. P: the two modes hold $\approx$81--86\,\% of the elements at every mesh and the intermediate bins fill \emph{in}, not out, with refinement. S: a third mode near $\rho\approx0.45$ grows with refinement.}
+\label{fig:hist}
+\end{figure}
+\begin{figure}[htb]\centering
+\includegraphics[width=\textwidth]{fig3_interface.pdf}
+\caption{Interface geometry of the terminal designs. P: the gray band has a constant \emph{physical} width $w\approx0.04\approx0.65R$, so its width in elements grows as $1/h$. S: the band widens in physical units under refinement, which no interface-resolution mechanism can produce.}
+\label{fig:interface}
+\end{figure}
+\begin{figure}[htb]\centering
+\includegraphics[width=\textwidth]{fig6_fields.pdf}
+\caption{Terminal density fields (black $=1$) of both campaigns at three meshes.}
+\label{fig:fields}
+\end{figure}
+
+\noindent\textbf{Facts.}\nopagebreak
+\begin{itemize}
+\item \fact{1} \emph{No loss of intermediate densities with refinement, in either formulation.} P: $\Mnd$ goes $0.115\to0.165$ ($\times1.44$) and $\fgray$ $0.142\to0.188$ ($\times1.32$) from $160\times20$ to $800\times100$, non-monotonically (minimum $0.122$ at $400\times50$; plateau $0.12$--$0.14$ up to $640\times80$; a step of $+22\,\%$ at $720\times90$ that holds at $800\times100$). S: $\Mnd$ goes $0.134\to0.507$ ($\times3.8$) and $\fgray$ $0.149\to0.563$, monotonically. $f_{0.4\text{--}0.6}$, $f_{0.2\text{--}0.8}$ and the physical area $A_{\mathrm{gray}}$ all follow the same direction (Tables~\ref{tab:P}--\ref{tab:S}, \code{data/campaign\_metrics.csv}). No element sits exactly at either bound in any design; the two modes are the bins $[0,0.05)$ and $[0.95,1]$.
+\item \fact{2} \emph{P's intermediate material is an interface band of constant physical width.} $L$ is $29.9$--$32.3$ at all meshes up to $640\times80$ and $34.1$--$34.8$ at the two finest (which carry extra members, Fig.~\ref{fig:fields}); $w=A_{\mathrm{gray}}/L=0.037$--$0.044$ everywhere, i.e.\ $0.62$--$0.73R$, while $w/h$ grows from $0.75$ to $4.3$ elements. $88$--$96\,\%$ of P's intermediate elements lie within one filter radius of both a solid and a void element up to $640\times80$, and $77$--$79\,\%$ at $720\times90$/$800\times100$ (``band'' column); the residual, entirely gray members, is $4$--$12\,\%$ and $21$--$23\,\%$ respectively (Fig.~\ref{fig:where}).
+\item \fact{2b} \emph{Decomposition of $\Mnd$} (Fig.~\ref{fig:decomp}, Table~\ref{tab:decomp}): the interface band contributes $0.091$--$0.114$ to P's $\Mnd$ at all nine meshes; the bulk-gray contribution is $0.004$--$0.014$ up to $640\times80$ and $0.031$--$0.033$ at $720\times90$/$800\times100$; the near-mode tails contribute $0.013$--$0.020$. The entire step at the two finest meshes is bulk gray, i.e.\ whole members that are intermediate (Fig.~\ref{fig:where}, \S\ref{sec:step}); the band term is mesh-invariant to within $\pm12\,\%$.
+\item \fact{3} \emph{S's intermediate material is not an interface band.} $w$ grows from $0.037$ to $0.218$ physical ($0.7\to21.8$ elements), $L$ shrinks from $32$ to $21$, and the band share falls from $89\,\%$ to $6\,\%$: from $320\times40$ upward most of the design is a plateau near $\rho\approx0.45$ (Fig.~\ref{fig:hist}, right). In the decomposition the band term \emph{falls} from $0.098$ to $0.030$ while the bulk term rises from $0.014$ to $0.465$.
+\item \fact{4} \emph{The mesh dependence is a property of the trajectory, not only of the endpoint.} In P, $\Mnd(k)$ descends to the same floor $0.12$--$0.13$ at every mesh, but the number of outer iterations needed to fall below $0.20$ grows monotonically, $31,30,48,43,59,76,103,153,215$; at the matched iteration $k=93$ (the earliest native stop) $\Mnd$ is $0.118,0.122,0.141,0.122,0.131,0.141,0.219,0.267,0.312$ (Table~\ref{tab:matched}, Fig.~\ref{fig:traj}). The native stop fires at the first crossing $\|\Delta\rho\|_2/\varepsilon<1$ ($0.95$--$0.996$). Up to $480\times60$ the terminal $\Mnd$ is within $10^{-4}$ of its running minimum and the last-20 slope is within $\pm3\times10^{-5}$ per iteration ($240\times30$ is the exception in sign: its minimum $0.118$ occurs at $k=41$ and it stops $0.005$ higher); at $560\times70$, $640\times80$, $720\times90$ and $800\times100$ the terminal value \emph{is} the running minimum and the last-20 slope is $-6\times10^{-5}$, $-1.5\times10^{-4}$, $-2.9\times10^{-4}$ and $-5.9\times10^{-4}$ per iteration: those designs are still clearing gray when they stop. How much gray is left to clear is measured in \S\ref{sec:conv} (\fact{14}); it turns out to be small.
+\end{itemize}
+\begin{figure}[htb]\centering
+\includegraphics[width=\textwidth]{fig11_decomposition.pdf}
+\caption{Decomposition of the terminal $\Mnd$ into the interface band (intermediate elements within one filter radius of both a solid and a void element), bulk gray, and near-mode tails.}
+\label{fig:decomp}
+\end{figure}
+\begin{table}[htb]\centering\footnotesize
+\caption{Decomposition of $\Mnd$ (Fig.~\ref{fig:decomp}); \code{data/campaign\_metrics.csv}.}
+\label{tab:decomp}
+\input{figures/tab_decomposition.tex}
+\end{table}
+\begin{table}[htb]\centering\small
+\caption{P campaign: $\Mnd$ at matched outer iterations and the iteration at which $\Mnd$ first falls below $0.20$ and $0.15$ (\code{data/iter\_P\_*.csv}).}
+\label{tab:matched}
+\input{figures/tab_matched_k.tex}
+\end{table}
+\begin{figure}[htb]\centering
+\includegraphics[width=\textwidth]{fig4_pedersen_trajectories.pdf}
+\caption{P campaign, all nine meshes: $\Mnd$ (left) and the stop statistic $\|\Delta\rho\|_2/\varepsilon$ (right) per outer iteration; dots mark the native stop.}
+\label{fig:traj}
+\end{figure}
+\begin{figure}[htb]\centering
+\includegraphics[width=\textwidth]{fig7_gray_location.pdf}
+\caption{Where P's intermediate elements sit (orange) at the coarsest and finest mesh. At $800\times100$ the band is $\approx4$ elements wide along every interface, and the thin end-bay braces are entirely intermediate.}
+\label{fig:where}
+\end{figure}
+
+\section{Candidate mechanisms and controlled tests}\label{sec:mech}
+
+Every arm below changes exactly one factor of a recorded baseline and is run through the production route (\code{olhoffcurrent\_paths} gate $\to$ \code{olh.config.resolve} $\to$ \code{olhoffSolve}) by \code{scripts/bg\_run\_arm.m}; the effective configuration hash of each run is recorded (\code{runs/*.json}). Meshes $160\times20$ to $400\times50$ ($480\times60$ for the material/controller arms); no mesh below $160\times20$ is used as evidence.
+
+\subsection{Filter scaling}\label{sec:filter}
+\fact{5} The radius is held fixed in \emph{physical} units by the code: \code{olhoffSolve.m} converts \code{filter.radiusPhysical}$=0.06$ to $r_{\min}=R/h$ elements before \code{prepFilter}, so $r_{\min}=1.2,1.8,\ldots,6.0$ across the nine meshes (Tables~\ref{tab:P}--\ref{tab:S}). The discrete cone kernel $\max(0,r_{\min}-d)$ that \code{prepFilter} builds has an RMS radius of $0.0316$ (160$\times$20) to $0.0334$ physical, against $\sqrt{0.3}R=0.0329$ for the continuous cone: the physical filter scale is preserved to within $4\,\%$ even at $1.2$ elements, although the self-weight share falls from $60\,\%$ to $2.7\,\%$ and the stencil grows from 4 to 108 neighbours (\code{data/filter\_kernel.csv}). The filter acts on sensitivities only; densities are never smoothed.
+\par\noindent\textbf{Interventions.} (a) \emph{Radius fixed in elements}, $r_{\min}=3$ at every mesh (physical $R=0.15,0.10,0.075,0.06$; at $400\times50$ identical to P, which is verified bitwise, \code{data/identity\_checks.json}). (b) \emph{Physical radius doubled}, $R=0.12$. If the gray band is set by $R$, arm (b) must roughly double $w$ and $\fgray$ at every mesh, and arm (a) must make the coarse meshes grayer than the fine ones.
+
+\par\noindent\textbf{Results} (Fig.~\ref{fig:filterarms}, Table~\ref{tab:arms}). \fact{10} With $R=0.12$ the terminal $\Mnd$ is $0.261,0.263,0.262,0.264$ at $160\times20$--$400\times50$ (mesh-invariant to $1\,\%$), $\fgray=0.30$--$0.31$, and the band width is $w=0.087$--$0.088=0.73R$ at every mesh, against $0.037$--$0.041=0.62$--$0.68R$ at $R=0.06$: the interface band scales with the physical radius and its band term in the decomposition doubles ($0.19$--$0.20$ vs $0.09$--$0.11$). \fact{11} With $r_{\min}=3$ elements at every mesh the trend \emph{reverses}: $\Mnd=0.297,0.215,0.163,0.122$ and $\fgray=0.356,0.253,0.193,0.140$ from $160\times20$ to $400\times50$, while $w/h=2.5,2.1,2.0,1.9$ elements stays fixed and $w=0.125,0.071,0.051,0.037$ tracks the shrinking physical radius $0.15,0.10,0.075,0.06$ ($w/R=0.83,0.71,0.68,0.62$). \interp{2} The gray band is set by the physical filter radius ($w\approx0.6$--$0.8R$ over a $2.5\times$ range of $R$); holding $R$ fixed in physical units makes the intermediate content mesh-invariant, and a ``loss of intermediate densities with refinement'' is produced \emph{only} when the radius is held in element units, i.e.\ when the physical problem changes with the mesh. The production sweep does not do this, and the near-cancellation of the discrete kernel's RMS-radius error (\fact{5}) is consistent with the flat $R=0.06$ and $R=0.12$ series.
+\begin{figure}[htb]\centering
+\includegraphics[width=\textwidth]{fig9_filter_arms.pdf}
+\caption{Filter interventions on formulation P. Fixed physical radius (0.06 and 0.12): mesh-invariant intermediate content. Radius fixed at 3 elements: intermediate content falls with refinement because the physical radius shrinks; at $400\times50$ the two definitions coincide and the runs are bitwise identical.}
+\label{fig:filterarms}
+\end{figure}
+
+
+\subsection{Material interpolation and Pedersen low-density treatment}\label{sec:material}
+\fact{6} By inspection of \code{olh.material.stiffnessInterpolation} and \code{massInterpolation}, the two laws coincide \emph{exactly} for $\rho\ge0.1$ (both $g_K=\rho^3$, $g_M=\rho$) and differ only below it (Table~\ref{tab:laws}): SIMP+(4b) keeps $g_K=\rho^3$ and cuts the mass to $6\times10^5\rho^6-5\times10^6\rho^7$; Pedersen keeps the mass linear and raises the stiffness to $\rho/100$. The mass-to-stiffness ratio is bounded by $109$ under SIMP+(4b) and is exactly $100$ under Pedersen for all $\rho<0.1$. Consequently the generalized gradients $f_{sk,e}=g_K'\,\phi_s^{eT}K_0\phi_k^e-\tilde\lambda\,g_M'\,\phi_s^{eT}M_0\phi_k^e$ of every \emph{intermediate} element ($0.1<\rho_e<0.9$) are the same functions of $(\rho_e,\phi)$ under both laws; the material law can act on the gray band only indirectly, through the eigenpairs.
+\begin{table}[htb]\centering\footnotesize
+\caption{Implemented interpolation factors ($p=3$, $\rho_0=0.1$, printed eq.~(4b) constants) and the mass/stiffness ratio $g_M/g_K$.}
+\label{tab:laws}
+\begin{tabular}{lrrrrrr}\toprule
+$\rho$ & $g_K^{\mathrm{SIMP}}$ & $g_K^{\mathrm{Ped}}$ & $g_M^{(4b)}$ & $g_M^{\mathrm{lin}}$ & ratio SIMP+(4b) & ratio Ped+lin\\\midrule
+0.5   & 0.125 & 0.125 & 0.5 & 0.5 & 4 & 4\\
+0.1   & $10^{-3}$ & $10^{-3}$ & 0.1 & 0.1 & 100 & 100\\
+0.09  & $7.3\times10^{-4}$ & $9.0\times10^{-4}$ & 0.080 & 0.09 & 109 & 100\\
+0.05  & $1.25\times10^{-4}$ & $5.0\times10^{-4}$ & $5.5\times10^{-3}$ & 0.05 & 44 & 100\\
+0.01  & $10^{-6}$ & $10^{-4}$ & $5.5\times10^{-7}$ & 0.01 & 0.55 & 100\\
+0.001 & $10^{-9}$ & $10^{-5}$ & $6\times10^{-13}$ & 0.001 & $6\times10^{-4}$ & 100\\\bottomrule
+\end{tabular}
+\end{table}
+\par\noindent\textbf{Interventions} (the $2\times2$ factorial material $\times$ controller, Fig.~\ref{fig:factorial}): (c) \emph{SIMP+(4b) under the adaptive box}, i.e.\ P with only the material law changed; (d) \emph{Pedersen under the $\beta$-stall ladder}, i.e.\ S with only the material law changed. The recorded campaigns supply the two remaining cells.
+
+\par\noindent\textbf{Results} (Fig.~\ref{fig:factorial}, Table~\ref{tab:arms}). \fact{12} \emph{Pedersen material under the ladder} reproduces the historical S trend: $\Mnd=0.137,0.206,0.246,0.317,0.351$ at $160\times20$--$480\times60$ (S: $0.134,0.156,0.234,0.323,0.347$), with the same stop iterations ($86,102,130,139,162$ vs $91,104,131,139,164$), one or two ladder descents at every mesh, and the same decomposition (band term falling from $0.107$ to $0.049$, bulk term rising from $0.011$ to $0.293$). At $400\times50$ the two material laws give $\omega_1=162.92$ and $162.89$. \fact{13} \emph{SIMP+(4b) under the adaptive box} is not a clean comparison: at every mesh $\omega_1$ collapses by more than $30\,\%$ from one outer iteration to the next in $3,13,26,27,11$ iterations (minimum in-loop $\omega_1$ of $7$--$13\,\mathrm{rad/s}$), and at $480\times60$ the run stops at $k=64$ on a design whose fundamental mode is a localized low-density mode ($\omega_1=34.4$). No such event occurs in any recorded P trajectory, in the S ladder trajectories, or in the fixed-move S trajectories at $160\times20$--$400\times50$ (\code{data/iter\_*.csv}: zero drops $>30\,\%$). The terminal $\Mnd$ of this arm ($0.109,0.148,0.229,0.185,0.286$) is therefore that of spike-disrupted, immature trajectories, and its excess over P is bulk gray ($0.004,0.021,0.129,0.079,0.200$) with a band term ($0.074$--$0.108$) equal to P's. \interp{3} The material law does not act on the gray band and does not drive the mesh trend of either formulation; it acts on \emph{robustness}: with the $0.10$ adaptive box the eq.~(4b) mass cut-off admits localized modes that the Pedersen stiffness floor (ratio fixed at 100, Table~\ref{tab:laws}) removes. This is the reason the production choice of the Pedersen law matters for the fine-mesh designs, but it is a different mechanism from the bimodality gap.
+\begin{figure}[htb]\centering
+\includegraphics[width=\textwidth]{fig8_factorial.pdf}
+\caption{The $2\times2$ factorial material $\times$ controller. Solid lines: recorded campaigns; dashed: single-factor arms. The controller, not the material law, separates the two branches; the SIMP+(4b)/adaptive arm is disrupted by localized-mode spikes at every mesh (see text).}
+\label{fig:factorial}
+\end{figure}
+
+
+\subsection{Convergence state, stop rule and move-limit behaviour}\label{sec:conv}
+\fact{7} \emph{S: the ladder stops the run before the gray clears.} In the recorded fixed-move interventions on S (\code{diagnostics/move\_stop}, \code{evidence/move\_activity\_400}; Fig.~\ref{fig:ladder}) the production ladder descends at outer 130 ($320\times40$) and 138 ($400\times50$) while $\Mnd$ is still falling steeply, the descent cuts $\|\Delta\rho\|_2$ by $2.8$--$2.9\times$ in one iteration (measured at $160\times20$ and $320\times40$) and the stop fires one iteration later; the same trajectory continued at a fixed move $0.04$ reaches $\Mnd=0.133$ ($320\times40$, $k=216$) and $0.162$ ($400\times50$, $k=369$, $w=0.0437$, band share $82\,\%$) instead of $0.234$ and $0.323$, with $\omega_1$ \emph{higher} by $0.35\,\%$ and $2.1\,\%$. \interp{1} The strong growth of S's bimodality gap with refinement is a premature-termination artefact of the reconstruction's move ladder plus mesh-scaled tolerance: removing the descent removes $43$--$50\,\%$ of the terminal $\Mnd$ at the two fine meshes and restores the interface-band structure ($w\approx0.04$) that P has. This was established before this note and is confirmed here on the recorded trajectories.
+\begin{figure}[htb]\centering
+\includegraphics[width=\textwidth]{fig5_simp_ladder_vs_fixed.pdf}
+\caption{Formulation S: $\Mnd$ per outer iteration under the production ladder (red; dotted lines mark move descents) and under a fixed move $0.04$ (orange), from the recorded diagnostics. The two arms are bitwise identical up to the first descent.}
+\label{fig:ladder}
+\end{figure}
+\par\noindent\textbf{Intervention} (e) \emph{P with the stop disabled} (\code{stop.tolerance}$=0$, 400 outer iterations, prefix bitwise-verified against the campaign up to each native stop): if the mesh dependence of P's terminal $\Mnd$ is a convergence-state effect, $\Mnd$ must keep falling past the native stop and the meshes must approach one another at a fixed budget.
+
+\par\noindent\textbf{Results} (Fig.~\ref{fig:budget}, Table~\ref{tab:budget}). \fact{14} With the stop disabled the P trajectories are bitwise identical to the campaign up to each native stop (checked at every continued mesh, \code{data/identity\_checks.json}). After it they do not clear further gray: $\Mnd$ at $k=400$ is $0.116,0.122,0.143,0.123,0.136$ at $160\times20$, $240\times30$, $320\times40$, $400\times50$, $640\times80$ against $0.115,0.123,0.141,0.122,0.133$ at the native stops. At $640\times80$, which was still falling at the stop ($-1.5\times10^{-4}$ per iteration), $\Mnd$ bottoms out at $0.1323$ at $k=181$, only $0.0007$ below its stop value, and then rises. \fact{14b} At $240\times30$, $320\times40$, $400\times50$ and $640\times80$, $\omega_1$ peaks within $0$--$12$ iterations of the end of the clearing ($k=40,61,53,131$, against $\Mnd<0.15$ first reached at $34,61,50,119$). It then declines slowly while $\Mnd$ creeps up, and $\omega_1(400)$ is $0.14$--$0.44\,\%$ below the peak. At those four meshes the native stop fires after the best design along the trajectory, $0.03$--$0.36\,\%$ below the peak $\omega_1$. \fact{14c} At $800\times100$, the steepest-falling mesh at its stop, continuation lowers $\Mnd$ from $0.1645$ to $0.1587$ (minimum at $k=377$, flat from $k\approx340$). That removes $0.006$ of the $0.031$ excess over $640\times80$, so about $80\,\%$ of the step survives. The bulk-gray term moves only from $0.031$ to $0.030$, $\omega_1$ peaks at $k=250$ (four iterations after the stop) and $\omega_1(400)$ is $0.11\,\%$ below it. No continuation was run at $720\times90$.
+\interp{4} The terminal $\Mnd$ of P is, to within $0.006$, the converged value of the formulation at every continued mesh ($160\times20$--$400\times50$, $640\times80$, $800\times100$), not a stop artefact. Continuing past the stop does not remove the fine-mesh step and slightly lowers $\omega_1$. The $0.02$ excess of $320\times40$ over its neighbours is a property of that mesh's asymmetric design. \hyp{3} The slow post-clearing decline of $\omega_1$ is consistent with the update field not being the gradient of any objective. For the historical formulation at $480\times60$ the repository's \code{diagnostics/filtered\_subproblem\_integrability\_audit} measured a non-zero curl of the sensitivity-filtered field. That audit was not repeated for P here.
+\begin{table}[htb]\centering\footnotesize
+\caption{P with the stop disabled: discreteness and $\omega_1$ at the native stop, at the minimum of $\Mnd$, at the maximum of $\omega_1$ and at $k=400$ (\code{data/iter\_budget400\_*.csv}).}
+\label{tab:budget}
+\input{figures/tab_budget.tex}
+\end{table}
+\begin{figure}[htb]\centering
+\includegraphics[width=\textwidth]{fig10_budget.pdf}
+\caption{Formulation P with the design-change stop disabled (400 outer iterations): $\Mnd$, $\omega_1$ relative to its value at the production stop, and the stop statistic. Dots mark the production stop; the trajectories are bitwise identical up to it.}
+\label{fig:budget}
+\end{figure}
+\par\noindent\textbf{Step-bound intervention.} \fact{4} showed that the number of iterations P needs to clear its gray grows as $(1/h)^{1.17}$ (\code{data/clearing\_time\_fit.txt}). \hyp{2} A per-element move box bounds the physical speed at which an interface can migrate to $\le d_{\max}h$ per iteration, which would make the clearing time scale as $1/h$. \textbf{Results} (Fig.~\ref{fig:box}, Table~\ref{tab:box}). \fact{15} Changing the adaptive-box ceiling from $0.10$ to $0.05$ and $0.20$ changes the number of outer iterations P needs to bring $\Mnd$ below $0.20$ from $48$ to $103$ and $28$ at $320\times40$ and from $43$ to $142$ and $31$ at $400\times50$ (exponents $-0.94$ and $-1.10$ in the ceiling over the range $0.05$--$0.20$), while the terminal band width ($w=0.036$--$0.041$) and terminal $\Mnd$ ($0.117$--$0.141$ across all ceilings) are unchanged; at $160\times20$, where the band is sub-element, doubling the ceiling does not accelerate the clearing ($31\to36$). \interp{5} The per-element step bound sets the \emph{speed} of the gray clearing in outer iterations but not its end point. Because the bound is a density increment per element, an interface can move only a bounded number of elements, i.e.\ a distance $\propto h$, per iteration. This is consistent with the clearing time growing with $1/h$ (\fact{4}); the measured exponents are not exactly $-1$ (\S\ref{sec:unc}). In P the clearing is essentially complete by the native stop (\fact{14}), so this mechanism explains the mesh dependence of the \emph{number of iterations}, not of the terminal $\Mnd$.
+\begin{figure}[htb]\centering
+\includegraphics[width=\textwidth]{fig12_box.pdf}
+\caption{Adaptive-box ceiling $0.05$, $0.10$ (production) and $0.20$: $\Mnd$ per outer iteration; dots mark the native stop.}
+\label{fig:box}
+\end{figure}
+\begin{table}[htb]\centering\footnotesize
+\caption{Box-ceiling arms (\code{data/iter\_box*.csv}, \code{data/new\_run\_metrics.csv}).}
+\label{tab:box}
+\input{figures/tab_box.tex}
+\end{table}
+
+
+\subsection{Interface resolution and discretization of the density field}\label{sec:interface}
+Under a fixed physical $R$, a sensitivity-filtered SIMP design carries an interface band whose physical width is set by the filter and the penalization, not by $h$. Then $N_{\mathrm{gray}}=wL/h^2$ grows as $1/h^2$ while $\fgray=wL/(ab)$ is constant, and refinement \emph{resolves} the band with more elements rather than removing it. \fact{2} is precisely this: $w$ is constant at $0.62$--$0.73R$ and $w/h$ grows as $1/h$. The alternative, a band one element wide at every mesh ($\fgray\propto h$), is excluded by the data at every mesh above $240\times30$; at $160\times20$ the band is sub-element ($w/h=0.75$) and the field can only represent it by single intermediate elements (Fig.~\ref{fig:where}, top), which is why the coarsest mesh is not a reliable reference for interface quantities.
+
+\subsection{Multiplicity handling}\label{sec:mult}
+\fact{8} Multiplicity is handled by a \emph{fixed} $N=2$ subspace at every iteration in both formulations (\code{multiplicity.method}\,=\,\code{subspace}, size 2, diagonal offsets), so nothing in the multiplicity logic varies with the mesh. What varies is the terminal gap: in P it is $0.7\,\%$ at $160\times20$ (an effectively bimodal optimum) and $11.8$--$24.5\,\%$ at every finer mesh, with $\omega_1$ and $\omega_2$ last within $5\,\%$ at outer $31$--$86$; in S it is $1.5\,\%$ at $160\times20$, $7$--$16\,\%$ from $240\times30$ to $480\times60$, and $2.9,0.9,0.9,0.6\,\%$ at the four finest meshes, which are also the grayest. \hyp{1} In S the near-coincident pair at fine meshes is a consequence of the gray plateau (a nearly homogeneous beam has closely spaced bending modes), not its cause: the fixed-move continuations that remove the gray also open the gap ($400\times50$: gap $7.7\,\%$ under the ladder, $20.3\,\%$ for the fixed-move design F400, \code{data/prior\_intervention\_metrics.csv}). No intervention on the multiplicity rule was run.
+
+\subsection{The residual step at $720\times90$ and $800\times100$}\label{sec:step}
+Bulk-gray elements were split by distance to the two phases (\code{scripts/bg\_bulk\_gray.m}, Table~\ref{tab:coreless}): \emph{coreless members} have a void element within one filter radius and no solid element within one filter radius; \emph{gray plateaus} have no void element within one radius.
+\fact{16} In P the coreless-member term is $0.005$--$0.008$ from $160\times20$ to $640\times80$ (zero at $240\times30$ and $400\times50$) and $0.027$ and $0.025$ at $720\times90$ and $800\times100$. The plateau term is $0.0005$--$0.007$ at every mesh. The step is therefore entirely coreless members: $6$--$8$ members of mean density $0.45$--$0.49$ and median width $1.7R$, i.e.\ at the filter diameter. They survive the $800\times100$ continuation ($0.024$).
+\fact{17} With $R=0.12$ the coreless term is $0.030,0.037,0.039,0.041$ at $R/h=2.4,3.6,4.8,6.0$ (median width $1.4$--$2.9R$). It rises smoothly, without a jump at the $R/h=5.4$--$6.0$ at which P's step appears.
+\interp{6} The step is not an artefact of the stop (\fact{14c}), not a widening of the interface band ($w$ unchanged), and not a threshold in the number of elements per filter radius (\fact{17}). It is a change of layout: the two finest meshes converge to designs carrying more members that are about one filter diameter wide and have no solid core.
+\hyp{4} Which layout is reached is trajectory-dependent. The fine meshes spend longer in the near-coalescence phase ($\omega_2/\omega_1-1<5\,\%$ last at outer $57$ and $86$, against $31$--$48$ at $240\times30$--$640\times80$) and clear their gray later (\fact{4}), and nearly equivalent layouts exist ($720\times90$ and $800\times100$ agree in $\omega_1$ to $0.01\,\%$ at IoU $0.78$). A test would restart $800\times100$ from the interpolated $640\times80$ design and check whether the coreless members reappear; the solver has no restart input, so this was not run.
+\begin{table}[htb]\centering\footnotesize
+\caption{Split of the bulk-gray term of $\Mnd$ into coreless members and gray plateaus (\code{data/bulk\_gray\_classification.csv}). members: connected groups of $\ge4$ coreless elements.}
+\label{tab:coreless}
+\input{figures/tab_coreless.tex}
+\end{table}
+
+\subsection{Boundary layers}
+\fact{9} The outermost ring of elements holds $0.4$--$3.5\,\%$ of P's intermediate elements (its share of $N_E$ is $2.2$--$11\,\%$), and the intermediate fraction inside that ring ($2.6$--$6.7\,\%$) is \emph{below} the domain average ($14$--$19\,\%$) at every mesh; the two supports (single mid-height nodes) create no visible gray layer (Fig.~\ref{fig:where}). Boundary layers are not a contributor.
+
+\section{Causal diagnosis}\label{sec:diag}
+
+The question was whether refinement systematically changes the bimodality gap of the terminal density field and, if so, through which mechanism. The answer differs by formulation and is summarized in Table~\ref{tab:verdict}.
+
+\begin{table}[htb]\centering\footnotesize
+\caption{Verdict per candidate mechanism. ``Tested'' means a single-factor intervention was run (\S\ref{sec:mech}); ``analysed'' means an inspection of the implemented equations or of recorded data.}
+\label{tab:verdict}
+\setlength{\tabcolsep}{4pt}\begin{tabular}{p{3.4cm}p{1.9cm}p{10.0cm}}\toprule
+candidate & status & finding\\\midrule
+filter scaling & tested & $R$ is fixed physically in the code; the band width is $0.6$--$0.8R$ at every mesh and both radii; fixing $R$ in elements reverses the trend. \textbf{Not a cause in production; the only way to obtain a refinement-driven loss of intermediate densities.}\\
+interface resolution / density discretization & analysed & P's intermediate material is a band of constant physical width: refinement resolves it with $\propto1/h$ elements and leaves $\fgray$ constant. \textbf{Explains the flatness of P, not a change.}\\
+material law, Pedersen treatment & tested & identical sensitivities for $0.1<\rho<0.9$; Pedersen under the ladder reproduces S; SIMP+(4b) under the adaptive box suffers localized-mode spikes. \textbf{Not a cause of the gap trend; a robustness factor.}\\
+move limit / controller & tested (recorded + new) & the ladder descent fires the stop while $\Mnd$ is still falling; fixed move removes $43$--$50\,\%$ of S's terminal $\Mnd$; ladder with Pedersen material reproduces S. \textbf{Established cause of the S trend.}\\
+convergence state / stop rule & tested & S: established cause (see move limit). P: continuation to 400 iterations changes $\Mnd$ by at most $0.006$ at six meshes and removes about $20\,\%$ of the step at $800\times100$. \textbf{Not a cause in P.}\\
+layout selection at fine meshes & analysed & the P step is entirely coreless members one filter diameter wide; no jump at matched $R/h$ with $R=0.12$. \textbf{Identified as the carrier of the step; its cause is not established.}\\
+multiplicity handling & analysed & fixed $N=2$ at every iteration and mesh; the terminal gap$_{12}$ correlates with grayness in S but is removed by the same fixed-move intervention. \textbf{Not a cause.}\\
+boundary layers & analysed & intermediate fraction on the domain boundary is below the domain average at every mesh. \textbf{Not a contributor.}\\
+\bottomrule\end{tabular}
+\end{table}
+
+\paragraph{Formulation S (historical SIMP + eq.~(4b), $\beta$-stall ladder): causal mechanism established.} The bimodality gap grows strongly with refinement ($\Mnd$ $0.13\to0.51$) because the reconstruction's move ladder descends on a stall of the bound variable while the design is still clearing gray, the descent mechanically halves the stop statistic, and the mesh-scaled tolerance then admits the stop one iteration later (\fact{7}). The three lines of evidence are the recorded fixed-move interventions (removing the descent removes $43$--$50\,\%$ of the terminal $\Mnd$ at $320\times40$ and $400\times50$ and restores an interface band of the same width as P, \interp{1}); the Pedersen-material ladder arm, which reproduces S at every mesh and so excludes the material law (\interp{3}); and the decomposition, in which S's excess is entirely bulk gray, i.e.\ members that have not yet separated into solid and void (\fact{3}). The growth with refinement is timing. On the recorded fixed-move trajectories $\Mnd$ first falls below $0.20$ at $k=57,155,327$ ($160\times20$, $320\times40$, $400\times50$), while the ladder's first descent comes at $k=79,130,138$. At $160\times20$ the descent comes after the clearing; at the two finer meshes it comes before, and the stop freezes $\Mnd$ at $0.234$ and $0.323$.
+
+\paragraph{Formulation P (production Pedersen, adaptive box): no refinement-driven change of the interface band; a partial explanation of the residual step.} The intermediate content of P is, to within the scatter between neighbouring meshes, mesh-invariant from $160\times20$ to $640\times80$ ($\Mnd$ $0.115$--$0.141$, band term $0.091$--$0.111$), because the band is a physical object of width $\approx0.65R$ (\fact{2}, \interp{2}); the stop-disabled runs show that these values are converged (\interp{4}). The only systematic change is the $+22\,\%$ step at $720\times90$ and $800\times100$. Its carrier is identified: coreless gray members about one filter diameter wide, which appear in the layouts of the two finest meshes (\fact{16}, \interp{6}). Two candidate causes were tested and eliminated: premature stopping (continuation at $800\times100$ keeps $80\,\%$ of the step, \fact{14c}) and a threshold in elements per filter radius (no jump at matched $R/h$, \fact{17}). Why the finest meshes converge to that layout is not established (\hyp{4}).
+
+
+\section{Implications for the Olhoff implementation}\label{sec:impl}
+
+\begin{itemize}
+\item \textbf{Report the bimodality gap of P as mesh-invariant in the band and layout-dependent in the bulk.} For any table across meshes, quote $\Mnd$ together with the band/bulk decomposition. The band term ($0.09$--$0.11$ at $R=0.06$) is the formulation's intrinsic value and scales with $R$. The bulk term reflects which layout was reached, which differs at $720\times90$ and $800\times100$.
+\item \textbf{The S column of earlier campaigns must not be read as a property of the Du--Olhoff formulation.} Its fine-mesh grayness is a controller artefact (\interp{1}); this was already recorded in \code{diagnostics/move\_stop} and is confirmed here with the material law excluded.
+\item \textbf{The Pedersen law is load-bearing for robustness, not for discreteness.} Under the $0.10$ adaptive box the eq.~(4b) formulation produces localized-mode spikes at every mesh tested and a spurious terminal mode at $480\times60$ (\fact{13}); the switch to Pedersen on 2026-09-13 is justified on that ground, and any future change of the low-density law must be re-tested for spikes at $\ge480\times60$.
+\item \textbf{A mesh sweep that fixes the radius in elements is not a refinement study.} It changes the physical problem and produces a spurious loss of intermediate densities with refinement (\fact{11}); \code{filter.radiusPhysical} must stay the controlling field.
+\item \textbf{The stop rule of P does not need to change for discreteness.} It is a first-crossing heuristic, but at every continued mesh the stopped design is within $0.36\,\%$ of the best $\omega_1$ along the 400-iteration trajectory, and running on changes $\Mnd$ by at most $0.006$ and lowers $\omega_1$ by up to $0.11\,\%$ (\fact{14}--\fact{14c}). A longer run or a tighter $\varepsilon$ will not make the $800\times100$ design as discrete as the $640\times80$ one.
+\item \textbf{Do not use $160\times20$ for interface quantities.} Its band is sub-element ($w/h=0.75$) and its filter is 1.2 elements; it is also the only bimodal optimum ($\omega_2/\omega_1-1=0.7\,\%$) and the only fragmented design.
+\end{itemize}
+
+
+\section{Remaining uncertainty}\label{sec:unc}
+
+\begin{itemize}
+\item The cause of the layout change at $720\times90$ and $800\times100$ is open (\hyp{4}). $720\times90$ was not continued past its stop; its coreless term equals that of $800\times100$, so the same conclusion is expected but not measured. Whether the step persists beyond $800\times100$ is unknown.
+\item The scaling of the clearing time as $(1/h)^{1.17}$ (\fact{4}) is a fit over nine points; the step-bound hypothesis \hyp{2} predicts an exponent of 1 in the box ceiling; the box arms give $-0.94$ ($320\times40$) and $-1.10$ ($400\times50$) over a $4\times$ range of the ceiling, but the response is not uniform (a $3.3\times$ speed-up for $0.05\to0.10$ against $1.4\times$ for $0.10\to0.20$ at $400\times50$) and there is no acceleration at $160\times20$, so the per-element step bound is the dominant but not the only limiter of the clearing speed, and the $(1/h)^{1.17}$ law is empirical.
+\item The band width $w\approx0.65R$ is measured on the $\rho=0.5$ contour of a piecewise-constant field with a $0.1<\rho<0.9$ threshold; other thresholds change the constant, not the mesh-invariance (the $f_{0.2\text{--}0.8}$ and $f_{0.4\text{--}0.6}$ columns behave the same way). Why the constant is $0.65$ rather than $1$ or $2$ is not derived: a sensitivity filter does not smooth the density directly, and no closed-form relation between $R$ and the terminal band width of the filtered eigenfrequency problem is available in the Du--Olhoff or Pedersen literature.
+\item The 2026-09-11 S campaign stores no per-iteration history; the S trajectory facts rest on the recorded diagnostics at $160\times20$, $320\times40$ and $400\times50$ only.
+\item The $320\times40$ P design ($\Mnd$ $0.141$, left--right asymmetric) and the $800\times100$ design (asymmetric) show that the formulation has several nearly equivalent optima; the mesh dependence of \emph{which} layout is found is outside the scope of this note and is not resolved by the stop-disabled runs.
+\item All new runs were executed on one machine with the production tree unchanged (Appendix~\ref{app:prov}); no run below $160\times20$ contributes to any statement.
+\end{itemize}
+
+
+\section*{Conclusion}
+
+\noindent\textbf{Verdict: partial explanation, with one causal mechanism established and the original hypothesis rejected in the form it was posed.}
+\begin{itemize}
+\item \emph{No formulation shows a loss of intermediate densities with refinement.} Under the production Pedersen/adaptive-box formulation every measure of intermediate content is flat within scatter from $160\times20$ to $640\times80$ and rises by $22\,\%$ at the two finest meshes; under the historical SIMP/ladder formulation it rises monotonically by a factor of $3.8$. A refinement-driven loss appears only when the filter radius is held in element units, which changes the physical problem (\fact{11}).
+\item \emph{Causal mechanism established for the historical formulation:} the move-ladder descent plus the mesh-scaled design-change stop terminates the run before the gray has cleared (\interp{1}). The effect grows with refinement because the clearing needs $57$, $155$ and $327$ iterations at $160\times20$, $320\times40$ and $400\times50$, while the ladder descends at $79$, $130$ and $138$ (\S\ref{sec:diag}). The material law is excluded (\interp{3}).
+\item \emph{For the production formulation the mesh-invariant part is explained:} a physical interface band of width $\approx0.65R$, resolved by more elements, and converged at the stop (\interp{2}, \interp{4}).
+\item \emph{The residual $+22\,\%$ step at $720\times90$ and $800\times100$ is only partly explained.} Its carrier is established: coreless gray members one filter diameter wide in a different layout (\interp{6}). Premature stopping and an elements-per-radius threshold were tested and eliminated. What makes the finest meshes select that layout is not demonstrated.
+\item \emph{Not causes:} the material law (identical sensitivities in the intermediate range; a robustness factor through localized modes only), the multiplicity handling (fixed $N=2$), boundary layers, and the discrete filter kernel (RMS radius within $4\,\%$ of the continuous one).
+\end{itemize}
+
+
+\section*{References}
+{\small
+\begin{itemize}
+\item Du J, Olhoff N (2007) Topological design of freely vibrating continuum structures for maximum values of simple and multiple eigenfrequencies and frequency gaps. Struct Multidisc Optim 34:91--110 (erratum 34:545). Sec.~1: Sigmund filter ``applied to the sensitivities''; sec.~2.2: localized modes in regions with $\rho_e\le0.1$, remedied by Pedersen's stiffness linearization or eq.~(4).
+\item Pedersen NL (2000) Maximization of eigenvalues using topology optimization. Struct Multidisc Optim 20:2--11.
+\item Sigmund O (1997) On the design of compliant mechanisms using topology optimization. Mech Struct Mach 25:493--524.
+\item Sigmund O, Petersson J (1998) Numerical instabilities in topology optimization: a survey of procedures dealing with checkerboards, mesh-dependencies and local minima. Struct Optim 16:68--75.
+\item Svanberg K (1987) The method of moving asymptotes -- a new method for structural optimization. Int J Numer Methods Eng 24:359--373.
+\item Tcherniak D (2002) Topology optimization of resonating structures using SIMP method. Int J Numer Methods Eng 54:1605--1622.
+\end{itemize}}
+
+\appendix
+\section{Provenance and reproduction}\label{app:prov}
+
+\paragraph{Repository state.}
+\begin{itemize}
+\item New runs: repository \code{topOpt4freqMax}, branch \code{benchmark-methodology-r2}, MATLAB R2025b Update~1 (25.2.0.3042426), one computational thread per run, Apple M1 Max, published Svanberg MMA (\code{mma\_published/mmasub.m}).\\
+HEAD: \code{05919933f3f4af68b36c1981e66130709a263593} (working tree dirty only by untracked campaign artefacts and this folder).\\
+Production tree \code{analysis/OlhoffCurrent/+impl}, live SHA-256 (79 files, identical to the tree of the recorded P campaign):\\
+\code{4ba9a3ae10881344a0e60f2b8a8976c5ec9ceccf966bc2a3da4f37fb5aebffbf}
+\item Recorded inputs, read-only, under \code{examples/Performance/conference\_benchmark/}:\\
+\code{nine\_mesh\_pedersen\_b21483b} (P; HEAD \code{b21483b}; \code{benchmark\_records.mat} SHA-256 \code{261bf8fc\ldots});\\
+\code{campaign\_9mesh\_r2} (S; \code{benchmark\_records.mat} SHA-256 \code{87312585\ldots});\\
+and under \code{analysis/OlhoffCurrent/}:\\
+\code{evidence/move\_activity\_400/\{F400,P400\}\_400x50\_trajectory.mat};\\
+\code{diagnostics/move\_stop/runs/*\_iterations.csv}.
+\end{itemize}
+
+\paragraph{Exact route of every new run.} \code{scripts/bg\_launch\_one.sh <arm> <nelx> <nely>} executes
+\begin{quote}\small\code{matlab -batch "addpath(scripts); A=bg\_arms(); a=A(k);}\\ \code{bg\_run\_arm(a.name,nelx,nely,a.preset,a.overrides,a.maxOuter,runs)"}\end{quote}
+and \code{bg\_run\_arm} installs the fail-closed path gate, resolves \code{olh.config.resolve(preset, mesh, overrides, runtime)}, records \code{olhoffcurrent\_config\_hash(cfg)} and \code{olhoffcurrent\_provenance()}, and calls \code{olhoffSolve(cfg)}. Table~\ref{tab:prov} lists every run; \code{data/RUN\_INDEX.json} carries the full hashes, wall times and the SHA-256 of each \code{runs/*.mat}.
+
+\begin{table}[htb]\centering\scriptsize
+\caption{Every new run. Overrides are applied on top of the named upstream preset (P: \code{duOlhoffAdaptivePedersen}; ladder: \code{duOlhoffFrozenM4}); cfg hash = first 12 hex digits of the effective-configuration SHA-256.}
+\label{tab:prov}
+\input{figures/tab_provenance.tex}
+\end{table}
+
+\paragraph{Metrics and figures.} All metrics are computed by \code{scripts/bg\_metrics.m}. Extraction: \code{bg\_extract\_campaigns.m}, \code{bg\_extract\_prior\_interventions.m} and \code{bg\_extract\_new\_runs.m} (the last one also writes the identity checks to \code{data/identity\_checks.json}). Tables and figures: \code{bg\_analytic.py}, \code{bg\_plots.py} and \code{bg\_provenance.py}. See \code{README.md}.
+
+\begin{table}[htb]\centering\scriptsize
+\caption{Single-factor arms, terminal metrics (\code{data/new\_run\_metrics.csv}). spikes: outer iterations at which $\omega_1$ fell by more than 30\,\% from the previous iteration.}
+\label{tab:arms}
+\input{figures/tab_new_arms.tex}
+\end{table}
+
+\end{document}

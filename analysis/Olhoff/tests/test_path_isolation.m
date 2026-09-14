@@ -7,9 +7,9 @@ function nFail = test_path_isolation()
 %   not been tested.
 %
 %   TEST A   clean path + OlhoffCurrent                            -> PASS
-%   TEST B   OlhoffCurrent + analysis/OlhoffM4Reconstruction       -> BLOCK
+%   TEST B   OlhoffCurrent + archived OlhoffM4Reconstruction       -> BLOCK
 %   TEST C   OlhoffCurrent + external /Users/.../Matlab/Olhoff     -> BLOCK
-%   TEST D   OlhoffCurrent + Matlab/reproduction2007               -> BLOCK
+%   TEST D   OlhoffCurrent + archived Matlab/reproduction2007      -> BLOCK
 %   TEST E   helper shadowing only, top-level solver still correct -> BLOCK
 %   TEST F   a DECLARED benign collision that WINS the resolution   -> BLOCK
 %
@@ -31,8 +31,8 @@ fprintf('\n%s\nTEST_PATH_ISOLATION\n%s\n', repmat('=',1,72), repmat('=',1,72));
 nFail = nFail + check('A  clean path + OlhoffCurrent -> PASS', @() local_A(), true);
 
 % ---------------------------------------------------------------- TEST B
-nFail = nFail + check('B  + analysis/OlhoffM4Reconstruction -> BLOCK', ...
-    @() local_contaminate({fullfile(repo,'analysis','OlhoffM4Reconstruction')}), false);
+nFail = nFail + check('B  + archived OlhoffM4Reconstruction -> BLOCK', ...
+    @() local_contaminate({fullfile(repo,'development','reconstruction','OlhoffM4Reconstruction')}), false);
 
 % ---------------------------------------------------------------- TEST C
 if exist(ext,'dir') == 7
@@ -43,9 +43,9 @@ else
 end
 
 % ---------------------------------------------------------------- TEST D
-nFail = nFail + check('D  + Matlab/reproduction2007 -> BLOCK', ...
-    @() local_contaminate({fullfile(repo,'Matlab','reproduction2007','algo'), ...
-                           fullfile(repo,'Matlab','reproduction2007','fem')}), false);
+nFail = nFail + check('D  + archived Matlab/reproduction2007 -> BLOCK', ...
+    @() local_contaminate({fullfile(repo,'development','reconstruction','Matlab','reproduction2007','algo'), ...
+                           fullfile(repo,'development','reconstruction','Matlab','reproduction2007','fem')}), false);
 
 % ---------------------------------------------------------------- TEST E
 nFail = nFail + check('E  helper shadowing only, olhoffSolve still ours -> BLOCK', ...
@@ -87,8 +87,8 @@ function ok = local_E(repo)
 %   but a HELPER is shadowed by a competing tree.  A gate that checks only the
 %   entry point passes this; a gate that checks helper resolution must not.
 old = path(); c = onCleanup(@() path(old));
-dirs = {fullfile(repo,'Matlab','reproduction2007','algo'), ...
-        fullfile(repo,'Matlab','reproduction2007','fem')};
+dirs = {fullfile(repo,'development','reconstruction','Matlab','reproduction2007','algo'), ...
+        fullfile(repo,'development','reconstruction','Matlab','reproduction2007','fem')};
 for k = 1:numel(dirs)
     if exist(dirs{k},'dir') == 7, addpath(dirs{k}, '-begin'); end
 end

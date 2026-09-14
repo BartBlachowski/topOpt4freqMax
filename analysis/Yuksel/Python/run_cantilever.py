@@ -13,7 +13,7 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
-from YukselApproach.Python.solver import top99neo_inertial_freq
+from Yuksel.Python.solver import top99neo_inertial_freq
 
 
 def main() -> None:

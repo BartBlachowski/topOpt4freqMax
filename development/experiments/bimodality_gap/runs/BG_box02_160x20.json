@@ -1,0 +1,33 @@
+{
+  "name": "BG_box02_160x20",
+  "arm": "box02",
+  "mesh": [
+    160,
+    20
+  ],
+  "upstreamPreset": "duOlhoffAdaptivePedersen",
+  "overrides": [
+    "move.initial",
+    0.2
+  ],
+  "maxOuter": 400,
+  "cfgHash": "e8cd0f6a31f609b72c12c049f8c23912a01f9a994bb7d0aecb245d8c7251f7d8",
+  "rminEl": 1.2,
+  "eps": 0.05,
+  "status": "CONVERGED",
+  "nOuter": 229,
+  "wall_s": 804.48621408333338,
+  "solver_wall_s": 804.46863625,
+  "matlab_version": "25.2.0.3042426 (R2025b) Update 1",
+  "threads": 1,
+  "repo_head": "05919933f3f4af68b36c1981e66130709a263593-dirty",
+  "impl_tree_sha256": "4ba9a3ae10881344a0e60f2b8a8976c5ec9ceccf966bc2a3da4f37fb5aebffbf",
+  "impl_n_files": 79,
+  "resolved_mmasub": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/mma_published/mmasub.m",
+  "timestamp": "2026-09-14T11:19:43",
+  "Mnd_final": 0.11675156878222506,
+  "gray_final": 0.13875,
+  "omega1": 167.62360894410915,
+  "omega2": 168.05218082610608,
+  "gap12": 0.0025567513114446152
+}

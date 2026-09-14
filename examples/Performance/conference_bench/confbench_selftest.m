@@ -62,7 +62,7 @@ end
 % ---- T2: fail-closed dispatch -------------------------------------------
 entryPath = path();
 try
-    superseded = fullfile(repo, 'Matlab', 'reproduction2007', 'algo');
+    superseded = fullfile(repo, 'development', 'reconstruction', 'Matlab', 'reproduction2007', 'algo');
     addpath(superseded, '-begin');
     refused = false; msg = '';
     try

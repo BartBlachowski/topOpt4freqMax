@@ -7,10 +7,14 @@ function [repoRel, absolute] = olhoffcurrent_forbidden_paths()
 %               and against MATLAB path entries
 %     absolute  absolute prefixes outside this repository
 %
-%   analysis/OlhoffCurrent is the ONLY Olhoff implementation production may
-%   execute.  Everything below is historical evidence, experimental code, audit
-%   material or development upstream.  Each is classified in
-%   analysis/OLHOFF_IMPLEMENTATION_MAP.md.
+%   analysis/Olhoff is the ONLY Olhoff implementation production may execute.
+%   Everything below is historical evidence, experimental code, audit material
+%   or development upstream.  Since the 2026-09-14 repository cleanup every
+%   historical tree lives under development/, which is forbidden as a whole;
+%   the pre-cleanup locations stay listed so a tree re-created there still
+%   fails closed.  Classification: development/repository_cleanup/
+%   MIGRATION_MANIFEST.tsv (the 2026-09-07 map is archived under
+%   development/migration_history/olhoff_current_promotion/).
 %
 %   THIS BLACKLIST IS NOT THE WHOLE GATE.  It is the part that names what we
 %   already know about.  olhoffcurrent_assert_dispatch ALSO refuses any second
@@ -20,7 +24,8 @@ function [repoRel, absolute] = olhoffcurrent_forbidden_paths()
 %   See also OLHOFFCURRENT_ASSERT_DISPATCH, OLHOFFCURRENT_PATHS.
 
 repoRel = { ...
-    fullfile('analysis', 'OlhoffM4Reconstruction'), ...   % frozen conference evidence
+    fullfile('development'), ...                        % the archive: every historical tree since 2026-09-14
+    fullfile('analysis', 'OlhoffM4Reconstruction'), ...   % pre-2026-09-14 locations, kept as guards
     fullfile('analysis', 'OlhoffExperiments'), ...        % future experimental tree
     fullfile('analysis', 'OlhoffApproach'), ...
     fullfile('analysis', 'OlhoffApproachExact'), ...

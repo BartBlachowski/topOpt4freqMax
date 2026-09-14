@@ -1,6 +1,13 @@
-# OlhoffCurrent
+# Olhoff — the supported Du–Olhoff implementation
 
-> ## `analysis/OlhoffCurrent` is the ONLY production Olhoff implementation in `topOpt4freqMax`.
+> **Renamed 2026-09-14.** This directory was `analysis/OlhoffCurrent` until the
+> repository cleanup. Function names keep the `olhoffcurrent_` prefix, and
+> `PROVENANCE.json`, `PROVENANCE.md` and `SOURCE_MANIFEST.json` record the
+> directory under its name at promotion time; they were moved byte-for-byte.
+> Source integrity is verified relative to `+impl/`, so the rename does not
+> affect `olhoffcurrent_currentness()`.
+
+> ## `analysis/Olhoff` is the ONLY production Olhoff implementation in `topOpt4freqMax`.
 >
 > Every other Du–Olhoff tree on this machine — inside this repository or outside
 > it — is historical evidence, experimental code, audit material or development
@@ -14,20 +21,26 @@
 
 | Tree | Role | Production executable? |
 |---|---|---|
-| **`analysis/OlhoffCurrent`** | **PRODUCTION — the source of truth** | **YES, and only this** |
-| `analysis/OlhoffM4Reconstruction` | FROZEN_EVIDENCE — the frozen historical reconstruction the conference numbers came from | no |
-| `analysis/OlhoffExperiments` | EXPERIMENTAL — for future experimental implementations and scripts, when created | no |
+| **`analysis/Olhoff`** | **PRODUCTION — the source of truth** | **YES, and only this** |
 | `/Users/piotrek/Programming/Matlab/Olhoff` | DEVELOPMENT / RESEARCH UPSTREAM | no |
-| `analysis/OlhoffApproach*`, `analysis/OlhoffRegularized`, `analysis/OlhoffReproduced2007`, `Matlab/reproduction2007`, `analysis/olhoff_*_audit`, … | HISTORICAL / AUDIT_ONLY unless explicitly reclassified later | no |
+| everything under `development/` — `OlhoffM4Reconstruction`, `OlhoffApproach*`, `OlhoffRegularized`, `OlhoffReproduced2007`, `Matlab/reproduction2007`, the `olhoff_*` audits | FROZEN_EVIDENCE / HISTORICAL / AUDIT_ONLY | no — `development/` is forbidden as a whole |
 
-The full classification of every discovered tree is in
-[`analysis/OLHOFF_IMPLEMENTATION_MAP.md`](../OLHOFF_IMPLEMENTATION_MAP.md).
-There is exactly one `PRODUCTION` entry in it.
+The classification made at promotion (2026-09-07) is archived in
+`development/migration_history/olhoff_current_promotion/OLHOFF_IMPLEMENTATION_MAP.md`;
+the current source-of-truth analysis is
+`development/repository_cleanup/SOURCE_OF_TRUTH.md`.
+
+The diagnostics and raw evidence produced on this tree while it was named
+`OlhoffCurrent` (`diagnostics/`, `evidence/`), and the study-finalization gates
+that govern them (`olhoffcurrent_finalization_gate`, `olhoffcurrent_evidence_gate`,
+`olhoffcurrent_evidence_declare`, `EVIDENCE_POLICY.md` and their tests), are
+archived under `development/reconstruction/`. They are not needed to run or
+verify production.
 
 ## 2. How to run it
 
 ```matlab
-addpath('<repo>/analysis/OlhoffCurrent');
+addpath('<repo>/analysis/Olhoff');
 
 prod = olhoffcurrent_production_preset();          % the recorded production choice
 out  = olhoffcurrent_run(160, 20, 'Preset', prod.name);
@@ -90,7 +103,7 @@ name.
 ## 4. Why the core lives under `+impl/`
 
 `genpath` skips folders whose name begins with `+`, **and every folder beneath
-them**. Six scripts under `examples/Revision_v1/` call
+them**. Archived scripts (e.g. the paper-revision experiments) call
 `addpath(genpath(<repo>/analysis))`, and those entries persist for the rest of
 the MATLAB session.
 
@@ -109,7 +122,7 @@ file, so `algo/` must stay a sibling of `mma_published/`.
 ## 5. The path invariant, and how it fails closed
 
 > **Exactly one executable Olhoff implementation is visible to MATLAB:
-> `analysis/OlhoffCurrent`.**
+> `analysis/Olhoff`.**
 
 `olhoffcurrent_assert_dispatch` checks **every** symbol this tree owns — 32 of
 them, derived from the directory rather than restated as a list — using
@@ -162,7 +175,6 @@ test_named_preset_reproduction('pedersen')         % 160x20 vs committed upstrea
 test_named_preset_reproduction('stageExhaustion')  % 160x20 vs pre-migration OlhoffCurrent
 test_cost_reporting()          % total and per-outer-iteration cost fields
 test_pedersen_adaptive_units() % adaptive move-box rule and Pedersen stiffness law (no solve)
-test_evidence_retention(), test_finalization_gate()
 ```
 
 ## 8. What is here
@@ -182,7 +194,7 @@ test_evidence_retention(), test_finalization_gate()
 | `olhoffcurrent_currentness.m` / `_provenance.m` / `_source_manifest.m` | provenance and integrity |
 | `PROVENANCE.md` / `PROVENANCE.json` | where this came from, exactly |
 | `SOURCE_MANIFEST.json` | integrity manifest over `+impl/` |
-| `tests/` | path isolation, currentness, integrity, preset identity and reproduction, cost reporting, evidence gates |
+| `tests/` | path isolation, currentness, integrity, preset identity and reproduction, cost reporting |
 
 ## 9. Changing it
 
@@ -190,7 +202,7 @@ Production source is **not** edited in place. The workflow is:
 
 ```
 external development  ->  experiment / audit  ->  accepted committed state
-   ->  explicit promotion into OlhoffCurrent  ->  regression verification  ->  production
+   ->  explicit promotion into analysis/Olhoff  ->  regression verification  ->  production
 ```
 
 Editing `+impl/` directly makes `olhoffcurrent_currentness()` report

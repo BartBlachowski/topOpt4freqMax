@@ -46,7 +46,7 @@ doThrow = p.Results.Throw;
 
 root     = olhoffcurrent_root();
 core     = fullfile(root, '+impl');
-repoRoot = fileparts(fileparts(root));            % <repo>/analysis/OlhoffCurrent
+repoRoot = fileparts(fileparts(root));            % <repo>/analysis/Olhoff
 mlroot   = matlabroot();
 names    = olhoffcurrent_owned_names();
 [repoRel, absForbidden] = olhoffcurrent_forbidden_paths();

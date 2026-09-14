@@ -1,0 +1,35 @@
+{
+  "name": "BG_simpAdaptive_320x40",
+  "arm": "simpAdaptive",
+  "mesh": [
+    320,
+    40
+  ],
+  "upstreamPreset": "duOlhoffAdaptivePedersen",
+  "overrides": [
+    "material.stiffness.model",
+    "simp",
+    "material.mass.model",
+    "eq4b"
+  ],
+  "maxOuter": 400,
+  "cfgHash": "d7913af7155e6359202b3929a2d648b92a957ba6a2efd1b7829a7575507a6686",
+  "rminEl": 2.4,
+  "eps": 0.1,
+  "status": "CONVERGED",
+  "nOuter": 138,
+  "wall_s": 1486.6592087083334,
+  "solver_wall_s": 1486.6477664166666,
+  "matlab_version": "25.2.0.3042426 (R2025b) Update 1",
+  "threads": 1,
+  "repo_head": "05919933f3f4af68b36c1981e66130709a263593-dirty",
+  "impl_tree_sha256": "4ba9a3ae10881344a0e60f2b8a8976c5ec9ceccf966bc2a3da4f37fb5aebffbf",
+  "impl_n_files": 79,
+  "resolved_mmasub": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/mma_published/mmasub.m",
+  "timestamp": "2026-09-14T10:23:15",
+  "Mnd_final": 0.22911561439387809,
+  "gray_final": 0.248828125,
+  "omega1": 165.81132630030436,
+  "omega2": 175.23348776748392,
+  "gap12": 0.056824595022627648
+}

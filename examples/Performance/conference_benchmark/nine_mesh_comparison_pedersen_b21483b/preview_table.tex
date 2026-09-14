@@ -1,0 +1,29 @@
+% Standalone preview wrapper for conference_performance_table.tex.
+%
+% The generated table file is a FRAGMENT meant to be \input{} into a paper.
+% This wrapper supplies a document class so that
+%
+%     pdflatex preview_table.tex
+%
+% renders it.  Nothing here is part of the benchmark evidence.
+%
+% The Pedersen caption contains an unescaped "^" (rho*rho0^(p-1)) that
+% confbench_export.m does not escape, so "^" is an ordinary character for the
+% \input below; T1 encoding makes "|" and "<" print as themselves.
+%
+% 27 rows plus that caption overflow an A4 landscape page (the caption tail is
+% lost), and the ten-column tabular with the full Du-Olhoff label is about
+% 300 mm wide at \small, hence a 330 x 270 mm page with 12 mm margins.
+\documentclass[11pt]{article}
+\usepackage[paperwidth=330mm,paperheight=270mm,margin=12mm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsmath}
+\pagestyle{empty}
+\begin{document}
+\small
+\begingroup
+\catcode`\^=12
+\input{conference_performance_table.tex}
+\endgroup
+\end{document}

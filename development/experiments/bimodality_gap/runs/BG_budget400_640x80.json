@@ -1,0 +1,35 @@
+{
+  "name": "BG_budget400_640x80",
+  "arm": "budget400",
+  "mesh": [
+    640,
+    80
+  ],
+  "upstreamPreset": "duOlhoffAdaptivePedersen",
+  "overrides": [
+    "stop.toleranceRule",
+    "explicit",
+    "stop.tolerance",
+    0
+  ],
+  "maxOuter": 400,
+  "cfgHash": "c13acd36f1da739bf396d31d4b757df1d30dff34db1d9d85d64614d58e137cfc",
+  "rminEl": 4.8,
+  "eps": 0,
+  "status": "CAP_HIT",
+  "nOuter": 400,
+  "wall_s": 8806.1842668333338,
+  "solver_wall_s": 8806.17463175,
+  "matlab_version": "25.2.0.3042426 (R2025b) Update 1",
+  "threads": 1,
+  "repo_head": "05919933f3f4af68b36c1981e66130709a263593-dirty",
+  "impl_tree_sha256": "4ba9a3ae10881344a0e60f2b8a8976c5ec9ceccf966bc2a3da4f37fb5aebffbf",
+  "impl_n_files": 79,
+  "resolved_mmasub": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/mma_published/mmasub.m",
+  "timestamp": "2026-09-14T13:27:52",
+  "Mnd_final": 0.13608880243963434,
+  "gray_final": 0.15640625,
+  "omega1": 165.46615961749944,
+  "omega2": 205.79893196825319,
+  "gap12": 0.24375239290009007
+}

@@ -1,0 +1,35 @@
+{
+  "name": "BG_filterEl3_160x20",
+  "arm": "filterEl3",
+  "mesh": [
+    160,
+    20
+  ],
+  "upstreamPreset": "duOlhoffAdaptivePedersen",
+  "overrides": [
+    "filter.radiusPhysical",
+    [],
+    "filter.radiusElements",
+    3
+  ],
+  "maxOuter": 400,
+  "cfgHash": "a8c50eb45fb5505bb78de0c19adeb2cea3806f77ac7d1a2111d93b9c367e4583",
+  "rminEl": 3,
+  "eps": 0.05,
+  "status": "CAP_HIT",
+  "nOuter": 400,
+  "wall_s": 864.69713591666664,
+  "solver_wall_s": 864.683296125,
+  "matlab_version": "25.2.0.3042426 (R2025b) Update 1",
+  "threads": 1,
+  "repo_head": "05919933f3f4af68b36c1981e66130709a263593-dirty",
+  "impl_tree_sha256": "4ba9a3ae10881344a0e60f2b8a8976c5ec9ceccf966bc2a3da4f37fb5aebffbf",
+  "impl_n_files": 79,
+  "resolved_mmasub": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/mma_published/mmasub.m",
+  "timestamp": "2026-09-14T10:59:51",
+  "Mnd_final": 0.29686375617112476,
+  "gray_final": 0.355625,
+  "omega1": 156.21126475313397,
+  "omega2": 158.1848337007321,
+  "gap12": 0.012633973297105196
+}

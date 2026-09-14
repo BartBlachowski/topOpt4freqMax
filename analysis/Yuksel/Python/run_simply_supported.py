@@ -13,7 +13,7 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
-from YukselApproach.Python.solver import top99neo_dynamic_freq, top99neo_inertial_freq
+from Yuksel.Python.solver import top99neo_dynamic_freq, top99neo_inertial_freq
 
 
 def _plot_dynamic_frequency_convergence(omega_hist, title: str) -> None:

@@ -60,7 +60,7 @@ codegen/
 *.fig
 
 # A4 Recovery Phase 2 §10.9 PNG evidence remains tracked.
-!examples/Revision_v1/output/a4/*.png
+!development/experiments/Revision_v1/output/a4/*.png
 
 *.csv
 *.jsonl
@@ -77,34 +77,37 @@ codegen/
 *.bst
 *.out
 
-# --- Du-Olhoff 2007 clean-room reproduction (Matlab/reproduction2007) ---
+# --- Du-Olhoff 2007 clean-room reproduction (development/reconstruction/Matlab/reproduction2007) ---
 # The frozen baselines are the migration regression gate and the paper figures
 # are inputs to the comparison plots, so they must be tracked despite the
 # blanket *.mat / *.log / *.png / *.txt rules above.  Run-time output under
-# Matlab/reproduction2007/results/ stays ignored.
-!Matlab/reproduction2007/baseline/*.mat
-!Matlab/reproduction2007/baseline/*.log
-!Matlab/reproduction2007/docs/figs/*.png
-!Matlab/reproduction2007/SOURCE_SHA256.txt
+# its results/ directory stays ignored.
+!development/reconstruction/Matlab/reproduction2007/baseline/*.mat
+!development/reconstruction/Matlab/reproduction2007/baseline/*.log
+!development/reconstruction/Matlab/reproduction2007/docs/figs/*.png
+!development/reconstruction/Matlab/reproduction2007/SOURCE_SHA256.txt
 
-# --- Olhoff benchmark-path equivalence proofs (examples/Performance/equivalence) ---
+# --- r3 Olhoff benchmark-path equivalence proofs (development/benchmark_history/examples_Performance/equivalence) ---
 # These .mat records ARE the admission evidence for every Olhoff timing row:
 # olhoff_equivalence_gate reads them to decide whether a mesh may enter a
 # performance table.  Ignoring them under the blanket *.mat rule would leave the
 # gate with nothing to read on a fresh clone.
-!examples/Performance/equivalence/*.mat
-!examples/Performance/equivalence/negative_controls/*.mat
+!development/benchmark_history/examples_Performance/equivalence/*.mat
+!development/benchmark_history/examples_Performance/equivalence/negative_controls/*.mat
 
 # Phase 2I qualification evidence is an audit deliverable, not disposable run
 # output.  Keep the CSV decision tables, checksum manifest, and the minimum raw
 # records needed to reproduce the negative precision ruling on a fresh clone.
-!analysis/iteration_efficiency_phase2i_precision_qualification/*.csv
-!analysis/iteration_efficiency_phase2i_precision_qualification/SHA256SUMS.txt
-!analysis/iteration_efficiency_phase2i_precision_qualification/raw/*.csv
-!analysis/iteration_efficiency_phase2i_precision_qualification/raw/*.mat
+!development/experiments/iteration_efficiency/iteration_efficiency_phase2i_precision_qualification/*.csv
+!development/experiments/iteration_efficiency/iteration_efficiency_phase2i_precision_qualification/SHA256SUMS.txt
+!development/experiments/iteration_efficiency/iteration_efficiency_phase2i_precision_qualification/raw/*.csv
+!development/experiments/iteration_efficiency/iteration_efficiency_phase2i_precision_qualification/raw/*.mat
 
 # Archives.  Zip bundles are local backups of content that is either already
 # tracked file-by-file or deliberately excluded; they are not evidence, and one
-# of them (analysis/OlhoffArchive.zip, 552 MB) exceeds GitHub's 100 MB per-file
+# of them (development/legacy_implementations/OlhoffArchive.zip, 552 MB) exceeds GitHub's 100 MB per-file
 # hard limit and blocks the push outright.  Keep them on disk, out of git.
 *.zip
+
+# Paths above that point into development/ were re-pointed by the 2026-09-14
+# repository cleanup (development/repository_cleanup/MIGRATION_MANIFEST.tsv).
