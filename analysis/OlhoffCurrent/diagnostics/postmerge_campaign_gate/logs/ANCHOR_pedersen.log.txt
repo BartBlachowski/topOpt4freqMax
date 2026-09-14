@@ -1,0 +1,1 @@
+PMGANCHOR pedersen   status=CONVERGED nOuter=121 inner=2369 omega1=169.210576386275 wall=229s cfgHash=b1a5744df798ad624fcd0b8b4306888eb99816ee5ce60f51040e39e03e90d4f4

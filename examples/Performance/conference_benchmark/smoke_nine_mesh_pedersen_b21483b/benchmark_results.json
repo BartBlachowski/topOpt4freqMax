@@ -1,0 +1,1603 @@
+{
+  "schema": "conference_performance_benchmark_results/1",
+  "generated": "2026-09-14T01:27:35+02:00",
+  "run_label": "smoke_nine_mesh_pedersen_b21483b",
+  "scientific_evidence": false,
+  "performance_campaign": false,
+  "caveats": {
+    "table_caption": "Count/time columns represent method-native computational stages and are not mathematically identical across methods. Total wall time is the common performance quantity.",
+    "olhoff": "Du-Olhoff RECONSTRUCTION, Pedersen/adaptive-box formulation (class C controller and filter radius, class B/D material law): SIMP p = 3 with the Pedersen (2000) linearized low-density stiffness (rho*rho0^(p-1) below rho0 = 0.1) and LINEAR mass, eq. (2); a per-element ADAPTIVE move box (initial 0.10, floor 0.002, x1.2 on monotone / x0.7 on reversing outer steps); NATURAL termination by ||drho||_2 < 0.05*sqrt(NE/3200) with no guards and no persistence, a heuristic design-change stop and not a KKT certificate; Sigmund sensitivity filter on all f_sk at a FIXED PHYSICAL radius R = 0.06 (1.2 elements at 160x20, 6 at 800x100). This is a DISTINCT formulation from the historical SIMP + eq. (4b) OlhoffCurrent reconstruction (duOlhoffSimpEq4bBetaStallLadderSensitivityFiltered), not a bug fix of it; Pedersen stiffness is the alternative Du & Olhoff sec. 2.2 name, not their choice. Terminal bimodality is NOT expected beyond coarse meshes: in the committed R = 0.06 sweep the optimum is bimodal only at 160x20 (native gap12 0.7 %) and native gap12 is 11.8-24.5 % from 240x30 to 800x100. Native eigenfrequencies are those of the Pedersen/linear-mass model; any cross-method table must name its evaluator model. Must NOT be labelled \"Olhoff 2007\". Field-level provenance (A/B/C/D) is documented in analysis/OlhoffCurrent/+impl/architecture/docs/SCIENTIFIC_CONFIG_PROVENANCE.md and is printed per run by olh.config.describe.",
+    "olhoff_label": "The Olhoff column is labelled \"Du-Olhoff reconstruction (Pedersen stiffness + linear mass, adaptive box)\" and must not be labelled \"Olhoff 2007\". It is produced by analysis/OlhoffCurrent at the named preset duOlhoffPedersenAdaptiveBoxSensitivityFiltered (upstream preset duOlhoffAdaptivePedersen @ 2530692). It is NOT the historical SIMP + eq. (4b) realization that earlier campaigns labelled \"Du-Olhoff reconstruction (M4)\" (preset duOlhoffSimpEq4bBetaStallLadderSensitivityFiltered): the two differ in the low-density material law and the outer controller.",
+    "memory": "Reliable, method-independent peak-memory measurement was not available in the MATLAB environment; memory was omitted rather than reported with inconsistent semantics.",
+    "olhoff_iteration_counts": "The outer iteration count of the Du-Olhoff reconstruction is set by its per-element adaptive move box and its mesh-scaled design-change tolerance, neither of which the original publication specifies, and it is NOT monotone in the mesh (committed R = 0.06 sweep: 121, 111, 101, 93, 112, 130, 156, 204, 246 outer iterations from 160x20 to 800x100). Per-outer-iteration cost is therefore reported next to total wall time.",
+    "scaling": "Scaling exponents may be fitted only to complete campaign data and never to smoke or preflight runs. For the Du-Olhoff reconstruction the outer iteration count is a property of the reconstruction's controller and stop, not of the published method, and need not be monotone in the mesh; a total-time exponent mixes per-iteration cost with that count, so the per-outer-iteration cost fit is reported alongside it. Either exponent describes this reconstruction, not the published method."
+  },
+  "timing_schema": {
+    "schema_version": "conference_benchmark_timing/1",
+    "common": {
+      "total_wall_time_s": "Caller-side tic/toc around the solve and nothing else. CSV/JSON/MAT writing, plotting, table formatting, LaTeX generation, the common E1/E2/E3 evaluator and topology rendering are all outside it.",
+      "overhead_time_s": "Whatever the solve spends outside the two named stages: configuration dispatch, model build, filter preparation, the final modal analysis and result assembly. It exists so that no microsecond has to be forced into a named stage.",
+      "identity": "total_wall_time_s = time1 + time2 + overhead_time_s",
+      "timing_accounting_residual_s": "total_wall_time_s minus (time1 + time2 + overhead_time_s).",
+      "timing_accounting_fail": "TIMING_ACCOUNTING_FAIL: set when the residual exceeds the predeclared tolerance recorded alongside it.",
+      "independent_crosscheck_residual_s": "A SECOND, independent measurement of the same interval: the caller-side total minus the solver's own self-reported wall time. Unlike the identity above it is not an algebraic tautology, so it detects a mis-nested timer.",
+      "threads": "All runs are single-threaded (maxNumCompThreads(1)).",
+      "memory": "NOT MEASURED and NOT REPORTED. Reliable, method-independent peak-memory measurement was not available in the MATLAB environment; memory was omitted rather than reported with inconsistent semantics."
+    },
+    "methods": {
+      "Proposed": {
+        "architecture": "one reference eigenanalysis, then a SIMP topology optimization",
+        "count1": {
+          "name": "eigenanalysis_solves",
+          "value": "always 1",
+          "meaning": "The number of reference eigenanalyses performed. This is a SOLVE count. It is NOT an optimization iteration and must not be read as one."
+        },
+        "count2": {
+          "name": "simp_iterations",
+          "meaning": "SIMP topology-optimization iterations."
+        },
+        "time1": {
+          "name": "stage1_eigenanalysis_and_preparation_s",
+          "boundary": "solver initialization: mesh and element matrices, boundary conditions, filter preparation, and the single reference eigenanalysis. stage1_reference_eigen_time_s isolates the eigenanalysis alone and is a SUB-INTERVAL of this."
+        },
+        "time2": {
+          "name": "stage2_simp_time_s",
+          "boundary": "the SIMP optimization loop only."
+        }
+      },
+      "Yuksel": {
+        "architecture": "two sequential optimization stages",
+        "count1": {
+          "name": "stage1_iterations",
+          "meaning": "Stage-1 optimization iterations."
+        },
+        "count2": {
+          "name": "stage2_iterations",
+          "meaning": "Stage-2 optimization iterations."
+        },
+        "time1": {
+          "name": "stage1_time_s",
+          "boundary": "the Stage-1 loop only."
+        },
+        "time2": {
+          "name": "stage2_time_s",
+          "boundary": "the Stage-2 loop only; disjoint from Stage 1."
+        },
+        "assertions": [
+          "N_total = N1 + N2",
+          "T1 + T2 = optimization_loop_time (non-overlapping timers)"
+        ]
+      },
+      "DuOlhoffReconstruction": {
+        "label": "Du-Olhoff reconstruction (Pedersen stiffness + linear mass, adaptive box)",
+        "preset": "duOlhoffPedersenAdaptiveBoxSensitivityFiltered",
+        "upstream_preset": "duOlhoffAdaptivePedersen",
+        "upstream_commit": "253069262407885a8b759a9e721c4f0a7d3a397d",
+        "architecture": "NESTED: an outer loop, each of whose iterations contains a complete MMA sub-optimization.",
+        "count1": {
+          "name": "outer_iterations",
+          "meaning": "Fig. 1 outer iterations."
+        },
+        "count2": {
+          "name": "inner_mma_iterations_total",
+          "meaning": "cumulative nested MMA sub-iterations over the whole run."
+        },
+        "time1": {
+          "name": "outer_time_excluding_inner_s",
+          "boundary": "every computational region of an outer iteration EXCEPT the nested MMA solve: FE assembly, the eigenproblem, modal processing, generalized-gradient sensitivities, sensitivity filtering, local subproblem construction, the step controller, the design update, bookkeeping and the convergence test. Measured as sum(t_outer) - sum(t_inner) from per-iteration timers, so the nested solve cannot be double-counted."
+        },
+        "time2": {
+          "name": "inner_mma_time_total_s",
+          "boundary": "the nested MMA loop, and only that."
+        },
+        "derived": [
+          "inner_iterations_per_outer_mean",
+          "inner_time_per_outer_mean_s",
+          "inner_time_per_inner_iteration_mean_s",
+          "inner_time_share_pct"
+        ],
+        "per_outer_iteration_cost": {
+          "why": "the outer iteration count need not be monotone in the mesh, so total wall time alone cannot be read as a per-iteration scaling law",
+          "fields": [
+            "outer_time_total_s = sum(t_outer)",
+            "outer_time_per_outer_mean_s = sum(t_outer)/N_outer",
+            "outer_time_per_outer_median_s = median(t_outer)",
+            "outer_time_excluding_inner_per_outer_mean_s = (sum(t_outer)-sum(t_inner))/N_outer",
+            "eigen_time_per_outer_mean_s = sum(t_eig)/N_outer (FE assembly + eigensolve)",
+            "gradient_time_per_outer_mean_s = sum(t_grad)/N_outer",
+            "total_wall_time_per_outer_s = total_wall_time_s/N_outer",
+            "inner_time_per_outer_mean_s, inner_time_per_inner_iteration_mean_s"
+          ]
+        },
+        "prohibited": "N_outer + N_inner must NEVER be reported as a generic iteration count: the two are different objects.",
+        "caveat": "Du-Olhoff RECONSTRUCTION, Pedersen/adaptive-box formulation (class C controller and filter radius, class B/D material law): SIMP p = 3 with the Pedersen (2000) linearized low-density stiffness (rho*rho0^(p-1) below rho0 = 0.1) and LINEAR mass, eq. (2); a per-element ADAPTIVE move box (initial 0.10, floor 0.002, x1.2 on monotone / x0.7 on reversing outer steps); NATURAL termination by ||drho||_2 < 0.05*sqrt(NE/3200) with no guards and no persistence, a heuristic design-change stop and not a KKT certificate; Sigmund sensitivity filter on all f_sk at a FIXED PHYSICAL radius R = 0.06 (1.2 elements at 160x20, 6 at 800x100). This is a DISTINCT formulation from the historical SIMP + eq. (4b) OlhoffCurrent reconstruction (duOlhoffSimpEq4bBetaStallLadderSensitivityFiltered), not a bug fix of it; Pedersen stiffness is the alternative Du & Olhoff sec. 2.2 name, not their choice. Terminal bimodality is NOT expected beyond coarse meshes: in the committed R = 0.06 sweep the optimum is bimodal only at 160x20 (native gap12 0.7 %) and native gap12 is 11.8-24.5 % from 240x30 to 800x100. Native eigenfrequencies are those of the Pedersen/linear-mass model; any cross-method table must name its evaluator model. Must NOT be labelled \"Olhoff 2007\". Field-level provenance (A/B/C/D) is documented in analysis/OlhoffCurrent/+impl/architecture/docs/SCIENTIFIC_CONFIG_PROVENANCE.md and is printed per run by olh.config.describe."
+      }
+    },
+    "cross_method_warning": "Count and time columns represent method-native computational stages and are not mathematically identical across methods. Total wall time is the common performance quantity."
+  },
+  "memory": {
+    "measured": false,
+    "reported": false,
+    "reason": "Reliable, method-independent peak-memory measurement was not available in the MATLAB environment; memory was omitted rather than reported with inconsistent semantics."
+  },
+  "scaling": {
+    "fitted": false,
+    "reason": "this run is not a complete performance campaign; a scaling exponent must not be fitted to smoke or preflight data",
+    "model": "T(Ne) = C * Ne^p",
+    "methods": []
+  },
+  "runs": [
+    {
+      "accounting": {
+        "total_wall_time_s": 1.6333792916666667,
+        "component_sum_s": 1.6333792916666667,
+        "timing_accounting_residual_s": 0,
+        "timing_accounting_relative_residual": 0,
+        "timing_accounting_tolerance_s": 1E-6,
+        "timing_accounting_tolerance_rel": 1E-9,
+        "timing_accounting_fail": false,
+        "independent_crosscheck_residual_s": 0.00054237499999998384,
+        "independent_crosscheck_relative": 0.00033205698319252935,
+        "independent_crosscheck_tolerance_rel": 0.05,
+        "independent_crosscheck_fail": false
+      },
+      "caveat": "Du-Olhoff RECONSTRUCTION, Pedersen/adaptive-box formulation (class C controller and filter radius, class B/D material law): SIMP p = 3 with the Pedersen (2000) linearized low-density stiffness (rho*rho0^(p-1) below rho0 = 0.1) and LINEAR mass, eq. (2); a per-element ADAPTIVE move box (initial 0.10, floor 0.002, x1.2 on monotone / x0.7 on reversing outer steps); NATURAL termination by ||drho||_2 < 0.05*sqrt(NE/3200) with no guards and no persistence, a heuristic design-change stop and not a KKT certificate; Sigmund sensitivity filter on all f_sk at a FIXED PHYSICAL radius R = 0.06 (1.2 elements at 160x20, 6 at 800x100). This is a DISTINCT formulation from the historical SIMP + eq. (4b) OlhoffCurrent reconstruction (duOlhoffSimpEq4bBetaStallLadderSensitivityFiltered), not a bug fix of it; Pedersen stiffness is the alternative Du & Olhoff sec. 2.2 name, not their choice. Terminal bimodality is NOT expected beyond coarse meshes: in the committed R = 0.06 sweep the optimum is bimodal only at 160x20 (native gap12 0.7 %) and native gap12 is 11.8-24.5 % from 240x30 to 800x100. Native eigenfrequencies are those of the Pedersen/linear-mass model; any cross-method table must name its evaluator model. Must NOT be labelled \"Olhoff 2007\". Field-level provenance (A/B/C/D) is documented in analysis/OlhoffCurrent/+impl/architecture/docs/SCIENTIFIC_CONFIG_PROVENANCE.md and is printed per run by olh.config.describe.",
+      "counts": {
+        "count1_name": "outer_iterations",
+        "count1": 3,
+        "count2_name": "inner_mma_iterations_total",
+        "count2": 58,
+        "outer_iterations": 3,
+        "inner_iterations_total": 58,
+        "inner_iterations_per_outer_mean": 19.333333333333332,
+        "iterations_total_generic": null
+      },
+      "effective_config_hash": "40fdaa629162102d8ab82d1f0bfeca77ce67aeacf44777e3911e1cbeeb29958e",
+      "error": "",
+      "evaluator": {
+        "evaluator_candidate": "C",
+        "density_representation": "ACTUAL_GRAY",
+        "modal_classifier_version": "candidate_c_unanimous_v1",
+        "volume": 0.49992271884421796,
+        "volume_residual": -7.7281155782038535E-5,
+        "minimum_density": 0.20017592897168246,
+        "maximum_density": 0.79995097391196657,
+        "mean_density": 0.49992271884421796,
+        "std_density": 0.21718279122822173,
+        "grayness": 0.81138547734377409,
+        "gray_fraction_01_09": 1,
+        "connectivity_raw_05": {
+          "n_components": 4,
+          "left_right_connected": false,
+          "largest_component_fraction": 0.47230320699708456,
+          "solid_fraction": 0.42875
+        },
+        "binary_solid_count": 1600,
+        "binary_volume": 0.5,
+        "connectivity_binary": {
+          "n_components": 1,
+          "left_right_connected": true,
+          "largest_component_fraction": 1,
+          "solid_fraction": 0.5
+        },
+        "binary_role": "ENDPOINT_MANUFACTURABILITY_TOPOLOGY_DIAGNOSTIC_EXCLUDED_FROM_Q",
+        "modal_raw_E1": {
+          "model": "E1",
+          "classifier": "UNANIMOUS_ALL_THREE",
+          "rho_void_threshold": 0.1,
+          "voidKE_threshold": 0.5,
+          "voidSE_threshold": 0.5,
+          "densityParticipation_threshold": 0.5,
+          "IPR_role": "NONBINDING_QA",
+          "status": "PASS",
+          "solver_status": "PASS",
+          "failure_reason": "",
+          "modes_requested_final": 3,
+          "escalation_count": 0,
+          "batch_schedule": 3,
+          "lambda": [
+            11887.350379000745,
+            69523.661791468141,
+            216407.48047180392
+          ],
+          "omega": [
+            109.02912628743177,
+            263.67339985570811,
+            465.19617418010216
+          ],
+          "eigenpair_residual": [
+            4.560093903879339E-11,
+            8.8070572566932069E-12,
+            2.6619182241850165E-12
+          ],
+          "eigenpair_valid": [
+            true,
+            true,
+            true
+          ],
+          "diagnostic_finite": [
+            true,
+            true,
+            true
+          ],
+          "voidKE": [
+            0,
+            0,
+            0
+          ],
+          "voidSE": [
+            0,
+            0,
+            0
+          ],
+          "densityParticipation": [
+            0.63818091816786682,
+            0.61453407007168714,
+            0.61165036906557946
+          ],
+          "IPR": [
+            0.00060012840505548276,
+            0.0005524969595426209,
+            0.00056708517658995224
+          ],
+          "kinetic_energy_total": [
+            0.999999999999999,
+            0.99999999999999822,
+            1.0000000000000004
+          ],
+          "strain_energy_total": [
+            11887.350379006815,
+            69523.661791461112,
+            216407.48047179985
+          ],
+          "condition_margins": [
+            [
+              0.5,
+              0.5,
+              0.13818091816786682
+            ],
+            [
+              0.5,
+              0.5,
+              0.11453407007168714
+            ],
+            [
+              0.5,
+              0.5,
+              0.11165036906557946
+            ]
+          ],
+          "minimum_margin": [
+            0.13818091816786682,
+            0.11453407007168714,
+            0.11165036906557946
+          ],
+          "valid_structural": [
+            true,
+            true,
+            true
+          ],
+          "selected_ordinal": 1,
+          "selected_lambda": 11887.350379000745,
+          "selected_omega": 109.02912628743177,
+          "selected_voidKE": 0,
+          "selected_voidSE": 0,
+          "selected_densityParticipation": 0.63818091816786682,
+          "selected_IPR": 0.00060012840505548276,
+          "selected_condition_margins": [
+            0.5,
+            0.5,
+            0.13818091816786682
+          ],
+          "selected_minimum_margin": 0.13818091816786682,
+          "matrix_free_dofs": null,
+          "technical_mode_limit": null
+        },
+        "omega_raw_E1": [
+          109.02912628743177,
+          263.67339985570811,
+          465.19617418010216
+        ],
+        "selected_ordinal_raw_E1": 1,
+        "selected_lambda_raw_E1": 11887.350379000745,
+        "selected_omega_raw_E1": 109.02912628743177,
+        "status_raw_E1": "PASS",
+        "binary_diagnostic_E1": {
+          "model": "",
+          "classifier": "UNANIMOUS_ALL_THREE",
+          "rho_void_threshold": 0.1,
+          "voidKE_threshold": 0.5,
+          "voidSE_threshold": 0.5,
+          "densityParticipation_threshold": 0.5,
+          "IPR_role": "NONBINDING_QA",
+          "status": "PASS",
+          "solver_status": "NOT_RUN",
+          "failure_reason": "",
+          "modes_requested_final": 0,
+          "escalation_count": 0,
+          "batch_schedule": [],
+          "lambda": [
+            4217.2227818407991,
+            4517.5579295946291,
+            12350.510134329215,
+            25445.71719517051,
+            92116.29125596075,
+            171520.34727712741
+          ],
+          "omega": [
+            64.940147688781849,
+            67.212780998814722,
+            111.13284903361929,
+            159.51713762217059,
+            303.50665767979581,
+            414.15015064240578
+          ],
+          "eigenpair_residual": [
+            2.6329418346253E-10,
+            2.130292907314105E-10,
+            1.0806369874909482E-10,
+            5.6086584790709711E-11,
+            2.9061095753001579E-11,
+            2.0012273807119105E-11
+          ],
+          "eigenpair_valid": [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ],
+          "diagnostic_finite": [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ],
+          "voidKE": [
+            7.4812455939499478E-7,
+            2.6171337012500203E-7,
+            8.3745011893893467E-7,
+            4.2140740875990828E-7,
+            7.1509183592349648E-7,
+            8.4748558106257131E-7
+          ],
+          "voidSE": [
+            0.00028435046284658484,
+            0.039984032643383377,
+            0.0022078390580147302,
+            0.0061691862040907193,
+            0.00043313082210587876,
+            0.0004479365632242774
+          ],
+          "densityParticipation": [
+            0.99999925187544147,
+            0.99999973828663014,
+            0.99999916254988175,
+            0.99999957859259192,
+            0.9999992849081647,
+            0.99999915251441962
+          ],
+          "IPR": [
+            0.00095670840367725082,
+            0.00095908357891638955,
+            0.00076889526455666771,
+            0.00088521242769926535,
+            0.00075712127644166462,
+            0.00070301064459758647
+          ],
+          "kinetic_energy_total": [
+            0.99999999999999967,
+            0.99999999999999956,
+            0.99999999999999778,
+            0.99999999999999967,
+            0.99999999999999989,
+            0.99999999999999922
+          ],
+          "strain_energy_total": [
+            4217.2227822246941,
+            4517.5579299854708,
+            12350.510134741517,
+            25445.717195595902,
+            92116.2912563675,
+            171520.34727753105
+          ],
+          "condition_margins": [
+            [
+              0.49999925187544059,
+              0.49971564953715342,
+              0.49999925187544147
+            ],
+            [
+              0.49999973828662986,
+              0.46001596735661665,
+              0.49999973828663014
+            ],
+            [
+              0.49999916254988108,
+              0.49779216094198525,
+              0.49999916254988175
+            ],
+            [
+              0.49999957859259125,
+              0.49383081379590926,
+              0.49999957859259192
+            ],
+            [
+              0.49999928490816409,
+              0.49956686917789411,
+              0.4999992849081647
+            ],
+            [
+              0.49999915251441895,
+              0.49955206343677572,
+              0.49999915251441962
+            ]
+          ],
+          "minimum_margin": [
+            0.49971564953715342,
+            0.46001596735661665,
+            0.49779216094198525,
+            0.49383081379590926,
+            0.49956686917789411,
+            0.49955206343677572
+          ],
+          "valid_structural": [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ],
+          "selected_ordinal": null,
+          "selected_lambda": null,
+          "selected_omega": null,
+          "selected_voidKE": null,
+          "selected_voidSE": null,
+          "selected_densityParticipation": null,
+          "selected_IPR": null,
+          "selected_condition_margins": [
+            null,
+            null,
+            null
+          ],
+          "selected_minimum_margin": null,
+          "matrix_free_dofs": null,
+          "technical_mode_limit": null,
+          "role": "ENDPOINT_MANUFACTURABILITY_TOPOLOGY_DIAGNOSTIC_EXCLUDED_FROM_Q"
+        },
+        "omega_binary_E1": [
+          64.940147688781849,
+          67.212780998814722,
+          111.13284903361929,
+          159.51713762217059,
+          303.50665767979581,
+          414.15015064240578
+        ],
+        "modal_raw_E2": {
+          "model": "E2",
+          "classifier": "UNANIMOUS_ALL_THREE",
+          "rho_void_threshold": 0.1,
+          "voidKE_threshold": 0.5,
+          "voidSE_threshold": 0.5,
+          "densityParticipation_threshold": 0.5,
+          "IPR_role": "NONBINDING_QA",
+          "status": "PASS",
+          "solver_status": "PASS",
+          "failure_reason": "",
+          "modes_requested_final": 3,
+          "escalation_count": 0,
+          "batch_schedule": 3,
+          "lambda": [
+            11887.253122772887,
+            69519.541868003231,
+            216397.37914601804
+          ],
+          "omega": [
+            109.02868027621396,
+            263.66558718953678,
+            465.18531699315065
+          ],
+          "eigenpair_residual": [
+            4.6439578734097124E-11,
+            9.0463739480376685E-12,
+            2.658548248692929E-12
+          ],
+          "eigenpair_valid": [
+            true,
+            true,
+            true
+          ],
+          "diagnostic_finite": [
+            true,
+            true,
+            true
+          ],
+          "voidKE": [
+            0,
+            0,
+            0
+          ],
+          "voidSE": [
+            0,
+            0,
+            0
+          ],
+          "densityParticipation": [
+            0.63818132953547946,
+            0.61453489533419958,
+            0.61165112863905913
+          ],
+          "IPR": [
+            0.000600132301789792,
+            0.00055249946749395427,
+            0.00056708786173892281
+          ],
+          "kinetic_energy_total": [
+            0.999999999999999,
+            1.0000000000000016,
+            1.0000000000000016
+          ],
+          "strain_energy_total": [
+            11887.253122788203,
+            69519.5418679963,
+            216397.37914602333
+          ],
+          "condition_margins": [
+            [
+              0.5,
+              0.5,
+              0.13818132953547946
+            ],
+            [
+              0.5,
+              0.5,
+              0.11453489533419958
+            ],
+            [
+              0.5,
+              0.5,
+              0.11165112863905913
+            ]
+          ],
+          "minimum_margin": [
+            0.13818132953547946,
+            0.11453489533419958,
+            0.11165112863905913
+          ],
+          "valid_structural": [
+            true,
+            true,
+            true
+          ],
+          "selected_ordinal": 1,
+          "selected_lambda": 11887.253122772887,
+          "selected_omega": 109.02868027621396,
+          "selected_voidKE": 0,
+          "selected_voidSE": 0,
+          "selected_densityParticipation": 0.63818132953547946,
+          "selected_IPR": 0.000600132301789792,
+          "selected_condition_margins": [
+            0.5,
+            0.5,
+            0.13818132953547946
+          ],
+          "selected_minimum_margin": 0.13818132953547946,
+          "matrix_free_dofs": null,
+          "technical_mode_limit": null
+        },
+        "omega_raw_E2": [
+          109.02868027621396,
+          263.66558718953678,
+          465.18531699315065
+        ],
+        "selected_ordinal_raw_E2": 1,
+        "selected_lambda_raw_E2": 11887.253122772887,
+        "selected_omega_raw_E2": 109.02868027621396,
+        "status_raw_E2": "PASS",
+        "binary_diagnostic_E2": {
+          "model": "",
+          "classifier": "UNANIMOUS_ALL_THREE",
+          "rho_void_threshold": 0.1,
+          "voidKE_threshold": 0.5,
+          "voidSE_threshold": 0.5,
+          "densityParticipation_threshold": 0.5,
+          "IPR_role": "NONBINDING_QA",
+          "status": "PASS",
+          "solver_status": "NOT_RUN",
+          "failure_reason": "",
+          "modes_requested_final": 0,
+          "escalation_count": 0,
+          "batch_schedule": [],
+          "lambda": [
+            4216.0279074648624,
+            4337.1094006224075,
+            12323.270858081483,
+            25288.892515736068,
+            92076.506584542876,
+            171443.74391288013
+          ],
+          "omega": [
+            64.930947224454243,
+            65.856733904912161,
+            111.01022861917492,
+            159.02481729508784,
+            303.44110892320253,
+            414.05765771554104
+          ],
+          "eigenpair_residual": [
+            2.5704590770333239E-10,
+            2.3490918741407317E-10,
+            1.0617427338869592E-10,
+            5.5435226693196781E-11,
+            2.4961076627740689E-11,
+            1.7218776712381389E-11
+          ],
+          "eigenpair_valid": [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ],
+          "diagnostic_finite": [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ],
+          "voidKE": [
+            7.4812405847942148E-10,
+            2.6171275431902577E-10,
+            8.3738635913173711E-10,
+            4.212869342884902E-10,
+            7.1514932629121689E-10,
+            8.4756453860259755E-10
+          ],
+          "voidSE": [
+            2.8445748733876472E-7,
+            4.1647658184066415E-5,
+            2.2141695061829363E-6,
+            6.2084697234551264E-6,
+            4.3314311873506118E-7,
+            4.48080117521122E-7
+          ],
+          "densityParticipation": [
+            0.99999999925187533,
+            0.99999999973828646,
+            0.99999999916261328,
+            0.99999999957871344,
+            0.99999999928485139,
+            0.99999999915243531
+          ],
+          "IPR": [
+            0.0009567138816882878,
+            0.0009590894598955202,
+            0.00076881004378386367,
+            0.00088531684923028172,
+            0.00075725115665285433,
+            0.00070298133345909463
+          ],
+          "kinetic_energy_total": [
+            0.99999999999999989,
+            1.0000000000000004,
+            1.0000000000000018,
+            1.0000000000000009,
+            0.99999999999999889,
+            1.0000000000000009
+          ],
+          "strain_energy_total": [
+            4216.0279078636258,
+            4337.1094010397055,
+            12323.270858599741,
+            25288.892516261116,
+            92076.506585013543,
+            171443.74391335336
+          ],
+          "condition_margins": [
+            [
+              0.49999999925187594,
+              0.49999971554251266,
+              0.49999999925187533
+            ],
+            [
+              0.49999999973828724,
+              0.49995835234181596,
+              0.49999999973828646
+            ],
+            [
+              0.49999999916261362,
+              0.49999778583049381,
+              0.49999999916261328
+            ],
+            [
+              0.49999999957871305,
+              0.49999379153027657,
+              0.49999999957871344
+            ],
+            [
+              0.49999999928485067,
+              0.49999956685688124,
+              0.49999999928485139
+            ],
+            [
+              0.49999999915243548,
+              0.49999955191988249,
+              0.49999999915243531
+            ]
+          ],
+          "minimum_margin": [
+            0.49999971554251266,
+            0.49995835234181596,
+            0.49999778583049381,
+            0.49999379153027657,
+            0.49999956685688124,
+            0.49999955191988249
+          ],
+          "valid_structural": [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ],
+          "selected_ordinal": null,
+          "selected_lambda": null,
+          "selected_omega": null,
+          "selected_voidKE": null,
+          "selected_voidSE": null,
+          "selected_densityParticipation": null,
+          "selected_IPR": null,
+          "selected_condition_margins": [
+            null,
+            null,
+            null
+          ],
+          "selected_minimum_margin": null,
+          "matrix_free_dofs": null,
+          "technical_mode_limit": null,
+          "role": "ENDPOINT_MANUFACTURABILITY_TOPOLOGY_DIAGNOSTIC_EXCLUDED_FROM_Q"
+        },
+        "omega_binary_E2": [
+          64.930947224454243,
+          65.856733904912161,
+          111.01022861917492,
+          159.02481729508784,
+          303.44110892320253,
+          414.05765771554104
+        ],
+        "modal_raw_E3": {
+          "model": "E3",
+          "classifier": "UNANIMOUS_ALL_THREE",
+          "rho_void_threshold": 0.1,
+          "voidKE_threshold": 0.5,
+          "voidSE_threshold": 0.5,
+          "densityParticipation_threshold": 0.5,
+          "IPR_role": "NONBINDING_QA",
+          "status": "PASS",
+          "solver_status": "PASS",
+          "failure_reason": "",
+          "modes_requested_final": 3,
+          "escalation_count": 0,
+          "batch_schedule": 3,
+          "lambda": [
+            11887.253025424443,
+            69519.5377437598,
+            216397.36903433927
+          ],
+          "omega": [
+            109.02867982977894,
+            263.66557936856265,
+            465.18530612470903
+          ],
+          "eigenpair_residual": [
+            4.7565865555515669E-11,
+            8.56494148662621E-12,
+            2.6969687768488311E-12
+          ],
+          "eigenpair_valid": [
+            true,
+            true,
+            true
+          ],
+          "diagnostic_finite": [
+            true,
+            true,
+            true
+          ],
+          "voidKE": [
+            0,
+            0,
+            0
+          ],
+          "voidSE": [
+            0,
+            0,
+            0
+          ],
+          "densityParticipation": [
+            0.63818132994726828,
+            0.61453489616032253,
+            0.61165112939939714
+          ],
+          "IPR": [
+            0.00060013230569064941,
+            0.00055249947000455255,
+            0.00056708786442676538
+          ],
+          "kinetic_energy_total": [
+            1.0000000000000018,
+            1,
+            0.99999999999999911
+          ],
+          "strain_energy_total": [
+            11887.253025428427,
+            69519.537743759545,
+            216397.36903434678
+          ],
+          "condition_margins": [
+            [
+              0.5,
+              0.5,
+              0.13818132994726828
+            ],
+            [
+              0.5,
+              0.5,
+              0.11453489616032253
+            ],
+            [
+              0.5,
+              0.5,
+              0.11165112939939714
+            ]
+          ],
+          "minimum_margin": [
+            0.13818132994726828,
+            0.11453489616032253,
+            0.11165112939939714
+          ],
+          "valid_structural": [
+            true,
+            true,
+            true
+          ],
+          "selected_ordinal": 1,
+          "selected_lambda": 11887.253025424443,
+          "selected_omega": 109.02867982977894,
+          "selected_voidKE": 0,
+          "selected_voidSE": 0,
+          "selected_densityParticipation": 0.63818132994726828,
+          "selected_IPR": 0.00060013230569064941,
+          "selected_condition_margins": [
+            0.5,
+            0.5,
+            0.13818132994726828
+          ],
+          "selected_minimum_margin": 0.13818132994726828,
+          "matrix_free_dofs": null,
+          "technical_mode_limit": null
+        },
+        "omega_raw_E3": [
+          109.02867982977894,
+          263.66557936856265,
+          465.18530612470903
+        ],
+        "selected_ordinal_raw_E3": 1,
+        "selected_lambda_raw_E3": 11887.253025424443,
+        "selected_omega_raw_E3": 109.02867982977894,
+        "status_raw_E3": "PASS",
+        "binary_diagnostic_E3": {
+          "model": "",
+          "classifier": "UNANIMOUS_ALL_THREE",
+          "rho_void_threshold": 0.1,
+          "voidKE_threshold": 0.5,
+          "voidSE_threshold": 0.5,
+          "densityParticipation_threshold": 0.5,
+          "IPR_role": "NONBINDING_QA",
+          "status": "PASS",
+          "solver_status": "NOT_RUN",
+          "failure_reason": "",
+          "modes_requested_final": 0,
+          "escalation_count": 0,
+          "batch_schedule": [],
+          "lambda": [
+            4216.0279106186426,
+            4337.1094017573687,
+            12323.27086839957,
+            25288.89252638855,
+            92076.5066503765,
+            171443.74405807583
+          ],
+          "omega": [
+            64.9309472487399,
+            65.856733913529055,
+            111.01022866564851,
+            159.02481732858098,
+            303.441109031681,
+            414.05765789087371
+          ],
+          "eigenpair_residual": [
+            2.5529423564208282E-10,
+            2.3204261703751997E-10,
+            1.0365014233998376E-10,
+            5.3789291745447284E-11,
+            2.5647300457381512E-11,
+            1.787987842800783E-11
+          ],
+          "eigenpair_valid": [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ],
+          "diagnostic_finite": [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ],
+          "voidKE": [
+            7.4811518899053039E-14,
+            2.6171163179087117E-14,
+            8.3735063952741335E-14,
+            4.212558018078379E-14,
+            7.1496244955796588E-14,
+            8.4641949747609641E-14
+          ],
+          "voidSE": [
+            2.8445748290334065E-7,
+            4.1647658183516833E-5,
+            2.2141694883851512E-6,
+            6.2084697080037513E-6,
+            4.3314302522058044E-7,
+            4.4807954458340486E-7
+          ],
+          "densityParticipation": [
+            0.99999999999992628,
+            0.99999999999997458,
+            0.99999999999991629,
+            0.99999999999995937,
+            0.99999999999992917,
+            0.99999999999991462
+          ],
+          "IPR": [
+            0.00095671388312292363,
+            0.00095908946039841361,
+            0.00076881004506621246,
+            0.00088531684998827,
+            0.00075725115777670827,
+            0.00070298133462156883
+          ],
+          "kinetic_energy_total": [
+            1,
+            1.0000000000000022,
+            1.0000000000000022,
+            1.0000000000000004,
+            1.0000000000000009,
+            1.0000000000000016
+          ],
+          "strain_energy_total": [
+            4216.0279110322635,
+            4337.1094021735225,
+            12323.270868918311,
+            25288.8925269267,
+            92076.506650861891,
+            171443.74405855895
+          ],
+          "condition_margins": [
+            [
+              0.49999999999992517,
+              0.4999997155425171,
+              0.49999999999992628
+            ],
+            [
+              0.49999999999997385,
+              0.49995835234181646,
+              0.49999999999997458
+            ],
+            [
+              0.49999999999991629,
+              0.49999778583051163,
+              0.49999999999991629
+            ],
+            [
+              0.49999999999995787,
+              0.499993791530292,
+              0.49999999999995937
+            ],
+            [
+              0.4999999999999285,
+              0.49999956685697478,
+              0.49999999999992917
+            ],
+            [
+              0.49999999999991535,
+              0.49999955192045542,
+              0.49999999999991462
+            ]
+          ],
+          "minimum_margin": [
+            0.4999997155425171,
+            0.49995835234181646,
+            0.49999778583051163,
+            0.499993791530292,
+            0.49999956685697478,
+            0.49999955192045542
+          ],
+          "valid_structural": [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ],
+          "selected_ordinal": null,
+          "selected_lambda": null,
+          "selected_omega": null,
+          "selected_voidKE": null,
+          "selected_voidSE": null,
+          "selected_densityParticipation": null,
+          "selected_IPR": null,
+          "selected_condition_margins": [
+            null,
+            null,
+            null
+          ],
+          "selected_minimum_margin": null,
+          "matrix_free_dofs": null,
+          "technical_mode_limit": null,
+          "role": "ENDPOINT_MANUFACTURABILITY_TOPOLOGY_DIAGNOSTIC_EXCLUDED_FROM_Q"
+        },
+        "omega_binary_E3": [
+          64.9309472487399,
+          65.856733913529055,
+          111.01022866564851,
+          159.02481732858098,
+          303.441109031681,
+          414.05765789087371
+        ],
+        "status": "PASS"
+      },
+      "implementation": "analysis/OlhoffCurrent",
+      "implementation_provenance": {
+        "manifest_schema": "olhoff_current_provenance/2",
+        "implementation": "analysis/OlhoffCurrent",
+        "role": "PRODUCTION - the only Olhoff implementation production scripts may execute",
+        "promotion_date": "2026-09-13",
+        "source": {
+          "repository": "/Users/piotrek/Programming/Matlab/Olhoff",
+          "role": "DEVELOPMENT / RESEARCH UPSTREAM",
+          "branch": "migration/upstream-olhoffcurrent-capabilities",
+          "commit": "253069262407885a8b759a9e721c4f0a7d3a397d",
+          "tree": "4571029f39b62181499ab3d4ffb6da89f1d30021",
+          "commit_date": "2026-09-13T19:00:09+02:00",
+          "commit_subject": "Promote optional stage-exhaustion controller and outer timing",
+          "parent_successful_science_commit": "6b0870850d7407a0f2fc31dbf0d0f318c2e5f2f7",
+          "parent_successful_science_branch": "repro/natural-convergence",
+          "parent_subject": "Nine resolution test - ultimate results",
+          "promotion_route": "byte copy from `git archive 253069...` (committed object), never from the upstream working tree",
+          "archive_sha256": "f911240340cab69b9806f98f9413d9038649fde5e14adf3bbe4d57f3ddb0dbeb",
+          "dirty_state": "The upstream working tree (checked out: repro/natural-convergence @ 6b08708) carried one uncommitted modification, repro/PLAN_OLHOFFCURRENT_UPDATE.md (the uncommitted section 7). It was not read by the promotion; only committed blobs of 253069 were copied.",
+          "acceptance_evidence": [
+            "upstream Olhoff@253069262407885a8b759a9e721c4f0a7d3a397d:repro/audits/upstream_olhoffcurrent_capabilities (CLEAN_BASE_FROM_6B087085_PASS, SOURCE_DEFAULT_NONINTERFERENCE_PASS, STAGE_EXHAUSTION_CAPABILITY_PASS, TOUTER_TELEMETRY_PASS, SWEEP_EVIDENCE_UNCHANGED_PASS, UPSTREAM_CAPABILITY_PROMOTION_READY)",
+            "upstream Olhoff@6b0870850d7407a0f2fc31dbf0d0f318c2e5f2f7:repro/results/S160x20..S800x100 and SWEEP_R06.md (Pedersen/adaptive-box nine-mesh R = 0.06 sweep)",
+            "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration (this promotion: 160x20 gates; production decision in HARNESS_UPDATE.md; committed)",
+            "analysis/OlhoffCurrent/diagnostics/provenance_gate_hardening (finalization-gate provenance repair; committed)"
+          ],
+          "supplementary_local_evidence_not_required": {
+            "paths": [
+              "analysis/OlhoffCurrent/diagnostics/scientific_delta_olhoff_migration (OLHOFFCURRENT_MIGRATION_READY_WITH_NAMED_FORMULATION_SPLIT)",
+              "analysis/OlhoffCurrent/diagnostics/nine_mesh_campaign_audit (TERMINATION_CROSS_MESH_NOT_CREDIBLE)",
+              "analysis/OlhoffCurrent/diagnostics/three_rung_canary_preflight (historical three-rung canaries)"
+            ],
+            "status": "untracked in the primary checkout at 013cc48; absent from a clean clone",
+            "policy": "Analyses that informed decisions. No claim needed to reproduce or validate this promotion depends on them: identity, byte copy, 160x20 reproduction and the production decision are carried by the committed acceptance_evidence above. Recorded 2026-09-13 by diagnostics/provenance_gate_hardening; no scientific statement changed."
+          }
+        },
+        "main_repository": {
+          "path": "/Users/piotrek/Programming/topOpt4freqMax",
+          "branch": "migration/olhoffcurrent-upstream-253069 (worktree /Users/piotrek/Programming/topOpt4freqMax-migration-253069)",
+          "commit_before_promotion": "013cc48451d33bed61c5c4eea174bbd898d548a2",
+          "source_branch_of_that_commit": "benchmark-methodology-r2",
+          "state_before_promotion": "no tracked changes; eight untracked diagnostic directories under analysis/OlhoffCurrent/diagnostics in the primary checkout, left untouched (the migration ran in a dedicated worktree)"
+        },
+        "promoted_content": {
+          "layout": "analysis/OlhoffCurrent/+impl/{algo,fem,filter,mma,mma_published,architecture/{+olh,olhoffSolve.m,legacy,docs}}",
+          "n_files": 79,
+          "verbatim": "All 79 promoted files are byte-identical to upstream 253069262407885a8b759a9e721c4f0a7d3a397d. There are NO target-local adaptations.",
+          "promoted_by_this_event": "16 replaced + 4 added (the other 59 were already byte-identical); see diagnostics/upstream_253069_migration/PROMOTION_MAP.md",
+          "excluded_from_promotion": [
+            "audit_*/",
+            "results/",
+            "runs/",
+            "docs/ (repo-root)",
+            "NOTES.md",
+            "CLAUDE.md",
+            "EVIDENCE_MANIFEST.sha256",
+            "architecture/anchors/",
+            "architecture/tests/",
+            "top88.m (repo-root duplicate of filter/top88_reference.m)",
+            "setpaths.m (replaced by olhoffcurrent_paths.m)",
+            "architecture/README.md (excluded as at 695f03b)",
+            "repro/ (upstream sweep evidence and audits)"
+          ],
+          "exclusion_rationale": "Those are upstream evidence, upstream regression harness and upstream path setup. They remain upstream; production carries only the executable implementation plus its own repository-local gate."
+        },
+        "adaptations": [],
+        "adaptations_note": "hist.tOuter (the former single documented adaptation) and the stage-exhaustion controller (the former undocumented six-file local divergence plus exhaustion.m) are now supplied by upstream 253069 itself.",
+        "presets": {
+          "registry": "analysis/OlhoffCurrent/olhoffcurrent_presets.m",
+          "selection_rule": "Every configuration resolution names its preset explicitly; there is no unnamed default. Compatibility aliases resolve only to the formulation they always named; historical audit codes are provenance aliases and are refused as names.",
+          "canonical": [
+            {
+              "name": "duOlhoffSimpEq4bBetaStallLadderSensitivityFiltered",
+              "upstream_preset": "duOlhoffFrozenM4",
+              "role": "HISTORICAL_FORMULATION",
+              "compatibility_aliases": [
+                "duOlhoffFixedPenaltySensitivityFiltered"
+              ],
+              "historical_aliases": [
+                "M4",
+                "TMA",
+                "B0",
+                "REG160",
+                "duOlhoffFrozenM4",
+                "A1_frozen160"
+              ]
+            },
+            {
+              "name": "duOlhoffSimpEq4bThreeRungStageExhaustionSensitivityFiltered",
+              "upstream_preset": "duOlhoffFrozenM4 + move.levels [0.04 0.02 0.01], move.continuation.signal stageExhaustion, stop.rule stageExhaustion; cap 1600",
+              "role": "HISTORICAL_DIAGNOSTIC (not production-eligible)",
+              "compatibility_aliases": [],
+              "historical_aliases": [
+                "TR3_C",
+                "TR3_C_320x40",
+                "CAN3_480x60",
+                "CAN3_800x100",
+                "EX3_160"
+              ]
+            },
+            {
+              "name": "duOlhoffPedersenAdaptiveBoxSensitivityFiltered",
+              "upstream_preset": "duOlhoffAdaptivePedersen",
+              "role": "DISTINCT_FORMULATION (production since 2026-09-13)",
+              "compatibility_aliases": [],
+              "historical_aliases": [
+                "duOlhoffAdaptivePedersen",
+                "S160x20",
+                "S240x30",
+                "S320x40",
+                "S400x50",
+                "S480x60",
+                "S560x70",
+                "S640x80",
+                "S720x90",
+                "S800x100"
+              ]
+            }
+          ]
+        },
+        "production_preset_events": [
+          {
+            "event": 1,
+            "date": "2026-09-07",
+            "kind": "INITIAL_PROMOTION (reconstructed from the provenance/1 record, preserved verbatim under history[0])",
+            "old_preset": [],
+            "new_preset": "duOlhoffSimpEq4bBetaStallLadderSensitivityFiltered",
+            "name_at_the_time": "duOlhoffFixedPenaltySensitivityFiltered",
+            "upstream_preset": "duOlhoffFrozenM4",
+            "upstream_commit": "695f03bdac20c423a4e1d389cf9db9187597bcc3",
+            "config_hash_schema": "81-row schema (pre-migration); 80 rows at 695f03b plus stop.rule from commit 1438aa3",
+            "config_hashes": {
+              "x160x20": "28756d22aacb59726be9f37583deca89fcfcecc93f9b867d46a49223ed1db697",
+              "x240x30": "0856b13d02e3f1065c0ab145213bb57afb1b98570e64c9b023851f696141196c",
+              "x320x40": "2a5b500991ff5931eef4919e768503d41fd558fe56ffbffe40c382c74d676cad",
+              "x400x50": "cec3cd6b89ad67bc5386093a0caaf1b05dc172ddb75f488c52088c69d55d0c20",
+              "x480x60": "a49417d0571d3c2406d030cbab1fda58a1dad8d334991c5aaf22fa17f1d7f601",
+              "x560x70": "3478f34841ce743457aac7d4ba1755f2989453a9f0d79ccfc4f961f89fb7fd64",
+              "x640x80": "e5d868133d52a510797e6847b9f113ab3d5424849f8473f23c7827485bff300b",
+              "x720x90": "7efe1ee908be54cefd2b9e63f911e337809b92870056c7b1854b46bd41a91078",
+              "x800x100": "9321858983a3d7d33ca1a7b5bed9136fb7967e637b7ac5b40dadfad5ffdd4132"
+            },
+            "note": "Hashes as recorded by the 2026-09-11 campaign (examples/Performance/conference_benchmark/campaign_9mesh_r2). They remain valid identifiers of that historical evidence."
+          },
+          {
+            "event": 2,
+            "date": "2026-09-13",
+            "kind": "PRODUCTION_PRESET_CHANGE with upstream promotion",
+            "old_preset": "duOlhoffSimpEq4bBetaStallLadderSensitivityFiltered",
+            "old_preset_status": "retained unchanged and resolvable by its canonical name and by its compatibility alias duOlhoffFixedPenaltySensitivityFiltered",
+            "new_preset": "duOlhoffPedersenAdaptiveBoxSensitivityFiltered",
+            "upstream_preset": "duOlhoffAdaptivePedersen",
+            "upstream_commit": "253069262407885a8b759a9e721c4f0a7d3a397d",
+            "upstream_parent_successful_science_commit": "6b0870850d7407a0f2fc31dbf0d0f318c2e5f2f7",
+            "config_hash_schema": "87-row schema (upstream 253069)",
+            "config_hashes": {
+              "x160x20": "b1a5744df798ad624fcd0b8b4306888eb99816ee5ce60f51040e39e03e90d4f4",
+              "x240x30": "2fac1384239527b1a0108e1d34725021cdc7c5a26f1939b602239415b34847e1",
+              "x320x40": "a1203d43efb240308cfcb520c92a6d9bc37a0c703c728fc2f3d298f779bc5f6e",
+              "x400x50": "e40c6ba16c9addbb587d08ecab29669f7db560d09b980ca62c2096856b849280",
+              "x480x60": "8e55d18251152ec2d26836593489c14f4842390d912d7c66f43f3b18730c83de",
+              "x560x70": "8b2533a3caf8432d40a54dbcbd8958900e333c410527d5547c53699b9e373ccf",
+              "x640x80": "cbe8dcf070d3e318a889867b5168fdbb09f1b6babfd46f981447d96e9a073aaf",
+              "x720x90": "2893ad47136fc9a7775f1f4d9ff1dcba38e7fe14271dd12b5727ff4bd8bb54f3",
+              "x800x100": "f9138743067afd0edce255ad26a6d7ae5c0f632a537516a4793eafecbacbe4cd"
+            },
+            "old_preset_config_hashes_under_new_schema": {
+              "x160x20": "c0fe56ce897ce32ec8efc90ca1fb6bdd9c8326ee56700f5ce33adfb26bded17d",
+              "x240x30": "6578c7846a6851ea8eb60a47abb59b4482432f324e3ee908092cabcae0dcf7ee",
+              "x320x40": "7bc5b94f4a0b2aca4f66bbec9cc3664c5181cdaddca6b556eff0b506f8f07b08",
+              "x400x50": "95d2400f000fbd145006524513147b4ace1d1c3f75c339d605a15caac155d84c",
+              "x480x60": "11bcb9a9e4df3fdb2f53a82e84df1070cf1a3ce6c97be817a63249ecdb262450",
+              "x560x70": "1a6c7b95f388afeb4789413f8ff4bd5cce347f210e2ef6c76b54285a7f891068",
+              "x640x80": "36079c2f075ec7f49a31eeaf1fc27ae329ff9b590d52378235b280f0a4b9a235",
+              "x720x90": "a338c98d5c2aa77c65d754bc03684d66b53ea5b2ccddce7b8ee56d4c9992a35c",
+              "x800x100": "a37164f0895a0a2abb65f44e12ce05c4517088af638a7ca5a7322a094f39416a"
+            },
+            "rationale": "Decision recorded in the committed diagnostics/upstream_253069_migration/HARNESS_UPDATE.md; the sweep it rests on is committed upstream (Olhoff@6b0870850d7407a0f2fc31dbf0d0f318c2e5f2f7 repro/results, SWEEP_R06.md). The Pedersen/adaptive-box formulation is a distinct, scientifically defensible reconstruction whose committed nine-mesh R = 0.06 sweep terminates cleanly without localized-mode spikes; its success is primarily formulation stability, not a better KKT point; the historical eq.(4b) formulation remains reproducible under its own name. The historical preset's cross-mesh termination was not credible (TERMINATION_CROSS_MESH_NOT_CREDIBLE). Not chosen for better-looking topology. Supporting local analyses scientific_delta_olhoff_migration and nine_mesh_campaign_audit are supplementary and uncommitted (source.supplementary_local_evidence_not_required).",
+            "authorization": "Migration gate only (160x20). A new nine-mesh campaign requires separate owner authorization.",
+            "evidence": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration"
+          }
+        ],
+        "config_hash_transition": {
+          "schema_rows_before": 81,
+          "schema_rows_after": 87,
+          "added_rows": [
+            "material.stiffness.linearBelow",
+            "optimizer.inner.asymptoteHistory",
+            "move.adaptive.grow",
+            "move.adaptive.shrink",
+            "stop.guards.settledWindow",
+            "stop.guards.boxInactiveFraction"
+          ],
+          "explanation": "olhoffcurrent_config_hash iterates schema rows, so every configuration hash changes when rows are added, although no historical scientific value changes. All 81 old leaves are equal for every recorded historical configuration, and the 81-row hash recomputed from the migrated configuration reproduces every recorded hash exactly.",
+          "record": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/CONFIG_HASH_TRANSITION.md"
+        },
+        "known_preexisting_defects": {
+          "id": "PCONT_MOVE_HISTORY_LOGGED_BEFORE_RESET",
+          "introduced_upstream_at": "6b0870850d7407a0f2fc31dbf0d0f318c2e5f2f7 (present in 253069)",
+          "affected_presets": [
+            "pContinuationDecoupled",
+            "pMassCompatible"
+          ],
+          "effect": "hist.move (and log text / transitions derived from it) records the pre-reset move level at p-continuation event iterations; rho, omega and every drho are unaffected",
+          "status": "documented, deliberately NOT repaired in this migration",
+          "record": "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/KNOWN_PREEXISTING_DEFECTS.md"
+        },
+        "relationships": {
+          "analysis_OlhoffM4Reconstruction": "FROZEN_EVIDENCE. The frozen conference reconstruction, imported from the same upstream tree on 2026-09-04. It is the realization analysis/OlhoffCurrent's production preset must and does reproduce. It is NOT a production dependency and is hard-blocked from the production MATLAB path.",
+          "x_Users_piotrek_Programming_Matlab_Olhoff": "DEVELOPMENT_UPSTREAM. Never an executable dependency of a production run. Blocked by absolute path in olhoffcurrent_forbidden_paths.",
+          "analysis_OlhoffExperiments": "EXPERIMENTAL. Not created by this task; already blocked pre-emptively so it cannot become a production dependency by accident.",
+          "otherOlhoffTrees": "HISTORICAL / AUDIT_ONLY. Classified in analysis/OLHOFF_IMPLEMENTATION_MAP.md and blocked by olhoffcurrent_forbidden_paths."
+        },
+        "alias_statement": "Historical audit IDs (M4, S2, R2, P1, PD1, PM1, T800, TMA, B0, REG160, TR3_C, CAN3_*, EX3_160, S160x20..S800x100) are provenance aliases, not canonical API terminology. The only compatibility alias is duOlhoffFixedPenaltySensitivityFiltered, which resolves exclusively to duOlhoffSimpEq4bBetaStallLadderSensitivityFiltered.",
+        "equivalence_evidence": [
+          "analysis/OLHOFF_CURRENT_PROMOTION_REPORT.md (2026-09-07 promotion)",
+          "analysis/OlhoffCurrent/diagnostics/upstream_253069_migration/REPORT.md (2026-09-13 promotion)"
+        ],
+        "lineage": [
+          {
+            "date": "2026-09-07",
+            "event": "promotion from upstream 695f03b, 74 files, one adaptation (hist.tOuter)"
+          },
+          {
+            "date": "2026-09-09",
+            "event": "target commit 1438aa3 added the stage-exhaustion controller locally: +impl became 75 files differing from 695f03b in seven (six edited + exhaustion.m); PROVENANCE.md was not updated"
+          },
+          {
+            "date": "2026-09-13",
+            "event": "upstream 253069 absorbed both local capabilities as default-off options on top of 6b08708; this promotion byte-copies it: 79 files, zero adaptations"
+          }
+        ],
+        "history": {
+          "manifest_schema": "olhoff_current_provenance/1",
+          "implementation": "analysis/OlhoffCurrent",
+          "role": "PRODUCTION - the only Olhoff implementation production scripts may execute",
+          "promotion_date": "2026-09-07",
+          "source": {
+            "repository": "/Users/piotrek/Programming/Matlab/Olhoff",
+            "role": "DEVELOPMENT / RESEARCH UPSTREAM",
+            "branch": "architecture/canonical-config",
+            "commit": "695f03bdac20c423a4e1d389cf9db9187597bcc3",
+            "commit_date": "2026-09-06T23:24:25+02:00",
+            "commit_subject": "Phase 24: final report -- 12/12 anchors bitwise, verdict VERIFIED",
+            "dirty_state": "clean (git status --porcelain empty at promotion time)",
+            "acceptance_evidence": "architecture/docs/OLHOFF_ARCHITECTURE_REFACTOR_REPORT.md, verdict OLHOFF_ARCHITECTURE_REFACTOR_VERIFIED"
+          },
+          "main_repository": {
+            "path": "/Users/piotrek/Programming/topOpt4freqMax",
+            "branch": "benchmark-methodology-r2",
+            "commit_before_promotion": "9cd1c8eed109e1c1b02c67fc6d9bb81f87179d6a",
+            "state_before_promotion": "clean except four untracked historical Olhoff directories"
+          },
+          "production_preset": {
+            "name": "duOlhoffFixedPenaltySensitivityFiltered",
+            "delegates_to_upstream_preset": "duOlhoffFrozenM4",
+            "historical_aliases": [
+              "M4",
+              "TMA",
+              "B0",
+              "REG160",
+              "duOlhoffFrozenM4"
+            ],
+            "alias_policy": "Historical audit IDs are PROVENANCE ALIASES and experiment identifiers only. They are NOT canonical API terminology and no production script may use them."
+          },
+          "promoted_content": {
+            "layout": "analysis/OlhoffCurrent/+impl/{algo,fem,filter,mma,mma_published,architecture}",
+            "verbatim": "All promoted files are byte-identical to the upstream commit EXCEPT the single adaptation recorded below.",
+            "excluded_from_promotion": [
+              "audit_*/",
+              "results/",
+              "runs/",
+              "docs/ (repo-root)",
+              "NOTES.md",
+              "CLAUDE.md",
+              "EVIDENCE_MANIFEST.sha256",
+              "architecture/anchors/",
+              "architecture/tests/",
+              "top88.m (repo-root duplicate of filter/top88_reference.m)",
+              "setpaths.m (replaced by olhoffcurrent_paths.m)"
+            ],
+            "exclusion_rationale": "Those are upstream evidence, upstream regression harness and upstream path setup. They remain upstream; production carries only the executable implementation plus its own repository-local gate."
+          },
+          "adaptations": {
+            "file": "+impl/architecture/olhoffSolve.m",
+            "kind": "BENCHMARK TIMING INSTRUMENTATION",
+            "change": "Adds hist.tOuter: a tic at the top of the outer loop and a toc recorded after the convergence test and every guard.",
+            "why": "The conference benchmark's nested cost accounting (outer_time_excluding_inner_s) requires the wall time of a complete outer iteration. The frozen conference reconstruction carries exactly this instrumentation as analysis/OlhoffM4Reconstruction/patches/olhoffOpt.timing-instrumentation.diff; upstream olhoffSolve.m does not. Repointing production without it would silently break the benchmark's accounting.",
+            "trajectory_effect": "NONE. hist.tOuter is written and never read back by the solver. Proved empirically, not asserted: see the equivalence evidence below.",
+            "upstream_sha256": "9f80dd8ed504dc5cce5d8ab995cd4520e1e388ec6478f6446378cb8a464e2543",
+            "promoted_sha256": "5d4abd37c8b186a42d1a7ef5b7066c8bc2429d33ee91f20b0b844bace772324b"
+          },
+          "relationships": {
+            "analysis_OlhoffM4Reconstruction": "FROZEN_EVIDENCE. The frozen conference reconstruction, imported from the same upstream tree on 2026-09-04. It is the realization analysis/OlhoffCurrent's production preset must and does reproduce. It is NOT a production dependency and is hard-blocked from the production MATLAB path.",
+            "x_Users_piotrek_Programming_Matlab_Olhoff": "DEVELOPMENT_UPSTREAM. Never an executable dependency of a production run. Blocked by absolute path in olhoffcurrent_forbidden_paths.",
+            "analysis_OlhoffExperiments": "EXPERIMENTAL. Not created by this task; already blocked pre-emptively so it cannot become a production dependency by accident.",
+            "otherOlhoffTrees": "HISTORICAL / AUDIT_ONLY. Classified in analysis/OLHOFF_IMPLEMENTATION_MAP.md and blocked by olhoffcurrent_forbidden_paths."
+          },
+          "alias_statement": "Historical audit IDs (M4, S2, R2, P1, PD1, PM1, T800, TMA, B0, REG160) are provenance aliases, not canonical API terminology.",
+          "equivalence_evidence": "analysis/OLHOFF_CURRENT_PROMOTION_REPORT.md"
+        },
+        "live_source_tree_sha256": "4ba9a3ae10881344a0e60f2b8a8976c5ec9ceccf966bc2a3da4f37fb5aebffbf",
+        "live_source_n_files": 79,
+        "production_preset": "duOlhoffPedersenAdaptiveBoxSensitivityFiltered",
+        "production_preset_display_name": "Du-Olhoff reconstruction (Pedersen stiffness + linear mass, adaptive box)",
+        "production_preset_upstream_alias": "duOlhoffAdaptivePedersen",
+        "production_preset_historical_aliases": [
+          "duOlhoffAdaptivePedersen",
+          "S160x20",
+          "S240x30",
+          "S320x40",
+          "S400x50",
+          "S480x60",
+          "S560x70",
+          "S640x80",
+          "S720x90",
+          "S800x100"
+        ],
+        "production_preset_event_date": "2026-09-13",
+        "registered_presets": [
+          "duOlhoffSimpEq4bBetaStallLadderSensitivityFiltered",
+          "duOlhoffSimpEq4bThreeRungStageExhaustionSensitivityFiltered",
+          "duOlhoffPedersenAdaptiveBoxSensitivityFiltered"
+        ],
+        "main_repo_commit": "b21483b158f58e05e7b56957f2fbe8e1d2891395-dirty"
+      },
+      "is_warmup": false,
+      "label": "smoke_nine_mesh_pedersen_b21483b",
+      "mesh": [
+        160,
+        20
+      ],
+      "method": "Du-Olhoff reconstruction (Pedersen stiffness + linear mass, adaptive box)",
+      "method_key": "olhoff",
+      "method_label": "Du-Olhoff reconstruction (Pedersen stiffness + linear mass, adaptive box)",
+      "n_elements": 3200,
+      "ok": false,
+      "omega": [
+        109.02867982578638,
+        263.665579367008,
+        465.18530612386508
+      ],
+      "omega1_native": 109.02867982578638,
+      "overridden": true,
+      "production_preset": "duOlhoffPedersenAdaptiveBoxSensitivityFiltered",
+      "profile_id": "duOlhoffPedersenAdaptiveBoxSensitivityFiltered",
+      "resolved_implementation": [
+        {
+          "name": "applyFilter",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/filter/applyFilter.m"
+        },
+        {
+          "name": "assemble2D",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/fem/assemble2D.m"
+        },
+        {
+          "name": "classifyModes",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/fem/classifyModes.m"
+        },
+        {
+          "name": "compareHistory",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/algo/compareHistory.m"
+        },
+        {
+          "name": "compareHistoryTo",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/algo/compareHistoryTo.m"
+        },
+        {
+          "name": "compareTopology",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/algo/compareTopology.m"
+        },
+        {
+          "name": "defaultCfg",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/algo/defaultCfg.m"
+        },
+        {
+          "name": "deltaLambda",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/algo/deltaLambda.m"
+        },
+        {
+          "name": "eigSolve",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/fem/eigSolve.m"
+        },
+        {
+          "name": "elemMats2D",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/fem/elemMats2D.m"
+        },
+        {
+          "name": "genGrad",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/algo/genGrad.m"
+        },
+        {
+          "name": "imresizeNN",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/algo/imresizeNN.m"
+        },
+        {
+          "name": "innerLoop",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/algo/innerLoop.m"
+        },
+        {
+          "name": "innerLoopLP",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/algo/innerLoopLP.m"
+        },
+        {
+          "name": "innerLoopRho",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/algo/innerLoopRho.m"
+        },
+        {
+          "name": "massScale",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/fem/massScale.m"
+        },
+        {
+          "name": "mmasub",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/mma_published/mmasub.m"
+        },
+        {
+          "name": "model2D",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/fem/model2D.m"
+        },
+        {
+          "name": "moveControl",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/algo/moveControl.m"
+        },
+        {
+          "name": "multRule",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/algo/multRule.m"
+        },
+        {
+          "name": "olhoffOpt",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/algo/olhoffOpt.m"
+        },
+        {
+          "name": "olhoffSolve",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/architecture/olhoffSolve.m"
+        },
+        {
+          "name": "plotHistory",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/algo/plotHistory.m"
+        },
+        {
+          "name": "prepFilter",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/filter/prepFilter.m"
+        },
+        {
+          "name": "projChain",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/filter/projChain.m"
+        },
+        {
+          "name": "projDensityField",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/filter/projDensityField.m"
+        },
+        {
+          "name": "projectDensity",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/filter/projectDensity.m"
+        },
+        {
+          "name": "subsolv",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/mma_published/subsolv.m"
+        },
+        {
+          "name": "textStamp",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/algo/textStamp.m"
+        },
+        {
+          "name": "top88_reference",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/filter/top88_reference.m"
+        },
+        {
+          "name": "topologyImage",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/algo/topologyImage.m"
+        },
+        {
+          "name": "useMMA",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/algo/useMMA.m"
+        }
+      ],
+      "scientific_observation": false,
+      "solver_log": [],
+      "status": "CAP_HIT",
+      "status_note": "reached the 3-outer safety cap; this is NOT convergence | warm-up or overridden budget; NOT a benchmark observation",
+      "stopping": {
+        "outer_iterations": 3,
+        "max_outer": 3,
+        "converged": false,
+        "stop_rule": "designChange",
+        "move_policy": "adaptive",
+        "final_max_density_change": 0.099979425792853918,
+        "final_l2_density_change": 4.3447663008729993,
+        "final_rms_density_change": 0.076805342850452235,
+        "eps_l2": 0.05,
+        "eps_rms": 0.00088388347648318442,
+        "final_move_limit": 0.1,
+        "final_move_limit_meaning": "largest per-element move box of the last outer iteration (hist.move = max box)",
+        "final_move_mean": 0.0942249999999998,
+        "final_ladder_stage": 1,
+        "final_multiplicity": 2,
+        "final_inner_converged": 1,
+        "n_inner_not_converged": 0,
+        "volume": 0.49992271884421796,
+        "final_grayness": 0.81138547734377409,
+        "gap12_pct": 141.83139682908313
+      },
+      "times": {
+        "time1_name": "outer_time_excluding_inner_s",
+        "time1": 0.11071025000000012,
+        "time2_name": "inner_mma_time_total_s",
+        "time2": 1.472217875,
+        "outer_time_excluding_inner_s": 0.11071025000000012,
+        "inner_time_total_s": 1.472217875,
+        "inner_time_per_outer_mean_s": 0.49073929166666663,
+        "inner_time_per_inner_iteration_mean_s": 0.025383066810344825,
+        "inner_time_share_pct": 90.133252117931463,
+        "eigen_time_s": 0.097015249999999983,
+        "gradient_time_s": 0.0085847083333333331,
+        "outer_bookkeeping_time_s": 0.0051102916666669884,
+        "overhead_time_s": 0.050451166666666714,
+        "total_wall_time_s": 1.6333792916666667,
+        "outer_time_total_s": 1.582928125,
+        "outer_time_per_outer_mean_s": 0.52764270833333338,
+        "outer_time_per_outer_median_s": 0.34374675,
+        "outer_time_excluding_inner_per_outer_mean_s": 0.036903416666666709,
+        "eigen_time_per_outer_mean_s": 0.032338416666666661,
+        "gradient_time_per_outer_mean_s": 0.0028615694444444444,
+        "total_wall_time_per_outer_s": 0.544459763888889,
+        "solver_self_report_wall_s": 1.6328369166666667,
+        "independent_crosscheck_residual_s": 0.00054237499999998384
+      }
+    }
+  ]
+}

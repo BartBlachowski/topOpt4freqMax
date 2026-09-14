@@ -1,0 +1,13 @@
+{
+  "label": "C800x100_three_rung_fixedwork",
+  "when": "2026-09-12T14:37:44",
+  "loadavg": "{ 2.21 2.36 2.66 }",
+  "swap": "total = 0.00M  used = 0.00M  free = 0.00M  (encrypted)",
+  "vm_stat": "Mach Virtual Memory Statistics: (page size of 16384 bytes)\nPages free:                                  1441532.\nPages active:                                1227533.\nPages inactive:                               898427.\nPages speculative:                            331791.\nPages throttled:                                   0.",
+  "freeRAM_pages": "1441419.",
+  "matlabProcs": "2",
+  "topCPU": "%CPU COMM\n126.0 /Applications/MATLAB_R2025b.app/bin/maca64/../../Contents/MacOS/MATLAB_maca64\n 19.9 /private/var/folders/6b/jnh3zrqx6rb4k17mvvy0wb6m0000gn/T/AppTranslocation/BC714BD1-BAE0-4D8C-8072-E098BAB03FA7/d/Visual Studio Code.app/Contents/Frameworks/Code Helper (Renderer).app/Contents/MacOS/Code Helper (Renderer)\n 15.9 /System/Library/PrivateFrameworks/SkyLight.framework/Resources/WindowServer\n  5.7 /private/var/folders/6b/jnh3zrqx6rb4k17mvvy0wb6m0000gn/T/AppTranslocation/BC714BD1-BAE0-4D8C-8072-E098BAB03FA7/d/Visual Studio Code.app/Contents/Frameworks/Code Helper (Renderer).app/Contents/MacOS/Code Helper (Renderer)\n  5.1 /System/Volumes/Preboot/Cryptexes/App/System/Applications/Safari.app/Contents/MacOS/Safari\nps: stdout: Broken pipe",
+  "threads": 1,
+  "calib_dgemm_s": 0.011464666666666666,
+  "calib_spsolve_s": 0.0028021666666666668
+}

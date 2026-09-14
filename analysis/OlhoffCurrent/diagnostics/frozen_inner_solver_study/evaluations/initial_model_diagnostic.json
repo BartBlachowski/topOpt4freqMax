@@ -1,0 +1,25 @@
+{
+  "scope": "Retained first MMA call, coefficients reconstructed without solving",
+  "initial_objective": -1,
+  "initial_constraints": [
+    0,
+    -0.27642867034896335,
+    -4.9954984071052593,
+    -3.1802977370413526E-6
+  ],
+  "initial_feasible": true,
+  "candidate_true_objective": -0.99999036574355926,
+  "candidate_approx_objective": -0.99998978887183254,
+  "candidate_total_approx_objective": -0.99998928870157144,
+  "approx_objective_worsening": 1.0711298428556226E-5,
+  "true_objective_worsening": 9.63425644073812E-6,
+  "max_model_constraint_with_y": -9.2686830426625568E-8,
+  "max_true_minus_approx": -5.76871726720718E-7,
+  "auxiliary_y": [
+    1.0010010161510314E-10,
+    1.000000000361639E-10,
+    1.0000000000200168E-10,
+    1.0007015953293266E-10
+  ],
+  "auxiliary_z": 1.0000000000000005E-7
+}

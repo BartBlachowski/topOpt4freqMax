@@ -1,0 +1,46 @@
+{
+  "matlab": "25.2.0.2998904 (R2025b)",
+  "P1": {
+    "cfgHash_stored": "03097a28b0ad7fdb0d977985d3b5fd279dd74553c9dd5dfbd3cc035ac2a1782e",
+    "cfgHash_fresh": "03097a28b0ad7fdb0d977985d3b5fd279dd74553c9dd5dfbd3cc035ac2a1782e",
+    "treatment_cfg_isequal_control_cfg": true,
+    "pass": true
+  },
+  "P4": {
+    "wall_s": 4.651524666666667,
+    "accepted": true,
+    "termination": "",
+    "reason": "",
+    "bs": 1.0017921288433158,
+    "bsO": 1.001792128848223,
+    "abs_dbs": 4.9071857688431919E-12,
+    "gainRecovery": 0.999999997261812,
+    "d2": 0.010748656908989117,
+    "dinf": 0.74522969606122391,
+    "gap": 9.1037621885448061E-11,
+    "boxComp": 2.12341430782718E-6,
+    "candidate": "complementarySlackness",
+    "solver": "augmented",
+    "attempts": 1,
+    "exitflags": -7,
+    "tSolve": 2.3178393333333331,
+    "tCertificate": 0.90059966666666669,
+    "candidateGaps": [
+      0.00071435652144380413,
+      9.1037621885448061E-11,
+      6.5916161418044794E-12,
+      6.5916161418044794E-12
+    ],
+    "candidateNames": [
+      "solverDuals",
+      "complementarySlackness",
+      "dualboundGeneral",
+      "dualboundAligned"
+    ],
+    "beta": 26921.772248193382,
+    "nInterior": 28,
+    "nGrayFullMove": 8250,
+    "nGray": 8272,
+    "pass": false
+  }
+}

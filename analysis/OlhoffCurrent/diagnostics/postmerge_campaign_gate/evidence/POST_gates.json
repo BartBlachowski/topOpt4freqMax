@@ -1,0 +1,34 @@
+{
+  "repo": "/Users/piotrek/Programming/topOpt4freqMax",
+  "kind": "gates",
+  "when": "13-Sep-2026 22:27:50",
+  "matlab": "25.2.0.2998904 (R2025b)",
+  "head": "b21483b158f58e05e7b56957f2fbe8e1d2891395",
+  "suites": [
+    {
+      "name": "test_path_isolation",
+      "nFail": 0,
+      "error": ""
+    },
+    {
+      "name": "test_currentness",
+      "nFail": 0,
+      "error": ""
+    },
+    {
+      "name": "test_source_integrity",
+      "nFail": 0,
+      "error": ""
+    },
+    {
+      "name": "test_evidence_retention",
+      "nFail": 0,
+      "error": ""
+    },
+    {
+      "name": "test_finalization_gate",
+      "nFail": 2,
+      "error": ""
+    }
+  ]
+}

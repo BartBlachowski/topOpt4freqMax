@@ -1,0 +1,53 @@
+function K = fp_kkt(P, x, mu, xsi, eta, label)
+%FP_KKT  KKT conditions of the EXACT production problem at x with supplied
+%   multipliers: mu (m x 1, rows of evalProd), xsi (lower), eta (upper).
+%   Stationarity is normalized by the preregistered sRow0 = RMS(F11/lamref).
+NE = P.NE; nvar = P.nvar;
+[fval, dfdx, dlam, ~, ev] = P.evalProd(x); %#ok<ASGLU>
+gL = P.f + dfdx.'*mu(:) - xsi(:) + eta(:);
+sRow0 = sqrt(mean((P.F11/P.lamref).^2));
+sRowPt = sqrt(mean((dfdx(1,1:NE)).^2));
+xmin = P.xmin; xmax = P.xmax; width = xmax - xmin;
+K = struct('label',label);
+K.primal = struct('fval',fval.','max_fval',max(fval), ...
+    'box_violation_lower',max(max(xmin-x),0),'box_violation_upper',max(max(x-xmax),0));
+K.dual = struct('mu',mu(:).','min_mu',min(mu),'min_xsi',min(xsi),'min_eta',min(eta));
+K.complementarity = struct('mu_times_f',(mu(:).*fval).','max_abs_mu_f',max(abs(mu(:).*fval)), ...
+    'max_xsi_gap',max(xsi(:).*(x-xmin)),'max_eta_gap',max(eta(:).*(xmax-x)), ...
+    'max_box_comp_normalized',max([max(xsi(:).*(x-xmin)),max(eta(:).*(xmax-x))])/(sRow0*P.move));
+K.stationarity = struct('sRow0',sRow0,'sRow_point',sRowPt, ...
+    'raw_rms',sqrt(mean(gL(1:NE).^2)),'raw_max',max(abs(gL(1:NE))), ...
+    'norm_rms',sqrt(mean(gL(1:NE).^2))/sRow0,'norm_max',max(abs(gL(1:NE)))/sRow0, ...
+    'norm_rms_pointscale',sqrt(mean(gL(1:NE).^2))/sRowPt,'bs_residual',gL(nvar));
+K.eigs = struct('e1',ev(1),'e2',ev(2),'separation',ev(2)-ev(1));
+% active-set sweep (reporting only)
+tols = [1e-8 1e-7 1e-6 1e-5 1e-4 1e-3];
+sw = zeros(numel(tols),5);
+for t = 1:numel(tols)
+    tb = tols(t)*max(width(1:NE),eps);
+    atLo = x(1:NE) <= xmin(1:NE)+tb; atHi = x(1:NE) >= xmax(1:NE)-tb;
+    sw(t,:) = [tols(t), nnz(atLo & P.loMoveLimited), nnz(atLo & ~P.loMoveLimited), ...
+               nnz(atHi & P.hiMoveLimited), nnz(atHi & ~P.hiMoveLimited)];
+end
+K.active_sweep_cols = {'tol','n_at_minus_move','n_at_floor','n_at_plus_move','n_at_ceiling'};
+K.active_sweep = sw;
+tb = 1e-6*max(width(1:NE),eps);
+atLo = x(1:NE) <= xmin(1:NE)+tb; atHi = x(1:NE) >= xmax(1:NE)-tb;
+K.active = struct('n_minus_move',nnz(atLo & P.loMoveLimited),'n_floor',nnz(atLo & ~P.loMoveLimited), ...
+    'n_plus_move',nnz(atHi & P.hiMoveLimited),'n_ceiling',nnz(atHi & ~P.hiMoveLimited), ...
+    'n_interior',nnz(~atLo & ~atHi),'frac_move_bound',(nnz(atLo & P.loMoveLimited)+nnz(atHi & P.hiMoveLimited))/NE, ...
+    'frac_any_bound',(nnz(atLo)+nnz(atHi))/NE);
+K.masks = struct('atLo',atLo,'atHi',atHi);
+% verdict per preregistration sec. 5
+pass = K.primal.max_fval <= 1e-8 && max(K.primal.box_violation_lower,K.primal.box_violation_upper) <= 1e-10 && ...
+       min([K.dual.min_mu,K.dual.min_xsi,K.dual.min_eta]) >= -1e-10 && ...
+       K.complementarity.max_abs_mu_f <= 1e-6 && K.complementarity.max_box_comp_normalized <= 1e-6 && ...
+       K.stationarity.norm_rms <= 1e-6 && K.stationarity.norm_max <= 1e-5;
+fail = K.primal.max_fval >= 1e-5 || max(K.primal.box_violation_lower,K.primal.box_violation_upper) >= 1e-7 || ...
+       min([K.dual.min_mu,K.dual.min_xsi,K.dual.min_eta]) <= -1e-7 || ...
+       K.complementarity.max_abs_mu_f >= 1e-3 || K.complementarity.max_box_comp_normalized >= 1e-3 || ...
+       K.stationarity.norm_rms >= 1e-3;
+if pass, K.verdict = 'REFERENCE_PROBLEM25_KKT_PASS';
+elseif fail, K.verdict = 'REFERENCE_PROBLEM25_KKT_FAIL';
+else, K.verdict = 'REFERENCE_PROBLEM25_KKT_INCONCLUSIVE'; end
+end

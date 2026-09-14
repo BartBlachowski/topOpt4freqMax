@@ -1,0 +1,14 @@
+                               scope: 'Retained first MMA call, coefficients reconstructed without solving'
+                   initial_objective: -1
+                 initial_constraints: [0 -0.2764 -4.9955 -3.1803e-06]
+                    initial_feasible: 1
+            candidate_true_objective: -1.0000
+          candidate_approx_objective: -1.0000
+    candidate_total_approx_objective: -1.0000
+          approx_objective_worsening: 1.0711e-05
+            true_objective_worsening: 9.6343e-06
+         max_model_constraint_with_y: -9.2687e-08
+               max_true_minus_approx: -5.7687e-07
+                         auxiliary_y: [1.0010e-10 1.0000e-10 … ] (1×4 double)
+                         auxiliary_z: 1.0000e-07
+

@@ -1,0 +1,280 @@
+{
+  "standard": "bitwise (class+size+raw bytes for numeric/logical; recursive for struct/cell); excluded: tEig tGrad tInner tOuter wallclock provenance.resolvedAt",
+  "when": "13-Sep-2026 22:41:09",
+  "historical": {
+    "meta": {
+      "anchor": "historical",
+      "preset": "duOlhoffSimpEq4bBetaStallLadderSensitivityFiltered",
+      "mesh": [
+        160,
+        20
+      ],
+      "head": "b21483b158f58e05e7b56957f2fbe8e1d2891395",
+      "impl_dirty": "",
+      "treeHash": "4ba9a3ae10881344a0e60f2b8a8976c5ec9ceccf966bc2a3da4f37fb5aebffbf",
+      "config_hash": "c0fe56ce897ce32ec8efc90ca1fb6bdd9c8326ee56700f5ce33adfb26bded17d",
+      "solver": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/architecture/olhoffSolve.m",
+      "mmasub": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/mma_published/mmasub.m",
+      "matlab": "25.2.0.2998904 (R2025b)",
+      "threads": 1,
+      "started": "13-Sep-2026 22:34:59",
+      "wall_s": 124.14397758333334,
+      "finished": "13-Sep-2026 22:37:03"
+    },
+    "metrics": {
+      "status": "CONVERGED",
+      "nOuter": 91,
+      "innerTotal": 2241,
+      "innerMax": 51,
+      "omega1": 169.49522702153845,
+      "omega2": 171.95999591815919,
+      "gap12_pct": 1.4541818905068822,
+      "volume": 0.49999900877797954,
+      "Mnd_pct": 13.402499279526742,
+      "gray_fraction": 0.149375,
+      "mid_fraction": 0.025,
+      "rho_sha256_bytes": "22aa4447bc5f2855271f44f0661536f4ad6c86c5711cedcfe51ea6d97d0ff18b",
+      "final_move_max": 0.01,
+      "final_N": 2,
+      "log_tail": [
+        "iter 12: omega_J (J=3) is itself multiple -- (25b) undefined",
+        "iter 90: ||drho|| below eps but the move limit just changed (0.02 -> 0.01); convergence NOT asserted",
+        "converged at outer iteration 91 (||drho||_2 = 2.358e-02, max|drho| = 5.810e-03)"
+      ]
+    },
+    "vs_migration_post": {
+      "differing": [],
+      "onlyInCandidate": [],
+      "onlyInReference": [],
+      "cfgRowsDiffering": [],
+      "passDiffs": true,
+      "passStrict": true,
+      "droppedFieldsAllEmptyExTrace": true,
+      "cfgRowsDifferingOnlyAddedRows": true,
+      "passPrePost": true,
+      "passCommitted": true,
+      "cfg_struct_differing": []
+    },
+    "vs_premigration": {
+      "differing": [],
+      "onlyInCandidate": [
+        "res.aux (only in candidate)"
+      ],
+      "onlyInReference": [
+        "res.hist.exA (only in reference)",
+        "res.hist.exB (only in reference)",
+        "res.hist.exE (only in reference)",
+        "res.hist.exNA (only in reference)",
+        "res.hist.exNB (only in reference)",
+        "res.hist.exDecl (only in reference)",
+        "res.hist.exCos (only in reference)",
+        "res.hist.exNet (only in reference)",
+        "res.hist.exMedcos (only in reference)",
+        "res.hist.exMednet (only in reference)",
+        "res.hist.exAmp (only in reference)",
+        "res.hist.exStageStart (only in reference)"
+      ],
+      "cfgRowsDiffering": [
+        "material.stiffness.linearBelow",
+        "optimizer.inner.asymptoteHistory",
+        "move.adaptive.grow",
+        "move.adaptive.shrink",
+        "stop.guards.settledWindow",
+        "stop.guards.boxInactiveFraction"
+      ],
+      "passDiffs": true,
+      "passStrict": false,
+      "droppedFieldsAllEmptyExTrace": true,
+      "cfgRowsDifferingOnlyAddedRows": true,
+      "passPrePost": true,
+      "passCommitted": false
+    },
+    "vs_upstream_snapshot_run": {
+      "differing": [],
+      "onlyInCandidate": [],
+      "onlyInReference": [],
+      "cfgRowsDiffering": [],
+      "passDiffs": true,
+      "passStrict": true,
+      "droppedFieldsAllEmptyExTrace": true,
+      "cfgRowsDifferingOnlyAddedRows": true,
+      "passPrePost": true,
+      "passCommitted": true
+    },
+    "vs_frozen_campaign_record": {
+      "reference": "examples/Performance/conference_benchmark/campaign_9mesh_r2/benchmark_records.mat (olhoff, 160x20)",
+      "rho_bitwise": true,
+      "omega1_bitwise": true,
+      "volume_bitwise": true,
+      "outer": [
+        91,
+        91
+      ],
+      "inner": [
+        2241,
+        2241
+      ],
+      "status": [
+        "CONVERGED",
+        "NATIVE_CONVERGED"
+      ],
+      "effective_config_hash_recorded": "28756d22aacb59726be9f37583deca89fcfcecc93f9b867d46a49223ed1db697"
+    },
+    "config_hash": {
+      "new_87row_hash": "c0fe56ce897ce32ec8efc90ca1fb6bdd9c8326ee56700f5ce33adfb26bded17d",
+      "n_rows_now": 87,
+      "old_81row_hash_reconstructed": "28756d22aacb59726be9f37583deca89fcfcecc93f9b867d46a49223ed1db697",
+      "n_old_rows": 81,
+      "old_81row_hash_recorded_campaign": "28756d22aacb59726be9f37583deca89fcfcecc93f9b867d46a49223ed1db697",
+      "old_81row_hash_recorded_provenance_event1": "28756d22aacb59726be9f37583deca89fcfcecc93f9b867d46a49223ed1db697",
+      "old_values_identical_to_premigration": true
+    },
+    "frozen_values": {
+      "outer": 91,
+      "inner": 2241,
+      "omega1_15g": "169.495227021538"
+    },
+    "pass": {
+      "bitwise_vs_migration_post": true,
+      "vs_premigration": true,
+      "bitwise_vs_upstream_snapshot": true,
+      "campaign_record": true,
+      "old_81row_hash": true,
+      "frozen_values": true,
+      "single_thread_clean_impl": true
+    },
+    "PASS": true
+  },
+  "pedersen": {
+    "meta": {
+      "anchor": "pedersen",
+      "preset": "duOlhoffPedersenAdaptiveBoxSensitivityFiltered",
+      "mesh": [
+        160,
+        20
+      ],
+      "head": "b21483b158f58e05e7b56957f2fbe8e1d2891395",
+      "impl_dirty": "",
+      "treeHash": "4ba9a3ae10881344a0e60f2b8a8976c5ec9ceccf966bc2a3da4f37fb5aebffbf",
+      "config_hash": "b1a5744df798ad624fcd0b8b4306888eb99816ee5ce60f51040e39e03e90d4f4",
+      "solver": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/architecture/olhoffSolve.m",
+      "mmasub": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/mma_published/mmasub.m",
+      "matlab": "25.2.0.2998904 (R2025b)",
+      "threads": 1,
+      "started": "13-Sep-2026 22:37:12",
+      "wall_s": 229.039594375,
+      "finished": "13-Sep-2026 22:41:01"
+    },
+    "metrics": {
+      "status": "CONVERGED",
+      "nOuter": 121,
+      "innerTotal": 2369,
+      "innerMax": 38,
+      "omega1": 169.21057638627477,
+      "omega2": 170.3999757559335,
+      "gap12_pct": 0.70291077251788514,
+      "volume": 0.4999989839449725,
+      "Mnd_pct": 11.461565500445316,
+      "gray_fraction": 0.141875,
+      "mid_fraction": 0.016875,
+      "rho_sha256_bytes": "2a1c0d0afa18e76398671d9f2213cd07e3853ce990f8ba74fcc3ab3f28004719",
+      "final_move_max": 0.1,
+      "final_N": 2,
+      "log_tail": [
+        "iter 4: omega_J (J=3) is itself multiple -- (25b) undefined",
+        "converged at outer iteration 121 (||drho||_2 = 4.745e-02, max|drho| = 1.358e-02)"
+      ]
+    },
+    "committed_S160": {
+      "artifact": "Olhoff@253069 git archive: repro/results/S160x20/res.mat",
+      "sha256": "de7b15764509a1797d8713495f37481004cefb7b33f248d9b3981a4a3450daa0",
+      "sha256_at_6b08708": "de7b15764509a1797d8713495f37481004cefb7b33f248d9b3981a4a3450daa0"
+    },
+    "vs_committed_S160": {
+      "differing": [],
+      "onlyInCandidate": [],
+      "onlyInReference": [],
+      "cfgRowsDiffering": [
+        "stop.rule",
+        "runtime.verbose",
+        "runtime.name"
+      ],
+      "passDiffs": true,
+      "passStrict": false,
+      "droppedFieldsAllEmptyExTrace": true,
+      "cfgRowsDifferingOnlyAddedRows": false,
+      "passPrePost": false,
+      "passCommitted": true
+    },
+    "vs_migration_post": {
+      "differing": [],
+      "onlyInCandidate": [],
+      "onlyInReference": [],
+      "cfgRowsDiffering": [],
+      "passDiffs": true,
+      "passStrict": true,
+      "droppedFieldsAllEmptyExTrace": true,
+      "cfgRowsDifferingOnlyAddedRows": true,
+      "passPrePost": true,
+      "passCommitted": true,
+      "cfg_struct_differing": []
+    },
+    "vs_upstream_snapshot_run": {
+      "differing": [],
+      "onlyInCandidate": [],
+      "onlyInReference": [],
+      "cfgRowsDiffering": [],
+      "passDiffs": true,
+      "passStrict": true,
+      "droppedFieldsAllEmptyExTrace": true,
+      "cfgRowsDifferingOnlyAddedRows": true,
+      "passPrePost": true,
+      "passCommitted": true
+    },
+    "box": {
+      "move_max_first5": [
+        0.1,
+        0.1,
+        0.1,
+        0.1,
+        0.1
+      ],
+      "move_max_last": 0.1,
+      "moveMean_first5": [
+        0.099999999999999659,
+        0.099999999999999659,
+        0.0942249999999998,
+        0.08826375000000071,
+        0.085213375000000438
+      ],
+      "moveMean_last": 0.0084442061032017415,
+      "move_equals_committed": true,
+      "moveMean_equals_committed": true,
+      "Mnd_equals_committed": true,
+      "multiplicity_N_equals_committed": true,
+      "nInner_equals_committed": true
+    },
+    "stop": {
+      "rule": "designChange",
+      "status": "CONVERGED",
+      "status_committed": "CONVERGED",
+      "log_equals_committed": true
+    },
+    "frozen_values": {
+      "outer": 121,
+      "inner": 2369,
+      "omega1_15g": "169.210576386275"
+    },
+    "pass": {
+      "vs_committed_S160": true,
+      "bitwise_vs_migration_post": true,
+      "bitwise_vs_upstream_snapshot": true,
+      "committed_artifact_is_6b08708_blob": true,
+      "box_and_multiplicity": true,
+      "stop": true,
+      "frozen_values": true,
+      "single_thread_clean_impl": true
+    },
+    "PASS": true
+  }
+}

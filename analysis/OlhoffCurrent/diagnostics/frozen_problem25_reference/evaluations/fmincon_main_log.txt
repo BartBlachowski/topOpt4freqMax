@@ -1,0 +1,25 @@
+[fp_fmincon] gradient check max relerr per row = [7.03e-06 0.000135 1.44e-06 0.00385]  pass=0
+
+Local minimum found that satisfies the constraints.
+
+Optimization completed because the objective function is non-decreasing in 
+feasible directions, to within the value of the optimality tolerance,
+and constraints are satisfied to within the value of the constraint tolerance.
+
+[fp_fmincon] S0_zero    exact  ef=1 it=38 bs=1.0017918952 fo=8.98e-12 cv=0.00e+00 wall=23s minsep=7428.6 KKT=REFERENCE_PROBLEM25_KKT_INCONCLUSIVE statRMS=1.07e-10
+
+Local minimum found that satisfies the constraints.
+
+Optimization completed because the objective function is non-decreasing in 
+feasible directions, to within the value of the optimality tolerance,
+and constraints are satisfied to within the value of the constraint tolerance.
+
+[fp_fmincon] S0_zero    lbfgs  ef=1 it=662 bs=1.0017913912 fo=7.48e-11 cv=0.00e+00 wall=5634s minsep=7428.6 KKT=REFERENCE_PROBLEM25_KKT_INCONCLUSIVE statRMS=1.11e-11
+
+Local minimum possible. Constraints satisfied.
+
+fmincon stopped because the size of the current step is less than
+the value of the step size tolerance and constraints are 
+satisfied to within the value of the constraint tolerance.
+
+[fp_fmincon] S1_P19     exact  ef=2 it=39 bs=1.0017918919 fo=6.23e-10 cv=0.00e+00 wall=16s minsep=7430.9 KKT=REFERENCE_PROBLEM25_KKT_INCONCLUSIVE statRMS=5.70e-09

@@ -1,0 +1,151 @@
+{
+  "rho386": "0a498a7d6ab0565b29c15ff9364060d937d4df10aa661fc90d02c038ce6e4a60",
+  "rho385": "9b1443e508a6e4ecb5288d30167c7258d837be127aa3a9a42d8cc092240f3ded",
+  "drho386": "0b12cd7f9ae32decc6e95bf63e89fa7ca4530d13ec6dc7d815b618d46af8a9fd",
+  "cfg": "03097a28b0ad7fdb0d977985d3b5fd279dd74553c9dd5dfbd3cc035ac2a1782e",
+  "implTree": "edbfe47eb32109a2fb017f6f13d5327f2c240357caa96630064ffcf37ee152cb",
+  "state": {
+    "mesh": [
+      480,
+      60
+    ],
+    "outer": 386,
+    "stage": 3,
+    "move": 0.01,
+    "N": 2
+  },
+  "xRef_sha256": "1c54f430042cbd109bc6bd96b995aeb4e4349aae7377c1005fefacccab6be529",
+  "dual_bound": -1.0017921288573759,
+  "certified_gap": 9.1529006596147156E-12,
+  "dual_feasible": true,
+  "kkt": {
+    "label": "authenticated oracle",
+    "primal": {
+      "fval": [
+        1.5099033134902129E-14,
+        -0.27812985172765003,
+        -4.9495810623201617,
+        4.0421986745463479E-14
+      ],
+      "max_fval": 4.0421986745463479E-14,
+      "box_violation_lower": 0,
+      "box_violation_upper": 0
+    },
+    "dual": {
+      "mu": [
+        0.99999999999999989,
+        0,
+        4.1340636973123739E-17,
+        0.72911364472506091
+      ],
+      "min_mu": 0,
+      "min_xsi": 0,
+      "min_eta": 0
+    },
+    "complementarity": {
+      "mu_times_f": [
+        1.5099033134902126E-14,
+        -0,
+        -2.0461883386642596E-16,
+        2.9472222083012979E-14
+      ],
+      "max_abs_mu_f": 2.9472222083012979E-14,
+      "max_xsi_gap": 6.1334152117591511E-17,
+      "max_eta_gap": 3.1928010720927519E-12,
+      "max_box_comp_normalized": 4.9618948659317261E-7
+    },
+    "stationarity": {
+      "sRow0": 0.00064346407136000846,
+      "sRow_point": 0.00064346585690437858,
+      "raw_rms": 1.2486515465965056E-18,
+      "raw_max": 4.90059381963448E-17,
+      "norm_rms": 1.9405147888947226E-15,
+      "norm_max": 7.6159556341299931E-14,
+      "norm_rms_pointscale": 1.9405094041874857E-15,
+      "bs_residual": -4.1340636973123739E-17
+    },
+    "eigs": {
+      "e1": 48.160974020203184,
+      "e2": 7522.5144931294653,
+      "separation": 7474.3535191092624
+    },
+    "active_sweep_cols": [
+      "tol",
+      "n_at_minus_move",
+      "n_at_floor",
+      "n_at_plus_move",
+      "n_at_ceiling"
+    ],
+    "active_sweep": [
+      [
+        1E-8,
+        4710,
+        9398,
+        4570,
+        9684
+      ],
+      [
+        1E-7,
+        4888,
+        9404,
+        4772,
+        9686
+      ],
+      [
+        1E-6,
+        4906,
+        9404,
+        4788,
+        9686
+      ],
+      [
+        1E-5,
+        4908,
+        9404,
+        4796,
+        9686
+      ],
+      [
+        0.0001,
+        4910,
+        9404,
+        4796,
+        9686
+      ],
+      [
+        0.001,
+        4910,
+        9404,
+        4797,
+        9686
+      ]
+    ],
+    "active": {
+      "n_minus_move": 4906,
+      "n_floor": 9404,
+      "n_plus_move": 4788,
+      "n_ceiling": 9686,
+      "n_interior": 16,
+      "frac_move_bound": 0.33659722222222221,
+      "frac_any_bound": 0.99944444444444447
+    },
+    "verdict": "REFERENCE_PROBLEM25_KKT_PASS"
+  },
+  "beta": 26921.772248325255,
+  "bs": 1.001792128848223,
+  "constraints": [
+    1.5099033134902129E-14,
+    -0.27812985172765003,
+    -4.9495810623201617,
+    4.0421986745463479E-14
+  ],
+  "equivalence": {
+    "points": 24,
+    "max_value_error": 2.3092638912203256E-14,
+    "max_gradient_relerr": 2.2079777242667298E-16,
+    "max_redundancy_violation": 0
+  },
+  "zero_density_updates": 0,
+  "topology_runs": 0,
+  "verdict": "FROZEN_SOLVER_ORACLE_PASS"
+}

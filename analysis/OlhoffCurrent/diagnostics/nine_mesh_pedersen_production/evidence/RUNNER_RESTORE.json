@@ -1,0 +1,12 @@
+{
+ "schema": "nmp_runner_restore/1",
+ "when": "2026-09-14T05:35:24+0200",
+ "action": "git checkout -- examples/Performance/performance_comparison.m (only after the campaign process exited)",
+ "pre_restore_runner_sha256": "05d043c3005d6ffbf571889f88623bb49aa14e6b7dce1a4e836fbce4684c9950",
+ "pre_restore_diff_sha256": "57e20f0c4f3165d81f1bdf8a1424277e1dbf4aca813070995ac42df1bb14c5a8",
+ "pre_restore_diff_equals_locked_patch": true,
+ "post_restore_runner_sha256": "5ed7ddc3e474095a006ad0024ff83d2e3bea4ba724ec246b945887ec5e496f0f",
+ "committed_sha256": "5ed7ddc3e474095a006ad0024ff83d2e3bea4ba724ec246b945887ec5e496f0f",
+ "tracked_changes_after_restore": [],
+ "head": "b21483b158f58e05e7b56957f2fbe8e1d2891395"
+}

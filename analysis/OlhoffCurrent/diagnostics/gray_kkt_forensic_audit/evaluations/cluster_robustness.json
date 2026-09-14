@@ -1,0 +1,154 @@
+{
+  "400": {
+    "Fraw": {
+      "Q": [
+        [
+          1.026351000718844,
+          -1.6937785761142053e-05
+        ],
+        [
+          -1.6937785761142053e-05,
+          -0.02635100071884411
+        ]
+      ],
+      "threshold_t": -0.04173520485202257,
+      "mu_volume": -0.015063398195572234,
+      "Q_eigenvalues": [
+        -0.02635100099137003,
+        1.02635100099137
+      ],
+      "Q_PSD": false,
+      "volume_dual_nonnegative": false,
+      "complementarity_trace_QD_over_lambda1": -0.012270701130082152,
+      "complementarity_QD_Fro_over_lambda1": 0.01227070366496786,
+      "gray_RMS_lower_bound_over_raw_interior_RMS": 0.33930850674418095,
+      "note": "Unconstrained trace-one symmetric dual fit: lower bound, NOT an admissible exact KKT multiplier for separated eigenvalues."
+    },
+    "Ffiltered": {
+      "Q": [
+        [
+          1.001019752921637,
+          2.1507825628273037e-05
+        ],
+        [
+          2.1507825628273037e-05,
+          -0.0010197529216369183
+        ]
+      ],
+      "threshold_t": 1.8524113372060207,
+      "mu_volume": 0.6685868607393324,
+      "Q_eigenvalues": [
+        -0.0010197533832819537,
+        1.0010197533832819
+      ],
+      "Q_PSD": false,
+      "volume_dual_nonnegative": true,
+      "complementarity_trace_QD_over_lambda1": -0.00047486178841725594,
+      "complementarity_QD_Fro_over_lambda1": 0.00047496739525429275,
+      "gray_RMS_lower_bound_over_raw_interior_RMS": 0.021606315359960663,
+      "note": "Unconstrained trace-one symmetric dual fit: lower bound, NOT an admissible exact KKT multiplier for separated eigenvalues."
+    }
+  },
+  "480": {
+    "Fraw": {
+      "Q": [
+        [
+          1.0120346136764464,
+          0.0003810527370919008
+        ],
+        [
+          0.0003810527370919008,
+          -0.012034613676446426
+        ]
+      ],
+      "threshold_t": 0.6662562061632388,
+      "mu_volume": 0.3570055029659656,
+      "Q_eigenvalues": [
+        -0.012034755464876801,
+        1.0120347554648768
+      ],
+      "Q_PSD": false,
+      "volume_dual_nonnegative": true,
+      "complementarity_trace_QD_over_lambda1": -0.0033268886300834707,
+      "complementarity_QD_Fro_over_lambda1": 0.0033285558977254014,
+      "gray_RMS_lower_bound_over_raw_interior_RMS": 0.33057104789691777,
+      "note": "Unconstrained trace-one symmetric dual fit: lower bound, NOT an admissible exact KKT multiplier for separated eigenvalues."
+    },
+    "Ffiltered": {
+      "Q": [
+        [
+          1.000585847338644,
+          4.4310660257828724e-05
+        ],
+        [
+          4.4310660257828724e-05,
+          -0.0005858473386439744
+        ]
+      ],
+      "threshold_t": 1.3554444261570175,
+      "mu_volume": 0.7262988541438675,
+      "Q_eigenvalues": [
+        -0.0005858492997807296,
+        1.0005858492997808
+      ],
+      "Q_PSD": false,
+      "volume_dual_nonnegative": true,
+      "complementarity_trace_QD_over_lambda1": -0.00016195358673738608,
+      "complementarity_QD_Fro_over_lambda1": 0.00016241616828889245,
+      "gray_RMS_lower_bound_over_raw_interior_RMS": 0.048919721604754114,
+      "note": "Unconstrained trace-one symmetric dual fit: lower bound, NOT an admissible exact KKT multiplier for separated eigenvalues."
+    }
+  },
+  "800": {
+    "Fraw": {
+      "Q": [
+        [
+          0.5596209830930479,
+          0.4783629917264218
+        ],
+        [
+          0.4783629917264218,
+          0.44037901690695214
+        ]
+      ],
+      "threshold_t": 0.28198129124848736,
+      "mu_volume": 0.4300715394740576,
+      "Q_eigenvalues": [
+        0.017935882398996388,
+        0.9820641176010036
+      ],
+      "Q_PSD": true,
+      "volume_dual_nonnegative": true,
+      "complementarity_trace_QD_over_lambda1": 3.071770414321476e-05,
+      "complementarity_QD_Fro_over_lambda1": 4.535357867659644e-05,
+      "gray_RMS_lower_bound_over_raw_interior_RMS": 0.12676173116697823,
+      "note": "Unconstrained trace-one symmetric dual fit: lower bound, NOT an admissible exact KKT multiplier for separated eigenvalues.",
+      "raw_dual_weighted_gray_cancellation_median": 0.46906607056122884
+    },
+    "Ffiltered": {
+      "Q": [
+        [
+          0.5580427891640123,
+          0.4714149905519124
+        ],
+        [
+          0.4714149905519124,
+          0.4419572108359877
+        ]
+      ],
+      "threshold_t": 0.4648984532445353,
+      "mu_volume": 0.7090526914063773,
+      "Q_eigenvalues": [
+        0.025025202046468974,
+        0.974974797953531
+      ],
+      "Q_PSD": true,
+      "volume_dual_nonnegative": true,
+      "complementarity_trace_QD_over_lambda1": 3.0827787712893504e-05,
+      "complementarity_QD_Fro_over_lambda1": 4.507343745388927e-05,
+      "gray_RMS_lower_bound_over_raw_interior_RMS": 0.05044637529916742,
+      "note": "Unconstrained trace-one symmetric dual fit: lower bound, NOT an admissible exact KKT multiplier for separated eigenvalues.",
+      "raw_dual_weighted_gray_cancellation_median": 0.4639407699084007
+    }
+  }
+}

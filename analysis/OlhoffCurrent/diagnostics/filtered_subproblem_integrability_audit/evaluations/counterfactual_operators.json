@@ -1,0 +1,271 @@
+{
+  "rows": [
+    {
+      "pair": "D1a,D1b",
+      "op": "A_production",
+      "skew": -0.68905782330684662,
+      "rel": 1.631760830256147
+    },
+    {
+      "pair": "D1a,D1b",
+      "op": "B_plain_average",
+      "skew": -0.00043535063720027273,
+      "rel": 0.048019810098487554
+    },
+    {
+      "pair": "D1a,D1b",
+      "op": "Bsym_symmetrized",
+      "skew": -0.00021700592792101361,
+      "rel": 0.024066206576253687
+    },
+    {
+      "pair": "D1a,D1b",
+      "op": "Wt_density_chain",
+      "skew": 1.3387813636786539E-6,
+      "rel": 0.00014926173958768694
+    },
+    {
+      "pair": "D2a,D2b",
+      "op": "A_production",
+      "skew": -0.00082019474210843352,
+      "rel": 0.027951634138941018
+    },
+    {
+      "pair": "D2a,D2b",
+      "op": "B_plain_average",
+      "skew": -0.00033011520711907771,
+      "rel": 0.011442508043428225
+    },
+    {
+      "pair": "D2a,D2b",
+      "op": "Bsym_symmetrized",
+      "skew": -0.00033011520711907771,
+      "rel": 0.011442508043428225
+    },
+    {
+      "pair": "D2a,D2b",
+      "op": "Wt_density_chain",
+      "skew": -0.00033011520711907771,
+      "rel": 0.011442508043428225
+    },
+    {
+      "pair": "D1a,D2a",
+      "op": "A_production",
+      "skew": 3.5144146334750124,
+      "rel": 1.6017477835305116
+    },
+    {
+      "pair": "D1a,D2a",
+      "op": "B_plain_average",
+      "skew": 0.0039418548715934865,
+      "rel": 0.0029854740753477273
+    },
+    {
+      "pair": "D1a,D2a",
+      "op": "Bsym_symmetrized",
+      "skew": -8.3856660672454453E-5,
+      "rel": 6.3507154753682891E-5
+    },
+    {
+      "pair": "D1a,D2a",
+      "op": "Wt_density_chain",
+      "skew": -0.0041095681929375072,
+      "rel": 0.0031028388766902856
+    },
+    {
+      "pair": "D3,D2a",
+      "op": "A_production",
+      "skew": 0.5127905815189745,
+      "rel": 0.81543778583905846
+    },
+    {
+      "pair": "D3,D2a",
+      "op": "B_plain_average",
+      "skew": 0.00086750295262438826,
+      "rel": 0.0074430069816688749
+    },
+    {
+      "pair": "D3,D2a",
+      "op": "Bsym_symmetrized",
+      "skew": 0.0011279577127633472,
+      "rel": 0.009656080306162905
+    },
+    {
+      "pair": "D3,D2a",
+      "op": "Wt_density_chain",
+      "skew": 0.0013884124729023339,
+      "rel": 0.01185930674501938
+    },
+    {
+      "pair": "D4a,D4b",
+      "op": "A_production",
+      "skew": -0.39847010440050268,
+      "rel": 1.6790203563450659
+    },
+    {
+      "pair": "D4a,D4b",
+      "op": "B_plain_average",
+      "skew": 0.013528223011719652,
+      "rel": 0.34477472582997848
+    },
+    {
+      "pair": "D4a,D4b",
+      "op": "Bsym_symmetrized",
+      "skew": 0.019853292230057565,
+      "rel": 0.47534644375812829
+    },
+    {
+      "pair": "D4a,D4b",
+      "op": "Wt_density_chain",
+      "skew": 0.026178361448395426,
+      "rel": 0.59101340361744259
+    },
+    {
+      "pair": "D1a,D4a",
+      "op": "A_production",
+      "skew": -5.1318115264775415,
+      "rel": 0.7599187218196235
+    },
+    {
+      "pair": "D1a,D4a",
+      "op": "B_plain_average",
+      "skew": 0.0069588984718244179,
+      "rel": 0.066746127600843669
+    },
+    {
+      "pair": "D1a,D4a",
+      "op": "Bsym_symmetrized",
+      "skew": -0.0037431557350558337,
+      "rel": 0.038685164502530719
+    },
+    {
+      "pair": "D1a,D4a",
+      "op": "Wt_density_chain",
+      "skew": -0.01444520994193578,
+      "rel": 0.15012905709682248
+    },
+    {
+      "pair": "D2a,D4a",
+      "op": "A_production",
+      "skew": 0.31441938193602686,
+      "rel": 0.773247507828775
+    },
+    {
+      "pair": "D2a,D4a",
+      "op": "B_plain_average",
+      "skew": -0.0058974188075495426,
+      "rel": 0.065334559122038519
+    },
+    {
+      "pair": "D2a,D4a",
+      "op": "Bsym_symmetrized",
+      "skew": -0.0067077625222461967,
+      "rel": 0.074311952633458411
+    },
+    {
+      "pair": "D2a,D4a",
+      "op": "Wt_density_chain",
+      "skew": -0.0075181062369427953,
+      "rel": 0.08328934614487768
+    },
+    {
+      "pair": "D5D1a,D5D1b",
+      "op": "A_production",
+      "skew": -0.68905792182962289,
+      "rel": 1.6317610635694983
+    },
+    {
+      "pair": "D5D1a,D5D1b",
+      "op": "B_plain_average",
+      "skew": -0.00043535968029973643,
+      "rel": 0.048020807568209527
+    },
+    {
+      "pair": "D5D1a,D5D1b",
+      "op": "Bsym_symmetrized",
+      "skew": -0.00021701478179669831,
+      "rel": 0.024067188482576621
+    },
+    {
+      "pair": "D5D1a,D5D1b",
+      "op": "Wt_density_chain",
+      "skew": 1.3301167097988509E-6,
+      "rel": 0.00014829585408632177
+    },
+    {
+      "pair": "D5D2a,D5D4a",
+      "op": "A_production",
+      "skew": 0.62443631306514891,
+      "rel": 1.4872185463176717
+    },
+    {
+      "pair": "D5D2a,D5D4a",
+      "op": "B_plain_average",
+      "skew": 0.0057238089976993922,
+      "rel": 0.0690494545898905
+    },
+    {
+      "pair": "D5D2a,D5D4a",
+      "op": "Bsym_symmetrized",
+      "skew": 0.0050140431000729319,
+      "rel": 0.061043487742072342
+    },
+    {
+      "pair": "D5D2a,D5D4a",
+      "op": "Wt_density_chain",
+      "skew": 0.00430427720244661,
+      "rel": 0.0528888843896182
+    },
+    {
+      "pair": "D3,D4b",
+      "op": "A_production",
+      "skew": -13.26644549790336,
+      "rel": 0.96763049481805974
+    },
+    {
+      "pair": "D3,D4b",
+      "op": "B_plain_average",
+      "skew": -0.11802724391896284,
+      "rel": 0.85395554737582968
+    },
+    {
+      "pair": "D3,D4b",
+      "op": "Bsym_symmetrized",
+      "skew": -0.11589444830380102,
+      "rel": 0.84303954219002786
+    },
+    {
+      "pair": "D3,D4b",
+      "op": "Wt_density_chain",
+      "skew": -0.11376165268863971,
+      "rel": 0.8320053395368936
+    }
+  ],
+  "summary": [
+    {
+      "op": "A_production",
+      "median_rel": 1.2274245205678658,
+      "max_rel": 1.6790203563450659,
+      "operator_symmetric": false
+    },
+    {
+      "op": "B_plain_average",
+      "median_rel": 0.056677683345124019,
+      "max_rel": 0.85395554737582968,
+      "operator_symmetric": false
+    },
+    {
+      "op": "Bsym_symmetrized",
+      "median_rel": 0.03137617649255367,
+      "max_rel": 0.84303954219002786,
+      "operator_symmetric": true
+    },
+    {
+      "op": "Wt_density_chain",
+      "median_rel": 0.032374095567318795,
+      "max_rel": 0.8320053395368936,
+      "operator_symmetric": false
+    }
+  ],
+  "note": "Diagnostic only.  M*Hess is symmetric iff M*Hess = Hess*M'. Symmetrizing M does NOT make M*Hess symmetric unless M also commutes with Hess.  The density-filter chain rule W' is listed because F(rho)=f(W*rho) has gradient W'*grad f EVALUATED AT W*rho; the entry here uses grad f at rho, so it is NOT that consistent formulation and is shown only to isolate the operator effect."
+}

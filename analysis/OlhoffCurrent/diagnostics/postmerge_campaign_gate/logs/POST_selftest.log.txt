@@ -1,0 +1,87 @@
+  BC[1] closest_point: 1 nodes, 2 dofs fixed
+  BC[2] closest_point: 1 nodes, 2 dofs fixed
+  BC[1] closest_point: 1 nodes, 2 dofs fixed
+  BC[2] closest_point: 1 nodes, 2 dofs fixed
+Compliance objective with load-case aggregation
+mesh: 40 x 6
+domain: L x H = 8 x 1
+volfrac: 0.5, rmin(phys): 0.4, penal: 3
+Filter method: Sensitivity based
+element size: hx=0.2, hy=0.166667
+Optimizer: OC
+Load cases: 1
+  case[1] "proposed_mode1": factor=1, nLoads=1
+[Load cases] authoritative semi_harmonic baseline=solid, load_sensitivity=omitted
+[Load cases] semi_harmonic baseline cached up to mode 1.
+it.:    1 , obj(sum_i u_i^T K u_i): 38302.253 Vol.: 0.500, ch.: 0.200
+it.:    2 , obj(sum_i u_i^T K u_i): 33473.027 Vol.: 0.500, ch.: 0.200
+it.:    3 , obj(sum_i u_i^T K u_i): 21067.988 Vol.: 0.500, ch.: 0.180
+[Final Eigen] lambda1=1.078544e+04, omega1=1.038530e+02 rad/s, f1=1.652872e+01 Hz
+[Eigensolve] Computing topology domain modes (n=3)...
+[Eigensolve] Topology modes done: omega_1 = 103.8530 rad/s.
+  BC[1] closest_point: 1 nodes, 2 dofs fixed
+  BC[2] closest_point: 1 nodes, 2 dofs fixed
+
+Final design: omega1 = 127.4011 rad/s
+[Eigensolve] Computing topology domain modes (n=3)...
+[Eigensolve] Topology modes done: omega_1 = 102.2111 rad/s.
+
+---- CONFERENCE BENCHMARK MECHANICS SELF-TEST ----
+  [PASS] T1   a raising solver yields RUN_ERROR, not a crash
+              status=RUN_ERROR ok=0 note=run_topopt_from_json:UnsupportedOurFilter: Unsupported optimization.filter.type "no_such_filter" for ourApproach. | warm-up or overridden budget; NOT a benchmark observation
+  [FAIL] T2   dispatch gate refuses a shadowing non-production implementation
+              refused=0, guard then resolves correctly=1 | olhoffcurrent_paths must be called with an output argument the caller keeps alive:  guard = olhoffcurrent_paths();  Discarding the guard restores the path immediately and leaves the solver unreachable.
+  [PASS] T3   all three methods produce the same record field set
+              26 fields, struct array built=1. 
+  [PASS] T4   timing-accounting identity passes and TIMING_ACCOUNTING_FAIL fires
+              consistent: residual 0.000e+00, fail=0 | inconsistent: residual -4.000e-01, fail=1
+  [PASS] T5   no memory column in the exported tables
+  [PASS] T6   the production Olhoff configuration rejects an odd nely
+              The simply-supported idealization pins the supports at MID HEIGHT, which requires an even nely (got 21).
+  [PASS] T7   preflight refuses a mesh above 160x20 without acknowledgement
+              check present=1, refused=1, overall preflight pass=0
+  [PASS] T8   Stage-1 at cap + Stage-2 tolerance stop => CAP_HIT
+              n1=1000/1000 n2=966/5000 -> CAP_HIT (ok=0), want CAP_HIT
+  [PASS] T9   Stage-2 at cap => CAP_HIT
+              n1=300/5000 n2=5000/5000 -> CAP_HIT (ok=0), want CAP_HIT
+  [PASS] T10  both stages below cap + tolerance stop => NATIVE_CONVERGED
+              n1=300/5000 n2=400/5000 -> NATIVE_CONVERGED (ok=1), want NATIVE_CONVERGED
+  [PASS] T11  failed subproblem outranks a cap state => SOLVER_FAILURE
+              n1=5000/5000 n2=5000/5000 -> SOLVER_FAILURE (ok=0), want SOLVER_FAILURE
+  [PASS] T12  scaling fit excludes CAP_HIT and names the points used
+              n=4 meshes={160x20,360x20,640x20,1000x20} C=8.486e-06 p=1.5956
+  [PASS] T13  Olhoff preset assertions accept only their own formulation
+              own sets pass=1; Pedersen set on beta-stall cfg fails 5 check(s); beta-stall set on Pedersen cfg fails 4 check(s); stage-exhaustion diagnostic refused=1
+  [PASS] T14  per-outer-iteration cost fit uses the ok rows and only methods with outer counts
+              per-outer quantities=5 n=[4 4 4 4 4] p(total/outer)=1.0771; Yuksel per-outer fits=0
+  RESULT: FAIL   (scientific_evidence=false, performance_campaign=false)
+  written to /Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/diagnostics/postmerge_campaign_gate/evidence/POST_selftest_selftest_report.json
+  [1] T1 status=RUN_ERROR ok=0 note=run_topopt_from_json:UnsupportedOurFilter: Unsupported optimization.filter.type "no_such_filter" for ourApproach. | warm-up or overridden budget; NOT a benchmark observation
+  [0] T2 refused=0, guard then resolves correctly=1 | olhoffcurrent_paths must be called with an output argument the caller keeps alive:  guard = olhoffcurrent_paths();  Discarding the guard restores the path immediately and leaves the solver unreachable.
+  [1] T3 26 fields, struct array built=1. 
+  [1] T4 consistent: residual 0.000e+00, fail=0 | inconsistent: residual -4.000e-01, fail=1
+  [1] T5 
+  [1] T6 The simply-supported idealization pins the supports at MID HEIGHT, which requires an even nely (got 21).
+  [1] T7 check present=1, refused=1, overall preflight pass=0
+  [1] T8 n1=1000/1000 n2=966/5000 -> CAP_HIT (ok=0), want CAP_HIT
+  [1] T9 n1=300/5000 n2=5000/5000 -> CAP_HIT (ok=0), want CAP_HIT
+  [1] T10 n1=300/5000 n2=400/5000 -> NATIVE_CONVERGED (ok=1), want NATIVE_CONVERGED
+  [1] T11 n1=5000/5000 n2=5000/5000 -> SOLVER_FAILURE (ok=0), want SOLVER_FAILURE
+  [1] T12 n=4 meshes={160x20,360x20,640x20,1000x20} C=8.486e-06 p=1.5956
+  [1] T13 own sets pass=1; Pedersen set on beta-stall cfg fails 5 check(s); beta-stall set on Pedersen cfg fails 4 check(s); stage-exhaustion diagnostic refused=1
+  [1] T14 per-outer quantities=5 n=[4 4 4 4 4] p(total/outer)=1.0771; Yuksel per-outer fits=0
+SUITE confbench_selftest                            failures=1 
+
+ans = 
+
+  struct with fields:
+
+          repo: '/Users/piotrek/Programming/topOpt4freqMax'
+          kind: 'selftest'
+          when: '13-Sep-2026 22:36:45'
+        matlab: '25.2.0.2998904 (R2025b)'
+          head: 'b21483b158f58e05e7b56957f2fbe8e1d2891395'
+        suites: [1×1 struct]
+      selftest: [1×14 struct]
+    failed_ids: {'T2'}
+

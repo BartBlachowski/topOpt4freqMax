@@ -1,0 +1,17 @@
+{
+  "required_artifacts_present": true,
+  "master_rows": 9,
+  "figures_png": 12,
+  "figures_svg": 12,
+  "source_hash_matches": 21,
+  "effective_config_hash_matches": 9,
+  "impl_files_match": 75,
+  "historical_branch_replays_match": 4,
+  "candidate_csv_columns_match": 52,
+  "timing_reconciliation": true,
+  "local_links_resolve": true,
+  "no_changes_outside_audit": true,
+  "all_measured_inputs_unchanged": true,
+  "scientific_runs": 0,
+  "review_notes": "Atlas, refinement/scaling/decomposition/branch/residual figures inspected visually. Missing histories are left blank; current hashes do not authenticate an absent original campaign seal."
+}

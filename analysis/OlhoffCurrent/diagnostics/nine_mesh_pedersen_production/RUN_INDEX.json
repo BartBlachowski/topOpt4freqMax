@@ -1,0 +1,230 @@
+{
+ "schema": "nmp_run_index/1",
+ "campaign": "definitive Olhoff nine-mesh Pedersen production campaign",
+ "preset": "duOlhoffPedersenAdaptiveBoxSensitivityFiltered",
+ "head": "b21483b158f58e05e7b56957f2fbe8e1d2891395",
+ "impl_tree_sha256": "4ba9a3ae10881344a0e60f2b8a8976c5ec9ceccf966bc2a3da4f37fb5aebffbf",
+ "authoritative_runner": "examples/Performance/performance_comparison.m",
+ "launch_local": "2026-09-14T01:29:50+0200",
+ "end_local": "2026-09-14T05:34:54+0200",
+ "exit_code": 0,
+ "command": [
+  "/usr/bin/caffeinate",
+  "-i",
+  "-s",
+  "/Applications/MATLAB_R2025b.app/bin/matlab",
+  "-batch",
+  "addpath('/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/scripts'); addpath('/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent'); nmp_arm_hooks(); run('/Users/piotrek/Programming/topOpt4freqMax/examples/Performance/performance_comparison.m'); nmp_after_run();"
+ ],
+ "output_root": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b",
+ "attempts": 1,
+ "retries": [],
+ "repeated_runs": [],
+ "warmup": {
+  "run_dir": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/runs/warmup_48x6",
+  "note": "performance_comparison.m's own discarded 48x6, 5-outer warm-up; never an observation"
+ },
+ "runs": [
+  {
+   "order": 1,
+   "mesh": "160x20",
+   "run_dir": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/runs/160x20",
+   "status": "NATIVE_CONVERGED",
+   "precheck_when": "2026-09-14T01:30:03.022+02:00",
+   "precheck_pass": true,
+   "tap_when": "2026-09-14T01:33:47.044+02:00",
+   "postcheck_when": "2026-09-14T01:33:47.067+02:00",
+   "postcheck_pass": true,
+   "config_hash": "b1a5744df798ad624fcd0b8b4306888eb99816ee5ce60f51040e39e03e90d4f4",
+   "rho_sha256": "2a1c0d0afa18e76398671d9f2213cd07e3853ce990f8ba74fcc3ab3f28004719",
+   "files": {
+    "POSTCHECK.json": "a1e9639b0c09be5f93988f4909d7c5e4db19866188c1a763ed8c1264e0d291dc",
+    "PRECHECK.json": "733ccf32b734c26ca30a9d9552c00108a9ded4c959b9335ffe83171004775923",
+    "RUN_OUT.mat": "d89fd9323f1dd86261ce9ff95e057e944daba48a7d27ddd42264e23edbf3277e",
+    "SOLVER_RESULT.mat": "85fb42ee310f825ae898fd84c0963c26638549269a19398a4c2c9493b094ffa7",
+    "TAP.json": "bd14d07b79ad5ac3954a7b7a2a0872274e00d885c41bdeb3727d062b82ff4dea"
+   },
+   "topology_png": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/topologies/topology_olhoff_160x20.png"
+  },
+  {
+   "order": 2,
+   "mesh": "240x30",
+   "run_dir": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/runs/240x30",
+   "status": "NATIVE_CONVERGED",
+   "precheck_when": "2026-09-14T01:33:47.714+02:00",
+   "precheck_pass": true,
+   "tap_when": "2026-09-14T01:39:42.761+02:00",
+   "postcheck_when": "2026-09-14T01:39:42.782+02:00",
+   "postcheck_pass": true,
+   "config_hash": "2fac1384239527b1a0108e1d34725021cdc7c5a26f1939b602239415b34847e1",
+   "rho_sha256": "bc8fa77962f9e45a39c5ad6d88966148f78e49c5a52ebd86d5a392881bcd2307",
+   "files": {
+    "POSTCHECK.json": "4a6b1ed8665483d0894f85068bbc582ef41163d5280fb1aeb5c4fba2689f96cb",
+    "PRECHECK.json": "92cb59edd6fa0b75d588709f7f33e84ee33451d6dc60504a09260ff5d50da854",
+    "RUN_OUT.mat": "d9d76f4d351e25f2e9f0d3f55bd2e92d71c3fc128d73069d8866f419ba23fd8b",
+    "SOLVER_RESULT.mat": "51c33ae914e09744d3808536fe81068bd7c2caddd0840481a5a6dd10de465062",
+    "TAP.json": "c70e8f91d313bd9c92fe1de93bf998afba670632734b569f7d83f3a7b42bb2f2"
+   },
+   "topology_png": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/topologies/topology_olhoff_240x30.png"
+  },
+  {
+   "order": 3,
+   "mesh": "320x40",
+   "run_dir": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/runs/320x40",
+   "status": "NATIVE_CONVERGED",
+   "precheck_when": "2026-09-14T01:39:43.588+02:00",
+   "precheck_pass": true,
+   "tap_when": "2026-09-14T01:46:50.950+02:00",
+   "postcheck_when": "2026-09-14T01:46:50.973+02:00",
+   "postcheck_pass": true,
+   "config_hash": "a1203d43efb240308cfcb520c92a6d9bc37a0c703c728fc2f3d298f779bc5f6e",
+   "rho_sha256": "f246a9436ec9fd72ed546921d8e2ab43110ef924e0b2bd268524701a07a58a90",
+   "files": {
+    "POSTCHECK.json": "63f95b80bdc42807efbe7bc89c945c556d56e849a5abad9806123b653de09d3b",
+    "PRECHECK.json": "c4c135a7713ac419cc072e888dec6a315ace8b13c6cb4d26daf6bddc80fab437",
+    "RUN_OUT.mat": "463672959f0a702ab643ad71cbe3dad6e96bccc337eafb601f0e594b7ce758d7",
+    "SOLVER_RESULT.mat": "5c189fd647182cf7277e7877e0fb7000bba8b4b7da60102d00d1bb4d3a345964",
+    "TAP.json": "81e64df15bef3c02b39c6a714835788195bdae7e519f280106fc91b5d4518982"
+   },
+   "topology_png": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/topologies/topology_olhoff_320x40.png"
+  },
+  {
+   "order": 4,
+   "mesh": "400x50",
+   "run_dir": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/runs/400x50",
+   "status": "NATIVE_CONVERGED",
+   "precheck_when": "2026-09-14T01:46:52.178+02:00",
+   "precheck_pass": true,
+   "tap_when": "2026-09-14T01:56:22.384+02:00",
+   "postcheck_when": "2026-09-14T01:56:22.408+02:00",
+   "postcheck_pass": true,
+   "config_hash": "e40c6ba16c9addbb587d08ecab29669f7db560d09b980ca62c2096856b849280",
+   "rho_sha256": "34c618a3cd085e2693068a4511eb866d90ba783e01f58543307c0a269b975d16",
+   "files": {
+    "POSTCHECK.json": "9f99345a0efed5fef9718dfcb58a58e255e9d1f854860d0842ea7764ba77a305",
+    "PRECHECK.json": "d6fde53a72cb1296bc823dc3799a9095c07adc13298f0be203de6a583b2d5830",
+    "RUN_OUT.mat": "53e14dedc77d0626b136f041110c17f9f9f913277c9aa52c07861f727af581e3",
+    "SOLVER_RESULT.mat": "8684d144b0027e972e68a91d19dfd716aaac9248fd813543b5f8610638cbc53c",
+    "TAP.json": "f3127b6c8eb86f19eb67d1db837168cb1328b9c1968cea2d890a6b228cae5057"
+   },
+   "topology_png": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/topologies/topology_olhoff_400x50.png"
+  },
+  {
+   "order": 5,
+   "mesh": "480x60",
+   "run_dir": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/runs/480x60",
+   "status": "NATIVE_CONVERGED",
+   "precheck_when": "2026-09-14T01:56:23.998+02:00",
+   "precheck_pass": true,
+   "tap_when": "2026-09-14T02:12:45.464+02:00",
+   "postcheck_when": "2026-09-14T02:12:45.489+02:00",
+   "postcheck_pass": true,
+   "config_hash": "8e55d18251152ec2d26836593489c14f4842390d912d7c66f43f3b18730c83de",
+   "rho_sha256": "acf85ed42f2241b297ff938f9a7bf10f839e97a88397833cdf4a2b0a9f1e590f",
+   "files": {
+    "POSTCHECK.json": "302b5769e5d46dfddc424e05f8d8641d079ed02a5c20f8f660c04ea72c6266d2",
+    "PRECHECK.json": "375dd0560632e971c5fe79e4c2e039735e8017ea66fcf3b339fe482cbd78417b",
+    "RUN_OUT.mat": "1cc59e24585ed4be017ea727700322e0b900d6856c28a0e2bbe6616aa8f4ee81",
+    "SOLVER_RESULT.mat": "9342ee65f1042cbd93e37851cf4f51055f79cc6c7858964409a675d4ea94e962",
+    "TAP.json": "5af133bd6435431ef94570a165c2081e2ddba54e4b1d5d4992d570eaddd63bd5"
+   },
+   "topology_png": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/topologies/topology_olhoff_480x60.png"
+  },
+  {
+   "order": 6,
+   "mesh": "560x70",
+   "run_dir": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/runs/560x70",
+   "status": "NATIVE_CONVERGED",
+   "precheck_when": "2026-09-14T02:12:47.742+02:00",
+   "precheck_pass": true,
+   "tap_when": "2026-09-14T02:36:32.895+02:00",
+   "postcheck_when": "2026-09-14T02:36:32.923+02:00",
+   "postcheck_pass": true,
+   "config_hash": "8b2533a3caf8432d40a54dbcbd8958900e333c410527d5547c53699b9e373ccf",
+   "rho_sha256": "b69314dfdd7de5eabc98a5755955ac7302e75ccfa9a31e681de76055813dab2d",
+   "files": {
+    "POSTCHECK.json": "b0ea82d9c2473b23f7d7222f1554ff271f7b05178b0040f01de93ab02f6e4307",
+    "PRECHECK.json": "174ed11538068f32c781619b21881cfa6f37b21d22916f48c1cb8671561b76dd",
+    "RUN_OUT.mat": "4c846381da70dd09a8435768696bc50dd1ea6e9db930ec0383022e05bcae81c5",
+    "SOLVER_RESULT.mat": "363e72c727c11a4bbabe7459ad8aa0fbd22d8fb22163849ebd0501fa0b2f3e13",
+    "TAP.json": "f3fe45125d8cce87340dda04c68fbab554a6221c2ca5708335f11b1f7ed7079c"
+   },
+   "topology_png": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/topologies/topology_olhoff_560x70.png"
+  },
+  {
+   "order": 7,
+   "mesh": "640x80",
+   "run_dir": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/runs/640x80",
+   "status": "NATIVE_CONVERGED",
+   "precheck_when": "2026-09-14T02:36:35.838+02:00",
+   "precheck_pass": true,
+   "tap_when": "2026-09-14T03:13:31.765+02:00",
+   "postcheck_when": "2026-09-14T03:13:31.795+02:00",
+   "postcheck_pass": true,
+   "config_hash": "cbe8dcf070d3e318a889867b5168fdbb09f1b6babfd46f981447d96e9a073aaf",
+   "rho_sha256": "65eedc9596ef7c62d6423be8b27f228dea771b9a6ec618a9242694898cf22161",
+   "files": {
+    "POSTCHECK.json": "de8157689026d6623c4f2a98ccaa2e5d9bc74e5069d391859c7903e64d69d22c",
+    "PRECHECK.json": "c26989ed4740819d925c68089d2ec1001efec60b4edbf2f3b7638a03d3bc7a00",
+    "RUN_OUT.mat": "cfe7f3ca711eb62bc05a49f6b323b12991bc86e20bce735929c735c9aa81b710",
+    "SOLVER_RESULT.mat": "ed87ea8259ebaeecb47317e35e1082f2dc065bb97dbbae678886c76f68e8734a",
+    "TAP.json": "c6484cbd68143778488f7e5513d6e217c23ebcb705b3804b1dda5bdfc7a2244e"
+   },
+   "topology_png": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/topologies/topology_olhoff_640x80.png"
+  },
+  {
+   "order": 8,
+   "mesh": "720x90",
+   "run_dir": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/runs/720x90",
+   "status": "NATIVE_CONVERGED",
+   "precheck_when": "2026-09-14T03:13:35.518+02:00",
+   "precheck_pass": true,
+   "tap_when": "2026-09-14T04:12:33.145+02:00",
+   "postcheck_when": "2026-09-14T04:12:33.177+02:00",
+   "postcheck_pass": true,
+   "config_hash": "2893ad47136fc9a7775f1f4d9ff1dcba38e7fe14271dd12b5727ff4bd8bb54f3",
+   "rho_sha256": "857c95da6a3e9b419f9c822ad7af2277dcac9ec2693184ae2e64c8bed3480acc",
+   "files": {
+    "POSTCHECK.json": "e7fd25dd2bc3efcd7ee8c29a583148d1f186a8c27c2c29535827c4fd9445686c",
+    "PRECHECK.json": "a282ab6ff0975449671c72d4e4888c21216d9256132e854b50edb417115e919b",
+    "RUN_OUT.mat": "1f41124ab1ae446c66a61e3450f9782a8a46f2ddf826b07a54794485d8a3e2ae",
+    "SOLVER_RESULT.mat": "15b558e381c2271cded5cff143b1491ecd6a4b3b15f5eb21083cb82df1f40109",
+    "TAP.json": "3fe7dc5e4740f8d369da49e44d2255a4ed3151359e01861274281737a5fa8062"
+   },
+   "topology_png": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/topologies/topology_olhoff_720x90.png"
+  },
+  {
+   "order": 9,
+   "mesh": "800x100",
+   "run_dir": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/runs/800x100",
+   "status": "NATIVE_CONVERGED",
+   "precheck_when": "2026-09-14T04:12:39.689+02:00",
+   "precheck_pass": true,
+   "tap_when": "2026-09-14T05:34:20.805+02:00",
+   "postcheck_when": "2026-09-14T05:34:20.842+02:00",
+   "postcheck_pass": true,
+   "config_hash": "f9138743067afd0edce255ad26a6d7ae5c0f632a537516a4793eafecbacbe4cd",
+   "rho_sha256": "b89af0554b020c247cff5359718bb7ee11eb6e70113ed61e1baf8dc8e033febb",
+   "files": {
+    "POSTCHECK.json": "1e9a1aa54be33a3300d06d2b410bd54315c07efb2dbaed37699d70f3902bfe61",
+    "PRECHECK.json": "af13905d783f025951e0a3ad912ca0fc852140b756cfbc6b3044bed4ec4b6ce6",
+    "RUN_OUT.mat": "0588c5460b0f2d494634438e0693587eb8ad2821a60788e684aaabd265cbd5ae",
+    "SOLVER_RESULT.mat": "b8a763855ae4d95ff4f934c83cf89249a542d1e5eb34f9b2c4d7ac2252a6ff98",
+    "TAP.json": "74f1bf24eb6591efae3c96fca4172dbde56d6a5f9154f5e7a6107d370992694a"
+   },
+   "topology_png": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/topologies/topology_olhoff_800x100.png"
+  }
+ ],
+ "non_scientific_pre_campaign": {
+  "smoke_output_root": "examples/Performance/conference_benchmark/smoke_nine_mesh_pedersen_b21483b",
+  "smoke_logs": [
+   "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/logs/smoke_AFTER_RUN.json",
+   "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/logs/smoke_END.json",
+   "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/logs/smoke_HOOKS_ARMED.json",
+   "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/logs/smoke_LAUNCH.json",
+   "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/logs/smoke_performance_comparison_stdout.log"
+  ],
+  "synthetic_endpath": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/evidence/SYNTHETIC_ENDPATH.json",
+  "note": "mechanics only; excluded from every table, fit and verdict"
+ }
+}

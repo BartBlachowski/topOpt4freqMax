@@ -1,0 +1,106 @@
+{
+  "manifest_ok": true,
+  "manifest_tree": "edbfe47eb32109a2fb017f6f13d5327f2c240357caa96630064ffcf37ee152cb",
+  "manifest_recorded_tree": "edbfe47eb32109a2fb017f6f13d5327f2c240357caa96630064ffcf37ee152cb",
+  "manifest_nfiles": 75,
+  "manifest_mismatches": [],
+  "manifest_missing": [],
+  "manifest_extra": [],
+  "manifest_artifactsIgnored": [
+    ".DS_Store"
+  ],
+  "currentness_state": "UPSTREAM_AHEAD",
+  "currentness": {
+    "state": "UPSTREAM_AHEAD",
+    "detail": "upstream has 1 commit(s) after the promoted state on branch repro/natural-convergence. This is INFORMATIONAL: production currentness changes only when an upstream state is explicitly ACCEPTED and promoted. analysis/OlhoffCurrent remains valid production.",
+    "localOk": true,
+    "upstream": {
+      "repo": "/Users/piotrek/Programming/Matlab/Olhoff",
+      "reachable": true,
+      "branch": "repro/natural-convergence",
+      "head": "6b0870850d7407a0f2fc31dbf0d0f318c2e5f2f7",
+      "promoted": "695f03bdac20c423a4e1d389cf9db9187597bcc3",
+      "commitsAhead": 1,
+      "promotedIsAncestor": true,
+      "dirty": "M repro/PLAN_OLHOFFCURRENT_UPDATE.md"
+    }
+  },
+  "production_preset": "duOlhoffFixedPenaltySensitivityFiltered",
+  "production_upstream_preset": "duOlhoffFrozenM4",
+  "production_cfgHash_480": "a49417d0571d3c2406d030cbab1fda58a1dad8d334991c5aaf22fa17f1d7f601",
+  "production_levels": [
+    0.04,
+    0.02,
+    0.01,
+    0.005
+  ],
+  "production_signal": "boundVariable",
+  "production_stop_rule": "designChange",
+  "c480_cfgHash": "03097a28b0ad7fdb0d977985d3b5fd279dd74553c9dd5dfbd3cc035ac2a1782e",
+  "c480_cfgHash_recorded": "03097a28b0ad7fdb0d977985d3b5fd279dd74553c9dd5dfbd3cc035ac2a1782e",
+  "c480_cfgHash_match": true,
+  "prod_vs_c480_diff": [
+    {
+      "path": "move.levels",
+      "production": "[0.040000000000000001 0.02 0.01 0.0050000000000000001]",
+      "c480": "[0.040000000000000001 0.02 0.01]"
+    },
+    {
+      "path": "move.continuation.signal",
+      "production": "boundVariable",
+      "c480": "stageExhaustion"
+    },
+    {
+      "path": "stop.rule",
+      "production": "designChange",
+      "c480": "stageExhaustion"
+    },
+    {
+      "path": "runtime.maxOuter",
+      "production": "400",
+      "c480": "1600"
+    },
+    {
+      "path": "runtime.diagnostics",
+      "production": "false",
+      "c480": "true"
+    },
+    {
+      "path": "runtime.name",
+      "production": "OLHOFF_CURRENT_480x60",
+      "c480": "CAN3_480x60"
+    },
+    {
+      "path": "provenance.overrides",
+      "production": "domain.mesh.nelx | 480 | domain.mesh.nely | 60 | runtime.maxOuter | 400 | runtime.singleThread | true | runtime.diagnostics | false | runtime.verbose | false | runtime.name | OLHOFF_CURRENT_480x60",
+      "c480": "domain.mesh.nelx | 480 | domain.mesh.nely | 60 | runtime.maxOuter | 1600 | runtime.singleThread | true | runtime.diagnostics | true | runtime.verbose | false | runtime.name | CV_C_480x60 | move.continuation.signal | stageExhaustion | stop.rule | stageExhaustion | move.levels | [0.040000000000000001 0.02 0.01] | runtime.name | TR3_C_480x60 | runtime.name | CAN3_480x60"
+    },
+    {
+      "path": "provenance.resolvedAt",
+      "production": "2026-09-13T16:47:26",
+      "c480": "2026-09-12T11:40:12"
+    },
+    {
+      "path": "provenance.upstreamPreset",
+      "production": "duOlhoffFrozenM4",
+      "c480": "[]"
+    },
+    {
+      "path": "provenance.historicalAliases",
+      "production": "M4 | TMA | B0 | REG160 | duOlhoffFrozenM4",
+      "c480": "[]"
+    }
+  ],
+  "frozenM4_sha256": "6ed3624cd19b3569f55b23acad1d5a1038d9c625a7fae9935e801ffb765ac40e",
+  "files": {
+    "olhoffcurrent_preset_m": "301349abf03190768f51a3b66f75cd894e73e677025bee1a3d386044af3cdadf",
+    "olhoffcurrent_config_m": "16b431039ec47a9131a5b9365d1e4e28628507cc88e986684bf982c28e462b50",
+    "olhoffcurrent_run_m": "45e788eb83692e96f40313f05461e88911162abafd4041bea58840ff53b55adb",
+    "PROVENANCE_json": "2e8224e816ddf8b6ddd25fc05a20c3b05453452d5f561e941b8ac00e0c38452e",
+    "PROVENANCE_md": "21dbbfc11916a16935cc486679b88560dcfd78dd1064c8140101f3aba28c7759",
+    "SOURCE_MANIFEST_json": "431e7b3084507cd8b53862847b828cfd9f8948172e349bbae0c72749e8134aeb",
+    "README_md": "821e4a091e6d1f8cff32dc53af70971d5a89424485477bc0148b1b86d8e3c5cc"
+  },
+  "c480_trajectory_sha256": "a87546bc391cdc683def34a9f27678884528032f6b140e156349d2e74135ab9b",
+  "c480_state_sha256": "2210902c1cf043c19caa3fb95608e883964f9ddb526a646b56efadc19d01f92e"
+}

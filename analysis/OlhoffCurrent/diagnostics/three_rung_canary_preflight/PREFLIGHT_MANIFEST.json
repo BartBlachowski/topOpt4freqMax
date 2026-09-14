@@ -1,0 +1,112 @@
+{
+ "manifest_schema": "three_rung_canary_preflight/1",
+ "frozen_at": "2026-09-12T11:15:43+0200",
+ "purpose": "Pre-run assertion manifest.  cp_preflight.m MUST fail closed against this file before any optimization is executed.",
+ "branch": "benchmark-methodology-r2",
+ "head": "013cc48451d33bed61c5c4eea174bbd898d548a2",
+ "cap": 1600,
+ "cap_provenance": "two_branch_controller_validation/PREREGISTRATION.md sec. 5; the same cap the validated C160/C240/C320/C400 runs used. It is NOT raised or lowered after seeing any trajectory.",
+ "policy": {
+  "move.levels": [
+   0.04,
+   0.02,
+   0.01
+  ],
+  "move.continuation.signal": "stageExhaustion",
+  "stop.rule": "stageExhaustion",
+  "exhaustion_rule": "frozen two-branch E = A OR B, W=20, P=20, Wnp=10",
+  "beta_continuation_authority": false,
+  "beta_stop_authority": false
+ },
+ "impl": {
+  "root": "analysis/OlhoffCurrent/+impl",
+  "tree_sha256": "edbfe47eb32109a2fb017f6f13d5327f2c240357caa96630064ffcf37ee152cb",
+  "n_files": 75,
+  "matches_validated_c320_implTree": true
+ },
+ "production_preset_state": {
+  "production_preset": "duOlhoffFixedPenaltySensitivityFiltered",
+  "delegates_to": "duOlhoffFrozenM4",
+  "promoted_to_three_rung": false,
+  "disclosure": "Production is STILL the legacy four-rung / boundVariable / designChange policy.  This driver therefore applies the validated overrides explicitly through tr_config, and does NOT resolve through olhoffcurrent_config."
+ },
+ "controller_path": {
+  "entry": "cp_run.m -> cp_preflight.m -> cp_config.m -> tr_config.m -> cv_config.m",
+  "solver": "olhoffSolve.m",
+  "descent": "+olh/+move/limit.m  stageExhaustion branch",
+  "detector": "+olh/+move/exhaustion.m",
+  "terminal_admission": "olhoffSolve.m  exhaustStop branch",
+  "sources": {
+   "architecture/olhoffSolve.m": "1e5a114cbf91717e01e5592e86203f401ed5cdb3e5f5ce9a727b8163cdf2fba3",
+   "architecture/+olh/+move/exhaustion.m": "17b37a384b1aa5d987d9c861e16071d1140af130f92406ccc11cec4518bcae0c",
+   "architecture/+olh/+move/limit.m": "61fa923d430121ead764a229b4f48dfd77617540b4ab6db883ccd9d5904b1c1e",
+   "architecture/+olh/+config/resolve.m": "d77d43fd0bcbefffc66524f2b35add5384c98e30fced1e068ceb4723d283717d",
+   "architecture/+olh/+config/schema.m": "d7a808995d9a34810442ddf17f15de980aa1e62efe90b3563f3e474ae5f5cf67",
+   "architecture/+olh/+config/validate.m": "30e495ea8bcc25193de2c64f04984549870e213f9f9df871e52cc4c906cab141",
+   "architecture/+olh/+presets/duOlhoffFrozenM4.m": "6ed3624cd19b3569f55b23acad1d5a1038d9c625a7fae9935e801ffb765ac40e"
+  }
+ },
+ "environment_record_required": [
+  "matlab version",
+  "computer",
+  "os",
+  "cpu",
+  "ncores",
+  "ram_bytes",
+  "threads",
+  "blas thread env",
+  "hostname",
+  "loadavg",
+  "swap",
+  "free RAM"
+ ],
+ "environment_record_note": "These are RECORDED by cp_preflight at run time and written into the run record.  They are deliberately NOT asserted against frozen values: no MATLAB has ever been started on this host under this study, so freezing an expected toolchain version would be fabrication rather than a check.",
+ "host_at_freeze_time": {
+  "cpu": "Apple M1 Max",
+  "ncores": "10",
+  "ram_bytes": "68719476736",
+  "os": "26.6.2",
+  "kernel": "25.6.0",
+  "hostname": "PMS.local",
+  "matlab_app": "/Applications/MATLAB_R2025b.app",
+  "matlab_runtime_version": null
+ },
+ "timing_schema": {
+  "per_outer": [
+   "tOuter",
+   "tEig",
+   "tGrad",
+   "tInner"
+  ],
+  "derived": [
+   "tOther = tOuter - tEig - tGrad - tInner"
+  ],
+  "class": "NONDETERMINISTIC PERFORMANCE TELEMETRY.  Never read back by the optimizer; excluded from every scientific-state comparison."
+ },
+ "meshes": {
+  "480x60": {
+   "nelx": 480,
+   "nely": 60,
+   "NE": 28800,
+   "free_DOF_expected": null,
+   "stop_tolerance": 0.15000000000000002,
+   "filter_radiusPhysical": 0.06,
+   "rminEl_expected": 3.5999999999999996,
+   "predicted_config_hash": "03097a28b0ad7fdb0d977985d3b5fd279dd74553c9dd5dfbd3cc035ac2a1782e",
+   "retention_policy": "full RHO and DRHO retained for every outer iteration, plus hist, res.diag, res.exhaustion and res.log; no post-hoc discard is permitted",
+   "output_path": "runs/C480x60_three_rung"
+  },
+  "800x100": {
+   "nelx": 800,
+   "nely": 100,
+   "NE": 80000,
+   "free_DOF_expected": null,
+   "stop_tolerance": 0.25,
+   "filter_radiusPhysical": 0.06,
+   "rminEl_expected": 6.0,
+   "predicted_config_hash": "7724af5ed26786e16132c30fbae840f5d8679d5ea798fc75d5c48eefd0e50ffe",
+   "retention_policy": "full RHO and DRHO retained for every outer iteration, plus hist, res.diag, res.exhaustion and res.log; no post-hoc discard is permitted",
+   "output_path": "runs/C800x100_three_rung"
+  }
+ }
+}

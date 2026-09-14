@@ -1,0 +1,181 @@
+# PREREGISTRATION — three_rung_canary_preflight
+
+Frozen before any optimization was attempted. Nothing below was written with
+knowledge of a canary outcome, and nothing below was revised after one.
+
+**Freeze proof.** The immutable original is `evidence/PREREGISTRATION.frozen`,
+SHA-256 `25a2500b6e708202b51fba705cb8604c20de577f56f8707f1ac93ce6fec14c82`. That
+same digest appears in `evidence/FINAL_SHA256.PRERUN.txt`, which was written
+while the study still stood at `THREE_RUNG_DEPLOYMENT_PREFLIGHT_FAIL` and zero
+runs had been executed. `PREFLIGHT_MANIFEST.json` was frozen at 11:15:43; the
+first configuration was not resolved until 11:40:12 and the first solve started
+after that. The only edit to this file since the freeze is this header block,
+which adds provenance and changes no gate, threshold, cap or decision rule.
+
+Frozen artefact: `PREFLIGHT_MANIFEST.json`
+(branch `benchmark-methodology-r2`, HEAD `013cc48451d33bed61c5c4eea174bbd898d548a2`).
+
+---
+
+## 1. Question
+
+Does the **validated** three-rung controller generalize beyond 400×50?
+
+The September 11 nine-mesh campaign cannot answer this. It ran the legacy
+production policy — ladder `[0.04 0.02 0.01 0.005]`, `boundVariable`
+continuation, `designChange` stopping, cap 400 — on all nine meshes. The
+validated policy was never deployed there.
+
+## 2. What is under test
+
+```
+move.levels                = [0.04 0.02 0.01]
+move.continuation.signal   = stageExhaustion
+stop.rule                  = stageExhaustion
+exhaustion rule            = frozen two-branch E = A OR B, W=20, P=20, Wnp=10
+terminal persistent E at move 0.01  => CONVERGED
+beta continuation authority = OFF
+beta stop authority         = OFF
+```
+
+Everything else is locked (§3). The controller is not re-implemented here: the
+configuration is obtained by **calling**
+`three_rung_promotion_validation_retry1/scripts/tr_config.m`, the builder that
+produced the validated C320 result.
+
+## 3. Absolute locks
+
+`p = 3` · Eq.(4b) mass · `q = 1` · sensitivity filter applied to every `f_sk` ·
+physical `R = 0.06·b` · projection OFF · fixed subspace multiplicity `N = 2` ·
+diagonal offsets ON · off-diagonal ON · published MMA · unchanged FE ·
+unchanged eigensolver · unchanged objective · volume 0.5 · uniform
+initialization 0.5 · single thread · A, B, the A/B windows, persistence `P`,
+reset semantics, tolerance scaling `eps = 0.05·sqrt(NE/3200)`, and the three
+move values — **none of these may be touched, before or after any outcome.**
+
+Forbidden for the duration: adding a Branch C; retuning any threshold; altering
+`maxOuter` after seeing results; extending a failed run; restarting from an
+intermediate design; changing the multiplicity treatment, filter, mass
+interpolation or MMA; repairing a scientific outcome and rerunning it.
+
+**Once a scientific canary begins, its outcome is final for this task.**
+
+## 4. Cap
+
+`runtime.maxOuter = 1600`, inherited unchanged from
+`two_branch_controller_validation/PREREGISTRATION.md` §5 — the same cap the
+validated C160 / C240 / C320 / C400 runs used. It is not raised or lowered
+after seeing a trajectory.
+
+**Preregistered cap risk.** Extrapolating the four validated S1-declaration
+iterations (102, 206, 274, 388 at NE = 3200, 7200, 12800, 20000;
+`S1 ≈ 0.336·NE^0.713`, R²log = 0.989) projects ≈ 586 outer at 480×60 and
+≈ 1130 outer at 800×100. The 800 projection leaves only ≈ 470 iterations of
+headroom under the cap. This is recorded **now**, before any run, so that a
+CAP_HIT at 800 cannot later be reinterpreted. The projection is a budget
+estimate (`evidence/cost_expectation.json`); **no acceptance gate reads it.**
+
+## 5. Runs authorized
+
+Exactly one 480×60 canary, and — only if 480 passes §6 — exactly one 800×100
+canary. `cp_run.m` refuses every other mesh in code. No alternative arm, no
+legacy comparison run, no repeat.
+
+## 6. The 480 acceptance gate
+
+Status `CONVERGED` alone is **not** acceptance. All ten must hold:
+
+1. the three-rung policy was actually used (runtime-resolved, hash-matched);
+2. the stage sequence is valid (1 → 2 → 3, monotone, no skips);
+3. terminal persistent E occurred at `move = 0.01`, i.e. at stage 3;
+4. no hidden legacy or beta transition anywhere in the trace;
+5. no numerical failure (`status ≠ SOLVER_FAILURE`, no NaN in `omega`/`rho`);
+6. every inner MMA solve acceptable under the frozen policy
+   (`sum(~hist.innerConv) == 0`);
+7. the terminal trajectory shows no obvious substantial unresolved evolution
+   — judged on the retained terminal window, stated with its evidence;
+8. no config drift (preflight hash identical before and after);
+9. telemetry and evidence complete (trajectory rebuilt exactly to `res.rho`;
+   every column of the frozen schema present);
+10. no outcome-driven intervention occurred.
+
+Classification: `C480_THREE_RUNG_CANARY_PASS` / `_FAIL` / `_INCONCLUSIVE`.
+
+FAIL ⇒ do not run 800, do not run the full nine, STOP.
+INCONCLUSIVE ⇒ normally STOP; 800 may proceed **only** if the reason is purely
+non-scientific telemetry failure repairable without rerunning 480.
+
+## 7. The 800 classification — three separate verdicts
+
+Preregistered so they cannot be collapsed after the fact.
+
+**Controller** — `C800_THREE_RUNG_CONTROLLER_PASS` / `_FAIL` / `_INCONCLUSIVE`.
+Preregistered ruling on a cap hit: a CAP_HIT whose stage sequence is
+progressing normally and whose S1 length is consistent with §4 is
+`_INCONCLUSIVE` — the controller was not given enough iterations to answer, and
+the cap must not be raised to manufacture one. A CAP_HIT accompanied by a
+pathology (stuck in stage 1 far beyond the projection, oscillating or
+retracted declarations, a declaration consumed at the wrong stage) is `_FAIL`.
+
+**Scientific endpoint** — `C800_ENDPOINT_CREDIBLE` /
+`_SCIENTIFICALLY_SUSPICIOUS` / `_INCONCLUSIVE`. Judged on M_nd, grayness,
+ω₁, topology maturity and the next-mode warning regime, independently of
+whether the controller behaved correctly.
+
+**Performance** — `C800_RUNTIME_BEHAVIOR_EXPLAINED` / `_UNEXPLAINED`.
+
+## 8. Timing telemetry class
+
+`tOuter`, `tEig`, `tGrad`, `tInner` are **nondeterministic performance
+telemetry**. They are written and never read back by the optimizer, and are
+excluded from every scientific-state comparison and every hash.
+
+**Preregistered comparability caveat.** The canaries must run with
+`runtime.diagnostics = true` to retain trajectories; the legacy nine-mesh
+campaign ran with it `false`, and the recorder costs measurable time per outer
+iteration. Canary wall time is therefore **not** directly comparable to legacy
+wall time. An equal-policy, equal-mesh upper bound on the recorder's cost
+(400×50) is ≈ 1.79× per outer, itself confounded by controller and host
+differences. Any legacy-vs-canary timing statement must carry this caveat.
+
+## 9. Retention
+
+Full `RHO` and `DRHO` for every outer iteration, plus `hist`, `res.diag`,
+`res.exhaustion` and `res.log`; plus the terminal state saved separately for
+the Part F fixed-work benchmark. Worst case at 800×100 under the cap is
+2.05 GB for `RHO`+`DRHO`, against 68.7 GB of host RAM; the preflight refuses to
+start if that budget exceeds a quarter of RAM, so the checkpoint fallback in
+`INSTRUMENTATION.md` §4 is decided **before** a run, never after. No post-hoc
+discard is permitted.
+
+## 10. Fixed-work benchmark
+
+`cp_fixedwork.m` reads a canary's saved terminal state and re-evaluates the
+assembly+eigensolve, gradient and MMA-subproblem kernels K = 5 times each after
+2 discarded warm-ups. The design is never advanced; an assertion at the end
+refuses to return if `rho` changed. It produces no design, no trajectory and no
+convergence claim.
+
+## 11. Decision rule — fixed before C480
+
+| Case | Condition | Verdict |
+|---|---|---|
+| 1 | 480 PASS, 800 controller PASS, 800 endpoint credible or interpretable, timing explained, evidence complete | `CORRECT_NINE_MESH_CAMPAIGN_AUTHORIZED` |
+| 2 | 480 FAIL | `THREE_RUNG_GENERALIZATION_FAILS_IMMEDIATELY_BEYOND_400` + `CORRECT_NINE_MESH_CAMPAIGN_BLOCKED`; 800 is not run |
+| 3 | 480 PASS, 800 controller FAIL | `THREE_RUNG_FINE_MESH_GENERALIZATION_PROBLEM`; no retune, no full nine; a later separate task may inspect 560/640/720 |
+| 4 | 480 PASS, 800 controller PASS, endpoint poor / warnings severe | `THREE_RUNG_CONTROLLER_GENERALIZES_BUT_FINE_MESH_SCIENCE_SUSPICIOUS` + normally `CORRECT_NINE_MESH_CAMPAIGN_NOT_YET_AUTHORIZED` |
+| 5 | science good, timing anomaly unexplained | authorization may still be BLOCKED for performance-study purposes |
+
+**Preregistered case 0 — deployment preflight FAIL.** If the preflight does not
+pass, scientific runs = 0 and the study stops there. No canary verdict is
+issued (there is no canary), and the campaign is `BLOCKED`. This case is
+written into the preregistration rather than improvised, because a preflight
+whose failure had no preregistered consequence would not be a gate.
+
+## 12. Stop conditions
+
+Stop before all science if the deployment preflight fails. Stop after 480 on
+controller/scientific failure, config drift, evidence-retention failure, or a
+numerical failure that prevents interpretation. Never run 800 automatically
+after a failed 480. After 800, repair nothing and retune nothing. Do not run
+560/640/720. Do not run the full nine.

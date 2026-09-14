@@ -1,0 +1,15 @@
+{
+  "schema": "olhoffcurrent_campaign_identity/1",
+  "status": "NOT_FROZEN",
+  "reason": "Campaign gate stopped before merge at Step 1: FINALIZATION_GATE_PROVENANCE_LOGIC_FAIL / PREREGISTRATION_AMENDMENT_REVIEW_FAIL. Step 8 requires both 160x20 anchors to pass on the merged tree; neither ran.",
+  "production_preset": null,
+  "production_config_hash": null,
+  "merged_target_head": null,
+  "candidate_identities_not_frozen": {
+    "migration_commit": "9b30ec45b038fb36e7cf20d57679b71cfd099fb3",
+    "upstream_implementation_commit": "253069262407885a8b759a9e721c4f0a7d3a397d",
+    "implementation_tree_sha256_at_migration_commit": "4ba9a3ae10881344a0e60f2b8a8976c5ec9ceccf966bc2a3da4f37fb5aebffbf",
+    "source_manifest_sha256_at_migration_commit": "aee44aa9172a8105314bbb9475e28bed8a53d4d154824a8748abf64a208b1836",
+    "preset_recorded_as_production_in_PROVENANCE_json_at_migration_commit": "duOlhoffPedersenAdaptiveBoxSensitivityFiltered"
+  }
+}

@@ -1,0 +1,482 @@
+{
+  "label": "FROZEN-SUBPROBLEM REFERENCE (coneprog, certified) -- drho discarded, never applied",
+  "config": {
+    "form": "x",
+    "LinearSolver": "schur",
+    "OptimalityTolerance": 1E-10,
+    "ConstraintTolerance": 1E-10,
+    "MaxIterations": 500
+  },
+  "exitflag": -7,
+  "output": {
+    "iterations": 27,
+    "primalfeasibility": 0.0010203336862403228,
+    "dualfeasibility": 17.36066917720127,
+    "dualitygap": 2.8968756339045967E-15,
+    "algorithm": "interior-point",
+    "linearsolver": "schur",
+    "message": "Search direction is small and current iterate is not within the specified constraint and/or optimality tolerance."
+  },
+  "wall_s": 53.569091958333331,
+  "fval_solver": -1.001792128848223,
+  "bs": 1.001792128848223,
+  "beta": 26921.772248325255,
+  "omega_pred": 164.07855511408326,
+  "bs_minus_1": 0.0017921288482229958,
+  "lamref": 26873.611274304643,
+  "omega1_current": 163.93172747916933,
+  "box_violation_raw": 0,
+  "solver_duals": {
+    "mu_soc": 0.58079085364038119,
+    "nu_ineqlin": [
+      3.0203192003918245E-17,
+      0.72911679097175142
+    ],
+    "xsi_max": 0.0075537012911231008,
+    "eta_max": 0.00086225950499390649
+  },
+  "kkt_solver_duals": {
+    "label": "solver multipliers (coneprog, dual unconverged)",
+    "primal": {
+      "fval": [
+        1.5099033134902129E-14,
+        -0.27812985172765003,
+        -4.9495810623201617,
+        4.0421986745463479E-14
+      ],
+      "max_fval": 4.0421986745463479E-14,
+      "box_violation_lower": 0,
+      "box_violation_upper": 0
+    },
+    "dual": {
+      "mu": [
+        0.58079085364038119,
+        0,
+        3.0203192003918245E-17,
+        0.72911679097175142
+      ],
+      "min_mu": 0,
+      "min_xsi": 9.6162376904989114E-16,
+      "min_eta": 8.1185472898416479E-16
+    },
+    "complementarity": {
+      "mu_times_f": [
+        8.7693803435642089E-15,
+        -0,
+        -1.4949314716421348E-16,
+        2.9472349260555E-14
+      ],
+      "max_abs_mu_f": 2.9472349260555E-14,
+      "max_xsi_gap": 9.6334712274754247E-16,
+      "max_eta_gap": 3.2459639676562805E-15,
+      "max_box_comp_normalized": 5.04451470117935E-10
+    },
+    "stationarity": {
+      "sRow0": 0.00064346407136000846,
+      "sRow_point": 0.00064346585690437858,
+      "raw_rms": 0.00026974677264302277,
+      "raw_max": 0.0031453548036827128,
+      "norm_rms": 0.41921030971145473,
+      "norm_max": 4.8881591741941008,
+      "norm_rms_pointscale": 0.41920914645065332,
+      "bs_residual": -0.41920914635961892
+    },
+    "eigs": {
+      "e1": 48.160974020203184,
+      "e2": 7522.5144931294653,
+      "separation": 7474.3535191092624
+    },
+    "active_sweep_cols": [
+      "tol",
+      "n_at_minus_move",
+      "n_at_floor",
+      "n_at_plus_move",
+      "n_at_ceiling"
+    ],
+    "active_sweep": [
+      [
+        1E-8,
+        4710,
+        9398,
+        4570,
+        9684
+      ],
+      [
+        1E-7,
+        4888,
+        9404,
+        4772,
+        9686
+      ],
+      [
+        1E-6,
+        4906,
+        9404,
+        4788,
+        9686
+      ],
+      [
+        1E-5,
+        4908,
+        9404,
+        4796,
+        9686
+      ],
+      [
+        0.0001,
+        4910,
+        9404,
+        4796,
+        9686
+      ],
+      [
+        0.001,
+        4910,
+        9404,
+        4797,
+        9686
+      ]
+    ],
+    "active": {
+      "n_minus_move": 4906,
+      "n_floor": 9404,
+      "n_plus_move": 4788,
+      "n_ceiling": 9686,
+      "n_interior": 16,
+      "frac_move_bound": 0.33659722222222221,
+      "frac_any_bound": 0.99944444444444447
+    },
+    "verdict": "REFERENCE_PROBLEM25_KKT_FAIL"
+  },
+  "certificate": {
+    "dual_bound": -1.0017921288546681,
+    "p": [
+      -0.99999999961560282,
+      -2.7727142198908871E-5
+    ],
+    "mu": 1,
+    "nu": [
+      4.1340636973123739E-17,
+      0.72911364472506091
+    ],
+    "w": [
+      -0.99999999961560282,
+      -2.7727142198908871E-5
+    ],
+    "primal": -1.001792128848223,
+    "gap": 6.4450667025539587E-12,
+    "gap_relative_to_gain": 3.5963188187861786E-9,
+    "aligned": {
+      "p": [
+        -0.99999999961473585,
+        -2.775838853223165E-5
+      ],
+      "mu": 0.99999999999999989,
+      "nu": [
+        4.1340636973123739E-17,
+        0.72911364472506091
+      ],
+      "w": [
+        -0.99999999961473585,
+        -2.775838853223165E-5
+      ],
+      "dual_bound": -1.0017921288573759,
+      "gap": 9.1529006596147156E-12,
+      "note": "cone direction fixed to the exact subgradient s/||s|| at x; (mu, nu) maximized"
+    }
+  },
+  "certificate_aligned": {
+    "p": [
+      -0.99999999961473585,
+      -2.775838853223165E-5
+    ],
+    "mu": 0.99999999999999989,
+    "nu": [
+      4.1340636973123739E-17,
+      0.72911364472506091
+    ],
+    "w": [
+      -0.99999999961473585,
+      -2.775838853223165E-5
+    ],
+    "dual_bound": -1.0017921288573759,
+    "gap": 9.1529006596147156E-12,
+    "note": "cone direction fixed to the exact subgradient s/||s|| at x; (mu, nu) maximized"
+  },
+  "kkt_certificate_duals": {
+    "label": "certificate multipliers (maximized dual bound)",
+    "primal": {
+      "fval": [
+        1.5099033134902129E-14,
+        -0.27812985172765003,
+        -4.9495810623201617,
+        4.0421986745463479E-14
+      ],
+      "max_fval": 4.0421986745463479E-14,
+      "box_violation_lower": 0,
+      "box_violation_upper": 0
+    },
+    "dual": {
+      "mu": [
+        0.99999999999999989,
+        0,
+        4.1340636973123739E-17,
+        0.72911364472506091
+      ],
+      "min_mu": 0,
+      "min_xsi": 0,
+      "min_eta": 0
+    },
+    "complementarity": {
+      "mu_times_f": [
+        1.5099033134902126E-14,
+        -0,
+        -2.0461883386642596E-16,
+        2.9472222083012979E-14
+      ],
+      "max_abs_mu_f": 2.9472222083012979E-14,
+      "max_xsi_gap": 6.1334152117591511E-17,
+      "max_eta_gap": 3.1928010720927519E-12,
+      "max_box_comp_normalized": 4.9618948659317261E-7
+    },
+    "stationarity": {
+      "sRow0": 0.00064346407136000846,
+      "sRow_point": 0.00064346585690437858,
+      "raw_rms": 1.2486515465965056E-18,
+      "raw_max": 4.90059381963448E-17,
+      "norm_rms": 1.9405147888947226E-15,
+      "norm_max": 7.6159556341299931E-14,
+      "norm_rms_pointscale": 1.9405094041874857E-15,
+      "bs_residual": -4.1340636973123739E-17
+    },
+    "eigs": {
+      "e1": 48.160974020203184,
+      "e2": 7522.5144931294653,
+      "separation": 7474.3535191092624
+    },
+    "active_sweep_cols": [
+      "tol",
+      "n_at_minus_move",
+      "n_at_floor",
+      "n_at_plus_move",
+      "n_at_ceiling"
+    ],
+    "active_sweep": [
+      [
+        1E-8,
+        4710,
+        9398,
+        4570,
+        9684
+      ],
+      [
+        1E-7,
+        4888,
+        9404,
+        4772,
+        9686
+      ],
+      [
+        1E-6,
+        4906,
+        9404,
+        4788,
+        9686
+      ],
+      [
+        1E-5,
+        4908,
+        9404,
+        4796,
+        9686
+      ],
+      [
+        0.0001,
+        4910,
+        9404,
+        4796,
+        9686
+      ],
+      [
+        0.001,
+        4910,
+        9404,
+        4797,
+        9686
+      ]
+    ],
+    "active": {
+      "n_minus_move": 4906,
+      "n_floor": 9404,
+      "n_plus_move": 4788,
+      "n_ceiling": 9686,
+      "n_interior": 16,
+      "frac_move_bound": 0.33659722222222221,
+      "frac_any_bound": 0.99944444444444447
+    },
+    "verdict": "REFERENCE_PROBLEM25_KKT_PASS"
+  },
+  "gap_decomposition": {
+    "box_complementarity": 9.17622014451125E-12,
+    "cone_complementarity": 0,
+    "linear_complementarity": -7.72545494186265E-15,
+    "sum": 9.1684946895693875E-12,
+    "gap": 6.4450667025539587E-12
+  },
+  "cone_dual_feasible": {
+    "norm_p": 0.99999999999999989,
+    "mu": 0.99999999999999989,
+    "norm_p_le_mu": true,
+    "cone_gap": 0
+  },
+  "free_coordinates": {
+    "n_abs_q_below_1e8_rel": 0,
+    "n_abs_q_below_1e6_rel": 22,
+    "n_abs_q_below_1e4_rel": 1194,
+    "qmax": 0.0075537010784817076,
+    "q_bs": -6.9681665489391915E-17
+  },
+  "kkt_verdict": "REFERENCE_PROBLEM25_KKT_PASS",
+  "kkt_verdict_solver_duals": "REFERENCE_PROBLEM25_KKT_FAIL",
+  "global_verdict": "GLOBAL_PROBLEM25_REFERENCE_CERTIFIED",
+  "production_fval": [
+    1.5099033134902129E-14,
+    -0.27812985172765003,
+    -4.9495810623201617,
+    4.0421986745463479E-14
+  ],
+  "evals": [
+    48.160974020203184,
+    7522.5144931294653
+  ],
+  "solution": {
+    "bs": 1.001792128848223,
+    "beta": 26921.772248325255,
+    "omega_pred": 164.07855511408326,
+    "max_abs_drho": 0.0099999999988803628,
+    "max_abs_drho_over_move": 0.99999999988803623,
+    "norm2_drho": 1.003271209281595,
+    "mean_abs_drho": 0.0040560487456086361,
+    "rms_drho": 0.0059118322954353642,
+    "volume_change_abs": 0.045796287570013916,
+    "volume_change_rel": 3.180297747917633E-6,
+    "volume_row": 4.0421986745463479E-14,
+    "volume_slack": -4.0421986745463479E-14,
+    "nextmode_row": -4.9495810623201617,
+    "nextmode_slack": 4.9495810623201617,
+    "cluster1_row": 1.5099033134902129E-14,
+    "cluster2_row": -0.27812985172765003,
+    "cluster2_slack": 0.27812985172765003,
+    "separation_e2_minus_e1": 7474.3535191092624,
+    "separation_over_d2": 1.0061541423201663,
+    "image_abc": [
+      48.1609754600031,
+      -0.10373800450541193,
+      93.877859658723224
+    ],
+    "fJJ_drho": -1185.8039004823363,
+    "sum_drho": 0.045796287570013916,
+    "n_positive": 14484,
+    "n_negative": 14316,
+    "n_zero": 0
+  },
+  "active": {
+    "n_minus_move": 4906,
+    "n_floor": 9404,
+    "n_plus_move": 4788,
+    "n_ceiling": 9686,
+    "n_interior": 16,
+    "frac_move_bound": 0.33659722222222221,
+    "frac_any_bound": 0.99944444444444447
+  },
+  "active_sweep": [
+    [
+      1E-8,
+      4710,
+      9398,
+      4570,
+      9684
+    ],
+    [
+      1E-7,
+      4888,
+      9404,
+      4772,
+      9686
+    ],
+    [
+      1E-6,
+      4906,
+      9404,
+      4788,
+      9686
+    ],
+    [
+      1E-5,
+      4908,
+      9404,
+      4796,
+      9686
+    ],
+    [
+      0.0001,
+      4910,
+      9404,
+      4796,
+      9686
+    ],
+    [
+      0.001,
+      4910,
+      9404,
+      4797,
+      9686
+    ]
+  ],
+  "active_sweep_cols": [
+    "tol",
+    "n_at_minus_move",
+    "n_at_floor",
+    "n_at_plus_move",
+    "n_at_ceiling"
+  ],
+  "move_bound_dominated": false,
+  "by_class": {
+    "void_rho_0_1_": {
+      "n": 10266,
+      "n_minus_move": 404,
+      "n_floor": 9404,
+      "n_plus_move": 454,
+      "n_ceiling": 0,
+      "n_interior": 4,
+      "mean_drho": -0.0008564130239687109,
+      "sum_drho": -8.7919361040627866
+    },
+    "gray": {
+      "n": 8272,
+      "n_minus_move": 4268,
+      "n_floor": 0,
+      "n_plus_move": 3992,
+      "n_ceiling": 0,
+      "n_interior": 12,
+      "mean_drho": -0.00032655924863460436,
+      "sum_drho": -2.7012981047054474
+    },
+    "solid_rho_0_9_": {
+      "n": 10262,
+      "n_minus_move": 234,
+      "n_floor": 0,
+      "n_plus_move": 342,
+      "n_ceiling": 9686,
+      "n_interior": 0,
+      "mean_drho": 0.0011244426521475586,
+      "sum_drho": 11.539030496338247
+    }
+  },
+  "compare_quick": {
+    "bs_P19": 1.0000049637074067,
+    "bs_M500": 1.0007024808401863,
+    "G_P19": 0.9972302731404723,
+    "G_M500": 0.60801878677257659
+  }
+}

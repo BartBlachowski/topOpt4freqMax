@@ -1,0 +1,42 @@
+{
+  "schema": "olhoff_current_evidence/1",
+  "study": "postmerge_campaign_gate",
+  "generated": "2026-09-13T20:59:30+02:00",
+  "evidenceRoot": "analysis/OlhoffCurrent/diagnostics/postmerge_campaign_gate/evidence",
+  "implementation": "analysis/OlhoffCurrent",
+  "sourceTree": "edbfe47eb32109a2fb017f6f13d5327f2c240357caa96630064ffcf37ee152cb",
+  "matlab": "25.2.0.2998904 (R2025b)",
+  "verdict": "OLHOFF_NINE_MESH_CAMPAIGN_BLOCKED",
+  "migration_commit": "9b30ec45b038fb36e7cf20d57679b71cfd099fb3",
+  "upstream_commit": "253069262407885a8b759a9e721c4f0a7d3a397d",
+  "no_mesh_solved": true,
+  "artifacts": [
+    {
+      "path": "gate_probe.log",
+      "class": "required",
+      "description": "MATLAB log of gate probes P0-P10 against olhoffcurrent_finalization_gate @ 9b30ec4",
+      "bytes": 3042,
+      "sha256": "8ce7596c974f6df8b8afb7ff00bae9c8bffdbc31d798630e966dc663bc512100",
+      "present": true,
+      "format": ".log"
+    },
+    {
+      "path": "gate_probe_results.json",
+      "class": "required",
+      "description": "P0-P9 verdicts (expect vs gate.ok)",
+      "bytes": 2247,
+      "sha256": "4d14d50a1ddf8971eb457433470ed142fd766bda3d356b93a68fe5b0607ad126",
+      "present": true,
+      "format": "JSON"
+    },
+    {
+      "path": "gate_probe_p10_result.json",
+      "class": "required",
+      "description": "P10 verdict (+impl edit with regenerated manifest)",
+      "bytes": 206,
+      "sha256": "ad45ad978cf1d727ea88be035165b2898c44d5ebf58a45cc42430f6a1ab7345f",
+      "present": true,
+      "format": "JSON"
+    }
+  ]
+}

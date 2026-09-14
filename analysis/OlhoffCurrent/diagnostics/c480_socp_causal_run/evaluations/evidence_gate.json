@@ -1,0 +1,65 @@
+{
+  "ok": true,
+  "studyDir": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/diagnostics/c480_socp_causal_run",
+  "manifestPath": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/diagnostics/c480_socp_causal_run/EVIDENCE.json",
+  "manifestPresent": true,
+  "nRequired": 3,
+  "nPresent": 3,
+  "nMissing": 0,
+  "nMismatch": 0,
+  "nOptional": 1,
+  "nScratch": 1,
+  "artifacts": [
+    {
+      "path": "C480x60_socp_trajectory.mat",
+      "resolved": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/evidence/c480_socp_causal_run/C480x60_socp_trajectory.mat",
+      "class": "required",
+      "status": "REQUIRED_PRESENT_MATCH",
+      "bytes": 4.772927E+6,
+      "bytesOnDisk": 4.772927E+6,
+      "sha256": "9ec6e3c3544668ca94d48c3015019463cf063a57afc709558b9f71459dd0c4da",
+      "sha256OnDisk": "9ec6e3c3544668ca94d48c3015019463cf063a57afc709558b9f71459dd0c4da"
+    },
+    {
+      "path": "C480x60_socp_state.mat",
+      "resolved": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/evidence/c480_socp_causal_run/C480x60_socp_state.mat",
+      "class": "required",
+      "status": "REQUIRED_PRESENT_MATCH",
+      "bytes": 185921,
+      "bytesOnDisk": 185921,
+      "sha256": "62273eeefffe5d0ea87c50f6da8a580bc2afd917c244d40cd8ee2394529af466",
+      "sha256OnDisk": "62273eeefffe5d0ea87c50f6da8a580bc2afd917c244d40cd8ee2394529af466"
+    },
+    {
+      "path": "C480x60_socp_diag.mat",
+      "resolved": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/evidence/c480_socp_causal_run/C480x60_socp_diag.mat",
+      "class": "required",
+      "status": "REQUIRED_PRESENT_MATCH",
+      "bytes": 1.355233E+6,
+      "bytesOnDisk": 1.355233E+6,
+      "sha256": "81bffa6a3c45d3f4db2740687216080333e60a5d8b67e63d6559704a017cd983",
+      "sha256OnDisk": "81bffa6a3c45d3f4db2740687216080333e60a5d8b67e63d6559704a017cd983"
+    },
+    {
+      "path": "LAUNCHED.lock",
+      "resolved": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/evidence/c480_socp_causal_run/LAUNCHED.lock",
+      "class": "optional",
+      "status": "OPTIONAL_PRESENT",
+      "bytes": 25,
+      "bytesOnDisk": 25,
+      "sha256": "c39139f29eac8a4a114631d7fd48f1a1773581603b07a9cda01a698e75f078d0",
+      "sha256OnDisk": "c39139f29eac8a4a114631d7fd48f1a1773581603b07a9cda01a698e75f078d0"
+    },
+    {
+      "path": "checkpoint.mat",
+      "resolved": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/evidence/c480_socp_causal_run/checkpoint.mat",
+      "class": "scratch",
+      "status": "SCRATCH",
+      "bytes": 0,
+      "bytesOnDisk": null,
+      "sha256": "",
+      "sha256OnDisk": ""
+    }
+  ],
+  "detail": "3 required (3 present/match, 0 missing, 0 mismatch), 1 optional, 1 scratch"
+}

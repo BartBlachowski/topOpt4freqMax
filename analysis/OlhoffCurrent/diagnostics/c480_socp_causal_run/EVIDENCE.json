@@ -1,0 +1,208 @@
+{
+  "schema": "olhoff_current_evidence/1",
+  "study": "c480_socp_causal_run",
+  "generated": "2026-09-13T12:19:20+02:00",
+  "evidenceRoot": "analysis/OlhoffCurrent/evidence/c480_socp_causal_run",
+  "implementation": "analysis/OlhoffCurrent",
+  "sourceTree": "edbfe47eb32109a2fb017f6f13d5327f2c240357caa96630064ffcf37ee152cb",
+  "matlab": "25.2.0.2998904 (R2025b)",
+  "preregistration": "5b6186f2f2b438f73ce4cfeae8e4565326dc91d99b19e207aa47604c32286ddd",
+  "amendment1": "298efd23763f678f7519d37dc7c40f6e693bad2bec8a1933e4d853e0f09fa340",
+  "control_trajectory_reused_read_only": "analysis/OlhoffCurrent/evidence/three_rung_canary_preflight/C480x60_three_rung_trajectory.mat",
+  "control_trajectory_sha256": "a87546bc391cdc683def34a9f27678884528032f6b140e156349d2e74135ab9b",
+  "scientific_runs": 1,
+  "treatment_runs": 1,
+  "control_reruns": 0,
+  "artifacts": [
+    {
+      "path": "C480x60_socp_trajectory.mat",
+      "class": "required",
+      "description": "treatment: RHO, DRHO, move, hist, cfg, meta, exh, log, socp records, final omega/lambda, status, treat",
+      "bytes": 4.772927E+6,
+      "sha256": "9ec6e3c3544668ca94d48c3015019463cf063a57afc709558b9f71459dd0c4da",
+      "present": true,
+      "format": "MAT-file (v7.3 = HDF5) -- read with load()",
+      "variables": [
+        {
+          "name": "DRHO",
+          "size": [
+            28800,
+            14
+          ],
+          "class": "double",
+          "bytes": 3.2256E+6
+        },
+        {
+          "name": "RHO",
+          "size": [
+            28800,
+            14
+          ],
+          "class": "double",
+          "bytes": 3.2256E+6
+        },
+        {
+          "name": "cfg",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 20493
+        },
+        {
+          "name": "exh",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 2004
+        },
+        {
+          "name": "hist",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 10340
+        },
+        {
+          "name": "lambdaFinal",
+          "size": [
+            5,
+            1
+          ],
+          "class": "double",
+          "bytes": 40
+        },
+        {
+          "name": "log",
+          "size": [
+            1,
+            2
+          ],
+          "class": "cell",
+          "bytes": 784
+        },
+        {
+          "name": "meta",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 2161
+        },
+        {
+          "name": "move",
+          "size": [
+            14,
+            1
+          ],
+          "class": "double",
+          "bytes": 112
+        },
+        {
+          "name": "omegaFinal",
+          "size": [
+            5,
+            1
+          ],
+          "class": "double",
+          "bytes": 40
+        },
+        {
+          "name": "socp",
+          "size": [
+            1,
+            15
+          ],
+          "class": "cell",
+          "bytes": 555368
+        },
+        {
+          "name": "status",
+          "size": [
+            1,
+            24
+          ],
+          "class": "char",
+          "bytes": 48
+        },
+        {
+          "name": "termination",
+          "size": [
+            1,
+            24
+          ],
+          "class": "char",
+          "bytes": 48
+        },
+        {
+          "name": "treat",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 1430
+        }
+      ]
+    },
+    {
+      "path": "C480x60_socp_state.mat",
+      "class": "required",
+      "description": "treatment terminal design + cfg + final spectrum",
+      "bytes": 185921,
+      "sha256": "62273eeefffe5d0ea87c50f6da8a580bc2afd917c244d40cd8ee2394529af466",
+      "present": true,
+      "format": "MAT-file (v7.3 = HDF5) -- read with load()",
+      "variables": {
+        "name": "state",
+        "size": [
+          1,
+          1
+        ],
+        "class": "struct",
+        "bytes": 251953
+      }
+    },
+    {
+      "path": "C480x60_socp_diag.mat",
+      "class": "required",
+      "description": "treatment res.diag: per-iteration drho, predicted dlam, lam, beta, Vrot",
+      "bytes": 1.355233E+6,
+      "sha256": "81bffa6a3c45d3f4db2740687216080333e60a5d8b67e63d6559704a017cd983",
+      "present": true,
+      "format": "MAT-file (v7.3 = HDF5) -- read with load()",
+      "variables": {
+        "name": "dg",
+        "size": [
+          1,
+          1
+        ],
+        "class": "struct",
+        "bytes": 3.233547E+6
+      }
+    },
+    {
+      "path": "LAUNCHED.lock",
+      "class": "optional",
+      "description": "one-run launch lock (timestamp)",
+      "bytes": 25,
+      "sha256": "c39139f29eac8a4a114631d7fd48f1a1773581603b07a9cda01a698e75f078d0",
+      "present": true,
+      "format": ".lock"
+    },
+    {
+      "path": "checkpoint.mat",
+      "class": "scratch",
+      "description": "process-interruption checkpoint; not evidence",
+      "bytes": 0,
+      "sha256": "",
+      "present": false
+    }
+  ]
+}

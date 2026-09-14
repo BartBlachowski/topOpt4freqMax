@@ -1,0 +1,24 @@
+{
+  "repo": "/Users/piotrek/Programming/topOpt4freqMax",
+  "kind": "solves160",
+  "when": "13-Sep-2026 22:34:51",
+  "matlab": "25.2.0.2998904 (R2025b)",
+  "head": "b21483b158f58e05e7b56957f2fbe8e1d2891395",
+  "suites": [
+    {
+      "name": "test_preset_equivalence",
+      "nFail": 0,
+      "error": ""
+    },
+    {
+      "name": "test_named_preset_reproduction:pedersen",
+      "nFail": 0,
+      "error": ""
+    },
+    {
+      "name": "test_named_preset_reproduction:stageExhaustion",
+      "nFail": 0,
+      "error": ""
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "400": {
+    "warning_end_state_vs_final": {
+      "iteration": 13.0,
+      "final_core_gray_fraction": 0.0,
+      "final_core_mid_fraction": 0.0,
+      "domain_L1_to_final": 0.2545841670603127,
+      "final_core_L1_to_final": 0.0,
+      "threshold_flip_to_final": 0.1724
+    },
+    "stays_within_Mnd_01pp_of_final_after": 419
+  },
+  "480": {
+    "warning_end_state_vs_final": {
+      "iteration": 16.0,
+      "final_core_gray_fraction": 1.0,
+      "final_core_mid_fraction": 0.9210245464247598,
+      "domain_L1_to_final": 0.20825120953809062,
+      "final_core_L1_to_final": 0.10045590459322187,
+      "threshold_flip_to_final": 0.17722222222222223
+    },
+    "stays_within_Mnd_01pp_of_final_after": 348
+  },
+  "800": {
+    "warning_end_state_vs_final": {
+      "iteration": 113.0,
+      "final_core_gray_fraction": 1.0,
+      "final_core_mid_fraction": 0.9797556300910397,
+      "domain_L1_to_final": 0.12511076133314883,
+      "final_core_L1_to_final": 0.09416316753548605,
+      "threshold_flip_to_final": 0.19205
+    },
+    "stays_within_Mnd_01pp_of_final_after": 441
+  }
+}

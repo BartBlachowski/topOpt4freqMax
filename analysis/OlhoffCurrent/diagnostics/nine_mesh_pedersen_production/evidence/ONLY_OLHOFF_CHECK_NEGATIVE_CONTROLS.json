@@ -1,0 +1,6 @@
+{
+ "real_log": true,
+ "neg_methods_header": false,
+ "neg_extra_run_line": false,
+ "neg_extra_warmup": false
+}

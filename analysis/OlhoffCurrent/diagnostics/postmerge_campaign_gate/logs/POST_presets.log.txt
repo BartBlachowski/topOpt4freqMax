@@ -1,0 +1,85 @@
+
+========================================================================
+TEST_PRESET_IDENTITY
+========================================================================
+  [PASS] three canonical presets, unique
+  [PASS] no alias equals a canonical name
+  [PASS] aliases are not shared between presets
+  [PASS] the only compatibility alias belongs to the beta-stall preset
+  [PASS] compatibility alias -> beta-stall preset, identical configuration hash
+  [PASS] unnamed configuration is refused
+  [PASS] unnamed preset lookup is refused
+  [PASS] unnamed run is refused
+  [PASS] provenance aliases are refused (M4, S160x20, duOlhoffFrozenM4, duOlhoffAdaptivePedersen)
+  [PASS] unknown preset is refused
+  [PASS] caveat requires a preset name
+  [PASS] shared numerics identical in all three (p, filter R, multiplicity, MMA, rho_min, maxCluster, eps)
+  [PASS] beta-stall: SIMP, eq4b, ladder [0.04 0.02 0.01 0.005], beta signal, settled design-change stop, cap 400
+  [PASS] three-rung: SIMP, eq4b, ladder [0.04 0.02 0.01], stage exhaustion move AND stop, cap 1600
+  [PASS] Pedersen: pedersen below 0.1, eq2 mass, adaptive box 0.10/0.002/x1.2/x0.7, no guards, no exhaustion, cap 400
+  [PASS] 81 pre-migration rows recorded
+  [PASS] beta-stall 160x20: pre-migration hash 28756d22... reproduced from the migrated config
+  [PASS] three-rung C320x40: pre-migration hash afad9ea4... reproduced (resolution only)
+  [PASS] four-rung exhaustion override C160x20: pre-migration hash 31d2ef38... reproduced
+  [PASS] production = Pedersen preset, from the latest recorded event
+  [PASS] the first recorded event is the beta-stall preset (history kept)
+  [PASS] the historical stage-exhaustion diagnostic is not production-eligible
+  [PASS] Pedersen and beta-stall differ in stiffness, mass and move policy
+  [PASS] formulation text names Pedersen only for the Pedersen preset
+  [PASS] caveats differ and the Pedersen caveat states the formulation split
+  [PASS] configuration schema has 87 rows
+------------------------------------------------------------------------
+  failures: 0
+
+SUITE test_preset_identity                          failures=0 
+
+========================================================================
+TEST_PEDERSEN_ADAPTIVE_UNITS
+========================================================================
+  [PASS] resolved constants: initial 0.10, floor 0.002, grow 1.2, shrink 0.7
+  [PASS] A1 outer 1-2: every element at the initial box
+  [PASS] A2 outer 3: grow clamped at 0.10, reversal x0.7, zero step unchanged
+  [PASS] A2 outer 4: second reversal contracts again (0.049)
+  [PASS] A3 oscillating element contracts to the floor (0.002)
+  [PASS] A4 monotone element grows back to the ceiling (0.1), never above
+  [PASS] A5 refuses without the current design
+  [PASS] P1 rho >= 0.1: g = rho^3, dg = 3 rho^2
+  [PASS] P2 rho < 0.1: g = rho*rho0^(p-1) = rho/100, dg = rho0^(p-1)
+  [PASS] P3 C0 continuous at rho0 = 0.1
+  [PASS] P4 SIMP branch unchanged (rho^3)
+  [PASS] P5 linear mass / Pedersen stiffness at rho_min = 100 (want 100)
+------------------------------------------------------------------------
+  failures: 0
+
+SUITE test_pedersen_adaptive_units                  failures=0 
+
+========================================================================
+TEST_COST_REPORTING
+========================================================================
+  [PASS] run completed (status CAP_HIT)
+  [PASS] result names its preset, role and upstream commit
+  [PASS] every total and per-outer field present and finite
+  [PASS] outer_iterations = 3 (the cut cap)
+  [PASS] per-outer means x outer count reproduce the totals
+  [PASS] outer loop nested in the call; overhead = total - sum(tOuter)
+  [PASS] median per-outer time lies within [total/n^2, total]
+  [PASS] stopping record names the move policy and the meaning of final_move_limit
+------------------------------------------------------------------------
+  failures: 0
+
+SUITE test_cost_reporting                           failures=0 
+SUITE test_preset_identity                          failures=0 
+SUITE test_pedersen_adaptive_units                  failures=0 
+SUITE test_cost_reporting                           failures=0 
+
+ans = 
+
+  struct with fields:
+
+      repo: '/Users/piotrek/Programming/topOpt4freqMax'
+      kind: 'presets'
+      when: '13-Sep-2026 22:34:49'
+    matlab: '25.2.0.2998904 (R2025b)'
+      head: 'b21483b158f58e05e7b56957f2fbe8e1d2891395'
+    suites: [1×3 struct]
+

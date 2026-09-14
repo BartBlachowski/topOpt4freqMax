@@ -1,0 +1,803 @@
+{
+  "schema": "olhoff_current_evidence/1",
+  "study": "nine_mesh_campaign_audit",
+  "evidenceRoot": "",
+  "audit_only": true,
+  "scientific_runs": 0,
+  "artifacts": [
+    {
+      "path": "analysis/OlhoffCurrent/evidence/two_branch_controller_validation/C160x20_trajectory.mat",
+      "class": "required",
+      "description": "Stored numerical input for this offline audit; scientific identity limitations are documented separately",
+      "bytes": 8858000,
+      "sha256": "4d11a2fdc1c985b15dea74cc234ed9d1f658960c1d42bfd8092770cc1b658832",
+      "present": true,
+      "format": "MAT v7.3 HDF5",
+      "variables": [
+        {
+          "name": "DRHO",
+          "HDF5_shape": [
+            219,
+            3200
+          ],
+          "dtype": "float64",
+          "MATLAB_class": "double"
+        },
+        {
+          "name": "RHO",
+          "HDF5_shape": [
+            219,
+            3200
+          ],
+          "dtype": "float64",
+          "MATLAB_class": "double"
+        },
+        {
+          "name": "cfg",
+          "kind": "MATLAB struct represented as HDF5 group",
+          "fields": [
+            "design",
+            "domain",
+            "eigen",
+            "filter",
+            "material",
+            "move",
+            "multiplicity",
+            "optimizer",
+            "projection",
+            "provenance",
+            "runtime",
+            "stop"
+          ]
+        },
+        {
+          "name": "exh",
+          "kind": "MATLAB struct represented as HDF5 group",
+          "fields": [
+            "P",
+            "W",
+            "Wnp",
+            "descents",
+            "eventBranch",
+            "events",
+            "ruleAdmitsStop",
+            "signalDrivesMove",
+            "stageStarts",
+            "terminalBranch",
+            "terminalDeclBegin",
+            "terminalDeclIter",
+            "terminalDeclared",
+            "tol"
+          ]
+        },
+        {
+          "name": "hist",
+          "kind": "MATLAB struct represented as HDF5 group",
+          "fields": [
+            "N",
+            "beta",
+            "cumInner",
+            "dBeta",
+            "degen",
+            "dxNorm2",
+            "dxOuter",
+            "dxPhys2",
+            "exA",
+            "exAmp",
+            "exB",
+            "exCos",
+            "exDecl",
+            "exE",
+            "exMedcos",
+            "exMednet",
+            "exNA",
+            "exNB",
+            "exNet",
+            "exStageStart",
+            "gap12",
+            "innerConv",
+            "massLow",
+            "move",
+            "multJ",
+            "nInner",
+            "omega",
+            "pEvent",
+            "pPen",
+            "pStage",
+            "projBeta",
+            "projEvent",
+            "projStage",
+            "stage",
+            "tEig",
+            "tGrad",
+            "tInner",
+            "tOuter",
+            "vol",
+            "volErr"
+          ]
+        },
+        {
+          "name": "log",
+          "HDF5_shape": [
+            7,
+            1
+          ],
+          "dtype": "object",
+          "MATLAB_class": "cell"
+        },
+        {
+          "name": "meta",
+          "kind": "MATLAB struct represented as HDF5 group",
+          "fields": [
+            "arm",
+            "cfgHash",
+            "implTree",
+            "label",
+            "matlab",
+            "maxOuter",
+            "nelx",
+            "nely",
+            "overrides",
+            "preset",
+            "upstreamPreset",
+            "wall_s"
+          ]
+        },
+        {
+          "name": "move",
+          "HDF5_shape": [
+            1,
+            219
+          ],
+          "dtype": "float64",
+          "MATLAB_class": "double"
+        }
+      ]
+    },
+    {
+      "path": "analysis/OlhoffCurrent/evidence/three_rung_resolution_240/C240x30_trajectory.mat",
+      "class": "required",
+      "description": "Stored numerical input for this offline audit; scientific identity limitations are documented separately",
+      "bytes": 131203128,
+      "sha256": "183d7ce60d512fc2c045c3cb575404b00c8f0e223adaf97db86c9eef1fd50b0d",
+      "present": true,
+      "format": "MAT v7.3 HDF5",
+      "variables": [
+        {
+          "name": "DRHO",
+          "HDF5_shape": [
+            1358,
+            7200
+          ],
+          "dtype": "float64",
+          "MATLAB_class": "double"
+        },
+        {
+          "name": "RHO",
+          "HDF5_shape": [
+            1358,
+            7200
+          ],
+          "dtype": "float64",
+          "MATLAB_class": "double"
+        },
+        {
+          "name": "cfg",
+          "kind": "MATLAB struct represented as HDF5 group",
+          "fields": [
+            "design",
+            "domain",
+            "eigen",
+            "filter",
+            "material",
+            "move",
+            "multiplicity",
+            "optimizer",
+            "projection",
+            "provenance",
+            "runtime",
+            "stop"
+          ]
+        },
+        {
+          "name": "exh",
+          "kind": "MATLAB struct represented as HDF5 group",
+          "fields": [
+            "P",
+            "W",
+            "Wnp",
+            "descents",
+            "eventBranch",
+            "events",
+            "ruleAdmitsStop",
+            "signalDrivesMove",
+            "stageStarts",
+            "terminalBranch",
+            "terminalDeclBegin",
+            "terminalDeclIter",
+            "terminalDeclared",
+            "tol"
+          ]
+        },
+        {
+          "name": "hist",
+          "kind": "MATLAB struct represented as HDF5 group",
+          "fields": [
+            "N",
+            "beta",
+            "cumInner",
+            "dBeta",
+            "degen",
+            "dxNorm2",
+            "dxOuter",
+            "dxPhys2",
+            "exA",
+            "exAmp",
+            "exB",
+            "exCos",
+            "exDecl",
+            "exE",
+            "exMedcos",
+            "exMednet",
+            "exNA",
+            "exNB",
+            "exNet",
+            "exStageStart",
+            "gap12",
+            "innerConv",
+            "massLow",
+            "move",
+            "multJ",
+            "nInner",
+            "omega",
+            "pEvent",
+            "pPen",
+            "pStage",
+            "projBeta",
+            "projEvent",
+            "projStage",
+            "stage",
+            "tEig",
+            "tGrad",
+            "tInner",
+            "tOuter",
+            "vol",
+            "volErr"
+          ]
+        },
+        {
+          "name": "log",
+          "HDF5_shape": [
+            8,
+            1
+          ],
+          "dtype": "object",
+          "MATLAB_class": "cell"
+        },
+        {
+          "name": "meta",
+          "kind": "MATLAB struct represented as HDF5 group",
+          "fields": [
+            "arm",
+            "cfgHash",
+            "implTree",
+            "label",
+            "matlab",
+            "maxOuter",
+            "nelx",
+            "nely",
+            "overrides",
+            "preregSha256",
+            "preset",
+            "upstreamPreset",
+            "wall_s"
+          ]
+        },
+        {
+          "name": "move",
+          "HDF5_shape": [
+            1,
+            1358
+          ],
+          "dtype": "float64",
+          "MATLAB_class": "double"
+        }
+      ]
+    },
+    {
+      "path": "analysis/OlhoffCurrent/evidence/two_branch_controller_validation/C320x40_trajectory.mat",
+      "class": "required",
+      "description": "Stored numerical input for this offline audit; scientific identity limitations are documented separately",
+      "bytes": 283657283,
+      "sha256": "c9d4d76649de605690acecad185875f400dedea6c287cd91d4ee8b644ea328c0",
+      "present": true,
+      "format": "MAT v7.3 HDF5",
+      "variables": [
+        {
+          "name": "DRHO",
+          "HDF5_shape": [
+            1600,
+            12800
+          ],
+          "dtype": "float64",
+          "MATLAB_class": "double"
+        },
+        {
+          "name": "RHO",
+          "HDF5_shape": [
+            1600,
+            12800
+          ],
+          "dtype": "float64",
+          "MATLAB_class": "double"
+        },
+        {
+          "name": "cfg",
+          "kind": "MATLAB struct represented as HDF5 group",
+          "fields": [
+            "design",
+            "domain",
+            "eigen",
+            "filter",
+            "material",
+            "move",
+            "multiplicity",
+            "optimizer",
+            "projection",
+            "provenance",
+            "runtime",
+            "stop"
+          ]
+        },
+        {
+          "name": "exh",
+          "kind": "MATLAB struct represented as HDF5 group",
+          "fields": [
+            "P",
+            "W",
+            "Wnp",
+            "descents",
+            "eventBranch",
+            "events",
+            "ruleAdmitsStop",
+            "signalDrivesMove",
+            "stageStarts",
+            "terminalBranch",
+            "terminalDeclBegin",
+            "terminalDeclIter",
+            "terminalDeclared",
+            "tol"
+          ]
+        },
+        {
+          "name": "hist",
+          "kind": "MATLAB struct represented as HDF5 group",
+          "fields": [
+            "N",
+            "beta",
+            "cumInner",
+            "dBeta",
+            "degen",
+            "dxNorm2",
+            "dxOuter",
+            "dxPhys2",
+            "exA",
+            "exAmp",
+            "exB",
+            "exCos",
+            "exDecl",
+            "exE",
+            "exMedcos",
+            "exMednet",
+            "exNA",
+            "exNB",
+            "exNet",
+            "exStageStart",
+            "gap12",
+            "innerConv",
+            "massLow",
+            "move",
+            "multJ",
+            "nInner",
+            "omega",
+            "pEvent",
+            "pPen",
+            "pStage",
+            "projBeta",
+            "projEvent",
+            "projStage",
+            "stage",
+            "tEig",
+            "tGrad",
+            "tInner",
+            "tOuter",
+            "vol",
+            "volErr"
+          ]
+        },
+        {
+          "name": "log",
+          "HDF5_shape": [
+            4,
+            1
+          ],
+          "dtype": "object",
+          "MATLAB_class": "cell"
+        },
+        {
+          "name": "meta",
+          "kind": "MATLAB struct represented as HDF5 group",
+          "fields": [
+            "arm",
+            "cfgHash",
+            "implTree",
+            "label",
+            "matlab",
+            "maxOuter",
+            "nelx",
+            "nely",
+            "overrides",
+            "preset",
+            "upstreamPreset",
+            "wall_s"
+          ]
+        },
+        {
+          "name": "move",
+          "HDF5_shape": [
+            1,
+            1600
+          ],
+          "dtype": "float64",
+          "MATLAB_class": "double"
+        }
+      ]
+    },
+    {
+      "path": "analysis/OlhoffCurrent/evidence/two_branch_controller_validation/C400x50_trajectory.mat",
+      "class": "required",
+      "description": "Stored numerical input for this offline audit; scientific identity limitations are documented separately",
+      "bytes": 139808729,
+      "sha256": "fa0e714c712889a1442c8063d1ec809244bc42701883cf74366efb0a2019045e",
+      "present": true,
+      "format": "MAT v7.3 HDF5",
+      "variables": [
+        {
+          "name": "DRHO",
+          "HDF5_shape": [
+            505,
+            20000
+          ],
+          "dtype": "float64",
+          "MATLAB_class": "double"
+        },
+        {
+          "name": "RHO",
+          "HDF5_shape": [
+            505,
+            20000
+          ],
+          "dtype": "float64",
+          "MATLAB_class": "double"
+        },
+        {
+          "name": "cfg",
+          "kind": "MATLAB struct represented as HDF5 group",
+          "fields": [
+            "design",
+            "domain",
+            "eigen",
+            "filter",
+            "material",
+            "move",
+            "multiplicity",
+            "optimizer",
+            "projection",
+            "provenance",
+            "runtime",
+            "stop"
+          ]
+        },
+        {
+          "name": "exh",
+          "kind": "MATLAB struct represented as HDF5 group",
+          "fields": [
+            "P",
+            "W",
+            "Wnp",
+            "descents",
+            "eventBranch",
+            "events",
+            "ruleAdmitsStop",
+            "signalDrivesMove",
+            "stageStarts",
+            "terminalBranch",
+            "terminalDeclBegin",
+            "terminalDeclIter",
+            "terminalDeclared",
+            "tol"
+          ]
+        },
+        {
+          "name": "hist",
+          "kind": "MATLAB struct represented as HDF5 group",
+          "fields": [
+            "N",
+            "beta",
+            "cumInner",
+            "dBeta",
+            "degen",
+            "dxNorm2",
+            "dxOuter",
+            "dxPhys2",
+            "exA",
+            "exAmp",
+            "exB",
+            "exCos",
+            "exDecl",
+            "exE",
+            "exMedcos",
+            "exMednet",
+            "exNA",
+            "exNB",
+            "exNet",
+            "exStageStart",
+            "gap12",
+            "innerConv",
+            "massLow",
+            "move",
+            "multJ",
+            "nInner",
+            "omega",
+            "pEvent",
+            "pPen",
+            "pStage",
+            "projBeta",
+            "projEvent",
+            "projStage",
+            "stage",
+            "tEig",
+            "tGrad",
+            "tInner",
+            "tOuter",
+            "vol",
+            "volErr"
+          ]
+        },
+        {
+          "name": "log",
+          "HDF5_shape": [
+            7,
+            1
+          ],
+          "dtype": "object",
+          "MATLAB_class": "cell"
+        },
+        {
+          "name": "meta",
+          "kind": "MATLAB struct represented as HDF5 group",
+          "fields": [
+            "arm",
+            "cfgHash",
+            "implTree",
+            "label",
+            "matlab",
+            "maxOuter",
+            "nelx",
+            "nely",
+            "overrides",
+            "preset",
+            "upstreamPreset",
+            "wall_s"
+          ]
+        },
+        {
+          "name": "move",
+          "HDF5_shape": [
+            1,
+            505
+          ],
+          "dtype": "float64",
+          "MATLAB_class": "double"
+        }
+      ]
+    },
+    {
+      "path": "examples/Performance/conference_benchmark/campaign_9mesh_r2/benchmark_records.mat",
+      "class": "required",
+      "description": "Stored numerical input for this offline audit; scientific identity limitations are documented separately",
+      "bytes": 12402579,
+      "sha256": "873125858df02664d9a7d37bd09e4e9b0b1ccff5c37940d088f9b1e424921fae",
+      "present": true,
+      "format": "MAT v7.3 HDF5",
+      "variables": [
+        {
+          "name": "cfg",
+          "kind": "MATLAB struct represented as HDF5 group",
+          "fields": [
+            "confirmLongCampaign",
+            "crosscheckTolRel",
+            "fitScaling",
+            "maxOuterOverride",
+            "methods",
+            "outputDir",
+            "performanceCampaign",
+            "resolutions",
+            "runEvaluator",
+            "runLabel",
+            "runWarmup",
+            "scientificEvidence",
+            "singleThread",
+            "timingTolAbs",
+            "timingTolRel",
+            "writeCSV",
+            "writeJSON",
+            "writeLaTeX",
+            "yukselMaxIters"
+          ]
+        },
+        {
+          "name": "manifest",
+          "kind": "MATLAB struct represented as HDF5 group",
+          "fields": [
+            "active_methods",
+            "active_resolutions",
+            "active_resolutions_count",
+            "cap_summary",
+            "caveats",
+            "configuration",
+            "element_counts",
+            "environment",
+            "generated_by",
+            "generated_datetime",
+            "manifest_role",
+            "manifest_schema",
+            "method_configurations",
+            "olhoff_implementation",
+            "path_scrub",
+            "preflight",
+            "repository",
+            "resolved_implementations",
+            "run_class",
+            "source_hashes",
+            "timing_schema",
+            "warmup"
+          ]
+        },
+        {
+          "name": "records",
+          "kind": "MATLAB struct represented as HDF5 group",
+          "fields": [
+            "accounting",
+            "caveat",
+            "counts",
+            "effective_config",
+            "effective_config_hash",
+            "error",
+            "evaluator",
+            "implementation",
+            "implementation_provenance",
+            "is_warmup",
+            "label",
+            "mesh",
+            "method",
+            "method_key",
+            "method_label",
+            "n_elements",
+            "ok",
+            "omega",
+            "omega1_native",
+            "overridden",
+            "production_preset",
+            "profile_id",
+            "resolved_implementation",
+            "scientific_observation",
+            "solver_log",
+            "status",
+            "status_note",
+            "stopping",
+            "telemetry",
+            "times",
+            "x"
+          ]
+        },
+        {
+          "name": "scaling",
+          "kind": "MATLAB struct represented as HDF5 group",
+          "fields": [
+            "caveat",
+            "fitted",
+            "methods",
+            "model",
+            "reason"
+          ]
+        },
+        {
+          "name": "records.x for method_key=olhoff",
+          "arrays": [
+            {
+              "record_index_MATLAB": 3,
+              "HDF5_shape": [
+                1,
+                3200
+              ],
+              "dtype": "float64"
+            },
+            {
+              "record_index_MATLAB": 6,
+              "HDF5_shape": [
+                1,
+                7200
+              ],
+              "dtype": "float64"
+            },
+            {
+              "record_index_MATLAB": 9,
+              "HDF5_shape": [
+                1,
+                12800
+              ],
+              "dtype": "float64"
+            },
+            {
+              "record_index_MATLAB": 12,
+              "HDF5_shape": [
+                1,
+                20000
+              ],
+              "dtype": "float64"
+            },
+            {
+              "record_index_MATLAB": 15,
+              "HDF5_shape": [
+                1,
+                28800
+              ],
+              "dtype": "float64"
+            },
+            {
+              "record_index_MATLAB": 18,
+              "HDF5_shape": [
+                1,
+                39200
+              ],
+              "dtype": "float64"
+            },
+            {
+              "record_index_MATLAB": 21,
+              "HDF5_shape": [
+                1,
+                51200
+              ],
+              "dtype": "float64"
+            },
+            {
+              "record_index_MATLAB": 24,
+              "HDF5_shape": [
+                1,
+                64800
+              ],
+              "dtype": "float64"
+            },
+            {
+              "record_index_MATLAB": 27,
+              "HDF5_shape": [
+                1,
+                80000
+              ],
+              "dtype": "float64"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "analysis/OlhoffCurrent/evidence/three_rung_promotion_validation_retry1/C320x40_three_rung_trajectory.mat",
+      "class": "optional",
+      "description": "Missing original candidate; absence disclosed. Audit does not claim raw candidate replay.",
+      "sha256": "fb29817e1a5de7e3803fd00ef991c1b3cf23baca4aca48e50876b86ca5bbaffe",
+      "present": false,
+      "format": "MAT v7.3 HDF5"
+    }
+  ]
+}

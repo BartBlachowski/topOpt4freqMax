@@ -1,0 +1,210 @@
+Topological design of freely vibrating continuum structures for maximum values of simple and multiple eigenfrequencies and frequency gaps      97
+
+
+the increments Δlj ; j ¼ n;    ; n þ N  1 of the multiple              indicated in Fig. 1, which is applicable for problems with
+eigenvalue are generally nonlinear functions of the direction              any mix of multiple and simple eigenfrequencies. Firstly,
+of the design increment vector Δr. Thus, unlike simple                     we specify the value of the order n of the eigenfrequency
+eigenvalues, multiple eigenvalues do not admit a usual                     wn to be considered, and assign initial values to the design
+linearization in terms of the design variables.                            variables re ; e ¼ 1;    ; NE . As shown in Fig. 1, the
+   Finally, two important special cases should be observed.                procedure consists of a main (outer) loop and an inner
+                                                                           loop, and these shall be briefly discussed in the following.
+3.4.1 Case of simple eigenfrequency
+                                                                           3.5.1 Main loop
+As is to be expected, for N=1, i.e., j=s=k=n, (17) and (18)
+reduce to the case of a simple (unimodal) eigenvalue                       In general, the first step of a given iteration in the main loop
+ln ¼ wn2 . In this case, (18) reduces to the simple algebraic              is solely based on the given value of n and the set of values
+equation                                                                   of the design variables re ; e ¼ 1;    ; NE , obtained at the
+                                                                           end of the preceding iteration. Using these values, we first
+f Tnn Δρ  Δl n ¼ 0;                                             ð20Þ
+                                                                           apply (3) to compute the global stiffness and mass matrices
+where, according to (13), (19), and (14), we have                          K and M and then solve the generalized eigenvalue
+                                                                           problem (7b) by finite element (FE) analysis for the
+f nn ¼ rl n ;                                                    ð21Þ
+i.e., f nn is simply the vector of sensitivities of the unimodal                            0. Problem initialization.
+eigenvalue ln ¼ w2n with respect to the design variables ρe,                                  Define value of n and
+e=1, ..., NE, cf. (10) and (14).                                                         initialize design variables ρ e
+
+
+3.4.2 Case of vanishing off-diagonal terms
+                                                                             1. Solution of the generalized eigenvalue problem (7b,c)
+                                                                                 for eigenfrequencies and –modes by FE-analysis.
+For the case of multiple eigenvalues, cf. (17) with N>1, a                    Detect possible multiplicity N of ω n (and R of ω n−1 )
+very important observation can be made. If in (18) all off-
+diagonal scalar products are 0, i.e., if
+                                                                             2. Computation of generalized gradients fsk, if N>1 (and
+                                                                                   R>1) or usual gradients if N=1 (and R=1)
+f Tsk Δρ ¼ 0;     s 6¼ k;   s; k ¼ n;    ; n þ N  1;         ð22Þ
+then the increment Δlj of an eigenvalue lj ¼ w2j becomes
+determined as
+                                                                              3. Iterative solution of sub-optimization problem (25)
+Δlj ¼ f Tjj Δρ;     j ¼ n;    ; n þ N  1;                    ð23Þ         (or (26)) for increments Δ ρ e of the design variables
+
+where, according to (17) and (19),                                                                                               Inner loop
+      n  0           0
+                                        0        0
+                                                      oT
+f jj ¼ φTj Kρ1  lj Mρ1 φj ;    ; φTj KρN  lj MρN φj ;                                     Increments Δ ρe
+                                                E           E
+                                                                                                 converged ?                   No
+  j ¼ n;    ; n þ N  1:
+                                                                 ð24Þ                                    Yes
+
+   Hence, if the design increment vector Δr fulfils (22),
+                                                                                    4. Update values of the design variables
+then f jj has precisely the same form as the gradient vector
+                                                                                              ρ e : = ρ e + Δρ e .
+rlj in (14) for a simple eigenvalue, and the eigenvalue
+                                                                                                                                        Main loop
+increments Δlj in (23) are uniquely determined on the
+basis of the eigenmodes 8j , j ¼ n;    ; n þ N  1. The
+formulas for design sensitivity analysis of multiple eigen-                                     ρ e converged ?                        No
+values then become precisely the same as those for simple
+                                                                                              i.e., Δ ρ < ε ?
+eigenvalues.
+                                                                                                         Yes
+3.5 Computational procedure
+                                                                                                      Stop
+The topology optimization problems (15a–c) and (16a–d)
+can be efficiently solved by the iterative procedure                       Fig. 1 Flow chart of the iterative solution procedure
+98                                                                                                                                       J. Du, N. Olhoff
+
+
+eigenfrequencies wj and eigenmodes φj ; j ¼ 1;    ; J . In this      (16a–d) in terms of the vector Δr of increments
+equation, J must be chosen to be sufficiently large to                  Δre ; e ¼ 1;    ; NE , of the design variables and
+capture all members of a possible N-fold eigenfrequency                             increments of the squared eigenfrequencies
+                                                                        corresponding
+wn ¼    ¼ wnþN 1 . If not done by the FE program, we                Δlj ¼ Δ wj2 ; j ¼ n;    ; n þ N  1 (and j ¼ n  R;    ;
+orthonormalize φj ; j ¼ 1;    ; J according to (7c).                 n  1, for problem (16a–d)). Hereby, we obtain the
+     As an important part of the first step, we finally detect          following subproblems to be solved for optimum incre-
+the possible multiplicity N of the eigenfrequency wn ¼                  ments in the third step of the main loop of the computa-
+   ¼ wnþN 1 (as well as multiplicity R of wnR ¼    ¼            tional procedure for:
+wn1 if problem (16a–d) is considered). In this context, the
+term ‘multiplicity’ is used if the numerical value of the               (1) Maximization of the nth eigenfrequency:
+relative difference between eigenfrequencies in question is
+                                                                                     max              fβ g
+within a predefined, very small tolerance.                                    β; Δρ1 ;    ; ΔρNE                                                ð25aÞ
+     In the second step of the main loop, we set e       l ¼ wn2 (17)
+       b
+(and l ¼ wn1 for problem (16a–d)), and on the basis of the
+               2
+                                                                        subject to:
+iterates K, M, φj , N (and R) obtained in the first step, we
+                       0          0
+now compute Kρe and Mρe and subsequently establish the                     h              i
+                                                                        β  w2j þ f Tjj Δρ  0;                  f or j ¼ J ¼ n þ N;               ð25bÞ
+generalized gradient vectors f sk ; s; k ¼ n;    ; n þ N  1,
+from (19). If problem (16a–d) is considered, f sk ; s; k ¼
+n  R;    ; n  1 also needs to be computed.         Note that        h        i
+according to (21), we have f sk ¼ f nn ¼ r w2n if wn is                 b  w2j þ Δ w2j  0;                       j ¼ n; . . . ; n þ N  1;       ð25cÞ
+simple (N=1) and the analogous result if wn1 is simple
+(R=1).
+                                                                                           
+     In addition to the values of the design variables                  det f Tsk Δρ  δsk w2 ¼ 0;                      s; k ¼ n; . . . ; n þ N  1;
+re ; e ¼ 1;    ; NE used in the first step, all the iterates                                                                                    ð25dÞ
+determined in this and the second step, i.e., K, M, wj , and
+φj ; ðj ¼ 1;    ; J Þ, N, R, e
+                                l, bl, and the fsk vectors mentioned
+above are kept fixed in the third step of the main loop.                X
+                                                                        NE
+     As indicated in Fig. 1, the third step of the main loop                   ðre þ Δre ÞVe  V   0;                  V  ¼ aV0 ;               ð25eÞ
+consists of an inner loop that solves a suboptimization                 e¼1
+
+problem. Upon convergence, this inner loop delivers
+optimum values of increments Δre ; e ¼ 1;    ; NE of the
+                                                                        0 < r  re þ Δre  1;                     e ¼ 1;    ; NE ;              ð25f Þ
+design variables subject to the fixed values of the above
+mentioned iterates. The inner loop is discussed below.                  (2) Maximization of the gap (distance) between the nth
+     In the fourth step of the main loop, the design variables              and (n−1)st eigenfrequencies:
+re ; e ¼ 1;    ; NE , are updated by addition of the incre-
+ments Δre , and subsequently, a check for convergence of                                max              fβ 2  β 1 g                              ð26aÞ
+                                                                                β 1 ;β 2 ;Δρ1 ;ΔρNE
+re is performed     by investigating   whether the norm of the
+vector Δr ¼ Δr1 ;    ; ΔrNE of design increments is less             subject to:
+than a small, predefined value ɛ. If the design variables re                 h             i
+have converged, the optimum topology design has been                    β2  w2j þ f Tjj Δρ  0;                  f or j ¼ J ¼ n þ N ;             ð26bÞ
+obtained—otherwise, the updated vector of design variables                  h        i
+is used as a basis for a subsequent iteration in the main               b2  w2j þ Δ w2j  0;                        j ¼ n; . . . ; n þ N  1;     ð26cÞ
+loop.
+
+3.5.2 Inner loop                                                        h           i
+                                                                            w2j þ Δ w2j  b1  0;                    j ¼ n  R; . . . ; n  1;
+                                                                                                                                                   ð26dÞ
+Inspired by the results (18) and (19) of the sensitivity
+                                                                             ð R  n  1Þ
+analysis of a multiple eigenfrequency in Section 3.4, we
+shall now develop a scheme to be used in the third step of
+                                                                        h                 i
+the main loop in Fig. 1 for optimum values of increments
+                                                                            w2j þ f Tjj Δρ  β 1  0;             f or j ¼ n  R  1;
+Δre ; e ¼ 1;    ; NE of the design variables subject to the
+                                                                                                                                                   ð26eÞ
+known values of iterates that are fixed in the third step. To
+                                                                             ðif R  n  2Þ
+this end, we rewrite the bound formulations (15a–c) and
+Topological design of freely vibrating continuum structures for maximum values of simple and multiple eigenfrequencies and frequency gaps   99
+
+                  
+det fskT Δρ  δsk w2 ¼ 0;          s; k ¼ n; . . . ; n þ N  1;            3.5.3 Remarks
+                                                               ð26f Þ
+                                                                           It is seen that relative to (15a–c) and (16a–d), (25d), (26f),
+                        2
+det   f Tsk Δρ  δsk    w   ¼ 0;   s; k ¼ n  R; . . . ; n  1;            and (26g) have been included in the formulations of
+                                                                           problems (25a–f) and (26a–i). These equations stem from
+                                                               ð26gÞ
+                                                                           (18) and represent the coupling between the independent    
+                                                                           variables Δre and the dependent variables Δ wj2
+X
+NE                                                                         corresponding to multiple eigenfrequencies. This coupling
+      ðre þ Δre ÞVe  V   0;       V  ¼ aV0 ;               ð26hÞ       is nonlinear in general. Each of (25d), (26f), and (26g)
+e¼1                                                                        represent an algebraic subeigenvalue problem with Δðw      Þ
+                                                                                                                                       2
+                                                                                                                                          as
+                                                                           an eigenvalue that furnishes a number of solutions Δ wj2 ,
+                                                                           which correspond to the possible multiplicity N of the
+                                                                           eigenvalue (17) in problems (15a–c) and (16a–d) and the
+0 < r  re þ Δre  1;          e ¼ 1;    ; NE :                ð26iÞ
+                                                                           possible multiplicity R of the additional similar eigenvalue
+                                                                           that may occur in problem (16a–d) and is defined in the
+                                                                           earlier footnote. The increments Δðw 2j Þ obtained this way
+                                                                           are seen to enter the variable bound constraints (25c), (26c),
+     Note that we have not transferred to (25a–f) and (26a–i),             and (26d) for the incremented multiple eigenfrequencies.
+respectively, the constraints in (15a–c) and (16a–d) con-                  Note that if N and/or R have been found to be equal to unity
+taining the generalized eigenvalue problem (7b) and                        in step 1 of the main (outer) loop in Fig. 1, it follows directly
+orthonormality conditions (7c); these constraints have been                from the results in Section 3.4.1 that each of (25d), (26f),
+already implemented through the structural FE analysis in                  and/or (26g) reduce to the pertinent single algebraic equation
+step 1 of the main loop of the iterative solution procedure,               for the increment of a simple eigenfrequency.
+cf. Section 3.5.1 and Fig. 1. Note also that in the                            This means that the computational procedure developed
+suboptimization problems (25a–f) and (26a–i), the only                     in the present Section 3.5 and outlined in Fig. 1, can be
+unknowns are the bound variables β and (β1, β2) and the                    applied for automatic solution of problems (15a–c) and
+increments of the design variables Δre ; e ¼ 1;    ; NE ,               (16a–d) in Section 3.3 independently of whether the subject
+which play the role as independent variables, and the                      eigenfrequencies of order n in (15a–c) and (16a–d) and of
+dependent variables are the increments Δðwj2 Þ; j ¼ n;                     order n−1 in (16a–d) are members of a multiple eigenvalue
+   ; n þ N  1 of the N-fold eigenfrequency wn2 ¼    ¼               or are just a simple eigenvalue.
+wnþN1
+   2
+                    (25a–f) and (26a–i)) together with the
+           (in problems                                                        The suboptimization problems (25a–f) and (26a–i) of
+increments Δ wj2 ; j ¼ n  R;    ; n  1 of the R-fold                  problems (15a–c) and (16a–d), respectively, can be solved
+eigenfrequency w2nR ¼    ¼ wn1    2
+                                           (in problem (26a–i)).           by using a mathematical programming method. In this
+All other iterates in (25a–f) and (26a–i), i.e., the material              paper, the MMA method (Svanberg 1987) has been used.
+volume densities re , the eigenfrequencies wj , the general-                   Finally, it is worth noting that if we introduce the
+ized gradient vectors f sk , and the multiplicities N and R                additional constraints f Tsk Δr ¼ 0, for s 6¼ k, s, k=n, ...,
+have been determined in steps 1 and 2 of the main iteration                n+N−1, i.e., if we impose vanishing of the off-diagonal
+loop and are kept fixed in the current step 3 of this loop.                terms in (18), then the increments Δlj ¼ Δðwj2 Þ are
+     Earlier, we defined J as the highest order of an                      determined in a linearized form with respect to the incre-
+eigenfrequency to be considered and subjected to the                       ments Δre of the material volume densities for both simple
+variable bound constraints (15b) and (16b) in problems                     and multiple eigenvalues. As a result, the suboptimization
+(15a–c) and (16a–d). In the current computational proce-                   problems (25a–f) and (26a–i) reduce to linear programming
+dure, we have chosen J to be the order J=n+N of the                        problems (see Krog and Olhoff 1999) and can be solved
+closest eigenfrequency that is greater than the multiple                   using a linear programming algorithm.
+eigenfrequency wj ; j ¼ n þ N  1. Assuming that the Jth
+eigenfrequency is simple, it immediately follows from
+Section 3.4.1 that the variable bound constraint for the                   4 Numerical examples: single material topology design
+incremented form of the Jth eigenfrequency can be written                  of beam-like 2D structures
+as (25b) and (26b) in problems (25a–f) and (26a–i). A
+corresponding constraint for the closest eigenfrequency                    4.1 Maximization of the fundamental eigenfrequency
+wnR1 that is smaller than the multiple eigenfrequency
+wj2 ; j ¼ n  R;    ; n  1 takes the form (26e), if wnR1 is          As a first example, we consider the topology optimization
+simple.                                                                    of a single-material beam-like structure modeled by 2D
+

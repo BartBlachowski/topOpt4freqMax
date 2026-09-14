@@ -1,0 +1,1197 @@
+{
+  "verdict": "GRAY_FORENSICS_EVIDENCE_PASS",
+  "branch": "benchmark-methodology-r2",
+  "HEAD": "013cc48451d33bed61c5c4eea174bbd898d548a2",
+  "impl_tree": "edbfe47eb32109a2fb017f6f13d5327f2c240357caa96630064ffcf37ee152cb",
+  "production_file_checks": [
+    {
+      "path": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/algo/compareHistory.m",
+      "expected": "1caaff78e5ffd57d8b4c0f4ad93ae6d8feed0d2b38a6b391f471311e6303604a",
+      "actual": "1caaff78e5ffd57d8b4c0f4ad93ae6d8feed0d2b38a6b391f471311e6303604a"
+    },
+    {
+      "path": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/algo/compareHistoryTo.m",
+      "expected": "5f1797b29907990a67fa203e838beb09ab403a0068cdb290971925f15c3c6c61",
+      "actual": "5f1797b29907990a67fa203e838beb09ab403a0068cdb290971925f15c3c6c61"
+    },
+    {
+      "path": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/algo/compareTopology.m",
+      "expected": "adadf0b1a143231e6ca7f5168be9f7747040b81b9a91fc4b79ebc8900c9e58fd",
+      "actual": "adadf0b1a143231e6ca7f5168be9f7747040b81b9a91fc4b79ebc8900c9e58fd"
+    },
+    {
+      "path": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/algo/defaultCfg.m",
+      "expected": "dd8f1cc7c19d41dfb4dde989ddd40a3dbfd733fecb622f43275144c359a6b911",
+      "actual": "dd8f1cc7c19d41dfb4dde989ddd40a3dbfd733fecb622f43275144c359a6b911"
+    },
+    {
+      "path": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/algo/deltaLambda.m",
+      "expected": "101519fcdcc2175d7d2aa135d919ad0a0efaa24cbb3edd7761d8f27b9b504038",
+      "actual": "101519fcdcc2175d7d2aa135d919ad0a0efaa24cbb3edd7761d8f27b9b504038"
+    },
+    {
+      "path": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/algo/genGrad.m",
+      "expected": "13f2ab8541b2f626e340a592b99730ee4cba101e4f978a214dd7227adaeb5208",
+      "actual": "13f2ab8541b2f626e340a592b99730ee4cba101e4f978a214dd7227adaeb5208"
+    },
+    {
+      "path": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/algo/imresizeNN.m",
+      "expected": "b548f7838cdbaa2db1998fc885a2ee45b704e17ae0bcedfbf16236a7ae962be9",
+      "actual": "b548f7838cdbaa2db1998fc885a2ee45b704e17ae0bcedfbf16236a7ae962be9"
+    },
+    {
+      "path": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/algo/innerLoop.m",
+      "expected": "0f9f7fbcc89d5b518fc08c85f70af28caba08bcdc14850f10a3534fe1b65e18f",
+      "actual": "0f9f7fbcc89d5b518fc08c85f70af28caba08bcdc14850f10a3534fe1b65e18f"
+    },
+    {
+      "path": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/algo/innerLoopLP.m",
+      "expected": "7724753c02f84d6009c3998f758d5b3f9c5144ad39ca6f470584a2c99e089465",
+      "actual": "7724753c02f84d6009c3998f758d5b3f9c5144ad39ca6f470584a2c99e089465"
+    },
+    {
+      "path": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/algo/innerLoopRho.m",
+      "expected": "aded1849467e93201d2a8c78effaa303300e71da4e192cefad4649f55cab35e5",
+      "actual": "aded1849467e93201d2a8c78effaa303300e71da4e192cefad4649f55cab35e5"
+    },
+    {
+      "path": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/algo/moveControl.m",
+      "expected": "76ff15824f205db8d5a6a4b1ef4890f7320e450dc0bd1e6f4989ad794791c80d",
+      "actual": "76ff15824f205db8d5a6a4b1ef4890f7320e450dc0bd1e6f4989ad794791c80d"
+    },
+    {
+      "path": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/algo/multRule.m",
+      "expected": "c8ee926c2cf985b79e634b99116bbd37b96d9a1f9b26b51c4bb88ee31d5d4b52",
+      "actual": "c8ee926c2cf985b79e634b99116bbd37b96d9a1f9b26b51c4bb88ee31d5d4b52"
+    },
+    {
+      "path": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/algo/olhoffOpt.m",
+      "expected": "dd8424f84f60bafbff05b634ec176545385bd9b91d020ce0aecab431a6b03e7c",
+      "actual": "dd8424f84f60bafbff05b634ec176545385bd9b91d020ce0aecab431a6b03e7c"
+    },
+    {
+      "path": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/algo/plotHistory.m",
+      "expected": "4f0b1620c557fae43f2ac9d20accb9484da01cb8d3e751b9ac869e0f35c5163c",
+      "actual": "4f0b1620c557fae43f2ac9d20accb9484da01cb8d3e751b9ac869e0f35c5163c"
+    },
+    {
+      "path": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/algo/textStamp.m",
+      "expected": "f540e10ab2c84b85c70c62e69192998f806260031275d4c94d60bc9db2fe2c55",
+      "actual": "f540e10ab2c84b85c70c62e69192998f806260031275d4c94d60bc9db2fe2c55"
+    },
+    {
+      "path": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/algo/topologyImage.m",
+      "expected": "1bcdf9b9849475a46beea8ef4651618d699debed1823aee8658a4df412141823",
+      "actual": "1bcdf9b9849475a46beea8ef4651618d699debed1823aee8658a4df412141823"
+    },
+    {
+      "path": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/algo/useMMA.m",
+      "expected": "b87ef5f65918c015e5262eda6138b6fa47403f127846212dc0238e0549e100d8",
+      "actual": "b87ef5f65918c015e5262eda6138b6fa47403f127846212dc0238e0549e100d8"
+    },
+    {
+      "path": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/architecture/+olh/+config/assign.m",
+      "expected": "e5a8bee460f8d76226132a35ca4d5a474853e360612e6f9a23f207fbc801297b",
+      "actual": "e5a8bee460f8d76226132a35ca4d5a474853e360612e6f9a23f207fbc801297b"
+    },
+    {
+      "path": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/architecture/+olh/+config/defaults.m",
+      "expected": "32c52085a91869e577388e337f57a6a8b37bfa19c552ec6094d3bcf2266e39b5",
+      "actual": "32c52085a91869e577388e337f57a6a8b37bfa19c552ec6094d3bcf2266e39b5"
+    },
+    {
+      "path": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/architecture/+olh/+config/describe.m",
+      "expected": "e089721ba2b91f5f3968ec9842c3dc857556b69023df1a753910bf8ac33e242f",
+      "actual": "e089721ba2b91f5f3968ec9842c3dc857556b69023df1a753910bf8ac33e242f"
+    },
+    {
+      "path": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/architecture/+olh/+config/epsilonForMesh.m",
+      "expected": "8a2c621749d4bfd287bcd50dd06a066e9f963f8aa0c0b9cd3d9f2994f4c2a9fe",
+      "actual": "8a2c621749d4bfd287bcd50dd06a066e9f963f8aa0c0b9cd3d9f2994f4c2a9fe"
+    },
+    {
+      "path": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/architecture/+olh/+config/fromLegacy.m",
+      "expected": "7d0bad832c906c5304acb2ebf84304739fe3531281a0e007aa395fd58ae96ff8",
+      "actual": "7d0bad832c906c5304acb2ebf84304739fe3531281a0e007aa395fd58ae96ff8"
+    },
+    {
+      "path": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/architecture/+olh/+config/getPath.m",
+      "expected": "f9a866853d27c16488508c21c8f38d286b56188201b891427fc030c2059b4b0e",
+      "actual": "f9a866853d27c16488508c21c8f38d286b56188201b891427fc030c2059b4b0e"
+    },
+    {
+      "path": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/architecture/+olh/+config/paths.m",
+      "expected": "43397408fb993e530a7bd3b5696a23b3501bc0cfaaa8e0f84c7a9bad45690720",
+      "actual": "43397408fb993e530a7bd3b5696a23b3501bc0cfaaa8e0f84c7a9bad45690720"
+    },
+    {
+      "path": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/architecture/+olh/+config/resolve.m",
+      "expected": "d77d43fd0bcbefffc66524f2b35add5384c98e30fced1e068ceb4723d283717d",
+      "actual": "d77d43fd0bcbefffc66524f2b35add5384c98e30fced1e068ceb4723d283717d"
+    },
+    {
+      "path": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/architecture/+olh/+config/schema.m",
+      "expected": "d7a808995d9a34810442ddf17f15de980aa1e62efe90b3563f3e474ae5f5cf67",
+      "actual": "d7a808995d9a34810442ddf17f15de980aa1e62efe90b3563f3e474ae5f5cf67"
+    },
+    {
+      "path": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/architecture/+olh/+config/setPath.m",
+      "expected": "e36cebd3f921e64d33b10dbf4ef7ef44c17fb2bf1e23a6404d0b264426d79517",
+      "actual": "e36cebd3f921e64d33b10dbf4ef7ef44c17fb2bf1e23a6404d0b264426d79517"
+    },
+    {
+      "path": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/architecture/+olh/+config/toLegacy.m",
+      "expected": "685caacbd3db2bd19e14cc4fe3be0098b7bba423fe2b4a91f0cb83a3e4a21a04",
+      "actual": "685caacbd3db2bd19e14cc4fe3be0098b7bba423fe2b4a91f0cb83a3e4a21a04"
+    },
+    {
+      "path": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/architecture/+olh/+config/validate.m",
+      "expected": "30e495ea8bcc25193de2c64f04984549870e213f9f9df871e52cc4c906cab141",
+      "actual": "30e495ea8bcc25193de2c64f04984549870e213f9f9df871e52cc4c906cab141"
+    },
+    {
+      "path": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/architecture/+olh/+material/massInterpolation.m",
+      "expected": "1b8fd4e887f08b5b61c5a4f72578a8b29c99748fcb545c68534325e6e52deab3",
+      "actual": "1b8fd4e887f08b5b61c5a4f72578a8b29c99748fcb545c68534325e6e52deab3"
+    },
+    {
+      "path": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/architecture/+olh/+move/exhaustion.m",
+      "expected": "17b37a384b1aa5d987d9c861e16071d1140af130f92406ccc11cec4518bcae0c",
+      "actual": "17b37a384b1aa5d987d9c861e16071d1140af130f92406ccc11cec4518bcae0c"
+    },
+    {
+      "path": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/architecture/+olh/+move/limit.m",
+      "expected": "61fa923d430121ead764a229b4f48dfd77617540b4ab6db883ccd9d5904b1c1e",
+      "actual": "61fa923d430121ead764a229b4f48dfd77617540b4ab6db883ccd9d5904b1c1e"
+    },
+    {
+      "path": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/architecture/+olh/+multi/detect.m",
+      "expected": "91e499e9308ccc8d471473a7d45cb7707f3e6d0f6fc73d9fdbfd04829312bfc3",
+      "actual": "91e499e9308ccc8d471473a7d45cb7707f3e6d0f6fc73d9fdbfd04829312bfc3"
+    },
+    {
+      "path": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/architecture/+olh/+presets/apply.m",
+      "expected": "daed58374c507ff140b542483d6c51c6b12dac9bf9e764925b7e19c124a2f7ba",
+      "actual": "daed58374c507ff140b542483d6c51c6b12dac9bf9e764925b7e19c124a2f7ba"
+    },
+    {
+      "path": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/architecture/+olh/+presets/duOlhoffFrozenM4.m",
+      "expected": "6ed3624cd19b3569f55b23acad1d5a1038d9c625a7fae9935e801ffb765ac40e",
+      "actual": "6ed3624cd19b3569f55b23acad1d5a1038d9c625a7fae9935e801ffb765ac40e"
+    },
+    {
+      "path": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/architecture/+olh/+presets/duOlhoffMatureM4.m",
+      "expected": "0445fbc560ad2e99738be9cc72501cf5acb8e196256fdd5f028cdc4b23e14102",
+      "actual": "0445fbc560ad2e99738be9cc72501cf5acb8e196256fdd5f028cdc4b23e14102"
+    },
+    {
+      "path": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/architecture/+olh/+presets/legacyBinaryDiagonal.m",
+      "expected": "b26bdaa0e5183a9d1cd107708b61d295f9a7d39a4d66a6251e812b112f26eade",
+      "actual": "b26bdaa0e5183a9d1cd107708b61d295f9a7d39a4d66a6251e812b112f26eade"
+    },
+    {
+      "path": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/architecture/+olh/+presets/list.m",
+      "expected": "d30b9ab76114e39af56e4938f365867cda101d1447389baf3bfbca0ed72610a8",
+      "actual": "d30b9ab76114e39af56e4938f365867cda101d1447389baf3bfbca0ed72610a8"
+    },
+    {
+      "path": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/architecture/+olh/+presets/noDescentFixedMove.m",
+      "expected": "91d16bcb595d4e1c2ed96a69d16fdc77bdccdaeae07ca4f8e06269f377ae74da",
+      "actual": "91d16bcb595d4e1c2ed96a69d16fdc77bdccdaeae07ca4f8e06269f377ae74da"
+    },
+    {
+      "path": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/architecture/+olh/+presets/pContinuationCoupled.m",
+      "expected": "737eb4600d34bfbc21be9ecb9ceb0d5f852f556738ecb6f765112d3c1e4b8cf9",
+      "actual": "737eb4600d34bfbc21be9ecb9ceb0d5f852f556738ecb6f765112d3c1e4b8cf9"
+    },
+    {
+      "path": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/architecture/+olh/+presets/pContinuationDecoupled.m",
+      "expected": "6e774ec3e2d62b018f63e7177dfe4112d5af7486c909ba69bb063a60d14dbeee",
+      "actual": "6e774ec3e2d62b018f63e7177dfe4112d5af7486c909ba69bb063a60d14dbeee"
+    },
+    {
+      "path": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/architecture/+olh/+presets/pMassCompatible.m",
+      "expected": "329163edcd25b2220c1f7943244511c25c0f2f7d37bc3938812ffde9da9a6cd7",
+      "actual": "329163edcd25b2220c1f7943244511c25c0f2f7d37bc3938812ffde9da9a6cd7"
+    },
+    {
+      "path": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/architecture/+olh/+presets/projected.m",
+      "expected": "bf7b0e464fce470820b7082b4278101133e23f6911e8430007753fb916f8e806",
+      "actual": "bf7b0e464fce470820b7082b4278101133e23f6911e8430007753fb916f8e806"
+    },
+    {
+      "path": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/architecture/+olh/+presets/projectionIdentity.m",
+      "expected": "feac2cfaaf26112f743eff134f8a46eae3ff2d30fc8c94eb6b1a3d1ad46f16cd",
+      "actual": "feac2cfaaf26112f743eff134f8a46eae3ff2d30fc8c94eb6b1a3d1ad46f16cd"
+    },
+    {
+      "path": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/architecture/+olh/+presets/restorationLadderGuard.m",
+      "expected": "74edb3cf466b6627e39259022546db7c96a1e3e5da46104bf1a46da5c921d7c6",
+      "actual": "74edb3cf466b6627e39259022546db7c96a1e3e5da46104bf1a46da5c921d7c6"
+    },
+    {
+      "path": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/architecture/docs/ARCHITECTURE.md",
+      "expected": "90cacf422c345c2cee9eaf070067230f43e98318a42ac6833a5a2bfb8c1be509",
+      "actual": "90cacf422c345c2cee9eaf070067230f43e98318a42ac6833a5a2bfb8c1be509"
+    },
+    {
+      "path": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/architecture/docs/ARCHITECTURE_VARIANT_INVENTORY.md",
+      "expected": "da5108752950843f8820c941f4343a8a9873a7f96897e822941508d11f8d87b6",
+      "actual": "da5108752950843f8820c941f4343a8a9873a7f96897e822941508d11f8d87b6"
+    },
+    {
+      "path": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/architecture/docs/CONFIG_REFERENCE.md",
+      "expected": "397939c66043ef012d0f8fa6e383c7224a54724d4b62fea1a2fad79eb617a14b",
+      "actual": "397939c66043ef012d0f8fa6e383c7224a54724d4b62fea1a2fad79eb617a14b"
+    },
+    {
+      "path": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/architecture/docs/FILE_CLASSIFICATION.md",
+      "expected": "c412b0f0107dfbbfe472f1dd4f2002bc06e93ee79e783cd484d58634af84ba14",
+      "actual": "c412b0f0107dfbbfe472f1dd4f2002bc06e93ee79e783cd484d58634af84ba14"
+    },
+    {
+      "path": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/architecture/docs/MIGRATION_FROM_LEGACY.md",
+      "expected": "1808da8b98cafc8704183cdbb631d25835c0c4ffbae9c40cb89e856b5f8ce4b5",
+      "actual": "1808da8b98cafc8704183cdbb631d25835c0c4ffbae9c40cb89e856b5f8ce4b5"
+    },
+    {
+      "path": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/architecture/docs/OLHOFF_ARCHITECTURE_REFACTOR_PLAN.md",
+      "expected": "a4551702a0ffeae0c4db3477e6851605db7c016530a3a3fa9770ec2141331fe6",
+      "actual": "a4551702a0ffeae0c4db3477e6851605db7c016530a3a3fa9770ec2141331fe6"
+    },
+    {
+      "path": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/architecture/docs/OLHOFF_ARCHITECTURE_REFACTOR_REPORT.md",
+      "expected": "8c18d83852a250b6734b5f868e644c054bf458654d0c54ef47d4e9a7932d49e1",
+      "actual": "8c18d83852a250b6734b5f868e644c054bf458654d0c54ef47d4e9a7932d49e1"
+    },
+    {
+      "path": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/architecture/docs/PRESETS.md",
+      "expected": "5fc61dde76f71d627249c76f78c4171606ce18db92c4365a7c0b08a52e4ee86d",
+      "actual": "5fc61dde76f71d627249c76f78c4171606ce18db92c4365a7c0b08a52e4ee86d"
+    },
+    {
+      "path": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/architecture/docs/PYMORPHOGEN_PORT_MAP.md",
+      "expected": "5e5c7ad0978d3f3fd20273bfcfade3d96080d27e2d0db1587f6c7316b2d0e3be",
+      "actual": "5e5c7ad0978d3f3fd20273bfcfade3d96080d27e2d0db1587f6c7316b2d0e3be"
+    },
+    {
+      "path": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/architecture/docs/SCIENTIFIC_CONFIG_PROVENANCE.md",
+      "expected": "22cd312905fe4589b566884614e5b0b8aa2dc91f69e383fdd6f929ef977e8d97",
+      "actual": "22cd312905fe4589b566884614e5b0b8aa2dc91f69e383fdd6f929ef977e8d97"
+    },
+    {
+      "path": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/architecture/docs/TERMINOLOGY.md",
+      "expected": "a05d2ed01d8449757b470ccfc32fd13550e6741f15d786bc4ed8fb66b67127e6",
+      "actual": "a05d2ed01d8449757b470ccfc32fd13550e6741f15d786bc4ed8fb66b67127e6"
+    },
+    {
+      "path": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/architecture/legacy/olhoffOpt_PRE_CANONICAL.m",
+      "expected": "cb9790232eec619faf7ec85e43393a068166bb2466fa5bcb599a05daa03eb544",
+      "actual": "cb9790232eec619faf7ec85e43393a068166bb2466fa5bcb599a05daa03eb544"
+    },
+    {
+      "path": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/architecture/olhoffSolve.m",
+      "expected": "1e5a114cbf91717e01e5592e86203f401ed5cdb3e5f5ce9a727b8163cdf2fba3",
+      "actual": "1e5a114cbf91717e01e5592e86203f401ed5cdb3e5f5ce9a727b8163cdf2fba3"
+    },
+    {
+      "path": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/fem/assemble2D.m",
+      "expected": "7b2f1e10228d57237d962689909297351c879c9b613f311500f23dd37bd00878",
+      "actual": "7b2f1e10228d57237d962689909297351c879c9b613f311500f23dd37bd00878"
+    },
+    {
+      "path": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/fem/classifyModes.m",
+      "expected": "0f93a2acce7aac69e5ad168edc1413e01bce5757b7e00c9c2c4a7a70288c29e1",
+      "actual": "0f93a2acce7aac69e5ad168edc1413e01bce5757b7e00c9c2c4a7a70288c29e1"
+    },
+    {
+      "path": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/fem/eigSolve.m",
+      "expected": "b0784ceeb15fafe164ba138b963c3ab4dc5a466fc2953c79786809edd16159cd",
+      "actual": "b0784ceeb15fafe164ba138b963c3ab4dc5a466fc2953c79786809edd16159cd"
+    },
+    {
+      "path": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/fem/elemMats2D.m",
+      "expected": "b8ae7c424d42f02390ebeb724592bf606ff9504f4be588810a58a1c4493bfba1",
+      "actual": "b8ae7c424d42f02390ebeb724592bf606ff9504f4be588810a58a1c4493bfba1"
+    },
+    {
+      "path": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/fem/massScale.m",
+      "expected": "2a93c74d1872bb62a41a856e10445a494721097cd7b7881fb98c110a67f6115a",
+      "actual": "2a93c74d1872bb62a41a856e10445a494721097cd7b7881fb98c110a67f6115a"
+    },
+    {
+      "path": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/fem/model2D.m",
+      "expected": "3cc19e1c52023225a1350d1c3e7623a9df68b01f52a74c82ddd4aac377ac6560",
+      "actual": "3cc19e1c52023225a1350d1c3e7623a9df68b01f52a74c82ddd4aac377ac6560"
+    },
+    {
+      "path": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/filter/applyFilter.m",
+      "expected": "461ec7c7950b4d08e20c04d348d9d95674d3e42f1f167b05d3804c94abe057a7",
+      "actual": "461ec7c7950b4d08e20c04d348d9d95674d3e42f1f167b05d3804c94abe057a7"
+    },
+    {
+      "path": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/filter/prepFilter.m",
+      "expected": "18ceb629c567fafcd90830c4eed3a4809fc2dda682d54cef1176b82bd6d47e1a",
+      "actual": "18ceb629c567fafcd90830c4eed3a4809fc2dda682d54cef1176b82bd6d47e1a"
+    },
+    {
+      "path": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/filter/projChain.m",
+      "expected": "1392d0030d51aa43a84b4a4a3b344741274008b316aa448915d362bb659ca655",
+      "actual": "1392d0030d51aa43a84b4a4a3b344741274008b316aa448915d362bb659ca655"
+    },
+    {
+      "path": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/filter/projDensityField.m",
+      "expected": "cc62399dee265b56a7ac27d669857361b340365b86d1336fa227566696a4b5fb",
+      "actual": "cc62399dee265b56a7ac27d669857361b340365b86d1336fa227566696a4b5fb"
+    },
+    {
+      "path": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/filter/projectDensity.m",
+      "expected": "817a0db22efdfe8ee0f8cace56a13d5c52a28cb4e875bd49880392745919c320",
+      "actual": "817a0db22efdfe8ee0f8cace56a13d5c52a28cb4e875bd49880392745919c320"
+    },
+    {
+      "path": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/filter/top88_reference.m",
+      "expected": "eb8613bdb46e833b45acf9d43a8dad39a7e8fd104beafeab896742bcc3093810",
+      "actual": "eb8613bdb46e833b45acf9d43a8dad39a7e8fd104beafeab896742bcc3093810"
+    },
+    {
+      "path": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/mma/mmasub.m",
+      "expected": "54c1680036e6effdb70bc32524b0c11c366cebed64d5a508c82553e871ff7660",
+      "actual": "54c1680036e6effdb70bc32524b0c11c366cebed64d5a508c82553e871ff7660"
+    },
+    {
+      "path": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/mma/subsolv.m",
+      "expected": "130033335ac5a21f31437a196bf8f37c5b97880a00e93cf2962a8a54bac2b98a",
+      "actual": "130033335ac5a21f31437a196bf8f37c5b97880a00e93cf2962a8a54bac2b98a"
+    },
+    {
+      "path": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/mma_published/README.md",
+      "expected": "14ac696e5b319a19e44a11b4a5aa41d74c1b9915ff1ebf1435d5e046f637d1d0",
+      "actual": "14ac696e5b319a19e44a11b4a5aa41d74c1b9915ff1ebf1435d5e046f637d1d0"
+    },
+    {
+      "path": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/mma_published/mmasub.m",
+      "expected": "4507b73e3e44cdd6999b52c7a815569a4fc716749b1e23c2d0c228ff51da2edb",
+      "actual": "4507b73e3e44cdd6999b52c7a815569a4fc716749b1e23c2d0c228ff51da2edb"
+    },
+    {
+      "path": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/mma_published/subsolv.m",
+      "expected": "130033335ac5a21f31437a196bf8f37c5b97880a00e93cf2962a8a54bac2b98a",
+      "actual": "130033335ac5a21f31437a196bf8f37c5b97880a00e93cf2962a8a54bac2b98a"
+    }
+  ],
+  "cases": [
+    {
+      "mesh": "400x50",
+      "nelx": 400,
+      "nely": 50,
+      "iteration": 466,
+      "source_study": "three_rung_architecture",
+      "trajectory": "analysis/OlhoffCurrent/evidence/two_branch_controller_validation/C400x50_trajectory.mat",
+      "rho_sha256": "b3d388a576fe939cc701988797f036cbe0dac12581217f48916462577d1f8211",
+      "impl_tree": "edbfe47eb32109a2fb017f6f13d5327f2c240357caa96630064ffcf37ee152cb",
+      "saved_config_hash": "0afb0d4daa11b52aac8f184c856f71626bfd11b0a581e66d5aaacfa7f78f3a78",
+      "effective_three_rung_config_hash": "cb907ad79a95c961740bc6d5d4ecd64855776ad8bd4528379ba018d939997008",
+      "status": "CONVERGED_EXACT_S3_COUNTERFACTUAL",
+      "saved_levels": [
+        0.04,
+        0.02,
+        0.01,
+        0.005
+      ],
+      "effective_levels": [
+        0.04,
+        0.02,
+        0.01
+      ],
+      "move": 0.01,
+      "stage": 3,
+      "Mnd_percent_identity": 15.373230197122789,
+      "meta": {
+        "arm": "C",
+        "cfgHash": "0afb0d4daa11b52aac8f184c856f71626bfd11b0a581e66d5aaacfa7f78f3a78",
+        "implTree": "edbfe47eb32109a2fb017f6f13d5327f2c240357caa96630064ffcf37ee152cb",
+        "label": "candidate: frozen two-branch stage exhaustion, E = A OR B",
+        "matlab": "25.2.0.2998904 (R2025b)",
+        "maxOuter": 1600.0,
+        "nelx": 400.0,
+        "nely": 50.0,
+        "overrides": [
+          "move.continuation.signal",
+          "stageExhaustion",
+          "stop.rule",
+          "stageExhaustion"
+        ],
+        "preset": "duOlhoffFixedPenaltySensitivityFiltered",
+        "upstreamPreset": "duOlhoffFrozenM4",
+        "wall_s": 3539.3367536666665
+      }
+    },
+    {
+      "mesh": "480x60",
+      "nelx": 480,
+      "nely": 60,
+      "iteration": 386,
+      "source_study": "three_rung_canary_preflight",
+      "trajectory": "analysis/OlhoffCurrent/evidence/three_rung_canary_preflight/C480x60_three_rung_trajectory.mat",
+      "rho_sha256": "0a498a7d6ab0565b29c15ff9364060d937d4df10aa661fc90d02c038ce6e4a60",
+      "impl_tree": "edbfe47eb32109a2fb017f6f13d5327f2c240357caa96630064ffcf37ee152cb",
+      "saved_config_hash": "03097a28b0ad7fdb0d977985d3b5fd279dd74553c9dd5dfbd3cc035ac2a1782e",
+      "effective_three_rung_config_hash": "03097a28b0ad7fdb0d977985d3b5fd279dd74553c9dd5dfbd3cc035ac2a1782e",
+      "status": "CONVERGED",
+      "saved_levels": [
+        0.04,
+        0.02,
+        0.01
+      ],
+      "effective_levels": [
+        0.04,
+        0.02,
+        0.01
+      ],
+      "move": 0.01,
+      "stage": 3,
+      "Mnd_percent_identity": 26.34156302529313,
+      "meta": {
+        "arm": "CANARY3",
+        "baseArm": "two_branch_controller_validation cv_config('C')",
+        "builder": "three_rung_promotion_validation_retry1/scripts/tr_config.m",
+        "cfgHash": "03097a28b0ad7fdb0d977985d3b5fd279dd74553c9dd5dfbd3cc035ac2a1782e",
+        "hostPost": {
+          "calib_dgemm_s": 0.012363916666666667,
+          "calib_spsolve_s": 0.0026715833333333335,
+          "freeRAM_pages": "1380773.",
+          "label": "C480x60_three_rung_post",
+          "loadavg": "{ 2.87 2.58 3.07 }",
+          "matlabProcs": "2",
+          "swap": "total = 0.00M  used = 0.00M  free = 0.00M  (encrypted)",
+          "threads": 1.0,
+          "topCPU": "%CPU COMM\n 85.4 /Applications/MATLAB_R2025b.app/bin/maca64/../../Contents/MacOS/MATLAB_maca64\n 15.5 /System/Library/PrivateFrameworks/SkyLight.framework/Resources/WindowServer\n  6.2 /System/Library/Audio/Plug-Ins/usbaudio.bundle/Contents/MacOS/usbaudiod\n  6.0 /System/Library/Frameworks/WebKit.framework/Versions/A/XPCServices/com.apple.WebKit.GPU.xpc/Contents/MacOS/com.apple.WebKit.GPU\n  4.8 /System/Library/Frameworks/WebKit.framework/Versions/A/XPCServices/com.apple.WebKit.WebContent.xpc/Contents/MacOS/com.apple.WebKit.WebContent\nps: stdout: Broken pipe",
+          "vm_stat": "Mach Virtual Memory Statistics: (page size of 16384 bytes)\nPages free:                                  1380706.\nPages active:                                1305268.\nPages inactive:                               955315.\nPages speculative:                            342496.\nPages throttled:                                   0.",
+          "when": "2026-09-12T12:26:52"
+        },
+        "hostPre": {
+          "calib_dgemm_s": 0.0126765,
+          "calib_spsolve_s": 0.0027622083333333335,
+          "freeRAM_pages": "2269164.",
+          "label": "C480x60_three_rung_pre",
+          "loadavg": "{ 11.11 36.72 21.42 }",
+          "matlabProcs": "2",
+          "swap": "total = 0.00M  used = 0.00M  free = 0.00M  (encrypted)",
+          "threads": 1.0,
+          "topCPU": "%CPU COMM\n278.3 /Applications/MATLAB_R2025b.app/bin/maca64/../../Contents/MacOS/MATLAB_maca64\n 14.0 /System/Library/PrivateFrameworks/SkyLight.framework/Resources/WindowServer\n  8.1 /System/Library/Frameworks/WebKit.framework/Versions/A/XPCServices/com.apple.WebKit.WebContent.xpc/Contents/MacOS/com.apple.WebKit.WebContent\n  4.7 /private/var/folders/6b/jnh3zrqx6rb4k17mvvy0wb6m0000gn/T/AppTranslocation/BC714BD1-BAE0-4D8C-8072-E098BAB03FA7/d/Visual Studio Code.app/Contents/Frameworks/Code Helper (Renderer).app/Contents/MacOS/Code Helper (Renderer)\n  3.9 /usr/libexec/trustd\nps: stdout: Broken pipe",
+          "vm_stat": "Mach Virtual Memory Statistics: (page size of 16384 bytes)\nPages free:                                  2269152.\nPages active:                                 853259.\nPages inactive:                               560537.\nPages speculative:                            291932.\nPages throttled:                                   0.",
+          "when": "2026-09-12T11:40:13"
+        },
+        "implTree": "edbfe47eb32109a2fb017f6f13d5327f2c240357caa96630064ffcf37ee152cb",
+        "label": "three-rung canary: frozen two-branch stage exhaustion, E = A OR B, ladder [0.04 0.02 0.01]",
+        "levels": [
+          0.04,
+          0.02,
+          0.01
+        ],
+        "matlab": "25.2.0.2998904 (R2025b)",
+        "maxOuter": 1600.0,
+        "nelx": 480.0,
+        "nely": 60.0,
+        "preflight": {
+          "NE": 28800.0,
+          "blockers": [],
+          "checkedAt": "2026-09-12T11:40:12",
+          "mesh": [
+            480.0,
+            60.0
+          ],
+          "pass": true,
+          "record": {
+            "beta_continuation_authority": false,
+            "beta_stop_authority": false,
+            "blasEnv": {
+              "MKL_NUM_THREADS": "",
+              "OMP_NUM_THREADS": "",
+              "VECLIB_MAXIMUM_THREADS": ""
+            },
+            "cfgHash": "03097a28b0ad7fdb0d977985d3b5fd279dd74553c9dd5dfbd3cc035ac2a1782e",
+            "cfgHash_frozen": "03097a28b0ad7fdb0d977985d3b5fd279dd74553c9dd5dfbd3cc035ac2a1782e",
+            "checks": {
+              "actual": [
+                "[0.040000000000000001 0.02 0.01]",
+                "stageExhaustion",
+                "stageExhaustion",
+                "ladder",
+                "3",
+                "false",
+                "eq4b",
+                "1",
+                "false",
+                "sensitivity",
+                "all",
+                "0.059999999999999998",
+                "false",
+                "subspace",
+                "2",
+                "true",
+                "true",
+                "0.050000000000000003",
+                "mma",
+                "published",
+                "increment",
+                "0.050000000000000003",
+                "5",
+                "500",
+                "eigs",
+                "1",
+                "4",
+                "9.9999999999999998e-13",
+                "4",
+                "0.5",
+                "0.001",
+                "0.5",
+                "8",
+                "1",
+                "simplySupported",
+                "midHeight",
+                "Q4",
+                "consistent",
+                "l2",
+                "designVariable",
+                "meshScaled",
+                "480",
+                "60",
+                "0.15000000000000002",
+                "1600",
+                "true",
+                "true"
+              ],
+              "expected": [
+                "[0.040000000000000001 0.02 0.01]",
+                "stageExhaustion",
+                "stageExhaustion",
+                "ladder",
+                "3",
+                "false",
+                "eq4b",
+                "1",
+                "false",
+                "sensitivity",
+                "all",
+                "0.059999999999999998",
+                "false",
+                "subspace",
+                "2",
+                "true",
+                "true",
+                "0.050000000000000003",
+                "mma",
+                "published",
+                "increment",
+                "0.050000000000000003",
+                "5",
+                "500",
+                "eigs",
+                "1",
+                "4",
+                "9.9999999999999998e-13",
+                "4",
+                "0.5",
+                "0.001",
+                "0.5",
+                "8",
+                "1",
+                "simplySupported",
+                "midHeight",
+                "Q4",
+                "consistent",
+                "l2",
+                "designVariable",
+                "meshScaled",
+                "480",
+                "60",
+                "0.15000000000000002",
+                "1600",
+                "true",
+                "true"
+              ],
+              "ok": [
+                true,
+                true,
+                true,
+                true,
+                true,
+                true,
+                true,
+                true,
+                true,
+                true,
+                true,
+                true,
+                true,
+                true,
+                true,
+                true,
+                true,
+                true,
+                true,
+                true,
+                true,
+                true,
+                true,
+                true,
+                true,
+                true,
+                true,
+                true,
+                true,
+                true,
+                true,
+                true,
+                true,
+                true,
+                true,
+                true,
+                true,
+                true,
+                true,
+                true,
+                true,
+                true,
+                true,
+                true,
+                true,
+                true,
+                true
+              ],
+              "path": [
+                "move.levels",
+                "move.continuation.signal",
+                "stop.rule",
+                "move.policy",
+                "material.stiffness.p",
+                "material.stiffness.continuation.enabled",
+                "material.mass.model",
+                "material.mass.q",
+                "material.mass.continuation.enabled",
+                "filter.type",
+                "filter.applyTo",
+                "filter.radiusPhysical",
+                "projection.enabled",
+                "multiplicity.method",
+                "multiplicity.subspaceSize",
+                "multiplicity.diagonalOffsets",
+                "multiplicity.offDiagonal",
+                "multiplicity.tolerance",
+                "optimizer.inner.type",
+                "optimizer.inner.variant",
+                "optimizer.inner.variable",
+                "optimizer.inner.tolerance",
+                "optimizer.inner.minIterations",
+                "optimizer.inner.maxIterations",
+                "eigen.solver",
+                "eigen.targetMode",
+                "eigen.maxCluster",
+                "eigen.tolerance",
+                "eigen.krylovFactor",
+                "design.initial",
+                "design.minimum",
+                "design.volumeFraction",
+                "domain.a",
+                "domain.b",
+                "domain.boundary.condition",
+                "domain.boundary.support",
+                "domain.element.type",
+                "domain.element.massMatrix",
+                "stop.norm",
+                "stop.field",
+                "stop.toleranceRule",
+                "domain.mesh.nelx",
+                "domain.mesh.nely",
+                "stop.tolerance",
+                "runtime.maxOuter",
+                "runtime.singleThread",
+                "runtime.diagnostics"
+              ]
+            },
+            "computer": "MACA64",
+            "cpu": "Apple M1 Max",
+            "dispatch_blockers": [],
+            "dispatch_ok": true,
+            "freeRAM": "Mach Virtual Memory Statistics: (page size of 16384 bytes)\nPages free:                                  2279118.\nPages active:                                 848443.\nPages inactive:                               555301.",
+            "hostname": "PMS.local",
+            "implTree": "edbfe47eb32109a2fb017f6f13d5327f2c240357caa96630064ffcf37ee152cb",
+            "implTree_ok": true,
+            "loadavg": "{ 11.11 36.72 21.42 }",
+            "matlab": "25.2.0.2998904 (R2025b)",
+            "ncores": 10.0,
+            "os": "26.6.2",
+            "ram_bytes": 68719476736.0,
+            "retention": {
+              "NE": 28800.0,
+              "bytes_per_column": 230400.0,
+              "cap": 1600.0,
+              "fits_in_ram": true,
+              "policy": "full RHO and DRHO retained for every outer iteration, plus hist, res.diag, res.exhaustion and res.log; no post-hoc discard is permitted",
+              "worst_case_RHO_DRHO_bytes": 737280000.0
+            },
+            "swap": "total = 0.00M  used = 0.00M  free = 0.00M  (encrypted)",
+            "telemetry_missing": [],
+            "threads": 10.0
+          },
+          "verdict": "THREE_RUNG_DEPLOYMENT_PREFLIGHT_PASS"
+        },
+        "preset": "duOlhoffFixedPenaltySensitivityFiltered",
+        "singleFactor": "move.levels",
+        "upstreamPreset": "duOlhoffFrozenM4",
+        "wall_s": 2799.278047375
+      }
+    },
+    {
+      "mesh": "800x100",
+      "nelx": 800,
+      "nely": 100,
+      "iteration": 468,
+      "source_study": "three_rung_canary_preflight",
+      "trajectory": "analysis/OlhoffCurrent/evidence/three_rung_canary_preflight/C800x100_three_rung_trajectory.mat",
+      "rho_sha256": "50e4e625c330e1aadddf75ea121966213173b5817af7337d2ef3603e287bb9c7",
+      "impl_tree": "edbfe47eb32109a2fb017f6f13d5327f2c240357caa96630064ffcf37ee152cb",
+      "saved_config_hash": "7724af5ed26786e16132c30fbae840f5d8679d5ea798fc75d5c48eefd0e50ffe",
+      "effective_three_rung_config_hash": "7724af5ed26786e16132c30fbae840f5d8679d5ea798fc75d5c48eefd0e50ffe",
+      "status": "CONVERGED",
+      "saved_levels": [
+        0.04,
+        0.02,
+        0.01
+      ],
+      "effective_levels": [
+        0.04,
+        0.02,
+        0.01
+      ],
+      "move": 0.01,
+      "stage": 3,
+      "Mnd_percent_identity": 34.41232077776823,
+      "meta": {
+        "arm": "CANARY3",
+        "baseArm": "two_branch_controller_validation cv_config('C')",
+        "builder": "three_rung_promotion_validation_retry1/scripts/tr_config.m",
+        "cfgHash": "7724af5ed26786e16132c30fbae840f5d8679d5ea798fc75d5c48eefd0e50ffe",
+        "hostPost": {
+          "calib_dgemm_s": 0.011952708333333333,
+          "calib_spsolve_s": 0.002682375,
+          "freeRAM_pages": "1428127.",
+          "label": "C800x100_three_rung_post",
+          "loadavg": "{ 2.85 2.79 2.88 }",
+          "matlabProcs": "2",
+          "swap": "total = 0.00M  used = 0.00M  free = 0.00M  (encrypted)",
+          "threads": 1.0,
+          "topCPU": "%CPU COMM\n 89.4 /Applications/MATLAB_R2025b.app/bin/maca64/../../Contents/MacOS/MATLAB_maca64\n 29.8 /System/Library/PrivateFrameworks/SkyLight.framework/Resources/WindowServer\n 14.6 /System/Library/Frameworks/WebKit.framework/Versions/A/XPCServices/com.apple.WebKit.WebContent.xpc/Contents/MacOS/com.apple.WebKit.WebContent\n  3.5 /System/Library/Frameworks/WebKit.framework/Versions/A/XPCServices/com.apple.WebKit.GPU.xpc/Contents/MacOS/com.apple.WebKit.GPU\n  3.5 /System/Applications/Utilities/Activity Monitor.app/Contents/MacOS/Activity Monitor\nps: stdout: Broken pipe",
+          "vm_stat": "Mach Virtual Memory Statistics: (page size of 16384 bytes)\nPages free:                                  1428121.\nPages active:                                1290313.\nPages inactive:                               938741.\nPages speculative:                            313360.\nPages throttled:                                   0.",
+          "when": "2026-09-12T14:34:03"
+        },
+        "hostPre": {
+          "calib_dgemm_s": 0.012898375,
+          "calib_spsolve_s": 0.002794375,
+          "freeRAM_pages": "1390509.",
+          "label": "C800x100_three_rung_pre",
+          "loadavg": "{ 3.19 2.77 3.10 }",
+          "matlabProcs": "2",
+          "swap": "total = 0.00M  used = 0.00M  free = 0.00M  (encrypted)",
+          "threads": 1.0,
+          "topCPU": "%CPU COMM\n293.1 /Applications/MATLAB_R2025b.app/bin/maca64/../../Contents/MacOS/MATLAB_maca64\n 17.6 /System/Library/PrivateFrameworks/SkyLight.framework/Resources/WindowServer\n 12.1 /System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/Metadata.framework/Versions/A/Support/mdworker_shared\n  5.8 /System/Library/Audio/Plug-Ins/usbaudio.bundle/Contents/MacOS/usbaudiod\n  5.7 /System/Library/Frameworks/WebKit.framework/Versions/A/XPCServices/com.apple.WebKit.GPU.xpc/Contents/MacOS/com.apple.WebKit.GPU\nps: stdout: Broken pipe",
+          "vm_stat": "Mach Virtual Memory Statistics: (page size of 16384 bytes)\nPages free:                                  1390439.\nPages active:                                1290454.\nPages inactive:                               936930.\nPages speculative:                            352144.\nPages throttled:                                   0.",
+          "when": "2026-09-12T12:28:09"
+        },
+        "implTree": "edbfe47eb32109a2fb017f6f13d5327f2c240357caa96630064ffcf37ee152cb",
+        "label": "three-rung canary: frozen two-branch stage exhaustion, E = A OR B, ladder [0.04 0.02 0.01]",
+        "levels": [
+          0.04,
+          0.02,
+          0.01
+        ],
+        "matlab": "25.2.0.2998904 (R2025b)",
+        "maxOuter": 1600.0,
+        "nelx": 800.0,
+        "nely": 100.0,
+        "preflight": {
+          "NE": 80000.0,
+          "blockers": [],
+          "checkedAt": "2026-09-12T12:28:09",
+          "mesh": [
+            800.0,
+            100.0
+          ],
+          "pass": true,
+          "record": {
+            "beta_continuation_authority": false,
+            "beta_stop_authority": false,
+            "blasEnv": {
+              "MKL_NUM_THREADS": "",
+              "OMP_NUM_THREADS": "",
+              "VECLIB_MAXIMUM_THREADS": ""
+            },
+            "cfgHash": "7724af5ed26786e16132c30fbae840f5d8679d5ea798fc75d5c48eefd0e50ffe",
+            "cfgHash_frozen": "7724af5ed26786e16132c30fbae840f5d8679d5ea798fc75d5c48eefd0e50ffe",
+            "checks": {
+              "actual": [
+                "[0.040000000000000001 0.02 0.01]",
+                "stageExhaustion",
+                "stageExhaustion",
+                "ladder",
+                "3",
+                "false",
+                "eq4b",
+                "1",
+                "false",
+                "sensitivity",
+                "all",
+                "0.059999999999999998",
+                "false",
+                "subspace",
+                "2",
+                "true",
+                "true",
+                "0.050000000000000003",
+                "mma",
+                "published",
+                "increment",
+                "0.050000000000000003",
+                "5",
+                "500",
+                "eigs",
+                "1",
+                "4",
+                "9.9999999999999998e-13",
+                "4",
+                "0.5",
+                "0.001",
+                "0.5",
+                "8",
+                "1",
+                "simplySupported",
+                "midHeight",
+                "Q4",
+                "consistent",
+                "l2",
+                "designVariable",
+                "meshScaled",
+                "800",
+                "100",
+                "0.25",
+                "1600",
+                "true",
+                "true"
+              ],
+              "expected": [
+                "[0.040000000000000001 0.02 0.01]",
+                "stageExhaustion",
+                "stageExhaustion",
+                "ladder",
+                "3",
+                "false",
+                "eq4b",
+                "1",
+                "false",
+                "sensitivity",
+                "all",
+                "0.059999999999999998",
+                "false",
+                "subspace",
+                "2",
+                "true",
+                "true",
+                "0.050000000000000003",
+                "mma",
+                "published",
+                "increment",
+                "0.050000000000000003",
+                "5",
+                "500",
+                "eigs",
+                "1",
+                "4",
+                "9.9999999999999998e-13",
+                "4",
+                "0.5",
+                "0.001",
+                "0.5",
+                "8",
+                "1",
+                "simplySupported",
+                "midHeight",
+                "Q4",
+                "consistent",
+                "l2",
+                "designVariable",
+                "meshScaled",
+                "800",
+                "100",
+                "0.25",
+                "1600",
+                "true",
+                "true"
+              ],
+              "ok": [
+                true,
+                true,
+                true,
+                true,
+                true,
+                true,
+                true,
+                true,
+                true,
+                true,
+                true,
+                true,
+                true,
+                true,
+                true,
+                true,
+                true,
+                true,
+                true,
+                true,
+                true,
+                true,
+                true,
+                true,
+                true,
+                true,
+                true,
+                true,
+                true,
+                true,
+                true,
+                true,
+                true,
+                true,
+                true,
+                true,
+                true,
+                true,
+                true,
+                true,
+                true,
+                true,
+                true,
+                true,
+                true,
+                true,
+                true
+              ],
+              "path": [
+                "move.levels",
+                "move.continuation.signal",
+                "stop.rule",
+                "move.policy",
+                "material.stiffness.p",
+                "material.stiffness.continuation.enabled",
+                "material.mass.model",
+                "material.mass.q",
+                "material.mass.continuation.enabled",
+                "filter.type",
+                "filter.applyTo",
+                "filter.radiusPhysical",
+                "projection.enabled",
+                "multiplicity.method",
+                "multiplicity.subspaceSize",
+                "multiplicity.diagonalOffsets",
+                "multiplicity.offDiagonal",
+                "multiplicity.tolerance",
+                "optimizer.inner.type",
+                "optimizer.inner.variant",
+                "optimizer.inner.variable",
+                "optimizer.inner.tolerance",
+                "optimizer.inner.minIterations",
+                "optimizer.inner.maxIterations",
+                "eigen.solver",
+                "eigen.targetMode",
+                "eigen.maxCluster",
+                "eigen.tolerance",
+                "eigen.krylovFactor",
+                "design.initial",
+                "design.minimum",
+                "design.volumeFraction",
+                "domain.a",
+                "domain.b",
+                "domain.boundary.condition",
+                "domain.boundary.support",
+                "domain.element.type",
+                "domain.element.massMatrix",
+                "stop.norm",
+                "stop.field",
+                "stop.toleranceRule",
+                "domain.mesh.nelx",
+                "domain.mesh.nely",
+                "stop.tolerance",
+                "runtime.maxOuter",
+                "runtime.singleThread",
+                "runtime.diagnostics"
+              ]
+            },
+            "computer": "MACA64",
+            "cpu": "Apple M1 Max",
+            "dispatch_blockers": [],
+            "dispatch_ok": true,
+            "freeRAM": "Mach Virtual Memory Statistics: (page size of 16384 bytes)\nPages free:                                  1398883.\nPages active:                                1286497.\nPages inactive:                               933394.",
+            "hostname": "PMS.local",
+            "implTree": "edbfe47eb32109a2fb017f6f13d5327f2c240357caa96630064ffcf37ee152cb",
+            "implTree_ok": true,
+            "loadavg": "{ 3.03 2.73 3.09 }",
+            "matlab": "25.2.0.2998904 (R2025b)",
+            "ncores": 10.0,
+            "os": "26.6.2",
+            "ram_bytes": 68719476736.0,
+            "retention": {
+              "NE": 80000.0,
+              "bytes_per_column": 640000.0,
+              "cap": 1600.0,
+              "fits_in_ram": true,
+              "policy": "full RHO and DRHO retained for every outer iteration, plus hist, res.diag, res.exhaustion and res.log; no post-hoc discard is permitted",
+              "worst_case_RHO_DRHO_bytes": 2048000000.0
+            },
+            "swap": "total = 0.00M  used = 0.00M  free = 0.00M  (encrypted)",
+            "telemetry_missing": [],
+            "threads": 10.0
+          },
+          "verdict": "THREE_RUNG_DEPLOYMENT_PREFLIGHT_PASS"
+        },
+        "preset": "duOlhoffFixedPenaltySensitivityFiltered",
+        "singleFactor": "move.levels",
+        "upstreamPreset": "duOlhoffFrozenM4",
+        "wall_s": 7554.096479416667
+      }
+    }
+  ],
+  "inputs": [
+    {
+      "path": "analysis/OlhoffCurrent/evidence/two_branch_controller_validation/C400x50_trajectory.mat",
+      "class": "required",
+      "sha256": "fa0e714c712889a1442c8063d1ec809244bc42701883cf74366efb0a2019045e",
+      "bytes": 139808729,
+      "format": "MATLAB v7.3 HDF5",
+      "datasets": {
+        "DRHO": {
+          "matlab_shape": [
+            20000,
+            505
+          ],
+          "dtype": "float64"
+        },
+        "RHO": {
+          "matlab_shape": [
+            20000,
+            505
+          ],
+          "dtype": "float64"
+        },
+        "log": {
+          "matlab_shape": [
+            1,
+            7
+          ],
+          "dtype": "object"
+        },
+        "move": {
+          "matlab_shape": [
+            505,
+            1
+          ],
+          "dtype": "float64"
+        }
+      }
+    },
+    {
+      "path": "analysis/OlhoffCurrent/evidence/three_rung_canary_preflight/C480x60_three_rung_trajectory.mat",
+      "class": "required",
+      "sha256": "a87546bc391cdc683def34a9f27678884528032f6b140e156349d2e74135ab9b",
+      "bytes": 155461014,
+      "format": "MATLAB v7.3 HDF5",
+      "datasets": {
+        "DRHO": {
+          "matlab_shape": [
+            28800,
+            386
+          ],
+          "dtype": "float64"
+        },
+        "RHO": {
+          "matlab_shape": [
+            28800,
+            386
+          ],
+          "dtype": "float64"
+        },
+        "log": {
+          "matlab_shape": [
+            1,
+            8
+          ],
+          "dtype": "object"
+        },
+        "move": {
+          "matlab_shape": [
+            386,
+            1
+          ],
+          "dtype": "float64"
+        }
+      }
+    },
+    {
+      "path": "analysis/OlhoffCurrent/evidence/three_rung_canary_preflight/C480x60_three_rung_state.mat",
+      "class": "required",
+      "sha256": "2210902c1cf043c19caa3fb95608e883964f9ddb526a646b56efadc19d01f92e",
+      "bytes": 247885,
+      "format": "MATLAB v7.3 HDF5",
+      "datasets": {}
+    },
+    {
+      "path": "analysis/OlhoffCurrent/evidence/three_rung_canary_preflight/C800x100_three_rung_trajectory.mat",
+      "class": "required",
+      "sha256": "aef7af1c3ec669b41d6ff6799aaaea4bc35feac0d20ff739f91a532bece012eb",
+      "bytes": 536083874,
+      "format": "MATLAB v7.3 HDF5",
+      "datasets": {
+        "DRHO": {
+          "matlab_shape": [
+            80000,
+            468
+          ],
+          "dtype": "float64"
+        },
+        "RHO": {
+          "matlab_shape": [
+            80000,
+            468
+          ],
+          "dtype": "float64"
+        },
+        "log": {
+          "matlab_shape": [
+            1,
+            85
+          ],
+          "dtype": "object"
+        },
+        "move": {
+          "matlab_shape": [
+            468,
+            1
+          ],
+          "dtype": "float64"
+        }
+      }
+    },
+    {
+      "path": "analysis/OlhoffCurrent/evidence/three_rung_canary_preflight/C800x100_three_rung_state.mat",
+      "class": "required",
+      "sha256": "4be416d0aaa41c3415fef472ac205d639efad6f5abdfca1e8d1052c974b33101",
+      "bytes": 539638,
+      "format": "MATLAB v7.3 HDF5",
+      "datasets": {}
+    }
+  ],
+  "optimization_runs": 0,
+  "density_updates": 0,
+  "preregistration_sha256": "6e52819b8c48716daae8286072d8ba4b08dd3143825e494d301b631973caa7c6"
+}

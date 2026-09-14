@@ -1,0 +1,207 @@
+
+========================================================================
+TEST_PATH_ISOLATION
+========================================================================
+  [PASS] A  clean path + OlhoffCurrent -> PASS
+  [PASS] B  + analysis/OlhoffM4Reconstruction -> BLOCK
+  [PASS] C  + external /Matlab/Olhoff -> BLOCK
+  [PASS] D  + Matlab/reproduction2007 -> BLOCK
+      premise: olhoffSolve is ours = 1, innerLoop shadowed = 1, gate refuses = 1
+  [PASS] E  helper shadowing only, olhoffSolve still ours -> BLOCK
+      premise: declared copy won = 1, gate refuses = 1
+  [PASS] F  a declared collision that WINS -> BLOCK
+------------------------------------------------------------------------
+  failures: 0
+
+SUITE test_path_isolation                           failures=0 
+
+========================================================================
+TEST_CURRENTNESS
+========================================================================
+  [PASS] +impl/ matches SOURCE_MANIFEST.json                  79 files, tree 4ba9a3ae10881344
+  [PASS] PROVENANCE.json names a 40-char upstream commit      253069262407885a8b759a9e721c4f0a7d3a397d
+  [PASS] currentness reports a declared state                 CURRENT
+  [PASS] local integrity is PASS                              promoted source is intact and matches upstream migration/upstream-olhoffcurrent-capabilities at 253069262407885a8b759a9e721c4f0a7d3a397d.
+  [PASS] a corrupted manifest yields LOCAL_MODIFIED           LOCAL_MODIFIED
+  [PASS] restoring the manifest restores the state            CURRENT
+  [PASS] duOlhoffSimpEq4bBetaStallLadderSensitivityFiltered: upstream preset exists duOlhoffFrozenM4
+  [PASS] duOlhoffSimpEq4bBetaStallLadderSensitivityFiltered: name is not an audit code duOlhoffSimpEq4bBetaStallLadderSensitivityFiltered
+  [PASS] duOlhoffSimpEq4bThreeRungStageExhaustionSensitivityFiltered: upstream preset exists duOlhoffFrozenM4
+  [PASS] duOlhoffSimpEq4bThreeRungStageExhaustionSensitivityFiltered: name is not an audit code duOlhoffSimpEq4bThreeRungStageExhaustionSensitivityFiltered
+  [PASS] duOlhoffPedersenAdaptiveBoxSensitivityFiltered: upstream preset exists duOlhoffAdaptivePedersen
+  [PASS] duOlhoffPedersenAdaptiveBoxSensitivityFiltered: name is not an audit code duOlhoffPedersenAdaptiveBoxSensitivityFiltered
+  [PASS] the production preset is registered and eligible     duOlhoffPedersenAdaptiveBoxSensitivityFiltered
+------------------------------------------------------------------------
+  failures: 0
+
+SUITE test_currentness                              failures=0 
+
+========================================================================
+TEST_SOURCE_INTEGRITY
+========================================================================
+  [PASS] A  pristine tree -> CURRENT
+  [PASS] B  .DS_Store added -> CURRENT
+  [PASS] C  *.asv added     -> CURRENT
+  [PASS] D  *.m~ added      -> CURRENT
+      state=LOCAL_MODIFIED  mismatches=1 missing=0 extra=0
+  [PASS] E  recorded .m modified -> BLOCK
+      state=LOCAL_MODIFIED  mismatches=0 missing=1 extra=0
+  [PASS] F  recorded source removed -> BLOCK
+      state=LOCAL_MODIFIED  mismatches=0 missing=0 extra=1
+  [PASS] G  unexpected new .m under +impl -> BLOCK
+      state=LOCAL_MODIFIED  mismatches=0 missing=0 extra=1
+  [PASS] H  unexpected .m inside a package dir -> BLOCK
+      first blocker: FORBIDDEN DIRECTORY ON PATH: /Users/piotrek/Programming/topOpt4freqMax/Matlab/reproduction2007/fem
+  [PASS] I  competing Olhoff implementation on path -> BLOCK
+      first blocker: mmasub RESOLVES OUTSIDE PRODUCTION: /Users/piotrek/Programming/topOpt4freqMax/tools/Matlab/mmasub.m
+  [PASS] J  tools/Matlab 'asfound' mmasub wins -> BLOCK
+------------------------------------------------------------------------
+  failures: 0
+
+  [OK]   tree restored pristine: 79 source files, tree 4ba9a3ae10881344
+SUITE test_source_integrity                         failures=0 
+
+========================================================================
+TEST_EVIDENCE_RETENTION
+========================================================================
+  [PASS] R5a git actually ignores the evidence path
+[evidence_declare] /Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/evidence/_gate_selftest/study/EVIDENCE.json  (3 artifacts)
+  [PASS] R1  all required present            -> PASS
+  [PASS] R1b required counted as present
+  [PASS] R5  git-ignored required evidence OK -> PASS
+  [PASS] R4  optional+scratch missing         -> PASS
+  [PASS] R3  required trajectory MODIFIED     -> FAIL
+  [PASS] R3b status is REQUIRED_HASH_MISMATCH
+  [PASS] R2  required trajectory MISSING      -> FAIL
+  [PASS] R6  git-ignored evidence DISAPPEARS  -> FAIL
+  [PASS] R2b status is REQUIRED_MISSING
+  [PASS] R8  declaring absent required file   -> REFUSED
+  [PASS] R7  no EVIDENCE.json at all          -> FAIL
+  [PASS] R9  unknown class fails closed       -> FAIL
+  [PASS] R10 source integrity still CURRENT
+  [PASS] R10b +impl tree hash unchanged by the evidence mechanism
+------------------------------------------------------------------------
+TEST_EVIDENCE_RETENTION: 0 failure(s)
+========================================================================
+SUITE test_evidence_retention                       failures=0 
+
+========================================================================
+TEST_FINALIZATION_GATE
+========================================================================
+[evidence_declare] /Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/evidence/_finalization_selftest/study/EVIDENCE.json  (1 artifacts)
+  [PASS] A  compliant study                        -> PASS
+  [PASS] B  no EVIDENCE.json (the lost-study state) -> FAIL
+  [PASS] C  required artifact removed               -> FAIL
+  [PASS] D  required artifact altered               -> FAIL
+  [PASS] D2 restored                                -> PASS
+  [PASS] E  no FINAL_SHA256.txt                     -> FAIL
+  [PASS] F  FINAL_SHA256.txt stale (one wrong)      -> FAIL
+  [PASS] G  names an absent .mat                    -> FAIL
+  probe P0   expected=1 actual=1
+  probe P1   expected=1 actual=1
+  probe P2   expected=0 actual=0
+  probe P3   expected=0 actual=0
+  probe P4   expected=0 actual=0
+  probe P5   expected=0 actual=0
+  probe P6   expected=0 actual=0
+  probe P7   expected=0 actual=0
+  probe P8   expected=0 actual=0
+  probe P9   expected=0 actual=0
+  probe P10  expected=0 actual=0
+  probe P11  expected=1 actual=1
+  probe P12  expected=0 actual=0
+  probe P13  expected=0 actual=0
+  probe P14  expected=0 actual=0
+  probe P15  expected=0 actual=0
+  probe P16  expected=0 actual=0
+  probe P17  expected=0 actual=0
+  probe P18  expected=0 actual=0
+  probe P19  expected=1 actual=1
+  probe P20  expected=0 actual=0
+  probe P21  expected=0 actual=0
+  probe P22  expected=0 actual=0
+  probe P23  expected=0 actual=0
+  probe P24  expected=0 actual=0
+  probe P25  expected=0 actual=0
+  probe P26  expected=0 actual=0
+  probe P27  expected=0 actual=0
+  probe P28  expected=0 actual=0
+  probe P29  expected=0 actual=0
+  probe P30  expected=0 actual=0
+  probe P31  expected=0 actual=0
+  probe P32  expected=0 actual=0
+  probe P33  expected=0 actual=0
+  probe P34  expected=0 actual=0
+  probe P35  expected=0 actual=0
+  probe P36  expected=0 actual=0
+  probe P37  expected=0 actual=0
+  probe P38  expected=0 actual=0
+  [PASS] J  P0   compliant study, no source lines                                   -> PASS
+  [PASS] J  P1   genuine olhoffSolve.m digest at the freeze commit, after a promoti -> PASS
+  [PASS] J  P2   single fabricated digest on a source path                          -> FAIL
+  [PASS] J  P3   limit.m freeze digest placed on the olhoffSolve.m line (wrong path -> FAIL
+  [PASS] J  P4   non-source README.md carrying its freeze digest after it changed   -> FAIL
+  [PASS] J  P5   fabricated digest FOLLOWED by the genuine digest, same path        -> FAIL
+  [PASS] J  P6   genuine digest followed by a fabricated digest, same path          -> FAIL
+  [PASS] J  P7   empty-file digest on olhoffSolve.m (non-empty at the freeze commit -> FAIL
+  [PASS] J  P8   genuine superseded line; +impl locally edited, manifest unchanged  -> FAIL
+  [PASS] J  P9   empty digest; probe path deleted before the freeze commit, re-adde -> FAIL
+  [PASS] J  P10  genuine superseded line; +impl edited AND SOURCE_MANIFEST.json reg -> FAIL
+  [PASS] J  P11  two identical genuine lines, same path                             -> PASS
+  [PASS] J  P12  olhoffSolve.m digest from an OLDER commit, not the freeze commit   -> FAIL
+  [PASS] J  P13  digest of a non-source file placed on a source-path line           -> FAIL
+  [PASS] J  P14  malformed: uppercase 64-hex digest on a source line                -> FAIL
+  [PASS] J  P15  malformed: 63-hex digest on a source line                          -> FAIL
+  [PASS] J  P16  non-canonical source path (architecture/../architecture) with genu -> FAIL
+  [PASS] J  P17  missing: source path absent from working tree and history          -> FAIL
+  [PASS] J  P18  empty digest; path never existed at the freeze commit, added later -> FAIL
+  [PASS] J  P19  empty digest; genuinely EMPTY committed file at the freeze commit, -> PASS
+  [PASS] J  P20  empty digest; path non-empty at the freeze commit, changed later   -> FAIL
+  [PASS] J  P21  study-local shadow copy of a source path with matching fabricated  -> FAIL
+  [PASS] J  P22  genuine superseded line; EVIDENCE.json declares no source tree     -> FAIL
+  [PASS] J  P23  genuine superseded line; declared source tree is not the freeze-co -> FAIL
+  [PASS] J  P24  genuine superseded lines; hash file carries an uncommitted extra l -> FAIL
+  [PASS] J  P25  SOURCE_MANIFEST.json tampered (consistent-looking rows), +impl cle -> FAIL
+  [PASS] J  P26  untracked extra source file in +impl, manifest regenerated         -> FAIL
+  [PASS] J  P27  +impl file deleted in the working tree                             -> FAIL
+  [PASS] J  P28  +impl edit + regenerated manifest hidden with git update-index --s -> FAIL
+  [PASS] J  P29  committed +impl change + committed manifest, PROVENANCE.md tree no -> FAIL
+  [PASS] J  P30  case-variant source path resolving to a study-local shadow copy (a -> FAIL
+  [PASS] J  P31  OlhoffCurrent//+impl spelling + study-local shadow copy (ADDENDUM_ -> FAIL
+  [PASS] J  P32  OlhoffCurrent/./+impl spelling + study-local shadow copy (ADDENDUM -> FAIL
+  [PASS] J  P33  study-relative ../../+impl path to the REAL production file, curre -> FAIL
+  [PASS] J  P34  +impl//architecture spelling with the genuine freeze digest (ADDEN -> FAIL
+  [PASS] J  P35  freeze-commit blob forged with git replace, fabricated digest (ADD -> FAIL
+  [PASS] J  P36  dirty +impl, GIT_DIR redirected to a clone committing the edit (AD -> FAIL
+  [PASS] J  P37  dirty +impl, HEAD blobs substituted with git replace (ADDENDUM_1)  -> FAIL
+  [PASS] J  P38  study-local symlink to the real production file, current digest (A -> FAIL
+  [PASS] J  all 39 probes ran (P0-P38)
+  [PASS] J  probe suite left this repository untouched
+  [FAIL] H  real compliant study move_activity_400            -> PASS
+  [PASS] H  real compliant study beta_transition_mechanism    -> PASS
+  [PASS] H  real compliant study two_branch_controller_validation -> PASS
+  [PASS] H2 7 superseded lines HISTORICAL_VERIFIED: same paths, freeze bba45e7, source 1438aa3
+  [PASS] H2 historical and current statuses reported separately, both VERIFIED
+  [FAIL] I  no NEW study fails the gate (new: controller_architecture_offline, frozen_inner_solver_study, frozen_problem25_reference, move_activity_400, move_ladder_necessity, scientific_delta_olhoff_migration, three_rung_architecture, three_rung_promotion_closure, three_rung_promotion_validation_retry1, two_rung_architecture)
+     legacy deficient set (8, unchanged history): admission_rule, dynamical_regime, fixedmove_400_dynamics, move_activity_offline, move_stop, move_transition, topology_maturity_transition, two_branch_maturity_240
+------------------------------------------------------------------------
+TEST_FINALIZATION_GATE: 2 failure(s)
+========================================================================
+SUITE test_finalization_gate                        failures=2 
+SUITE test_path_isolation                           failures=0 
+SUITE test_currentness                              failures=0 
+SUITE test_source_integrity                         failures=0 
+SUITE test_evidence_retention                       failures=0 
+SUITE test_finalization_gate                        failures=2 
+
+ans = 
+
+  struct with fields:
+
+      repo: '/Users/piotrek/Programming/topOpt4freqMax'
+      kind: 'gates'
+      when: '14-Sep-2026 00:39:26'
+    matlab: '25.2.0.2998904 (R2025b)'
+      head: 'b21483b158f58e05e7b56957f2fbe8e1d2891395'
+    suites: [1×5 struct]
+

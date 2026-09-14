@@ -1,0 +1,74 @@
+{
+ "OLHOFF_SOURCE_COMMIT_VERIFIED": {
+  "SOURCE_IDENTITY.md": "3aba4f3255d8eee832d876e867610939cc792bced0ffb7753a4e22c91aca6e63",
+  "evaluations/source_snapshot_manifest.json": "ebdb2fc6842cc5b2f6b79f41c5a3ba6c394d1e34c082a480a74a9e775ddfa300",
+  "scripts/sd_snapshot_manifest.py": "3baae41d3e004e7884ddf4efc6af8f6c007c3fea76a3dcbadce940e5045b9ac6"
+ },
+ "OLHOFFCURRENT_TARGET_IDENTITY_PASS": {
+  "TARGET_IDENTITY.md": "331a159af9e6e88be0ed64c23165d8496a9092cd84a08770ad1331aa499586b8",
+  "evaluations/target_identity.json": "5d60f331b513613d65d0bd4356a8a97ca3a8b9e18d05637d6befa78334d7a491",
+  "evaluations/final_integrity.json": "d0b938633cb52a99edd64ae7fa5df1afb92d81908613f44ce5275942386114d4"
+ },
+ "SOURCE_SWEEP_EVIDENCE_PASS": {
+  "evaluations/sweep_verification.json": "b863e8d589f90b8ed5f78bc1dbc798a609d2a1203c2fa82915f82926974a05c3",
+  "scripts/sd_verify_sweeps.m": "122e7b6a2886b02f8e851d9c238567b051670efe5371c5df41a2ab27f43c7714"
+ },
+ "SOURCE_TARGET_DIFFERENT_SCIENTIFIC_FORMULATION": {
+  "FORMULATION_COMPARISON.md": "ca2415beedb074bc3eb9d82ce0a51b72473a709d8026f8b7fba935b2091008fe",
+  "evaluations/m1_run/M1_verification.json": "f490c7cebcf9d365eda78c96a5ce26d1ecf938ea0294107d64a2be4c1b86ca04",
+  "evaluations/same_state_comparison.json": "39002f9d861105dde8d3589a1fc879e579b9d75e9fe80000e48090f9abc5cab6",
+  "evaluations/effective_configs_480.json": "24833aac28f0f9d860d844ab0437c5cf0501ff712e9073d60f75f4479932abd8"
+ },
+ "FIRST_DIVERGENCE_OUTER_BOX_CONTROLLER": {
+  "FIRST_DIVERGENCE.md": "b207f2a610ff21186e1637e2a25e2069fdf925d3816dc2f5df2ac4c677cd9a50",
+  "evaluations/same_state_comparison.json": "39002f9d861105dde8d3589a1fc879e579b9d75e9fe80000e48090f9abc5cab6",
+  "evaluations/config_comparison.json": "c950a1b449954ae67945e41d57fa0ef5ac90cfca638c784cff9788976e5c532c"
+ },
+ "SOURCE_SUCCESS_PRIMARILY_FORMULATION": {
+  "CAUSAL_ATTRIBUTION.md": "32a43834348b0ae012155f8bae44ed547fc498e0eee35a5131057ff03c00b479",
+  "evaluations/trajectory_analysis.json": "8bce69852ed8c759d37e0a405fc875ae3e421b957bb4a46177ad838d8e340a3e",
+  "evaluations/lowdensity_kkt.json": "a4b26ad5889aa0225c5047261f9ff79066385479327cca930305c9e3f7306d4f",
+  "evaluations/retained_pairs.json": "1aecca36bae5cec71415aa2e7955dd478dfd2271116c898294083138b0bf0ed2",
+  "evaluations/m1_run/M1_480x60_res.mat": "3d73aa125d7c502097f0027ef4824fc95baa58343e0a1e138bcacce416493a20"
+ },
+ "PRESERVE_OLD_OLHOFFCURRENT_PRESET": {
+  "MIGRATION_CLASSIFICATION.md": "6e420db09802cd850d4a20d878875118caaefef0c7ce761735d9025f3afd896d"
+ },
+ "SOURCE_METHOD_REQUIRES_DISTINCT_NAMED_PRESET": {
+  "MIGRATION_CLASSIFICATION.md": "6e420db09802cd850d4a20d878875118caaefef0c7ce761735d9025f3afd896d",
+  "FORMULATION_COMPARISON.md": "ca2415beedb074bc3eb9d82ce0a51b72473a709d8026f8b7fba935b2091008fe"
+ },
+ "OLHOFFCURRENT_MIGRATION_READY_WITH_NAMED_FORMULATION_SPLIT": {
+  "MIGRATION_GATE.md": "580e6d64b4b70cb2dc469c2c45618dcd01f6499d9c387632631d9bb0336fd19c"
+ },
+ "PREFIX_BITWISE_PASS": {
+  "evaluations/m1_run/M1_verification.json": "f490c7cebcf9d365eda78c96a5ce26d1ecf938ea0294107d64a2be4c1b86ca04",
+  "scripts/sd_m1_post.m": "af22fa5abe01a88f6a673811002fd00971350e205b788496daa7906561a0bb20"
+ },
+ "HEURISTIC_STOP": {
+  "STOPPING_COMPARISON.md": "0367658020363cb65a5acedc689b7454d648d5b5b41bfb7fee9278849036830e",
+  "evaluations/lowdensity_kkt.json": "a4b26ad5889aa0225c5047261f9ff79066385479327cca930305c9e3f7306d4f"
+ },
+ "retained_inputs": {
+  "C480_trajectory": {
+   "path": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/evidence/three_rung_canary_preflight/C480x60_three_rung_trajectory.mat",
+   "sha256": "a87546bc391cdc683def34a9f27678884528032f6b140e156349d2e74135ab9b"
+  },
+  "S480_res": {
+   "path": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/diagnostics/scientific_delta_olhoff_migration/source_snapshot/+olhoff_6b08708/repro/results/S480x60/res.mat",
+   "sha256": "e10d37561de49d381868d50690c6a3906b82612bde074f846f214e3109906542"
+  },
+  "prior_stationarity_definition": {
+   "path": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/diagnostics/gray_kkt_forensic_audit/scripts/stationarity.py",
+   "sha256": "3e77cff11df6fa62f67dea92a10ff700e67f6202fe9b7f8e661ccb67da2503ef"
+  },
+  "prior_geometry_definition": {
+   "path": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/diagnostics/gray_kkt_forensic_audit/scripts/geometry.py",
+   "sha256": "a3255058af8643f4a8390c9451c8891341de30ba522d50d127150c17f92ee288"
+  },
+  "prior_telemetry_definition": {
+   "path": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/diagnostics/dynamical_regime/scripts/dr_telemetry.m",
+   "sha256": "5f646f9c0751e3e1ff3edab129dea28f1d4c94ba48c2051f88729d8dfc11f491"
+  }
+ }
+}

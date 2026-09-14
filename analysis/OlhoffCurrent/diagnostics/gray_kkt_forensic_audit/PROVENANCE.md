@@ -1,0 +1,13 @@
+# Provenance
+
+Audit branch `benchmark-methodology-r2`, HEAD `013cc48451d33bed61c5c4eea174bbd898d548a2`. Initial dirty paths were only `diagnostics/nine_mesh_campaign_audit/` and `diagnostics/three_rung_canary_preflight/`; both pre-existed. This audit creates only `diagnostics/gray_kkt_forensic_audit/`. No production modifications, commits or optimization runs.
+
+Implementation `edbfe47eb32109a2fb017f6f13d5327f2c240357caa96630064ffcf37ee152cb`; all 75 manifest file hashes verified. The same hash is inside each MAT trajectory. Input containers were read-only; their exact hashes are in EVIDENCE.json. The completed audit rechecks both input and production hashes. Full input identity, decoded config and config hashes are retained.
+
+400 source: two_branch_controller_validation (source-study starting HEAD `b6014ba8bca41f85671d79ab4c8bdee7419880bb`), interpreted through the frozen three_rung_architecture proof (HEAD `1438aa3f4bd934f5b588587ef65f4f2ca35bac1c`). These are source-study repository observations, not invented per-MAT commit fields. The MAT itself records implTree, config hash and MATLAB build, not a per-run HEAD. 480/800 source: three_rung_canary_preflight, branch benchmark-methodology-r2, HEAD `013cc48451d33bed61c5c4eea174bbd898d548a2`. Known older container-transfer concerns are not inherited as current failures: the actual files now match the authoritative manifests.
+
+MATLAB executable `/Applications/MATLAB_R2025b.app/bin/matlab`, native eigSolve/genGrad/applyFilter/deltaLambda kernels with one computational thread. Python environment is the repository `.venv`, h5py, numpy, scipy, matplotlib. No MATLAB optimizer call is made. Executable audit entry points are listed in scripts/README.md. Do not run a repository test suite for this task because some fixtures optimize.
+
+Execution limitations and corrected audit-only recorder/read issues are disclosed in evaluations/EXECUTION_NOTES.md. Invalid integer FD containers are retained as scratch and excluded from all metrics. The final correct FD outputs contain 252 perturbed FE evaluations over 42 distinct state/element pairs, three delta values each, plus three base states. Earlier repeated evaluations are disclosed in logs; 252 is the accepted dataset, not the total number of FE calls made across attempts. All were analysis evaluations, zero density updates.
+
+Preregistration SHA-256 `6e52819b8c48716daae8286072d8ba4b08dd3143825e494d301b631973caa7c6`. The cluster robustness fit is a separately labelled exploratory extension after observing the small but resolved terminal 800 gap. It does not alter the preregistered primary test or sample.

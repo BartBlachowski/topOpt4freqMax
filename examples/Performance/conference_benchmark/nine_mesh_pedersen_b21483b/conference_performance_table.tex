@@ -1,0 +1,35 @@
+% Conference performance table -- generated, do not edit by hand.
+% The Olhoff column is labelled "Du-Olhoff reconstruction (Pedersen stiffness + linear mass, adaptive box)" and must not be labelled "Olhoff 2007". It is produced by analysis/OlhoffCurrent at the named preset duOlhoffPedersenAdaptiveBoxSensitivityFiltered (upstream preset duOlhoffAdaptivePedersen @ 2530692). It is NOT the historical SIMP + eq. (4b) realization that earlier campaigns labelled "Du-Olhoff reconstruction (M4)" (preset duOlhoffSimpEq4bBetaStallLadderSensitivityFiltered): the two differ in the low-density material law and the outer controller.
+\begin{table}[t]
+\centering
+\begin{tabular}{llrrrrrr}
+\hline
+Method & Mesh & Count 1 & Count 2 & Time 1 [s] & Time 2 [s] & Total [s] & $\omega_1$ \\
+\hline
+Du-Olhoff reconstruction (Pedersen stiffness + linear mass, adaptive box) & $160\times20$ & 121 & 2369 & 4.29 & 219.58 & 223.92 & 169.21 \\
+Du-Olhoff reconstruction (Pedersen stiffness + linear mass, adaptive box) & $240\times30$ & 111 & 2077 & 7.44 & 347.43 & 354.94 & 167.34 \\
+Du-Olhoff reconstruction (Pedersen stiffness + linear mass, adaptive box) & $320\times40$ & 101 & 2001 & 11.70 & 415.37 & 427.20 & 165.86 \\
+Du-Olhoff reconstruction (Pedersen stiffness + linear mass, adaptive box) & $400\times50$ & 93 & 1913 & 17.33 & 552.57 & 570.10 & 166.46 \\
+Du-Olhoff reconstruction (Pedersen stiffness + linear mass, adaptive box) & $480\times60$ & 112 & 2137 & 32.11 & 948.95 & 981.39 & 166.01 \\
+Du-Olhoff reconstruction (Pedersen stiffness + linear mass, adaptive box) & $560\times70$ & 130 & 2371 & 51.10 & 1373.50 & 1425.05 & 165.81 \\
+Du-Olhoff reconstruction (Pedersen stiffness + linear mass, adaptive box) & $640\times80$ & 156 & 2868 & 81.21 & 2134.00 & 2215.82 & 165.65 \\
+Du-Olhoff reconstruction (Pedersen stiffness + linear mass, adaptive box) & $720\times90$ & 204 & 3752 & 189.37 & 3347.10 & 3537.51 & 165.42 \\
+Du-Olhoff reconstruction (Pedersen stiffness + linear mass, adaptive box) & $800\times100$ & 246 & 4650 & 284.96 & 4614.75 & 4901.03 & 165.43 \\
+\hline
+\end{tabular}
+\caption{Count/time columns represent method-native computational stages and are not mathematically identical across methods. Total wall time is the common performance quantity.
+Du-Olhoff reconstruction (Pedersen stiffness + linear mass, adaptive box): Count 1 = outer iterations, Count 2 = cumulative nested MMA iterations, Time 1 = outer work excluding the nested MMA solve, Time 2 = nested MMA total. The two counts are never added.
+Du-Olhoff RECONSTRUCTION, Pedersen/adaptive-box formulation (class C controller and filter radius, class B/D material law): SIMP p = 3 with the Pedersen (2000) linearized low-density stiffness (rho*rho0^(p-1) below rho0 = 0.1) and LINEAR mass, eq. (2); a per-element ADAPTIVE move box (initial 0.10, floor 0.002, x1.2 on monotone / x0.7 on reversing outer steps); NATURAL termination by ||drho||\_2 < 0.05*sqrt(NE/3200) with no guards and no persistence, a heuristic design-change stop and not a KKT certificate; Sigmund sensitivity filter on all f\_sk at a FIXED PHYSICAL radius R = 0.06 (1.2 elements at 160x20, 6 at 800x100). This is a DISTINCT formulation from the historical SIMP + eq. (4b) OlhoffCurrent reconstruction (duOlhoffSimpEq4bBetaStallLadderSensitivityFiltered), not a bug fix of it; Pedersen stiffness is the alternative Du \& Olhoff sec. 2.2 name, not their choice. Terminal bimodality is NOT expected beyond coarse meshes: in the committed R = 0.06 sweep the optimum is bimodal only at 160x20 (native gap12 0.7 \%) and native gap12 is 11.8-24.5 \% from 240x30 to 800x100. Native eigenfrequencies are those of the Pedersen/linear-mass model; any cross-method table must name its evaluator model. Must NOT be labelled "Olhoff 2007". Field-level provenance (A/B/C/D) is documented in analysis/OlhoffCurrent/+impl/architecture/docs/SCIENTIFIC\_CONFIG\_PROVENANCE.md and is printed per run by olh.config.describe.}
+\label{tab:conference-performance}
+\end{table}
+
+% Nested-scheme detail for the Du-Olhoff reconstruction (Pedersen stiffness + linear mass, adaptive box):
+%   160x20: 19.58 inner MMA iterations per outer, inner time share 98.1%
+%   240x30: 18.71 inner MMA iterations per outer, inner time share 97.9%
+%   320x40: 19.81 inner MMA iterations per outer, inner time share 97.2%
+%   400x50: 20.57 inner MMA iterations per outer, inner time share 96.9%
+%   480x60: 19.08 inner MMA iterations per outer, inner time share 96.7%
+%   560x70: 18.24 inner MMA iterations per outer, inner time share 96.4%
+%   640x80: 18.38 inner MMA iterations per outer, inner time share 96.3%
+%   720x90: 18.39 inner MMA iterations per outer, inner time share 94.6%
+%   800x100: 18.90 inner MMA iterations per outer, inner time share 94.2%

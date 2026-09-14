@@ -1,0 +1,3986 @@
+{
+  "manifest_schema": "conference_performance_benchmark/1",
+  "generated_datetime": "2026-09-14T05:34:28+02:00",
+  "generated_by": "examples/Performance/performance_comparison.m",
+  "manifest_role": "OUTPUT. Generated from the runtime configuration. It is not a source of scientific settings and nothing reads it back.",
+  "configuration": {
+    "resolutions": [
+      [
+        160,
+        20
+      ],
+      [
+        240,
+        30
+      ],
+      [
+        320,
+        40
+      ],
+      [
+        400,
+        50
+      ],
+      [
+        480,
+        60
+      ],
+      [
+        560,
+        70
+      ],
+      [
+        640,
+        80
+      ],
+      [
+        720,
+        90
+      ],
+      [
+        800,
+        100
+      ]
+    ],
+    "confirmLongCampaign": true,
+    "maxOuterOverride": [],
+    "yukselMaxIters": 5000,
+    "methods": {
+      "proposed": false,
+      "yuksel": false,
+      "olhoff": true
+    },
+    "singleThread": true,
+    "runWarmup": true,
+    "runEvaluator": true,
+    "fitScaling": true,
+    "writeCSV": true,
+    "writeJSON": true,
+    "writeLaTeX": true,
+    "outputDir": "/Users/piotrek/Programming/topOpt4freqMax/examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b",
+    "runLabel": "nine_mesh_pedersen_b21483b",
+    "timingTolAbs": 1E-6,
+    "timingTolRel": 1E-9,
+    "crosscheckTolRel": 0.05,
+    "scientificEvidence": true,
+    "performanceCampaign": true
+  },
+  "active_resolutions": [
+    [
+      160,
+      20
+    ],
+    [
+      240,
+      30
+    ],
+    [
+      320,
+      40
+    ],
+    [
+      400,
+      50
+    ],
+    [
+      480,
+      60
+    ],
+    [
+      560,
+      70
+    ],
+    [
+      640,
+      80
+    ],
+    [
+      720,
+      90
+    ],
+    [
+      800,
+      100
+    ]
+  ],
+  "active_resolutions_count": 9,
+  "active_methods": [
+    "olhoff"
+  ],
+  "element_counts": [
+    3200,
+    7200,
+    12800,
+    20000,
+    28800,
+    39200,
+    51200,
+    64800,
+    80000
+  ],
+  "method_configurations": [
+    {
+      "a": 8,
+      "b": 1,
+      "t": 1,
+      "nelx": 160,
+      "nely": 20,
+      "bc": "a",
+      "support": "mid",
+      "axial": "both",
+      "elemType": "Q4",
+      "massType": "consistent",
+      "E": 1.0E+7,
+      "nu": 0.3,
+      "rhom": 1,
+      "p": 3,
+      "massInterp": "lin",
+      "rhomin": 0.001,
+      "rho0": 0.5,
+      "volfrac": 0.5,
+      "n": 1,
+      "Nmax": 4,
+      "rminEl": null,
+      "rminPhys": 0.06,
+      "filterMode": "all",
+      "tolMult": 0.05,
+      "multRule": "subspace",
+      "tolEnter": 0.01,
+      "tolExit": 0.05,
+      "subN": 2,
+      "offDiag": true,
+      "move": 0.1,
+      "moveFamily": "SA",
+      "moveMin": 0.002,
+      "s1Gamma": 0.97,
+      "s1AfterCoal": true,
+      "s2Levels": [
+        0.04,
+        0.02,
+        0.01,
+        0.005
+      ],
+      "s2Window": 10,
+      "s2Tol": 0.005,
+      "s2Signal": "beta",
+      "s3Lo": 0.3,
+      "s3Hi": 0.7,
+      "s3Down": 0.7,
+      "s3Up": 1.1,
+      "innerSolver": "mma",
+      "mmaVariant": "published",
+      "innerVar": "drho",
+      "maxInner": 500,
+      "tolInner": 0.05,
+      "minInner": 5,
+      "maxOuter": 400,
+      "tolOuter": 0.05,
+      "outerNorm": "l2",
+      "outerGuard": "none",
+      "solver": "eigs",
+      "threads": 1,
+      "verbose": false,
+      "stiffModel": "pedersen",
+      "stiffLinearBelow": 0.1,
+      "sAGrow": 1.2,
+      "sAShrink": 0.7,
+      "name": "OLHOFF_CURRENT_160x20",
+      "diag": false,
+      "canonical": {
+        "domain": {
+          "a": 8,
+          "b": 1,
+          "thickness": 1,
+          "mesh": {
+            "nelx": 160,
+            "nely": 20
+          },
+          "boundary": {
+            "condition": "simplySupported",
+            "support": "midHeight",
+            "axialRestraint": "bothEnds"
+          },
+          "element": {
+            "type": "Q4",
+            "massMatrix": "consistent"
+          }
+        },
+        "material": {
+          "solid": {
+            "E": 1.0E+7,
+            "nu": 0.3,
+            "density": 1
+          },
+          "stiffness": {
+            "model": "pedersen",
+            "linearBelow": 0.1,
+            "p": 3,
+            "continuation": {
+              "enabled": false,
+              "schedule": [],
+              "driver": "moveLadderStage",
+              "blockStopUntilFinal": true
+            }
+          },
+          "mass": {
+            "model": "eq2",
+            "q": 1,
+            "lowDensityExponent": 6,
+            "cutoff": 0.1,
+            "continuation": {
+              "enabled": false,
+              "lowPModel": "eq2"
+            }
+          }
+        },
+        "design": {
+          "initial": 0.5,
+          "minimum": 0.001,
+          "volumeFraction": 0.5
+        },
+        "filter": {
+          "type": "sensitivity",
+          "radiusPhysical": 0.06,
+          "radiusElements": [],
+          "applyTo": "all"
+        },
+        "projection": {
+          "enabled": false,
+          "eta": 0.5,
+          "beta": {
+            "levels": []
+          },
+          "continuation": {
+            "trigger": "outerConvergence"
+          }
+        },
+        "eigen": {
+          "targetMode": 1,
+          "maxCluster": 4,
+          "solver": "eigs",
+          "tolerance": 1E-12,
+          "maxIterations": 5000,
+          "krylovFactor": 4
+        },
+        "multiplicity": {
+          "method": "subspace",
+          "tolerance": 0.05,
+          "enterTolerance": 0.01,
+          "exitTolerance": 0.05,
+          "subspaceSize": 2,
+          "diagonalOffsets": true,
+          "offDiagonal": true
+        },
+        "optimizer": {
+          "inner": {
+            "type": "mma",
+            "variable": "increment",
+            "variant": "published",
+            "asymptoteHistory": "inner",
+            "tolerance": 0.05,
+            "minIterations": 5,
+            "maxIterations": 500
+          }
+        },
+        "move": {
+          "policy": "adaptive",
+          "initial": 0.1,
+          "minimum": 0.002,
+          "levels": [
+            0.04,
+            0.02,
+            0.01,
+            0.005
+          ],
+          "geometric": {
+            "ratio": 0.97,
+            "afterCoalescence": true
+          },
+          "adaptive": {
+            "grow": 1.2,
+            "shrink": 0.7
+          },
+          "trust": {
+            "loRatio": 0.3,
+            "hiRatio": 0.7,
+            "shrink": 0.7,
+            "grow": 1.1
+          },
+          "continuation": {
+            "signal": "boundVariable",
+            "window": 10,
+            "tolerance": 0.005
+          }
+        },
+        "stop": {
+          "rule": "designChange",
+          "norm": "l2",
+          "tolerance": 0.05,
+          "toleranceRule": "meshScaled",
+          "field": "designVariable",
+          "guards": {
+            "settledMove": false,
+            "settledWindow": 1,
+            "boxInactiveFraction": 0,
+            "ladderExhausted": false,
+            "maxDesignChange": false
+          }
+        },
+        "runtime": {
+          "maxOuter": 400,
+          "singleThread": true,
+          "diagnostics": false,
+          "verbose": false,
+          "name": "OLHOFF_CURRENT_160x20"
+        },
+        "provenance": {
+          "preset": "duOlhoffAdaptivePedersen",
+          "overrides": [
+            "domain.mesh.nelx",
+            160,
+            "domain.mesh.nely",
+            20,
+            "runtime.maxOuter",
+            400,
+            "runtime.singleThread",
+            true,
+            "runtime.diagnostics",
+            false,
+            "runtime.verbose",
+            false,
+            "runtime.name",
+            "OLHOFF_CURRENT_160x20"
+          ],
+          "warnings": [],
+          "resolvedAt": "2026-09-14T01:29:57",
+          "schemaRows": 87,
+          "olhoffCurrentPreset": "duOlhoffPedersenAdaptiveBoxSensitivityFiltered",
+          "requestedPresetName": "duOlhoffPedersenAdaptiveBoxSensitivityFiltered",
+          "presetResolvedVia": "canonical",
+          "presetRole": "DISTINCT_FORMULATION",
+          "upstreamPreset": "duOlhoffAdaptivePedersen",
+          "upstreamCommit": "253069262407885a8b759a9e721c4f0a7d3a397d",
+          "compatibilityAliases": [],
+          "historicalAliases": [
+            "duOlhoffAdaptivePedersen",
+            "S160x20",
+            "S240x30",
+            "S320x40",
+            "S400x50",
+            "S480x60",
+            "S560x70",
+            "S640x80",
+            "S720x90",
+            "S800x100"
+          ],
+          "implementation": "analysis/OlhoffCurrent"
+        }
+      },
+      "olhoff_preset": "duOlhoffPedersenAdaptiveBoxSensitivityFiltered"
+    },
+    {
+      "a": 8,
+      "b": 1,
+      "t": 1,
+      "nelx": 240,
+      "nely": 30,
+      "bc": "a",
+      "support": "mid",
+      "axial": "both",
+      "elemType": "Q4",
+      "massType": "consistent",
+      "E": 1.0E+7,
+      "nu": 0.3,
+      "rhom": 1,
+      "p": 3,
+      "massInterp": "lin",
+      "rhomin": 0.001,
+      "rho0": 0.5,
+      "volfrac": 0.5,
+      "n": 1,
+      "Nmax": 4,
+      "rminEl": null,
+      "rminPhys": 0.06,
+      "filterMode": "all",
+      "tolMult": 0.05,
+      "multRule": "subspace",
+      "tolEnter": 0.01,
+      "tolExit": 0.05,
+      "subN": 2,
+      "offDiag": true,
+      "move": 0.1,
+      "moveFamily": "SA",
+      "moveMin": 0.002,
+      "s1Gamma": 0.97,
+      "s1AfterCoal": true,
+      "s2Levels": [
+        0.04,
+        0.02,
+        0.01,
+        0.005
+      ],
+      "s2Window": 10,
+      "s2Tol": 0.005,
+      "s2Signal": "beta",
+      "s3Lo": 0.3,
+      "s3Hi": 0.7,
+      "s3Down": 0.7,
+      "s3Up": 1.1,
+      "innerSolver": "mma",
+      "mmaVariant": "published",
+      "innerVar": "drho",
+      "maxInner": 500,
+      "tolInner": 0.05,
+      "minInner": 5,
+      "maxOuter": 400,
+      "tolOuter": 0.075000000000000011,
+      "outerNorm": "l2",
+      "outerGuard": "none",
+      "solver": "eigs",
+      "threads": 1,
+      "verbose": false,
+      "stiffModel": "pedersen",
+      "stiffLinearBelow": 0.1,
+      "sAGrow": 1.2,
+      "sAShrink": 0.7,
+      "name": "OLHOFF_CURRENT_240x30",
+      "diag": false,
+      "canonical": {
+        "domain": {
+          "a": 8,
+          "b": 1,
+          "thickness": 1,
+          "mesh": {
+            "nelx": 240,
+            "nely": 30
+          },
+          "boundary": {
+            "condition": "simplySupported",
+            "support": "midHeight",
+            "axialRestraint": "bothEnds"
+          },
+          "element": {
+            "type": "Q4",
+            "massMatrix": "consistent"
+          }
+        },
+        "material": {
+          "solid": {
+            "E": 1.0E+7,
+            "nu": 0.3,
+            "density": 1
+          },
+          "stiffness": {
+            "model": "pedersen",
+            "linearBelow": 0.1,
+            "p": 3,
+            "continuation": {
+              "enabled": false,
+              "schedule": [],
+              "driver": "moveLadderStage",
+              "blockStopUntilFinal": true
+            }
+          },
+          "mass": {
+            "model": "eq2",
+            "q": 1,
+            "lowDensityExponent": 6,
+            "cutoff": 0.1,
+            "continuation": {
+              "enabled": false,
+              "lowPModel": "eq2"
+            }
+          }
+        },
+        "design": {
+          "initial": 0.5,
+          "minimum": 0.001,
+          "volumeFraction": 0.5
+        },
+        "filter": {
+          "type": "sensitivity",
+          "radiusPhysical": 0.06,
+          "radiusElements": [],
+          "applyTo": "all"
+        },
+        "projection": {
+          "enabled": false,
+          "eta": 0.5,
+          "beta": {
+            "levels": []
+          },
+          "continuation": {
+            "trigger": "outerConvergence"
+          }
+        },
+        "eigen": {
+          "targetMode": 1,
+          "maxCluster": 4,
+          "solver": "eigs",
+          "tolerance": 1E-12,
+          "maxIterations": 5000,
+          "krylovFactor": 4
+        },
+        "multiplicity": {
+          "method": "subspace",
+          "tolerance": 0.05,
+          "enterTolerance": 0.01,
+          "exitTolerance": 0.05,
+          "subspaceSize": 2,
+          "diagonalOffsets": true,
+          "offDiagonal": true
+        },
+        "optimizer": {
+          "inner": {
+            "type": "mma",
+            "variable": "increment",
+            "variant": "published",
+            "asymptoteHistory": "inner",
+            "tolerance": 0.05,
+            "minIterations": 5,
+            "maxIterations": 500
+          }
+        },
+        "move": {
+          "policy": "adaptive",
+          "initial": 0.1,
+          "minimum": 0.002,
+          "levels": [
+            0.04,
+            0.02,
+            0.01,
+            0.005
+          ],
+          "geometric": {
+            "ratio": 0.97,
+            "afterCoalescence": true
+          },
+          "adaptive": {
+            "grow": 1.2,
+            "shrink": 0.7
+          },
+          "trust": {
+            "loRatio": 0.3,
+            "hiRatio": 0.7,
+            "shrink": 0.7,
+            "grow": 1.1
+          },
+          "continuation": {
+            "signal": "boundVariable",
+            "window": 10,
+            "tolerance": 0.005
+          }
+        },
+        "stop": {
+          "rule": "designChange",
+          "norm": "l2",
+          "tolerance": 0.075000000000000011,
+          "toleranceRule": "meshScaled",
+          "field": "designVariable",
+          "guards": {
+            "settledMove": false,
+            "settledWindow": 1,
+            "boxInactiveFraction": 0,
+            "ladderExhausted": false,
+            "maxDesignChange": false
+          }
+        },
+        "runtime": {
+          "maxOuter": 400,
+          "singleThread": true,
+          "diagnostics": false,
+          "verbose": false,
+          "name": "OLHOFF_CURRENT_240x30"
+        },
+        "provenance": {
+          "preset": "duOlhoffAdaptivePedersen",
+          "overrides": [
+            "domain.mesh.nelx",
+            240,
+            "domain.mesh.nely",
+            30,
+            "runtime.maxOuter",
+            400,
+            "runtime.singleThread",
+            true,
+            "runtime.diagnostics",
+            false,
+            "runtime.verbose",
+            false,
+            "runtime.name",
+            "OLHOFF_CURRENT_240x30"
+          ],
+          "warnings": [],
+          "resolvedAt": "2026-09-14T01:29:57",
+          "schemaRows": 87,
+          "olhoffCurrentPreset": "duOlhoffPedersenAdaptiveBoxSensitivityFiltered",
+          "requestedPresetName": "duOlhoffPedersenAdaptiveBoxSensitivityFiltered",
+          "presetResolvedVia": "canonical",
+          "presetRole": "DISTINCT_FORMULATION",
+          "upstreamPreset": "duOlhoffAdaptivePedersen",
+          "upstreamCommit": "253069262407885a8b759a9e721c4f0a7d3a397d",
+          "compatibilityAliases": [],
+          "historicalAliases": [
+            "duOlhoffAdaptivePedersen",
+            "S160x20",
+            "S240x30",
+            "S320x40",
+            "S400x50",
+            "S480x60",
+            "S560x70",
+            "S640x80",
+            "S720x90",
+            "S800x100"
+          ],
+          "implementation": "analysis/OlhoffCurrent"
+        }
+      },
+      "olhoff_preset": "duOlhoffPedersenAdaptiveBoxSensitivityFiltered"
+    },
+    {
+      "a": 8,
+      "b": 1,
+      "t": 1,
+      "nelx": 320,
+      "nely": 40,
+      "bc": "a",
+      "support": "mid",
+      "axial": "both",
+      "elemType": "Q4",
+      "massType": "consistent",
+      "E": 1.0E+7,
+      "nu": 0.3,
+      "rhom": 1,
+      "p": 3,
+      "massInterp": "lin",
+      "rhomin": 0.001,
+      "rho0": 0.5,
+      "volfrac": 0.5,
+      "n": 1,
+      "Nmax": 4,
+      "rminEl": null,
+      "rminPhys": 0.06,
+      "filterMode": "all",
+      "tolMult": 0.05,
+      "multRule": "subspace",
+      "tolEnter": 0.01,
+      "tolExit": 0.05,
+      "subN": 2,
+      "offDiag": true,
+      "move": 0.1,
+      "moveFamily": "SA",
+      "moveMin": 0.002,
+      "s1Gamma": 0.97,
+      "s1AfterCoal": true,
+      "s2Levels": [
+        0.04,
+        0.02,
+        0.01,
+        0.005
+      ],
+      "s2Window": 10,
+      "s2Tol": 0.005,
+      "s2Signal": "beta",
+      "s3Lo": 0.3,
+      "s3Hi": 0.7,
+      "s3Down": 0.7,
+      "s3Up": 1.1,
+      "innerSolver": "mma",
+      "mmaVariant": "published",
+      "innerVar": "drho",
+      "maxInner": 500,
+      "tolInner": 0.05,
+      "minInner": 5,
+      "maxOuter": 400,
+      "tolOuter": 0.1,
+      "outerNorm": "l2",
+      "outerGuard": "none",
+      "solver": "eigs",
+      "threads": 1,
+      "verbose": false,
+      "stiffModel": "pedersen",
+      "stiffLinearBelow": 0.1,
+      "sAGrow": 1.2,
+      "sAShrink": 0.7,
+      "name": "OLHOFF_CURRENT_320x40",
+      "diag": false,
+      "canonical": {
+        "domain": {
+          "a": 8,
+          "b": 1,
+          "thickness": 1,
+          "mesh": {
+            "nelx": 320,
+            "nely": 40
+          },
+          "boundary": {
+            "condition": "simplySupported",
+            "support": "midHeight",
+            "axialRestraint": "bothEnds"
+          },
+          "element": {
+            "type": "Q4",
+            "massMatrix": "consistent"
+          }
+        },
+        "material": {
+          "solid": {
+            "E": 1.0E+7,
+            "nu": 0.3,
+            "density": 1
+          },
+          "stiffness": {
+            "model": "pedersen",
+            "linearBelow": 0.1,
+            "p": 3,
+            "continuation": {
+              "enabled": false,
+              "schedule": [],
+              "driver": "moveLadderStage",
+              "blockStopUntilFinal": true
+            }
+          },
+          "mass": {
+            "model": "eq2",
+            "q": 1,
+            "lowDensityExponent": 6,
+            "cutoff": 0.1,
+            "continuation": {
+              "enabled": false,
+              "lowPModel": "eq2"
+            }
+          }
+        },
+        "design": {
+          "initial": 0.5,
+          "minimum": 0.001,
+          "volumeFraction": 0.5
+        },
+        "filter": {
+          "type": "sensitivity",
+          "radiusPhysical": 0.06,
+          "radiusElements": [],
+          "applyTo": "all"
+        },
+        "projection": {
+          "enabled": false,
+          "eta": 0.5,
+          "beta": {
+            "levels": []
+          },
+          "continuation": {
+            "trigger": "outerConvergence"
+          }
+        },
+        "eigen": {
+          "targetMode": 1,
+          "maxCluster": 4,
+          "solver": "eigs",
+          "tolerance": 1E-12,
+          "maxIterations": 5000,
+          "krylovFactor": 4
+        },
+        "multiplicity": {
+          "method": "subspace",
+          "tolerance": 0.05,
+          "enterTolerance": 0.01,
+          "exitTolerance": 0.05,
+          "subspaceSize": 2,
+          "diagonalOffsets": true,
+          "offDiagonal": true
+        },
+        "optimizer": {
+          "inner": {
+            "type": "mma",
+            "variable": "increment",
+            "variant": "published",
+            "asymptoteHistory": "inner",
+            "tolerance": 0.05,
+            "minIterations": 5,
+            "maxIterations": 500
+          }
+        },
+        "move": {
+          "policy": "adaptive",
+          "initial": 0.1,
+          "minimum": 0.002,
+          "levels": [
+            0.04,
+            0.02,
+            0.01,
+            0.005
+          ],
+          "geometric": {
+            "ratio": 0.97,
+            "afterCoalescence": true
+          },
+          "adaptive": {
+            "grow": 1.2,
+            "shrink": 0.7
+          },
+          "trust": {
+            "loRatio": 0.3,
+            "hiRatio": 0.7,
+            "shrink": 0.7,
+            "grow": 1.1
+          },
+          "continuation": {
+            "signal": "boundVariable",
+            "window": 10,
+            "tolerance": 0.005
+          }
+        },
+        "stop": {
+          "rule": "designChange",
+          "norm": "l2",
+          "tolerance": 0.1,
+          "toleranceRule": "meshScaled",
+          "field": "designVariable",
+          "guards": {
+            "settledMove": false,
+            "settledWindow": 1,
+            "boxInactiveFraction": 0,
+            "ladderExhausted": false,
+            "maxDesignChange": false
+          }
+        },
+        "runtime": {
+          "maxOuter": 400,
+          "singleThread": true,
+          "diagnostics": false,
+          "verbose": false,
+          "name": "OLHOFF_CURRENT_320x40"
+        },
+        "provenance": {
+          "preset": "duOlhoffAdaptivePedersen",
+          "overrides": [
+            "domain.mesh.nelx",
+            320,
+            "domain.mesh.nely",
+            40,
+            "runtime.maxOuter",
+            400,
+            "runtime.singleThread",
+            true,
+            "runtime.diagnostics",
+            false,
+            "runtime.verbose",
+            false,
+            "runtime.name",
+            "OLHOFF_CURRENT_320x40"
+          ],
+          "warnings": [],
+          "resolvedAt": "2026-09-14T01:29:57",
+          "schemaRows": 87,
+          "olhoffCurrentPreset": "duOlhoffPedersenAdaptiveBoxSensitivityFiltered",
+          "requestedPresetName": "duOlhoffPedersenAdaptiveBoxSensitivityFiltered",
+          "presetResolvedVia": "canonical",
+          "presetRole": "DISTINCT_FORMULATION",
+          "upstreamPreset": "duOlhoffAdaptivePedersen",
+          "upstreamCommit": "253069262407885a8b759a9e721c4f0a7d3a397d",
+          "compatibilityAliases": [],
+          "historicalAliases": [
+            "duOlhoffAdaptivePedersen",
+            "S160x20",
+            "S240x30",
+            "S320x40",
+            "S400x50",
+            "S480x60",
+            "S560x70",
+            "S640x80",
+            "S720x90",
+            "S800x100"
+          ],
+          "implementation": "analysis/OlhoffCurrent"
+        }
+      },
+      "olhoff_preset": "duOlhoffPedersenAdaptiveBoxSensitivityFiltered"
+    },
+    {
+      "a": 8,
+      "b": 1,
+      "t": 1,
+      "nelx": 400,
+      "nely": 50,
+      "bc": "a",
+      "support": "mid",
+      "axial": "both",
+      "elemType": "Q4",
+      "massType": "consistent",
+      "E": 1.0E+7,
+      "nu": 0.3,
+      "rhom": 1,
+      "p": 3,
+      "massInterp": "lin",
+      "rhomin": 0.001,
+      "rho0": 0.5,
+      "volfrac": 0.5,
+      "n": 1,
+      "Nmax": 4,
+      "rminEl": null,
+      "rminPhys": 0.06,
+      "filterMode": "all",
+      "tolMult": 0.05,
+      "multRule": "subspace",
+      "tolEnter": 0.01,
+      "tolExit": 0.05,
+      "subN": 2,
+      "offDiag": true,
+      "move": 0.1,
+      "moveFamily": "SA",
+      "moveMin": 0.002,
+      "s1Gamma": 0.97,
+      "s1AfterCoal": true,
+      "s2Levels": [
+        0.04,
+        0.02,
+        0.01,
+        0.005
+      ],
+      "s2Window": 10,
+      "s2Tol": 0.005,
+      "s2Signal": "beta",
+      "s3Lo": 0.3,
+      "s3Hi": 0.7,
+      "s3Down": 0.7,
+      "s3Up": 1.1,
+      "innerSolver": "mma",
+      "mmaVariant": "published",
+      "innerVar": "drho",
+      "maxInner": 500,
+      "tolInner": 0.05,
+      "minInner": 5,
+      "maxOuter": 400,
+      "tolOuter": 0.125,
+      "outerNorm": "l2",
+      "outerGuard": "none",
+      "solver": "eigs",
+      "threads": 1,
+      "verbose": false,
+      "stiffModel": "pedersen",
+      "stiffLinearBelow": 0.1,
+      "sAGrow": 1.2,
+      "sAShrink": 0.7,
+      "name": "OLHOFF_CURRENT_400x50",
+      "diag": false,
+      "canonical": {
+        "domain": {
+          "a": 8,
+          "b": 1,
+          "thickness": 1,
+          "mesh": {
+            "nelx": 400,
+            "nely": 50
+          },
+          "boundary": {
+            "condition": "simplySupported",
+            "support": "midHeight",
+            "axialRestraint": "bothEnds"
+          },
+          "element": {
+            "type": "Q4",
+            "massMatrix": "consistent"
+          }
+        },
+        "material": {
+          "solid": {
+            "E": 1.0E+7,
+            "nu": 0.3,
+            "density": 1
+          },
+          "stiffness": {
+            "model": "pedersen",
+            "linearBelow": 0.1,
+            "p": 3,
+            "continuation": {
+              "enabled": false,
+              "schedule": [],
+              "driver": "moveLadderStage",
+              "blockStopUntilFinal": true
+            }
+          },
+          "mass": {
+            "model": "eq2",
+            "q": 1,
+            "lowDensityExponent": 6,
+            "cutoff": 0.1,
+            "continuation": {
+              "enabled": false,
+              "lowPModel": "eq2"
+            }
+          }
+        },
+        "design": {
+          "initial": 0.5,
+          "minimum": 0.001,
+          "volumeFraction": 0.5
+        },
+        "filter": {
+          "type": "sensitivity",
+          "radiusPhysical": 0.06,
+          "radiusElements": [],
+          "applyTo": "all"
+        },
+        "projection": {
+          "enabled": false,
+          "eta": 0.5,
+          "beta": {
+            "levels": []
+          },
+          "continuation": {
+            "trigger": "outerConvergence"
+          }
+        },
+        "eigen": {
+          "targetMode": 1,
+          "maxCluster": 4,
+          "solver": "eigs",
+          "tolerance": 1E-12,
+          "maxIterations": 5000,
+          "krylovFactor": 4
+        },
+        "multiplicity": {
+          "method": "subspace",
+          "tolerance": 0.05,
+          "enterTolerance": 0.01,
+          "exitTolerance": 0.05,
+          "subspaceSize": 2,
+          "diagonalOffsets": true,
+          "offDiagonal": true
+        },
+        "optimizer": {
+          "inner": {
+            "type": "mma",
+            "variable": "increment",
+            "variant": "published",
+            "asymptoteHistory": "inner",
+            "tolerance": 0.05,
+            "minIterations": 5,
+            "maxIterations": 500
+          }
+        },
+        "move": {
+          "policy": "adaptive",
+          "initial": 0.1,
+          "minimum": 0.002,
+          "levels": [
+            0.04,
+            0.02,
+            0.01,
+            0.005
+          ],
+          "geometric": {
+            "ratio": 0.97,
+            "afterCoalescence": true
+          },
+          "adaptive": {
+            "grow": 1.2,
+            "shrink": 0.7
+          },
+          "trust": {
+            "loRatio": 0.3,
+            "hiRatio": 0.7,
+            "shrink": 0.7,
+            "grow": 1.1
+          },
+          "continuation": {
+            "signal": "boundVariable",
+            "window": 10,
+            "tolerance": 0.005
+          }
+        },
+        "stop": {
+          "rule": "designChange",
+          "norm": "l2",
+          "tolerance": 0.125,
+          "toleranceRule": "meshScaled",
+          "field": "designVariable",
+          "guards": {
+            "settledMove": false,
+            "settledWindow": 1,
+            "boxInactiveFraction": 0,
+            "ladderExhausted": false,
+            "maxDesignChange": false
+          }
+        },
+        "runtime": {
+          "maxOuter": 400,
+          "singleThread": true,
+          "diagnostics": false,
+          "verbose": false,
+          "name": "OLHOFF_CURRENT_400x50"
+        },
+        "provenance": {
+          "preset": "duOlhoffAdaptivePedersen",
+          "overrides": [
+            "domain.mesh.nelx",
+            400,
+            "domain.mesh.nely",
+            50,
+            "runtime.maxOuter",
+            400,
+            "runtime.singleThread",
+            true,
+            "runtime.diagnostics",
+            false,
+            "runtime.verbose",
+            false,
+            "runtime.name",
+            "OLHOFF_CURRENT_400x50"
+          ],
+          "warnings": [],
+          "resolvedAt": "2026-09-14T01:29:58",
+          "schemaRows": 87,
+          "olhoffCurrentPreset": "duOlhoffPedersenAdaptiveBoxSensitivityFiltered",
+          "requestedPresetName": "duOlhoffPedersenAdaptiveBoxSensitivityFiltered",
+          "presetResolvedVia": "canonical",
+          "presetRole": "DISTINCT_FORMULATION",
+          "upstreamPreset": "duOlhoffAdaptivePedersen",
+          "upstreamCommit": "253069262407885a8b759a9e721c4f0a7d3a397d",
+          "compatibilityAliases": [],
+          "historicalAliases": [
+            "duOlhoffAdaptivePedersen",
+            "S160x20",
+            "S240x30",
+            "S320x40",
+            "S400x50",
+            "S480x60",
+            "S560x70",
+            "S640x80",
+            "S720x90",
+            "S800x100"
+          ],
+          "implementation": "analysis/OlhoffCurrent"
+        }
+      },
+      "olhoff_preset": "duOlhoffPedersenAdaptiveBoxSensitivityFiltered"
+    },
+    {
+      "a": 8,
+      "b": 1,
+      "t": 1,
+      "nelx": 480,
+      "nely": 60,
+      "bc": "a",
+      "support": "mid",
+      "axial": "both",
+      "elemType": "Q4",
+      "massType": "consistent",
+      "E": 1.0E+7,
+      "nu": 0.3,
+      "rhom": 1,
+      "p": 3,
+      "massInterp": "lin",
+      "rhomin": 0.001,
+      "rho0": 0.5,
+      "volfrac": 0.5,
+      "n": 1,
+      "Nmax": 4,
+      "rminEl": null,
+      "rminPhys": 0.06,
+      "filterMode": "all",
+      "tolMult": 0.05,
+      "multRule": "subspace",
+      "tolEnter": 0.01,
+      "tolExit": 0.05,
+      "subN": 2,
+      "offDiag": true,
+      "move": 0.1,
+      "moveFamily": "SA",
+      "moveMin": 0.002,
+      "s1Gamma": 0.97,
+      "s1AfterCoal": true,
+      "s2Levels": [
+        0.04,
+        0.02,
+        0.01,
+        0.005
+      ],
+      "s2Window": 10,
+      "s2Tol": 0.005,
+      "s2Signal": "beta",
+      "s3Lo": 0.3,
+      "s3Hi": 0.7,
+      "s3Down": 0.7,
+      "s3Up": 1.1,
+      "innerSolver": "mma",
+      "mmaVariant": "published",
+      "innerVar": "drho",
+      "maxInner": 500,
+      "tolInner": 0.05,
+      "minInner": 5,
+      "maxOuter": 400,
+      "tolOuter": 0.15000000000000002,
+      "outerNorm": "l2",
+      "outerGuard": "none",
+      "solver": "eigs",
+      "threads": 1,
+      "verbose": false,
+      "stiffModel": "pedersen",
+      "stiffLinearBelow": 0.1,
+      "sAGrow": 1.2,
+      "sAShrink": 0.7,
+      "name": "OLHOFF_CURRENT_480x60",
+      "diag": false,
+      "canonical": {
+        "domain": {
+          "a": 8,
+          "b": 1,
+          "thickness": 1,
+          "mesh": {
+            "nelx": 480,
+            "nely": 60
+          },
+          "boundary": {
+            "condition": "simplySupported",
+            "support": "midHeight",
+            "axialRestraint": "bothEnds"
+          },
+          "element": {
+            "type": "Q4",
+            "massMatrix": "consistent"
+          }
+        },
+        "material": {
+          "solid": {
+            "E": 1.0E+7,
+            "nu": 0.3,
+            "density": 1
+          },
+          "stiffness": {
+            "model": "pedersen",
+            "linearBelow": 0.1,
+            "p": 3,
+            "continuation": {
+              "enabled": false,
+              "schedule": [],
+              "driver": "moveLadderStage",
+              "blockStopUntilFinal": true
+            }
+          },
+          "mass": {
+            "model": "eq2",
+            "q": 1,
+            "lowDensityExponent": 6,
+            "cutoff": 0.1,
+            "continuation": {
+              "enabled": false,
+              "lowPModel": "eq2"
+            }
+          }
+        },
+        "design": {
+          "initial": 0.5,
+          "minimum": 0.001,
+          "volumeFraction": 0.5
+        },
+        "filter": {
+          "type": "sensitivity",
+          "radiusPhysical": 0.06,
+          "radiusElements": [],
+          "applyTo": "all"
+        },
+        "projection": {
+          "enabled": false,
+          "eta": 0.5,
+          "beta": {
+            "levels": []
+          },
+          "continuation": {
+            "trigger": "outerConvergence"
+          }
+        },
+        "eigen": {
+          "targetMode": 1,
+          "maxCluster": 4,
+          "solver": "eigs",
+          "tolerance": 1E-12,
+          "maxIterations": 5000,
+          "krylovFactor": 4
+        },
+        "multiplicity": {
+          "method": "subspace",
+          "tolerance": 0.05,
+          "enterTolerance": 0.01,
+          "exitTolerance": 0.05,
+          "subspaceSize": 2,
+          "diagonalOffsets": true,
+          "offDiagonal": true
+        },
+        "optimizer": {
+          "inner": {
+            "type": "mma",
+            "variable": "increment",
+            "variant": "published",
+            "asymptoteHistory": "inner",
+            "tolerance": 0.05,
+            "minIterations": 5,
+            "maxIterations": 500
+          }
+        },
+        "move": {
+          "policy": "adaptive",
+          "initial": 0.1,
+          "minimum": 0.002,
+          "levels": [
+            0.04,
+            0.02,
+            0.01,
+            0.005
+          ],
+          "geometric": {
+            "ratio": 0.97,
+            "afterCoalescence": true
+          },
+          "adaptive": {
+            "grow": 1.2,
+            "shrink": 0.7
+          },
+          "trust": {
+            "loRatio": 0.3,
+            "hiRatio": 0.7,
+            "shrink": 0.7,
+            "grow": 1.1
+          },
+          "continuation": {
+            "signal": "boundVariable",
+            "window": 10,
+            "tolerance": 0.005
+          }
+        },
+        "stop": {
+          "rule": "designChange",
+          "norm": "l2",
+          "tolerance": 0.15000000000000002,
+          "toleranceRule": "meshScaled",
+          "field": "designVariable",
+          "guards": {
+            "settledMove": false,
+            "settledWindow": 1,
+            "boxInactiveFraction": 0,
+            "ladderExhausted": false,
+            "maxDesignChange": false
+          }
+        },
+        "runtime": {
+          "maxOuter": 400,
+          "singleThread": true,
+          "diagnostics": false,
+          "verbose": false,
+          "name": "OLHOFF_CURRENT_480x60"
+        },
+        "provenance": {
+          "preset": "duOlhoffAdaptivePedersen",
+          "overrides": [
+            "domain.mesh.nelx",
+            480,
+            "domain.mesh.nely",
+            60,
+            "runtime.maxOuter",
+            400,
+            "runtime.singleThread",
+            true,
+            "runtime.diagnostics",
+            false,
+            "runtime.verbose",
+            false,
+            "runtime.name",
+            "OLHOFF_CURRENT_480x60"
+          ],
+          "warnings": [],
+          "resolvedAt": "2026-09-14T01:29:58",
+          "schemaRows": 87,
+          "olhoffCurrentPreset": "duOlhoffPedersenAdaptiveBoxSensitivityFiltered",
+          "requestedPresetName": "duOlhoffPedersenAdaptiveBoxSensitivityFiltered",
+          "presetResolvedVia": "canonical",
+          "presetRole": "DISTINCT_FORMULATION",
+          "upstreamPreset": "duOlhoffAdaptivePedersen",
+          "upstreamCommit": "253069262407885a8b759a9e721c4f0a7d3a397d",
+          "compatibilityAliases": [],
+          "historicalAliases": [
+            "duOlhoffAdaptivePedersen",
+            "S160x20",
+            "S240x30",
+            "S320x40",
+            "S400x50",
+            "S480x60",
+            "S560x70",
+            "S640x80",
+            "S720x90",
+            "S800x100"
+          ],
+          "implementation": "analysis/OlhoffCurrent"
+        }
+      },
+      "olhoff_preset": "duOlhoffPedersenAdaptiveBoxSensitivityFiltered"
+    },
+    {
+      "a": 8,
+      "b": 1,
+      "t": 1,
+      "nelx": 560,
+      "nely": 70,
+      "bc": "a",
+      "support": "mid",
+      "axial": "both",
+      "elemType": "Q4",
+      "massType": "consistent",
+      "E": 1.0E+7,
+      "nu": 0.3,
+      "rhom": 1,
+      "p": 3,
+      "massInterp": "lin",
+      "rhomin": 0.001,
+      "rho0": 0.5,
+      "volfrac": 0.5,
+      "n": 1,
+      "Nmax": 4,
+      "rminEl": null,
+      "rminPhys": 0.06,
+      "filterMode": "all",
+      "tolMult": 0.05,
+      "multRule": "subspace",
+      "tolEnter": 0.01,
+      "tolExit": 0.05,
+      "subN": 2,
+      "offDiag": true,
+      "move": 0.1,
+      "moveFamily": "SA",
+      "moveMin": 0.002,
+      "s1Gamma": 0.97,
+      "s1AfterCoal": true,
+      "s2Levels": [
+        0.04,
+        0.02,
+        0.01,
+        0.005
+      ],
+      "s2Window": 10,
+      "s2Tol": 0.005,
+      "s2Signal": "beta",
+      "s3Lo": 0.3,
+      "s3Hi": 0.7,
+      "s3Down": 0.7,
+      "s3Up": 1.1,
+      "innerSolver": "mma",
+      "mmaVariant": "published",
+      "innerVar": "drho",
+      "maxInner": 500,
+      "tolInner": 0.05,
+      "minInner": 5,
+      "maxOuter": 400,
+      "tolOuter": 0.17500000000000002,
+      "outerNorm": "l2",
+      "outerGuard": "none",
+      "solver": "eigs",
+      "threads": 1,
+      "verbose": false,
+      "stiffModel": "pedersen",
+      "stiffLinearBelow": 0.1,
+      "sAGrow": 1.2,
+      "sAShrink": 0.7,
+      "name": "OLHOFF_CURRENT_560x70",
+      "diag": false,
+      "canonical": {
+        "domain": {
+          "a": 8,
+          "b": 1,
+          "thickness": 1,
+          "mesh": {
+            "nelx": 560,
+            "nely": 70
+          },
+          "boundary": {
+            "condition": "simplySupported",
+            "support": "midHeight",
+            "axialRestraint": "bothEnds"
+          },
+          "element": {
+            "type": "Q4",
+            "massMatrix": "consistent"
+          }
+        },
+        "material": {
+          "solid": {
+            "E": 1.0E+7,
+            "nu": 0.3,
+            "density": 1
+          },
+          "stiffness": {
+            "model": "pedersen",
+            "linearBelow": 0.1,
+            "p": 3,
+            "continuation": {
+              "enabled": false,
+              "schedule": [],
+              "driver": "moveLadderStage",
+              "blockStopUntilFinal": true
+            }
+          },
+          "mass": {
+            "model": "eq2",
+            "q": 1,
+            "lowDensityExponent": 6,
+            "cutoff": 0.1,
+            "continuation": {
+              "enabled": false,
+              "lowPModel": "eq2"
+            }
+          }
+        },
+        "design": {
+          "initial": 0.5,
+          "minimum": 0.001,
+          "volumeFraction": 0.5
+        },
+        "filter": {
+          "type": "sensitivity",
+          "radiusPhysical": 0.06,
+          "radiusElements": [],
+          "applyTo": "all"
+        },
+        "projection": {
+          "enabled": false,
+          "eta": 0.5,
+          "beta": {
+            "levels": []
+          },
+          "continuation": {
+            "trigger": "outerConvergence"
+          }
+        },
+        "eigen": {
+          "targetMode": 1,
+          "maxCluster": 4,
+          "solver": "eigs",
+          "tolerance": 1E-12,
+          "maxIterations": 5000,
+          "krylovFactor": 4
+        },
+        "multiplicity": {
+          "method": "subspace",
+          "tolerance": 0.05,
+          "enterTolerance": 0.01,
+          "exitTolerance": 0.05,
+          "subspaceSize": 2,
+          "diagonalOffsets": true,
+          "offDiagonal": true
+        },
+        "optimizer": {
+          "inner": {
+            "type": "mma",
+            "variable": "increment",
+            "variant": "published",
+            "asymptoteHistory": "inner",
+            "tolerance": 0.05,
+            "minIterations": 5,
+            "maxIterations": 500
+          }
+        },
+        "move": {
+          "policy": "adaptive",
+          "initial": 0.1,
+          "minimum": 0.002,
+          "levels": [
+            0.04,
+            0.02,
+            0.01,
+            0.005
+          ],
+          "geometric": {
+            "ratio": 0.97,
+            "afterCoalescence": true
+          },
+          "adaptive": {
+            "grow": 1.2,
+            "shrink": 0.7
+          },
+          "trust": {
+            "loRatio": 0.3,
+            "hiRatio": 0.7,
+            "shrink": 0.7,
+            "grow": 1.1
+          },
+          "continuation": {
+            "signal": "boundVariable",
+            "window": 10,
+            "tolerance": 0.005
+          }
+        },
+        "stop": {
+          "rule": "designChange",
+          "norm": "l2",
+          "tolerance": 0.17500000000000002,
+          "toleranceRule": "meshScaled",
+          "field": "designVariable",
+          "guards": {
+            "settledMove": false,
+            "settledWindow": 1,
+            "boxInactiveFraction": 0,
+            "ladderExhausted": false,
+            "maxDesignChange": false
+          }
+        },
+        "runtime": {
+          "maxOuter": 400,
+          "singleThread": true,
+          "diagnostics": false,
+          "verbose": false,
+          "name": "OLHOFF_CURRENT_560x70"
+        },
+        "provenance": {
+          "preset": "duOlhoffAdaptivePedersen",
+          "overrides": [
+            "domain.mesh.nelx",
+            560,
+            "domain.mesh.nely",
+            70,
+            "runtime.maxOuter",
+            400,
+            "runtime.singleThread",
+            true,
+            "runtime.diagnostics",
+            false,
+            "runtime.verbose",
+            false,
+            "runtime.name",
+            "OLHOFF_CURRENT_560x70"
+          ],
+          "warnings": [],
+          "resolvedAt": "2026-09-14T01:29:58",
+          "schemaRows": 87,
+          "olhoffCurrentPreset": "duOlhoffPedersenAdaptiveBoxSensitivityFiltered",
+          "requestedPresetName": "duOlhoffPedersenAdaptiveBoxSensitivityFiltered",
+          "presetResolvedVia": "canonical",
+          "presetRole": "DISTINCT_FORMULATION",
+          "upstreamPreset": "duOlhoffAdaptivePedersen",
+          "upstreamCommit": "253069262407885a8b759a9e721c4f0a7d3a397d",
+          "compatibilityAliases": [],
+          "historicalAliases": [
+            "duOlhoffAdaptivePedersen",
+            "S160x20",
+            "S240x30",
+            "S320x40",
+            "S400x50",
+            "S480x60",
+            "S560x70",
+            "S640x80",
+            "S720x90",
+            "S800x100"
+          ],
+          "implementation": "analysis/OlhoffCurrent"
+        }
+      },
+      "olhoff_preset": "duOlhoffPedersenAdaptiveBoxSensitivityFiltered"
+    },
+    {
+      "a": 8,
+      "b": 1,
+      "t": 1,
+      "nelx": 640,
+      "nely": 80,
+      "bc": "a",
+      "support": "mid",
+      "axial": "both",
+      "elemType": "Q4",
+      "massType": "consistent",
+      "E": 1.0E+7,
+      "nu": 0.3,
+      "rhom": 1,
+      "p": 3,
+      "massInterp": "lin",
+      "rhomin": 0.001,
+      "rho0": 0.5,
+      "volfrac": 0.5,
+      "n": 1,
+      "Nmax": 4,
+      "rminEl": null,
+      "rminPhys": 0.06,
+      "filterMode": "all",
+      "tolMult": 0.05,
+      "multRule": "subspace",
+      "tolEnter": 0.01,
+      "tolExit": 0.05,
+      "subN": 2,
+      "offDiag": true,
+      "move": 0.1,
+      "moveFamily": "SA",
+      "moveMin": 0.002,
+      "s1Gamma": 0.97,
+      "s1AfterCoal": true,
+      "s2Levels": [
+        0.04,
+        0.02,
+        0.01,
+        0.005
+      ],
+      "s2Window": 10,
+      "s2Tol": 0.005,
+      "s2Signal": "beta",
+      "s3Lo": 0.3,
+      "s3Hi": 0.7,
+      "s3Down": 0.7,
+      "s3Up": 1.1,
+      "innerSolver": "mma",
+      "mmaVariant": "published",
+      "innerVar": "drho",
+      "maxInner": 500,
+      "tolInner": 0.05,
+      "minInner": 5,
+      "maxOuter": 400,
+      "tolOuter": 0.2,
+      "outerNorm": "l2",
+      "outerGuard": "none",
+      "solver": "eigs",
+      "threads": 1,
+      "verbose": false,
+      "stiffModel": "pedersen",
+      "stiffLinearBelow": 0.1,
+      "sAGrow": 1.2,
+      "sAShrink": 0.7,
+      "name": "OLHOFF_CURRENT_640x80",
+      "diag": false,
+      "canonical": {
+        "domain": {
+          "a": 8,
+          "b": 1,
+          "thickness": 1,
+          "mesh": {
+            "nelx": 640,
+            "nely": 80
+          },
+          "boundary": {
+            "condition": "simplySupported",
+            "support": "midHeight",
+            "axialRestraint": "bothEnds"
+          },
+          "element": {
+            "type": "Q4",
+            "massMatrix": "consistent"
+          }
+        },
+        "material": {
+          "solid": {
+            "E": 1.0E+7,
+            "nu": 0.3,
+            "density": 1
+          },
+          "stiffness": {
+            "model": "pedersen",
+            "linearBelow": 0.1,
+            "p": 3,
+            "continuation": {
+              "enabled": false,
+              "schedule": [],
+              "driver": "moveLadderStage",
+              "blockStopUntilFinal": true
+            }
+          },
+          "mass": {
+            "model": "eq2",
+            "q": 1,
+            "lowDensityExponent": 6,
+            "cutoff": 0.1,
+            "continuation": {
+              "enabled": false,
+              "lowPModel": "eq2"
+            }
+          }
+        },
+        "design": {
+          "initial": 0.5,
+          "minimum": 0.001,
+          "volumeFraction": 0.5
+        },
+        "filter": {
+          "type": "sensitivity",
+          "radiusPhysical": 0.06,
+          "radiusElements": [],
+          "applyTo": "all"
+        },
+        "projection": {
+          "enabled": false,
+          "eta": 0.5,
+          "beta": {
+            "levels": []
+          },
+          "continuation": {
+            "trigger": "outerConvergence"
+          }
+        },
+        "eigen": {
+          "targetMode": 1,
+          "maxCluster": 4,
+          "solver": "eigs",
+          "tolerance": 1E-12,
+          "maxIterations": 5000,
+          "krylovFactor": 4
+        },
+        "multiplicity": {
+          "method": "subspace",
+          "tolerance": 0.05,
+          "enterTolerance": 0.01,
+          "exitTolerance": 0.05,
+          "subspaceSize": 2,
+          "diagonalOffsets": true,
+          "offDiagonal": true
+        },
+        "optimizer": {
+          "inner": {
+            "type": "mma",
+            "variable": "increment",
+            "variant": "published",
+            "asymptoteHistory": "inner",
+            "tolerance": 0.05,
+            "minIterations": 5,
+            "maxIterations": 500
+          }
+        },
+        "move": {
+          "policy": "adaptive",
+          "initial": 0.1,
+          "minimum": 0.002,
+          "levels": [
+            0.04,
+            0.02,
+            0.01,
+            0.005
+          ],
+          "geometric": {
+            "ratio": 0.97,
+            "afterCoalescence": true
+          },
+          "adaptive": {
+            "grow": 1.2,
+            "shrink": 0.7
+          },
+          "trust": {
+            "loRatio": 0.3,
+            "hiRatio": 0.7,
+            "shrink": 0.7,
+            "grow": 1.1
+          },
+          "continuation": {
+            "signal": "boundVariable",
+            "window": 10,
+            "tolerance": 0.005
+          }
+        },
+        "stop": {
+          "rule": "designChange",
+          "norm": "l2",
+          "tolerance": 0.2,
+          "toleranceRule": "meshScaled",
+          "field": "designVariable",
+          "guards": {
+            "settledMove": false,
+            "settledWindow": 1,
+            "boxInactiveFraction": 0,
+            "ladderExhausted": false,
+            "maxDesignChange": false
+          }
+        },
+        "runtime": {
+          "maxOuter": 400,
+          "singleThread": true,
+          "diagnostics": false,
+          "verbose": false,
+          "name": "OLHOFF_CURRENT_640x80"
+        },
+        "provenance": {
+          "preset": "duOlhoffAdaptivePedersen",
+          "overrides": [
+            "domain.mesh.nelx",
+            640,
+            "domain.mesh.nely",
+            80,
+            "runtime.maxOuter",
+            400,
+            "runtime.singleThread",
+            true,
+            "runtime.diagnostics",
+            false,
+            "runtime.verbose",
+            false,
+            "runtime.name",
+            "OLHOFF_CURRENT_640x80"
+          ],
+          "warnings": [],
+          "resolvedAt": "2026-09-14T01:29:58",
+          "schemaRows": 87,
+          "olhoffCurrentPreset": "duOlhoffPedersenAdaptiveBoxSensitivityFiltered",
+          "requestedPresetName": "duOlhoffPedersenAdaptiveBoxSensitivityFiltered",
+          "presetResolvedVia": "canonical",
+          "presetRole": "DISTINCT_FORMULATION",
+          "upstreamPreset": "duOlhoffAdaptivePedersen",
+          "upstreamCommit": "253069262407885a8b759a9e721c4f0a7d3a397d",
+          "compatibilityAliases": [],
+          "historicalAliases": [
+            "duOlhoffAdaptivePedersen",
+            "S160x20",
+            "S240x30",
+            "S320x40",
+            "S400x50",
+            "S480x60",
+            "S560x70",
+            "S640x80",
+            "S720x90",
+            "S800x100"
+          ],
+          "implementation": "analysis/OlhoffCurrent"
+        }
+      },
+      "olhoff_preset": "duOlhoffPedersenAdaptiveBoxSensitivityFiltered"
+    },
+    {
+      "a": 8,
+      "b": 1,
+      "t": 1,
+      "nelx": 720,
+      "nely": 90,
+      "bc": "a",
+      "support": "mid",
+      "axial": "both",
+      "elemType": "Q4",
+      "massType": "consistent",
+      "E": 1.0E+7,
+      "nu": 0.3,
+      "rhom": 1,
+      "p": 3,
+      "massInterp": "lin",
+      "rhomin": 0.001,
+      "rho0": 0.5,
+      "volfrac": 0.5,
+      "n": 1,
+      "Nmax": 4,
+      "rminEl": null,
+      "rminPhys": 0.06,
+      "filterMode": "all",
+      "tolMult": 0.05,
+      "multRule": "subspace",
+      "tolEnter": 0.01,
+      "tolExit": 0.05,
+      "subN": 2,
+      "offDiag": true,
+      "move": 0.1,
+      "moveFamily": "SA",
+      "moveMin": 0.002,
+      "s1Gamma": 0.97,
+      "s1AfterCoal": true,
+      "s2Levels": [
+        0.04,
+        0.02,
+        0.01,
+        0.005
+      ],
+      "s2Window": 10,
+      "s2Tol": 0.005,
+      "s2Signal": "beta",
+      "s3Lo": 0.3,
+      "s3Hi": 0.7,
+      "s3Down": 0.7,
+      "s3Up": 1.1,
+      "innerSolver": "mma",
+      "mmaVariant": "published",
+      "innerVar": "drho",
+      "maxInner": 500,
+      "tolInner": 0.05,
+      "minInner": 5,
+      "maxOuter": 400,
+      "tolOuter": 0.225,
+      "outerNorm": "l2",
+      "outerGuard": "none",
+      "solver": "eigs",
+      "threads": 1,
+      "verbose": false,
+      "stiffModel": "pedersen",
+      "stiffLinearBelow": 0.1,
+      "sAGrow": 1.2,
+      "sAShrink": 0.7,
+      "name": "OLHOFF_CURRENT_720x90",
+      "diag": false,
+      "canonical": {
+        "domain": {
+          "a": 8,
+          "b": 1,
+          "thickness": 1,
+          "mesh": {
+            "nelx": 720,
+            "nely": 90
+          },
+          "boundary": {
+            "condition": "simplySupported",
+            "support": "midHeight",
+            "axialRestraint": "bothEnds"
+          },
+          "element": {
+            "type": "Q4",
+            "massMatrix": "consistent"
+          }
+        },
+        "material": {
+          "solid": {
+            "E": 1.0E+7,
+            "nu": 0.3,
+            "density": 1
+          },
+          "stiffness": {
+            "model": "pedersen",
+            "linearBelow": 0.1,
+            "p": 3,
+            "continuation": {
+              "enabled": false,
+              "schedule": [],
+              "driver": "moveLadderStage",
+              "blockStopUntilFinal": true
+            }
+          },
+          "mass": {
+            "model": "eq2",
+            "q": 1,
+            "lowDensityExponent": 6,
+            "cutoff": 0.1,
+            "continuation": {
+              "enabled": false,
+              "lowPModel": "eq2"
+            }
+          }
+        },
+        "design": {
+          "initial": 0.5,
+          "minimum": 0.001,
+          "volumeFraction": 0.5
+        },
+        "filter": {
+          "type": "sensitivity",
+          "radiusPhysical": 0.06,
+          "radiusElements": [],
+          "applyTo": "all"
+        },
+        "projection": {
+          "enabled": false,
+          "eta": 0.5,
+          "beta": {
+            "levels": []
+          },
+          "continuation": {
+            "trigger": "outerConvergence"
+          }
+        },
+        "eigen": {
+          "targetMode": 1,
+          "maxCluster": 4,
+          "solver": "eigs",
+          "tolerance": 1E-12,
+          "maxIterations": 5000,
+          "krylovFactor": 4
+        },
+        "multiplicity": {
+          "method": "subspace",
+          "tolerance": 0.05,
+          "enterTolerance": 0.01,
+          "exitTolerance": 0.05,
+          "subspaceSize": 2,
+          "diagonalOffsets": true,
+          "offDiagonal": true
+        },
+        "optimizer": {
+          "inner": {
+            "type": "mma",
+            "variable": "increment",
+            "variant": "published",
+            "asymptoteHistory": "inner",
+            "tolerance": 0.05,
+            "minIterations": 5,
+            "maxIterations": 500
+          }
+        },
+        "move": {
+          "policy": "adaptive",
+          "initial": 0.1,
+          "minimum": 0.002,
+          "levels": [
+            0.04,
+            0.02,
+            0.01,
+            0.005
+          ],
+          "geometric": {
+            "ratio": 0.97,
+            "afterCoalescence": true
+          },
+          "adaptive": {
+            "grow": 1.2,
+            "shrink": 0.7
+          },
+          "trust": {
+            "loRatio": 0.3,
+            "hiRatio": 0.7,
+            "shrink": 0.7,
+            "grow": 1.1
+          },
+          "continuation": {
+            "signal": "boundVariable",
+            "window": 10,
+            "tolerance": 0.005
+          }
+        },
+        "stop": {
+          "rule": "designChange",
+          "norm": "l2",
+          "tolerance": 0.225,
+          "toleranceRule": "meshScaled",
+          "field": "designVariable",
+          "guards": {
+            "settledMove": false,
+            "settledWindow": 1,
+            "boxInactiveFraction": 0,
+            "ladderExhausted": false,
+            "maxDesignChange": false
+          }
+        },
+        "runtime": {
+          "maxOuter": 400,
+          "singleThread": true,
+          "diagnostics": false,
+          "verbose": false,
+          "name": "OLHOFF_CURRENT_720x90"
+        },
+        "provenance": {
+          "preset": "duOlhoffAdaptivePedersen",
+          "overrides": [
+            "domain.mesh.nelx",
+            720,
+            "domain.mesh.nely",
+            90,
+            "runtime.maxOuter",
+            400,
+            "runtime.singleThread",
+            true,
+            "runtime.diagnostics",
+            false,
+            "runtime.verbose",
+            false,
+            "runtime.name",
+            "OLHOFF_CURRENT_720x90"
+          ],
+          "warnings": [],
+          "resolvedAt": "2026-09-14T01:29:58",
+          "schemaRows": 87,
+          "olhoffCurrentPreset": "duOlhoffPedersenAdaptiveBoxSensitivityFiltered",
+          "requestedPresetName": "duOlhoffPedersenAdaptiveBoxSensitivityFiltered",
+          "presetResolvedVia": "canonical",
+          "presetRole": "DISTINCT_FORMULATION",
+          "upstreamPreset": "duOlhoffAdaptivePedersen",
+          "upstreamCommit": "253069262407885a8b759a9e721c4f0a7d3a397d",
+          "compatibilityAliases": [],
+          "historicalAliases": [
+            "duOlhoffAdaptivePedersen",
+            "S160x20",
+            "S240x30",
+            "S320x40",
+            "S400x50",
+            "S480x60",
+            "S560x70",
+            "S640x80",
+            "S720x90",
+            "S800x100"
+          ],
+          "implementation": "analysis/OlhoffCurrent"
+        }
+      },
+      "olhoff_preset": "duOlhoffPedersenAdaptiveBoxSensitivityFiltered"
+    },
+    {
+      "a": 8,
+      "b": 1,
+      "t": 1,
+      "nelx": 800,
+      "nely": 100,
+      "bc": "a",
+      "support": "mid",
+      "axial": "both",
+      "elemType": "Q4",
+      "massType": "consistent",
+      "E": 1.0E+7,
+      "nu": 0.3,
+      "rhom": 1,
+      "p": 3,
+      "massInterp": "lin",
+      "rhomin": 0.001,
+      "rho0": 0.5,
+      "volfrac": 0.5,
+      "n": 1,
+      "Nmax": 4,
+      "rminEl": null,
+      "rminPhys": 0.06,
+      "filterMode": "all",
+      "tolMult": 0.05,
+      "multRule": "subspace",
+      "tolEnter": 0.01,
+      "tolExit": 0.05,
+      "subN": 2,
+      "offDiag": true,
+      "move": 0.1,
+      "moveFamily": "SA",
+      "moveMin": 0.002,
+      "s1Gamma": 0.97,
+      "s1AfterCoal": true,
+      "s2Levels": [
+        0.04,
+        0.02,
+        0.01,
+        0.005
+      ],
+      "s2Window": 10,
+      "s2Tol": 0.005,
+      "s2Signal": "beta",
+      "s3Lo": 0.3,
+      "s3Hi": 0.7,
+      "s3Down": 0.7,
+      "s3Up": 1.1,
+      "innerSolver": "mma",
+      "mmaVariant": "published",
+      "innerVar": "drho",
+      "maxInner": 500,
+      "tolInner": 0.05,
+      "minInner": 5,
+      "maxOuter": 400,
+      "tolOuter": 0.25,
+      "outerNorm": "l2",
+      "outerGuard": "none",
+      "solver": "eigs",
+      "threads": 1,
+      "verbose": false,
+      "stiffModel": "pedersen",
+      "stiffLinearBelow": 0.1,
+      "sAGrow": 1.2,
+      "sAShrink": 0.7,
+      "name": "OLHOFF_CURRENT_800x100",
+      "diag": false,
+      "canonical": {
+        "domain": {
+          "a": 8,
+          "b": 1,
+          "thickness": 1,
+          "mesh": {
+            "nelx": 800,
+            "nely": 100
+          },
+          "boundary": {
+            "condition": "simplySupported",
+            "support": "midHeight",
+            "axialRestraint": "bothEnds"
+          },
+          "element": {
+            "type": "Q4",
+            "massMatrix": "consistent"
+          }
+        },
+        "material": {
+          "solid": {
+            "E": 1.0E+7,
+            "nu": 0.3,
+            "density": 1
+          },
+          "stiffness": {
+            "model": "pedersen",
+            "linearBelow": 0.1,
+            "p": 3,
+            "continuation": {
+              "enabled": false,
+              "schedule": [],
+              "driver": "moveLadderStage",
+              "blockStopUntilFinal": true
+            }
+          },
+          "mass": {
+            "model": "eq2",
+            "q": 1,
+            "lowDensityExponent": 6,
+            "cutoff": 0.1,
+            "continuation": {
+              "enabled": false,
+              "lowPModel": "eq2"
+            }
+          }
+        },
+        "design": {
+          "initial": 0.5,
+          "minimum": 0.001,
+          "volumeFraction": 0.5
+        },
+        "filter": {
+          "type": "sensitivity",
+          "radiusPhysical": 0.06,
+          "radiusElements": [],
+          "applyTo": "all"
+        },
+        "projection": {
+          "enabled": false,
+          "eta": 0.5,
+          "beta": {
+            "levels": []
+          },
+          "continuation": {
+            "trigger": "outerConvergence"
+          }
+        },
+        "eigen": {
+          "targetMode": 1,
+          "maxCluster": 4,
+          "solver": "eigs",
+          "tolerance": 1E-12,
+          "maxIterations": 5000,
+          "krylovFactor": 4
+        },
+        "multiplicity": {
+          "method": "subspace",
+          "tolerance": 0.05,
+          "enterTolerance": 0.01,
+          "exitTolerance": 0.05,
+          "subspaceSize": 2,
+          "diagonalOffsets": true,
+          "offDiagonal": true
+        },
+        "optimizer": {
+          "inner": {
+            "type": "mma",
+            "variable": "increment",
+            "variant": "published",
+            "asymptoteHistory": "inner",
+            "tolerance": 0.05,
+            "minIterations": 5,
+            "maxIterations": 500
+          }
+        },
+        "move": {
+          "policy": "adaptive",
+          "initial": 0.1,
+          "minimum": 0.002,
+          "levels": [
+            0.04,
+            0.02,
+            0.01,
+            0.005
+          ],
+          "geometric": {
+            "ratio": 0.97,
+            "afterCoalescence": true
+          },
+          "adaptive": {
+            "grow": 1.2,
+            "shrink": 0.7
+          },
+          "trust": {
+            "loRatio": 0.3,
+            "hiRatio": 0.7,
+            "shrink": 0.7,
+            "grow": 1.1
+          },
+          "continuation": {
+            "signal": "boundVariable",
+            "window": 10,
+            "tolerance": 0.005
+          }
+        },
+        "stop": {
+          "rule": "designChange",
+          "norm": "l2",
+          "tolerance": 0.25,
+          "toleranceRule": "meshScaled",
+          "field": "designVariable",
+          "guards": {
+            "settledMove": false,
+            "settledWindow": 1,
+            "boxInactiveFraction": 0,
+            "ladderExhausted": false,
+            "maxDesignChange": false
+          }
+        },
+        "runtime": {
+          "maxOuter": 400,
+          "singleThread": true,
+          "diagnostics": false,
+          "verbose": false,
+          "name": "OLHOFF_CURRENT_800x100"
+        },
+        "provenance": {
+          "preset": "duOlhoffAdaptivePedersen",
+          "overrides": [
+            "domain.mesh.nelx",
+            800,
+            "domain.mesh.nely",
+            100,
+            "runtime.maxOuter",
+            400,
+            "runtime.singleThread",
+            true,
+            "runtime.diagnostics",
+            false,
+            "runtime.verbose",
+            false,
+            "runtime.name",
+            "OLHOFF_CURRENT_800x100"
+          ],
+          "warnings": [],
+          "resolvedAt": "2026-09-14T01:29:58",
+          "schemaRows": 87,
+          "olhoffCurrentPreset": "duOlhoffPedersenAdaptiveBoxSensitivityFiltered",
+          "requestedPresetName": "duOlhoffPedersenAdaptiveBoxSensitivityFiltered",
+          "presetResolvedVia": "canonical",
+          "presetRole": "DISTINCT_FORMULATION",
+          "upstreamPreset": "duOlhoffAdaptivePedersen",
+          "upstreamCommit": "253069262407885a8b759a9e721c4f0a7d3a397d",
+          "compatibilityAliases": [],
+          "historicalAliases": [
+            "duOlhoffAdaptivePedersen",
+            "S160x20",
+            "S240x30",
+            "S320x40",
+            "S400x50",
+            "S480x60",
+            "S560x70",
+            "S640x80",
+            "S720x90",
+            "S800x100"
+          ],
+          "implementation": "analysis/OlhoffCurrent"
+        }
+      },
+      "olhoff_preset": "duOlhoffPedersenAdaptiveBoxSensitivityFiltered"
+    }
+  ],
+  "resolved_implementations": {
+    "olhoff": [
+      {
+        "name": "applyFilter",
+        "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/filter/applyFilter.m"
+      },
+      {
+        "name": "assemble2D",
+        "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/fem/assemble2D.m"
+      },
+      {
+        "name": "classifyModes",
+        "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/fem/classifyModes.m"
+      },
+      {
+        "name": "compareHistory",
+        "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/algo/compareHistory.m"
+      },
+      {
+        "name": "compareHistoryTo",
+        "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/algo/compareHistoryTo.m"
+      },
+      {
+        "name": "compareTopology",
+        "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/algo/compareTopology.m"
+      },
+      {
+        "name": "defaultCfg",
+        "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/algo/defaultCfg.m"
+      },
+      {
+        "name": "deltaLambda",
+        "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/algo/deltaLambda.m"
+      },
+      {
+        "name": "eigSolve",
+        "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/fem/eigSolve.m"
+      },
+      {
+        "name": "elemMats2D",
+        "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/fem/elemMats2D.m"
+      },
+      {
+        "name": "genGrad",
+        "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/algo/genGrad.m"
+      },
+      {
+        "name": "imresizeNN",
+        "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/algo/imresizeNN.m"
+      },
+      {
+        "name": "innerLoop",
+        "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/algo/innerLoop.m"
+      },
+      {
+        "name": "innerLoopLP",
+        "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/algo/innerLoopLP.m"
+      },
+      {
+        "name": "innerLoopRho",
+        "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/algo/innerLoopRho.m"
+      },
+      {
+        "name": "massScale",
+        "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/fem/massScale.m"
+      },
+      {
+        "name": "mmasub",
+        "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/mma_published/mmasub.m"
+      },
+      {
+        "name": "model2D",
+        "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/fem/model2D.m"
+      },
+      {
+        "name": "moveControl",
+        "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/algo/moveControl.m"
+      },
+      {
+        "name": "multRule",
+        "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/algo/multRule.m"
+      },
+      {
+        "name": "olhoffOpt",
+        "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/algo/olhoffOpt.m"
+      },
+      {
+        "name": "olhoffSolve",
+        "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/architecture/olhoffSolve.m"
+      },
+      {
+        "name": "plotHistory",
+        "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/algo/plotHistory.m"
+      },
+      {
+        "name": "prepFilter",
+        "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/filter/prepFilter.m"
+      },
+      {
+        "name": "projChain",
+        "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/filter/projChain.m"
+      },
+      {
+        "name": "projDensityField",
+        "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/filter/projDensityField.m"
+      },
+      {
+        "name": "projectDensity",
+        "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/filter/projectDensity.m"
+      },
+      {
+        "name": "subsolv",
+        "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/mma_published/subsolv.m"
+      },
+      {
+        "name": "textStamp",
+        "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/algo/textStamp.m"
+      },
+      {
+        "name": "top88_reference",
+        "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/filter/top88_reference.m"
+      },
+      {
+        "name": "topologyImage",
+        "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/algo/topologyImage.m"
+      },
+      {
+        "name": "useMMA",
+        "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/algo/useMMA.m"
+      }
+    ],
+    "run_topopt_from_json": "/Users/piotrek/Programming/topOpt4freqMax/tools/Matlab/run_topopt_from_json.m",
+    "study_evaluate_design": "/Users/piotrek/Programming/topOpt4freqMax/analysis/three_method_parametric_study/study_evaluate_design.m",
+    "study_base_config": "/Users/piotrek/Programming/topOpt4freqMax/analysis/three_method_parametric_study/study_base_config.m"
+  },
+  "source_hashes": {
+    "examples_Performance_performance_comparison_m": {
+      "path": "examples/Performance/performance_comparison.m",
+      "sha256": "05d043c3005d6ffbf571889f88623bb49aa14e6b7dce1a4e836fbce4684c9950"
+    },
+    "examples_Performance_conference_bench_confbench_method_config_m": {
+      "path": "examples/Performance/conference_bench/confbench_method_config.m",
+      "sha256": "6d17d6bbad0c92a35cc2f9ddd437e157095c3ca74fcf7187c0d0a739a25c62d3"
+    },
+    "examples_Performance_conference_bench_confbench_run_case_m": {
+      "path": "examples/Performance/conference_bench/confbench_run_case.m",
+      "sha256": "e658fb1edfe03d1e560391ff3f71f68df0ecdc9e578d6653b68f3c64f68e74ac"
+    },
+    "examples_Performance_conference_bench_confbench_preflight_m": {
+      "path": "examples/Performance/conference_bench/confbench_preflight.m",
+      "sha256": "80c74fddf20d9b723e57fadd5f4a3c4965190a673e3c0d97c55ae65de3e66288"
+    },
+    "examples_Performance_conference_bench_confbench_manifest_m": {
+      "path": "examples/Performance/conference_bench/confbench_manifest.m",
+      "sha256": "c768b6bf28a1ae67e00f323ac125b728f47dbaf434e437f33bbe2cb977aa5773"
+    },
+    "examples_Performance_conference_bench_confbench_export_m": {
+      "path": "examples/Performance/conference_bench/confbench_export.m",
+      "sha256": "0802ee590c73153f5e3442aebd137e6e954fbd73ffb3a16090cf872bd87a42b6"
+    },
+    "examples_Performance_conference_bench_confbench_timing_schema_m": {
+      "path": "examples/Performance/conference_bench/confbench_timing_schema.m",
+      "sha256": "8cee863d2dfa6a682c09662ab2a44e7f46bc886e3ae59138c72b590fe091a88c"
+    },
+    "examples_Performance_conference_bench_confbench_caveats_m": {
+      "path": "examples/Performance/conference_bench/confbench_caveats.m",
+      "sha256": "ad1cd1552be3429ec4e0d4b6a58e33b5c15b5e563a4a0cbb360270738aaad4e8"
+    },
+    "examples_Performance_conference_bench_confbench_scaling_fit_m": {
+      "path": "examples/Performance/conference_bench/confbench_scaling_fit.m",
+      "sha256": "3ed1759e3d9515eef992ffa48b8d4ea6554c2da8a60a22a72ca6755672f555b0"
+    },
+    "examples_Performance_conference_bench_confbench_olhoff_preset_m": {
+      "path": "examples/Performance/conference_bench/confbench_olhoff_preset.m",
+      "sha256": "f8a675a0712593a5f597a97d6764a5bf316cfd1fd1d8291ef274439acbb08254"
+    },
+    "analysis_OlhoffCurrent_olhoffcurrent_presets_m": {
+      "path": "analysis/OlhoffCurrent/olhoffcurrent_presets.m",
+      "sha256": "d0ee45fd4af4781fd5adf884b6d50538e41c5d5a902f190b0320dd6f6f2501fc"
+    },
+    "analysis_OlhoffCurrent_olhoffcurrent_preset_m": {
+      "path": "analysis/OlhoffCurrent/olhoffcurrent_preset.m",
+      "sha256": "f742629e0020975f2e0c2efea19ff288b35775a8ebc31162c14781c48c6da54a"
+    },
+    "analysis_OlhoffCurrent_olhoffcurrent_production_preset_m": {
+      "path": "analysis/OlhoffCurrent/olhoffcurrent_production_preset.m",
+      "sha256": "59ffc208a0a028cf7e82df6024e0a239950987f37f4d79a841b2215f359acff6"
+    },
+    "analysis_OlhoffCurrent_olhoffcurrent_caveat_m": {
+      "path": "analysis/OlhoffCurrent/olhoffcurrent_caveat.m",
+      "sha256": "fc4a10ce49976937a8ff5767fa2e51071c18c8975f53a3b6467984aaa0e9c9f4"
+    },
+    "analysis_OlhoffCurrent_olhoffcurrent_config_m": {
+      "path": "analysis/OlhoffCurrent/olhoffcurrent_config.m",
+      "sha256": "ef1806325881e9a625530ad19a13a096b8913093478c304cad98499db9ba39da"
+    },
+    "analysis_OlhoffCurrent_olhoffcurrent_run_m": {
+      "path": "analysis/OlhoffCurrent/olhoffcurrent_run.m",
+      "sha256": "eb3b5a18a2a83da252f8f5cfe0be30b793c4fcb1daef074c61c953325f8e969f"
+    },
+    "analysis_OlhoffCurrent_olhoffcurrent_paths_m": {
+      "path": "analysis/OlhoffCurrent/olhoffcurrent_paths.m",
+      "sha256": "a8be7af6a5930d6ef90684483fcfad3ab9a90c082d2735e95afc2a48c9e254ac"
+    },
+    "analysis_OlhoffCurrent_olhoffcurrent_assert_dispatch_m": {
+      "path": "analysis/OlhoffCurrent/olhoffcurrent_assert_dispatch.m",
+      "sha256": "300b17c264ccd8567fd129670d2d1d537fdcdc71b9f133af2a3fd7fd0c00e39c"
+    },
+    "analysis_OlhoffCurrent_PROVENANCE_json": {
+      "path": "analysis/OlhoffCurrent/PROVENANCE.json",
+      "sha256": "18404c23aa43d4a766a8a0e6825741c1365c0c381a0b2b777a64c206d0919d4f"
+    },
+    "analysis_ourApproach_Matlab_topopt_freq_m": {
+      "path": "analysis/ourApproach/Matlab/topopt_freq.m",
+      "sha256": "284630992697de9c565aa511cbfd4389d4464e951e23436927bd0e150a53c09b"
+    },
+    "analysis_YukselApproach_Matlab_top99neo_inertial_freq_m": {
+      "path": "analysis/YukselApproach/Matlab/top99neo_inertial_freq.m",
+      "sha256": "5afc3d16b4ed6af05793df461b541ed3b2ea62a6da8836f38301a9a3917e6ba2"
+    },
+    "tools_Matlab_run_topopt_from_json_m": {
+      "path": "tools/Matlab/run_topopt_from_json.m",
+      "sha256": "3418b25e1c970041e5c28d0c58b58d959c47f239a2132bd90314ff9b72550a2b"
+    },
+    "analysis_three_method_parametric_study_study_base_config_m": {
+      "path": "analysis/three_method_parametric_study/study_base_config.m",
+      "sha256": "2b3903144e1f2cd69795a1d24e1e93105e3ea89768c8f5f3aa7553dddeda39ba"
+    },
+    "analysis_three_method_parametric_study_study_evaluate_design_m": {
+      "path": "analysis/three_method_parametric_study/study_evaluate_design.m",
+      "sha256": "e14a21efe0bb2d9b9d7f3187b4c3f671ec089f6ff96773074b8f3b56cacd79e9"
+    },
+    "analysis_three_method_parametric_study_results_profile_freeze_manifest_json": {
+      "path": "analysis/three_method_parametric_study/results/profile_freeze_manifest.json",
+      "sha256": "b55e31d87d18e90e8c0b8d278bd4111d494610b62f253194ea16cfcf78252eca"
+    }
+  },
+  "olhoff_implementation": {
+    "implementation": "analysis/OlhoffCurrent",
+    "role": "PRODUCTION - the only Olhoff implementation production may execute",
+    "production_preset": "duOlhoffPedersenAdaptiveBoxSensitivityFiltered",
+    "production_preset_event_date": "2026-09-13",
+    "benchmark_olhoff_preset": "duOlhoffPedersenAdaptiveBoxSensitivityFiltered",
+    "registered_presets": [
+      "duOlhoffSimpEq4bBetaStallLadderSensitivityFiltered",
+      "duOlhoffSimpEq4bThreeRungStageExhaustionSensitivityFiltered",
+      "duOlhoffPedersenAdaptiveBoxSensitivityFiltered"
+    ],
+    "upstream_preset_alias": "duOlhoffAdaptivePedersen",
+    "promoted_from_parent_successful_science_commit": "6b0870850d7407a0f2fc31dbf0d0f318c2e5f2f7",
+    "promoted_from_repository": "/Users/piotrek/Programming/Matlab/Olhoff",
+    "promoted_from_branch": "migration/upstream-olhoffcurrent-capabilities",
+    "promoted_from_commit": "253069262407885a8b759a9e721c4f0a7d3a397d",
+    "promotion_date": "2026-09-13",
+    "source_tree_sha256": "4ba9a3ae10881344a0e60f2b8a8976c5ec9ceccf966bc2a3da4f37fb5aebffbf",
+    "source_n_files": 79,
+    "source_integrity_ok": true,
+    "currentness_state": "CURRENT",
+    "main_repo_commit": "b21483b158f58e05e7b56957f2fbe8e1d2891395-dirty",
+    "epistemic_status": "Du-Olhoff RECONSTRUCTION, Pedersen/adaptive-box formulation (class C controller and filter radius, class B/D material law): SIMP p = 3 with the Pedersen (2000) linearized low-density stiffness (rho*rho0^(p-1) below rho0 = 0.1) and LINEAR mass, eq. (2); a per-element ADAPTIVE move box (initial 0.10, floor 0.002, x1.2 on monotone / x0.7 on reversing outer steps); NATURAL termination by ||drho||_2 < 0.05*sqrt(NE/3200) with no guards and no persistence, a heuristic design-change stop and not a KKT certificate; Sigmund sensitivity filter on all f_sk at a FIXED PHYSICAL radius R = 0.06 (1.2 elements at 160x20, 6 at 800x100). This is a DISTINCT formulation from the historical SIMP + eq. (4b) OlhoffCurrent reconstruction (duOlhoffSimpEq4bBetaStallLadderSensitivityFiltered), not a bug fix of it; Pedersen stiffness is the alternative Du & Olhoff sec. 2.2 name, not their choice. Terminal bimodality is NOT expected beyond coarse meshes: in the committed R = 0.06 sweep the optimum is bimodal only at 160x20 (native gap12 0.7 %) and native gap12 is 11.8-24.5 % from 240x30 to 800x100. Native eigenfrequencies are those of the Pedersen/linear-mass model; any cross-method table must name its evaluator model. Must NOT be labelled \"Olhoff 2007\". Field-level provenance (A/B/C/D) is documented in analysis/OlhoffCurrent/+impl/architecture/docs/SCIENTIFIC_CONFIG_PROVENANCE.md and is printed per run by olh.config.describe.",
+    "implementation_map": "analysis/OLHOFF_IMPLEMENTATION_MAP.md"
+  },
+  "environment": {
+    "matlab_version": "25.2.0.2998904 (R2025b)",
+    "matlab_release": "2025b",
+    "computer": "MACA64",
+    "max_num_comp_threads": 1,
+    "single_thread_requested": true,
+    "blas_library": "Apple Accelerate BLAS (ILP64)",
+    "hostname": "PMS.local"
+  },
+  "repository": {
+    "path": "/Users/piotrek/Programming/topOpt4freqMax",
+    "git_available": true,
+    "head": "b21483b158f58e05e7b56957f2fbe8e1d2891395",
+    "branch": "benchmark-methodology-r2",
+    "dirty": true,
+    "dirty_files": [
+      "M examples/Performance/performance_comparison.m",
+      "?? analysis/OlhoffCurrent/diagnostics/c480_socp_causal_run/",
+      "?? analysis/OlhoffCurrent/diagnostics/filtered_subproblem_integrability_audit/",
+      "?? analysis/OlhoffCurrent/diagnostics/frozen_inner_solver_study/",
+      "?? analysis/OlhoffCurrent/diagnostics/frozen_problem25_reference/",
+      "?? analysis/OlhoffCurrent/diagnostics/gray_kkt_forensic_audit/",
+      "?? analysis/OlhoffCurrent/diagnostics/nine_mesh_campaign_audit/",
+      "?? analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/",
+      "?? analysis/OlhoffCurrent/diagnostics/postmerge_campaign_gate/",
+      "?? analysis/OlhoffCurrent/diagnostics/scientific_delta_olhoff_migration/",
+      "?? analysis/OlhoffCurrent/diagnostics/three_rung_canary_preflight/",
+      "?? examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/",
+      "?? examples/Performance/conference_benchmark/smoke_nine_mesh_pedersen_b21483b/"
+    ],
+    "dirty_file_count": 13
+  },
+  "run_class": {
+    "run_label": "nine_mesh_pedersen_b21483b",
+    "scientific_evidence": true,
+    "performance_campaign": true,
+    "max_outer_override": [],
+    "yuksel_max_iters": 5000,
+    "yuksel_max_iters_frozen": 1000,
+    "warmup_performed": true
+  },
+  "caveats": {
+    "table_caption": "Count/time columns represent method-native computational stages and are not mathematically identical across methods. Total wall time is the common performance quantity.",
+    "olhoff": "Du-Olhoff RECONSTRUCTION, Pedersen/adaptive-box formulation (class C controller and filter radius, class B/D material law): SIMP p = 3 with the Pedersen (2000) linearized low-density stiffness (rho*rho0^(p-1) below rho0 = 0.1) and LINEAR mass, eq. (2); a per-element ADAPTIVE move box (initial 0.10, floor 0.002, x1.2 on monotone / x0.7 on reversing outer steps); NATURAL termination by ||drho||_2 < 0.05*sqrt(NE/3200) with no guards and no persistence, a heuristic design-change stop and not a KKT certificate; Sigmund sensitivity filter on all f_sk at a FIXED PHYSICAL radius R = 0.06 (1.2 elements at 160x20, 6 at 800x100). This is a DISTINCT formulation from the historical SIMP + eq. (4b) OlhoffCurrent reconstruction (duOlhoffSimpEq4bBetaStallLadderSensitivityFiltered), not a bug fix of it; Pedersen stiffness is the alternative Du & Olhoff sec. 2.2 name, not their choice. Terminal bimodality is NOT expected beyond coarse meshes: in the committed R = 0.06 sweep the optimum is bimodal only at 160x20 (native gap12 0.7 %) and native gap12 is 11.8-24.5 % from 240x30 to 800x100. Native eigenfrequencies are those of the Pedersen/linear-mass model; any cross-method table must name its evaluator model. Must NOT be labelled \"Olhoff 2007\". Field-level provenance (A/B/C/D) is documented in analysis/OlhoffCurrent/+impl/architecture/docs/SCIENTIFIC_CONFIG_PROVENANCE.md and is printed per run by olh.config.describe.",
+    "olhoff_label": "The Olhoff column is labelled \"Du-Olhoff reconstruction (Pedersen stiffness + linear mass, adaptive box)\" and must not be labelled \"Olhoff 2007\". It is produced by analysis/OlhoffCurrent at the named preset duOlhoffPedersenAdaptiveBoxSensitivityFiltered (upstream preset duOlhoffAdaptivePedersen @ 2530692). It is NOT the historical SIMP + eq. (4b) realization that earlier campaigns labelled \"Du-Olhoff reconstruction (M4)\" (preset duOlhoffSimpEq4bBetaStallLadderSensitivityFiltered): the two differ in the low-density material law and the outer controller.",
+    "memory": "Reliable, method-independent peak-memory measurement was not available in the MATLAB environment; memory was omitted rather than reported with inconsistent semantics.",
+    "olhoff_iteration_counts": "The outer iteration count of the Du-Olhoff reconstruction is set by its per-element adaptive move box and its mesh-scaled design-change tolerance, neither of which the original publication specifies, and it is NOT monotone in the mesh (committed R = 0.06 sweep: 121, 111, 101, 93, 112, 130, 156, 204, 246 outer iterations from 160x20 to 800x100). Per-outer-iteration cost is therefore reported next to total wall time.",
+    "scaling": "Scaling exponents may be fitted only to complete campaign data and never to smoke or preflight runs. For the Du-Olhoff reconstruction the outer iteration count is a property of the reconstruction's controller and stop, not of the published method, and need not be monotone in the mesh; a total-time exponent mixes per-iteration cost with that count, so the per-outer-iteration cost fit is reported alongside it. Either exponent describes this reconstruction, not the published method."
+  },
+  "timing_schema": {
+    "schema_version": "conference_benchmark_timing/1",
+    "common": {
+      "total_wall_time_s": "Caller-side tic/toc around the solve and nothing else. CSV/JSON/MAT writing, plotting, table formatting, LaTeX generation, the common E1/E2/E3 evaluator and topology rendering are all outside it.",
+      "overhead_time_s": "Whatever the solve spends outside the two named stages: configuration dispatch, model build, filter preparation, the final modal analysis and result assembly. It exists so that no microsecond has to be forced into a named stage.",
+      "identity": "total_wall_time_s = time1 + time2 + overhead_time_s",
+      "timing_accounting_residual_s": "total_wall_time_s minus (time1 + time2 + overhead_time_s).",
+      "timing_accounting_fail": "TIMING_ACCOUNTING_FAIL: set when the residual exceeds the predeclared tolerance recorded alongside it.",
+      "independent_crosscheck_residual_s": "A SECOND, independent measurement of the same interval: the caller-side total minus the solver's own self-reported wall time. Unlike the identity above it is not an algebraic tautology, so it detects a mis-nested timer.",
+      "threads": "All runs are single-threaded (maxNumCompThreads(1)).",
+      "memory": "NOT MEASURED and NOT REPORTED. Reliable, method-independent peak-memory measurement was not available in the MATLAB environment; memory was omitted rather than reported with inconsistent semantics."
+    },
+    "methods": {
+      "Proposed": {
+        "architecture": "one reference eigenanalysis, then a SIMP topology optimization",
+        "count1": {
+          "name": "eigenanalysis_solves",
+          "value": "always 1",
+          "meaning": "The number of reference eigenanalyses performed. This is a SOLVE count. It is NOT an optimization iteration and must not be read as one."
+        },
+        "count2": {
+          "name": "simp_iterations",
+          "meaning": "SIMP topology-optimization iterations."
+        },
+        "time1": {
+          "name": "stage1_eigenanalysis_and_preparation_s",
+          "boundary": "solver initialization: mesh and element matrices, boundary conditions, filter preparation, and the single reference eigenanalysis. stage1_reference_eigen_time_s isolates the eigenanalysis alone and is a SUB-INTERVAL of this."
+        },
+        "time2": {
+          "name": "stage2_simp_time_s",
+          "boundary": "the SIMP optimization loop only."
+        }
+      },
+      "Yuksel": {
+        "architecture": "two sequential optimization stages",
+        "count1": {
+          "name": "stage1_iterations",
+          "meaning": "Stage-1 optimization iterations."
+        },
+        "count2": {
+          "name": "stage2_iterations",
+          "meaning": "Stage-2 optimization iterations."
+        },
+        "time1": {
+          "name": "stage1_time_s",
+          "boundary": "the Stage-1 loop only."
+        },
+        "time2": {
+          "name": "stage2_time_s",
+          "boundary": "the Stage-2 loop only; disjoint from Stage 1."
+        },
+        "assertions": [
+          "N_total = N1 + N2",
+          "T1 + T2 = optimization_loop_time (non-overlapping timers)"
+        ]
+      },
+      "DuOlhoffReconstruction": {
+        "label": "Du-Olhoff reconstruction (Pedersen stiffness + linear mass, adaptive box)",
+        "preset": "duOlhoffPedersenAdaptiveBoxSensitivityFiltered",
+        "upstream_preset": "duOlhoffAdaptivePedersen",
+        "upstream_commit": "253069262407885a8b759a9e721c4f0a7d3a397d",
+        "architecture": "NESTED: an outer loop, each of whose iterations contains a complete MMA sub-optimization.",
+        "count1": {
+          "name": "outer_iterations",
+          "meaning": "Fig. 1 outer iterations."
+        },
+        "count2": {
+          "name": "inner_mma_iterations_total",
+          "meaning": "cumulative nested MMA sub-iterations over the whole run."
+        },
+        "time1": {
+          "name": "outer_time_excluding_inner_s",
+          "boundary": "every computational region of an outer iteration EXCEPT the nested MMA solve: FE assembly, the eigenproblem, modal processing, generalized-gradient sensitivities, sensitivity filtering, local subproblem construction, the step controller, the design update, bookkeeping and the convergence test. Measured as sum(t_outer) - sum(t_inner) from per-iteration timers, so the nested solve cannot be double-counted."
+        },
+        "time2": {
+          "name": "inner_mma_time_total_s",
+          "boundary": "the nested MMA loop, and only that."
+        },
+        "derived": [
+          "inner_iterations_per_outer_mean",
+          "inner_time_per_outer_mean_s",
+          "inner_time_per_inner_iteration_mean_s",
+          "inner_time_share_pct"
+        ],
+        "per_outer_iteration_cost": {
+          "why": "the outer iteration count need not be monotone in the mesh, so total wall time alone cannot be read as a per-iteration scaling law",
+          "fields": [
+            "outer_time_total_s = sum(t_outer)",
+            "outer_time_per_outer_mean_s = sum(t_outer)/N_outer",
+            "outer_time_per_outer_median_s = median(t_outer)",
+            "outer_time_excluding_inner_per_outer_mean_s = (sum(t_outer)-sum(t_inner))/N_outer",
+            "eigen_time_per_outer_mean_s = sum(t_eig)/N_outer (FE assembly + eigensolve)",
+            "gradient_time_per_outer_mean_s = sum(t_grad)/N_outer",
+            "total_wall_time_per_outer_s = total_wall_time_s/N_outer",
+            "inner_time_per_outer_mean_s, inner_time_per_inner_iteration_mean_s"
+          ]
+        },
+        "prohibited": "N_outer + N_inner must NEVER be reported as a generic iteration count: the two are different objects.",
+        "caveat": "Du-Olhoff RECONSTRUCTION, Pedersen/adaptive-box formulation (class C controller and filter radius, class B/D material law): SIMP p = 3 with the Pedersen (2000) linearized low-density stiffness (rho*rho0^(p-1) below rho0 = 0.1) and LINEAR mass, eq. (2); a per-element ADAPTIVE move box (initial 0.10, floor 0.002, x1.2 on monotone / x0.7 on reversing outer steps); NATURAL termination by ||drho||_2 < 0.05*sqrt(NE/3200) with no guards and no persistence, a heuristic design-change stop and not a KKT certificate; Sigmund sensitivity filter on all f_sk at a FIXED PHYSICAL radius R = 0.06 (1.2 elements at 160x20, 6 at 800x100). This is a DISTINCT formulation from the historical SIMP + eq. (4b) OlhoffCurrent reconstruction (duOlhoffSimpEq4bBetaStallLadderSensitivityFiltered), not a bug fix of it; Pedersen stiffness is the alternative Du & Olhoff sec. 2.2 name, not their choice. Terminal bimodality is NOT expected beyond coarse meshes: in the committed R = 0.06 sweep the optimum is bimodal only at 160x20 (native gap12 0.7 %) and native gap12 is 11.8-24.5 % from 240x30 to 800x100. Native eigenfrequencies are those of the Pedersen/linear-mass model; any cross-method table must name its evaluator model. Must NOT be labelled \"Olhoff 2007\". Field-level provenance (A/B/C/D) is documented in analysis/OlhoffCurrent/+impl/architecture/docs/SCIENTIFIC_CONFIG_PROVENANCE.md and is printed per run by olh.config.describe."
+      }
+    },
+    "cross_method_warning": "Count and time columns represent method-native computational stages and are not mathematically identical across methods. Total wall time is the common performance quantity."
+  },
+  "warmup": {
+    "ran": true,
+    "mesh": [
+      48,
+      6
+    ],
+    "notes": [
+      "Du-Olhoff reconstruction (Pedersen stiffness + linear mass, adaptive box): CAP_HIT in 1.02 s"
+    ]
+  },
+  "preflight": {
+    "checks": [
+      {
+        "name": "cfg.resolutions is a non-empty N-by-2 integer matrix",
+        "pass": true,
+        "detail": "9 mesh(es): 160x20, 240x30, 320x40, 400x50, 480x60, 560x70, 640x80, 720x90, 800x100"
+      },
+      {
+        "name": "every nely is even (mid-height supports)",
+        "pass": true,
+        "detail": "odd nely at row(s): zeros(1,0)"
+      },
+      {
+        "name": "no duplicate resolutions",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "at least one method enabled",
+        "pass": true,
+        "detail": "proposed=0 yuksel=0 olhoff=1"
+      },
+      {
+        "name": "scientific_evidence derived from cfg, not declared",
+        "pass": true,
+        "detail": "scientific_evidence=1 (min NE = 3200, floor 3200 = 160x20; override=[]; yuksel budget 5000 vs frozen 1000)"
+      },
+      {
+        "name": "a performance campaign is also scientific evidence",
+        "pass": true,
+        "detail": "performance_campaign=1"
+      },
+      {
+        "name": "meshes above 160x20 are explicitly acknowledged",
+        "pass": true,
+        "detail": "8 mesh(es) exceed 160x20. Set cfg.confirmLongCampaign = true in performance_comparison.m to run them."
+      },
+      {
+        "name": "single-threaded execution is in force",
+        "pass": true,
+        "detail": "maxNumCompThreads = 1, requested single thread = 1"
+      },
+      {
+        "name": "promoted Olhoff source hashes to SOURCE_MANIFEST.json",
+        "pass": true,
+        "detail": "79 files re-hashed; tree 4ba9a3ae10881344a0e60f2b8a8976c5ec9ceccf966bc2a3da4f37fb5aebffbf"
+      },
+      {
+        "name": "promoted Olhoff source is not modified in place",
+        "pass": true,
+        "detail": "currentness state = CURRENT"
+      },
+      {
+        "name": "Olhoff provenance is consistent with its upstream",
+        "pass": true,
+        "detail": "promoted source is intact and matches upstream migration/upstream-olhoffcurrent-capabilities at 253069262407885a8b759a9e721c4f0a7d3a397d."
+      },
+      {
+        "name": "exactly one Olhoff implementation is visible to MATLAB",
+        "pass": true,
+        "detail": "all 32 production-owned symbols resolve inside analysis/OlhoffCurrent/+impl, with no shadow candidate anywhere else (checked with which -all)"
+      },
+      {
+        "name": "the benchmark names a canonical, production-eligible Olhoff preset",
+        "pass": true,
+        "detail": "duOlhoffPedersenAdaptiveBoxSensitivityFiltered (role DISTINCT_FORMULATION, eligible 1, resolved via canonical)"
+      },
+      {
+        "name": "the benchmark Olhoff preset is the recorded production preset",
+        "pass": true,
+        "detail": "benchmark duOlhoffPedersenAdaptiveBoxSensitivityFiltered, PROVENANCE.json production duOlhoffPedersenAdaptiveBoxSensitivityFiltered"
+      },
+      {
+        "name": "Olhoff 160x20: method config carries the benchmark preset",
+        "pass": true,
+        "detail": "mcfg.olhoff_preset=duOlhoffPedersenAdaptiveBoxSensitivityFiltered"
+      },
+      {
+        "name": "Olhoff 160x20: resolved from the named preset duOlhoffPedersenAdaptiveBoxSensitivityFiltered",
+        "pass": true,
+        "detail": "cfg.provenance.olhoffCurrentPreset=duOlhoffPedersenAdaptiveBoxSensitivityFiltered"
+      },
+      {
+        "name": "Olhoff 160x20: genuine nested MMA sub-optimization",
+        "pass": true,
+        "detail": "innerSolver=mma innerVar=drho mmaVariant=published offDiag=1"
+      },
+      {
+        "name": "Olhoff 160x20: fixed subspace multiplicity, subN = 2",
+        "pass": true,
+        "detail": "multRule=subspace subN=2 (no threshold classifier)"
+      },
+      {
+        "name": "Olhoff 160x20: fixed physical filter R = 0.06 on all f_sk",
+        "pass": true,
+        "detail": "rminPhys=0.06 -> rminEl=1.2 (derived at run time), filterMode=all"
+      },
+      {
+        "name": "Olhoff 160x20: tolInner = 0.05, 5..500",
+        "pass": true,
+        "detail": "tolInner=0.05 maxInner=500 minInner=5"
+      },
+      {
+        "name": "Olhoff 160x20: p = 3 fixed, rho_min = 1e-3, maxCluster = 4",
+        "pass": true,
+        "detail": "p=3 pSchedule=0 rhomin=0.001 Nmax=4"
+      },
+      {
+        "name": "Olhoff 160x20: Pedersen low-density stiffness, threshold 0.1",
+        "pass": true,
+        "detail": "material.stiffness.model=pedersen linearBelow=0.1"
+      },
+      {
+        "name": "Olhoff 160x20: linear mass, eq. (2)",
+        "pass": true,
+        "detail": "material.mass.model=eq2 massInterp=lin"
+      },
+      {
+        "name": "Olhoff 160x20: adaptive per-element move box 0.10 / 0.002 / x1.2 / x0.7",
+        "pass": true,
+        "detail": "move.policy=adaptive moveFamily=SA move0=0.1 moveMin=0.002 grow=1.2 shrink=0.7"
+      },
+      {
+        "name": "Olhoff 160x20: stage exhaustion disabled (move and stop)",
+        "pass": true,
+        "detail": "move.continuation.signal=boundVariable stop.rule=designChange"
+      },
+      {
+        "name": "Olhoff 160x20: natural design-change stop, no guards",
+        "pass": true,
+        "detail": "||drho||_2 < 0.05, i.e. per-element RMS < 8.838834765e-04 (constant across meshes); guard=none"
+      },
+      {
+        "name": "Olhoff 160x20: outer cap 400, no projection, inner asymptotes reset per outer",
+        "pass": true,
+        "detail": "maxOuter=400 projection=0 asymptoteHistory=inner"
+      },
+      {
+        "name": "Olhoff 160x20: single thread and diagnostics off",
+        "pass": true,
+        "detail": "threads=1 diag=0 (the per-iteration recorder is proved bitwise inert and is off so it is not timed)"
+      },
+      {
+        "name": "Olhoff 240x30: method config carries the benchmark preset",
+        "pass": true,
+        "detail": "mcfg.olhoff_preset=duOlhoffPedersenAdaptiveBoxSensitivityFiltered"
+      },
+      {
+        "name": "Olhoff 240x30: resolved from the named preset duOlhoffPedersenAdaptiveBoxSensitivityFiltered",
+        "pass": true,
+        "detail": "cfg.provenance.olhoffCurrentPreset=duOlhoffPedersenAdaptiveBoxSensitivityFiltered"
+      },
+      {
+        "name": "Olhoff 240x30: genuine nested MMA sub-optimization",
+        "pass": true,
+        "detail": "innerSolver=mma innerVar=drho mmaVariant=published offDiag=1"
+      },
+      {
+        "name": "Olhoff 240x30: fixed subspace multiplicity, subN = 2",
+        "pass": true,
+        "detail": "multRule=subspace subN=2 (no threshold classifier)"
+      },
+      {
+        "name": "Olhoff 240x30: fixed physical filter R = 0.06 on all f_sk",
+        "pass": true,
+        "detail": "rminPhys=0.06 -> rminEl=1.8 (derived at run time), filterMode=all"
+      },
+      {
+        "name": "Olhoff 240x30: tolInner = 0.05, 5..500",
+        "pass": true,
+        "detail": "tolInner=0.05 maxInner=500 minInner=5"
+      },
+      {
+        "name": "Olhoff 240x30: p = 3 fixed, rho_min = 1e-3, maxCluster = 4",
+        "pass": true,
+        "detail": "p=3 pSchedule=0 rhomin=0.001 Nmax=4"
+      },
+      {
+        "name": "Olhoff 240x30: Pedersen low-density stiffness, threshold 0.1",
+        "pass": true,
+        "detail": "material.stiffness.model=pedersen linearBelow=0.1"
+      },
+      {
+        "name": "Olhoff 240x30: linear mass, eq. (2)",
+        "pass": true,
+        "detail": "material.mass.model=eq2 massInterp=lin"
+      },
+      {
+        "name": "Olhoff 240x30: adaptive per-element move box 0.10 / 0.002 / x1.2 / x0.7",
+        "pass": true,
+        "detail": "move.policy=adaptive moveFamily=SA move0=0.1 moveMin=0.002 grow=1.2 shrink=0.7"
+      },
+      {
+        "name": "Olhoff 240x30: stage exhaustion disabled (move and stop)",
+        "pass": true,
+        "detail": "move.continuation.signal=boundVariable stop.rule=designChange"
+      },
+      {
+        "name": "Olhoff 240x30: natural design-change stop, no guards",
+        "pass": true,
+        "detail": "||drho||_2 < 0.075, i.e. per-element RMS < 8.838834765e-04 (constant across meshes); guard=none"
+      },
+      {
+        "name": "Olhoff 240x30: outer cap 400, no projection, inner asymptotes reset per outer",
+        "pass": true,
+        "detail": "maxOuter=400 projection=0 asymptoteHistory=inner"
+      },
+      {
+        "name": "Olhoff 240x30: single thread and diagnostics off",
+        "pass": true,
+        "detail": "threads=1 diag=0 (the per-iteration recorder is proved bitwise inert and is off so it is not timed)"
+      },
+      {
+        "name": "Olhoff 320x40: method config carries the benchmark preset",
+        "pass": true,
+        "detail": "mcfg.olhoff_preset=duOlhoffPedersenAdaptiveBoxSensitivityFiltered"
+      },
+      {
+        "name": "Olhoff 320x40: resolved from the named preset duOlhoffPedersenAdaptiveBoxSensitivityFiltered",
+        "pass": true,
+        "detail": "cfg.provenance.olhoffCurrentPreset=duOlhoffPedersenAdaptiveBoxSensitivityFiltered"
+      },
+      {
+        "name": "Olhoff 320x40: genuine nested MMA sub-optimization",
+        "pass": true,
+        "detail": "innerSolver=mma innerVar=drho mmaVariant=published offDiag=1"
+      },
+      {
+        "name": "Olhoff 320x40: fixed subspace multiplicity, subN = 2",
+        "pass": true,
+        "detail": "multRule=subspace subN=2 (no threshold classifier)"
+      },
+      {
+        "name": "Olhoff 320x40: fixed physical filter R = 0.06 on all f_sk",
+        "pass": true,
+        "detail": "rminPhys=0.06 -> rminEl=2.4 (derived at run time), filterMode=all"
+      },
+      {
+        "name": "Olhoff 320x40: tolInner = 0.05, 5..500",
+        "pass": true,
+        "detail": "tolInner=0.05 maxInner=500 minInner=5"
+      },
+      {
+        "name": "Olhoff 320x40: p = 3 fixed, rho_min = 1e-3, maxCluster = 4",
+        "pass": true,
+        "detail": "p=3 pSchedule=0 rhomin=0.001 Nmax=4"
+      },
+      {
+        "name": "Olhoff 320x40: Pedersen low-density stiffness, threshold 0.1",
+        "pass": true,
+        "detail": "material.stiffness.model=pedersen linearBelow=0.1"
+      },
+      {
+        "name": "Olhoff 320x40: linear mass, eq. (2)",
+        "pass": true,
+        "detail": "material.mass.model=eq2 massInterp=lin"
+      },
+      {
+        "name": "Olhoff 320x40: adaptive per-element move box 0.10 / 0.002 / x1.2 / x0.7",
+        "pass": true,
+        "detail": "move.policy=adaptive moveFamily=SA move0=0.1 moveMin=0.002 grow=1.2 shrink=0.7"
+      },
+      {
+        "name": "Olhoff 320x40: stage exhaustion disabled (move and stop)",
+        "pass": true,
+        "detail": "move.continuation.signal=boundVariable stop.rule=designChange"
+      },
+      {
+        "name": "Olhoff 320x40: natural design-change stop, no guards",
+        "pass": true,
+        "detail": "||drho||_2 < 0.1, i.e. per-element RMS < 8.838834765e-04 (constant across meshes); guard=none"
+      },
+      {
+        "name": "Olhoff 320x40: outer cap 400, no projection, inner asymptotes reset per outer",
+        "pass": true,
+        "detail": "maxOuter=400 projection=0 asymptoteHistory=inner"
+      },
+      {
+        "name": "Olhoff 320x40: single thread and diagnostics off",
+        "pass": true,
+        "detail": "threads=1 diag=0 (the per-iteration recorder is proved bitwise inert and is off so it is not timed)"
+      },
+      {
+        "name": "Olhoff 400x50: method config carries the benchmark preset",
+        "pass": true,
+        "detail": "mcfg.olhoff_preset=duOlhoffPedersenAdaptiveBoxSensitivityFiltered"
+      },
+      {
+        "name": "Olhoff 400x50: resolved from the named preset duOlhoffPedersenAdaptiveBoxSensitivityFiltered",
+        "pass": true,
+        "detail": "cfg.provenance.olhoffCurrentPreset=duOlhoffPedersenAdaptiveBoxSensitivityFiltered"
+      },
+      {
+        "name": "Olhoff 400x50: genuine nested MMA sub-optimization",
+        "pass": true,
+        "detail": "innerSolver=mma innerVar=drho mmaVariant=published offDiag=1"
+      },
+      {
+        "name": "Olhoff 400x50: fixed subspace multiplicity, subN = 2",
+        "pass": true,
+        "detail": "multRule=subspace subN=2 (no threshold classifier)"
+      },
+      {
+        "name": "Olhoff 400x50: fixed physical filter R = 0.06 on all f_sk",
+        "pass": true,
+        "detail": "rminPhys=0.06 -> rminEl=3 (derived at run time), filterMode=all"
+      },
+      {
+        "name": "Olhoff 400x50: tolInner = 0.05, 5..500",
+        "pass": true,
+        "detail": "tolInner=0.05 maxInner=500 minInner=5"
+      },
+      {
+        "name": "Olhoff 400x50: p = 3 fixed, rho_min = 1e-3, maxCluster = 4",
+        "pass": true,
+        "detail": "p=3 pSchedule=0 rhomin=0.001 Nmax=4"
+      },
+      {
+        "name": "Olhoff 400x50: Pedersen low-density stiffness, threshold 0.1",
+        "pass": true,
+        "detail": "material.stiffness.model=pedersen linearBelow=0.1"
+      },
+      {
+        "name": "Olhoff 400x50: linear mass, eq. (2)",
+        "pass": true,
+        "detail": "material.mass.model=eq2 massInterp=lin"
+      },
+      {
+        "name": "Olhoff 400x50: adaptive per-element move box 0.10 / 0.002 / x1.2 / x0.7",
+        "pass": true,
+        "detail": "move.policy=adaptive moveFamily=SA move0=0.1 moveMin=0.002 grow=1.2 shrink=0.7"
+      },
+      {
+        "name": "Olhoff 400x50: stage exhaustion disabled (move and stop)",
+        "pass": true,
+        "detail": "move.continuation.signal=boundVariable stop.rule=designChange"
+      },
+      {
+        "name": "Olhoff 400x50: natural design-change stop, no guards",
+        "pass": true,
+        "detail": "||drho||_2 < 0.125, i.e. per-element RMS < 8.838834765e-04 (constant across meshes); guard=none"
+      },
+      {
+        "name": "Olhoff 400x50: outer cap 400, no projection, inner asymptotes reset per outer",
+        "pass": true,
+        "detail": "maxOuter=400 projection=0 asymptoteHistory=inner"
+      },
+      {
+        "name": "Olhoff 400x50: single thread and diagnostics off",
+        "pass": true,
+        "detail": "threads=1 diag=0 (the per-iteration recorder is proved bitwise inert and is off so it is not timed)"
+      },
+      {
+        "name": "Olhoff 480x60: method config carries the benchmark preset",
+        "pass": true,
+        "detail": "mcfg.olhoff_preset=duOlhoffPedersenAdaptiveBoxSensitivityFiltered"
+      },
+      {
+        "name": "Olhoff 480x60: resolved from the named preset duOlhoffPedersenAdaptiveBoxSensitivityFiltered",
+        "pass": true,
+        "detail": "cfg.provenance.olhoffCurrentPreset=duOlhoffPedersenAdaptiveBoxSensitivityFiltered"
+      },
+      {
+        "name": "Olhoff 480x60: genuine nested MMA sub-optimization",
+        "pass": true,
+        "detail": "innerSolver=mma innerVar=drho mmaVariant=published offDiag=1"
+      },
+      {
+        "name": "Olhoff 480x60: fixed subspace multiplicity, subN = 2",
+        "pass": true,
+        "detail": "multRule=subspace subN=2 (no threshold classifier)"
+      },
+      {
+        "name": "Olhoff 480x60: fixed physical filter R = 0.06 on all f_sk",
+        "pass": true,
+        "detail": "rminPhys=0.06 -> rminEl=3.6 (derived at run time), filterMode=all"
+      },
+      {
+        "name": "Olhoff 480x60: tolInner = 0.05, 5..500",
+        "pass": true,
+        "detail": "tolInner=0.05 maxInner=500 minInner=5"
+      },
+      {
+        "name": "Olhoff 480x60: p = 3 fixed, rho_min = 1e-3, maxCluster = 4",
+        "pass": true,
+        "detail": "p=3 pSchedule=0 rhomin=0.001 Nmax=4"
+      },
+      {
+        "name": "Olhoff 480x60: Pedersen low-density stiffness, threshold 0.1",
+        "pass": true,
+        "detail": "material.stiffness.model=pedersen linearBelow=0.1"
+      },
+      {
+        "name": "Olhoff 480x60: linear mass, eq. (2)",
+        "pass": true,
+        "detail": "material.mass.model=eq2 massInterp=lin"
+      },
+      {
+        "name": "Olhoff 480x60: adaptive per-element move box 0.10 / 0.002 / x1.2 / x0.7",
+        "pass": true,
+        "detail": "move.policy=adaptive moveFamily=SA move0=0.1 moveMin=0.002 grow=1.2 shrink=0.7"
+      },
+      {
+        "name": "Olhoff 480x60: stage exhaustion disabled (move and stop)",
+        "pass": true,
+        "detail": "move.continuation.signal=boundVariable stop.rule=designChange"
+      },
+      {
+        "name": "Olhoff 480x60: natural design-change stop, no guards",
+        "pass": true,
+        "detail": "||drho||_2 < 0.15, i.e. per-element RMS < 8.838834765e-04 (constant across meshes); guard=none"
+      },
+      {
+        "name": "Olhoff 480x60: outer cap 400, no projection, inner asymptotes reset per outer",
+        "pass": true,
+        "detail": "maxOuter=400 projection=0 asymptoteHistory=inner"
+      },
+      {
+        "name": "Olhoff 480x60: single thread and diagnostics off",
+        "pass": true,
+        "detail": "threads=1 diag=0 (the per-iteration recorder is proved bitwise inert and is off so it is not timed)"
+      },
+      {
+        "name": "Olhoff 560x70: method config carries the benchmark preset",
+        "pass": true,
+        "detail": "mcfg.olhoff_preset=duOlhoffPedersenAdaptiveBoxSensitivityFiltered"
+      },
+      {
+        "name": "Olhoff 560x70: resolved from the named preset duOlhoffPedersenAdaptiveBoxSensitivityFiltered",
+        "pass": true,
+        "detail": "cfg.provenance.olhoffCurrentPreset=duOlhoffPedersenAdaptiveBoxSensitivityFiltered"
+      },
+      {
+        "name": "Olhoff 560x70: genuine nested MMA sub-optimization",
+        "pass": true,
+        "detail": "innerSolver=mma innerVar=drho mmaVariant=published offDiag=1"
+      },
+      {
+        "name": "Olhoff 560x70: fixed subspace multiplicity, subN = 2",
+        "pass": true,
+        "detail": "multRule=subspace subN=2 (no threshold classifier)"
+      },
+      {
+        "name": "Olhoff 560x70: fixed physical filter R = 0.06 on all f_sk",
+        "pass": true,
+        "detail": "rminPhys=0.06 -> rminEl=4.2 (derived at run time), filterMode=all"
+      },
+      {
+        "name": "Olhoff 560x70: tolInner = 0.05, 5..500",
+        "pass": true,
+        "detail": "tolInner=0.05 maxInner=500 minInner=5"
+      },
+      {
+        "name": "Olhoff 560x70: p = 3 fixed, rho_min = 1e-3, maxCluster = 4",
+        "pass": true,
+        "detail": "p=3 pSchedule=0 rhomin=0.001 Nmax=4"
+      },
+      {
+        "name": "Olhoff 560x70: Pedersen low-density stiffness, threshold 0.1",
+        "pass": true,
+        "detail": "material.stiffness.model=pedersen linearBelow=0.1"
+      },
+      {
+        "name": "Olhoff 560x70: linear mass, eq. (2)",
+        "pass": true,
+        "detail": "material.mass.model=eq2 massInterp=lin"
+      },
+      {
+        "name": "Olhoff 560x70: adaptive per-element move box 0.10 / 0.002 / x1.2 / x0.7",
+        "pass": true,
+        "detail": "move.policy=adaptive moveFamily=SA move0=0.1 moveMin=0.002 grow=1.2 shrink=0.7"
+      },
+      {
+        "name": "Olhoff 560x70: stage exhaustion disabled (move and stop)",
+        "pass": true,
+        "detail": "move.continuation.signal=boundVariable stop.rule=designChange"
+      },
+      {
+        "name": "Olhoff 560x70: natural design-change stop, no guards",
+        "pass": true,
+        "detail": "||drho||_2 < 0.175, i.e. per-element RMS < 8.838834765e-04 (constant across meshes); guard=none"
+      },
+      {
+        "name": "Olhoff 560x70: outer cap 400, no projection, inner asymptotes reset per outer",
+        "pass": true,
+        "detail": "maxOuter=400 projection=0 asymptoteHistory=inner"
+      },
+      {
+        "name": "Olhoff 560x70: single thread and diagnostics off",
+        "pass": true,
+        "detail": "threads=1 diag=0 (the per-iteration recorder is proved bitwise inert and is off so it is not timed)"
+      },
+      {
+        "name": "Olhoff 640x80: method config carries the benchmark preset",
+        "pass": true,
+        "detail": "mcfg.olhoff_preset=duOlhoffPedersenAdaptiveBoxSensitivityFiltered"
+      },
+      {
+        "name": "Olhoff 640x80: resolved from the named preset duOlhoffPedersenAdaptiveBoxSensitivityFiltered",
+        "pass": true,
+        "detail": "cfg.provenance.olhoffCurrentPreset=duOlhoffPedersenAdaptiveBoxSensitivityFiltered"
+      },
+      {
+        "name": "Olhoff 640x80: genuine nested MMA sub-optimization",
+        "pass": true,
+        "detail": "innerSolver=mma innerVar=drho mmaVariant=published offDiag=1"
+      },
+      {
+        "name": "Olhoff 640x80: fixed subspace multiplicity, subN = 2",
+        "pass": true,
+        "detail": "multRule=subspace subN=2 (no threshold classifier)"
+      },
+      {
+        "name": "Olhoff 640x80: fixed physical filter R = 0.06 on all f_sk",
+        "pass": true,
+        "detail": "rminPhys=0.06 -> rminEl=4.8 (derived at run time), filterMode=all"
+      },
+      {
+        "name": "Olhoff 640x80: tolInner = 0.05, 5..500",
+        "pass": true,
+        "detail": "tolInner=0.05 maxInner=500 minInner=5"
+      },
+      {
+        "name": "Olhoff 640x80: p = 3 fixed, rho_min = 1e-3, maxCluster = 4",
+        "pass": true,
+        "detail": "p=3 pSchedule=0 rhomin=0.001 Nmax=4"
+      },
+      {
+        "name": "Olhoff 640x80: Pedersen low-density stiffness, threshold 0.1",
+        "pass": true,
+        "detail": "material.stiffness.model=pedersen linearBelow=0.1"
+      },
+      {
+        "name": "Olhoff 640x80: linear mass, eq. (2)",
+        "pass": true,
+        "detail": "material.mass.model=eq2 massInterp=lin"
+      },
+      {
+        "name": "Olhoff 640x80: adaptive per-element move box 0.10 / 0.002 / x1.2 / x0.7",
+        "pass": true,
+        "detail": "move.policy=adaptive moveFamily=SA move0=0.1 moveMin=0.002 grow=1.2 shrink=0.7"
+      },
+      {
+        "name": "Olhoff 640x80: stage exhaustion disabled (move and stop)",
+        "pass": true,
+        "detail": "move.continuation.signal=boundVariable stop.rule=designChange"
+      },
+      {
+        "name": "Olhoff 640x80: natural design-change stop, no guards",
+        "pass": true,
+        "detail": "||drho||_2 < 0.2, i.e. per-element RMS < 8.838834765e-04 (constant across meshes); guard=none"
+      },
+      {
+        "name": "Olhoff 640x80: outer cap 400, no projection, inner asymptotes reset per outer",
+        "pass": true,
+        "detail": "maxOuter=400 projection=0 asymptoteHistory=inner"
+      },
+      {
+        "name": "Olhoff 640x80: single thread and diagnostics off",
+        "pass": true,
+        "detail": "threads=1 diag=0 (the per-iteration recorder is proved bitwise inert and is off so it is not timed)"
+      },
+      {
+        "name": "Olhoff 720x90: method config carries the benchmark preset",
+        "pass": true,
+        "detail": "mcfg.olhoff_preset=duOlhoffPedersenAdaptiveBoxSensitivityFiltered"
+      },
+      {
+        "name": "Olhoff 720x90: resolved from the named preset duOlhoffPedersenAdaptiveBoxSensitivityFiltered",
+        "pass": true,
+        "detail": "cfg.provenance.olhoffCurrentPreset=duOlhoffPedersenAdaptiveBoxSensitivityFiltered"
+      },
+      {
+        "name": "Olhoff 720x90: genuine nested MMA sub-optimization",
+        "pass": true,
+        "detail": "innerSolver=mma innerVar=drho mmaVariant=published offDiag=1"
+      },
+      {
+        "name": "Olhoff 720x90: fixed subspace multiplicity, subN = 2",
+        "pass": true,
+        "detail": "multRule=subspace subN=2 (no threshold classifier)"
+      },
+      {
+        "name": "Olhoff 720x90: fixed physical filter R = 0.06 on all f_sk",
+        "pass": true,
+        "detail": "rminPhys=0.06 -> rminEl=5.4 (derived at run time), filterMode=all"
+      },
+      {
+        "name": "Olhoff 720x90: tolInner = 0.05, 5..500",
+        "pass": true,
+        "detail": "tolInner=0.05 maxInner=500 minInner=5"
+      },
+      {
+        "name": "Olhoff 720x90: p = 3 fixed, rho_min = 1e-3, maxCluster = 4",
+        "pass": true,
+        "detail": "p=3 pSchedule=0 rhomin=0.001 Nmax=4"
+      },
+      {
+        "name": "Olhoff 720x90: Pedersen low-density stiffness, threshold 0.1",
+        "pass": true,
+        "detail": "material.stiffness.model=pedersen linearBelow=0.1"
+      },
+      {
+        "name": "Olhoff 720x90: linear mass, eq. (2)",
+        "pass": true,
+        "detail": "material.mass.model=eq2 massInterp=lin"
+      },
+      {
+        "name": "Olhoff 720x90: adaptive per-element move box 0.10 / 0.002 / x1.2 / x0.7",
+        "pass": true,
+        "detail": "move.policy=adaptive moveFamily=SA move0=0.1 moveMin=0.002 grow=1.2 shrink=0.7"
+      },
+      {
+        "name": "Olhoff 720x90: stage exhaustion disabled (move and stop)",
+        "pass": true,
+        "detail": "move.continuation.signal=boundVariable stop.rule=designChange"
+      },
+      {
+        "name": "Olhoff 720x90: natural design-change stop, no guards",
+        "pass": true,
+        "detail": "||drho||_2 < 0.225, i.e. per-element RMS < 8.838834765e-04 (constant across meshes); guard=none"
+      },
+      {
+        "name": "Olhoff 720x90: outer cap 400, no projection, inner asymptotes reset per outer",
+        "pass": true,
+        "detail": "maxOuter=400 projection=0 asymptoteHistory=inner"
+      },
+      {
+        "name": "Olhoff 720x90: single thread and diagnostics off",
+        "pass": true,
+        "detail": "threads=1 diag=0 (the per-iteration recorder is proved bitwise inert and is off so it is not timed)"
+      },
+      {
+        "name": "Olhoff 800x100: method config carries the benchmark preset",
+        "pass": true,
+        "detail": "mcfg.olhoff_preset=duOlhoffPedersenAdaptiveBoxSensitivityFiltered"
+      },
+      {
+        "name": "Olhoff 800x100: resolved from the named preset duOlhoffPedersenAdaptiveBoxSensitivityFiltered",
+        "pass": true,
+        "detail": "cfg.provenance.olhoffCurrentPreset=duOlhoffPedersenAdaptiveBoxSensitivityFiltered"
+      },
+      {
+        "name": "Olhoff 800x100: genuine nested MMA sub-optimization",
+        "pass": true,
+        "detail": "innerSolver=mma innerVar=drho mmaVariant=published offDiag=1"
+      },
+      {
+        "name": "Olhoff 800x100: fixed subspace multiplicity, subN = 2",
+        "pass": true,
+        "detail": "multRule=subspace subN=2 (no threshold classifier)"
+      },
+      {
+        "name": "Olhoff 800x100: fixed physical filter R = 0.06 on all f_sk",
+        "pass": true,
+        "detail": "rminPhys=0.06 -> rminEl=6 (derived at run time), filterMode=all"
+      },
+      {
+        "name": "Olhoff 800x100: tolInner = 0.05, 5..500",
+        "pass": true,
+        "detail": "tolInner=0.05 maxInner=500 minInner=5"
+      },
+      {
+        "name": "Olhoff 800x100: p = 3 fixed, rho_min = 1e-3, maxCluster = 4",
+        "pass": true,
+        "detail": "p=3 pSchedule=0 rhomin=0.001 Nmax=4"
+      },
+      {
+        "name": "Olhoff 800x100: Pedersen low-density stiffness, threshold 0.1",
+        "pass": true,
+        "detail": "material.stiffness.model=pedersen linearBelow=0.1"
+      },
+      {
+        "name": "Olhoff 800x100: linear mass, eq. (2)",
+        "pass": true,
+        "detail": "material.mass.model=eq2 massInterp=lin"
+      },
+      {
+        "name": "Olhoff 800x100: adaptive per-element move box 0.10 / 0.002 / x1.2 / x0.7",
+        "pass": true,
+        "detail": "move.policy=adaptive moveFamily=SA move0=0.1 moveMin=0.002 grow=1.2 shrink=0.7"
+      },
+      {
+        "name": "Olhoff 800x100: stage exhaustion disabled (move and stop)",
+        "pass": true,
+        "detail": "move.continuation.signal=boundVariable stop.rule=designChange"
+      },
+      {
+        "name": "Olhoff 800x100: natural design-change stop, no guards",
+        "pass": true,
+        "detail": "||drho||_2 < 0.25, i.e. per-element RMS < 8.838834765e-04 (constant across meshes); guard=none"
+      },
+      {
+        "name": "Olhoff 800x100: outer cap 400, no projection, inner asymptotes reset per outer",
+        "pass": true,
+        "detail": "maxOuter=400 projection=0 asymptoteHistory=inner"
+      },
+      {
+        "name": "Olhoff 800x100: single thread and diagnostics off",
+        "pass": true,
+        "detail": "threads=1 diag=0 (the per-iteration recorder is proved bitwise inert and is off so it is not timed)"
+      },
+      {
+        "name": "no non-production Olhoff directory is on the MATLAB path",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "no Olhoff-family name resolves OR SHADOWS into a non-production tree",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "run_topopt_from_json is the repository tool copy",
+        "pass": true,
+        "detail": "/Users/piotrek/Programming/topOpt4freqMax/tools/Matlab/run_topopt_from_json.m"
+      },
+      {
+        "name": "the common E1/E2/E3 evaluator is the frozen study copy",
+        "pass": true,
+        "detail": "/Users/piotrek/Programming/topOpt4freqMax/analysis/three_method_parametric_study/study_evaluate_design.m"
+      },
+      {
+        "name": "no memory instrumentation is requested",
+        "pass": true,
+        "detail": "memory is not measured and not reported. Reliable, method-independent peak-memory measurement was not available in the MATLAB environment; memory was omitted rather than reported with inconsistent semantics."
+      },
+      {
+        "name": "output directory does not overwrite earlier evidence",
+        "pass": true,
+        "detail": "outputDir = /Users/piotrek/Programming/topOpt4freqMax/examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b"
+      },
+      {
+        "name": "timing schema is defined for every enabled method",
+        "pass": true,
+        "detail": "Count and time columns represent method-native computational stages and are not mathematically identical across methods. Total wall time is the common performance quantity."
+      },
+      {
+        "name": "the Du-Olhoff caveat is defined and non-empty",
+        "pass": true,
+        "detail": "Du-Olhoff RECONSTRUCTION, Pedersen/adaptive-box formulation (class C controller and filter radius, class B/D material law): SIMP p = 3 with the Pedersen (2000) linearized low-density stiffness (rho*rho0^(p-1) below rho0 = 0.1) and LINEAR mass, eq. (2); a per-element ADAPTIVE move box (initial 0.10, floor 0.002, x1.2 on monotone / x0.7 on reversing outer steps); NATURAL termination by ||drho||_2 < 0.05*sqrt(NE/3200) with no guards and no persistence, a heuristic design-change stop and not a KKT certificate; Sigmund sensitivity filter on all f_sk at a FIXED PHYSICAL radius R = 0.06 (1.2 elements at 160x20, 6 at 800x100). This is a DISTINCT formulation from the historical SIMP + eq. (4b) OlhoffCurrent reconstruction (duOlhoffSimpEq4bBetaStallLadderSensitivityFiltered), not a bug fix of it; Pedersen stiffness is the alternative Du & Olhoff sec. 2.2 name, not their choice. Terminal bimodality is NOT expected beyond coarse meshes: in the committed R = 0.06 sweep the optimum is bimodal only at 160x20 (native gap12 0.7 %) and native gap12 is 11.8-24.5 % from 240x30 to 800x100. Native eigenfrequencies are those of the Pedersen/linear-mass model; any cross-method table must name its evaluator model. Must NOT be labelled \"Olhoff 2007\". Field-level provenance (A/B/C/D) is documented in analysis/OlhoffCurrent/+impl/architecture/docs/SCIENTIFIC_CONFIG_PROVENANCE.md and is printed per run by olh.config.describe."
+      }
+    ],
+    "notes": [
+      "production Olhoff: analysis/OlhoffCurrent, production preset duOlhoffPedersenAdaptiveBoxSensitivityFiltered (event 2026-09-13), promoted from /Users/piotrek/Programming/Matlab/Olhoff migration/upstream-olhoffcurrent-capabilities @ 253069262407885a8b759a9e721c4f0a7d3a397d",
+      "  promoted source tree sha256: 4ba9a3ae10881344a0e60f2b8a8976c5ec9ceccf966bc2a3da4f37fb5aebffbf (79 files)",
+      "  external development repository (PROVENANCE ONLY, not a gate, FORBIDDEN on the production path): recorded branch migration/upstream-olhoffcurrent-capabilities, head 253069262407885a8b759a9e721c4f0a7d3a397d, 0 commit(s) ahead of the promoted state"
+    ],
+    "pass": true,
+    "olhoff_currentness": {
+      "state": "CURRENT",
+      "detail": "promoted source is intact and matches upstream migration/upstream-olhoffcurrent-capabilities at 253069262407885a8b759a9e721c4f0a7d3a397d.",
+      "localOk": true,
+      "upstream": {
+        "repo": "/Users/piotrek/Programming/Matlab/Olhoff",
+        "reachable": true,
+        "branch": "migration/upstream-olhoffcurrent-capabilities",
+        "head": "253069262407885a8b759a9e721c4f0a7d3a397d",
+        "promoted": "253069262407885a8b759a9e721c4f0a7d3a397d",
+        "commitsAhead": 0,
+        "promotedIsAncestor": true,
+        "branchExists": true,
+        "checkedOutBranch": "repro/natural-convergence",
+        "checkedOutHead": "6b0870850d7407a0f2fc31dbf0d0f318c2e5f2f7",
+        "dirty": "M repro/PLAN_OLHOFFCURRENT_UPDATE.md"
+      },
+      "manifest": {
+        "root": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl",
+        "nFiles": 79,
+        "treeHash": "4ba9a3ae10881344a0e60f2b8a8976c5ec9ceccf966bc2a3da4f37fb5aebffbf",
+        "files": [
+          "algo/compareHistory.m",
+          "algo/compareHistoryTo.m",
+          "algo/compareTopology.m",
+          "algo/defaultCfg.m",
+          "algo/deltaLambda.m",
+          "algo/genGrad.m",
+          "algo/imresizeNN.m",
+          "algo/innerLoop.m",
+          "algo/innerLoopLP.m",
+          "algo/innerLoopRho.m",
+          "algo/moveControl.m",
+          "algo/multRule.m",
+          "algo/olhoffOpt.m",
+          "algo/plotHistory.m",
+          "algo/textStamp.m",
+          "algo/topologyImage.m",
+          "algo/useMMA.m",
+          "architecture/+olh/+config/assign.m",
+          "architecture/+olh/+config/defaults.m",
+          "architecture/+olh/+config/describe.m",
+          "architecture/+olh/+config/epsilonForMesh.m",
+          "architecture/+olh/+config/fromLegacy.m",
+          "architecture/+olh/+config/getPath.m",
+          "architecture/+olh/+config/paths.m",
+          "architecture/+olh/+config/resolve.m",
+          "architecture/+olh/+config/schema.m",
+          "architecture/+olh/+config/setPath.m",
+          "architecture/+olh/+config/toLegacy.m",
+          "architecture/+olh/+config/validate.m",
+          "architecture/+olh/+material/massInterpolation.m",
+          "architecture/+olh/+material/stiffnessInterpolation.m",
+          "architecture/+olh/+move/exhaustion.m",
+          "architecture/+olh/+move/limit.m",
+          "architecture/+olh/+multi/detect.m",
+          "architecture/+olh/+presets/apply.m",
+          "architecture/+olh/+presets/duOlhoffAdaptiveMove.m",
+          "architecture/+olh/+presets/duOlhoffAdaptivePedersen.m",
+          "architecture/+olh/+presets/duOlhoffFrozenM4.m",
+          "architecture/+olh/+presets/duOlhoffMatureM4.m",
+          "architecture/+olh/+presets/duOlhoffOuterAsymptotes.m",
+          "architecture/+olh/+presets/legacyBinaryDiagonal.m",
+          "architecture/+olh/+presets/list.m",
+          "architecture/+olh/+presets/noDescentFixedMove.m",
+          "architecture/+olh/+presets/pContinuationCoupled.m",
+          "architecture/+olh/+presets/pContinuationDecoupled.m",
+          "architecture/+olh/+presets/pMassCompatible.m",
+          "architecture/+olh/+presets/projected.m",
+          "architecture/+olh/+presets/projectionIdentity.m",
+          "architecture/+olh/+presets/restorationLadderGuard.m",
+          "architecture/docs/ARCHITECTURE.md",
+          "architecture/docs/ARCHITECTURE_VARIANT_INVENTORY.md",
+          "architecture/docs/CONFIG_REFERENCE.md",
+          "architecture/docs/FILE_CLASSIFICATION.md",
+          "architecture/docs/MIGRATION_FROM_LEGACY.md",
+          "architecture/docs/OLHOFF_ARCHITECTURE_REFACTOR_PLAN.md",
+          "architecture/docs/OLHOFF_ARCHITECTURE_REFACTOR_REPORT.md",
+          "architecture/docs/PRESETS.md",
+          "architecture/docs/PYMORPHOGEN_PORT_MAP.md",
+          "architecture/docs/SCIENTIFIC_CONFIG_PROVENANCE.md",
+          "architecture/docs/TERMINOLOGY.md",
+          "architecture/legacy/olhoffOpt_PRE_CANONICAL.m",
+          "architecture/olhoffSolve.m",
+          "fem/assemble2D.m",
+          "fem/classifyModes.m",
+          "fem/eigSolve.m",
+          "fem/elemMats2D.m",
+          "fem/massScale.m",
+          "fem/model2D.m",
+          "filter/applyFilter.m",
+          "filter/prepFilter.m",
+          "filter/projChain.m",
+          "filter/projDensityField.m",
+          "filter/projectDensity.m",
+          "filter/top88_reference.m",
+          "mma/mmasub.m",
+          "mma/subsolv.m",
+          "mma_published/README.md",
+          "mma_published/mmasub.m",
+          "mma_published/subsolv.m"
+        ],
+        "hashes": [
+          "1caaff78e5ffd57d8b4c0f4ad93ae6d8feed0d2b38a6b391f471311e6303604a",
+          "5f1797b29907990a67fa203e838beb09ab403a0068cdb290971925f15c3c6c61",
+          "adadf0b1a143231e6ca7f5168be9f7747040b81b9a91fc4b79ebc8900c9e58fd",
+          "dd8f1cc7c19d41dfb4dde989ddd40a3dbfd733fecb622f43275144c359a6b911",
+          "101519fcdcc2175d7d2aa135d919ad0a0efaa24cbb3edd7761d8f27b9b504038",
+          "6176f68ba89120e2354f84ab3e849b907dc53c84a11dd6423aef7fcf765eb084",
+          "b548f7838cdbaa2db1998fc885a2ee45b704e17ae0bcedfbf16236a7ae962be9",
+          "0f9f7fbcc89d5b518fc08c85f70af28caba08bcdc14850f10a3534fe1b65e18f",
+          "7724753c02f84d6009c3998f758d5b3f9c5144ad39ca6f470584a2c99e089465",
+          "f892f720c29e6ca1c4bd25b33d7e67ba2ab31b7a316e20896da2228e0cd7fcab",
+          "76ff15824f205db8d5a6a4b1ef4890f7320e450dc0bd1e6f4989ad794791c80d",
+          "c8ee926c2cf985b79e634b99116bbd37b96d9a1f9b26b51c4bb88ee31d5d4b52",
+          "dd8424f84f60bafbff05b634ec176545385bd9b91d020ce0aecab431a6b03e7c",
+          "4f0b1620c557fae43f2ac9d20accb9484da01cb8d3e751b9ac869e0f35c5163c",
+          "f540e10ab2c84b85c70c62e69192998f806260031275d4c94d60bc9db2fe2c55",
+          "1bcdf9b9849475a46beea8ef4651618d699debed1823aee8658a4df412141823",
+          "b87ef5f65918c015e5262eda6138b6fa47403f127846212dc0238e0549e100d8",
+          "e5a8bee460f8d76226132a35ca4d5a474853e360612e6f9a23f207fbc801297b",
+          "32c52085a91869e577388e337f57a6a8b37bfa19c552ec6094d3bcf2266e39b5",
+          "ba09e574bde8d46d2d9504e7b59d187f797249771c00bdd2999f536825256185",
+          "8a2c621749d4bfd287bcd50dd06a066e9f963f8aa0c0b9cd3d9f2994f4c2a9fe",
+          "36fdb3339c39697def1a85d53fbf51031c0c41fc6a1eb25dda473d5937dfc407",
+          "f9a866853d27c16488508c21c8f38d286b56188201b891427fc030c2059b4b0e",
+          "43397408fb993e530a7bd3b5696a23b3501bc0cfaaa8e0f84c7a9bad45690720",
+          "d77d43fd0bcbefffc66524f2b35add5384c98e30fced1e068ceb4723d283717d",
+          "3fa03435a0fc54f2863c537b3e926d00023d2df7bbb6eb00001e0ce05eb6584b",
+          "e36cebd3f921e64d33b10dbf4ef7ef44c17fb2bf1e23a6404d0b264426d79517",
+          "38fd269c0372c1c1b1da3c1b2658bcebfd4a1b41540816d4b1a0a2b08f7a08fe",
+          "10493fbe6717cfce186e93257e239e1acacb7d4826638b527c54a8d604373e22",
+          "1b8fd4e887f08b5b61c5a4f72578a8b29c99748fcb545c68534325e6e52deab3",
+          "6dfedb07f21c06ed3476a7979e1c83f1eb2100ccb9b823242124556c84eccd58",
+          "17b37a384b1aa5d987d9c861e16071d1140af130f92406ccc11cec4518bcae0c",
+          "f1d519c81395669393467d44750fdad884f7435aae75113f167ca18f6d4e4773",
+          "91e499e9308ccc8d471473a7d45cb7707f3e6d0f6fc73d9fdbfd04829312bfc3",
+          "daed58374c507ff140b542483d6c51c6b12dac9bf9e764925b7e19c124a2f7ba",
+          "3e7962dc0ad0a148c3b5a267ec6a25d6ff3ef578d637c685b2d8349f3037b7f3",
+          "94e924e6ce46ea40e6ed87af9596fb44f5049ef9f20b4da44f2c5e45b1d2ae75",
+          "6ed3624cd19b3569f55b23acad1d5a1038d9c625a7fae9935e801ffb765ac40e",
+          "0445fbc560ad2e99738be9cc72501cf5acb8e196256fdd5f028cdc4b23e14102",
+          "59d154c1198001f536129612851f10132f9aa195467687aa2db188b43698844e",
+          "b26bdaa0e5183a9d1cd107708b61d295f9a7d39a4d66a6251e812b112f26eade",
+          "2593695f8801b4eb5c7bb7da61010edd819c8405d43ad2b197f065a89e1c9109",
+          "91d16bcb595d4e1c2ed96a69d16fdc77bdccdaeae07ca4f8e06269f377ae74da",
+          "737eb4600d34bfbc21be9ecb9ceb0d5f852f556738ecb6f765112d3c1e4b8cf9",
+          "6e774ec3e2d62b018f63e7177dfe4112d5af7486c909ba69bb063a60d14dbeee",
+          "329163edcd25b2220c1f7943244511c25c0f2f7d37bc3938812ffde9da9a6cd7",
+          "bf7b0e464fce470820b7082b4278101133e23f6911e8430007753fb916f8e806",
+          "feac2cfaaf26112f743eff134f8a46eae3ff2d30fc8c94eb6b1a3d1ad46f16cd",
+          "74edb3cf466b6627e39259022546db7c96a1e3e5da46104bf1a46da5c921d7c6",
+          "90cacf422c345c2cee9eaf070067230f43e98318a42ac6833a5a2bfb8c1be509",
+          "da5108752950843f8820c941f4343a8a9873a7f96897e822941508d11f8d87b6",
+          "94a05f13413892aedd7237b47e423f4c06c389723f09dcdf19620883ebc3edca",
+          "c412b0f0107dfbbfe472f1dd4f2002bc06e93ee79e783cd484d58634af84ba14",
+          "dd2c9cabf6d82319ebaea209bd0de641753a892e36d77f4ebc537f442137e7ac",
+          "a4551702a0ffeae0c4db3477e6851605db7c016530a3a3fa9770ec2141331fe6",
+          "8c18d83852a250b6734b5f868e644c054bf458654d0c54ef47d4e9a7932d49e1",
+          "de0baa086173b00df046beb73e5f7426b3886c95c42482ff78948ef930ae700d",
+          "5e5c7ad0978d3f3fd20273bfcfade3d96080d27e2d0db1587f6c7316b2d0e3be",
+          "deb3c90cad72b39d7d12304d7badb39d3d52229056bf316b7860183e12fb332c",
+          "a05d2ed01d8449757b470ccfc32fd13550e6741f15d786bc4ed8fb66b67127e6",
+          "cb9790232eec619faf7ec85e43393a068166bb2466fa5bcb599a05daa03eb544",
+          "6c891b42a6c3bbdd80e3d1035f05f626bd8e73a2beaa3540532a68ec6e3cd7f7",
+          "ebf543df22d774598053fc99d50dbbce33f7d679084e14202d2999cb09da264f",
+          "0f93a2acce7aac69e5ad168edc1413e01bce5757b7e00c9c2c4a7a70288c29e1",
+          "1f7181e45b57b0db95c1e9faaf2cd6babb1ccd2cad5abaea247c10ae9d029856",
+          "b8ae7c424d42f02390ebeb724592bf606ff9504f4be588810a58a1c4493bfba1",
+          "2a93c74d1872bb62a41a856e10445a494721097cd7b7881fb98c110a67f6115a",
+          "3cc19e1c52023225a1350d1c3e7623a9df68b01f52a74c82ddd4aac377ac6560",
+          "461ec7c7950b4d08e20c04d348d9d95674d3e42f1f167b05d3804c94abe057a7",
+          "18ceb629c567fafcd90830c4eed3a4809fc2dda682d54cef1176b82bd6d47e1a",
+          "1392d0030d51aa43a84b4a4a3b344741274008b316aa448915d362bb659ca655",
+          "cc62399dee265b56a7ac27d669857361b340365b86d1336fa227566696a4b5fb",
+          "817a0db22efdfe8ee0f8cace56a13d5c52a28cb4e875bd49880392745919c320",
+          "eb8613bdb46e833b45acf9d43a8dad39a7e8fd104beafeab896742bcc3093810",
+          "54c1680036e6effdb70bc32524b0c11c366cebed64d5a508c82553e871ff7660",
+          "130033335ac5a21f31437a196bf8f37c5b97880a00e93cf2962a8a54bac2b98a",
+          "14ac696e5b319a19e44a11b4a5aa41d74c1b9915ff1ebf1435d5e046f637d1d0",
+          "4507b73e3e44cdd6999b52c7a815569a4fc716749b1e23c2d0c228ff51da2edb",
+          "130033335ac5a21f31437a196bf8f37c5b97880a00e93cf2962a8a54bac2b98a"
+        ],
+        "ok": true,
+        "mismatches": [],
+        "missing": [],
+        "extra": [],
+        "artifactsIgnored": [
+          ".DS_Store"
+        ],
+        "recordedTreeHash": "4ba9a3ae10881344a0e60f2b8a8976c5ec9ceccf966bc2a3da4f37fb5aebffbf"
+      }
+    },
+    "olhoff_dispatch": {
+      "ok": true,
+      "resolved": [
+        {
+          "name": "applyFilter",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/filter/applyFilter.m"
+        },
+        {
+          "name": "assemble2D",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/fem/assemble2D.m"
+        },
+        {
+          "name": "classifyModes",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/fem/classifyModes.m"
+        },
+        {
+          "name": "compareHistory",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/algo/compareHistory.m"
+        },
+        {
+          "name": "compareHistoryTo",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/algo/compareHistoryTo.m"
+        },
+        {
+          "name": "compareTopology",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/algo/compareTopology.m"
+        },
+        {
+          "name": "defaultCfg",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/algo/defaultCfg.m"
+        },
+        {
+          "name": "deltaLambda",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/algo/deltaLambda.m"
+        },
+        {
+          "name": "eigSolve",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/fem/eigSolve.m"
+        },
+        {
+          "name": "elemMats2D",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/fem/elemMats2D.m"
+        },
+        {
+          "name": "genGrad",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/algo/genGrad.m"
+        },
+        {
+          "name": "imresizeNN",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/algo/imresizeNN.m"
+        },
+        {
+          "name": "innerLoop",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/algo/innerLoop.m"
+        },
+        {
+          "name": "innerLoopLP",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/algo/innerLoopLP.m"
+        },
+        {
+          "name": "innerLoopRho",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/algo/innerLoopRho.m"
+        },
+        {
+          "name": "massScale",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/fem/massScale.m"
+        },
+        {
+          "name": "mmasub",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/mma_published/mmasub.m"
+        },
+        {
+          "name": "model2D",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/fem/model2D.m"
+        },
+        {
+          "name": "moveControl",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/algo/moveControl.m"
+        },
+        {
+          "name": "multRule",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/algo/multRule.m"
+        },
+        {
+          "name": "olhoffOpt",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/algo/olhoffOpt.m"
+        },
+        {
+          "name": "olhoffSolve",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/architecture/olhoffSolve.m"
+        },
+        {
+          "name": "plotHistory",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/algo/plotHistory.m"
+        },
+        {
+          "name": "prepFilter",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/filter/prepFilter.m"
+        },
+        {
+          "name": "projChain",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/filter/projChain.m"
+        },
+        {
+          "name": "projDensityField",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/filter/projDensityField.m"
+        },
+        {
+          "name": "projectDensity",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/filter/projectDensity.m"
+        },
+        {
+          "name": "subsolv",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/mma_published/subsolv.m"
+        },
+        {
+          "name": "textStamp",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/algo/textStamp.m"
+        },
+        {
+          "name": "top88_reference",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/filter/top88_reference.m"
+        },
+        {
+          "name": "topologyImage",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/algo/topologyImage.m"
+        },
+        {
+          "name": "useMMA",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/algo/useMMA.m"
+        }
+      ],
+      "blockers": [],
+      "warnings": [
+        "mmasub also exists at /Users/piotrek/Programming/topOpt4freqMax/tools/Matlab/mmasub.m (declared, production copy wins)",
+        "subsolv also exists at /Users/piotrek/Programming/topOpt4freqMax/tools/Matlab/subsolv.m (declared, production copy wins)"
+      ],
+      "declaredCollisions": [
+        {
+          "symbol": "mmasub",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/tools/Matlab/mmasub.m",
+          "sha256": "54c1680036e6effdb70bc32524b0c11c366cebed64d5a508c82553e871ff7660",
+          "declaredSha256": "54c1680036e6effdb70bc32524b0c11c366cebed64d5a508c82553e871ff7660"
+        },
+        {
+          "symbol": "subsolv",
+          "file": "/Users/piotrek/Programming/topOpt4freqMax/tools/Matlab/subsolv.m",
+          "sha256": "130033335ac5a21f31437a196bf8f37c5b97880a00e93cf2962a8a54bac2b98a",
+          "declaredSha256": "130033335ac5a21f31437a196bf8f37c5b97880a00e93cf2962a8a54bac2b98a"
+        }
+      ],
+      "pathEntries": []
+    },
+    "olhoff_preset": "duOlhoffPedersenAdaptiveBoxSensitivityFiltered"
+  },
+  "cap_summary": {
+    "any_cap_hit": false,
+    "n_cap_hit": 0,
+    "n_records": 9,
+    "cap_hit_rows": [],
+    "meaning": "CAP_HIT means a method reached a safety budget instead of its own stopping rule. Such rows are reported but are excluded from every scaling fit and must not be described as converged."
+  },
+  "path_scrub": {
+    "removed_entries": [],
+    "rationale": "Non-production Olhoff implementations inherited from this MATLAB session were removed from the path before preflight, so dispatch is a property of this driver rather than of whatever ran earlier in the session. The sole production implementation is analysis/OlhoffCurrent."
+  }
+}

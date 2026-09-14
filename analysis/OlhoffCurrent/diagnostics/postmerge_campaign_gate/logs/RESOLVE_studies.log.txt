@@ -1,0 +1,44 @@
+STUDY admission_rule                                ok=0 hist=NO_HISTORICAL_SOURCE_LINES cur=CURRENT_SOURCE_HASH_VERIFIED
+STUDY beta_transition_mechanism                     ok=1 hist=NO_HISTORICAL_SOURCE_LINES cur=CURRENT_SOURCE_HASH_VERIFIED
+STUDY c480_socp_causal_run                          ok=1 hist=NO_HISTORICAL_SOURCE_LINES cur=CURRENT_SOURCE_HASH_VERIFIED
+STUDY controller_architecture_offline               ok=0 hist=NO_HISTORICAL_SOURCE_LINES cur=CURRENT_SOURCE_HASH_VERIFIED
+STUDY dynamical_regime                              ok=0 hist=NO_HISTORICAL_SOURCE_LINES cur=CURRENT_SOURCE_HASH_VERIFIED
+STUDY filtered_subproblem_integrability_audit       ok=1 hist=NO_HISTORICAL_SOURCE_LINES cur=CURRENT_SOURCE_HASH_VERIFIED
+STUDY fixedmove_400_dynamics                        ok=0 hist=NO_HISTORICAL_SOURCE_LINES cur=CURRENT_SOURCE_HASH_VERIFIED
+STUDY frozen_inner_solver_study                     ok=0 hist=NO_HISTORICAL_SOURCE_LINES cur=CURRENT_SOURCE_HASH_VERIFIED
+STUDY frozen_problem25_reference                    ok=0 hist=NO_HISTORICAL_SOURCE_LINES cur=CURRENT_SOURCE_HASH_VERIFIED
+STUDY gray_kkt_forensic_audit                       ok=1 hist=NO_HISTORICAL_SOURCE_LINES cur=CURRENT_SOURCE_HASH_VERIFIED
+STUDY move_activity_400                             ok=0 hist=NO_HISTORICAL_SOURCE_LINES cur=CURRENT_SOURCE_HASH_VERIFIED
+STUDY move_activity_offline                         ok=0 hist=NO_HISTORICAL_SOURCE_LINES cur=CURRENT_SOURCE_HASH_VERIFIED
+STUDY move_ladder_necessity                         ok=0 hist=NO_HISTORICAL_SOURCE_LINES cur=CURRENT_SOURCE_HASH_VERIFIED
+STUDY move_stop                                     ok=0 hist=NO_HISTORICAL_SOURCE_LINES cur=CURRENT_SOURCE_HASH_VERIFIED
+STUDY move_transition                               ok=0 hist=NO_HISTORICAL_SOURCE_LINES cur=CURRENT_SOURCE_HASH_VERIFIED
+STUDY nine_mesh_campaign_audit                      ok=1 hist=NO_HISTORICAL_SOURCE_LINES cur=CURRENT_SOURCE_HASH_VERIFIED
+STUDY postmerge_campaign_gate                       ok=1 hist=NO_HISTORICAL_SOURCE_LINES cur=CURRENT_SOURCE_HASH_VERIFIED
+STUDY provenance_gate_hardening                     ok=1 hist=NO_HISTORICAL_SOURCE_LINES cur=CURRENT_SOURCE_HASH_VERIFIED
+STUDY scientific_delta_olhoff_migration             ok=0 hist=NO_HISTORICAL_SOURCE_LINES cur=CURRENT_SOURCE_HASH_VERIFIED
+STUDY three_rung_architecture                       ok=0 hist=NO_HISTORICAL_SOURCE_LINES cur=CURRENT_SOURCE_HASH_VERIFIED
+STUDY three_rung_canary_preflight                   ok=1 hist=NO_HISTORICAL_SOURCE_LINES cur=CURRENT_SOURCE_HASH_VERIFIED
+STUDY three_rung_promotion_closure                  ok=0 hist=NO_HISTORICAL_SOURCE_LINES cur=CURRENT_SOURCE_HASH_VERIFIED
+STUDY three_rung_promotion_validation               ok=1 hist=NO_HISTORICAL_SOURCE_LINES cur=CURRENT_SOURCE_HASH_VERIFIED
+STUDY three_rung_promotion_validation_retry1        ok=0 hist=NO_HISTORICAL_SOURCE_LINES cur=CURRENT_SOURCE_HASH_VERIFIED
+STUDY three_rung_resolution_240                     ok=1 hist=NO_HISTORICAL_SOURCE_LINES cur=CURRENT_SOURCE_HASH_VERIFIED
+STUDY topology_maturity_transition                  ok=0 hist=NO_HISTORICAL_SOURCE_LINES cur=CURRENT_SOURCE_HASH_VERIFIED
+STUDY two_branch_controller_validation              ok=1 hist=HISTORICAL_SOURCE_HASH_VERIFIED cur=CURRENT_SOURCE_HASH_VERIFIED
+STUDY two_branch_maturity_240                       ok=0 hist=NO_HISTORICAL_SOURCE_LINES cur=CURRENT_SOURCE_HASH_VERIFIED
+STUDY two_rung_architecture                         ok=0 hist=NO_HISTORICAL_SOURCE_LINES cur=CURRENT_SOURCE_HASH_VERIFIED
+STUDY upstream_253069_migration                     ok=1 hist=NO_HISTORICAL_SOURCE_LINES cur=CURRENT_SOURCE_HASH_VERIFIED
+
+ans = 
+
+  struct with fields:
+
+       repo: '/Users/piotrek/Programming/topOpt4freqMax'
+       kind: 'studies'
+       when: '14-Sep-2026 00:41:48'
+     matlab: '25.2.0.2998904 (R2025b)'
+       head: 'b21483b158f58e05e7b56957f2fbe8e1d2891395'
+     suites: [0×0 struct]
+    studies: [1×30 struct]
+    failing: {1×18 cell}
+

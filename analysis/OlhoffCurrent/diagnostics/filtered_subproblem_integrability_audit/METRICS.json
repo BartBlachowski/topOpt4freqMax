@@ -1,0 +1,246 @@
+{
+ "study": "filtered_subproblem_integrability_audit",
+ "generated": "2026-09-12T19:50:32+0200",
+ "branch": "benchmark-methodology-r2",
+ "head": "013cc48451d33bed61c5c4eea174bbd898d548a2",
+ "preregistration_sha256": "53d6623a9f0807217c515ed66e158ce617ab5d4a834bc9e9c07058e533644f81",
+ "locks": {
+  "optimization_runs": 0,
+  "accepted_density_updates": 0,
+  "continuation": 0,
+  "controller_transitions": 0,
+  "production_files_modified": 0,
+  "other_mesh_evaluations": 0,
+  "projection_runs": 0,
+  "p_continuation_runs": 0
+ },
+ "verdicts": {
+  "state_identity": "FROZEN_480_STATE_IDENTITY_PASS",
+  "inner_mma_kkt": "FINAL_INNER_MMA_KKT_FAIL",
+  "filtered_field": "FILTERED_FIELD_LOCALLY_NONCONSERVATIVE",
+  "effective_objective": "EFFECTIVE_SCALAR_OBJECTIVE_NOT_IDENTIFIED",
+  "surrogate_vs_physical": "SURROGATE_PHYSICAL_KKT_MISMATCH",
+  "grayness": "SURROGATE_MISMATCH_PARTIALLY_EXPLAINS_NONSTATIONARY_GRAYNESS",
+  "next_action": "INNER_MMA_CERTIFICATION_FAILURE_REQUIRES_RESOLUTION",
+  "performance_campaign": "PERFORMANCE_CAMPAIGN_STILL_BLOCKED"
+ },
+ "state": {
+  "rho_sha256": "0a498a7d6ab0565b29c15ff9364060d937d4df10aa661fc90d02c038ce6e4a60",
+  "rho385_sha256": "9b1443e508a6e4ecb5288d30167c7258d837be127aa3a9a42d8cc092240f3ded",
+  "drho386_sha256": "0b12cd7f9ae32decc6e95bf63e89fa7ca4530d13ec6dc7d815b618d46af8a9fd",
+  "cfgHash": "03097a28b0ad7fdb0d977985d3b5fd279dd74553c9dd5dfbd3cc035ac2a1782e",
+  "implTree": "edbfe47eb32109a2fb017f6f13d5327f2c240357caa96630064ffcf37ee152cb",
+  "nOuter": 386,
+  "stage": 3,
+  "move": 0.01,
+  "N": 2,
+  "multJ": 0,
+  "nInner_final": 19,
+  "gap12_at_rho386": 0.12979791372346,
+  "Mnd_386": 26.34156302529312,
+  "volume_386": 0.4999984544949872
+ },
+ "subproblem_reproduction": {
+  "drho_bitwise_equal": true,
+  "max_abs_diff": 0,
+  "nInner_recorded": 19,
+  "nInner_reproduced": 19,
+  "nInner_match": true,
+  "beta_recorded": 26873.74466704797,
+  "beta_reproduced": 26873.74466704797,
+  "beta_abs_diff": 0
+ },
+ "inner_kkt": {
+  "retained_exact_dual": false,
+  "dual_class": "reconstructed (identical mmasub inputs, duals captured)",
+  "lam": [
+   0.9972567734063279,
+   3.6167840533154884e-07,
+   2.0018108810544395e-08,
+   0.6324256597515894
+  ],
+  "fval": [
+   -4.712342912771561e-06,
+   -0.27651649966865643,
+   -4.99559317322774,
+   -3.0910100256025746e-06
+  ],
+  "primal_max_fval": -3.0910100256025746e-06,
+  "max_abs_lam_f": 4.699415888374744e-06,
+  "preregistered_projected_normRMS": {
+   "production": 1.005950425362399,
+   "certification_500": 1.0247419071873711,
+   "extended_5000": 1.0299081121777534
+  },
+  "exact_with_box_multipliers_normRMS": {
+   "production": 0.3597462071001886,
+   "certification_500": 0.5856697405845955,
+   "extended_5000": 0.5966493014306665
+  },
+  "preregistration_error_disclosed": "bound classification tolerance 1e-12 finds 0 active bounds against an interior-point solver, so the preregistered statistic omits -xsi+eta; both statistics cross the FAIL bar of 0.1",
+  "residual_by_class": {
+   "void": 0.5776348994533672,
+   "gray-shell": 0.015959601468639634,
+   "gray-core": 0.012906017493007236,
+   "solid": 0.17118892134353805
+  }
+ },
+ "inner_convergence": {
+  "converged": false,
+  "iterations": 5000,
+  "relStep": {
+   "first": 1,
+   "at19": 0.0411826168009066,
+   "at100": 0.009638160932847908,
+   "at500": 0.003723973743433427,
+   "at1000": 0.0029216134178823806,
+   "final": 0.002077181042973198,
+   "min": 0.00042412642361848066,
+   "last100_mean": 0.0032527285112891407,
+   "last100_min": 0.0008974485731824712,
+   "last100_max": 0.012413834014465596,
+   "monotone": false
+  },
+  "maxAbsDrho_over_move": {
+   "production_19": 0.06243011812112185,
+   "certification_500": 0.8756184537021795,
+   "extended_5000": 0.9787141535375194
+  },
+  "extended_over_production": 15.676955017747966
+ },
+ "integrability": {
+  "jacobian_median_by_delta": [
+   [
+    0.001,
+    0.2867459841274049,
+    2.556676775962191e-06,
+    10
+   ],
+   [
+    0.0003,
+    0.28675118757632206,
+    9.358768365241083e-06,
+    10
+   ],
+   [
+    0.0001,
+    0.286807359419375,
+    3.58637492731412e-05,
+    10
+   ],
+   [
+    3e-05,
+    0.2870096463124743,
+    0.00014178390859778976,
+    10
+   ]
+  ],
+  "jacobian_median_cols": [
+   "delta",
+   "median_r_filt",
+   "median_r_phys",
+   "nPairs"
+  ],
+  "loop_median_by_amp": [
+   [
+    0.001,
+    0.2721289409429225,
+    2.9399925517169113e-06
+   ],
+   [
+    0.0003,
+    0.2824426390270848,
+    7.274657057499687e-06
+   ],
+   [
+    0.0001,
+    0.28544426186592686,
+    4.7190688844578425e-05
+   ]
+  ],
+  "loop_median_cols": [
+   "amp",
+   "median_rel_filt",
+   "median_rel_phys"
+  ],
+  "loop_exponent_filtered": 1.9988791007339377,
+  "loop_exponent_physical": 0.9779288787597903,
+  "loop_reversal_relative_sum": 3.862236093213628e-13,
+  "mixed_fro_skew_ratio": {
+   "filtered": 0.0005592611606664994,
+   "physical": 2.072929550193989e-06
+  },
+  "multiplicity_screen": {
+   "n": 88,
+   "excluded": 0,
+   "min_gap12": 0.12979100685910797,
+   "order_changes": 0
+  }
+ },
+ "filter_operator": {
+  "A_skew_ratio": 1.4134965172546723,
+  "A_rowsum_range": [
+   0.6682641155601192,
+   245.09299976712794
+  ],
+  "H_symmetric": true,
+  "max_guard_active_elements": 0,
+  "symmetry_condition": {
+   "statement": "A is symmetric iff rho_i^2*Hs_i = rho_e^2*Hs_e for every pair with H_ei ~= 0",
+   "n_offdiag_pairs": 1008780.0,
+   "median_relative_violation": 0.05033082304019916,
+   "p90_relative_violation": 0.9508357152568283,
+   "max_relative_violation": 0.9999989675569708,
+   "frac_below_1e_6": 0.11568825710263883
+  },
+  "amplification_by_class": {
+   "void": 30.669755323207927,
+   "gray-shell": 0.8552890010842771,
+   "gray-core": 0.9865945480693701,
+   "solid": 0.9306232775529936
+  }
+ },
+ "mechanism": {
+  "decomposition": "J_filt(:,j) = A*J_phys(:,j) + A(:,j)*g_j/rho_j - e_j*g_filt_j/rho_j, with A = diag(1/(Hs.*rho))*H*diag(rho)",
+  "verified_max_relative_error": 9.705841111829889e-05,
+  "median_S1_share_rho_weighting": 0.009285384937801821,
+  "median_S2_share_A_times_Hess": 0.9907146150621983,
+  "counterfactual_operators": [
+   {
+    "op": "A_production",
+    "median_rel": 1.2274245205678658,
+    "max_rel": 1.6790203563450659,
+    "operator_symmetric": false
+   },
+   {
+    "op": "B_plain_average",
+    "median_rel": 0.05667768334512402,
+    "max_rel": 0.8539555473758297,
+    "operator_symmetric": false
+   },
+   {
+    "op": "Bsym_symmetrized",
+    "median_rel": 0.03137617649255367,
+    "max_rel": 0.8430395421900279,
+    "operator_symmetric": true
+   },
+   {
+    "op": "Wt_density_chain",
+    "median_rel": 0.032374095567318795,
+    "max_rel": 0.8320053395368936,
+    "operator_symmetric": false
+   }
+  ]
+ },
+ "disclosed_imperfections": [
+  "preregistered bound tolerance mis-specified for an interior-point solver (both statistics reported)",
+  "one loop corner leaves the box by 2.20e-06 (0.22% of rhomin) on the lowest-asymmetry pair",
+  "the 30x30 submatrix test cannot separate the two skew terms; two other tests do",
+  "a first extended-certification attempt was aborted for memory and produced no result"
+ ],
+ "host": {
+  "matlab": "25.2.0.2998904 (R2025b)",
+  "cpu": "Apple M1 Max",
+  "threads": 1
+ }
+}

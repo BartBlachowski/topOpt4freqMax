@@ -1,0 +1,16 @@
+{
+  "generated_UTC": "2026-09-12T13:54:43.518362+00:00",
+  "input_containers_verified": 5,
+  "production_files_verified": 75,
+  "endpoint_rho_hashes_verified": 3,
+  "float_FD_tables_verified": 3,
+  "required_documents_verified": 20,
+  "figures": 21,
+  "forbidden_optimizer_calls_in_evaluator": 0,
+  "optimization_runs": 0,
+  "rho_updates": 0,
+  "no_runs_directory": true,
+  "preregistration_unchanged": true,
+  "production_unchanged": true,
+  "verdict": "AUDIT_ARTIFACT_INTEGRITY_PASS"
+}

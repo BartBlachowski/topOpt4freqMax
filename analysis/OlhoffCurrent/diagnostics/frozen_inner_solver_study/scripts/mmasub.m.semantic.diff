@@ -1,0 +1,33 @@
+--- production
+
++++ official
+
+@@ -21,10 +21,10 @@
+
+ factor(find(zzz<0))=asydecr
+ low=xval-factor.*(xold1-low)
+ upp=xval+factor.*(upp-xold1)
+-lowmin=xval-0.2*(xmax-xmin)
++lowmin=xval-10*(xmax-xmin)
+ lowmax=xval-0.01*(xmax-xmin)
+ uppmin=xval+0.01*(xmax-xmin)
+-uppmax=xval+0.2*(xmax-xmin)
++uppmax=xval+10*(xmax-xmin)
+ low=max(low,lowmin)
+ low=min(low,lowmax)
+ upp=min(upp,uppmax)
+@@ -61,11 +61,11 @@
+
+ Q=sparse(m,n)
+ P=max(dfdx,0)
+ Q=max(-dfdx,0)
+-PQ=0.001*(P+Q)+raa0*eeem*xmamiinv.'
++PQ=0.001*(P+Q)+raa0*eeem*xmamiinv'
+ P=P+PQ
+ Q=Q+PQ
+ P=P*spdiags(ux2,0,n,n)
+ Q=Q*spdiags(xl2,0,n,n)
+-b=P*uxinv+Q*xlinv-fval(:)
++b=P*uxinv+Q*xlinv-fval
+ [xmma,ymma,zmma,lam,xsi,eta,mu,zet,s]=...
+ subsolv(m,n,epsimin,low,upp,alfa,beta,p0,q0,P,Q,a0,a,b,c,d)

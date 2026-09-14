@@ -1,0 +1,425 @@
+{
+  "source_hashes": [
+    {
+      "path": "examples/Performance/performance_comparison.m",
+      "sha256": "9aff8194d9557e571f106c099ef0286b3d66d026e91475ae37d72837fec0d5d4",
+      "actual_sha256": "9aff8194d9557e571f106c099ef0286b3d66d026e91475ae37d72837fec0d5d4",
+      "match": true
+    },
+    {
+      "path": "examples/Performance/conference_bench/confbench_method_config.m",
+      "sha256": "10a09a6e435d3b9b10e8cf0a414db2b50b5eeede04803eb145a0faa100aafef4",
+      "actual_sha256": "10a09a6e435d3b9b10e8cf0a414db2b50b5eeede04803eb145a0faa100aafef4",
+      "match": true
+    },
+    {
+      "path": "examples/Performance/conference_bench/confbench_run_case.m",
+      "sha256": "3a7105b8e01f168793ec03cea68674ffdb1492d187747fa3202387d4245bc29a",
+      "actual_sha256": "3a7105b8e01f168793ec03cea68674ffdb1492d187747fa3202387d4245bc29a",
+      "match": true
+    },
+    {
+      "path": "examples/Performance/conference_bench/confbench_preflight.m",
+      "sha256": "6524a2aba3f7696f9e4132d61e2aab079b6d4f827850adb8914fa5efed961a23",
+      "actual_sha256": "6524a2aba3f7696f9e4132d61e2aab079b6d4f827850adb8914fa5efed961a23",
+      "match": true
+    },
+    {
+      "path": "examples/Performance/conference_bench/confbench_manifest.m",
+      "sha256": "20398d0a7a4ce7e1c65b36a3df3e4546a0cf019d1cb89adb1a0405d6507d6e1a",
+      "actual_sha256": "20398d0a7a4ce7e1c65b36a3df3e4546a0cf019d1cb89adb1a0405d6507d6e1a",
+      "match": true
+    },
+    {
+      "path": "examples/Performance/conference_bench/confbench_export.m",
+      "sha256": "e03ebd19dac50cf4b19ac4c916b9956d62409c17d043925bc37db073397e1afb",
+      "actual_sha256": "e03ebd19dac50cf4b19ac4c916b9956d62409c17d043925bc37db073397e1afb",
+      "match": true
+    },
+    {
+      "path": "examples/Performance/conference_bench/confbench_timing_schema.m",
+      "sha256": "45cf577199e5fc7c780b9a145690da885fca738aa9fd8a08444cc46ca6da6427",
+      "actual_sha256": "45cf577199e5fc7c780b9a145690da885fca738aa9fd8a08444cc46ca6da6427",
+      "match": true
+    },
+    {
+      "path": "examples/Performance/conference_bench/confbench_caveats.m",
+      "sha256": "878c5cf1db3468adbaf2900922e6d7cb96faf5dcff16d7b800f568e3d7cd7dfe",
+      "actual_sha256": "878c5cf1db3468adbaf2900922e6d7cb96faf5dcff16d7b800f568e3d7cd7dfe",
+      "match": true
+    },
+    {
+      "path": "examples/Performance/conference_bench/confbench_scaling_fit.m",
+      "sha256": "4856b54331ab1cef8ebf9f79da1d7f6e5fef76c483b4f3bfb178d6e0dad85256",
+      "actual_sha256": "4856b54331ab1cef8ebf9f79da1d7f6e5fef76c483b4f3bfb178d6e0dad85256",
+      "match": true
+    },
+    {
+      "path": "analysis/OlhoffCurrent/olhoffcurrent_preset.m",
+      "sha256": "301349abf03190768f51a3b66f75cd894e73e677025bee1a3d386044af3cdadf",
+      "actual_sha256": "301349abf03190768f51a3b66f75cd894e73e677025bee1a3d386044af3cdadf",
+      "match": true
+    },
+    {
+      "path": "analysis/OlhoffCurrent/olhoffcurrent_config.m",
+      "sha256": "16b431039ec47a9131a5b9365d1e4e28628507cc88e986684bf982c28e462b50",
+      "actual_sha256": "16b431039ec47a9131a5b9365d1e4e28628507cc88e986684bf982c28e462b50",
+      "match": true
+    },
+    {
+      "path": "analysis/OlhoffCurrent/olhoffcurrent_run.m",
+      "sha256": "45e788eb83692e96f40313f05461e88911162abafd4041bea58840ff53b55adb",
+      "actual_sha256": "45e788eb83692e96f40313f05461e88911162abafd4041bea58840ff53b55adb",
+      "match": true
+    },
+    {
+      "path": "analysis/OlhoffCurrent/olhoffcurrent_paths.m",
+      "sha256": "a8be7af6a5930d6ef90684483fcfad3ab9a90c082d2735e95afc2a48c9e254ac",
+      "actual_sha256": "a8be7af6a5930d6ef90684483fcfad3ab9a90c082d2735e95afc2a48c9e254ac",
+      "match": true
+    },
+    {
+      "path": "analysis/OlhoffCurrent/olhoffcurrent_assert_dispatch.m",
+      "sha256": "300b17c264ccd8567fd129670d2d1d537fdcdc71b9f133af2a3fd7fd0c00e39c",
+      "actual_sha256": "300b17c264ccd8567fd129670d2d1d537fdcdc71b9f133af2a3fd7fd0c00e39c",
+      "match": true
+    },
+    {
+      "path": "analysis/OlhoffCurrent/PROVENANCE.json",
+      "sha256": "2e8224e816ddf8b6ddd25fc05a20c3b05453452d5f561e941b8ac00e0c38452e",
+      "actual_sha256": "2e8224e816ddf8b6ddd25fc05a20c3b05453452d5f561e941b8ac00e0c38452e",
+      "match": true
+    },
+    {
+      "path": "analysis/ourApproach/Matlab/topopt_freq.m",
+      "sha256": "284630992697de9c565aa511cbfd4389d4464e951e23436927bd0e150a53c09b",
+      "actual_sha256": "284630992697de9c565aa511cbfd4389d4464e951e23436927bd0e150a53c09b",
+      "match": true
+    },
+    {
+      "path": "analysis/YukselApproach/Matlab/top99neo_inertial_freq.m",
+      "sha256": "5afc3d16b4ed6af05793df461b541ed3b2ea62a6da8836f38301a9a3917e6ba2",
+      "actual_sha256": "5afc3d16b4ed6af05793df461b541ed3b2ea62a6da8836f38301a9a3917e6ba2",
+      "match": true
+    },
+    {
+      "path": "tools/Matlab/run_topopt_from_json.m",
+      "sha256": "3418b25e1c970041e5c28d0c58b58d959c47f239a2132bd90314ff9b72550a2b",
+      "actual_sha256": "3418b25e1c970041e5c28d0c58b58d959c47f239a2132bd90314ff9b72550a2b",
+      "match": true
+    },
+    {
+      "path": "analysis/three_method_parametric_study/study_base_config.m",
+      "sha256": "2b3903144e1f2cd69795a1d24e1e93105e3ea89768c8f5f3aa7553dddeda39ba",
+      "actual_sha256": "2b3903144e1f2cd69795a1d24e1e93105e3ea89768c8f5f3aa7553dddeda39ba",
+      "match": true
+    },
+    {
+      "path": "analysis/three_method_parametric_study/study_evaluate_design.m",
+      "sha256": "e14a21efe0bb2d9b9d7f3187b4c3f671ec089f6ff96773074b8f3b56cacd79e9",
+      "actual_sha256": "e14a21efe0bb2d9b9d7f3187b4c3f671ec089f6ff96773074b8f3b56cacd79e9",
+      "match": true
+    },
+    {
+      "path": "analysis/three_method_parametric_study/results/profile_freeze_manifest.json",
+      "sha256": "b55e31d87d18e90e8c0b8d278bd4111d494610b62f253194ea16cfcf78252eca",
+      "actual_sha256": "b55e31d87d18e90e8c0b8d278bd4111d494610b62f253194ea16cfcf78252eca",
+      "match": true
+    }
+  ],
+  "impl_tree": "edbfe47eb32109a2fb017f6f13d5327f2c240357caa96630064ffcf37ee152cb",
+  "expected_tree": "edbfe47eb32109a2fb017f6f13d5327f2c240357caa96630064ffcf37ee152cb",
+  "all_impl_files_match": true,
+  "extra_impl_files": [],
+  "raw_json_comparison": [
+    {
+      "mesh": true,
+      "counts": true,
+      "times": true,
+      "stopping": true,
+      "solver_log": true,
+      "omega": true,
+      "status": true,
+      "error": true,
+      "effective_config_hash": true,
+      "ok": true
+    },
+    {
+      "mesh": true,
+      "counts": true,
+      "times": true,
+      "stopping": true,
+      "solver_log": true,
+      "omega": true,
+      "status": true,
+      "error": true,
+      "effective_config_hash": true,
+      "ok": true
+    },
+    {
+      "mesh": true,
+      "counts": true,
+      "times": true,
+      "stopping": true,
+      "solver_log": true,
+      "omega": true,
+      "status": true,
+      "error": true,
+      "effective_config_hash": true,
+      "ok": true
+    },
+    {
+      "mesh": true,
+      "counts": true,
+      "times": true,
+      "stopping": true,
+      "solver_log": true,
+      "omega": true,
+      "status": true,
+      "error": true,
+      "effective_config_hash": true,
+      "ok": true
+    },
+    {
+      "mesh": true,
+      "counts": true,
+      "times": true,
+      "stopping": true,
+      "solver_log": true,
+      "omega": true,
+      "status": true,
+      "error": true,
+      "effective_config_hash": true,
+      "ok": true
+    },
+    {
+      "mesh": true,
+      "counts": true,
+      "times": true,
+      "stopping": true,
+      "solver_log": true,
+      "omega": true,
+      "status": true,
+      "error": true,
+      "effective_config_hash": true,
+      "ok": true
+    },
+    {
+      "mesh": true,
+      "counts": true,
+      "times": true,
+      "stopping": true,
+      "solver_log": true,
+      "omega": true,
+      "status": true,
+      "error": true,
+      "effective_config_hash": true,
+      "ok": true
+    },
+    {
+      "mesh": true,
+      "counts": true,
+      "times": true,
+      "stopping": true,
+      "solver_log": true,
+      "omega": true,
+      "status": true,
+      "error": true,
+      "effective_config_hash": true,
+      "ok": true
+    },
+    {
+      "mesh": true,
+      "counts": true,
+      "times": true,
+      "stopping": true,
+      "solver_log": true,
+      "omega": true,
+      "status": true,
+      "error": true,
+      "effective_config_hash": true,
+      "ok": true
+    }
+  ],
+  "manifest_vs_actual_config_differences": [
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {}
+  ],
+  "cross_mesh_config_differences": [
+    {},
+    {
+      "runtime.name": [
+        "OLHOFF_CURRENT_160x20",
+        "OLHOFF_CURRENT_240x30"
+      ],
+      "domain.mesh.nelx": [
+        160.0,
+        240.0
+      ],
+      "domain.mesh.nely": [
+        20.0,
+        30.0
+      ],
+      "stop.tolerance": [
+        0.05,
+        0.07500000000000001
+      ]
+    },
+    {
+      "runtime.name": [
+        "OLHOFF_CURRENT_160x20",
+        "OLHOFF_CURRENT_320x40"
+      ],
+      "domain.mesh.nelx": [
+        160.0,
+        320.0
+      ],
+      "domain.mesh.nely": [
+        20.0,
+        40.0
+      ],
+      "stop.tolerance": [
+        0.05,
+        0.1
+      ]
+    },
+    {
+      "runtime.name": [
+        "OLHOFF_CURRENT_160x20",
+        "OLHOFF_CURRENT_400x50"
+      ],
+      "domain.mesh.nelx": [
+        160.0,
+        400.0
+      ],
+      "domain.mesh.nely": [
+        20.0,
+        50.0
+      ],
+      "stop.tolerance": [
+        0.05,
+        0.125
+      ]
+    },
+    {
+      "runtime.name": [
+        "OLHOFF_CURRENT_160x20",
+        "OLHOFF_CURRENT_480x60"
+      ],
+      "domain.mesh.nelx": [
+        160.0,
+        480.0
+      ],
+      "domain.mesh.nely": [
+        20.0,
+        60.0
+      ],
+      "stop.tolerance": [
+        0.05,
+        0.15000000000000002
+      ]
+    },
+    {
+      "runtime.name": [
+        "OLHOFF_CURRENT_160x20",
+        "OLHOFF_CURRENT_560x70"
+      ],
+      "domain.mesh.nelx": [
+        160.0,
+        560.0
+      ],
+      "domain.mesh.nely": [
+        20.0,
+        70.0
+      ],
+      "stop.tolerance": [
+        0.05,
+        0.17500000000000002
+      ]
+    },
+    {
+      "runtime.name": [
+        "OLHOFF_CURRENT_160x20",
+        "OLHOFF_CURRENT_640x80"
+      ],
+      "domain.mesh.nelx": [
+        160.0,
+        640.0
+      ],
+      "domain.mesh.nely": [
+        20.0,
+        80.0
+      ],
+      "stop.tolerance": [
+        0.05,
+        0.2
+      ]
+    },
+    {
+      "runtime.name": [
+        "OLHOFF_CURRENT_160x20",
+        "OLHOFF_CURRENT_720x90"
+      ],
+      "domain.mesh.nelx": [
+        160.0,
+        720.0
+      ],
+      "domain.mesh.nely": [
+        20.0,
+        90.0
+      ],
+      "stop.tolerance": [
+        0.05,
+        0.225
+      ]
+    },
+    {
+      "runtime.name": [
+        "OLHOFF_CURRENT_160x20",
+        "OLHOFF_CURRENT_800x100"
+      ],
+      "domain.mesh.nelx": [
+        160.0,
+        800.0
+      ],
+      "domain.mesh.nely": [
+        20.0,
+        100.0
+      ],
+      "stop.tolerance": [
+        0.05,
+        0.25
+      ]
+    }
+  ],
+  "environment": {
+    "matlab_version": "25.2.0.2998904 (R2025b)",
+    "matlab_release": "2025b",
+    "computer": "MACA64",
+    "max_num_comp_threads": 1,
+    "single_thread_requested": true,
+    "blas_library": "Apple Accelerate BLAS (ILP64)",
+    "hostname": "PMS.local"
+  },
+  "campaign_repository": {
+    "path": "/Users/piotrek/Programming/topOpt4freqMax",
+    "git_available": true,
+    "head": "bba45e72ea18eca7615315fcc543572d42a436bc",
+    "branch": "benchmark-methodology-r2",
+    "dirty": true,
+    "dirty_files": [
+      "M examples/Performance/conference_bench/confbench_run_case.m",
+      " M examples/Performance/performance_comparison.m"
+    ],
+    "dirty_file_count": 2
+  },
+  "campaign_generated": "2026-09-11T23:51:04+02:00",
+  "current_head": "013cc48451d33bed61c5c4eea174bbd898d548a2"
+}

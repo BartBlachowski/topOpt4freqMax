@@ -1,0 +1,1 @@
+PMGANCHOR historical status=CONVERGED nOuter=91 inner=2241 omega1=169.495227021538 wall=124s cfgHash=c0fe56ce897ce32ec8efc90ca1fb6bdd9c8326ee56700f5ce33adfb26bded17d

@@ -1,0 +1,16 @@
+--- production
+
++++ official
+
+@@ -169,6 +169,10 @@
+
+ residumax=max(abs(residu))
+ steg=2*steg
+ end
++ifittt>198
++epsi
++ittt
++end
+ epsi=0.1*epsi
+ end
+ xmma=x

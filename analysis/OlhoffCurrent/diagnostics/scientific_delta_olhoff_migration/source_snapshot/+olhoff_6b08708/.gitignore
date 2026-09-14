@@ -1,0 +1,87 @@
+# =====================================================================
+# Olhoff post-conference development baseline
+# =====================================================================
+# This tree carries ~1.5 GB, almost all of it immutable audit evidence
+# (.mat / .npz binaries).  Policy:
+#
+#   * EVERY human-readable file is tracked, whatever its size.  These are
+#     the sources, the audit reports, the run logs and the JSON/CSV
+#     decision tables -- i.e. everything a refactor could damage.
+#   * Binary artifacts BELOW 5 MB are tracked too.
+#   * Binary artifacts AT OR ABOVE 5 MB are not tracked here; they are
+#     covered file-by-file by EVIDENCE_MANIFEST.sha256, which IS tracked.
+#     That manifest makes any accidental modification detectable even
+#     though the bytes themselves live outside git.
+#
+# Nothing in this file is permission to modify audit evidence.  Audit
+# directories are immutable records; see ARCHITECTURE_BASELINE.md.
+# ---------------------------------------------------------------------
+
+.DS_Store
+*.asv
+*.m~
+*.autosave
+
+# Large binaries are enumerated in .gitignore.largebinaries, generated at
+# baseline time and appended below by tools/baseline_gitignore.sh.
+# Generated at baseline: binary artifacts >= 5 MB, excluded from git,
+# covered instead by EVIDENCE_MANIFEST.sha256.
+/audit_conference_admission/diagnostic_filter_support/runs/WP6A_summary.mat
+/audit_conference_admission/runs/ADM_240x30_M4.mat
+/audit_conference_admission/runs/WP6_summary.mat
+/audit_filter_mesh_admission/runs/FMA_320x40_M4.mat
+/audit_filter_mesh_admission/runs/WP7_summary.mat
+/audit_m4_p_continuation_decoupled/runs/Bmature_320x40.mat
+/audit_m4_p_continuation_decoupled/runs/PD1_320x40.mat
+/audit_m4_p_continuation_decoupled/runs/PD1_320x40_density_history.npz
+/audit_m4_projection_invariance/runs/B240_240x30.mat
+/audit_m4_projection_invariance/runs/B320_320x40.mat
+/audit_m4_projection_invariance/runs/T160_160x20.mat
+/audit_m4_projection_invariance/runs/T240_240x30.mat
+/audit_m4_projection_invariance/runs/T320_320x40.mat
+/audit_m4_topology_restoration/baseline/tree/audit_conference_admission/diagnostic_filter_support/runs/WP6A_summary.mat
+/audit_m4_topology_restoration/baseline/tree/audit_conference_admission/runs/ADM_240x30_M4.mat
+/audit_m4_topology_restoration/baseline/tree/audit_conference_admission/runs/WP6_summary.mat
+/audit_m4_topology_restoration/baseline/tree/audit_filter_mesh_admission/runs/FMA_320x40_M4.mat
+/audit_m4_topology_restoration/baseline/tree/audit_filter_mesh_admission/runs/WP7_summary.mat
+/audit_m4_topology_restoration/baseline/tree/audit_multiplicity_reconstruction/runs/WP5_summary.mat
+/audit_m4_topology_restoration/baseline/tree/audit_multiplicity_subN_confirmation/runs/WP3_summary.mat
+/audit_m4_topology_restoration/baseline/tree/audit_s2_design_continuation/runs/SDC_320x40.mat
+/audit_m4_topology_restoration/baseline/tree/audit_s2_design_continuation/runs/WP6_eval.mat
+/audit_m4_topology_restoration/baseline/tree/audit_s2_design_continuation/runs/WP7_oldnew.mat
+/audit_m4_topology_restoration/baseline/tree/audit_termination_mesh_admission/runs/TMA_240x30.mat
+/audit_m4_topology_restoration/baseline/tree/audit_termination_mesh_admission/runs/TMA_320x40.mat
+/audit_m4_topology_restoration/baseline/tree/audit_termination_mesh_admission/runs/WP9_summary.mat
+/audit_m4_topology_restoration/baseline/tree/docs/978-3-7091-2566-3_9.pdf
+/audit_m4_topology_restoration/runs/B0_320x40.mat
+/audit_m4_topology_restoration/runs/B0_320x40_density_history.npz
+/audit_m4_topology_restoration/runs/HISTORICAL_320x40_density_history.npz
+/audit_m4_topology_restoration/runs/R1_320x40.mat
+/audit_m4_topology_restoration/runs/R1_320x40_density_history.npz
+/audit_m4_topology_restoration/runs/R2_320x40.mat
+/audit_m4_topology_restoration/runs/R2_320x40_density_history.npz
+/audit_multiplicity_reconstruction/runs/WP5_summary.mat
+/audit_multiplicity_subN_confirmation/runs/WP3_summary.mat
+/audit_p_continuation/runs/Bmature_320x40.mat
+/audit_p_continuation/runs/Bmature_320x40_density_history.npz
+/audit_p_continuation/runs/P1_320x40.mat
+/audit_p_continuation/runs/P1_320x40_density_history.npz
+/audit_pm1_printed_mass_continuation/runs/Bmature_320x40.mat
+/audit_pm1_printed_mass_continuation/runs/PM1_320x40.mat
+/audit_pm1_printed_mass_continuation/runs/PM1_320x40_density_history.npz
+/audit_projection_800x100/runs/T800_800x100.mat
+/audit_s2_design_continuation/runs/SDC_320x40.mat
+/audit_s2_design_continuation/runs/WP6_eval.mat
+/audit_s2_design_continuation/runs/WP7_oldnew.mat
+/audit_s2_final_conference_restoration/runs/base_240x30.mat
+/audit_s2_final_conference_restoration/runs/base_320x40.mat
+/audit_s2_final_conference_restoration/runs/base_400x50.mat
+/audit_s2_final_conference_restoration/runs/nd_160x20.mat
+/audit_s2_final_conference_restoration/runs/nd_160x20_cap3000.mat
+/audit_s2_final_conference_restoration/runs/nd_240x30.mat
+/audit_s2_final_conference_restoration/runs/nd_320x40.mat
+/audit_s2_final_conference_restoration/runs/nd_400x50.mat
+/audit_termination_mesh_admission/runs/TMA_240x30.mat
+/audit_termination_mesh_admission/runs/TMA_320x40.mat
+/audit_termination_mesh_admission/runs/WP9_summary.mat
+/docs/978-3-7091-2566-3_9.pdf

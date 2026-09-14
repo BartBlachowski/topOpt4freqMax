@@ -1,0 +1,66 @@
+{
+  "schema": "nmp_postcheck/1",
+  "mode": "smoke",
+  "mesh": "48x6",
+  "is_warmup": true,
+  "when": "2026-09-14T01:27:32.356+02:00",
+  "hook": "breakpoint condition at analysis/OlhoffCurrent/olhoffcurrent_run.m:249 (if out.is_warmup), after the result is assembled",
+  "identity": {
+    "when": "2026-09-14T01:27:32.357+02:00",
+    "head": "b21483b158f58e05e7b56957f2fbe8e1d2891395",
+    "branch": "benchmark-methodology-r2",
+    "tracked_changes": [
+      "examples/Performance/performance_comparison.m"
+    ],
+    "runner_sha256": "3add5cc56b45664bbfabbb79e914520b3bc46f3b20dac40129a09acb957e53fc",
+    "olhoffcurrent_run_sha256": "eb3b5a18a2a83da252f8f5cfe0be30b793c4fcb1daef074c61c953325f8e969f",
+    "impl_tree_sha256": "4ba9a3ae10881344a0e60f2b8a8976c5ec9ceccf966bc2a3da4f37fb5aebffbf",
+    "impl_n_files": 79,
+    "impl_manifest_ok": true,
+    "source_manifest_sha256": "aee44aa9172a8105314bbb9475e28bed8a53d4d154824a8748abf64a208b1836",
+    "lock_sha256": "fe4da0c52e27a0153d3572d67d831dddb6ee0b0330523d5decfdc5cc2f6ef4af",
+    "checks": {
+      "head": true,
+      "branch": true,
+      "impl_tree": true,
+      "source_manifest": true,
+      "runner_is_locked_edit": true,
+      "olhoffcurrent_run_committed": true,
+      "tracked_changes_only_locked": true,
+      "lock_unchanged": true
+    },
+    "pass": true
+  },
+  "status": "CAP_HIT",
+  "status_note": "reached the 5-outer safety cap; this is NOT convergence",
+  "ok": false,
+  "preset": "duOlhoffPedersenAdaptiveBoxSensitivityFiltered",
+  "production_preset": "duOlhoffPedersenAdaptiveBoxSensitivityFiltered",
+  "frozen_config_hash": "",
+  "effective_config_hash": "5dc48b928510c0aaeda58e8b1f70c34aba191c2ff4b839e58561dc643148d44c",
+  "config_hash_rehashed_from_out_configuration": "5dc48b928510c0aaeda58e8b1f70c34aba191c2ff4b839e58561dc643148d44c",
+  "config_hash_rehashed_from_solver_effective_cfg": "5dc48b928510c0aaeda58e8b1f70c34aba191c2ff4b839e58561dc643148d44c",
+  "x_sha256": "d04e514d5f4edd855697ec9ba0e34b1c2fc7ce1050dbce48447d593eb041f659",
+  "tap_present": true,
+  "tap_crosscheck": {
+    "rho_sha256_equals_out_x": true,
+    "outer_equals_accounting": true,
+    "inner_equals_accounting": true,
+    "sum_tOuter_equals_accounting": true,
+    "sum_tInner_equals_accounting": true,
+    "sum_tEig_equals_accounting": true,
+    "callWall_equals_accounting": true,
+    "omega123_equals_out": true
+  },
+  "file": "RUN_OUT.mat",
+  "file_sha256": "d3fa9f6b8eabe27158bfb06a51946ffb9c37bde8b086c8b954a602307939bb69",
+  "checks": {
+    "identity": true,
+    "config_hash_unchanged": true,
+    "preset_unchanged": true,
+    "tap_consistent_with_runner_accounting": true
+  },
+  "warmup_note": "runner warm-up (discarded); frozen-hash check not applicable",
+  "pass": true,
+  "hook_seconds": 0.11898858333333333
+}

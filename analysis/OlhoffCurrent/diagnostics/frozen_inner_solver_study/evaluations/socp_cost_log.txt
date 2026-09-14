@@ -1,0 +1,2 @@
+SOCP repeat 1: assembly 0.192s solve 45.585s cert 1.220s gap 9.153e-12 fidelity 1 bitwise 1
+SOCP repeat 2: assembly 0.003s solve 45.456s cert 0.811s gap 9.153e-12 fidelity 1 bitwise 1

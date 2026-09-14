@@ -1,0 +1,138 @@
+
+outvector1 =
+
+     0     0     4     3     2
+
+
+outvector2 =
+
+    29    -6    -6
+
+
+outvector1 =
+
+    1.0000         0    2.5550    1.8906    1.0765
+
+
+outvector2 =
+
+   11.2616   -3.0043   -0.6529
+
+
+outvector1 =
+
+    2.0000    1.0000    2.0722    1.7959    1.1910
+
+
+outvector2 =
+
+    8.9376   -0.3497   -0.0086
+
+
+outvector1 =
+
+    3.0000         0    2.0162    1.7914    1.2244
+
+
+outvector2 =
+
+    8.7730   -0.0030   -0.0011
+
+
+outvector1 =
+
+    4.0000    1.0000    2.0170    1.7835    1.2335
+
+
+outvector2 =
+
+    8.7704   -0.0000   -0.0001
+
+
+outvector1 =
+
+    5.0000    1.0000    2.0174    1.7807    1.2367
+
+
+outvector2 =
+
+    8.7703   -0.0000   -0.0000
+
+
+outvector1 =
+
+    6.0000    1.0000    2.0175    1.7801    1.2374
+
+
+outvector2 =
+
+    8.7702   -0.0000   -0.0000
+
+
+outvector1 =
+
+    7.0000         0    2.0175    1.7800    1.2375
+
+
+outvector2 =
+
+    8.7702   -0.0000   -0.0000
+
+
+outvector1 =
+
+    8.0000         0    2.0175    1.7800    1.2375
+
+
+outvector2 =
+
+    8.7702   -0.0000   -0.0000
+
+
+outvector1 =
+
+    9.0000         0    2.0175    1.7800    1.2375
+
+
+outvector2 =
+
+    8.7702   -0.0000   -0.0000
+
+
+outvector1 =
+
+   10.0000         0    2.0175    1.7800    1.2375
+
+
+outvector2 =
+
+    8.7702   -0.0000   -0.0000
+
+
+outvector1 =
+
+   11.0000         0    2.0175    1.7800    1.2375
+
+
+outvector2 =
+
+    8.7702   -0.0000   -0.0000
+
+
+outvector1 =
+
+   12.0000         0    2.0175    1.7800    1.2375
+
+
+outvector2 =
+
+    8.7702   -0.0000   -0.0000
+
+                official_toy_x: [2.0175 1.7800 1.2375]
+               official_toy_f0: 8.7702
+              official_toy_kkt: 1.4473e-05
+    official_toy_converged_kkt: 5.4199e-07
+                     quadratic: [1×1 struct]
+                       verdict: 'GCMMA_IMPLEMENTATION_VALIDATED'
+                        source: 'official smoptit.se GCMMA-MMA-code-1.5, unmodified'
+

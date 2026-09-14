@@ -1,0 +1,110 @@
+--- production/+impl/architecture/olhoffSolve.m
++++ study/scripts/cs_olhoffSolveSOCP.m
+@@ -1,2 +1,9 @@
+-function res = olhoffSolve(cfg)
++function res = cs_olhoffSolveSOCP(cfg, treat)                                  %CS:signature%
++%CS-ORIG%function res = olhoffSolve(cfg)
++%CS_OLHOFFSOLVESOCP  STUDY COPY of +impl/architecture/olhoffSolve.m for the     %CS:signature%
++%   c480_socp_causal_run single-factor experiment.  Every line that differs     %CS:signature%
++%   from production carries a %CS:<category>% tag; every replaced production    %CS:signature%
++%   line is retained as a %CS-ORIG% comment.  treat.innerSolver selects         %CS:signature%
++%   'repeatedMMA' (production dispatch, verbatim) or 'exactSOCP' (certified     %CS:signature%
++%   conic solve of problem (25), cs_socp_inner).  See AUDIT_PREREGISTRATION.md. %CS:signature%
+ %OLHOFFSOLVE  Du & Olhoff (2007) sec. 3.5 -- maximization of the n-th
+@@ -149,2 +156,17 @@
+ projStage = 1;    % index into the projection sharpness levels
++socpRec     = {};                                                            %CS:telemetry%
++termination = '';                                                              %CS:failclosed%
++assert(any(strcmp(treat.innerSolver, {'repeatedMMA','exactSOCP'})), ...        %CS:dispatch%
++    'cs:innerSolver', 'unknown treat.innerSolver');                            %CS:dispatch%
++startOuter  = 1;                                                               %CS:checkpoint%
++if isfield(treat,'resumeFrom') && ~isempty(treat.resumeFrom)                   %CS:checkpoint%
++    CK = load(treat.resumeFrom);                                               %CS:checkpoint%
++    rho = CK.rho; hist = CK.hist; log = CK.log; cumInner = CK.cumInner;        %CS:checkpoint%
++    dg = CK.dg; mmaState = CK.mmaState; multState = CK.multState;              %CS:checkpoint%
++    mvState = CK.mvState; lamPrev = CK.lamPrev; pStage = CK.pStage;            %CS:checkpoint%
++    prevStage = CK.prevStage; projStage = CK.projStage; z = CK.z;              %CS:checkpoint%
++    sChain = CK.sChain; socpRec = CK.socpRec; startOuter = CK.outer + 1;       %CS:checkpoint%
++    log{end+1} = sprintf('resumed from checkpoint after outer %d', CK.outer);  %CS:checkpoint%
++    clear CK                                                                   %CS:checkpoint%
++end                                                                            %CS:checkpoint%
+ 
+@@ -165,3 +187,4 @@
+ 
+-for outer = 1:maxOuter
++for outer = startOuter:maxOuter                                                %CS:checkpoint%
++%CS-ORIG%for outer = 1:maxOuter
+     tOuterTic = tic;   % BENCHMARK TIMING INSTRUMENTATION ONLY
+@@ -215,2 +238,13 @@
+     tEig = toc(te);
++    if ~all(isfinite(w)) || ~all(isfinite(lam))                                %CS:failclosed%
++        termination = 'NUMERICAL_FAILURE';                                     %CS:failclosed%
++        log{end+1} = sprintf('iter %d: NUMERICAL_FAILURE non-finite eigenvalues', outer); %CS:failclosed%
++        break                                                                  %CS:failclosed%
++    end                                                                        %CS:failclosed%
++    if outer == 1 && isfield(treat,'expectOmega1') && ~isempty(treat.expectOmega1) && ... %CS:identity%
++            ~isequal(w(1:min(Jcalc,numel(w))), treat.expectOmega1(:))          %CS:identity%
++        termination = 'EVIDENCE_IDENTITY_FAILURE';                             %CS:identity%
++        log{end+1} = 'iter 1: FE spectrum differs bitwise from the control';   %CS:identity%
++        break                                                                  %CS:identity%
++    end                                                                        %CS:identity%
+ 
+@@ -287,2 +321,7 @@
+     tGrad = toc(tg);
++    if ~all(isfinite(F(:))) || ~all(isfinite(fJJ))                             %CS:failclosed%
++        termination = 'NUMERICAL_FAILURE';                                     %CS:failclosed%
++        log{end+1} = sprintf('iter %d: NUMERICAL_FAILURE non-finite gradients', outer); %CS:failclosed%
++        break                                                                  %CS:failclosed%
++    end                                                                        %CS:failclosed%
+ 
+@@ -340,3 +379,17 @@
+     end
+-    if innerLP
++    if strcmp(treat.innerSolver, 'exactSOCP')                                  %CS:dispatch%
++        flags = struct('outer',outer,'N',N,'n',n,'Jcalc',Jcalc,'useOff',useOff, ... %CS:dispatch%
++            'offDiag',offDiag,'useProj',useProj,'useDensityFilter',useDensityFilter, ... %CS:dispatch%
++            'useSensFilter',useSensFilter,'innerLP',innerLP, ...               %CS:dispatch%
++            'innerDesignVar',innerDesignVar);                                  %CS:dispatch%
++        [drho, st, rec] = cs_socp_inner(ctx, flags, treat);                    %CS:dispatch%
++        socpRec{outer} = rec;                                                  %CS:telemetry%
++        if ~rec.accepted                                                       %CS:failclosed%
++            termination = rec.termination;                                     %CS:failclosed%
++            log{end+1} = sprintf('iter %d: %s -- %s; no update applied', ...   %CS:failclosed%
++                outer, rec.termination, rec.reason);                           %CS:failclosed%
++            break                                                              %CS:failclosed%
++        end                                                                    %CS:failclosed%
++    elseif innerLP                                                             %CS:dispatch%
++%CS-ORIG%    if innerLP
+         [drho, st] = innerLoopLP(ctx);
+@@ -365,2 +418,7 @@
+     end
++    if ~all(isfinite(rho)) || ~all(isfinite(drho))                             %CS:failclosed%
++        termination = 'NUMERICAL_FAILURE';                                     %CS:failclosed%
++        log{end+1} = sprintf('iter %d: NUMERICAL_FAILURE non-finite design', outer); %CS:failclosed%
++        break                                                                  %CS:failclosed%
++    end                                                                        %CS:failclosed%
+     % cfg.stop.field is 'designVariable': BOTH measures below are formed from
+@@ -559,2 +617,9 @@
+ 
++    if verbose, fprintf('[cs] outer %d done  t=%.2fs\n', outer, hist.tOuter(outer)); end %CS:telemetry%
++    if isfield(treat,'checkpointEvery') && treat.checkpointEvery > 0 && ...    %CS:checkpoint%
++            mod(outer, treat.checkpointEvery) == 0 && ~convOuter               %CS:checkpoint%
++        save(treat.checkpointFile, 'rho','hist','log','cumInner','dg','mmaState', ... %CS:checkpoint%
++            'multState','mvState','lamPrev','pStage','prevStage','projStage', ... %CS:checkpoint%
++            'z','sChain','socpRec','outer','-v7.3','-nocompression');          %CS:checkpoint%
++    end                                                                        %CS:checkpoint%
+     if convOuter
+@@ -563,2 +628,6 @@
+     end
++    if isfield(treat,'stopAfter') && treat.stopAfter > 0 && outer >= treat.stopAfter %CS:preflight%
++        log{end+1} = sprintf('preflight stopAfter=%d reached', treat.stopAfter); %CS:preflight%
++        break                                                                  %CS:preflight%
++    end                                                                        %CS:preflight%
+ end
+@@ -578,2 +647,6 @@
+ res.status = local_status(log, numel(hist.N), maxOuter);
++if ~isempty(termination), res.status = termination; end                       %CS:failclosed%
++res.termination = termination;                                                 %CS:failclosed%
++res.socp = socpRec;                                                            %CS:telemetry%
++res.treat = treat;                                                             %CS:telemetry%
+ if useExhaustion

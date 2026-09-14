@@ -1,0 +1,37 @@
+
+========================================================================
+TEST_PATH_ISOLATION
+========================================================================
+  [PASS] A  clean path + OlhoffCurrent -> PASS
+  [PASS] B  + analysis/OlhoffM4Reconstruction -> BLOCK
+  [PASS] C  + external /Matlab/Olhoff -> BLOCK
+  [PASS] D  + Matlab/reproduction2007 -> BLOCK
+      premise: olhoffSolve is ours = 1, innerLoop shadowed = 1, gate refuses = 1
+  [PASS] E  helper shadowing only, olhoffSolve still ours -> BLOCK
+      premise: declared copy won = 1, gate refuses = 1
+  [PASS] F  a declared collision that WINS -> BLOCK
+------------------------------------------------------------------------
+  failures: 0
+
+SUITE test_path_isolation                           failures=0 
+SUITE test_currentness                              failures=NaN MATLAB:UndefinedFunction: Unrecognized function or variable 'test_currentness'.
+SUITE test_source_integrity                         failures=NaN MATLAB:UndefinedFunction: Unrecognized function or variable 'test_source_integrity'.
+SUITE test_evidence_retention                       failures=NaN MATLAB:UndefinedFunction: Unrecognized function or variable 'test_evidence_retention'.
+SUITE test_finalization_gate                        failures=NaN MATLAB:UndefinedFunction: Unrecognized function or variable 'test_finalization_gate'.
+SUITE test_path_isolation                           failures=0 
+SUITE test_currentness                              failures=NaN MATLAB:UndefinedFunction: Unrecognized function or variable 'test_currentness'.
+SUITE test_source_integrity                         failures=NaN MATLAB:UndefinedFunction: Unrecognized function or variable 'test_source_integrity'.
+SUITE test_evidence_retention                       failures=NaN MATLAB:UndefinedFunction: Unrecognized function or variable 'test_evidence_retention'.
+SUITE test_finalization_gate                        failures=NaN MATLAB:UndefinedFunction: Unrecognized function or variable 'test_finalization_gate'.
+
+ans = 
+
+  struct with fields:
+
+      repo: '/Users/piotrek/Programming/topOpt4freqMax'
+      kind: 'gates'
+      when: '13-Sep-2026 21:21:35'
+    matlab: '25.2.0.2998904 (R2025b)'
+      head: '013cc48451d33bed61c5c4eea174bbd898d548a2'
+    suites: [1×5 struct]
+

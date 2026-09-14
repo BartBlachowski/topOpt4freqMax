@@ -1,0 +1,63 @@
+diff --git a/repro/PLAN_OLHOFFCURRENT_UPDATE.md b/repro/PLAN_OLHOFFCURRENT_UPDATE.md
+index c420ab7..1ba6824 100644
+--- a/repro/PLAN_OLHOFFCURRENT_UPDATE.md
++++ b/repro/PLAN_OLHOFFCURRENT_UPDATE.md
+@@ -192,3 +192,58 @@ parents) → 3. Phase 4.1–4.2 (manifest, provenance) → 4. Phase 3 (preset) 
+ 5. Phase 4.3–4.5 (tests, live re-execution of S160x20) → 6. Phase 5 (harness) →
+ 7. one-mesh preflight run of `performance_comparison.m` at 160×20 → 8. nine-mesh
+ campaign. Phase 6 is independent and can precede or follow.
++
++---
++
++## 7. Fair-comparison settings for all three methods (suggestion, 2026-09-13)
++
++Principle: equalise what defines the PROBLEM and the MEASUREMENT; keep what
++defines the METHOD; expose per-iteration cost next to iteration counts.
++
++### 7.1 Same problem (must be identical)
++
++| item | common setting | today |
++|---|---|---|
++| FE model | Q4 plane stress, consistent mass, mid-height pins, ux both ends | shared |
++| stiffness | Pedersen (2000): ρ^3 above 0.1, ρ/100 below; p = 3 fixed | Olhoff Pedersen; Proposed/Yuksel SIMP, E_min 1e-9 |
++| mass | linear in ρ | Olhoff linear; Yuksel cut-off 0.1 (ρ^6 below); Proposed linear |
++| density floor | one value; 1e-7 gives void stiffness 1e-9 E under Pedersen (= today's void of the other two). NOT yet validated for Olhoff (sweep ran at 1e-3, void 1e-5 E) — one run at 240×30 | Olhoff 1e-3, others 1e-9 |
++| filter | Sigmund sensitivity filter, ONE shared H builder (top88 form), physical R = 0.06 | three builders (Proposed splits rmin in x/y; Yuksel pads 'symmetric'); radii 2.0 / 2.5 el vs 0.06 |
++| projection / continuation | none (β = 1, p = 3 from iteration 1) | already so |
++| initial design, volume | uniform 0.5, α = 0.5 | shared |
++| eigensolver | eigs, fixed v0, tol 1e-12, only the modes the method needs (Olhoff: maxCluster 2 → 3 modes instead of 5) | Olhoff extracts 5 |
++
++### 7.2 Same stop and step semantics
++
++- Stopping for all: per-element RMS density change ‖Δρ‖₂/√NE < 8.8e-4 (the Olhoff
++  value). Proposed/Yuksel currently stop on max|Δx| < 0.01 and already log
++  `final_rms_density_change` (1.5e-4 … 2e-3 in the last campaign), so the switch is
++  of the same order. Keep max|Δx| as a secondary column.
++- Move limit 0.10 for all (Yuksel 0.1 already; Olhoff adaptive box starts at 0.10;
++  Proposed 0.2 → 0.1, keep 0.2 as a sensitivity row — its 160×20/240×30 rows ended
++  grey, M_nd 0.26 / 0.16).
++- Caps unchanged (Olhoff 400; others 2000/5000); a cap hit is not an observation.
++- Single thread, warm-up, timing boundary as now.
++
++### 7.3 Method-native, keep but expose
++
++- Olhoff's nested MMA loop and tolInner 0.05 (a 10× cost band, NOTES §21 — report
++  the band). Yuksel's two stages. Proposed's single eigenanalysis + static solves.
++  Olhoff's fixed multiplicity window.
++- Objectives differ (min(ω₁,ω₂) vs ω₁ via a surrogate): report the gap.
++
++### 7.4 Columns
++
++outer count, native inner counts, common-evaluator ω₁/ω₂/ω₃ (one evaluator for all,
++stated), gap, M_nd, wall time, and per-iteration costs: eigen/static solve per outer
++step, MMA/OC update per sub-iterate, remaining per-outer overhead. Fit the
++per-iteration costs vs NE; never total time (Olhoff outer count 121 → 93 → 246 across
++the sweep; Yuksel stage-1 counts were non-monotone in the last campaign).
++
++### 7.5 Changes to the frozen profiles this implies
++
++Proposed: radius units, interpolation (Pedersen + linear mass), stopping rule,
++move 0.2 → 0.1. Yuksel: radius units, mass model, stopping rule. Olhoff: floor
++1e-3 → 1e-7 and Nmax 4 → 2, both validated by one run first. All three profiles get
++new ids in `profile_freeze_manifest.json`; the old campaign remains citable as the
++previous protocol.

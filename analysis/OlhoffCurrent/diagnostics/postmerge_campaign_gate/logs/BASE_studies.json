@@ -1,0 +1,479 @@
+{
+  "repo": "/Users/piotrek/Programming/topOpt4freqMax",
+  "kind": "studies",
+  "when": "13-Sep-2026 21:21:42",
+  "matlab": "25.2.0.2998904 (R2025b)",
+  "head": "013cc48451d33bed61c5c4eea174bbd898d548a2",
+  "suites": [],
+  "studies": [
+    {
+      "name": "admission_rule",
+      "ok": false,
+      "gates": {
+        "G1": false,
+        "G2": false,
+        "G3": true,
+        "G4": true,
+        "G5": true
+      },
+      "nMissing": 0,
+      "nMismatched": 0,
+      "historical": "n/a",
+      "current": "n/a",
+      "nSuperseded": 0
+    },
+    {
+      "name": "beta_transition_mechanism",
+      "ok": true,
+      "gates": {
+        "G1": true,
+        "G2": true,
+        "G3": true,
+        "G4": true,
+        "G5": true
+      },
+      "nMissing": 0,
+      "nMismatched": 0,
+      "historical": "n/a",
+      "current": "n/a",
+      "nSuperseded": 0
+    },
+    {
+      "name": "c480_socp_causal_run",
+      "ok": true,
+      "gates": {
+        "G1": true,
+        "G2": true,
+        "G3": true,
+        "G4": true,
+        "G5": true
+      },
+      "nMissing": 0,
+      "nMismatched": 0,
+      "historical": "n/a",
+      "current": "n/a",
+      "nSuperseded": 0
+    },
+    {
+      "name": "controller_architecture_offline",
+      "ok": false,
+      "gates": {
+        "G1": false,
+        "G2": false,
+        "G3": false,
+        "G4": false,
+        "G5": true
+      },
+      "nMissing": 0,
+      "nMismatched": 0,
+      "historical": "n/a",
+      "current": "n/a",
+      "nSuperseded": 0
+    },
+    {
+      "name": "dynamical_regime",
+      "ok": false,
+      "gates": {
+        "G1": false,
+        "G2": false,
+        "G3": true,
+        "G4": false,
+        "G5": false
+      },
+      "nMissing": 3,
+      "nMismatched": 0,
+      "historical": "n/a",
+      "current": "n/a",
+      "nSuperseded": 0
+    },
+    {
+      "name": "filtered_subproblem_integrability_audit",
+      "ok": true,
+      "gates": {
+        "G1": true,
+        "G2": true,
+        "G3": true,
+        "G4": true,
+        "G5": true
+      },
+      "nMissing": 0,
+      "nMismatched": 0,
+      "historical": "n/a",
+      "current": "n/a",
+      "nSuperseded": 0
+    },
+    {
+      "name": "fixedmove_400_dynamics",
+      "ok": false,
+      "gates": {
+        "G1": false,
+        "G2": false,
+        "G3": true,
+        "G4": false,
+        "G5": false
+      },
+      "nMissing": 2,
+      "nMismatched": 0,
+      "historical": "n/a",
+      "current": "n/a",
+      "nSuperseded": 0
+    },
+    {
+      "name": "frozen_inner_solver_study",
+      "ok": false,
+      "gates": {
+        "G1": true,
+        "G2": false,
+        "G3": true,
+        "G4": true,
+        "G5": true
+      },
+      "nMissing": 0,
+      "nMismatched": 0,
+      "historical": "n/a",
+      "current": "n/a",
+      "nSuperseded": 0
+    },
+    {
+      "name": "frozen_problem25_reference",
+      "ok": false,
+      "gates": {
+        "G1": true,
+        "G2": false,
+        "G3": true,
+        "G4": true,
+        "G5": true
+      },
+      "nMissing": 0,
+      "nMismatched": 0,
+      "historical": "n/a",
+      "current": "n/a",
+      "nSuperseded": 0
+    },
+    {
+      "name": "gray_kkt_forensic_audit",
+      "ok": true,
+      "gates": {
+        "G1": true,
+        "G2": true,
+        "G3": true,
+        "G4": true,
+        "G5": true
+      },
+      "nMissing": 0,
+      "nMismatched": 0,
+      "historical": "n/a",
+      "current": "n/a",
+      "nSuperseded": 0
+    },
+    {
+      "name": "move_activity_400",
+      "ok": false,
+      "gates": {
+        "G1": true,
+        "G2": false,
+        "G3": true,
+        "G4": false,
+        "G5": true
+      },
+      "nMissing": 0,
+      "nMismatched": 1,
+      "historical": "n/a",
+      "current": "n/a",
+      "nSuperseded": 0
+    },
+    {
+      "name": "move_activity_offline",
+      "ok": false,
+      "gates": {
+        "G1": false,
+        "G2": false,
+        "G3": true,
+        "G4": true,
+        "G5": true
+      },
+      "nMissing": 0,
+      "nMismatched": 0,
+      "historical": "n/a",
+      "current": "n/a",
+      "nSuperseded": 0
+    },
+    {
+      "name": "move_ladder_necessity",
+      "ok": false,
+      "gates": {
+        "G1": true,
+        "G2": true,
+        "G3": true,
+        "G4": false,
+        "G5": true
+      },
+      "nMissing": 0,
+      "nMismatched": 1,
+      "historical": "n/a",
+      "current": "n/a",
+      "nSuperseded": 0
+    },
+    {
+      "name": "move_stop",
+      "ok": false,
+      "gates": {
+        "G1": false,
+        "G2": false,
+        "G3": true,
+        "G4": false,
+        "G5": false
+      },
+      "nMissing": 4,
+      "nMismatched": 0,
+      "historical": "n/a",
+      "current": "n/a",
+      "nSuperseded": 0
+    },
+    {
+      "name": "move_transition",
+      "ok": false,
+      "gates": {
+        "G1": false,
+        "G2": false,
+        "G3": true,
+        "G4": true,
+        "G5": true
+      },
+      "nMissing": 0,
+      "nMismatched": 0,
+      "historical": "n/a",
+      "current": "n/a",
+      "nSuperseded": 0
+    },
+    {
+      "name": "nine_mesh_campaign_audit",
+      "ok": true,
+      "gates": {
+        "G1": true,
+        "G2": true,
+        "G3": true,
+        "G4": true,
+        "G5": true
+      },
+      "nMissing": 0,
+      "nMismatched": 0,
+      "historical": "n/a",
+      "current": "n/a",
+      "nSuperseded": 0
+    },
+    {
+      "name": "postmerge_campaign_gate",
+      "ok": false,
+      "gates": {
+        "G1": false,
+        "G2": false,
+        "G3": false,
+        "G4": false,
+        "G5": true
+      },
+      "nMissing": 0,
+      "nMismatched": 0,
+      "historical": "n/a",
+      "current": "n/a",
+      "nSuperseded": 0
+    },
+    {
+      "name": "scientific_delta_olhoff_migration",
+      "ok": false,
+      "gates": {
+        "G1": true,
+        "G2": false,
+        "G3": true,
+        "G4": true,
+        "G5": true
+      },
+      "nMissing": 0,
+      "nMismatched": 0,
+      "historical": "n/a",
+      "current": "n/a",
+      "nSuperseded": 0
+    },
+    {
+      "name": "three_rung_architecture",
+      "ok": false,
+      "gates": {
+        "G1": true,
+        "G2": false,
+        "G3": true,
+        "G4": true,
+        "G5": true
+      },
+      "nMissing": 0,
+      "nMismatched": 0,
+      "historical": "n/a",
+      "current": "n/a",
+      "nSuperseded": 0
+    },
+    {
+      "name": "three_rung_canary_preflight",
+      "ok": true,
+      "gates": {
+        "G1": true,
+        "G2": true,
+        "G3": true,
+        "G4": true,
+        "G5": true
+      },
+      "nMissing": 0,
+      "nMismatched": 0,
+      "historical": "n/a",
+      "current": "n/a",
+      "nSuperseded": 0
+    },
+    {
+      "name": "three_rung_promotion_closure",
+      "ok": false,
+      "gates": {
+        "G1": true,
+        "G2": true,
+        "G3": true,
+        "G4": false,
+        "G5": false
+      },
+      "nMissing": 1,
+      "nMismatched": 0,
+      "historical": "n/a",
+      "current": "n/a",
+      "nSuperseded": 0
+    },
+    {
+      "name": "three_rung_promotion_validation",
+      "ok": true,
+      "gates": {
+        "G1": true,
+        "G2": true,
+        "G3": true,
+        "G4": true,
+        "G5": true
+      },
+      "nMissing": 0,
+      "nMismatched": 0,
+      "historical": "n/a",
+      "current": "n/a",
+      "nSuperseded": 0
+    },
+    {
+      "name": "three_rung_promotion_validation_retry1",
+      "ok": false,
+      "gates": {
+        "G1": true,
+        "G2": false,
+        "G3": true,
+        "G4": false,
+        "G5": false
+      },
+      "nMissing": 1,
+      "nMismatched": 0,
+      "historical": "n/a",
+      "current": "n/a",
+      "nSuperseded": 0
+    },
+    {
+      "name": "three_rung_resolution_240",
+      "ok": true,
+      "gates": {
+        "G1": true,
+        "G2": true,
+        "G3": true,
+        "G4": true,
+        "G5": true
+      },
+      "nMissing": 0,
+      "nMismatched": 0,
+      "historical": "n/a",
+      "current": "n/a",
+      "nSuperseded": 0
+    },
+    {
+      "name": "topology_maturity_transition",
+      "ok": false,
+      "gates": {
+        "G1": false,
+        "G2": false,
+        "G3": true,
+        "G4": false,
+        "G5": false
+      },
+      "nMissing": 1,
+      "nMismatched": 0,
+      "historical": "n/a",
+      "current": "n/a",
+      "nSuperseded": 0
+    },
+    {
+      "name": "two_branch_controller_validation",
+      "ok": true,
+      "gates": {
+        "G1": true,
+        "G2": true,
+        "G3": true,
+        "G4": true,
+        "G5": true
+      },
+      "nMissing": 0,
+      "nMismatched": 0,
+      "historical": "n/a",
+      "current": "n/a",
+      "nSuperseded": 0
+    },
+    {
+      "name": "two_branch_maturity_240",
+      "ok": false,
+      "gates": {
+        "G1": false,
+        "G2": false,
+        "G3": true,
+        "G4": false,
+        "G5": false
+      },
+      "nMissing": 2,
+      "nMismatched": 0,
+      "historical": "n/a",
+      "current": "n/a",
+      "nSuperseded": 0
+    },
+    {
+      "name": "two_rung_architecture",
+      "ok": false,
+      "gates": {
+        "G1": true,
+        "G2": false,
+        "G3": true,
+        "G4": true,
+        "G5": true
+      },
+      "nMissing": 0,
+      "nMismatched": 0,
+      "historical": "n/a",
+      "current": "n/a",
+      "nSuperseded": 0
+    }
+  ],
+  "failing": [
+    "admission_rule",
+    "controller_architecture_offline",
+    "dynamical_regime",
+    "fixedmove_400_dynamics",
+    "frozen_inner_solver_study",
+    "frozen_problem25_reference",
+    "move_activity_400",
+    "move_activity_offline",
+    "move_ladder_necessity",
+    "move_stop",
+    "move_transition",
+    "postmerge_campaign_gate",
+    "scientific_delta_olhoff_migration",
+    "three_rung_architecture",
+    "three_rung_promotion_closure",
+    "three_rung_promotion_validation_retry1",
+    "topology_maturity_transition",
+    "two_branch_maturity_240",
+    "two_rung_architecture"
+  ]
+}

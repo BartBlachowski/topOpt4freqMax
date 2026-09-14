@@ -1,0 +1,212 @@
+{
+ "schema": "olhoffcurrent_postmerge_campaign_gate_metrics/2",
+ "attempt": 2,
+ "generated": "2026-09-13",
+ "verdicts": {
+  "PROVENANCE_GATE_HARDENING": "PASS",
+  "COMMITTED_PROVENANCE_SELF_CONTAINED": "PASS",
+  "GATE_REPAIR_SCOPE": "PASS",
+  "PREREGISTRATION_AMENDMENT_REVIEW": "PASS",
+  "FINALIZATION_GATE_PROVENANCE_LOGIC": "PASS",
+  "MIGRATION_COMMIT_REVIEW": "PASS",
+  "OLHOFF_MIGRATION_MERGE": "PASS",
+  "POSTMERGE_IMPLEMENTATION_IDENTITY": "PASS",
+  "POSTMERGE_TEST_SUITE": "FAIL",
+  "POSTMERGE_HISTORICAL_S160": "PASS",
+  "POSTMERGE_PEDERSEN_S160": "PASS",
+  "NINE_MESH_CONFIG_PREVIEW": "PASS",
+  "TELEMETRY_READINESS": "READY",
+  "REPOSITORY_INTEGRITY": "PASS",
+  "CAMPAIGN": "OLHOFF_NINE_MESH_CAMPAIGN_BLOCKED"
+ },
+ "blocker": {
+  "study": "gray_kkt_forensic_audit",
+  "tracked": false,
+  "gate": "G2 evidence gate",
+  "artifact": "analysis/OlhoffCurrent/SOURCE_MANIFEST.json",
+  "recorded_sha256": "431e7b3084507cd8b53862847b828cfd9f8948172e349bbae0c72749e8134aeb",
+  "current_sha256": "aee44aa9172a8105314bbb9475e28bed8a53d4d154824a8748abf64a208b1836",
+  "pre_merge": "PASS",
+  "post_merge": "FAIL",
+  "cause": "merge replaced the pinned production manifest",
+  "classification": "NEW (merge-induced, untracked local study)"
+ },
+ "commits": {
+  "pre_merge_head": "013cc48451d33bed61c5c4eea174bbd898d548a2",
+  "migration": "9b30ec45b038fb36e7cf20d57679b71cfd099fb3",
+  "repair": "b21483b158f58e05e7b56957f2fbe8e1d2891395",
+  "repair_tree": "64fc72d80ee7e505825febc4ca540e0d6e3339ef",
+  "superseded_first_repair": "adf86a3f8126e2099436b068ed3bd8a1921a2405",
+  "post_merge_head": "b21483b158f58e05e7b56957f2fbe8e1d2891395",
+  "merge": "fast-forward"
+ },
+ "probes": {
+  "committed_code_as_expected": 39,
+  "n": 39,
+  "fail_open_original_9b30ec4": 24,
+  "fail_open_first_repair_adf86a3": 6,
+  "original_attack_P5_P9_P10_now_fail": true
+ },
+ "real_study_R1": {
+  "historical_lines": 7,
+  "freeze": "bba45e72ea18eca7615315fcc543572d42a436bc",
+  "source": "1438aa3f4bd934f5b588587ef65f4f2ca35bac1c"
+ },
+ "identity": {
+  "impl_files": 79,
+  "impl_blob_equal_upstream": 79,
+  "impl_tree_sha256": "4ba9a3ae10881344a0e60f2b8a8976c5ec9ceccf966bc2a3da4f37fb5aebffbf",
+  "source_manifest_sha256": "aee44aa9172a8105314bbb9475e28bed8a53d4d154824a8748abf64a208b1836"
+ },
+ "suites_failures": {
+  "test_path_isolation": 0,
+  "test_currentness": 0,
+  "test_source_integrity": 0,
+  "test_evidence_retention": 0,
+  "test_finalization_gate": 2,
+  "test_preset_identity": 0,
+  "test_pedersen_adaptive_units": 0,
+  "test_cost_reporting": 0,
+  "test_preset_equivalence": 0,
+  "test_named_preset_reproduction:pedersen": 0,
+  "test_named_preset_reproduction:stageExhaustion": 0,
+  "test_config": 0,
+  "test_mass": 0,
+  "test_modules": 0,
+  "test_preset_resolution_unchanged": 0,
+  "test_stage_exhaustion": 0,
+  "test_outer_timing": 0,
+  "confbench_selftest": 1,
+  "harness": 0
+ },
+ "studies_post_merge_failing": [
+  "admission_rule",
+  "controller_architecture_offline",
+  "dynamical_regime",
+  "fixedmove_400_dynamics",
+  "frozen_inner_solver_study",
+  "frozen_problem25_reference",
+  "gray_kkt_forensic_audit",
+  "move_activity_400",
+  "move_activity_offline",
+  "move_ladder_necessity",
+  "move_stop",
+  "move_transition",
+  "scientific_delta_olhoff_migration",
+  "three_rung_architecture",
+  "three_rung_promotion_closure",
+  "three_rung_promotion_validation_retry1",
+  "topology_maturity_transition",
+  "two_branch_maturity_240",
+  "two_rung_architecture"
+ ],
+ "anchors": {
+  "historical": {
+   "outer": 91,
+   "inner": 2241,
+   "omega1": "169.495227021538",
+   "config_hash_87": "c0fe56ce897ce32ec8efc90ca1fb6bdd9c8326ee56700f5ce33adfb26bded17d",
+   "hash_81_reconstructed": "28756d22aacb59726be9f37583deca89fcfcecc93f9b867d46a49223ed1db697",
+   "pass": {
+    "bitwise_vs_migration_post": true,
+    "vs_premigration": true,
+    "bitwise_vs_upstream_snapshot": true,
+    "campaign_record": true,
+    "old_81row_hash": true,
+    "frozen_values": true,
+    "single_thread_clean_impl": true
+   },
+   "metrics": {
+    "status": "CONVERGED",
+    "nOuter": 91,
+    "innerTotal": 2241,
+    "innerMax": 51,
+    "omega1": 169.49522702153845,
+    "omega2": 171.9599959181592,
+    "gap12_pct": 1.4541818905068822,
+    "volume": 0.49999900877797954,
+    "Mnd_pct": 13.402499279526742,
+    "gray_fraction": 0.149375,
+    "mid_fraction": 0.025,
+    "rho_sha256_bytes": "22aa4447bc5f2855271f44f0661536f4ad6c86c5711cedcfe51ea6d97d0ff18b",
+    "final_move_max": 0.01,
+    "final_N": 2,
+    "log_tail": [
+     "iter 12: omega_J (J=3) is itself multiple -- (25b) undefined",
+     "iter 90: ||drho|| below eps but the move limit just changed (0.02 -> 0.01); convergence NOT asserted",
+     "converged at outer iteration 91 (||drho||_2 = 2.358e-02, max|drho| = 5.810e-03)"
+    ]
+   }
+  },
+  "pedersen": {
+   "outer": 121,
+   "inner": 2369,
+   "omega1": "169.210576386275",
+   "config_hash": "b1a5744df798ad624fcd0b8b4306888eb99816ee5ce60f51040e39e03e90d4f4",
+   "pass": {
+    "vs_committed_S160": true,
+    "bitwise_vs_migration_post": true,
+    "bitwise_vs_upstream_snapshot": true,
+    "committed_artifact_is_6b08708_blob": true,
+    "box_and_multiplicity": true,
+    "stop": true,
+    "frozen_values": true,
+    "single_thread_clean_impl": true
+   },
+   "metrics": {
+    "status": "CONVERGED",
+    "nOuter": 121,
+    "innerTotal": 2369,
+    "innerMax": 38,
+    "omega1": 169.21057638627477,
+    "omega2": 170.3999757559335,
+    "gap12_pct": 0.7029107725178851,
+    "volume": 0.4999989839449725,
+    "Mnd_pct": 11.461565500445316,
+    "gray_fraction": 0.141875,
+    "mid_fraction": 0.016875,
+    "rho_sha256_bytes": "2a1c0d0afa18e76398671d9f2213cd07e3853ce990f8ba74fcc3ab3f28004719",
+    "final_move_max": 0.1,
+    "final_N": 2,
+    "log_tail": [
+     "iter 4: omega_J (J=3) is itself multiple -- (25b) undefined",
+     "converged at outer iteration 121 (||drho||_2 = 4.745e-02, max|drho| = 1.358e-02)"
+    ]
+   }
+  }
+ },
+ "nine_config_hashes": {
+  "160x20": "b1a5744df798ad624fcd0b8b4306888eb99816ee5ce60f51040e39e03e90d4f4",
+  "240x30": "2fac1384239527b1a0108e1d34725021cdc7c5a26f1939b602239415b34847e1",
+  "320x40": "a1203d43efb240308cfcb520c92a6d9bc37a0c703c728fc2f3d298f779bc5f6e",
+  "400x50": "e40c6ba16c9addbb587d08ecab29669f7db560d09b980ca62c2096856b849280",
+  "480x60": "8e55d18251152ec2d26836593489c14f4842390d912d7c66f43f3b18730c83de",
+  "560x70": "8b2533a3caf8432d40a54dbcbd8958900e333c410527d5547c53699b9e373ccf",
+  "640x80": "cbe8dcf070d3e318a889867b5168fdbb09f1b6babfd46f981447d96e9a073aaf",
+  "720x90": "2893ad47136fc9a7775f1f4d9ff1dcba38e7fe14271dd12b5727ff4bd8bb54f3",
+  "800x100": "f9138743067afd0edce255ad26a6d7ae5c0f632a537516a4793eafecbacbe4cd"
+ },
+ "nine_preview_checks": {
+  "nine_meshes_resolved_not_solved": true,
+  "preset_is_recorded_production_and_benchmark": true,
+  "harness_route_hash_equals_api_hash": true,
+  "only_mesh_bound_rows_vary": true,
+  "stop_tolerance_is_mesh_scaled_rule": true,
+  "material_pedersen_linear_mass": true,
+  "no_eq4b": true,
+  "no_p_continuation": true,
+  "no_projection": true,
+  "fixed_physical_radius_0p06": true,
+  "adaptive_box": true,
+  "natural_design_change_stop": true,
+  "no_stage_exhaustion": true,
+  "nested_mma_no_socp": true,
+  "maxOuter_400_single_thread_no_diagnostics": true,
+  "distinct_hashes_per_mesh": true
+ },
+ "solves": {
+  "max_mesh": "160x20",
+  "above_160x20": 0,
+  "nine_mesh_campaign_run": false
+ }
+}

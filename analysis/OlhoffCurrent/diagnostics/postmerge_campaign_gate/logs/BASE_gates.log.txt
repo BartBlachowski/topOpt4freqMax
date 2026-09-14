@@ -1,0 +1,124 @@
+
+========================================================================
+TEST_PATH_ISOLATION
+========================================================================
+  [PASS] A  clean path + OlhoffCurrent -> PASS
+  [PASS] B  + analysis/OlhoffM4Reconstruction -> BLOCK
+  [PASS] C  + external /Matlab/Olhoff -> BLOCK
+  [PASS] D  + Matlab/reproduction2007 -> BLOCK
+      premise: olhoffSolve is ours = 1, innerLoop shadowed = 1, gate refuses = 1
+  [PASS] E  helper shadowing only, olhoffSolve still ours -> BLOCK
+      premise: declared copy won = 1, gate refuses = 1
+  [PASS] F  a declared collision that WINS -> BLOCK
+------------------------------------------------------------------------
+  failures: 0
+
+SUITE test_path_isolation                           failures=0 
+
+========================================================================
+TEST_CURRENTNESS
+========================================================================
+  [PASS] +impl/ matches SOURCE_MANIFEST.json                  75 files, tree edbfe47eb32109a2
+  [PASS] PROVENANCE.json names a 40-char upstream commit      695f03bdac20c423a4e1d389cf9db9187597bcc3
+  [PASS] currentness reports a declared state                 UPSTREAM_AHEAD
+  [PASS] local integrity is PASS                              upstream has 1 commit(s) after the promoted state on branch repro/natural-convergence. This is INFORMATIONAL: production currentness changes only when an upstream state is explicitly ACCEPTED and promoted. analysis/OlhoffCurrent remains valid production.
+  [PASS] a corrupted manifest yields LOCAL_MODIFIED           LOCAL_MODIFIED
+  [PASS] restoring the manifest restores the state            UPSTREAM_AHEAD
+  [PASS] the upstream preset it delegates to exists           duOlhoffFrozenM4
+  [PASS] the production preset name is not an audit code      duOlhoffFixedPenaltySensitivityFiltered
+------------------------------------------------------------------------
+  failures: 0
+
+SUITE test_currentness                              failures=0 
+
+========================================================================
+TEST_SOURCE_INTEGRITY
+========================================================================
+      (ok=1 nFiles=75 state=UPSTREAM_AHEAD mism=0 miss=0 extra=0)
+  [FAIL] A  pristine tree -> CURRENT
+      (ok=1 nFiles=75 state=UPSTREAM_AHEAD mism=0 miss=0 extra=0)
+  [FAIL] B  .DS_Store added -> CURRENT
+      (ok=1 nFiles=75 state=UPSTREAM_AHEAD mism=0 miss=0 extra=0)
+  [FAIL] C  *.asv added     -> CURRENT
+      (ok=1 nFiles=75 state=UPSTREAM_AHEAD mism=0 miss=0 extra=0)
+  [FAIL] D  *.m~ added      -> CURRENT
+      state=LOCAL_MODIFIED  mismatches=1 missing=0 extra=0
+  [PASS] E  recorded .m modified -> BLOCK
+      state=LOCAL_MODIFIED  mismatches=0 missing=1 extra=0
+  [PASS] F  recorded source removed -> BLOCK
+      state=LOCAL_MODIFIED  mismatches=0 missing=0 extra=1
+  [PASS] G  unexpected new .m under +impl -> BLOCK
+      state=LOCAL_MODIFIED  mismatches=0 missing=0 extra=1
+  [PASS] H  unexpected .m inside a package dir -> BLOCK
+      first blocker: FORBIDDEN DIRECTORY ON PATH: /Users/piotrek/Programming/topOpt4freqMax/Matlab/reproduction2007/fem
+  [PASS] I  competing Olhoff implementation on path -> BLOCK
+      first blocker: mmasub RESOLVES OUTSIDE PRODUCTION: /Users/piotrek/Programming/topOpt4freqMax/tools/Matlab/mmasub.m
+  [PASS] J  tools/Matlab 'asfound' mmasub wins -> BLOCK
+------------------------------------------------------------------------
+  failures: 4
+
+  [OK]   tree restored pristine: 75 source files, tree edbfe47eb32109a2
+SUITE test_source_integrity                         failures=4 
+
+========================================================================
+TEST_EVIDENCE_RETENTION
+========================================================================
+  [PASS] R5a git actually ignores the evidence path
+[evidence_declare] /Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/evidence/_gate_selftest/study/EVIDENCE.json  (3 artifacts)
+  [PASS] R1  all required present            -> PASS
+  [PASS] R1b required counted as present
+  [PASS] R5  git-ignored required evidence OK -> PASS
+  [PASS] R4  optional+scratch missing         -> PASS
+  [PASS] R3  required trajectory MODIFIED     -> FAIL
+  [PASS] R3b status is REQUIRED_HASH_MISMATCH
+  [PASS] R2  required trajectory MISSING      -> FAIL
+  [PASS] R6  git-ignored evidence DISAPPEARS  -> FAIL
+  [PASS] R2b status is REQUIRED_MISSING
+  [PASS] R8  declaring absent required file   -> REFUSED
+  [PASS] R7  no EVIDENCE.json at all          -> FAIL
+  [PASS] R9  unknown class fails closed       -> FAIL
+  [PASS] R10 source integrity still CURRENT
+  [PASS] R10b +impl tree hash unchanged by the evidence mechanism
+------------------------------------------------------------------------
+TEST_EVIDENCE_RETENTION: 0 failure(s)
+========================================================================
+SUITE test_evidence_retention                       failures=0 
+
+========================================================================
+TEST_FINALIZATION_GATE
+========================================================================
+[evidence_declare] /Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/evidence/_finalization_selftest/study/EVIDENCE.json  (1 artifacts)
+  [PASS] A  compliant study                        -> PASS
+  [PASS] B  no EVIDENCE.json (the lost-study state) -> FAIL
+  [PASS] C  required artifact removed               -> FAIL
+  [PASS] D  required artifact altered               -> FAIL
+  [PASS] D2 restored                                -> PASS
+  [PASS] E  no FINAL_SHA256.txt                     -> FAIL
+  [PASS] F  FINAL_SHA256.txt stale (one wrong)      -> FAIL
+  [PASS] G  names an absent .mat                    -> FAIL
+  [FAIL] H  real compliant study move_activity_400            -> PASS
+  [PASS] H  real compliant study beta_transition_mechanism    -> PASS
+  [PASS] H  real compliant study two_branch_controller_validation -> PASS
+  [FAIL] I  no NEW study fails the gate (new: controller_architecture_offline, frozen_inner_solver_study, frozen_problem25_reference, move_activity_400, move_ladder_necessity, postmerge_campaign_gate, scientific_delta_olhoff_migration, three_rung_architecture, three_rung_promotion_closure, three_rung_promotion_validation_retry1, two_rung_architecture)
+     legacy deficient set (8, unchanged history): admission_rule, dynamical_regime, fixedmove_400_dynamics, move_activity_offline, move_stop, move_transition, topology_maturity_transition, two_branch_maturity_240
+------------------------------------------------------------------------
+TEST_FINALIZATION_GATE: 2 failure(s)
+========================================================================
+SUITE test_finalization_gate                        failures=2 
+SUITE test_path_isolation                           failures=0 
+SUITE test_currentness                              failures=0 
+SUITE test_source_integrity                         failures=4 
+SUITE test_evidence_retention                       failures=0 
+SUITE test_finalization_gate                        failures=2 
+
+ans = 
+
+  struct with fields:
+
+      repo: '/Users/piotrek/Programming/topOpt4freqMax'
+      kind: 'gates'
+      when: '13-Sep-2026 21:25:07'
+    matlab: '25.2.0.2998904 (R2025b)'
+      head: '013cc48451d33bed61c5c4eea174bbd898d548a2'
+    suites: [1×5 struct]
+

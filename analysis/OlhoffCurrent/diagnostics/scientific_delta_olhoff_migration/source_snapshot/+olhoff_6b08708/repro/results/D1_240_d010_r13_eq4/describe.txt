@@ -1,0 +1,52 @@
+DU-OLHOFF EIGENFREQUENCY MAXIMIZATION -- effective formulation
+========================================================================
+preset            duOlhoffAdaptiveMove
+  override        domain.mesh.nelx = 240
+  override        domain.mesh.nely = 30
+  override        runtime.name = 'D1_240_d010_r13_eq4'
+  override        runtime.verbose = true
+  override        move.initial = 0.1
+  override        filter.radiusPhysical = []
+  override        filter.radiusElements = 1.3
+  override        material.mass.model = 'eq4'
+
+PROBLEM
+  maximize          omega_1, bound formulation (25a-f)
+  domain            8 x 1 x 1, 240 x 30 elements  [C]
+  supports          simplySupported, midHeight, axial restraint at bothEnds  [C]
+  volume fraction   0.5  [A]
+
+MATERIAL INTERPOLATION
+  stiffness         SIMP rho^p, p = 3 FIXED  [A]
+  mass              eq. (4) discontinuous at the cut-off  [A]
+                    q = 1, r = 6, cut-off 0.1
+
+REGULARIZATION
+  filter            Sigmund (1997) SENSITIVITY filter  [A]  <- the printed choice
+                    applied to all of the generalized gradients  [C]
+  radius            1.3 elements  [C]
+  projection        disabled
+
+FIELDS
+  design variable   rho, and it IS the physical density
+
+MULTIPLICITY
+  detection         NONE: N fixed at 2  [C]
+  (25d) form        diagonal offsets diag(lambda_j - lambda_n) RETAINED  [C]
+  off-diagonals     retained, full determinant  [A]
+
+OPTIMIZER
+  inner             MMA, published variant, on the increment  [A]
+  inner exit        rel. step < 0.05, at least 5, at most 500  [C]
+
+MOVE LIMIT   [the paper bounds drho ONLY by the box (25f)]
+  policy            ADAPTIVE per-element box: start 0.1, floor 0.002, x1.2 on monotone / x0.7 on reversal (Svanberg rule on the OUTER history)  [C]
+
+STOPPING
+  metric            L2 norm of the designVariable increment  [B]
+  threshold         eps = 0.075  (meshScaled)  [C]
+  guards            none
+  iteration cap     400  (reaching it is CAP_HIT, not convergence)
+========================================================================
+Provenance classes: A specified by a Du-Olhoff source | B implied by one |
+C under-specified reconstruction choice | D later experimental modification.

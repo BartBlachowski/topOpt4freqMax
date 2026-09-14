@@ -1,0 +1,48 @@
+{
+ "when": "2026-09-12T11:39:35+0200",
+ "host": {
+  "hostname": "PMS.local",
+  "cpu": "Apple M1 Max",
+  "ncpu": 10,
+  "physicalcpu": 10,
+  "ram_bytes": 68719476736,
+  "os": "26.6.2",
+  "build": "25G83",
+  "kernel": "25.6.0",
+  "arch": "arm64"
+ },
+ "load": {
+  "loadavg": "{ 19.11 41.62 22.33 }",
+  "uptime": "11:39  up 6 mins, 1 user, load averages: 19.11 41.62 22.33",
+  "swapusage": "total = 0.00M  used = 0.00M  free = 0.00M  (encrypted)",
+  "vm_stat_head": "Mach Virtual Memory Statistics: (page size of 16384 bytes)\nPages free:                                  2340746.\nPages active:                                 822208.\nPages inactive:                               531325.\nPages speculative:                            287489.\nPages throttled:                                   0.",
+  "matlab_processes": "0",
+  "top_cpu": "%CPU COMM\n 14.8 /System/Library/PrivateFrameworks/SkyLight.framework/Resources/WindowServer\n 11.2 /Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python\n  7.5 /private/var/folders/6b/jnh3zrqx6rb4k17mvvy0wb6m0000gn/T/AppTranslocation/BC714BD1-BAE0-4D8C-8072-E098BAB03FA7/d/Visual Studio Code.app/Contents/Frameworks/Code Helper (Renderer).app/Contents/MacOS/Code Helper (Renderer)\n  3.7 /System/Library/Frameworks/WebKit.framework/Versions/A/XPCServices/com.apple.WebKit.WebContent.xpc/Contents/MacOS/com.apple.WebKit.WebContent\n  3.2 /Users/piotrek/.vscode/extensions/anthropic.claude-code-2.1.268-darwin-arm64/resources/native-binary/claude"
+ },
+ "thread_env": {
+  "OMP_NUM_THREADS": "",
+  "MKL_NUM_THREADS": "",
+  "VECLIB_MAXIMUM_THREADS": "",
+  "OPENBLAS_NUM_THREADS": ""
+ },
+ "matlab": {
+  "probe_note": "runtime_version is obtained by actually starting MATLAB; a null value means MATLAB did not start.",
+  "app": "/Applications/MATLAB_R2025b.app",
+  "installed": true,
+  "on_PATH": null,
+  "runtime_version": "25.2.0.2998904 (R2025b)",
+  "license_files": "license_info.xml\nnetwork.lic",
+  "network_lic": "SERVER zm8pc.ippt.pan.pl INTERNET=zm8pc.ippt.pan.pl 27000\nUSE_SERVER",
+  "user_license_dir_exists": false
+ },
+ "license_server_reachability": {
+  "fqdn": "zm8pc.ippt.pan.pl",
+  "resolved": "148.81.54.174",
+  "tcp_27000": "OPEN",
+  "tcp_27001": "OPEN",
+  "tcp_27002": "ConnectionRefusedError",
+  "general_internet": "OK",
+  "dns_resolver": "148.81.52.11",
+  "interpretation": "name resolves and general internet works, but the licence manager ports are unreachable: this host is not on the institute network or its VPN"
+ }
+}

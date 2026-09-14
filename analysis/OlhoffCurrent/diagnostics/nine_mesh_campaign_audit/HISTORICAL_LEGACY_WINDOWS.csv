@@ -1,0 +1,9 @@
+mesh,window,omega_change_preupdate,omega_pct_preupdate,Mnd_change,inner_max_over_trajectory,same_move_whole_window,scope
+160x20,20,0.1774966237699971,0.10483956140070472,-0.7087830564219004,51.0,False,"historical matched endpoint, not retained campaign history"
+160x20,50,10.58132080931,6.659137362698964,-26.0727672268248,51.0,False,"historical matched endpoint, not retained campaign history"
+320x40,20,0.7703969640669754,0.46640849930990047,-2.7822248181240994,40.0,False,"historical matched endpoint, not retained campaign history"
+320x40,50,6.099368947036993,3.8157431885956328,-13.273869656044802,40.0,False,"historical matched endpoint, not retained campaign history"
+320x40,100,14.015230584633997,9.224697046018981,-28.3787260614494,40.0,False,"historical matched endpoint, not retained campaign history"
+400x50,20,0.7627928210349921,0.4705117534784975,-1.861950111380601,35.0,False,"historical matched endpoint, not retained campaign history"
+400x50,50,5.582867303934989,3.54919023287954,-9.784598719117504,35.0,False,"historical matched endpoint, not retained campaign history"
+400x50,100,11.091626340993002,7.307170467062596,-20.273050596003202,35.0,False,"historical matched endpoint, not retained campaign history"

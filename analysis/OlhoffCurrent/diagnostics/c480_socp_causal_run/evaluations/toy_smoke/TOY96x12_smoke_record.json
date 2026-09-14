@@ -1,0 +1,60 @@
+{
+  "tag": "TOY96x12_smoke",
+  "NE": 1152,
+  "nOuter": 6,
+  "status": "STOPPED_OTHER",
+  "termination": "",
+  "rebuildExact": true,
+  "clampDisplacementMax": 5.5511151231257827E-17,
+  "files": {
+    "trajectory": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/diagnostics/c480_socp_causal_run/evaluations/toy_smoke/TOY96x12_smoke_trajectory.mat",
+    "state": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/diagnostics/c480_socp_causal_run/evaluations/toy_smoke/TOY96x12_smoke_state.mat",
+    "diag": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/diagnostics/c480_socp_causal_run/evaluations/toy_smoke/TOY96x12_smoke_diag.mat",
+    "socpCsv": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/diagnostics/c480_socp_causal_run/evaluations/toy_smoke/TOY96x12_smoke_socp_iterations.csv",
+    "csv": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/diagnostics/c480_socp_causal_run/evaluations/toy_smoke/TOY96x12_smoke_iterations.csv",
+    "supplement": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/diagnostics/c480_socp_causal_run/evaluations/toy_smoke/TOY96x12_smoke_supplement.csv"
+  },
+  "Mnd_final": 84.924444486180477,
+  "gray_final": 1,
+  "mid_final": 0.23958333333333334,
+  "omega": [
+    102.95562988744209,
+    306.61400549185225,
+    464.10768209145954,
+    528.240893647527,
+    796.48674901279878
+  ],
+  "omega1": 102.95562988744209,
+  "omega2": 306.61400549185225,
+  "omega3": 464.10768209145954,
+  "gap23": 0.5136545421236226,
+  "gap12": 1.9781179118331167,
+  "volume_final": 0.50000000000633849,
+  "rho_sha256": "3cba8e7195b9642e15f257de0928020205ac5895a4b7f7f7ee38d9a73755f5af",
+  "move_final": 0.04,
+  "stage_final": 1,
+  "N_unique": 2,
+  "multJ_count": 0,
+  "terminal_l2": 1.3576449686039853,
+  "terminal_max": 0.039999999989861805,
+  "t": {
+    "eig": 0.078469,
+    "grad": 0.0095935416666666669,
+    "inner": 2.6888242916666667,
+    "outer": 2.7875429583333338
+  },
+  "stageStarts": 1,
+  "descents": [],
+  "terminalDeclared": false,
+  "terminalDeclIter": null,
+  "terminalDeclBegin": null,
+  "terminalBranch": "",
+  "eventBranch": [],
+  "log": [
+    "preflight stopAfter=6 reached"
+  ],
+  "meta": {
+    "note": "TOY SMOKE TEST -- software verification only, excluded from all analyses"
+  },
+  "wallclock_solver": 2.8124171666666666
+}

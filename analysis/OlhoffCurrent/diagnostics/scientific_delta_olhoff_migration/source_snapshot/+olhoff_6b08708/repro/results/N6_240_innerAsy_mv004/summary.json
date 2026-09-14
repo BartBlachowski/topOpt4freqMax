@@ -1,0 +1,44 @@
+{
+  "label": "N6_240_innerAsy_mv004",
+  "preset": "duOlhoffOuterAsymptotes",
+  "mesh": [
+    240,
+    30
+  ],
+  "status": "CONVERGED",
+  "converged": true,
+  "nOuter": 29,
+  "innerTotal": 895,
+  "omega1": 131.21795329107866,
+  "omega2": 319.6725594731879,
+  "omega3": 561.20512197648316,
+  "gap12_pct": 143.61952877291375,
+  "Mnd": 0.70287980145572992,
+  "greyFraction": 0.82194444444444448,
+  "coalescenceIter": null,
+  "omega2_peak": 319.55739866822739,
+  "omega2_peak_iter": 28,
+  "omega3_peak": 564.31597574283478,
+  "omega3_peak_iter": 18,
+  "omega1_initial": 68.320853969668761,
+  "final_dxNorm2": 0.05090246421084145,
+  "eps": 0.075000000000000011,
+  "final_maxdrho": 0.0066377010753102539,
+  "move": 0.04,
+  "wall_s": 62.605729208333337,
+  "tEig_s": 3.086578958333333,
+  "tInner_s": 58.681203999999994,
+  "overrides": [
+    "move.initial",
+    0.04,
+    "optimizer.inner.asymptoteHistory",
+    "inner"
+  ],
+  "log": [
+    "iter 8: omega_J (J=3) is itself multiple -- (25b) undefined",
+    "iter 9: omega_J (J=3) is itself multiple -- (25b) undefined",
+    "iter 10: omega_J (J=3) is itself multiple -- (25b) undefined",
+    "iter 11: omega_J (J=3) is itself multiple -- (25b) undefined",
+    "converged at outer iteration 29 (||drho||_2 = 5.090e-02, max|drho| = 6.638e-03)"
+  ]
+}

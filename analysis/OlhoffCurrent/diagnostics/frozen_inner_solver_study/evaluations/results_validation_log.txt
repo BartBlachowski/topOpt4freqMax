@@ -1,0 +1,9 @@
+                    points: 202
+    max_scalar_discrepancy: 0
+     max_conic_discrepancy: 1.0075e-14
+         max_box_violation: 0
+             g0_g1_bitwise: 1
+            rho_hash_after: '9b1443e508a6e4ecb5288d30167c7258d837be127aa3a9a42d8cc092240f3ded'
+            implTree_after: 'edbfe47eb32109a2fb017f6f13d5327f2c240357caa96630064ffcf37ee152cb'
+                   verdict: 'FROZEN_VARIANTS_EXACT_PROBLEM_AND_METRICS_PASS'
+

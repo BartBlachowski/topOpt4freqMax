@@ -1,0 +1,235 @@
+{
+  "runs": [
+    {
+      "solver": "augmented",
+      "threads": 1,
+      "wall_s": 2.808932625,
+      "exitflag": -7,
+      "iterations": 26,
+      "bitwise_oracle": false,
+      "abs_dbs": 4.9071857688431919E-12,
+      "d2": 0.010748656908989117,
+      "dinf": 0.74522969606122391,
+      "n_diff_gt_0p1move": 4,
+      "n_diff_gt_1e6move": 36,
+      "certified": true,
+      "candidate": "complementarySlackness",
+      "bestGap": 6.5916161418044794E-12,
+      "nInterior": 28,
+      "diff_elements_abs_q_over_sRow0": [
+        1.6823228771375859E-6,
+        1.6823117352640844E-6,
+        1.6535386707168332E-6,
+        1.6536327203551525E-6
+      ],
+      "diff_elements_rho": [
+        0.57312544393658138,
+        0.57312544422590694,
+        0.014383784685809992,
+        0.014383784682467956
+      ],
+      "diff_elements_z": [
+        -0.063961683530589647,
+        -0.066121693287031311,
+        0.24214554530761731,
+        0.25405487194617055
+      ],
+      "diff_elements_zo": [
+        0.09775965155681271,
+        -0.22756711286452533,
+        -0.50308415075360657,
+        0.99925388228600409
+      ],
+      "all_abs_q_over_sRow0_quantiles": [
+        7.169468042332603E-7,
+        1.4278354350681987E-5,
+        0.00023180868242599198,
+        0.0034110529680758716,
+        0.0786841809761887
+      ],
+      "n_abs_q_lt_1e_6_sRow0": 2,
+      "n_abs_q_lt_1e_4_sRow0": 124
+    },
+    {
+      "solver": "schur",
+      "threads": 1,
+      "wall_s": 37.950852791666669,
+      "exitflag": -7,
+      "iterations": 27,
+      "bitwise_oracle": true,
+      "abs_dbs": 0,
+      "d2": 0,
+      "dinf": 0,
+      "n_diff_gt_0p1move": 0,
+      "n_diff_gt_1e6move": 0,
+      "certified": true,
+      "candidate": "dualboundGeneral",
+      "bestGap": 6.4450667025539587E-12,
+      "nInterior": 16,
+      "diff_elements_abs_q_over_sRow0": [],
+      "diff_elements_rho": [],
+      "diff_elements_z": [],
+      "diff_elements_zo": [],
+      "all_abs_q_over_sRow0_quantiles": [
+        5.2830110828361323E-12,
+        1.4264834110490707E-5,
+        0.0002316366044944299,
+        0.003411329253938093,
+        0.078685520940388
+      ],
+      "n_abs_q_lt_1e_6_sRow0": 8,
+      "n_abs_q_lt_1e_4_sRow0": 126
+    },
+    {
+      "solver": "schur",
+      "threads": 4,
+      "wall_s": 37.909942541666666,
+      "exitflag": -7,
+      "iterations": 27,
+      "bitwise_oracle": true,
+      "abs_dbs": 0,
+      "d2": 0,
+      "dinf": 0,
+      "n_diff_gt_0p1move": 0,
+      "n_diff_gt_1e6move": 0,
+      "certified": true,
+      "candidate": "dualboundGeneral",
+      "bestGap": 6.4450667025539587E-12,
+      "nInterior": 16,
+      "diff_elements_abs_q_over_sRow0": [],
+      "diff_elements_rho": [],
+      "diff_elements_z": [],
+      "diff_elements_zo": [],
+      "all_abs_q_over_sRow0_quantiles": [
+        5.2830110828361323E-12,
+        1.4264834110490707E-5,
+        0.0002316366044944299,
+        0.003411329253938093,
+        0.078685520940388
+      ],
+      "n_abs_q_lt_1e_6_sRow0": 8,
+      "n_abs_q_lt_1e_4_sRow0": 126
+    },
+    {
+      "solver": "schur",
+      "threads": 8,
+      "wall_s": 37.970499375,
+      "exitflag": -7,
+      "iterations": 27,
+      "bitwise_oracle": true,
+      "abs_dbs": 0,
+      "d2": 0,
+      "dinf": 0,
+      "n_diff_gt_0p1move": 0,
+      "n_diff_gt_1e6move": 0,
+      "certified": true,
+      "candidate": "dualboundGeneral",
+      "bestGap": 6.4450667025539587E-12,
+      "nInterior": 16,
+      "diff_elements_abs_q_over_sRow0": [],
+      "diff_elements_rho": [],
+      "diff_elements_z": [],
+      "diff_elements_zo": [],
+      "all_abs_q_over_sRow0_quantiles": [
+        5.2830110828361323E-12,
+        1.4264834110490707E-5,
+        0.0002316366044944299,
+        0.003411329253938093,
+        0.078685520940388
+      ],
+      "n_abs_q_lt_1e_6_sRow0": 8,
+      "n_abs_q_lt_1e_4_sRow0": 126
+    },
+    {
+      "solver": "augmented",
+      "threads": 8,
+      "wall_s": 2.2555534583333334,
+      "exitflag": -7,
+      "iterations": 26,
+      "bitwise_oracle": false,
+      "abs_dbs": 4.9071857688431919E-12,
+      "d2": 0.010748656908989117,
+      "dinf": 0.74522969606122391,
+      "n_diff_gt_0p1move": 4,
+      "n_diff_gt_1e6move": 36,
+      "certified": true,
+      "candidate": "complementarySlackness",
+      "bestGap": 6.5916161418044794E-12,
+      "nInterior": 28,
+      "diff_elements_abs_q_over_sRow0": [
+        1.6823228771375859E-6,
+        1.6823117352640844E-6,
+        1.6535386707168332E-6,
+        1.6536327203551525E-6
+      ],
+      "diff_elements_rho": [
+        0.57312544393658138,
+        0.57312544422590694,
+        0.014383784685809992,
+        0.014383784682467956
+      ],
+      "diff_elements_z": [
+        -0.063961683530589647,
+        -0.066121693287031311,
+        0.24214554530761731,
+        0.25405487194617055
+      ],
+      "diff_elements_zo": [
+        0.09775965155681271,
+        -0.22756711286452533,
+        -0.50308415075360657,
+        0.99925388228600409
+      ],
+      "all_abs_q_over_sRow0_quantiles": [
+        7.169468042332603E-7,
+        1.4278354350681987E-5,
+        0.00023180868242599198,
+        0.0034110529680758716,
+        0.0786841809761887
+      ],
+      "n_abs_q_lt_1e_6_sRow0": 2,
+      "n_abs_q_lt_1e_4_sRow0": 124
+    }
+  ],
+  "segment": {
+    "t": [
+      0,
+      0.1,
+      0.2,
+      0.3,
+      0.4,
+      0.5,
+      0.6,
+      0.7,
+      0.8,
+      0.9,
+      1
+    ],
+    "bs": [
+      1.001792128848223,
+      1.0017921288477323,
+      1.0017921288472416,
+      1.0017921288467508,
+      1.0017921288462601,
+      1.0017921288457694,
+      1.0017921288452787,
+      1.001792128844788,
+      1.0017921288442972,
+      1.0017921288438065,
+      1.0017921288433158
+    ],
+    "maxRow": [
+      4.0421986745463479E-14,
+      3.4106051316484808E-14,
+      2.5979218776228663E-14,
+      7.0738476804561086E-14,
+      6.0632980118195215E-14,
+      6.000138657529735E-14,
+      5.3306495020579963E-14,
+      1.0143392298939742E-13,
+      8.8423096005701358E-14,
+      8.7159908919905629E-14,
+      7.8191280610755919E-14
+    ]
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "generated": "2026-09-13T11:42:45+02:00",
+  "preregistration_sha256": "5b6186f2f2b438f73ce4cfeae8e4565326dc91d99b19e207aa47604c32286ddd",
+  "amendment1_sha256": "298efd23763f678f7519d37dc7c40f6e693bad2bec8a1933e4d853e0f09fa340",
+  "parts": {
+    "P1_config_identity": true,
+    "P2_source_diff_audit": true,
+    "P3_control_replay_bitwise": true,
+    "P4_oracle_known_answer": true,
+    "P5_fail_closed_tests": true,
+    "P6_toy_smoke_and_resume": true,
+    "P7_impl_tree": true
+  },
+  "P4_original_augmented_primary": "FAILED design-space bars (d2 0.0107, dinf 0.745); amended pre-launch, see PREREGISTRATION_AMENDMENT_1.md",
+  "treatment_code_sha256_at_launch": {
+    "cs_config_diff.m": "c74abb178217505b4b61e940ae9beb8e0b29242c3f3e542b5aa3c54c83a3727d",
+    "cs_control_identity.m": "26c2d61d0cff7f215b761fd18ba3bb7c091f79fa0751fb1d7cfba734901460d4",
+    "cs_filehash.m": "0ff67c6fefdd0902764ad78dcbf4acfbfbd88b2af0588e2e381341b889436b06",
+    "cs_hash.m": "cb54fb15ed76791c662b3371c24eb069c929fa31443cf4d66550f589abefc78f",
+    "cs_json.m": "bfe63a256d7ca8f5b04bed9036c2dc1959a76e25ddcf76a235f0cb1dde345992",
+    "cs_olhoffSolveSOCP.m": "48f5fa77fd7da0706fec89763ea026a6c6e274b24a99dcb7e740c9f4b5f9f084",
+    "cs_postprocess.m": "2a5ca74c3ff208b172d7230f0bffe82dcc86fd9e76c31ac1745aefc5f9eb5dd8",
+    "cs_preflight.m": "9c94aaafa6c4a5cdbc35b6f7a96f942d729b7260190b314541cc600d1a07d484",
+    "cs_preflight_degeneracy.m": "be69d30ec628ad2be878f6f77f70d7f4a71b8dad864aae83db75ef549d07db47",
+    "cs_run_treatment.m": "655b2ad55383dc80446abfeda3b3558db8aef3f780401479b0730eb4ed09fe7d",
+    "cs_setup.m": "ccbbd48c5c3c9ccb338b29fb49b13ecfd9f84abd783edb72bebae298e2455f2e",
+    "cs_socp_certify.m": "e2345d2a63e1803552fc66f53484eda45b50c047603e8046ad04825ee3ae3852",
+    "cs_socp_eligible.m": "723e72b023b778751a4ffa050454d42dc5134c46a88faf7bc7dcbfa12d8c1764",
+    "cs_socp_equiv.m": "e4ef61d777c281bbb6fae9bee3722026bd1759fb585bfa0ece041154d2d7e0f7",
+    "cs_socp_inner.m": "8609b923d47e9e815994fb2652ef9777b65f7a0ff5f8522697e1945f59bc91a0",
+    "cs_socp_table.m": "6d03ecc2f03380fefd924f5960bc77d145098b1572d9b7cda3ada40ca4308edd",
+    "fp_dualbound.m": "f643384cd9c8a69751d18f24cc8520dccce1aef337bc64b0695cccd647f7db74",
+    "fp_kkt.m": "7a632985168d5789c97c37c52966c0ec872212645d1eacf59758566fea19a3bf",
+    "fp_problem.m": "5ae495fe52427e03842929978fcfd608290ac576b02eed912b6011eecad1a94f"
+  },
+  "verdict": "C480_SOCP_SINGLE_FACTOR_PREFLIGHT_PASS"
+}

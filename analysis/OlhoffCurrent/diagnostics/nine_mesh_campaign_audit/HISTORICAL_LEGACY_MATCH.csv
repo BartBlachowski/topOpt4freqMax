@@ -1,0 +1,4 @@
+mesh,outer_match,inner_match,Mnd_error,l2_error,scope
+160x20,True,True,-3.375077994860476e-14,-4.163336342344337e-17,historical endpoint agreement; NOT campaign trajectory identity
+320x40,True,True,6.394884621840902e-14,1.3877787807814457e-17,historical endpoint agreement; NOT campaign trajectory identity
+400x50,True,True,-7.105427357601002e-15,0.0,historical endpoint agreement; NOT campaign trajectory identity

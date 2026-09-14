@@ -1,0 +1,81 @@
+{
+  "label": "POST-HOC DIAGNOSTIC -- excluded from all verdicts; no design update",
+  "reposed_identity": {
+    "lam_bitwise": true,
+    "lamJ_bitwise": true,
+    "dOff_bitwise": true,
+    "move": 0.04
+  },
+  "primal_solve_s": 57.545440041666666,
+  "primal": {
+    "exitflag": 1,
+    "iterations": 28,
+    "bs": 1.0305227074946424,
+    "bs_equals_rejected_record": true,
+    "coneNorm": 2.976932938849691E-12,
+    "maxRow": 3.1986423386519568E-12,
+    "lambda_soc": 1.0000000000011351,
+    "lambda_ineqlin": [
+      9.7167669117926455E-15,
+      0.93552008710552859
+    ],
+    "nInterior": 236,
+    "frac_any_bound": 0.99180555555555561,
+    "gray_n": 15700,
+    "gray_full_move_frac": 0.98496815286624206
+  },
+  "dual_solve_s": 467.2623165,
+  "exact_dual": {
+    "name": "exactLagrangianDual",
+    "exitflag": -7,
+    "iterations": 16,
+    "p": [
+      -0.92401415578866075,
+      5.7625351639003537E-5
+    ],
+    "mu": 0.99999784660244762,
+    "nu": [
+      1.3507745677249166E-9,
+      0.93429815663930749
+    ],
+    "dual_feasible": true,
+    "dual_bound": -1.0305313165789916,
+    "gap": 8.6090843491870572E-6,
+    "boxComp": 0.001401538721585471,
+    "rowComp": 5.2916794201439356E-9,
+    "bsStat": 2.1520467778169146E-6,
+    "cone_complementarity": 2.2619836152039788E-13,
+    "p_norm_over_mu": 0.92401614735964865,
+    "would_pass_C1_C8_bars": false
+  },
+  "cs_free_p": {
+    "name": "complementarySlacknessFreeP",
+    "exitflag": null,
+    "iterations": null,
+    "p": [
+      -0.93633987755076875,
+      6.19149322489123E-7
+    ],
+    "mu": 0.9962737895011673,
+    "nu": [
+      0.0037262114138962668,
+      0.95437577082656677
+    ],
+    "dual_feasible": true,
+    "dual_bound": -1.0453710963363776,
+    "gap": 0.014848388841735227,
+    "boxComp": 0.31929469732869253,
+    "rowComp": 0.014597488526328133,
+    "bsStat": 9.1506356181617066E-10,
+    "cone_complementarity": 1.7841923912988016E-13,
+    "p_norm_over_mu": 0.93984192640438469,
+    "would_pass_C1_C8_bars": false,
+    "n_interior_rows": 237
+  },
+  "preregistered_certificate": {
+    "certified": false,
+    "bestGap": 0.0003591400533000666,
+    "reason": "no candidate passes: dualboundGeneral[C3,C6] dualboundAligned[C3,C6]",
+    "apex": true
+  }
+}

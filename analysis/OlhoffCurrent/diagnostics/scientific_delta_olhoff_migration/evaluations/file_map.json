@@ -1,0 +1,744 @@
+{
+ "counts": {
+  "IDENTICAL": 59,
+  "DIFFERENT": 15,
+  "SOURCE_ONLY": 4,
+  "TARGET_ONLY": 1
+ },
+ "rows": [
+  {
+   "path": "algo/compareHistory.m",
+   "status": "IDENTICAL",
+   "target_sha256": "1caaff78e5ffd57d8b4c0f4ad93ae6d8feed0d2b38a6b391f471311e6303604a",
+   "source_sha256": "1caaff78e5ffd57d8b4c0f4ad93ae6d8feed0d2b38a6b391f471311e6303604a",
+   "diff_lines_target_vs_source": 0,
+   "diff_lines_base_vs_target": null,
+   "diff_lines_base_vs_source": null
+  },
+  {
+   "path": "algo/compareHistoryTo.m",
+   "status": "IDENTICAL",
+   "target_sha256": "5f1797b29907990a67fa203e838beb09ab403a0068cdb290971925f15c3c6c61",
+   "source_sha256": "5f1797b29907990a67fa203e838beb09ab403a0068cdb290971925f15c3c6c61",
+   "diff_lines_target_vs_source": 0,
+   "diff_lines_base_vs_target": null,
+   "diff_lines_base_vs_source": null
+  },
+  {
+   "path": "algo/compareTopology.m",
+   "status": "IDENTICAL",
+   "target_sha256": "adadf0b1a143231e6ca7f5168be9f7747040b81b9a91fc4b79ebc8900c9e58fd",
+   "source_sha256": "adadf0b1a143231e6ca7f5168be9f7747040b81b9a91fc4b79ebc8900c9e58fd",
+   "diff_lines_target_vs_source": 0,
+   "diff_lines_base_vs_target": null,
+   "diff_lines_base_vs_source": null
+  },
+  {
+   "path": "algo/defaultCfg.m",
+   "status": "IDENTICAL",
+   "target_sha256": "dd8f1cc7c19d41dfb4dde989ddd40a3dbfd733fecb622f43275144c359a6b911",
+   "source_sha256": "dd8f1cc7c19d41dfb4dde989ddd40a3dbfd733fecb622f43275144c359a6b911",
+   "diff_lines_target_vs_source": 0,
+   "diff_lines_base_vs_target": null,
+   "diff_lines_base_vs_source": null
+  },
+  {
+   "path": "algo/deltaLambda.m",
+   "status": "IDENTICAL",
+   "target_sha256": "101519fcdcc2175d7d2aa135d919ad0a0efaa24cbb3edd7761d8f27b9b504038",
+   "source_sha256": "101519fcdcc2175d7d2aa135d919ad0a0efaa24cbb3edd7761d8f27b9b504038",
+   "diff_lines_target_vs_source": 0,
+   "diff_lines_base_vs_target": null,
+   "diff_lines_base_vs_source": null
+  },
+  {
+   "path": "algo/genGrad.m",
+   "status": "DIFFERENT",
+   "target_sha256": "13f2ab8541b2f626e340a592b99730ee4cba101e4f978a214dd7227adaeb5208",
+   "source_sha256": "6176f68ba89120e2354f84ab3e849b907dc53c84a11dd6423aef7fcf765eb084",
+   "diff_lines_target_vs_source": 6,
+   "diff_lines_base_vs_target": 0,
+   "diff_lines_base_vs_source": 6
+  },
+  {
+   "path": "algo/imresizeNN.m",
+   "status": "IDENTICAL",
+   "target_sha256": "b548f7838cdbaa2db1998fc885a2ee45b704e17ae0bcedfbf16236a7ae962be9",
+   "source_sha256": "b548f7838cdbaa2db1998fc885a2ee45b704e17ae0bcedfbf16236a7ae962be9",
+   "diff_lines_target_vs_source": 0,
+   "diff_lines_base_vs_target": null,
+   "diff_lines_base_vs_source": null
+  },
+  {
+   "path": "algo/innerLoop.m",
+   "status": "IDENTICAL",
+   "target_sha256": "0f9f7fbcc89d5b518fc08c85f70af28caba08bcdc14850f10a3534fe1b65e18f",
+   "source_sha256": "0f9f7fbcc89d5b518fc08c85f70af28caba08bcdc14850f10a3534fe1b65e18f",
+   "diff_lines_target_vs_source": 0,
+   "diff_lines_base_vs_target": null,
+   "diff_lines_base_vs_source": null
+  },
+  {
+   "path": "algo/innerLoopLP.m",
+   "status": "IDENTICAL",
+   "target_sha256": "7724753c02f84d6009c3998f758d5b3f9c5144ad39ca6f470584a2c99e089465",
+   "source_sha256": "7724753c02f84d6009c3998f758d5b3f9c5144ad39ca6f470584a2c99e089465",
+   "diff_lines_target_vs_source": 0,
+   "diff_lines_base_vs_target": null,
+   "diff_lines_base_vs_source": null
+  },
+  {
+   "path": "algo/innerLoopRho.m",
+   "status": "DIFFERENT",
+   "target_sha256": "aded1849467e93201d2a8c78effaa303300e71da4e192cefad4649f55cab35e5",
+   "source_sha256": "f892f720c29e6ca1c4bd25b33d7e67ba2ab31b7a316e20896da2228e0cd7fcab",
+   "diff_lines_target_vs_source": 64,
+   "diff_lines_base_vs_target": 0,
+   "diff_lines_base_vs_source": 64
+  },
+  {
+   "path": "algo/moveControl.m",
+   "status": "IDENTICAL",
+   "target_sha256": "76ff15824f205db8d5a6a4b1ef4890f7320e450dc0bd1e6f4989ad794791c80d",
+   "source_sha256": "76ff15824f205db8d5a6a4b1ef4890f7320e450dc0bd1e6f4989ad794791c80d",
+   "diff_lines_target_vs_source": 0,
+   "diff_lines_base_vs_target": null,
+   "diff_lines_base_vs_source": null
+  },
+  {
+   "path": "algo/multRule.m",
+   "status": "IDENTICAL",
+   "target_sha256": "c8ee926c2cf985b79e634b99116bbd37b96d9a1f9b26b51c4bb88ee31d5d4b52",
+   "source_sha256": "c8ee926c2cf985b79e634b99116bbd37b96d9a1f9b26b51c4bb88ee31d5d4b52",
+   "diff_lines_target_vs_source": 0,
+   "diff_lines_base_vs_target": null,
+   "diff_lines_base_vs_source": null
+  },
+  {
+   "path": "algo/olhoffOpt.m",
+   "status": "IDENTICAL",
+   "target_sha256": "dd8424f84f60bafbff05b634ec176545385bd9b91d020ce0aecab431a6b03e7c",
+   "source_sha256": "dd8424f84f60bafbff05b634ec176545385bd9b91d020ce0aecab431a6b03e7c",
+   "diff_lines_target_vs_source": 0,
+   "diff_lines_base_vs_target": null,
+   "diff_lines_base_vs_source": null
+  },
+  {
+   "path": "algo/plotHistory.m",
+   "status": "IDENTICAL",
+   "target_sha256": "4f0b1620c557fae43f2ac9d20accb9484da01cb8d3e751b9ac869e0f35c5163c",
+   "source_sha256": "4f0b1620c557fae43f2ac9d20accb9484da01cb8d3e751b9ac869e0f35c5163c",
+   "diff_lines_target_vs_source": 0,
+   "diff_lines_base_vs_target": null,
+   "diff_lines_base_vs_source": null
+  },
+  {
+   "path": "algo/textStamp.m",
+   "status": "IDENTICAL",
+   "target_sha256": "f540e10ab2c84b85c70c62e69192998f806260031275d4c94d60bc9db2fe2c55",
+   "source_sha256": "f540e10ab2c84b85c70c62e69192998f806260031275d4c94d60bc9db2fe2c55",
+   "diff_lines_target_vs_source": 0,
+   "diff_lines_base_vs_target": null,
+   "diff_lines_base_vs_source": null
+  },
+  {
+   "path": "algo/topologyImage.m",
+   "status": "IDENTICAL",
+   "target_sha256": "1bcdf9b9849475a46beea8ef4651618d699debed1823aee8658a4df412141823",
+   "source_sha256": "1bcdf9b9849475a46beea8ef4651618d699debed1823aee8658a4df412141823",
+   "diff_lines_target_vs_source": 0,
+   "diff_lines_base_vs_target": null,
+   "diff_lines_base_vs_source": null
+  },
+  {
+   "path": "algo/useMMA.m",
+   "status": "IDENTICAL",
+   "target_sha256": "b87ef5f65918c015e5262eda6138b6fa47403f127846212dc0238e0549e100d8",
+   "source_sha256": "b87ef5f65918c015e5262eda6138b6fa47403f127846212dc0238e0549e100d8",
+   "diff_lines_target_vs_source": 0,
+   "diff_lines_base_vs_target": null,
+   "diff_lines_base_vs_source": null
+  },
+  {
+   "path": "architecture/+olh/+config/assign.m",
+   "status": "IDENTICAL",
+   "target_sha256": "e5a8bee460f8d76226132a35ca4d5a474853e360612e6f9a23f207fbc801297b",
+   "source_sha256": "e5a8bee460f8d76226132a35ca4d5a474853e360612e6f9a23f207fbc801297b",
+   "diff_lines_target_vs_source": 0,
+   "diff_lines_base_vs_target": null,
+   "diff_lines_base_vs_source": null
+  },
+  {
+   "path": "architecture/+olh/+config/defaults.m",
+   "status": "IDENTICAL",
+   "target_sha256": "32c52085a91869e577388e337f57a6a8b37bfa19c552ec6094d3bcf2266e39b5",
+   "source_sha256": "32c52085a91869e577388e337f57a6a8b37bfa19c552ec6094d3bcf2266e39b5",
+   "diff_lines_target_vs_source": 0,
+   "diff_lines_base_vs_target": null,
+   "diff_lines_base_vs_source": null
+  },
+  {
+   "path": "architecture/+olh/+config/describe.m",
+   "status": "DIFFERENT",
+   "target_sha256": "e089721ba2b91f5f3968ec9842c3dc857556b69023df1a753910bf8ac33e242f",
+   "source_sha256": "8b3aec526b6018fccc4fae571e541dc0f939597ed9733cdef2e880a7426571a1",
+   "diff_lines_target_vs_source": 25,
+   "diff_lines_base_vs_target": 0,
+   "diff_lines_base_vs_source": 25
+  },
+  {
+   "path": "architecture/+olh/+config/epsilonForMesh.m",
+   "status": "IDENTICAL",
+   "target_sha256": "8a2c621749d4bfd287bcd50dd06a066e9f963f8aa0c0b9cd3d9f2994f4c2a9fe",
+   "source_sha256": "8a2c621749d4bfd287bcd50dd06a066e9f963f8aa0c0b9cd3d9f2994f4c2a9fe",
+   "diff_lines_target_vs_source": 0,
+   "diff_lines_base_vs_target": null,
+   "diff_lines_base_vs_source": null
+  },
+  {
+   "path": "architecture/+olh/+config/fromLegacy.m",
+   "status": "DIFFERENT",
+   "target_sha256": "7d0bad832c906c5304acb2ebf84304739fe3531281a0e007aa395fd58ae96ff8",
+   "source_sha256": "5e7812914b24a5b252f84b58604326a963747af5ae300ce262e658c2dab7bad5",
+   "diff_lines_target_vs_source": 12,
+   "diff_lines_base_vs_target": 3,
+   "diff_lines_base_vs_source": 9
+  },
+  {
+   "path": "architecture/+olh/+config/getPath.m",
+   "status": "IDENTICAL",
+   "target_sha256": "f9a866853d27c16488508c21c8f38d286b56188201b891427fc030c2059b4b0e",
+   "source_sha256": "f9a866853d27c16488508c21c8f38d286b56188201b891427fc030c2059b4b0e",
+   "diff_lines_target_vs_source": 0,
+   "diff_lines_base_vs_target": null,
+   "diff_lines_base_vs_source": null
+  },
+  {
+   "path": "architecture/+olh/+config/paths.m",
+   "status": "IDENTICAL",
+   "target_sha256": "43397408fb993e530a7bd3b5696a23b3501bc0cfaaa8e0f84c7a9bad45690720",
+   "source_sha256": "43397408fb993e530a7bd3b5696a23b3501bc0cfaaa8e0f84c7a9bad45690720",
+   "diff_lines_target_vs_source": 0,
+   "diff_lines_base_vs_target": null,
+   "diff_lines_base_vs_source": null
+  },
+  {
+   "path": "architecture/+olh/+config/resolve.m",
+   "status": "IDENTICAL",
+   "target_sha256": "d77d43fd0bcbefffc66524f2b35add5384c98e30fced1e068ceb4723d283717d",
+   "source_sha256": "d77d43fd0bcbefffc66524f2b35add5384c98e30fced1e068ceb4723d283717d",
+   "diff_lines_target_vs_source": 0,
+   "diff_lines_base_vs_target": null,
+   "diff_lines_base_vs_source": null
+  },
+  {
+   "path": "architecture/+olh/+config/schema.m",
+   "status": "DIFFERENT",
+   "target_sha256": "d7a808995d9a34810442ddf17f15de980aa1e62efe90b3563f3e474ae5f5cf67",
+   "source_sha256": "f6d1a93937c49bacff14e944d0392ed9a473feaeb1f6af85cf993e5c66f7374c",
+   "diff_lines_target_vs_source": 15,
+   "diff_lines_base_vs_target": 3,
+   "diff_lines_base_vs_source": 12
+  },
+  {
+   "path": "architecture/+olh/+config/setPath.m",
+   "status": "IDENTICAL",
+   "target_sha256": "e36cebd3f921e64d33b10dbf4ef7ef44c17fb2bf1e23a6404d0b264426d79517",
+   "source_sha256": "e36cebd3f921e64d33b10dbf4ef7ef44c17fb2bf1e23a6404d0b264426d79517",
+   "diff_lines_target_vs_source": 0,
+   "diff_lines_base_vs_target": null,
+   "diff_lines_base_vs_source": null
+  },
+  {
+   "path": "architecture/+olh/+config/toLegacy.m",
+   "status": "DIFFERENT",
+   "target_sha256": "685caacbd3db2bd19e14cc4fe3be0098b7bba423fe2b4a91f0cb83a3e4a21a04",
+   "source_sha256": "46fc3dd434e02380964ca90fbd6449606612a2179fd3533da24e84969846c167",
+   "diff_lines_target_vs_source": 15,
+   "diff_lines_base_vs_target": 4,
+   "diff_lines_base_vs_source": 11
+  },
+  {
+   "path": "architecture/+olh/+config/validate.m",
+   "status": "DIFFERENT",
+   "target_sha256": "30e495ea8bcc25193de2c64f04984549870e213f9f9df871e52cc4c906cab141",
+   "source_sha256": "a45c12dbedc4cde720f2ba2d00ba3822ef86905b7357c96e677aee3de1409276",
+   "diff_lines_target_vs_source": 42,
+   "diff_lines_base_vs_target": 27,
+   "diff_lines_base_vs_source": 15
+  },
+  {
+   "path": "architecture/+olh/+material/massInterpolation.m",
+   "status": "IDENTICAL",
+   "target_sha256": "1b8fd4e887f08b5b61c5a4f72578a8b29c99748fcb545c68534325e6e52deab3",
+   "source_sha256": "1b8fd4e887f08b5b61c5a4f72578a8b29c99748fcb545c68534325e6e52deab3",
+   "diff_lines_target_vs_source": 0,
+   "diff_lines_base_vs_target": null,
+   "diff_lines_base_vs_source": null
+  },
+  {
+   "path": "architecture/+olh/+material/stiffnessInterpolation.m",
+   "status": "SOURCE_ONLY",
+   "target_sha256": null,
+   "source_sha256": "6dfedb07f21c06ed3476a7979e1c83f1eb2100ccb9b823242124556c84eccd58",
+   "diff_lines_target_vs_source": null,
+   "diff_lines_base_vs_target": null,
+   "diff_lines_base_vs_source": null
+  },
+  {
+   "path": "architecture/+olh/+move/exhaustion.m",
+   "status": "TARGET_ONLY",
+   "target_sha256": "17b37a384b1aa5d987d9c861e16071d1140af130f92406ccc11cec4518bcae0c",
+   "source_sha256": null,
+   "diff_lines_target_vs_source": null,
+   "diff_lines_base_vs_target": null,
+   "diff_lines_base_vs_source": null
+  },
+  {
+   "path": "architecture/+olh/+move/limit.m",
+   "status": "DIFFERENT",
+   "target_sha256": "61fa923d430121ead764a229b4f48dfd77617540b4ab6db883ccd9d5904b1c1e",
+   "source_sha256": "98e8e23238d81d844259e320dacda4ee3400955a9a6dcc821d923fa4dc4ac751",
+   "diff_lines_target_vs_source": 78,
+   "diff_lines_base_vs_target": 44,
+   "diff_lines_base_vs_source": 36
+  },
+  {
+   "path": "architecture/+olh/+multi/detect.m",
+   "status": "IDENTICAL",
+   "target_sha256": "91e499e9308ccc8d471473a7d45cb7707f3e6d0f6fc73d9fdbfd04829312bfc3",
+   "source_sha256": "91e499e9308ccc8d471473a7d45cb7707f3e6d0f6fc73d9fdbfd04829312bfc3",
+   "diff_lines_target_vs_source": 0,
+   "diff_lines_base_vs_target": null,
+   "diff_lines_base_vs_source": null
+  },
+  {
+   "path": "architecture/+olh/+presets/apply.m",
+   "status": "IDENTICAL",
+   "target_sha256": "daed58374c507ff140b542483d6c51c6b12dac9bf9e764925b7e19c124a2f7ba",
+   "source_sha256": "daed58374c507ff140b542483d6c51c6b12dac9bf9e764925b7e19c124a2f7ba",
+   "diff_lines_target_vs_source": 0,
+   "diff_lines_base_vs_target": null,
+   "diff_lines_base_vs_source": null
+  },
+  {
+   "path": "architecture/+olh/+presets/duOlhoffAdaptiveMove.m",
+   "status": "SOURCE_ONLY",
+   "target_sha256": null,
+   "source_sha256": "3e7962dc0ad0a148c3b5a267ec6a25d6ff3ef578d637c685b2d8349f3037b7f3",
+   "diff_lines_target_vs_source": null,
+   "diff_lines_base_vs_target": null,
+   "diff_lines_base_vs_source": null
+  },
+  {
+   "path": "architecture/+olh/+presets/duOlhoffAdaptivePedersen.m",
+   "status": "SOURCE_ONLY",
+   "target_sha256": null,
+   "source_sha256": "94e924e6ce46ea40e6ed87af9596fb44f5049ef9f20b4da44f2c5e45b1d2ae75",
+   "diff_lines_target_vs_source": null,
+   "diff_lines_base_vs_target": null,
+   "diff_lines_base_vs_source": null
+  },
+  {
+   "path": "architecture/+olh/+presets/duOlhoffFrozenM4.m",
+   "status": "IDENTICAL",
+   "target_sha256": "6ed3624cd19b3569f55b23acad1d5a1038d9c625a7fae9935e801ffb765ac40e",
+   "source_sha256": "6ed3624cd19b3569f55b23acad1d5a1038d9c625a7fae9935e801ffb765ac40e",
+   "diff_lines_target_vs_source": 0,
+   "diff_lines_base_vs_target": null,
+   "diff_lines_base_vs_source": null
+  },
+  {
+   "path": "architecture/+olh/+presets/duOlhoffMatureM4.m",
+   "status": "IDENTICAL",
+   "target_sha256": "0445fbc560ad2e99738be9cc72501cf5acb8e196256fdd5f028cdc4b23e14102",
+   "source_sha256": "0445fbc560ad2e99738be9cc72501cf5acb8e196256fdd5f028cdc4b23e14102",
+   "diff_lines_target_vs_source": 0,
+   "diff_lines_base_vs_target": null,
+   "diff_lines_base_vs_source": null
+  },
+  {
+   "path": "architecture/+olh/+presets/duOlhoffOuterAsymptotes.m",
+   "status": "SOURCE_ONLY",
+   "target_sha256": null,
+   "source_sha256": "59d154c1198001f536129612851f10132f9aa195467687aa2db188b43698844e",
+   "diff_lines_target_vs_source": null,
+   "diff_lines_base_vs_target": null,
+   "diff_lines_base_vs_source": null
+  },
+  {
+   "path": "architecture/+olh/+presets/legacyBinaryDiagonal.m",
+   "status": "IDENTICAL",
+   "target_sha256": "b26bdaa0e5183a9d1cd107708b61d295f9a7d39a4d66a6251e812b112f26eade",
+   "source_sha256": "b26bdaa0e5183a9d1cd107708b61d295f9a7d39a4d66a6251e812b112f26eade",
+   "diff_lines_target_vs_source": 0,
+   "diff_lines_base_vs_target": null,
+   "diff_lines_base_vs_source": null
+  },
+  {
+   "path": "architecture/+olh/+presets/list.m",
+   "status": "DIFFERENT",
+   "target_sha256": "d30b9ab76114e39af56e4938f365867cda101d1447389baf3bfbca0ed72610a8",
+   "source_sha256": "2593695f8801b4eb5c7bb7da61010edd819c8405d43ad2b197f065a89e1c9109",
+   "diff_lines_target_vs_source": 3,
+   "diff_lines_base_vs_target": 0,
+   "diff_lines_base_vs_source": 3
+  },
+  {
+   "path": "architecture/+olh/+presets/noDescentFixedMove.m",
+   "status": "IDENTICAL",
+   "target_sha256": "91d16bcb595d4e1c2ed96a69d16fdc77bdccdaeae07ca4f8e06269f377ae74da",
+   "source_sha256": "91d16bcb595d4e1c2ed96a69d16fdc77bdccdaeae07ca4f8e06269f377ae74da",
+   "diff_lines_target_vs_source": 0,
+   "diff_lines_base_vs_target": null,
+   "diff_lines_base_vs_source": null
+  },
+  {
+   "path": "architecture/+olh/+presets/pContinuationCoupled.m",
+   "status": "IDENTICAL",
+   "target_sha256": "737eb4600d34bfbc21be9ecb9ceb0d5f852f556738ecb6f765112d3c1e4b8cf9",
+   "source_sha256": "737eb4600d34bfbc21be9ecb9ceb0d5f852f556738ecb6f765112d3c1e4b8cf9",
+   "diff_lines_target_vs_source": 0,
+   "diff_lines_base_vs_target": null,
+   "diff_lines_base_vs_source": null
+  },
+  {
+   "path": "architecture/+olh/+presets/pContinuationDecoupled.m",
+   "status": "IDENTICAL",
+   "target_sha256": "6e774ec3e2d62b018f63e7177dfe4112d5af7486c909ba69bb063a60d14dbeee",
+   "source_sha256": "6e774ec3e2d62b018f63e7177dfe4112d5af7486c909ba69bb063a60d14dbeee",
+   "diff_lines_target_vs_source": 0,
+   "diff_lines_base_vs_target": null,
+   "diff_lines_base_vs_source": null
+  },
+  {
+   "path": "architecture/+olh/+presets/pMassCompatible.m",
+   "status": "IDENTICAL",
+   "target_sha256": "329163edcd25b2220c1f7943244511c25c0f2f7d37bc3938812ffde9da9a6cd7",
+   "source_sha256": "329163edcd25b2220c1f7943244511c25c0f2f7d37bc3938812ffde9da9a6cd7",
+   "diff_lines_target_vs_source": 0,
+   "diff_lines_base_vs_target": null,
+   "diff_lines_base_vs_source": null
+  },
+  {
+   "path": "architecture/+olh/+presets/projected.m",
+   "status": "IDENTICAL",
+   "target_sha256": "bf7b0e464fce470820b7082b4278101133e23f6911e8430007753fb916f8e806",
+   "source_sha256": "bf7b0e464fce470820b7082b4278101133e23f6911e8430007753fb916f8e806",
+   "diff_lines_target_vs_source": 0,
+   "diff_lines_base_vs_target": null,
+   "diff_lines_base_vs_source": null
+  },
+  {
+   "path": "architecture/+olh/+presets/projectionIdentity.m",
+   "status": "IDENTICAL",
+   "target_sha256": "feac2cfaaf26112f743eff134f8a46eae3ff2d30fc8c94eb6b1a3d1ad46f16cd",
+   "source_sha256": "feac2cfaaf26112f743eff134f8a46eae3ff2d30fc8c94eb6b1a3d1ad46f16cd",
+   "diff_lines_target_vs_source": 0,
+   "diff_lines_base_vs_target": null,
+   "diff_lines_base_vs_source": null
+  },
+  {
+   "path": "architecture/+olh/+presets/restorationLadderGuard.m",
+   "status": "IDENTICAL",
+   "target_sha256": "74edb3cf466b6627e39259022546db7c96a1e3e5da46104bf1a46da5c921d7c6",
+   "source_sha256": "74edb3cf466b6627e39259022546db7c96a1e3e5da46104bf1a46da5c921d7c6",
+   "diff_lines_target_vs_source": 0,
+   "diff_lines_base_vs_target": null,
+   "diff_lines_base_vs_source": null
+  },
+  {
+   "path": "architecture/docs/ARCHITECTURE.md",
+   "status": "IDENTICAL",
+   "target_sha256": "90cacf422c345c2cee9eaf070067230f43e98318a42ac6833a5a2bfb8c1be509",
+   "source_sha256": "90cacf422c345c2cee9eaf070067230f43e98318a42ac6833a5a2bfb8c1be509",
+   "diff_lines_target_vs_source": 0,
+   "diff_lines_base_vs_target": null,
+   "diff_lines_base_vs_source": null
+  },
+  {
+   "path": "architecture/docs/ARCHITECTURE_VARIANT_INVENTORY.md",
+   "status": "IDENTICAL",
+   "target_sha256": "da5108752950843f8820c941f4343a8a9873a7f96897e822941508d11f8d87b6",
+   "source_sha256": "da5108752950843f8820c941f4343a8a9873a7f96897e822941508d11f8d87b6",
+   "diff_lines_target_vs_source": 0,
+   "diff_lines_base_vs_target": null,
+   "diff_lines_base_vs_source": null
+  },
+  {
+   "path": "architecture/docs/CONFIG_REFERENCE.md",
+   "status": "DIFFERENT",
+   "target_sha256": "397939c66043ef012d0f8fa6e383c7224a54724d4b62fea1a2fad79eb617a14b",
+   "source_sha256": "3908debfcd6cff1c43ce5c40f194a95542a440092a498dbc0089c29f6fa2c3b8",
+   "diff_lines_target_vs_source": 18,
+   "diff_lines_base_vs_target": 0,
+   "diff_lines_base_vs_source": 18
+  },
+  {
+   "path": "architecture/docs/FILE_CLASSIFICATION.md",
+   "status": "IDENTICAL",
+   "target_sha256": "c412b0f0107dfbbfe472f1dd4f2002bc06e93ee79e783cd484d58634af84ba14",
+   "source_sha256": "c412b0f0107dfbbfe472f1dd4f2002bc06e93ee79e783cd484d58634af84ba14",
+   "diff_lines_target_vs_source": 0,
+   "diff_lines_base_vs_target": null,
+   "diff_lines_base_vs_source": null
+  },
+  {
+   "path": "architecture/docs/MIGRATION_FROM_LEGACY.md",
+   "status": "IDENTICAL",
+   "target_sha256": "1808da8b98cafc8704183cdbb631d25835c0c4ffbae9c40cb89e856b5f8ce4b5",
+   "source_sha256": "1808da8b98cafc8704183cdbb631d25835c0c4ffbae9c40cb89e856b5f8ce4b5",
+   "diff_lines_target_vs_source": 0,
+   "diff_lines_base_vs_target": null,
+   "diff_lines_base_vs_source": null
+  },
+  {
+   "path": "architecture/docs/OLHOFF_ARCHITECTURE_REFACTOR_PLAN.md",
+   "status": "IDENTICAL",
+   "target_sha256": "a4551702a0ffeae0c4db3477e6851605db7c016530a3a3fa9770ec2141331fe6",
+   "source_sha256": "a4551702a0ffeae0c4db3477e6851605db7c016530a3a3fa9770ec2141331fe6",
+   "diff_lines_target_vs_source": 0,
+   "diff_lines_base_vs_target": null,
+   "diff_lines_base_vs_source": null
+  },
+  {
+   "path": "architecture/docs/OLHOFF_ARCHITECTURE_REFACTOR_REPORT.md",
+   "status": "IDENTICAL",
+   "target_sha256": "8c18d83852a250b6734b5f868e644c054bf458654d0c54ef47d4e9a7932d49e1",
+   "source_sha256": "8c18d83852a250b6734b5f868e644c054bf458654d0c54ef47d4e9a7932d49e1",
+   "diff_lines_target_vs_source": 0,
+   "diff_lines_base_vs_target": null,
+   "diff_lines_base_vs_source": null
+  },
+  {
+   "path": "architecture/docs/PRESETS.md",
+   "status": "DIFFERENT",
+   "target_sha256": "5fc61dde76f71d627249c76f78c4171606ce18db92c4365a7c0b08a52e4ee86d",
+   "source_sha256": "de0baa086173b00df046beb73e5f7426b3886c95c42482ff78948ef930ae700d",
+   "diff_lines_target_vs_source": 45,
+   "diff_lines_base_vs_target": 0,
+   "diff_lines_base_vs_source": 45
+  },
+  {
+   "path": "architecture/docs/PYMORPHOGEN_PORT_MAP.md",
+   "status": "IDENTICAL",
+   "target_sha256": "5e5c7ad0978d3f3fd20273bfcfade3d96080d27e2d0db1587f6c7316b2d0e3be",
+   "source_sha256": "5e5c7ad0978d3f3fd20273bfcfade3d96080d27e2d0db1587f6c7316b2d0e3be",
+   "diff_lines_target_vs_source": 0,
+   "diff_lines_base_vs_target": null,
+   "diff_lines_base_vs_source": null
+  },
+  {
+   "path": "architecture/docs/SCIENTIFIC_CONFIG_PROVENANCE.md",
+   "status": "DIFFERENT",
+   "target_sha256": "22cd312905fe4589b566884614e5b0b8aa2dc91f69e383fdd6f929ef977e8d97",
+   "source_sha256": "b1623f07226c3e4f7690cc4d13b3c5cac9e1ae50a94a2f495c26021f8bff3133",
+   "diff_lines_target_vs_source": 6,
+   "diff_lines_base_vs_target": 0,
+   "diff_lines_base_vs_source": 6
+  },
+  {
+   "path": "architecture/docs/TERMINOLOGY.md",
+   "status": "IDENTICAL",
+   "target_sha256": "a05d2ed01d8449757b470ccfc32fd13550e6741f15d786bc4ed8fb66b67127e6",
+   "source_sha256": "a05d2ed01d8449757b470ccfc32fd13550e6741f15d786bc4ed8fb66b67127e6",
+   "diff_lines_target_vs_source": 0,
+   "diff_lines_base_vs_target": null,
+   "diff_lines_base_vs_source": null
+  },
+  {
+   "path": "architecture/legacy/olhoffOpt_PRE_CANONICAL.m",
+   "status": "IDENTICAL",
+   "target_sha256": "cb9790232eec619faf7ec85e43393a068166bb2466fa5bcb599a05daa03eb544",
+   "source_sha256": "cb9790232eec619faf7ec85e43393a068166bb2466fa5bcb599a05daa03eb544",
+   "diff_lines_target_vs_source": 0,
+   "diff_lines_base_vs_target": null,
+   "diff_lines_base_vs_source": null
+  },
+  {
+   "path": "architecture/olhoffSolve.m",
+   "status": "DIFFERENT",
+   "target_sha256": "1e5a114cbf91717e01e5592e86203f401ed5cdb3e5f5ce9a727b8163cdf2fba3",
+   "source_sha256": "91e779510e7d7b6a63d2ceeb49ed004164a1b294d95d3143d57b8899997b98d9",
+   "diff_lines_target_vs_source": 179,
+   "diff_lines_base_vs_target": 117,
+   "diff_lines_base_vs_source": 62
+  },
+  {
+   "path": "fem/assemble2D.m",
+   "status": "DIFFERENT",
+   "target_sha256": "7b2f1e10228d57237d962689909297351c879c9b613f311500f23dd37bd00878",
+   "source_sha256": "ebf543df22d774598053fc99d50dbbce33f7d679084e14202d2999cb09da264f",
+   "diff_lines_target_vs_source": 7,
+   "diff_lines_base_vs_target": 0,
+   "diff_lines_base_vs_source": 7
+  },
+  {
+   "path": "fem/classifyModes.m",
+   "status": "IDENTICAL",
+   "target_sha256": "0f93a2acce7aac69e5ad168edc1413e01bce5757b7e00c9c2c4a7a70288c29e1",
+   "source_sha256": "0f93a2acce7aac69e5ad168edc1413e01bce5757b7e00c9c2c4a7a70288c29e1",
+   "diff_lines_target_vs_source": 0,
+   "diff_lines_base_vs_target": null,
+   "diff_lines_base_vs_source": null
+  },
+  {
+   "path": "fem/eigSolve.m",
+   "status": "DIFFERENT",
+   "target_sha256": "b0784ceeb15fafe164ba138b963c3ab4dc5a466fc2953c79786809edd16159cd",
+   "source_sha256": "1f7181e45b57b0db95c1e9faaf2cd6babb1ccd2cad5abaea247c10ae9d029856",
+   "diff_lines_target_vs_source": 20,
+   "diff_lines_base_vs_target": 0,
+   "diff_lines_base_vs_source": 20
+  },
+  {
+   "path": "fem/elemMats2D.m",
+   "status": "IDENTICAL",
+   "target_sha256": "b8ae7c424d42f02390ebeb724592bf606ff9504f4be588810a58a1c4493bfba1",
+   "source_sha256": "b8ae7c424d42f02390ebeb724592bf606ff9504f4be588810a58a1c4493bfba1",
+   "diff_lines_target_vs_source": 0,
+   "diff_lines_base_vs_target": null,
+   "diff_lines_base_vs_source": null
+  },
+  {
+   "path": "fem/massScale.m",
+   "status": "IDENTICAL",
+   "target_sha256": "2a93c74d1872bb62a41a856e10445a494721097cd7b7881fb98c110a67f6115a",
+   "source_sha256": "2a93c74d1872bb62a41a856e10445a494721097cd7b7881fb98c110a67f6115a",
+   "diff_lines_target_vs_source": 0,
+   "diff_lines_base_vs_target": null,
+   "diff_lines_base_vs_source": null
+  },
+  {
+   "path": "fem/model2D.m",
+   "status": "IDENTICAL",
+   "target_sha256": "3cc19e1c52023225a1350d1c3e7623a9df68b01f52a74c82ddd4aac377ac6560",
+   "source_sha256": "3cc19e1c52023225a1350d1c3e7623a9df68b01f52a74c82ddd4aac377ac6560",
+   "diff_lines_target_vs_source": 0,
+   "diff_lines_base_vs_target": null,
+   "diff_lines_base_vs_source": null
+  },
+  {
+   "path": "filter/applyFilter.m",
+   "status": "IDENTICAL",
+   "target_sha256": "461ec7c7950b4d08e20c04d348d9d95674d3e42f1f167b05d3804c94abe057a7",
+   "source_sha256": "461ec7c7950b4d08e20c04d348d9d95674d3e42f1f167b05d3804c94abe057a7",
+   "diff_lines_target_vs_source": 0,
+   "diff_lines_base_vs_target": null,
+   "diff_lines_base_vs_source": null
+  },
+  {
+   "path": "filter/prepFilter.m",
+   "status": "IDENTICAL",
+   "target_sha256": "18ceb629c567fafcd90830c4eed3a4809fc2dda682d54cef1176b82bd6d47e1a",
+   "source_sha256": "18ceb629c567fafcd90830c4eed3a4809fc2dda682d54cef1176b82bd6d47e1a",
+   "diff_lines_target_vs_source": 0,
+   "diff_lines_base_vs_target": null,
+   "diff_lines_base_vs_source": null
+  },
+  {
+   "path": "filter/projChain.m",
+   "status": "IDENTICAL",
+   "target_sha256": "1392d0030d51aa43a84b4a4a3b344741274008b316aa448915d362bb659ca655",
+   "source_sha256": "1392d0030d51aa43a84b4a4a3b344741274008b316aa448915d362bb659ca655",
+   "diff_lines_target_vs_source": 0,
+   "diff_lines_base_vs_target": null,
+   "diff_lines_base_vs_source": null
+  },
+  {
+   "path": "filter/projDensityField.m",
+   "status": "IDENTICAL",
+   "target_sha256": "cc62399dee265b56a7ac27d669857361b340365b86d1336fa227566696a4b5fb",
+   "source_sha256": "cc62399dee265b56a7ac27d669857361b340365b86d1336fa227566696a4b5fb",
+   "diff_lines_target_vs_source": 0,
+   "diff_lines_base_vs_target": null,
+   "diff_lines_base_vs_source": null
+  },
+  {
+   "path": "filter/projectDensity.m",
+   "status": "IDENTICAL",
+   "target_sha256": "817a0db22efdfe8ee0f8cace56a13d5c52a28cb4e875bd49880392745919c320",
+   "source_sha256": "817a0db22efdfe8ee0f8cace56a13d5c52a28cb4e875bd49880392745919c320",
+   "diff_lines_target_vs_source": 0,
+   "diff_lines_base_vs_target": null,
+   "diff_lines_base_vs_source": null
+  },
+  {
+   "path": "filter/top88_reference.m",
+   "status": "IDENTICAL",
+   "target_sha256": "eb8613bdb46e833b45acf9d43a8dad39a7e8fd104beafeab896742bcc3093810",
+   "source_sha256": "eb8613bdb46e833b45acf9d43a8dad39a7e8fd104beafeab896742bcc3093810",
+   "diff_lines_target_vs_source": 0,
+   "diff_lines_base_vs_target": null,
+   "diff_lines_base_vs_source": null
+  },
+  {
+   "path": "mma/mmasub.m",
+   "status": "IDENTICAL",
+   "target_sha256": "54c1680036e6effdb70bc32524b0c11c366cebed64d5a508c82553e871ff7660",
+   "source_sha256": "54c1680036e6effdb70bc32524b0c11c366cebed64d5a508c82553e871ff7660",
+   "diff_lines_target_vs_source": 0,
+   "diff_lines_base_vs_target": null,
+   "diff_lines_base_vs_source": null
+  },
+  {
+   "path": "mma/subsolv.m",
+   "status": "IDENTICAL",
+   "target_sha256": "130033335ac5a21f31437a196bf8f37c5b97880a00e93cf2962a8a54bac2b98a",
+   "source_sha256": "130033335ac5a21f31437a196bf8f37c5b97880a00e93cf2962a8a54bac2b98a",
+   "diff_lines_target_vs_source": 0,
+   "diff_lines_base_vs_target": null,
+   "diff_lines_base_vs_source": null
+  },
+  {
+   "path": "mma_published/README.md",
+   "status": "IDENTICAL",
+   "target_sha256": "14ac696e5b319a19e44a11b4a5aa41d74c1b9915ff1ebf1435d5e046f637d1d0",
+   "source_sha256": "14ac696e5b319a19e44a11b4a5aa41d74c1b9915ff1ebf1435d5e046f637d1d0",
+   "diff_lines_target_vs_source": 0,
+   "diff_lines_base_vs_target": null,
+   "diff_lines_base_vs_source": null
+  },
+  {
+   "path": "mma_published/mmasub.m",
+   "status": "IDENTICAL",
+   "target_sha256": "4507b73e3e44cdd6999b52c7a815569a4fc716749b1e23c2d0c228ff51da2edb",
+   "source_sha256": "4507b73e3e44cdd6999b52c7a815569a4fc716749b1e23c2d0c228ff51da2edb",
+   "diff_lines_target_vs_source": 0,
+   "diff_lines_base_vs_target": null,
+   "diff_lines_base_vs_source": null
+  },
+  {
+   "path": "mma_published/subsolv.m",
+   "status": "IDENTICAL",
+   "target_sha256": "130033335ac5a21f31437a196bf8f37c5b97880a00e93cf2962a8a54bac2b98a",
+   "source_sha256": "130033335ac5a21f31437a196bf8f37c5b97880a00e93cf2962a8a54bac2b98a",
+   "diff_lines_target_vs_source": 0,
+   "diff_lines_base_vs_target": null,
+   "diff_lines_base_vs_source": null
+  }
+ ],
+ "plan_unchanged_claim": {
+  "mma/mmasub.m": "IDENTICAL",
+  "mma/subsolv.m": "IDENTICAL",
+  "mma_published/mmasub.m": "IDENTICAL",
+  "mma_published/subsolv.m": "IDENTICAL",
+  "mma_published/README.md": "IDENTICAL",
+  "filter/applyFilter.m": "IDENTICAL",
+  "filter/prepFilter.m": "IDENTICAL",
+  "filter/projChain.m": "IDENTICAL",
+  "filter/projDensityField.m": "IDENTICAL",
+  "filter/projectDensity.m": "IDENTICAL",
+  "filter/top88_reference.m": "IDENTICAL",
+  "fem/model2D.m": "IDENTICAL",
+  "fem/elemMats2D.m": "IDENTICAL",
+  "fem/massScale.m": "IDENTICAL",
+  "algo/innerLoop.m": "IDENTICAL",
+  "algo/innerLoopLP.m": "IDENTICAL",
+  "algo/deltaLambda.m": "IDENTICAL",
+  "algo/multRule.m": "IDENTICAL",
+  "algo/moveControl.m": "IDENTICAL",
+  "algo/useMMA.m": "IDENTICAL"
+ },
+ "plan_unchanged_claim_all_identical": true
+}

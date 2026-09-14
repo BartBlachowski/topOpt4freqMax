@@ -1,0 +1,431 @@
+{
+ "study": "three_rung_canary_preflight",
+ "generated": "2026-09-12T14:55:18+0200",
+ "branch": "benchmark-methodology-r2",
+ "head": "013cc48451d33bed61c5c4eea174bbd898d548a2",
+ "scientific_runs": 2,
+ "runs_executed": {
+  "C480x60": "CONVERGED",
+  "C800x100": "CONVERGED",
+  "nine_mesh_campaign": "NOT_EXECUTED",
+  "meshes_560_640_720": "NOT_EXECUTED"
+ },
+ "verdicts": {
+  "deployment_preflight": "THREE_RUNG_DEPLOYMENT_PREFLIGHT_PASS",
+  "C480": "C480_THREE_RUNG_CANARY_PASS",
+  "C800_controller": "C800_THREE_RUNG_CONTROLLER_PASS",
+  "C800_endpoint": "C800_ENDPOINT_SCIENTIFICALLY_SUSPICIOUS",
+  "C800_runtime": "C800_RUNTIME_BEHAVIOR_EXPLAINED",
+  "fixed_work": "FIXED_WORK_SCALING_SANITY_PASS",
+  "next_mode_warning": "NEXT_MODE_WARNING_MATERIAL_CONCERN",
+  "overall": "THREE_RUNG_CONTROLLER_GENERALIZES_BUT_FINE_MESH_SCIENCE_SUSPICIOUS",
+  "campaign": "CORRECT_NINE_MESH_CAMPAIGN_BLOCKED"
+ },
+ "preregistered_case": "Case 4 (PREREGISTRATION.md sec. 11)",
+ "canaries": {
+  "480x60": {
+   "status": "CONVERGED",
+   "nOuter": 386,
+   "cap": 1600,
+   "cap_headroom": 1214,
+   "innerTotal": 7300,
+   "innerNonConv": 0,
+   "omega1": 163.93225938567002,
+   "omega2": 185.21032464590309,
+   "omega3": 401.39946949684344,
+   "gap12": 0.12979791372346,
+   "gap23": 1.1672629226489644,
+   "Mnd_pct": 26.34156302529312,
+   "volume": 0.4999984544949872,
+   "move_final": 0.01,
+   "stage_final": 3,
+   "wall_s": 2799.278047375,
+   "cfgHash": "03097a28b0ad7fdb0d977985d3b5fd279dd74553c9dd5dfbd3cc035ac2a1782e",
+   "rho_sha256": "0a498a7d6ab0565b29c15ff9364060d937d4df10aa661fc90d02c038ce6e4a60",
+   "stageStarts": [
+    1,
+    309,
+    348
+   ],
+   "declarations": [
+    {
+     "stage": 1,
+     "end": 308,
+     "duration": 308,
+     "inner": 5990
+    },
+    {
+     "stage": 2,
+     "end": 347,
+     "duration": 39,
+     "inner": 692
+    },
+    {
+     "stage": 3,
+     "end": 386,
+     "duration": 39,
+     "inner": 618
+    }
+   ],
+   "terminal_branch": "B",
+   "terminal_amp_over_tol": 0.052385011367139536,
+   "omega1_change_last20_pct": 0.0037139219622797635,
+   "Mnd_change_last20_pts": -0.03605608296051699,
+   "multJ_count": 4,
+   "multJ_fraction_pct": 1.0362694300518134,
+   "multJ_first": 12,
+   "multJ_overlaps_terminal": false,
+   "all_gates_pass": true,
+   "timing": {
+    "total_wall_s": 2799.278047375,
+    "sum_tOuter_s": 2798.8587867916667,
+    "N_outer": 386,
+    "N_inner": 7300,
+    "mean_inner_per_outer": 18.911917098445596,
+    "mean_wall_per_outer_s": 7.250929499460277,
+    "mean_eig_per_outer_s": 0.27157011409758197,
+    "mean_grad_per_outer_s": 0.016864681239205523,
+    "mean_inner_per_outer_s": 6.960978108052676,
+    "mean_s_per_mma_step": 0.368073636946347,
+    "T_other_s": 0.5854060833339645,
+    "share_pct": {
+     "eig": 3.7453145023378904,
+     "grad": 0.2325864737818903,
+     "inner": 96.0011831389454,
+     "other": 0.020915884934838595
+    }
+   },
+   "stage_timing": [
+    {
+     "stage": 1,
+     "move": 0.04,
+     "n": 308,
+     "tOuter_per_it": 5.959701138528138,
+     "tEig_per_it": 0.27208812040043295,
+     "tGrad_per_it": 0.01670413731060606,
+     "tInner_per_it": 5.669314647862554,
+     "inner_per_it": 19.448051948051948,
+     "s_per_mma_step": 0.29151066970645517
+    },
+    {
+     "stage": 2,
+     "move": 0.02,
+     "n": 39,
+     "tOuter_per_it": 11.036558753205128,
+     "tEig_per_it": 0.26623906623931626,
+     "tGrad_per_it": 0.017609269230769227,
+     "tInner_per_it": 10.751515768162394,
+     "inner_per_it": 17.743589743589745,
+     "s_per_mma_step": 0.6059380273964354
+    },
+    {
+     "stage": 3,
+     "move": 0.01,
+     "n": 39,
+     "tOuter_per_it": 13.662693455128206,
+     "tEig_per_it": 0.2728102403846154,
+     "tGrad_per_it": 0.017387978632478634,
+     "tInner_per_it": 13.371269825854702,
+     "inner_per_it": 15.846153846153847,
+     "s_per_mma_step": 0.843817998718986
+    }
+   ]
+  },
+  "800x100": {
+   "status": "CONVERGED",
+   "nOuter": 468,
+   "cap": 1600,
+   "cap_headroom": 1132,
+   "innerTotal": 10404,
+   "innerNonConv": 0,
+   "omega1": 161.94583808332942,
+   "omega2": 161.95148607903909,
+   "omega3": 382.47940150449614,
+   "gap12": 3.4875831182270845e-05,
+   "gap23": 1.3616912123784417,
+   "Mnd_pct": 34.41232077776818,
+   "volume": 0.49999367812652545,
+   "move_final": 0.01,
+   "stage_final": 3,
+   "wall_s": 7554.096479416667,
+   "cfgHash": "7724af5ed26786e16132c30fbae840f5d8679d5ea798fc75d5c48eefd0e50ffe",
+   "rho_sha256": "50e4e625c330e1aadddf75ea121966213173b5817af7337d2ef3603e287bb9c7",
+   "stageStarts": [
+    1,
+    391,
+    430
+   ],
+   "declarations": [
+    {
+     "stage": 1,
+     "end": 390,
+     "duration": 390,
+     "inner": 8467
+    },
+    {
+     "stage": 2,
+     "end": 429,
+     "duration": 39,
+     "inner": 881
+    },
+    {
+     "stage": 3,
+     "end": 468,
+     "duration": 39,
+     "inner": 1056
+    }
+   ],
+   "terminal_branch": "B",
+   "terminal_amp_over_tol": 0.0845253659187136,
+   "omega1_change_last20_pct": 0.014035201059520728,
+   "Mnd_change_last20_pts": -0.06438507273583127,
+   "multJ_count": 81,
+   "multJ_fraction_pct": 17.307692307692307,
+   "multJ_first": 26,
+   "multJ_overlaps_terminal": false,
+   "all_gates_pass": true,
+   "timing": {
+    "total_wall_s": 7554.096479416667,
+    "sum_tOuter_s": 7552.474774208334,
+    "N_outer": 468,
+    "N_inner": 10404,
+    "mean_inner_per_outer": 22.23076923076923,
+    "mean_wall_per_outer_s": 16.13776661155627,
+    "mean_eig_per_outer_s": 1.187249280982906,
+    "mean_grad_per_outer_s": 0.048925779558404554,
+    "mean_inner_per_outer_s": 14.899011029736467,
+    "mean_s_per_mma_step": 0.6701977279812252,
+    "T_other_s": 1.2076839583342007,
+    "share_pct": {
+     "eig": 7.356961527332511,
+     "grad": 0.3031756545752047,
+     "inner": 92.32387224553906,
+     "other": 0.01599057255323031
+    }
+   },
+   "stage_timing": [
+    {
+     "stage": 1,
+     "move": 0.04,
+     "n": 390,
+     "tOuter_per_it": 13.94322997190171,
+     "tEig_per_it": 1.1635583267094016,
+     "tGrad_per_it": 0.04869229230769231,
+     "tInner_per_it": 12.728386236858974,
+     "inner_per_it": 21.71025641025641,
+     "s_per_mma_step": 0.5862844729390575
+    },
+    {
+     "stage": 2,
+     "move": 0.02,
+     "n": 39,
+     "tOuter_per_it": 20.995220396367518,
+     "tEig_per_it": 1.2993963440170944,
+     "tGrad_per_it": 0.049937681623931626,
+     "tInner_per_it": 19.643618993589744,
+     "inner_per_it": 22.58974358974359,
+     "s_per_mma_step": 0.8695813175368899
+    },
+    {
+     "stage": 3,
+     "move": 0.01,
+     "n": 39,
+     "tOuter_per_it": 33.225679223290605,
+     "tEig_per_it": 1.3120117606837607,
+     "tGrad_per_it": 0.05024875,
+     "tInner_per_it": 31.860650994658126,
+     "inner_per_it": 27.076923076923077,
+     "s_per_mma_step": 1.1766717696890785
+    }
+   ]
+  }
+ },
+ "fixed_work_scaling": {
+  "assembly+eigensolve": {
+   "480x60": 0.2705867083333333,
+   "800x100": 1.3058041666666667,
+   "ratio": 4.825825239937722,
+   "exponent": 1.5406252947398114
+  },
+  "gradients": {
+   "480x60": 0.016815375,
+   "800x100": 0.056960625,
+   "ratio": 3.3874133047880286,
+   "exponent": 1.1942104471982526
+  },
+  "MMA sub-problem (whole)": {
+   "480x60": 11.917161541666667,
+   "800x100": 31.952484791666667,
+   "ratio": 2.6812160496397848,
+   "exponent": 0.9653689983324205
+  }
+ },
+ "topology_800_legacy_vs_three_rung": {
+  "IoU_threshold_0p5": 0.7020630482984672,
+  "threshold_flip_fraction": 0.154525,
+  "density_L1": 0.0988642735641273,
+  "Mnd_legacy_pct": 50.65606664059261,
+  "Mnd_three_rung_pct": 34.41232077776823
+ },
+ "mesh_trend_three_rung": {
+  "note": "M_nd rises monotonically and accelerates; omega1 falls monotonically. Under one frozen controller. This is the central negative finding.",
+  "Mnd_pct": {
+   "160x20": 12.756141959540171,
+   "240x30": 12.91652409156148,
+   "320x40": 12.940093529981493,
+   "400x50": 15.373230197122789,
+   "480x60": 26.34156302529312,
+   "800x100": 34.41232077776818
+  },
+  "omega1": {
+   "160x20": 169.97512028959605,
+   "240x30": 167.0393810208395,
+   "320x40": 166.42630441353683,
+   "400x50": 166.45229843313905,
+   "480x60": 163.93225938567002,
+   "800x100": 161.94583808332942
+  },
+  "S1_declaration": {
+   "160x20": 102,
+   "240x30": 206,
+   "320x40": 274,
+   "400x50": 388,
+   "480x60": 308,
+   "800x100": 390
+  },
+  "S1_monotone_in_mesh": false,
+  "structure_all_meshes": "S1 + 78; S2 and S3 both at the minimum dwell 39"
+ },
+ "preflight_checks_discharged_offline": {
+  "impl_tree_sha256": "edbfe47eb32109a2fb017f6f13d5327f2c240357caa96630064ffcf37ee152cb",
+  "impl_tree_match": true,
+  "impl_files": "75/75",
+  "impl_tree_equals_validated_c320_implTree": true,
+  "legacy_nine_config_hashes_reproduced": "9/9",
+  "validated_c320_hash_reproduced": true,
+  "validated_c320_hash": "afad9ea4b27da576553f128d66a8329edee963066c1ef477b1df70f9232daaab"
+ },
+ "preflight_runtime": {
+  "verdict": "THREE_RUNG_DEPLOYMENT_PREFLIGHT_PASS",
+  "meshes": [
+   "480x60",
+   "800x100"
+  ],
+  "field_checks": "47/47 at each mesh",
+  "blockers": 0,
+  "frozen_hash_equals_runtime_hash": true,
+  "dispatch_ok": true,
+  "beta_continuation_authority": false,
+  "beta_stop_authority": false,
+  "telemetry_missing": [],
+  "matlab": "25.2.0.2998904 (R2025b)",
+  "matlab_of_validated_c320_run": "25.2.0.3042426 (R2025b) Update 1",
+  "matlab_build_differs_from_validated_run": true,
+  "earlier_failed_attempt": {
+   "when": "2026-09-12T09:17:43Z",
+   "error": "MathWorks Licensing Error 15, code -15.2",
+   "scientific_runs_executed": 0,
+   "note": "the gate refused before compute; retained as the direct demonstration that cp_run fails closed"
+  }
+ },
+ "frozen_expectation": {
+  "cap": 1600,
+  "policy": {
+   "move.levels": [
+    0.04,
+    0.02,
+    0.01
+   ],
+   "move.continuation.signal": "stageExhaustion",
+   "stop.rule": "stageExhaustion",
+   "beta_authority": "none"
+  },
+  "meshes": {
+   "480x60": {
+    "nelx": 480,
+    "nely": 60,
+    "NE": 28800,
+    "predicted_config_hash": "03097a28b0ad7fdb0d977985d3b5fd279dd74553c9dd5dfbd3cc035ac2a1782e",
+    "stop_tolerance": 0.15000000000000002
+   },
+   "800x100": {
+    "nelx": 800,
+    "nely": 100,
+    "NE": 80000,
+    "predicted_config_hash": "7724af5ed26786e16132c30fbae840f5d8679d5ea798fc75d5c48eefd0e50ffe",
+    "stop_tolerance": 0.25
+   }
+  }
+ },
+ "production_preset_promoted_to_three_rung": false,
+ "cost_projection_prerun_vs_actual": {
+  "note": "the pre-run projection assumed S1 is monotone in mesh; it is not",
+  "480x60": {
+   "projected_outer": 586,
+   "actual_outer": 386,
+   "error_factor": 1.5181347150259068
+  },
+  "800x100": {
+   "projected_outer": 1130,
+   "actual_outer": 468,
+   "error_factor": 2.4145299145299144
+  }
+ },
+ "raw_evidence": {
+  "C480x60_trajectory": {
+   "sha256": "a87546bc391cdc683def34a9f27678884528032f6b140e156349d2e74135ab9b",
+   "bytes": 155461014
+  },
+  "C800x100_trajectory": {
+   "sha256": "aef7af1c3ec669b41d6ff6799aaaea4bc35feac0d20ff739f91a532bece012eb",
+   "bytes": 536083874
+  },
+  "C480x60_state": {
+   "sha256": "2210902c1cf043c19caa3fb95608e883964f9ddb526a646b56efadc19d01f92e",
+   "bytes": 247885
+  },
+  "C800x100_state": {
+   "sha256": "4be416d0aaa41c3415fef472ac205d639efad6f5abdfca1e8d1052c974b33101",
+   "bytes": 539638
+  }
+ },
+ "legacy_inversion_720_to_800": {
+  "note": "LEGACY campaign only (beta / four-rung / diagnostics OFF).",
+  "from": "720x90",
+  "to": "800x100",
+  "NE_ratio": 1.2345679012345678,
+  "total_wall_ratio": 0.8287820759212059,
+  "per_outer_ratio": 1.0871670760613468,
+  "outer_count_ratio": 0.7623318385650224,
+  "identity_check": 0.828782075921206,
+  "components_per_outer_ratio": {
+   "eigen": 1.2140270672288078,
+   "gradient": 1.194243396637615,
+   "inner": 1.0746640183911622
+  },
+  "inner_split": {
+   "mma_steps_per_outer_ratio": 1.0081934077708914,
+   "s_per_mma_step_ratio": 1.065930415838799
+  },
+  "local_exponents_vs_NE": {
+   "eigen": 0.9203779379921049,
+   "gradient": 0.8424068678280444,
+   "inner": 0.34172228204956206,
+   "s_per_mma_step": 0.30299798394992405
+  }
+ },
+ "host": {
+  "hostname": "PMS.local",
+  "cpu": "Apple M1 Max",
+  "ncpu": 10,
+  "physicalcpu": 10,
+  "ram_bytes": 68719476736,
+  "os": "26.6.2",
+  "build": "25G83",
+  "kernel": "25.6.0",
+  "arch": "arm64"
+ },
+ "scientific_parameters_changed_after_seeing_outcomes": false,
+ "preregistration_frozen_sha256": "25a2500b6e708202b51fba705cb8604c20de577f56f8707f1ac93ce6fec14c82",
+ "preregistration_digest_recorded_before_any_run_in": "evidence/FINAL_SHA256.PRERUN.txt"
+}

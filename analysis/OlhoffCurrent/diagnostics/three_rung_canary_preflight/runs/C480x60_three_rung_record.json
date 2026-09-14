@@ -1,0 +1,452 @@
+{
+  "tag": "C480x60_three_rung",
+  "mesh": [
+    480,
+    60
+  ],
+  "NE": 28800,
+  "freeDOF": 58678,
+  "status": "CONVERGED",
+  "nOuter": 386,
+  "wall_s": 2799.278047375,
+  "innerTotal": 7300,
+  "innerMax": 35,
+  "innerNonConv": 0,
+  "cfgHash": "03097a28b0ad7fdb0d977985d3b5fd279dd74553c9dd5dfbd3cc035ac2a1782e",
+  "implTree": "edbfe47eb32109a2fb017f6f13d5327f2c240357caa96630064ffcf37ee152cb",
+  "cap": 1600,
+  "tol": 0.15000000000000002,
+  "levels": [
+    0.04,
+    0.02,
+    0.01
+  ],
+  "omega": [
+    163.93225938567002,
+    185.21032464590309,
+    401.39946949684344,
+    559.43299915869557,
+    755.24241658939081
+  ],
+  "omega1": 163.93225938567002,
+  "omega2": 185.21032464590309,
+  "omega3": 401.39946949684344,
+  "gap12": 0.12979791372346,
+  "gap23": 1.1672629226489644,
+  "volume_final": 0.4999984544949872,
+  "Mnd_final": 26.341563025293119,
+  "gray_final": 0.28729166666666667,
+  "mid_final": 0.11861111111111111,
+  "move_final": 0.01,
+  "stage_final": 3,
+  "multN_final": 2,
+  "multJ_count": 4,
+  "multJ_first": 12,
+  "terminal_l2": 0.0078577517050709318,
+  "terminal_max": 0.00062430118121121851,
+  "stageStarts": [
+    1,
+    309,
+    348
+  ],
+  "descents": [
+    [
+      309,
+      1,
+      308,
+      289
+    ],
+    [
+      348,
+      2,
+      347,
+      328
+    ]
+  ],
+  "terminalDeclared": true,
+  "terminalDeclIter": 386,
+  "terminalDeclBegin": 367,
+  "terminalBranch": "B",
+  "eventBranch": [
+    "B",
+    "B"
+  ],
+  "signalDrivesMove": true,
+  "ruleAdmitsStop": true,
+  "t": {
+    "total": 2799.278047375,
+    "eig": 104.82606404166664,
+    "grad": 6.5097669583333317,
+    "inner": 2686.9375497083329,
+    "outer": 2798.8587867916667,
+    "other": 0.58540608333396449,
+    "per_outer": 7.2509294994602769,
+    "eig_per_outer": 0.27157011409758197,
+    "grad_per_outer": 0.016864681239205523,
+    "inner_per_outer": 6.960978108052676,
+    "inner_per_mma": 0.368073636946347,
+    "mean_inner_per_outer": 18.911917098445596
+  },
+  "rho_sha256": "0a498a7d6ab0565b29c15ff9364060d937d4df10aa661fc90d02c038ce6e4a60",
+  "preflight": {
+    "mesh": [
+      480,
+      60
+    ],
+    "NE": 28800,
+    "pass": true,
+    "blockers": [],
+    "record": {
+      "matlab": "25.2.0.2998904 (R2025b)",
+      "computer": "MACA64",
+      "os": "26.6.2",
+      "cpu": "Apple M1 Max",
+      "ncores": 10,
+      "ram_bytes": 6.8719476736E+10,
+      "threads": 10,
+      "blasEnv": {
+        "OMP_NUM_THREADS": "",
+        "MKL_NUM_THREADS": "",
+        "VECLIB_MAXIMUM_THREADS": ""
+      },
+      "hostname": "PMS.local",
+      "loadavg": "{ 11.11 36.72 21.42 }",
+      "swap": "total = 0.00M  used = 0.00M  free = 0.00M  (encrypted)",
+      "freeRAM": "Mach Virtual Memory Statistics: (page size of 16384 bytes)\nPages free:                                  2279118.\nPages active:                                 848443.\nPages inactive:                               555301.",
+      "dispatch_ok": true,
+      "dispatch_blockers": [],
+      "implTree": "edbfe47eb32109a2fb017f6f13d5327f2c240357caa96630064ffcf37ee152cb",
+      "implTree_ok": true,
+      "checks": [
+        {
+          "path": "move.levels",
+          "expected": "[0.040000000000000001 0.02 0.01]",
+          "actual": "[0.040000000000000001 0.02 0.01]",
+          "ok": true
+        },
+        {
+          "path": "move.continuation.signal",
+          "expected": "stageExhaustion",
+          "actual": "stageExhaustion",
+          "ok": true
+        },
+        {
+          "path": "stop.rule",
+          "expected": "stageExhaustion",
+          "actual": "stageExhaustion",
+          "ok": true
+        },
+        {
+          "path": "move.policy",
+          "expected": "ladder",
+          "actual": "ladder",
+          "ok": true
+        },
+        {
+          "path": "material.stiffness.p",
+          "expected": "3",
+          "actual": "3",
+          "ok": true
+        },
+        {
+          "path": "material.stiffness.continuation.enabled",
+          "expected": "false",
+          "actual": "false",
+          "ok": true
+        },
+        {
+          "path": "material.mass.model",
+          "expected": "eq4b",
+          "actual": "eq4b",
+          "ok": true
+        },
+        {
+          "path": "material.mass.q",
+          "expected": "1",
+          "actual": "1",
+          "ok": true
+        },
+        {
+          "path": "material.mass.continuation.enabled",
+          "expected": "false",
+          "actual": "false",
+          "ok": true
+        },
+        {
+          "path": "filter.type",
+          "expected": "sensitivity",
+          "actual": "sensitivity",
+          "ok": true
+        },
+        {
+          "path": "filter.applyTo",
+          "expected": "all",
+          "actual": "all",
+          "ok": true
+        },
+        {
+          "path": "filter.radiusPhysical",
+          "expected": "0.059999999999999998",
+          "actual": "0.059999999999999998",
+          "ok": true
+        },
+        {
+          "path": "projection.enabled",
+          "expected": "false",
+          "actual": "false",
+          "ok": true
+        },
+        {
+          "path": "multiplicity.method",
+          "expected": "subspace",
+          "actual": "subspace",
+          "ok": true
+        },
+        {
+          "path": "multiplicity.subspaceSize",
+          "expected": "2",
+          "actual": "2",
+          "ok": true
+        },
+        {
+          "path": "multiplicity.diagonalOffsets",
+          "expected": "true",
+          "actual": "true",
+          "ok": true
+        },
+        {
+          "path": "multiplicity.offDiagonal",
+          "expected": "true",
+          "actual": "true",
+          "ok": true
+        },
+        {
+          "path": "multiplicity.tolerance",
+          "expected": "0.050000000000000003",
+          "actual": "0.050000000000000003",
+          "ok": true
+        },
+        {
+          "path": "optimizer.inner.type",
+          "expected": "mma",
+          "actual": "mma",
+          "ok": true
+        },
+        {
+          "path": "optimizer.inner.variant",
+          "expected": "published",
+          "actual": "published",
+          "ok": true
+        },
+        {
+          "path": "optimizer.inner.variable",
+          "expected": "increment",
+          "actual": "increment",
+          "ok": true
+        },
+        {
+          "path": "optimizer.inner.tolerance",
+          "expected": "0.050000000000000003",
+          "actual": "0.050000000000000003",
+          "ok": true
+        },
+        {
+          "path": "optimizer.inner.minIterations",
+          "expected": "5",
+          "actual": "5",
+          "ok": true
+        },
+        {
+          "path": "optimizer.inner.maxIterations",
+          "expected": "500",
+          "actual": "500",
+          "ok": true
+        },
+        {
+          "path": "eigen.solver",
+          "expected": "eigs",
+          "actual": "eigs",
+          "ok": true
+        },
+        {
+          "path": "eigen.targetMode",
+          "expected": "1",
+          "actual": "1",
+          "ok": true
+        },
+        {
+          "path": "eigen.maxCluster",
+          "expected": "4",
+          "actual": "4",
+          "ok": true
+        },
+        {
+          "path": "eigen.tolerance",
+          "expected": "9.9999999999999998e-13",
+          "actual": "9.9999999999999998e-13",
+          "ok": true
+        },
+        {
+          "path": "eigen.krylovFactor",
+          "expected": "4",
+          "actual": "4",
+          "ok": true
+        },
+        {
+          "path": "design.initial",
+          "expected": "0.5",
+          "actual": "0.5",
+          "ok": true
+        },
+        {
+          "path": "design.minimum",
+          "expected": "0.001",
+          "actual": "0.001",
+          "ok": true
+        },
+        {
+          "path": "design.volumeFraction",
+          "expected": "0.5",
+          "actual": "0.5",
+          "ok": true
+        },
+        {
+          "path": "domain.a",
+          "expected": "8",
+          "actual": "8",
+          "ok": true
+        },
+        {
+          "path": "domain.b",
+          "expected": "1",
+          "actual": "1",
+          "ok": true
+        },
+        {
+          "path": "domain.boundary.condition",
+          "expected": "simplySupported",
+          "actual": "simplySupported",
+          "ok": true
+        },
+        {
+          "path": "domain.boundary.support",
+          "expected": "midHeight",
+          "actual": "midHeight",
+          "ok": true
+        },
+        {
+          "path": "domain.element.type",
+          "expected": "Q4",
+          "actual": "Q4",
+          "ok": true
+        },
+        {
+          "path": "domain.element.massMatrix",
+          "expected": "consistent",
+          "actual": "consistent",
+          "ok": true
+        },
+        {
+          "path": "stop.norm",
+          "expected": "l2",
+          "actual": "l2",
+          "ok": true
+        },
+        {
+          "path": "stop.field",
+          "expected": "designVariable",
+          "actual": "designVariable",
+          "ok": true
+        },
+        {
+          "path": "stop.toleranceRule",
+          "expected": "meshScaled",
+          "actual": "meshScaled",
+          "ok": true
+        },
+        {
+          "path": "domain.mesh.nelx",
+          "expected": "480",
+          "actual": "480",
+          "ok": true
+        },
+        {
+          "path": "domain.mesh.nely",
+          "expected": "60",
+          "actual": "60",
+          "ok": true
+        },
+        {
+          "path": "stop.tolerance",
+          "expected": "0.15000000000000002",
+          "actual": "0.15000000000000002",
+          "ok": true
+        },
+        {
+          "path": "runtime.maxOuter",
+          "expected": "1600",
+          "actual": "1600",
+          "ok": true
+        },
+        {
+          "path": "runtime.singleThread",
+          "expected": "true",
+          "actual": "true",
+          "ok": true
+        },
+        {
+          "path": "runtime.diagnostics",
+          "expected": "true",
+          "actual": "true",
+          "ok": true
+        }
+      ],
+      "beta_continuation_authority": false,
+      "beta_stop_authority": false,
+      "cfgHash": "03097a28b0ad7fdb0d977985d3b5fd279dd74553c9dd5dfbd3cc035ac2a1782e",
+      "cfgHash_frozen": "03097a28b0ad7fdb0d977985d3b5fd279dd74553c9dd5dfbd3cc035ac2a1782e",
+      "telemetry_missing": [],
+      "retention": {
+        "NE": 28800,
+        "cap": 1600,
+        "bytes_per_column": 230400,
+        "worst_case_RHO_DRHO_bytes": 7.3728E+8,
+        "policy": "full RHO and DRHO retained for every outer iteration, plus hist, res.diag, res.exhaustion and res.log; no post-hoc discard is permitted",
+        "fits_in_ram": true
+      }
+    },
+    "verdict": "THREE_RUNG_DEPLOYMENT_PREFLIGHT_PASS",
+    "checkedAt": "2026-09-12T11:40:12"
+  },
+  "hostPre": {
+    "label": "C480x60_three_rung_pre",
+    "when": "2026-09-12T11:40:13",
+    "loadavg": "{ 11.11 36.72 21.42 }",
+    "swap": "total = 0.00M  used = 0.00M  free = 0.00M  (encrypted)",
+    "vm_stat": "Mach Virtual Memory Statistics: (page size of 16384 bytes)\nPages free:                                  2269152.\nPages active:                                 853259.\nPages inactive:                               560537.\nPages speculative:                            291932.\nPages throttled:                                   0.",
+    "freeRAM_pages": "2269164.",
+    "matlabProcs": "2",
+    "topCPU": "%CPU COMM\n278.3 /Applications/MATLAB_R2025b.app/bin/maca64/../../Contents/MacOS/MATLAB_maca64\n 14.0 /System/Library/PrivateFrameworks/SkyLight.framework/Resources/WindowServer\n  8.1 /System/Library/Frameworks/WebKit.framework/Versions/A/XPCServices/com.apple.WebKit.WebContent.xpc/Contents/MacOS/com.apple.WebKit.WebContent\n  4.7 /private/var/folders/6b/jnh3zrqx6rb4k17mvvy0wb6m0000gn/T/AppTranslocation/BC714BD1-BAE0-4D8C-8072-E098BAB03FA7/d/Visual Studio Code.app/Contents/Frameworks/Code Helper (Renderer).app/Contents/MacOS/Code Helper (Renderer)\n  3.9 /usr/libexec/trustd\nps: stdout: Broken pipe",
+    "threads": 1,
+    "calib_dgemm_s": 0.0126765,
+    "calib_spsolve_s": 0.0027622083333333335
+  },
+  "hostPost": {
+    "label": "C480x60_three_rung_post",
+    "when": "2026-09-12T12:26:52",
+    "loadavg": "{ 2.87 2.58 3.07 }",
+    "swap": "total = 0.00M  used = 0.00M  free = 0.00M  (encrypted)",
+    "vm_stat": "Mach Virtual Memory Statistics: (page size of 16384 bytes)\nPages free:                                  1380706.\nPages active:                                1305268.\nPages inactive:                               955315.\nPages speculative:                            342496.\nPages throttled:                                   0.",
+    "freeRAM_pages": "1380773.",
+    "matlabProcs": "2",
+    "topCPU": "%CPU COMM\n 85.4 /Applications/MATLAB_R2025b.app/bin/maca64/../../Contents/MacOS/MATLAB_maca64\n 15.5 /System/Library/PrivateFrameworks/SkyLight.framework/Resources/WindowServer\n  6.2 /System/Library/Audio/Plug-Ins/usbaudio.bundle/Contents/MacOS/usbaudiod\n  6.0 /System/Library/Frameworks/WebKit.framework/Versions/A/XPCServices/com.apple.WebKit.GPU.xpc/Contents/MacOS/com.apple.WebKit.GPU\n  4.8 /System/Library/Frameworks/WebKit.framework/Versions/A/XPCServices/com.apple.WebKit.WebContent.xpc/Contents/MacOS/com.apple.WebKit.WebContent\nps: stdout: Broken pipe",
+    "threads": 1,
+    "calib_dgemm_s": 0.012363916666666667,
+    "calib_spsolve_s": 0.0026715833333333335
+  },
+  "files": {
+    "trajectory": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/evidence/three_rung_canary_preflight/C480x60_three_rung_trajectory.mat",
+    "state": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/evidence/three_rung_canary_preflight/C480x60_three_rung_state.mat",
+    "csv": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/diagnostics/three_rung_canary_preflight/runs/C480x60_three_rung_iterations.csv"
+  }
+}

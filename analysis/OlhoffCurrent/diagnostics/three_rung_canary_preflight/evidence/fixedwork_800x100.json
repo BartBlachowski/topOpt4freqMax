@@ -1,0 +1,88 @@
+{
+  "eig": {
+    "median": 1.3058041666666667,
+    "min": 1.284558875,
+    "max": 1.4595480833333334,
+    "mean": 1.3334209583333334,
+    "std": 0.071754415316267084,
+    "n": 5,
+    "samples": [
+      1.4595480833333334,
+      1.296266625,
+      1.284558875,
+      1.3058041666666667,
+      1.3209270416666667
+    ],
+    "spread_pct": 13.400876854301146
+  },
+  "grad": {
+    "median": 0.056960625,
+    "min": 0.054605791666666667,
+    "max": 0.06343858333333334,
+    "mean": 0.058474175,
+    "std": 0.0038859310845119738,
+    "n": 5,
+    "samples": [
+      0.054605791666666667,
+      0.056960625,
+      0.055648625,
+      0.06171725,
+      0.06343858333333334
+    ],
+    "spread_pct": 15.506837691241401
+  },
+  "inner": {
+    "median": 31.952484791666667,
+    "min": 31.902692541666667,
+    "max": 32.00215716666667,
+    "mean": 31.95422378333334,
+    "std": 0.041691572842267148,
+    "n": 5,
+    "samples": [
+      31.952484791666667,
+      32.00215716666667,
+      31.988375583333333,
+      31.925408833333332,
+      31.902692541666667
+    ],
+    "spread_pct": 0.31128917093153219,
+    "nInner": 26,
+    "s_per_mma_step": 1.2289417227564103
+  },
+  "mesh": [
+    800,
+    100
+  ],
+  "NE": 80000,
+  "K": 5,
+  "warmup": 2,
+  "freeDOF": 161798,
+  "N": 2,
+  "J": 3,
+  "Jcalc": 5,
+  "move_used": 0.01,
+  "omega_at_state": [
+    161.94583808332942,
+    161.95148607903909,
+    382.47940150449614,
+    478.69931057183,
+    720.80711214636517
+  ],
+  "cfgHash": "7724af5ed26786e16132c30fbae840f5d8679d5ea798fc75d5c48eefd0e50ffe",
+  "nOuter_of_source_run": 468,
+  "host": {
+    "label": "C800x100_three_rung_fixedwork",
+    "when": "2026-09-12T14:37:44",
+    "loadavg": "{ 2.21 2.36 2.66 }",
+    "swap": "total = 0.00M  used = 0.00M  free = 0.00M  (encrypted)",
+    "vm_stat": "Mach Virtual Memory Statistics: (page size of 16384 bytes)\nPages free:                                  1441532.\nPages active:                                1227533.\nPages inactive:                               898427.\nPages speculative:                            331791.\nPages throttled:                                   0.",
+    "freeRAM_pages": "1441419.",
+    "matlabProcs": "2",
+    "topCPU": "%CPU COMM\n126.0 /Applications/MATLAB_R2025b.app/bin/maca64/../../Contents/MacOS/MATLAB_maca64\n 19.9 /private/var/folders/6b/jnh3zrqx6rb4k17mvvy0wb6m0000gn/T/AppTranslocation/BC714BD1-BAE0-4D8C-8072-E098BAB03FA7/d/Visual Studio Code.app/Contents/Frameworks/Code Helper (Renderer).app/Contents/MacOS/Code Helper (Renderer)\n 15.9 /System/Library/PrivateFrameworks/SkyLight.framework/Resources/WindowServer\n  5.7 /private/var/folders/6b/jnh3zrqx6rb4k17mvvy0wb6m0000gn/T/AppTranslocation/BC714BD1-BAE0-4D8C-8072-E098BAB03FA7/d/Visual Studio Code.app/Contents/Frameworks/Code Helper (Renderer).app/Contents/MacOS/Code Helper (Renderer)\n  5.1 /System/Volumes/Preboot/Cryptexes/App/System/Applications/Safari.app/Contents/MacOS/Safari\nps: stdout: Broken pipe",
+    "threads": 1,
+    "calib_dgemm_s": 0.011464666666666666,
+    "calib_spsolve_s": 0.0028021666666666668
+  },
+  "matlab": "25.2.0.2998904 (R2025b)",
+  "when": "2026-09-12T14:41:41"
+}

@@ -1,0 +1,86 @@
+[
+  {
+    "mesh": "160x20",
+    "n_history": 219,
+    "rho_shape": [
+      219,
+      3200
+    ],
+    "drho_shape": [
+      219,
+      3200
+    ],
+    "rho_finite": true,
+    "drho_finite": true,
+    "max_csv_amp_error": 6.661338147750939e-16,
+    "A_all_match": true,
+    "B_all_match": true,
+    "nA_all_match": true,
+    "nB_all_match": true,
+    "max_Mnd_S3_error": 1.7763568394002505e-15,
+    "inner_sum_matches_record": true
+  },
+  {
+    "mesh": "240x30",
+    "n_history": 1358,
+    "rho_shape": [
+      1358,
+      7200
+    ],
+    "drho_shape": [
+      1358,
+      7200
+    ],
+    "rho_finite": true,
+    "drho_finite": true,
+    "max_csv_amp_error": 2.220446049250313e-15,
+    "A_all_match": true,
+    "B_all_match": true,
+    "nA_all_match": true,
+    "nB_all_match": true,
+    "max_Mnd_S3_error": 1.4210854715202004e-14,
+    "inner_sum_matches_record": true
+  },
+  {
+    "mesh": "320x40",
+    "n_history": 1600,
+    "rho_shape": [
+      1600,
+      12800
+    ],
+    "drho_shape": [
+      1600,
+      12800
+    ],
+    "rho_finite": true,
+    "drho_finite": true,
+    "max_csv_amp_error": 3.552713678800501e-15,
+    "A_all_match": true,
+    "B_all_match": true,
+    "nA_all_match": true,
+    "nB_all_match": true,
+    "max_Mnd_S3_error": 1.4210854715202004e-14,
+    "inner_sum_matches_record": true
+  },
+  {
+    "mesh": "400x50",
+    "n_history": 505,
+    "rho_shape": [
+      505,
+      20000
+    ],
+    "drho_shape": [
+      505,
+      20000
+    ],
+    "rho_finite": true,
+    "drho_finite": true,
+    "max_csv_amp_error": 5.329070518200751e-15,
+    "A_all_match": true,
+    "B_all_match": true,
+    "nA_all_match": true,
+    "nB_all_match": true,
+    "max_Mnd_S3_error": 7.105427357601002e-15,
+    "inner_sum_matches_record": true
+  }
+]

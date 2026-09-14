@@ -1,0 +1,38 @@
+{
+  "schema": "nmp_synthetic_endpath/1",
+  "when": "2026-09-14T01:28:32.420+02:00",
+  "output_dir": "/private/var/folders/6b/jnh3zrqx6rb4k17mvvy0wb6m0000gn/T/tp3e1ea8a2_c5e5_4a2d_a8ff_877d5a9381fe/nmp_synthetic_endpath",
+  "steps": [
+    {
+      "name": "confbench_scaling_fit",
+      "ok": true,
+      "message": "fitted=1"
+    },
+    {
+      "name": "confbench_manifest",
+      "ok": true,
+      "message": ""
+    },
+    {
+      "name": "confbench_export",
+      "ok": true,
+      "message": "/private/var/folders/6b/jnh3zrqx6rb4k17mvvy0wb6m0000gn/T/tp3e1ea8a2_c5e5_4a2d_a8ff_877d5a9381fe/nmp_synthetic_endpath/conference_performance_table.csv; /private/var/folders/6b/jnh3zrqx6rb4k17mvvy0wb6m0000gn/T/tp3e1ea8a2_c5e5_4a2d_a8ff_877d5a9381fe/nmp_synthetic_endpath/conference_performance_table.tex; /private/var/folders/6b/jnh3zrqx6rb4k17mvvy0wb6m0000gn/T/tp3e1ea8a2_c5e5_4a2d_a8ff_877d5a9381fe/nmp_synthetic_endpath/conference_performance_detailed.csv; /private/var/folders/6b/jnh3zrqx6rb4k17mvvy0wb6m0000gn/T/tp3e1ea8a2_c5e5_4a2d_a8ff_877d5a9381fe/nmp_synthetic_endpath/benchmark_results.json; /private/var/folders/6b/jnh3zrqx6rb4k17mvvy0wb6m0000gn/T/tp3e1ea8a2_c5e5_4a2d_a8ff_877d5a9381fe/nmp_synthetic_endpath/benchmark_manifest.json; /private/var/folders/6b/jnh3zrqx6rb4k17mvvy0wb6m0000gn/T/tp3e1ea8a2_c5e5_4a2d_a8ff_877d5a9381fe/nmp_synthetic_endpath/timing_schema.json; /private/var/folders/6b/jnh3zrqx6rb4k17mvvy0wb6m0000gn/T/tp3e1ea8a2_c5e5_4a2d_a8ff_877d5a9381fe/nmp_synthetic_endpath/BENCHMARK_NOTES.md"
+    },
+    {
+      "name": "save_v73",
+      "ok": true,
+      "message": ""
+    },
+    {
+      "name": "confbench_complexity_plots",
+      "ok": true,
+      "message": "/private/var/folders/6b/jnh3zrqx6rb4k17mvvy0wb6m0000gn/T/tp3e1ea8a2_c5e5_4a2d_a8ff_877d5a9381fe/nmp_synthetic_endpath/table1_complexity_fit.png; /private/var/folders/6b/jnh3zrqx6rb4k17mvvy0wb6m0000gn/T/tp3e1ea8a2_c5e5_4a2d_a8ff_877d5a9381fe/nmp_synthetic_endpath/table1_complexity_fit_linear.png; /private/var/folders/6b/jnh3zrqx6rb4k17mvvy0wb6m0000gn/T/tp3e1ea8a2_c5e5_4a2d_a8ff_877d5a9381fe/nmp_synthetic_endpath/table1_complexity_fit_fixedexp.png; /private/var/folders/6b/jnh3zrqx6rb4k17mvvy0wb6m0000gn/T/tp3e1ea8a2_c5e5_4a2d_a8ff_877d5a9381fe/nmp_synthetic_endpath/table1_complexity_fit_fixedexp_linear.png; /private/var/folders/6b/jnh3zrqx6rb4k17mvvy0wb6m0000gn/T/tp3e1ea8a2_c5e5_4a2d_a8ff_877d5a9381fe/nmp_synthetic_endpath/table1_complexity_fit.csv; /private/var/folders/6b/jnh3zrqx6rb4k17mvvy0wb6m0000gn/T/tp3e1ea8a2_c5e5_4a2d_a8ff_877d5a9381fe/nmp_synthetic_endpath/table1_complexity_fit_fixedexp.csv"
+    },
+    {
+      "name": "confbench_topology_images",
+      "ok": true,
+      "message": "written=9 skipped=0"
+    }
+  ],
+  "pass": true
+}

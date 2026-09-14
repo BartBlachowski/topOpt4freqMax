@@ -1,0 +1,1450 @@
+{
+  "S480_source_native": [
+    {
+      "path": "domain.a",
+      "value": "8"
+    },
+    {
+      "path": "domain.b",
+      "value": "1"
+    },
+    {
+      "path": "domain.thickness",
+      "value": "1"
+    },
+    {
+      "path": "domain.mesh.nelx",
+      "value": "480"
+    },
+    {
+      "path": "domain.mesh.nely",
+      "value": "60"
+    },
+    {
+      "path": "domain.boundary.condition",
+      "value": "simplySupported"
+    },
+    {
+      "path": "domain.boundary.support",
+      "value": "midHeight"
+    },
+    {
+      "path": "domain.boundary.axialRestraint",
+      "value": "bothEnds"
+    },
+    {
+      "path": "domain.element.type",
+      "value": "Q4"
+    },
+    {
+      "path": "domain.element.massMatrix",
+      "value": "consistent"
+    },
+    {
+      "path": "material.solid.E",
+      "value": "10000000"
+    },
+    {
+      "path": "material.solid.nu",
+      "value": "0.29999999999999999"
+    },
+    {
+      "path": "material.solid.density",
+      "value": "1"
+    },
+    {
+      "path": "material.stiffness.model",
+      "value": "pedersen"
+    },
+    {
+      "path": "material.stiffness.linearBelow",
+      "value": "0.10000000000000001"
+    },
+    {
+      "path": "material.stiffness.p",
+      "value": "3"
+    },
+    {
+      "path": "material.stiffness.continuation.enabled",
+      "value": "false"
+    },
+    {
+      "path": "material.stiffness.continuation.schedule",
+      "value": "[]"
+    },
+    {
+      "path": "material.stiffness.continuation.driver",
+      "value": "moveLadderStage"
+    },
+    {
+      "path": "material.stiffness.continuation.blockStopUntilFinal",
+      "value": "true"
+    },
+    {
+      "path": "material.mass.model",
+      "value": "eq2"
+    },
+    {
+      "path": "material.mass.q",
+      "value": "1"
+    },
+    {
+      "path": "material.mass.lowDensityExponent",
+      "value": "6"
+    },
+    {
+      "path": "material.mass.cutoff",
+      "value": "0.10000000000000001"
+    },
+    {
+      "path": "material.mass.continuation.enabled",
+      "value": "false"
+    },
+    {
+      "path": "material.mass.continuation.lowPModel",
+      "value": "eq2"
+    },
+    {
+      "path": "design.initial",
+      "value": "0.5"
+    },
+    {
+      "path": "design.minimum",
+      "value": "0.001"
+    },
+    {
+      "path": "design.volumeFraction",
+      "value": "0.5"
+    },
+    {
+      "path": "filter.type",
+      "value": "sensitivity"
+    },
+    {
+      "path": "filter.radiusPhysical",
+      "value": "0.059999999999999998"
+    },
+    {
+      "path": "filter.radiusElements",
+      "value": "[]"
+    },
+    {
+      "path": "filter.applyTo",
+      "value": "all"
+    },
+    {
+      "path": "projection.enabled",
+      "value": "false"
+    },
+    {
+      "path": "projection.eta",
+      "value": "0.5"
+    },
+    {
+      "path": "projection.beta.levels",
+      "value": "[]"
+    },
+    {
+      "path": "projection.continuation.trigger",
+      "value": "outerConvergence"
+    },
+    {
+      "path": "eigen.targetMode",
+      "value": "1"
+    },
+    {
+      "path": "eigen.maxCluster",
+      "value": "4"
+    },
+    {
+      "path": "eigen.solver",
+      "value": "eigs"
+    },
+    {
+      "path": "eigen.tolerance",
+      "value": "9.9999999999999998e-13"
+    },
+    {
+      "path": "eigen.maxIterations",
+      "value": "5000"
+    },
+    {
+      "path": "eigen.krylovFactor",
+      "value": "4"
+    },
+    {
+      "path": "multiplicity.method",
+      "value": "subspace"
+    },
+    {
+      "path": "multiplicity.tolerance",
+      "value": "0.050000000000000003"
+    },
+    {
+      "path": "multiplicity.enterTolerance",
+      "value": "0.01"
+    },
+    {
+      "path": "multiplicity.exitTolerance",
+      "value": "0.050000000000000003"
+    },
+    {
+      "path": "multiplicity.subspaceSize",
+      "value": "2"
+    },
+    {
+      "path": "multiplicity.diagonalOffsets",
+      "value": "true"
+    },
+    {
+      "path": "multiplicity.offDiagonal",
+      "value": "true"
+    },
+    {
+      "path": "optimizer.inner.type",
+      "value": "mma"
+    },
+    {
+      "path": "optimizer.inner.variable",
+      "value": "increment"
+    },
+    {
+      "path": "optimizer.inner.variant",
+      "value": "published"
+    },
+    {
+      "path": "optimizer.inner.asymptoteHistory",
+      "value": "inner"
+    },
+    {
+      "path": "optimizer.inner.tolerance",
+      "value": "0.050000000000000003"
+    },
+    {
+      "path": "optimizer.inner.minIterations",
+      "value": "5"
+    },
+    {
+      "path": "optimizer.inner.maxIterations",
+      "value": "500"
+    },
+    {
+      "path": "move.policy",
+      "value": "adaptive"
+    },
+    {
+      "path": "move.initial",
+      "value": "0.10000000000000001"
+    },
+    {
+      "path": "move.minimum",
+      "value": "0.002"
+    },
+    {
+      "path": "move.levels",
+      "value": "[0.040000000000000001 0.02 0.01 0.0050000000000000001]"
+    },
+    {
+      "path": "move.geometric.ratio",
+      "value": "0.96999999999999997"
+    },
+    {
+      "path": "move.geometric.afterCoalescence",
+      "value": "true"
+    },
+    {
+      "path": "move.adaptive.grow",
+      "value": "1.2"
+    },
+    {
+      "path": "move.adaptive.shrink",
+      "value": "0.69999999999999996"
+    },
+    {
+      "path": "move.trust.loRatio",
+      "value": "0.29999999999999999"
+    },
+    {
+      "path": "move.trust.hiRatio",
+      "value": "0.69999999999999996"
+    },
+    {
+      "path": "move.trust.shrink",
+      "value": "0.69999999999999996"
+    },
+    {
+      "path": "move.trust.grow",
+      "value": "1.1000000000000001"
+    },
+    {
+      "path": "move.continuation.signal",
+      "value": "boundVariable"
+    },
+    {
+      "path": "move.continuation.window",
+      "value": "10"
+    },
+    {
+      "path": "move.continuation.tolerance",
+      "value": "0.0050000000000000001"
+    },
+    {
+      "path": "stop.norm",
+      "value": "l2"
+    },
+    {
+      "path": "stop.tolerance",
+      "value": "0.15000000000000002"
+    },
+    {
+      "path": "stop.toleranceRule",
+      "value": "meshScaled"
+    },
+    {
+      "path": "stop.field",
+      "value": "designVariable"
+    },
+    {
+      "path": "stop.guards.settledMove",
+      "value": "false"
+    },
+    {
+      "path": "stop.guards.settledWindow",
+      "value": "1"
+    },
+    {
+      "path": "stop.guards.boxInactiveFraction",
+      "value": "0"
+    },
+    {
+      "path": "stop.guards.ladderExhausted",
+      "value": "false"
+    },
+    {
+      "path": "stop.guards.maxDesignChange",
+      "value": "false"
+    },
+    {
+      "path": "runtime.maxOuter",
+      "value": "400"
+    },
+    {
+      "path": "runtime.singleThread",
+      "value": "true"
+    },
+    {
+      "path": "runtime.diagnostics",
+      "value": "false"
+    },
+    {
+      "path": "runtime.verbose",
+      "value": "true"
+    },
+    {
+      "path": "runtime.name",
+      "value": "S480x60"
+    },
+    {
+      "path": "provenance.preset",
+      "value": "duOlhoffAdaptivePedersen"
+    },
+    {
+      "path": "provenance.overrides",
+      "value": "domain.mesh.nelx | 480 | domain.mesh.nely | 60 | runtime.name | S480x60 | runtime.verbose | true"
+    },
+    {
+      "path": "provenance.warnings",
+      "value": ""
+    },
+    {
+      "path": "provenance.resolvedAt",
+      "value": "2026-09-13T11:51:29"
+    },
+    {
+      "path": "provenance.schemaRows",
+      "value": "86"
+    }
+  ],
+  "M1_source_simp4b": [
+    {
+      "path": "domain.a",
+      "value": "8"
+    },
+    {
+      "path": "domain.b",
+      "value": "1"
+    },
+    {
+      "path": "domain.thickness",
+      "value": "1"
+    },
+    {
+      "path": "domain.mesh.nelx",
+      "value": "480"
+    },
+    {
+      "path": "domain.mesh.nely",
+      "value": "60"
+    },
+    {
+      "path": "domain.boundary.condition",
+      "value": "simplySupported"
+    },
+    {
+      "path": "domain.boundary.support",
+      "value": "midHeight"
+    },
+    {
+      "path": "domain.boundary.axialRestraint",
+      "value": "bothEnds"
+    },
+    {
+      "path": "domain.element.type",
+      "value": "Q4"
+    },
+    {
+      "path": "domain.element.massMatrix",
+      "value": "consistent"
+    },
+    {
+      "path": "material.solid.E",
+      "value": "10000000"
+    },
+    {
+      "path": "material.solid.nu",
+      "value": "0.29999999999999999"
+    },
+    {
+      "path": "material.solid.density",
+      "value": "1"
+    },
+    {
+      "path": "material.stiffness.model",
+      "value": "simp"
+    },
+    {
+      "path": "material.stiffness.linearBelow",
+      "value": "0.10000000000000001"
+    },
+    {
+      "path": "material.stiffness.p",
+      "value": "3"
+    },
+    {
+      "path": "material.stiffness.continuation.enabled",
+      "value": "false"
+    },
+    {
+      "path": "material.stiffness.continuation.schedule",
+      "value": "[]"
+    },
+    {
+      "path": "material.stiffness.continuation.driver",
+      "value": "moveLadderStage"
+    },
+    {
+      "path": "material.stiffness.continuation.blockStopUntilFinal",
+      "value": "true"
+    },
+    {
+      "path": "material.mass.model",
+      "value": "eq4b"
+    },
+    {
+      "path": "material.mass.q",
+      "value": "1"
+    },
+    {
+      "path": "material.mass.lowDensityExponent",
+      "value": "6"
+    },
+    {
+      "path": "material.mass.cutoff",
+      "value": "0.10000000000000001"
+    },
+    {
+      "path": "material.mass.continuation.enabled",
+      "value": "false"
+    },
+    {
+      "path": "material.mass.continuation.lowPModel",
+      "value": "eq2"
+    },
+    {
+      "path": "design.initial",
+      "value": "0.5"
+    },
+    {
+      "path": "design.minimum",
+      "value": "0.001"
+    },
+    {
+      "path": "design.volumeFraction",
+      "value": "0.5"
+    },
+    {
+      "path": "filter.type",
+      "value": "sensitivity"
+    },
+    {
+      "path": "filter.radiusPhysical",
+      "value": "0.059999999999999998"
+    },
+    {
+      "path": "filter.radiusElements",
+      "value": "[]"
+    },
+    {
+      "path": "filter.applyTo",
+      "value": "all"
+    },
+    {
+      "path": "projection.enabled",
+      "value": "false"
+    },
+    {
+      "path": "projection.eta",
+      "value": "0.5"
+    },
+    {
+      "path": "projection.beta.levels",
+      "value": "[]"
+    },
+    {
+      "path": "projection.continuation.trigger",
+      "value": "outerConvergence"
+    },
+    {
+      "path": "eigen.targetMode",
+      "value": "1"
+    },
+    {
+      "path": "eigen.maxCluster",
+      "value": "4"
+    },
+    {
+      "path": "eigen.solver",
+      "value": "eigs"
+    },
+    {
+      "path": "eigen.tolerance",
+      "value": "9.9999999999999998e-13"
+    },
+    {
+      "path": "eigen.maxIterations",
+      "value": "5000"
+    },
+    {
+      "path": "eigen.krylovFactor",
+      "value": "4"
+    },
+    {
+      "path": "multiplicity.method",
+      "value": "subspace"
+    },
+    {
+      "path": "multiplicity.tolerance",
+      "value": "0.050000000000000003"
+    },
+    {
+      "path": "multiplicity.enterTolerance",
+      "value": "0.01"
+    },
+    {
+      "path": "multiplicity.exitTolerance",
+      "value": "0.050000000000000003"
+    },
+    {
+      "path": "multiplicity.subspaceSize",
+      "value": "2"
+    },
+    {
+      "path": "multiplicity.diagonalOffsets",
+      "value": "true"
+    },
+    {
+      "path": "multiplicity.offDiagonal",
+      "value": "true"
+    },
+    {
+      "path": "optimizer.inner.type",
+      "value": "mma"
+    },
+    {
+      "path": "optimizer.inner.variable",
+      "value": "increment"
+    },
+    {
+      "path": "optimizer.inner.variant",
+      "value": "published"
+    },
+    {
+      "path": "optimizer.inner.asymptoteHistory",
+      "value": "inner"
+    },
+    {
+      "path": "optimizer.inner.tolerance",
+      "value": "0.050000000000000003"
+    },
+    {
+      "path": "optimizer.inner.minIterations",
+      "value": "5"
+    },
+    {
+      "path": "optimizer.inner.maxIterations",
+      "value": "500"
+    },
+    {
+      "path": "move.policy",
+      "value": "adaptive"
+    },
+    {
+      "path": "move.initial",
+      "value": "0.10000000000000001"
+    },
+    {
+      "path": "move.minimum",
+      "value": "0.002"
+    },
+    {
+      "path": "move.levels",
+      "value": "[0.040000000000000001 0.02 0.01 0.0050000000000000001]"
+    },
+    {
+      "path": "move.geometric.ratio",
+      "value": "0.96999999999999997"
+    },
+    {
+      "path": "move.geometric.afterCoalescence",
+      "value": "true"
+    },
+    {
+      "path": "move.adaptive.grow",
+      "value": "1.2"
+    },
+    {
+      "path": "move.adaptive.shrink",
+      "value": "0.69999999999999996"
+    },
+    {
+      "path": "move.trust.loRatio",
+      "value": "0.29999999999999999"
+    },
+    {
+      "path": "move.trust.hiRatio",
+      "value": "0.69999999999999996"
+    },
+    {
+      "path": "move.trust.shrink",
+      "value": "0.69999999999999996"
+    },
+    {
+      "path": "move.trust.grow",
+      "value": "1.1000000000000001"
+    },
+    {
+      "path": "move.continuation.signal",
+      "value": "boundVariable"
+    },
+    {
+      "path": "move.continuation.window",
+      "value": "10"
+    },
+    {
+      "path": "move.continuation.tolerance",
+      "value": "0.0050000000000000001"
+    },
+    {
+      "path": "stop.norm",
+      "value": "l2"
+    },
+    {
+      "path": "stop.tolerance",
+      "value": "0.15000000000000002"
+    },
+    {
+      "path": "stop.toleranceRule",
+      "value": "meshScaled"
+    },
+    {
+      "path": "stop.field",
+      "value": "designVariable"
+    },
+    {
+      "path": "stop.guards.settledMove",
+      "value": "false"
+    },
+    {
+      "path": "stop.guards.settledWindow",
+      "value": "1"
+    },
+    {
+      "path": "stop.guards.boxInactiveFraction",
+      "value": "0"
+    },
+    {
+      "path": "stop.guards.ladderExhausted",
+      "value": "false"
+    },
+    {
+      "path": "stop.guards.maxDesignChange",
+      "value": "false"
+    },
+    {
+      "path": "runtime.maxOuter",
+      "value": "400"
+    },
+    {
+      "path": "runtime.singleThread",
+      "value": "true"
+    },
+    {
+      "path": "runtime.diagnostics",
+      "value": "true"
+    },
+    {
+      "path": "runtime.verbose",
+      "value": "true"
+    },
+    {
+      "path": "runtime.name",
+      "value": "M1_480x60_simp4b_adaptive"
+    },
+    {
+      "path": "provenance.preset",
+      "value": "duOlhoffAdaptiveMove"
+    },
+    {
+      "path": "provenance.overrides",
+      "value": "domain.mesh.nelx | 480 | domain.mesh.nely | 60 | runtime.name | M1_480x60_simp4b_adaptive | runtime.verbose | true | move.initial | 0.10000000000000001 | runtime.diagnostics | true"
+    },
+    {
+      "path": "provenance.warnings",
+      "value": ""
+    },
+    {
+      "path": "provenance.resolvedAt",
+      "value": "2026-09-13T16:44:09"
+    },
+    {
+      "path": "provenance.schemaRows",
+      "value": "86"
+    }
+  ],
+  "C480_target_threerung": [
+    {
+      "path": "domain.a",
+      "value": "8"
+    },
+    {
+      "path": "domain.b",
+      "value": "1"
+    },
+    {
+      "path": "domain.thickness",
+      "value": "1"
+    },
+    {
+      "path": "domain.mesh.nelx",
+      "value": "480"
+    },
+    {
+      "path": "domain.mesh.nely",
+      "value": "60"
+    },
+    {
+      "path": "domain.boundary.condition",
+      "value": "simplySupported"
+    },
+    {
+      "path": "domain.boundary.support",
+      "value": "midHeight"
+    },
+    {
+      "path": "domain.boundary.axialRestraint",
+      "value": "bothEnds"
+    },
+    {
+      "path": "domain.element.type",
+      "value": "Q4"
+    },
+    {
+      "path": "domain.element.massMatrix",
+      "value": "consistent"
+    },
+    {
+      "path": "material.solid.E",
+      "value": "10000000"
+    },
+    {
+      "path": "material.solid.nu",
+      "value": "0.29999999999999999"
+    },
+    {
+      "path": "material.solid.density",
+      "value": "1"
+    },
+    {
+      "path": "material.stiffness.model",
+      "value": "simp"
+    },
+    {
+      "path": "material.stiffness.p",
+      "value": "3"
+    },
+    {
+      "path": "material.stiffness.continuation.enabled",
+      "value": "false"
+    },
+    {
+      "path": "material.stiffness.continuation.schedule",
+      "value": "[]"
+    },
+    {
+      "path": "material.stiffness.continuation.driver",
+      "value": "moveLadderStage"
+    },
+    {
+      "path": "material.stiffness.continuation.blockStopUntilFinal",
+      "value": "true"
+    },
+    {
+      "path": "material.mass.model",
+      "value": "eq4b"
+    },
+    {
+      "path": "material.mass.q",
+      "value": "1"
+    },
+    {
+      "path": "material.mass.lowDensityExponent",
+      "value": "6"
+    },
+    {
+      "path": "material.mass.cutoff",
+      "value": "0.10000000000000001"
+    },
+    {
+      "path": "material.mass.continuation.enabled",
+      "value": "false"
+    },
+    {
+      "path": "material.mass.continuation.lowPModel",
+      "value": "eq2"
+    },
+    {
+      "path": "design.initial",
+      "value": "0.5"
+    },
+    {
+      "path": "design.minimum",
+      "value": "0.001"
+    },
+    {
+      "path": "design.volumeFraction",
+      "value": "0.5"
+    },
+    {
+      "path": "filter.type",
+      "value": "sensitivity"
+    },
+    {
+      "path": "filter.radiusPhysical",
+      "value": "0.059999999999999998"
+    },
+    {
+      "path": "filter.radiusElements",
+      "value": "[]"
+    },
+    {
+      "path": "filter.applyTo",
+      "value": "all"
+    },
+    {
+      "path": "projection.enabled",
+      "value": "false"
+    },
+    {
+      "path": "projection.eta",
+      "value": "0.5"
+    },
+    {
+      "path": "projection.beta.levels",
+      "value": "[]"
+    },
+    {
+      "path": "projection.continuation.trigger",
+      "value": "outerConvergence"
+    },
+    {
+      "path": "eigen.targetMode",
+      "value": "1"
+    },
+    {
+      "path": "eigen.maxCluster",
+      "value": "4"
+    },
+    {
+      "path": "eigen.solver",
+      "value": "eigs"
+    },
+    {
+      "path": "eigen.tolerance",
+      "value": "9.9999999999999998e-13"
+    },
+    {
+      "path": "eigen.maxIterations",
+      "value": "5000"
+    },
+    {
+      "path": "eigen.krylovFactor",
+      "value": "4"
+    },
+    {
+      "path": "multiplicity.method",
+      "value": "subspace"
+    },
+    {
+      "path": "multiplicity.tolerance",
+      "value": "0.050000000000000003"
+    },
+    {
+      "path": "multiplicity.enterTolerance",
+      "value": "0.01"
+    },
+    {
+      "path": "multiplicity.exitTolerance",
+      "value": "0.050000000000000003"
+    },
+    {
+      "path": "multiplicity.subspaceSize",
+      "value": "2"
+    },
+    {
+      "path": "multiplicity.diagonalOffsets",
+      "value": "true"
+    },
+    {
+      "path": "multiplicity.offDiagonal",
+      "value": "true"
+    },
+    {
+      "path": "optimizer.inner.type",
+      "value": "mma"
+    },
+    {
+      "path": "optimizer.inner.variable",
+      "value": "increment"
+    },
+    {
+      "path": "optimizer.inner.variant",
+      "value": "published"
+    },
+    {
+      "path": "optimizer.inner.tolerance",
+      "value": "0.050000000000000003"
+    },
+    {
+      "path": "optimizer.inner.minIterations",
+      "value": "5"
+    },
+    {
+      "path": "optimizer.inner.maxIterations",
+      "value": "500"
+    },
+    {
+      "path": "move.policy",
+      "value": "ladder"
+    },
+    {
+      "path": "move.initial",
+      "value": "0.040000000000000001"
+    },
+    {
+      "path": "move.minimum",
+      "value": "0.002"
+    },
+    {
+      "path": "move.levels",
+      "value": "[0.040000000000000001 0.02 0.01]"
+    },
+    {
+      "path": "move.geometric.ratio",
+      "value": "0.96999999999999997"
+    },
+    {
+      "path": "move.geometric.afterCoalescence",
+      "value": "true"
+    },
+    {
+      "path": "move.trust.loRatio",
+      "value": "0.29999999999999999"
+    },
+    {
+      "path": "move.trust.hiRatio",
+      "value": "0.69999999999999996"
+    },
+    {
+      "path": "move.trust.shrink",
+      "value": "0.69999999999999996"
+    },
+    {
+      "path": "move.trust.grow",
+      "value": "1.1000000000000001"
+    },
+    {
+      "path": "move.continuation.signal",
+      "value": "stageExhaustion"
+    },
+    {
+      "path": "move.continuation.window",
+      "value": "10"
+    },
+    {
+      "path": "move.continuation.tolerance",
+      "value": "0.0050000000000000001"
+    },
+    {
+      "path": "stop.rule",
+      "value": "stageExhaustion"
+    },
+    {
+      "path": "stop.norm",
+      "value": "l2"
+    },
+    {
+      "path": "stop.tolerance",
+      "value": "0.15000000000000002"
+    },
+    {
+      "path": "stop.toleranceRule",
+      "value": "meshScaled"
+    },
+    {
+      "path": "stop.field",
+      "value": "designVariable"
+    },
+    {
+      "path": "stop.guards.settledMove",
+      "value": "true"
+    },
+    {
+      "path": "stop.guards.ladderExhausted",
+      "value": "false"
+    },
+    {
+      "path": "stop.guards.maxDesignChange",
+      "value": "false"
+    },
+    {
+      "path": "runtime.maxOuter",
+      "value": "1600"
+    },
+    {
+      "path": "runtime.singleThread",
+      "value": "true"
+    },
+    {
+      "path": "runtime.diagnostics",
+      "value": "true"
+    },
+    {
+      "path": "runtime.verbose",
+      "value": "false"
+    },
+    {
+      "path": "runtime.name",
+      "value": "CAN3_480x60"
+    },
+    {
+      "path": "provenance.preset",
+      "value": "duOlhoffFrozenM4"
+    },
+    {
+      "path": "provenance.overrides",
+      "value": "domain.mesh.nelx | 480 | domain.mesh.nely | 60 | runtime.maxOuter | 1600 | runtime.singleThread | true | runtime.diagnostics | true | runtime.verbose | false | runtime.name | CV_C_480x60 | move.continuation.signal | stageExhaustion | stop.rule | stageExhaustion | move.levels | [0.040000000000000001 0.02 0.01] | runtime.name | TR3_C_480x60 | runtime.name | CAN3_480x60"
+    },
+    {
+      "path": "provenance.warnings",
+      "value": ""
+    },
+    {
+      "path": "provenance.resolvedAt",
+      "value": "2026-09-12T11:40:12"
+    },
+    {
+      "path": "provenance.schemaRows",
+      "value": "81"
+    },
+    {
+      "path": "provenance.productionPreset",
+      "value": "duOlhoffFixedPenaltySensitivityFiltered"
+    },
+    {
+      "path": "provenance.implementation",
+      "value": "analysis/OlhoffCurrent"
+    }
+  ],
+  "PROD_target_canonical": [
+    {
+      "path": "domain.a",
+      "value": "8"
+    },
+    {
+      "path": "domain.b",
+      "value": "1"
+    },
+    {
+      "path": "domain.thickness",
+      "value": "1"
+    },
+    {
+      "path": "domain.mesh.nelx",
+      "value": "480"
+    },
+    {
+      "path": "domain.mesh.nely",
+      "value": "60"
+    },
+    {
+      "path": "domain.boundary.condition",
+      "value": "simplySupported"
+    },
+    {
+      "path": "domain.boundary.support",
+      "value": "midHeight"
+    },
+    {
+      "path": "domain.boundary.axialRestraint",
+      "value": "bothEnds"
+    },
+    {
+      "path": "domain.element.type",
+      "value": "Q4"
+    },
+    {
+      "path": "domain.element.massMatrix",
+      "value": "consistent"
+    },
+    {
+      "path": "material.solid.E",
+      "value": "10000000"
+    },
+    {
+      "path": "material.solid.nu",
+      "value": "0.29999999999999999"
+    },
+    {
+      "path": "material.solid.density",
+      "value": "1"
+    },
+    {
+      "path": "material.stiffness.model",
+      "value": "simp"
+    },
+    {
+      "path": "material.stiffness.p",
+      "value": "3"
+    },
+    {
+      "path": "material.stiffness.continuation.enabled",
+      "value": "false"
+    },
+    {
+      "path": "material.stiffness.continuation.schedule",
+      "value": "[]"
+    },
+    {
+      "path": "material.stiffness.continuation.driver",
+      "value": "moveLadderStage"
+    },
+    {
+      "path": "material.stiffness.continuation.blockStopUntilFinal",
+      "value": "true"
+    },
+    {
+      "path": "material.mass.model",
+      "value": "eq4b"
+    },
+    {
+      "path": "material.mass.q",
+      "value": "1"
+    },
+    {
+      "path": "material.mass.lowDensityExponent",
+      "value": "6"
+    },
+    {
+      "path": "material.mass.cutoff",
+      "value": "0.10000000000000001"
+    },
+    {
+      "path": "material.mass.continuation.enabled",
+      "value": "false"
+    },
+    {
+      "path": "material.mass.continuation.lowPModel",
+      "value": "eq2"
+    },
+    {
+      "path": "design.initial",
+      "value": "0.5"
+    },
+    {
+      "path": "design.minimum",
+      "value": "0.001"
+    },
+    {
+      "path": "design.volumeFraction",
+      "value": "0.5"
+    },
+    {
+      "path": "filter.type",
+      "value": "sensitivity"
+    },
+    {
+      "path": "filter.radiusPhysical",
+      "value": "0.059999999999999998"
+    },
+    {
+      "path": "filter.radiusElements",
+      "value": "[]"
+    },
+    {
+      "path": "filter.applyTo",
+      "value": "all"
+    },
+    {
+      "path": "projection.enabled",
+      "value": "false"
+    },
+    {
+      "path": "projection.eta",
+      "value": "0.5"
+    },
+    {
+      "path": "projection.beta.levels",
+      "value": "[]"
+    },
+    {
+      "path": "projection.continuation.trigger",
+      "value": "outerConvergence"
+    },
+    {
+      "path": "eigen.targetMode",
+      "value": "1"
+    },
+    {
+      "path": "eigen.maxCluster",
+      "value": "4"
+    },
+    {
+      "path": "eigen.solver",
+      "value": "eigs"
+    },
+    {
+      "path": "eigen.tolerance",
+      "value": "9.9999999999999998e-13"
+    },
+    {
+      "path": "eigen.maxIterations",
+      "value": "5000"
+    },
+    {
+      "path": "eigen.krylovFactor",
+      "value": "4"
+    },
+    {
+      "path": "multiplicity.method",
+      "value": "subspace"
+    },
+    {
+      "path": "multiplicity.tolerance",
+      "value": "0.050000000000000003"
+    },
+    {
+      "path": "multiplicity.enterTolerance",
+      "value": "0.01"
+    },
+    {
+      "path": "multiplicity.exitTolerance",
+      "value": "0.050000000000000003"
+    },
+    {
+      "path": "multiplicity.subspaceSize",
+      "value": "2"
+    },
+    {
+      "path": "multiplicity.diagonalOffsets",
+      "value": "true"
+    },
+    {
+      "path": "multiplicity.offDiagonal",
+      "value": "true"
+    },
+    {
+      "path": "optimizer.inner.type",
+      "value": "mma"
+    },
+    {
+      "path": "optimizer.inner.variable",
+      "value": "increment"
+    },
+    {
+      "path": "optimizer.inner.variant",
+      "value": "published"
+    },
+    {
+      "path": "optimizer.inner.tolerance",
+      "value": "0.050000000000000003"
+    },
+    {
+      "path": "optimizer.inner.minIterations",
+      "value": "5"
+    },
+    {
+      "path": "optimizer.inner.maxIterations",
+      "value": "500"
+    },
+    {
+      "path": "move.policy",
+      "value": "ladder"
+    },
+    {
+      "path": "move.initial",
+      "value": "0.040000000000000001"
+    },
+    {
+      "path": "move.minimum",
+      "value": "0.002"
+    },
+    {
+      "path": "move.levels",
+      "value": "[0.040000000000000001 0.02 0.01 0.0050000000000000001]"
+    },
+    {
+      "path": "move.geometric.ratio",
+      "value": "0.96999999999999997"
+    },
+    {
+      "path": "move.geometric.afterCoalescence",
+      "value": "true"
+    },
+    {
+      "path": "move.trust.loRatio",
+      "value": "0.29999999999999999"
+    },
+    {
+      "path": "move.trust.hiRatio",
+      "value": "0.69999999999999996"
+    },
+    {
+      "path": "move.trust.shrink",
+      "value": "0.69999999999999996"
+    },
+    {
+      "path": "move.trust.grow",
+      "value": "1.1000000000000001"
+    },
+    {
+      "path": "move.continuation.signal",
+      "value": "boundVariable"
+    },
+    {
+      "path": "move.continuation.window",
+      "value": "10"
+    },
+    {
+      "path": "move.continuation.tolerance",
+      "value": "0.0050000000000000001"
+    },
+    {
+      "path": "stop.rule",
+      "value": "designChange"
+    },
+    {
+      "path": "stop.norm",
+      "value": "l2"
+    },
+    {
+      "path": "stop.tolerance",
+      "value": "0.15000000000000002"
+    },
+    {
+      "path": "stop.toleranceRule",
+      "value": "meshScaled"
+    },
+    {
+      "path": "stop.field",
+      "value": "designVariable"
+    },
+    {
+      "path": "stop.guards.settledMove",
+      "value": "true"
+    },
+    {
+      "path": "stop.guards.ladderExhausted",
+      "value": "false"
+    },
+    {
+      "path": "stop.guards.maxDesignChange",
+      "value": "false"
+    },
+    {
+      "path": "runtime.maxOuter",
+      "value": "400"
+    },
+    {
+      "path": "runtime.singleThread",
+      "value": "true"
+    },
+    {
+      "path": "runtime.diagnostics",
+      "value": "false"
+    },
+    {
+      "path": "runtime.verbose",
+      "value": "false"
+    },
+    {
+      "path": "runtime.name",
+      "value": "OLHOFF_CURRENT_480x60"
+    },
+    {
+      "path": "provenance.preset",
+      "value": "duOlhoffFrozenM4"
+    },
+    {
+      "path": "provenance.overrides",
+      "value": "domain.mesh.nelx | 480 | domain.mesh.nely | 60 | runtime.maxOuter | 400 | runtime.singleThread | true | runtime.diagnostics | false | runtime.verbose | false | runtime.name | OLHOFF_CURRENT_480x60"
+    },
+    {
+      "path": "provenance.warnings",
+      "value": ""
+    },
+    {
+      "path": "provenance.resolvedAt",
+      "value": "2026-09-13T16:56:02"
+    },
+    {
+      "path": "provenance.schemaRows",
+      "value": "81"
+    },
+    {
+      "path": "provenance.productionPreset",
+      "value": "duOlhoffFixedPenaltySensitivityFiltered"
+    },
+    {
+      "path": "provenance.upstreamPreset",
+      "value": "duOlhoffFrozenM4"
+    },
+    {
+      "path": "provenance.historicalAliases",
+      "value": "M4 | TMA | B0 | REG160 | duOlhoffFrozenM4"
+    },
+    {
+      "path": "provenance.implementation",
+      "value": "analysis/OlhoffCurrent"
+    }
+  ]
+}

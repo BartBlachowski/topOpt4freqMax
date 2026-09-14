@@ -1,0 +1,695 @@
+{
+  "schema_rows": 81,
+  "rows": [
+    {
+      "path": "domain.a",
+      "control": "8",
+      "treatment": "8",
+      "fresh": "8",
+      "equal": true,
+      "scientific": true
+    },
+    {
+      "path": "domain.b",
+      "control": "1",
+      "treatment": "1",
+      "fresh": "1",
+      "equal": true,
+      "scientific": true
+    },
+    {
+      "path": "domain.thickness",
+      "control": "1",
+      "treatment": "1",
+      "fresh": "1",
+      "equal": true,
+      "scientific": true
+    },
+    {
+      "path": "domain.mesh.nelx",
+      "control": "480",
+      "treatment": "480",
+      "fresh": "480",
+      "equal": true,
+      "scientific": true
+    },
+    {
+      "path": "domain.mesh.nely",
+      "control": "60",
+      "treatment": "60",
+      "fresh": "60",
+      "equal": true,
+      "scientific": true
+    },
+    {
+      "path": "domain.boundary.condition",
+      "control": "simplySupported",
+      "treatment": "simplySupported",
+      "fresh": "simplySupported",
+      "equal": true,
+      "scientific": true
+    },
+    {
+      "path": "domain.boundary.support",
+      "control": "midHeight",
+      "treatment": "midHeight",
+      "fresh": "midHeight",
+      "equal": true,
+      "scientific": true
+    },
+    {
+      "path": "domain.boundary.axialRestraint",
+      "control": "bothEnds",
+      "treatment": "bothEnds",
+      "fresh": "bothEnds",
+      "equal": true,
+      "scientific": true
+    },
+    {
+      "path": "domain.element.type",
+      "control": "Q4",
+      "treatment": "Q4",
+      "fresh": "Q4",
+      "equal": true,
+      "scientific": true
+    },
+    {
+      "path": "domain.element.massMatrix",
+      "control": "consistent",
+      "treatment": "consistent",
+      "fresh": "consistent",
+      "equal": true,
+      "scientific": true
+    },
+    {
+      "path": "material.solid.E",
+      "control": "10000000",
+      "treatment": "10000000",
+      "fresh": "10000000",
+      "equal": true,
+      "scientific": true
+    },
+    {
+      "path": "material.solid.nu",
+      "control": "0.29999999999999999",
+      "treatment": "0.29999999999999999",
+      "fresh": "0.29999999999999999",
+      "equal": true,
+      "scientific": true
+    },
+    {
+      "path": "material.solid.density",
+      "control": "1",
+      "treatment": "1",
+      "fresh": "1",
+      "equal": true,
+      "scientific": true
+    },
+    {
+      "path": "material.stiffness.model",
+      "control": "simp",
+      "treatment": "simp",
+      "fresh": "simp",
+      "equal": true,
+      "scientific": true
+    },
+    {
+      "path": "material.stiffness.p",
+      "control": "3",
+      "treatment": "3",
+      "fresh": "3",
+      "equal": true,
+      "scientific": true
+    },
+    {
+      "path": "material.stiffness.continuation.enabled",
+      "control": "false",
+      "treatment": "false",
+      "fresh": "false",
+      "equal": true,
+      "scientific": true
+    },
+    {
+      "path": "material.stiffness.continuation.schedule",
+      "control": "[]",
+      "treatment": "[]",
+      "fresh": "[]",
+      "equal": true,
+      "scientific": true
+    },
+    {
+      "path": "material.stiffness.continuation.driver",
+      "control": "moveLadderStage",
+      "treatment": "moveLadderStage",
+      "fresh": "moveLadderStage",
+      "equal": true,
+      "scientific": true
+    },
+    {
+      "path": "material.stiffness.continuation.blockStopUntilFinal",
+      "control": "true",
+      "treatment": "true",
+      "fresh": "true",
+      "equal": true,
+      "scientific": true
+    },
+    {
+      "path": "material.mass.model",
+      "control": "eq4b",
+      "treatment": "eq4b",
+      "fresh": "eq4b",
+      "equal": true,
+      "scientific": true
+    },
+    {
+      "path": "material.mass.q",
+      "control": "1",
+      "treatment": "1",
+      "fresh": "1",
+      "equal": true,
+      "scientific": true
+    },
+    {
+      "path": "material.mass.lowDensityExponent",
+      "control": "6",
+      "treatment": "6",
+      "fresh": "6",
+      "equal": true,
+      "scientific": true
+    },
+    {
+      "path": "material.mass.cutoff",
+      "control": "0.10000000000000001",
+      "treatment": "0.10000000000000001",
+      "fresh": "0.10000000000000001",
+      "equal": true,
+      "scientific": true
+    },
+    {
+      "path": "material.mass.continuation.enabled",
+      "control": "false",
+      "treatment": "false",
+      "fresh": "false",
+      "equal": true,
+      "scientific": true
+    },
+    {
+      "path": "material.mass.continuation.lowPModel",
+      "control": "eq2",
+      "treatment": "eq2",
+      "fresh": "eq2",
+      "equal": true,
+      "scientific": true
+    },
+    {
+      "path": "design.initial",
+      "control": "0.5",
+      "treatment": "0.5",
+      "fresh": "0.5",
+      "equal": true,
+      "scientific": true
+    },
+    {
+      "path": "design.minimum",
+      "control": "0.001",
+      "treatment": "0.001",
+      "fresh": "0.001",
+      "equal": true,
+      "scientific": true
+    },
+    {
+      "path": "design.volumeFraction",
+      "control": "0.5",
+      "treatment": "0.5",
+      "fresh": "0.5",
+      "equal": true,
+      "scientific": true
+    },
+    {
+      "path": "filter.type",
+      "control": "sensitivity",
+      "treatment": "sensitivity",
+      "fresh": "sensitivity",
+      "equal": true,
+      "scientific": true
+    },
+    {
+      "path": "filter.radiusPhysical",
+      "control": "0.059999999999999998",
+      "treatment": "0.059999999999999998",
+      "fresh": "0.059999999999999998",
+      "equal": true,
+      "scientific": true
+    },
+    {
+      "path": "filter.radiusElements",
+      "control": "[]",
+      "treatment": "[]",
+      "fresh": "[]",
+      "equal": true,
+      "scientific": true
+    },
+    {
+      "path": "filter.applyTo",
+      "control": "all",
+      "treatment": "all",
+      "fresh": "all",
+      "equal": true,
+      "scientific": true
+    },
+    {
+      "path": "projection.enabled",
+      "control": "false",
+      "treatment": "false",
+      "fresh": "false",
+      "equal": true,
+      "scientific": true
+    },
+    {
+      "path": "projection.eta",
+      "control": "0.5",
+      "treatment": "0.5",
+      "fresh": "0.5",
+      "equal": true,
+      "scientific": true
+    },
+    {
+      "path": "projection.beta.levels",
+      "control": "[]",
+      "treatment": "[]",
+      "fresh": "[]",
+      "equal": true,
+      "scientific": true
+    },
+    {
+      "path": "projection.continuation.trigger",
+      "control": "outerConvergence",
+      "treatment": "outerConvergence",
+      "fresh": "outerConvergence",
+      "equal": true,
+      "scientific": true
+    },
+    {
+      "path": "eigen.targetMode",
+      "control": "1",
+      "treatment": "1",
+      "fresh": "1",
+      "equal": true,
+      "scientific": true
+    },
+    {
+      "path": "eigen.maxCluster",
+      "control": "4",
+      "treatment": "4",
+      "fresh": "4",
+      "equal": true,
+      "scientific": true
+    },
+    {
+      "path": "eigen.solver",
+      "control": "eigs",
+      "treatment": "eigs",
+      "fresh": "eigs",
+      "equal": true,
+      "scientific": true
+    },
+    {
+      "path": "eigen.tolerance",
+      "control": "9.9999999999999998e-13",
+      "treatment": "9.9999999999999998e-13",
+      "fresh": "9.9999999999999998e-13",
+      "equal": true,
+      "scientific": true
+    },
+    {
+      "path": "eigen.maxIterations",
+      "control": "5000",
+      "treatment": "5000",
+      "fresh": "5000",
+      "equal": true,
+      "scientific": true
+    },
+    {
+      "path": "eigen.krylovFactor",
+      "control": "4",
+      "treatment": "4",
+      "fresh": "4",
+      "equal": true,
+      "scientific": true
+    },
+    {
+      "path": "multiplicity.method",
+      "control": "subspace",
+      "treatment": "subspace",
+      "fresh": "subspace",
+      "equal": true,
+      "scientific": true
+    },
+    {
+      "path": "multiplicity.tolerance",
+      "control": "0.050000000000000003",
+      "treatment": "0.050000000000000003",
+      "fresh": "0.050000000000000003",
+      "equal": true,
+      "scientific": true
+    },
+    {
+      "path": "multiplicity.enterTolerance",
+      "control": "0.01",
+      "treatment": "0.01",
+      "fresh": "0.01",
+      "equal": true,
+      "scientific": true
+    },
+    {
+      "path": "multiplicity.exitTolerance",
+      "control": "0.050000000000000003",
+      "treatment": "0.050000000000000003",
+      "fresh": "0.050000000000000003",
+      "equal": true,
+      "scientific": true
+    },
+    {
+      "path": "multiplicity.subspaceSize",
+      "control": "2",
+      "treatment": "2",
+      "fresh": "2",
+      "equal": true,
+      "scientific": true
+    },
+    {
+      "path": "multiplicity.diagonalOffsets",
+      "control": "true",
+      "treatment": "true",
+      "fresh": "true",
+      "equal": true,
+      "scientific": true
+    },
+    {
+      "path": "multiplicity.offDiagonal",
+      "control": "true",
+      "treatment": "true",
+      "fresh": "true",
+      "equal": true,
+      "scientific": true
+    },
+    {
+      "path": "optimizer.inner.type",
+      "control": "mma",
+      "treatment": "mma",
+      "fresh": "mma",
+      "equal": true,
+      "scientific": true
+    },
+    {
+      "path": "optimizer.inner.variable",
+      "control": "increment",
+      "treatment": "increment",
+      "fresh": "increment",
+      "equal": true,
+      "scientific": true
+    },
+    {
+      "path": "optimizer.inner.variant",
+      "control": "published",
+      "treatment": "published",
+      "fresh": "published",
+      "equal": true,
+      "scientific": true
+    },
+    {
+      "path": "optimizer.inner.tolerance",
+      "control": "0.050000000000000003",
+      "treatment": "0.050000000000000003",
+      "fresh": "0.050000000000000003",
+      "equal": true,
+      "scientific": true
+    },
+    {
+      "path": "optimizer.inner.minIterations",
+      "control": "5",
+      "treatment": "5",
+      "fresh": "5",
+      "equal": true,
+      "scientific": true
+    },
+    {
+      "path": "optimizer.inner.maxIterations",
+      "control": "500",
+      "treatment": "500",
+      "fresh": "500",
+      "equal": true,
+      "scientific": true
+    },
+    {
+      "path": "move.policy",
+      "control": "ladder",
+      "treatment": "ladder",
+      "fresh": "ladder",
+      "equal": true,
+      "scientific": true
+    },
+    {
+      "path": "move.initial",
+      "control": "0.040000000000000001",
+      "treatment": "0.040000000000000001",
+      "fresh": "0.040000000000000001",
+      "equal": true,
+      "scientific": true
+    },
+    {
+      "path": "move.minimum",
+      "control": "0.002",
+      "treatment": "0.002",
+      "fresh": "0.002",
+      "equal": true,
+      "scientific": true
+    },
+    {
+      "path": "move.levels",
+      "control": "[0.040000000000000001 0.02 0.01]",
+      "treatment": "[0.040000000000000001 0.02 0.01]",
+      "fresh": "[0.040000000000000001 0.02 0.01]",
+      "equal": true,
+      "scientific": true
+    },
+    {
+      "path": "move.geometric.ratio",
+      "control": "0.96999999999999997",
+      "treatment": "0.96999999999999997",
+      "fresh": "0.96999999999999997",
+      "equal": true,
+      "scientific": true
+    },
+    {
+      "path": "move.geometric.afterCoalescence",
+      "control": "true",
+      "treatment": "true",
+      "fresh": "true",
+      "equal": true,
+      "scientific": true
+    },
+    {
+      "path": "move.trust.loRatio",
+      "control": "0.29999999999999999",
+      "treatment": "0.29999999999999999",
+      "fresh": "0.29999999999999999",
+      "equal": true,
+      "scientific": true
+    },
+    {
+      "path": "move.trust.hiRatio",
+      "control": "0.69999999999999996",
+      "treatment": "0.69999999999999996",
+      "fresh": "0.69999999999999996",
+      "equal": true,
+      "scientific": true
+    },
+    {
+      "path": "move.trust.shrink",
+      "control": "0.69999999999999996",
+      "treatment": "0.69999999999999996",
+      "fresh": "0.69999999999999996",
+      "equal": true,
+      "scientific": true
+    },
+    {
+      "path": "move.trust.grow",
+      "control": "1.1000000000000001",
+      "treatment": "1.1000000000000001",
+      "fresh": "1.1000000000000001",
+      "equal": true,
+      "scientific": true
+    },
+    {
+      "path": "move.continuation.signal",
+      "control": "stageExhaustion",
+      "treatment": "stageExhaustion",
+      "fresh": "stageExhaustion",
+      "equal": true,
+      "scientific": true
+    },
+    {
+      "path": "move.continuation.window",
+      "control": "10",
+      "treatment": "10",
+      "fresh": "10",
+      "equal": true,
+      "scientific": true
+    },
+    {
+      "path": "move.continuation.tolerance",
+      "control": "0.0050000000000000001",
+      "treatment": "0.0050000000000000001",
+      "fresh": "0.0050000000000000001",
+      "equal": true,
+      "scientific": true
+    },
+    {
+      "path": "stop.rule",
+      "control": "stageExhaustion",
+      "treatment": "stageExhaustion",
+      "fresh": "stageExhaustion",
+      "equal": true,
+      "scientific": true
+    },
+    {
+      "path": "stop.norm",
+      "control": "l2",
+      "treatment": "l2",
+      "fresh": "l2",
+      "equal": true,
+      "scientific": true
+    },
+    {
+      "path": "stop.tolerance",
+      "control": "0.15000000000000002",
+      "treatment": "0.15000000000000002",
+      "fresh": "0.15000000000000002",
+      "equal": true,
+      "scientific": true
+    },
+    {
+      "path": "stop.toleranceRule",
+      "control": "meshScaled",
+      "treatment": "meshScaled",
+      "fresh": "meshScaled",
+      "equal": true,
+      "scientific": true
+    },
+    {
+      "path": "stop.field",
+      "control": "designVariable",
+      "treatment": "designVariable",
+      "fresh": "designVariable",
+      "equal": true,
+      "scientific": true
+    },
+    {
+      "path": "stop.guards.settledMove",
+      "control": "true",
+      "treatment": "true",
+      "fresh": "true",
+      "equal": true,
+      "scientific": true
+    },
+    {
+      "path": "stop.guards.ladderExhausted",
+      "control": "false",
+      "treatment": "false",
+      "fresh": "false",
+      "equal": true,
+      "scientific": true
+    },
+    {
+      "path": "stop.guards.maxDesignChange",
+      "control": "false",
+      "treatment": "false",
+      "fresh": "false",
+      "equal": true,
+      "scientific": true
+    },
+    {
+      "path": "runtime.maxOuter",
+      "control": "1600",
+      "treatment": "1600",
+      "fresh": "1600",
+      "equal": true,
+      "scientific": true
+    },
+    {
+      "path": "runtime.singleThread",
+      "control": "true",
+      "treatment": "true",
+      "fresh": "true",
+      "equal": true,
+      "scientific": true
+    },
+    {
+      "path": "runtime.diagnostics",
+      "control": "true",
+      "treatment": "true",
+      "fresh": "true",
+      "equal": true,
+      "scientific": true
+    },
+    {
+      "path": "runtime.verbose",
+      "control": "false",
+      "treatment": "false",
+      "fresh": "false",
+      "equal": true,
+      "scientific": true
+    },
+    {
+      "path": "runtime.name",
+      "control": "CAN3_480x60",
+      "treatment": "CAN3_480x60",
+      "fresh": "CAN3_480x60",
+      "equal": true,
+      "scientific": false
+    }
+  ],
+  "cfg_struct_isequal": true,
+  "cfgHash_control": "03097a28b0ad7fdb0d977985d3b5fd279dd74553c9dd5dfbd3cc035ac2a1782e",
+  "cfgHash_treatment": "03097a28b0ad7fdb0d977985d3b5fd279dd74553c9dd5dfbd3cc035ac2a1782e",
+  "cfgHash_fresh": "03097a28b0ad7fdb0d977985d3b5fd279dd74553c9dd5dfbd3cc035ac2a1782e",
+  "config_differences": [],
+  "fresh_differences": [],
+  "treatment_descriptor": {
+    "control": {
+      "innerSolver": "repeatedMMA",
+      "implementation": "+impl/algo/innerLoop.m -> mma_published/mmasub.m"
+    },
+    "treatment": {
+      "innerSolver": "exactSOCP",
+      "implementation": "scripts/cs_socp_inner.m (fp_problem SOC, coneprog schur->augmented, cs_socp_certify)"
+    }
+  },
+  "scientific_differences": [
+    {
+      "field": "innerSolver",
+      "control": "repeatedMMA",
+      "treatment": "exactSOCP"
+    }
+  ],
+  "inert_under_treatment": [
+    "optimizer.inner.type",
+    "optimizer.inner.variant",
+    "optimizer.inner.tolerance",
+    "optimizer.inner.minIterations",
+    "optimizer.inner.maxIterations"
+  ],
+  "non_scientific_differences": [
+    "output directory",
+    "logging/progress print",
+    "SOCP telemetry records",
+    "certificate records",
+    "checkpointing",
+    "preflight stopAfter hook (0 in the treatment)",
+    "iteration-1 identity assertion",
+    "NaN/Inf fail-closed checks"
+  ],
+  "n_scientific_config_differences": 0,
+  "pass": true
+}

@@ -1,0 +1,986 @@
+{
+  "gradient_check": {
+    "h": 1E-8,
+    "max_relerr_per_row": [
+      7.0343346706757624E-6,
+      0.00013530486473373169,
+      1.4413064296546605E-6,
+      0.0038453011934577079
+    ],
+    "pass": false
+  },
+  "runs": [
+    {
+      "start": "S0_zero",
+      "mode": "exact",
+      "fval": -1.0017918951633309,
+      "exitflag": 1,
+      "iterations": 38,
+      "funcCount": 502,
+      "firstorderopt": 8.9802485217674781E-12,
+      "constrviolation": 0,
+      "wall_s": 25.120718125,
+      "min_sep": 7428.6366320309426,
+      "message": "Local minimum found that satisfies the constraints.\n\nOptimization completed because the objective function is non-decreasing in \nfeasible directions, to within the value of the optimality tolerance,\nand constraints are satisfied to within the value of the constraint tolerance.\n\n<stopping criteria details>\n\nOptimization completed: The relative first-order optimality measure, 8.980249e-12,\nis less than options.OptimalityTolerance = 1.000000e-10, and the relative maximum constraint\nviolation, 0.000000e+00, is less than options.ConstraintTolerance = 1.000000e-10.",
+      "bs": 1.0017918951633309,
+      "lambda": {
+        "ineqnonlin": [
+          0.99999999997557909,
+          2.8788670408569675E-11
+        ],
+        "ineqlin": [
+          1.6161600836335311E-12,
+          0.7291132432949643
+        ],
+        "lower_max": 0.0075537014421275693,
+        "upper_max": 0.00086226051188607769
+      },
+      "kkt": {
+        "label": "fmincon S0_zero exact",
+        "primal": {
+          "fval": [
+            -8.1514794914028244E-12,
+            -0.2782344650105788,
+            -4.95020991980412,
+            -1.2166386416841609E-11
+          ],
+          "max_fval": -8.1514794914028244E-12,
+          "box_violation_lower": 0,
+          "box_violation_upper": 0
+        },
+        "dual": {
+          "mu": [
+            0.99999999997557909,
+            2.8788670408569675E-11,
+            1.6161600836335311E-12,
+            0.7291132432949643
+          ],
+          "min_mu": 1.6161600836335311E-12,
+          "min_xsi": 7.985259541224722E-12,
+          "min_eta": 2.0009234036321249E-12
+        },
+        "complementarity": {
+          "mu_times_f": [
+            -8.1514794912037582E-12,
+            -8.0100003094942645E-12,
+            -8.0003316779941626E-12,
+            -8.8706734595631855E-12
+          ],
+          "max_abs_mu_f": 8.8706734595631855E-12,
+          "max_xsi_gap": 8.9802485217674781E-12,
+          "max_eta_gap": 8.4829471813473433E-12,
+          "max_box_comp_normalized": 1.395609937130921E-6
+        },
+        "stationarity": {
+          "sRow0": 0.00064346407136000846,
+          "sRow_point": 0.0006434658609555695,
+          "raw_rms": 6.8594827607875864E-14,
+          "raw_max": 1.0376201494685121E-12,
+          "norm_rms": 1.0660242064937001E-10,
+          "norm_max": 1.6125533586909148E-9,
+          "norm_rms_pointscale": 1.0660212416865461E-10,
+          "bs_residual": -4.5607946792836863E-16
+        },
+        "eigs": {
+          "e1": 48.154694282723028,
+          "e2": 7525.3195498720706,
+          "separation": 7477.164855589348
+        },
+        "active_sweep_cols": [
+          "tol",
+          "n_at_minus_move",
+          "n_at_floor",
+          "n_at_plus_move",
+          "n_at_ceiling"
+        ],
+        "active_sweep": [
+          [
+            1E-8,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1E-7,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1E-6,
+            0,
+            1628,
+            0,
+            4
+          ],
+          [
+            1E-5,
+            2,
+            2450,
+            0,
+            4802
+          ],
+          [
+            0.0001,
+            2518,
+            9304,
+            2918,
+            9522
+          ],
+          [
+            0.001,
+            4642,
+            9396,
+            4382,
+            9676
+          ]
+        ],
+        "active": {
+          "n_minus_move": 0,
+          "n_floor": 1628,
+          "n_plus_move": 0,
+          "n_ceiling": 4,
+          "n_interior": 27168,
+          "frac_move_bound": 0,
+          "frac_any_bound": 0.056666666666666664
+        },
+        "verdict": "REFERENCE_PROBLEM25_KKT_INCONCLUSIVE"
+      },
+      "sol": {
+        "bs": 1.0017918951633309,
+        "beta": 26921.765968368305,
+        "max_abs_drho_over_move": 0.99998025034286231,
+        "norm2_drho": 1.0019622204917273,
+        "image_abc": [
+          48.154695729494321,
+          -0.10400840127719047,
+          96.682916394357918
+        ],
+        "fJJ_drho": -1168.9105088684184,
+        "sum_drho": 0.045796112194686989,
+        "separation": 7477.164855589348,
+        "active": {
+          "n_minus_move": 0,
+          "n_floor": 1628,
+          "n_plus_move": 0,
+          "n_ceiling": 4,
+          "n_interior": 27168,
+          "frac_move_bound": 0,
+          "frac_any_bound": 0.056666666666666664
+        }
+      }
+    },
+    {
+      "start": "S1_P19",
+      "mode": "exact",
+      "fval": -1.0017918918817075,
+      "exitflag": 2,
+      "iterations": 39,
+      "funcCount": 451,
+      "firstorderopt": 6.2272274684817773E-10,
+      "constrviolation": 0,
+      "wall_s": 25.125118916666668,
+      "min_sep": 7430.8702853552295,
+      "message": "Local minimum possible. Constraints satisfied.\n\nfmincon stopped because the size of the current step is less than\nthe value of the step size tolerance and constraints are \nsatisfied to within the value of the constraint tolerance.\n\n<stopping criteria details>\n\nOptimization stopped because the relative changes in all elements of x are\nless than options.StepTolerance = 1.000000e-14, and the relative maximum constraint\nviolation, 0.000000e+00, is less than options.ConstraintTolerance = 1.000000e-10.",
+      "bs": 1.0017918918817075,
+      "lambda": {
+        "ineqnonlin": [
+          0.99999999997565714,
+          2.8712364331385615E-11
+        ],
+        "ineqlin": [
+          1.6161401608183032E-12,
+          0.72911643419213013
+        ],
+        "lower_max": 0.0075536982092731311,
+        "upper_max": 0.00086226002159165869
+      },
+      "kkt": {
+        "label": "fmincon S1_P19 exact",
+        "primal": {
+          "fval": [
+            -8.22675261247241E-12,
+            -0.27822901054808935,
+            -4.950180129452896,
+            -1.240891833731439E-11
+          ],
+          "max_fval": -8.22675261247241E-12,
+          "box_violation_lower": 0,
+          "box_violation_upper": 0
+        },
+        "dual": {
+          "mu": [
+            0.99999999997565714,
+            2.8712364331385615E-11,
+            1.6161401608183032E-12,
+            0.72911643419213013
+          ],
+          "min_mu": 1.6161401608183032E-12,
+          "min_xsi": 7.9861214150989477E-12,
+          "min_eta": 2.0008692948258182E-12
+        },
+        "complementarity": {
+          "mu_times_f": [
+            -8.2267526122721466E-12,
+            -7.9886127184176725E-12,
+            -8.0001849104935728E-12,
+            -9.0475462902840036E-12
+          ],
+          "max_abs_mu_f": 9.0475462902840036E-12,
+          "max_xsi_gap": 1.3564378051290534E-11,
+          "max_eta_gap": 2.57067631352708E-11,
+          "max_box_comp_normalized": 3.9950580427804885E-6
+        },
+        "stationarity": {
+          "sRow0": 0.00064346407136000846,
+          "sRow_point": 0.00064346589540029391,
+          "raw_rms": 3.6694290315287947E-12,
+          "raw_max": 6.22722746849457E-10,
+          "norm_rms": 5.7026168124246433E-9,
+          "norm_max": 9.67766149760758E-7,
+          "norm_rms_pointscale": 5.7026006471501932E-9,
+          "bs_residual": 4.0429469093948764E-16
+        },
+        "eigs": {
+          "e1": 48.154606095671738,
+          "e2": 7525.17288057835,
+          "separation": 7477.018274482678
+        },
+        "active_sweep_cols": [
+          "tol",
+          "n_at_minus_move",
+          "n_at_floor",
+          "n_at_plus_move",
+          "n_at_ceiling"
+        ],
+        "active_sweep": [
+          [
+            1E-8,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1E-7,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1E-6,
+            0,
+            1624,
+            0,
+            4
+          ],
+          [
+            1E-5,
+            2,
+            2450,
+            0,
+            4766
+          ],
+          [
+            0.0001,
+            2502,
+            9304,
+            2902,
+            9520
+          ],
+          [
+            0.001,
+            4562,
+            9394,
+            4368,
+            9676
+          ]
+        ],
+        "active": {
+          "n_minus_move": 0,
+          "n_floor": 1624,
+          "n_plus_move": 0,
+          "n_ceiling": 4,
+          "n_interior": 27172,
+          "frac_move_bound": 0,
+          "frac_any_bound": 0.056527777777777781
+        },
+        "verdict": "REFERENCE_PROBLEM25_KKT_INCONCLUSIVE"
+      },
+      "sol": {
+        "bs": 1.0017918918817075,
+        "beta": 26921.765880179231,
+        "max_abs_drho_over_move": 0.99998008035529318,
+        "norm2_drho": 1.0018951471174,
+        "image_abc": [
+          48.15460759764045,
+          -0.10597286227019964,
+          96.536247045437975
+        ],
+        "fJJ_drho": -1169.7111713760587,
+        "sum_drho": 0.045796108770000732,
+        "separation": 7477.018274482678,
+        "active": {
+          "n_minus_move": 0,
+          "n_floor": 1624,
+          "n_plus_move": 0,
+          "n_ceiling": 4,
+          "n_interior": 27172,
+          "frac_move_bound": 0,
+          "frac_any_bound": 0.056527777777777781
+        }
+      }
+    },
+    {
+      "start": "S2_M500",
+      "mode": "exact",
+      "fval": -1.0017918972615247,
+      "exitflag": 1,
+      "iterations": 39,
+      "funcCount": 470,
+      "firstorderopt": 8.8720597692687256E-12,
+      "constrviolation": 0,
+      "wall_s": 24.854158125,
+      "min_sep": 7407.2656601211256,
+      "message": "Local minimum found that satisfies the constraints.\n\nOptimization completed because the objective function is non-decreasing in \nfeasible directions, to within the value of the optimality tolerance,\nand constraints are satisfied to within the value of the constraint tolerance.\n\n<stopping criteria details>\n\nOptimization completed: The relative first-order optimality measure, 8.872060e-12,\nis less than options.OptimalityTolerance = 1.000000e-10, and the relative maximum constraint\nviolation, 0.000000e+00, is less than options.ConstraintTolerance = 1.000000e-10.",
+      "bs": 1.0017918972615247,
+      "lambda": {
+        "ineqnonlin": [
+          0.99999999997558076,
+          2.8788411958194094E-11
+        ],
+        "ineqlin": [
+          1.6161253211463544E-12,
+          0.7291136216924341
+        ],
+        "lower_max": 0.0075537014012798344,
+        "upper_max": 0.00086226048038712309
+      },
+      "kkt": {
+        "label": "fmincon S2_M500 exact",
+        "primal": {
+          "fval": [
+            -8.0684348091608626E-12,
+            -0.27823372157710691,
+            -4.9501926250681771,
+            -1.2169039109721781E-11
+          ],
+          "max_fval": -8.0684348091608626E-12,
+          "box_violation_lower": 0,
+          "box_violation_upper": 0
+        },
+        "dual": {
+          "mu": [
+            0.99999999997558076,
+            2.8788411958194094E-11,
+            1.6161253211463544E-12,
+            0.7291136216924341
+          ],
+          "min_mu": 1.6161253211463544E-12,
+          "min_xsi": 7.985998250578002E-12,
+          "min_eta": 2.0008770271461514E-12
+        },
+        "complementarity": {
+          "mu_times_f": [
+            -8.0684348089638369E-12,
+            -8.00990699742323E-12,
+            -8.0001316459246232E-12,
+            -8.8726121778061219E-12
+          ],
+          "max_abs_mu_f": 8.8726121778061219E-12,
+          "max_xsi_gap": 8.66680425873619E-12,
+          "max_eta_gap": 8.3366003117570824E-12,
+          "max_box_comp_normalized": 1.3468979302011787E-6
+        },
+        "stationarity": {
+          "sRow0": 0.00064346407136000846,
+          "sRow_point": 0.0006434658616242603,
+          "raw_rms": 2.0711661845582054E-14,
+          "raw_max": 3.133010683036467E-13,
+          "norm_rms": 3.2187751837964225E-11,
+          "norm_max": 4.86897532043183E-10,
+          "norm_rms_pointscale": 3.2187662284524173E-11,
+          "bs_residual": 9.1102322368217056E-17
+        },
+        "eigs": {
+          "e1": 48.154750666533992,
+          "e2": 7525.299627515984,
+          "separation": 7477.14487684945
+        },
+        "active_sweep_cols": [
+          "tol",
+          "n_at_minus_move",
+          "n_at_floor",
+          "n_at_plus_move",
+          "n_at_ceiling"
+        ],
+        "active_sweep": [
+          [
+            1E-8,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1E-7,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1E-6,
+            0,
+            1634,
+            0,
+            4
+          ],
+          [
+            1E-5,
+            2,
+            2450,
+            0,
+            4832
+          ],
+          [
+            0.0001,
+            2540,
+            9304,
+            2936,
+            9526
+          ],
+          [
+            0.001,
+            4614,
+            9396,
+            4384,
+            9676
+          ]
+        ],
+        "active": {
+          "n_minus_move": 0,
+          "n_floor": 1634,
+          "n_plus_move": 0,
+          "n_ceiling": 4,
+          "n_interior": 27162,
+          "frac_move_bound": 0,
+          "frac_any_bound": 0.056875
+        },
+        "verdict": "REFERENCE_PROBLEM25_KKT_INCONCLUSIVE"
+      },
+      "sol": {
+        "bs": 1.0017918972615247,
+        "beta": 26921.76602475435,
+        "max_abs_drho_over_move": 0.99998042568689383,
+        "norm2_drho": 1.0019326457131155,
+        "image_abc": [
+          48.154752114364065,
+          -0.10404631279026733,
+          96.6629940372116
+        ],
+        "fJJ_drho": -1169.3752244932166,
+        "sum_drho": 0.045796112190142568,
+        "separation": 7477.14487684945,
+        "active": {
+          "n_minus_move": 0,
+          "n_floor": 1634,
+          "n_plus_move": 0,
+          "n_ceiling": 4,
+          "n_interior": 27162,
+          "frac_move_bound": 0,
+          "frac_any_bound": 0.056875
+        }
+      }
+    },
+    {
+      "start": "S4_halfmax",
+      "mode": "exact",
+      "fval": -1.0017918947121665,
+      "exitflag": 1,
+      "iterations": 38,
+      "funcCount": 361,
+      "firstorderopt": 2.4633098671980906E-11,
+      "constrviolation": 0,
+      "wall_s": 23.090029708333333,
+      "min_sep": 7460.01909231103,
+      "message": "Local minimum found that satisfies the constraints.\n\nOptimization completed because the objective function is non-decreasing in \nfeasible directions, to within the value of the optimality tolerance,\nand constraints are satisfied to within the value of the constraint tolerance.\n\n<stopping criteria details>\n\nOptimization completed: The relative first-order optimality measure, 2.463310e-11,\nis less than options.OptimalityTolerance = 1.000000e-10, and the relative maximum constraint\nviolation, 0.000000e+00, is less than options.ConstraintTolerance = 1.000000e-10.",
+      "bs": 1.0017918947121665,
+      "lambda": {
+        "ineqnonlin": [
+          0.99999999997566014,
+          2.870953101966358E-11
+        ],
+        "ineqlin": [
+          1.616028463761375E-12,
+          0.729117042732438
+        ],
+        "lower_max": 0.0075536982508004084,
+        "upper_max": 0.00086225997927493619
+      },
+      "kkt": {
+        "label": "fmincon S4_halfmax exact",
+        "primal": {
+          "fval": [
+            -8.1294970755152463E-12,
+            -0.27824003944280862,
+            -4.9502150991773064,
+            -1.230508435886198E-11
+          ],
+          "max_fval": -8.1294970755152463E-12,
+          "box_violation_lower": 0,
+          "box_violation_upper": 0
+        },
+        "dual": {
+          "mu": [
+            0.99999999997566014,
+            2.870953101966358E-11,
+            1.616028463761375E-12,
+            0.729117042732438
+          ],
+          "min_mu": 1.616028463761375E-12,
+          "min_xsi": 7.9861829610319752E-12,
+          "min_eta": 2.0008654309458335E-12
+        },
+        "complementarity": {
+          "mu_times_f": [
+            -8.1294970753173756E-12,
+            -7.9881410432957328E-12,
+            -7.9996885020118642E-12,
+            -8.9718467183066254E-12
+          ],
+          "max_abs_mu_f": 8.9718467183066254E-12,
+          "max_xsi_gap": 1.3797710111459988E-11,
+          "max_eta_gap": 2.4633098671980906E-11,
+          "max_box_comp_normalized": 3.8282011021869563E-6
+        },
+        "stationarity": {
+          "sRow0": 0.00064346407136000846,
+          "sRow_point": 0.000643465895407697,
+          "raw_rms": 1.0925710030013335E-14,
+          "raw_max": 1.6464108107182943E-13,
+          "norm_rms": 1.6979518385418236E-11,
+          "norm_max": 2.558667816896885E-10,
+          "norm_rms_pointscale": 1.69794702531839E-11,
+          "bs_residual": 3.3888487792726522E-16
+        },
+        "eigs": {
+          "e1": 48.15468215771206,
+          "e2": 7525.4693428724722,
+          "separation": 7477.31466071476
+        },
+        "active_sweep_cols": [
+          "tol",
+          "n_at_minus_move",
+          "n_at_floor",
+          "n_at_plus_move",
+          "n_at_ceiling"
+        ],
+        "active_sweep": [
+          [
+            1E-8,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1E-7,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1E-6,
+            0,
+            1634,
+            0,
+            4
+          ],
+          [
+            1E-5,
+            2,
+            2450,
+            0,
+            4810
+          ],
+          [
+            0.0001,
+            2524,
+            9304,
+            2924,
+            9524
+          ],
+          [
+            0.001,
+            4562,
+            9394,
+            4372,
+            9676
+          ]
+        ],
+        "active": {
+          "n_minus_move": 0,
+          "n_floor": 1634,
+          "n_plus_move": 0,
+          "n_ceiling": 4,
+          "n_interior": 27162,
+          "frac_move_bound": 0,
+          "frac_any_bound": 0.056875
+        },
+        "verdict": "REFERENCE_PROBLEM25_KKT_INCONCLUSIVE"
+      },
+      "sol": {
+        "bs": 1.0017918947121665,
+        "beta": 26921.765956243886,
+        "max_abs_drho_over_move": 0.99998029148824708,
+        "norm2_drho": 1.0019144984323614,
+        "image_abc": [
+          48.154683659752294,
+          -0.10597748552208319,
+          96.832709339489327
+        ],
+        "fJJ_drho": -1168.771332531212,
+        "sum_drho": 0.045796110197987017,
+        "separation": 7477.31466071476,
+        "active": {
+          "n_minus_move": 0,
+          "n_floor": 1634,
+          "n_plus_move": 0,
+          "n_ceiling": 4,
+          "n_interior": 27162,
+          "frac_move_bound": 0,
+          "frac_any_bound": 0.056875
+        }
+      }
+    },
+    {
+      "start": "S5_halfmin",
+      "mode": "exact",
+      "fval": -1.001791899442279,
+      "exitflag": 1,
+      "iterations": 39,
+      "funcCount": 561,
+      "firstorderopt": 8.8715475024479286E-12,
+      "constrviolation": 0,
+      "wall_s": 24.768681291666667,
+      "min_sep": 6964.4183267867629,
+      "message": "Local minimum found that satisfies the constraints.\n\nOptimization completed because the objective function is non-decreasing in \nfeasible directions, to within the value of the optimality tolerance,\nand constraints are satisfied to within the value of the constraint tolerance.\n\n<stopping criteria details>\n\nOptimization completed: The relative first-order optimality measure, 8.871548e-12,\nis less than options.OptimalityTolerance = 1.000000e-10, and the relative maximum constraint\nviolation, 0.000000e+00, is less than options.ConstraintTolerance = 1.000000e-10.",
+      "bs": 1.001791899442279,
+      "lambda": {
+        "ineqnonlin": [
+          0.99999999997564681,
+          2.8723835802728781E-11
+        ],
+        "ineqlin": [
+          1.6159953210541812E-12,
+          0.72911377736328942
+        ],
+        "lower_max": 0.0075537010983713869,
+        "upper_max": 0.000862260445173982
+      },
+      "kkt": {
+        "label": "fmincon S5_halfmin exact",
+        "primal": {
+          "fval": [
+            -7.9838358146844257E-12,
+            -0.27824557633818459,
+            -4.9502289792135308,
+            -1.1533656005566527E-11
+          ],
+          "max_fval": -7.9838358146844257E-12,
+          "box_violation_lower": 0,
+          "box_violation_upper": 0
+        },
+        "dual": {
+          "mu": [
+            0.99999999997564681,
+            2.8723835802728781E-11,
+            1.6159953210541812E-12,
+            0.72911377736328942
+          ],
+          "min_mu": 1.6159953210541812E-12,
+          "min_xsi": 7.9864907248423549E-12,
+          "min_eta": 2.0008461094027265E-12
+        },
+        "complementarity": {
+          "mu_times_f": [
+            -7.9838358144899946E-12,
+            -7.99228024757365E-12,
+            -7.9995468685558809E-12,
+            -8.4093474970273985E-12
+          ],
+          "max_abs_mu_f": 8.4093474970273985E-12,
+          "max_xsi_gap": 8.2911286460254538E-12,
+          "max_eta_gap": 8.8715475024479286E-12,
+          "max_box_comp_normalized": 1.3787168386413966E-6
+        },
+        "stationarity": {
+          "sRow0": 0.00064346407136000846,
+          "sRow_point": 0.00064346586475217858,
+          "raw_rms": 9.0551798873620028E-14,
+          "raw_max": 1.3697460939931659E-12,
+          "norm_rms": 1.4072549331656106E-10,
+          "norm_max": 2.1287064110636469E-9,
+          "norm_rms_pointscale": 1.4072510110306275E-10,
+          "bs_residual": 1.12202254906572E-15
+        },
+        "eigs": {
+          "e1": 48.154809269001106,
+          "e2": 7525.6182663616837,
+          "separation": 7477.4634570926828
+        },
+        "active_sweep_cols": [
+          "tol",
+          "n_at_minus_move",
+          "n_at_floor",
+          "n_at_plus_move",
+          "n_at_ceiling"
+        ],
+        "active_sweep": [
+          [
+            1E-8,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1E-7,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1E-6,
+            0,
+            1638,
+            0,
+            4
+          ],
+          [
+            1E-5,
+            4,
+            2452,
+            0,
+            4876
+          ],
+          [
+            0.0001,
+            2556,
+            9304,
+            2958,
+            9526
+          ],
+          [
+            0.001,
+            4590,
+            9396,
+            4386,
+            9676
+          ]
+        ],
+        "active": {
+          "n_minus_move": 0,
+          "n_floor": 1638,
+          "n_plus_move": 0,
+          "n_ceiling": 4,
+          "n_interior": 27158,
+          "frac_move_bound": 0,
+          "frac_any_bound": 0.057013888888888892
+        },
+        "verdict": "REFERENCE_PROBLEM25_KKT_INCONCLUSIVE"
+      },
+      "sol": {
+        "bs": 1.001791899442279,
+        "beta": 26921.766083359093,
+        "max_abs_drho_over_move": 0.99998061786736347,
+        "norm2_drho": 1.0019396877358813,
+        "image_abc": [
+          48.154810721868742,
+          -0.10422938492520739,
+          96.981632877873523
+        ],
+        "fJJ_drho": -1168.3981987180387,
+        "sum_drho": 0.045796121294046532,
+        "separation": 7477.4634570926828,
+        "active": {
+          "n_minus_move": 0,
+          "n_floor": 1638,
+          "n_plus_move": 0,
+          "n_ceiling": 4,
+          "n_interior": 27158,
+          "frac_move_bound": 0,
+          "frac_any_bound": 0.057013888888888892
+        }
+      }
+    },
+    {
+      "start": "S6_rand",
+      "mode": "exact",
+      "fval": -1.0017918970864088,
+      "exitflag": 2,
+      "iterations": 39,
+      "funcCount": 589,
+      "firstorderopt": 6.7893904593806926E-10,
+      "constrviolation": 0,
+      "wall_s": 25.136758875,
+      "min_sep": 7460.0020802914523,
+      "message": "Local minimum possible. Constraints satisfied.\n\nfmincon stopped because the size of the current step is less than\nthe value of the step size tolerance and constraints are \nsatisfied to within the value of the constraint tolerance.\n\n<stopping criteria details>\n\nOptimization stopped because the relative changes in all elements of x are\nless than options.StepTolerance = 1.000000e-14, and the relative maximum constraint\nviolation, 0.000000e+00, is less than options.ConstraintTolerance = 1.000000e-10.",
+      "bs": 1.0017918970864088,
+      "lambda": {
+        "ineqnonlin": [
+          0.99999999997566691,
+          2.8701197870508913E-11
+        ],
+        "ineqlin": [
+          1.6160478693641004E-12,
+          0.72911642671976074
+        ],
+        "lower_max": 0.0075536977873371536,
+        "upper_max": 0.00086225998933059833
+      },
+      "kkt": {
+        "label": "fmincon S6_rand exact",
+        "primal": {
+          "fval": [
+            -8.0999651430602171E-12,
+            -0.27819796080332493,
+            -4.950040210550922,
+            -1.2344369477230228E-11
+          ],
+          "max_fval": -8.0999651430602171E-12,
+          "box_violation_lower": 0,
+          "box_violation_upper": 0
+        },
+        "dual": {
+          "mu": [
+            0.99999999997566691,
+            2.8701197870508913E-11,
+            1.6160478693641004E-12,
+            0.72911642671976074
+          ],
+          "min_mu": 1.6160478693641004E-12,
+          "min_xsi": 7.9853827066711486E-12,
+          "min_eta": 2.00091567125322E-12
+        },
+        "complementarity": {
+          "mu_times_f": [
+            -8.09996514286312E-12,
+            -7.9846147201883115E-12,
+            -7.9995019355274411E-12,
+            -9.0004825633465853E-12
+          ],
+          "max_abs_mu_f": 9.0004825633465853E-12,
+          "max_xsi_gap": 2.7927489179741137E-11,
+          "max_eta_gap": 2.7786106780127874E-11,
+          "max_box_comp_normalized": 4.3401784843580068E-6
+        },
+        "stationarity": {
+          "sRow0": 0.00064346407136000846,
+          "sRow_point": 0.00064346589960391726,
+          "raw_rms": 5.6161000482359338E-12,
+          "raw_max": 6.7893904594240638E-10,
+          "norm_rms": 8.7279155095107258E-9,
+          "norm_max": 1.0551312437808983E-6,
+          "norm_rms_pointscale": 8.7278907113693216E-9,
+          "bs_residual": -3.6493268833504093E-16
+        },
+        "eigs": {
+          "e1": 48.154745961382538,
+          "e2": 7524.3386016765035,
+          "separation": 7476.1838557151214
+        },
+        "active_sweep_cols": [
+          "tol",
+          "n_at_minus_move",
+          "n_at_floor",
+          "n_at_plus_move",
+          "n_at_ceiling"
+        ],
+        "active_sweep": [
+          [
+            1E-8,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1E-7,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1E-6,
+            0,
+            1634,
+            0,
+            4
+          ],
+          [
+            1E-5,
+            2,
+            2450,
+            0,
+            4816
+          ],
+          [
+            0.0001,
+            2542,
+            9306,
+            2932,
+            9524
+          ],
+          [
+            0.001,
+            4574,
+            9396,
+            4404,
+            9676
+          ]
+        ],
+        "active": {
+          "n_minus_move": 0,
+          "n_floor": 1634,
+          "n_plus_move": 0,
+          "n_ceiling": 4,
+          "n_interior": 27162,
+          "frac_move_bound": 0,
+          "frac_any_bound": 0.056875
+        },
+        "verdict": "REFERENCE_PROBLEM25_KKT_INCONCLUSIVE"
+      },
+      "sol": {
+        "bs": 1.0017918970864088,
+        "beta": 26921.766020048351,
+        "max_abs_drho_over_move": 0.99998029362786056,
+        "norm2_drho": 1.0018538799868377,
+        "image_abc": [
+          48.154747469990923,
+          -0.1062009120308427,
+          95.701968136952928
+        ],
+        "fJJ_drho": -1173.471157688492,
+        "sum_drho": 0.045796109663578888,
+        "separation": 7476.1838557151214,
+        "active": {
+          "n_minus_move": 0,
+          "n_floor": 1634,
+          "n_plus_move": 0,
+          "n_ceiling": 4,
+          "n_interior": 27162,
+          "frac_move_bound": 0,
+          "frac_any_bound": 0.056875
+        }
+      }
+    }
+  ]
+}

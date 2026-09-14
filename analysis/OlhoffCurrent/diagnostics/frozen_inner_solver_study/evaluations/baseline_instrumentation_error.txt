@@ -1,0 +1,6 @@
+{Subscripted assignment between dissimilar structures.
+
+Error in fi_mma_run (line 50)
+ H(it)=M;
+ ^^^^^
+} 

@@ -1,0 +1,39 @@
+diff --git a/examples/Performance/performance_comparison.m b/examples/Performance/performance_comparison.m
+index 1a4dd08..562b5cc 100644
+--- a/examples/Performance/performance_comparison.m
++++ b/examples/Performance/performance_comparison.m
+@@ -57,6 +57,7 @@
+     720   90
+     800  100
+ ];
++cfg.resolutions = [160 20];
+ 
+ % ---- Guards --------------------------------------------------------------
+ % Running anything above 160x20 costs minutes to hours per row.  This must be
+@@ -66,7 +67,7 @@
+ 
+ % Truncated outer budget for MECHANICS-ONLY smoke tests.  [] = the methods'
+ % own frozen budgets.  Any value here marks the whole run non-scientific.
+-cfg.maxOuterOverride = [];
++cfg.maxOuterOverride = 3;
+ 
+ % Yuksel per-stage SAFETY budget, applied to BOTH stages.  [] = the frozen
+ % profile value (1000).
+@@ -89,7 +90,7 @@
+ cfg.yukselMaxIters = 5000;
+ 
+ % ---- Which methods -------------------------------------------------------
+-cfg.methods = struct('proposed', true, 'yuksel', true, 'olhoff', true);
++cfg.methods = struct('proposed', false, 'yuksel', false, 'olhoff', true);
+ 
+ % ---- Execution -----------------------------------------------------------
+ cfg.singleThread = true;    % pin maxNumCompThreads(1) for every measured run
+@@ -103,7 +104,7 @@
+ cfg.writeLaTeX = true;
+ 
+ cfg.outputDir = '';                  % auto: examples/Performance/conference_benchmark/<runLabel>
+-cfg.runLabel  = 'campaign_9mesh_r2';
++cfg.runLabel  = 'smoke_nine_mesh_pedersen_b21483b';
+ 
+ % ---- Timing-accounting tolerances (predeclared, recorded in the artifacts) --
+ cfg.timingTolAbs     = 1e-6;   % |T_total - (T1+T2+T_overhead)|, seconds

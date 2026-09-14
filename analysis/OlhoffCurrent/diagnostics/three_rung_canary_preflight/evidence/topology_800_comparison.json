@@ -1,0 +1,7 @@
+{
+ "IoU_threshold_0p5": 0.7020630482984672,
+ "threshold_flip_fraction": 0.154525,
+ "density_L1": 0.0988642735641273,
+ "Mnd_legacy_pct": 50.65606664059261,
+ "Mnd_three_rung_pct": 34.41232077776823
+}

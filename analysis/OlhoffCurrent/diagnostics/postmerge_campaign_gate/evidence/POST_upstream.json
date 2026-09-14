@@ -1,0 +1,42 @@
+{
+  "repo": "/Users/piotrek/Programming/topOpt4freqMax",
+  "kind": "upstream",
+  "when": "13-Sep-2026 22:35:02",
+  "matlab": "25.2.0.2998904 (R2025b)",
+  "head": "b21483b158f58e05e7b56957f2fbe8e1d2891395",
+  "suites": [
+    {
+      "name": "test_config",
+      "nFail": 0,
+      "error": ""
+    },
+    {
+      "name": "test_mass",
+      "nFail": 0,
+      "error": ""
+    },
+    {
+      "name": "test_modules",
+      "nFail": 0,
+      "error": ""
+    },
+    {
+      "name": "test_preset_resolution_unchanged",
+      "nFail": 0,
+      "error": ""
+    },
+    {
+      "name": "test_stage_exhaustion",
+      "nFail": 0,
+      "error": ""
+    },
+    {
+      "name": "test_outer_timing",
+      "nFail": 0,
+      "error": ""
+    }
+  ],
+  "tree": "4ba9a3ae10881344a0e60f2b8a8976c5ec9ceccf966bc2a3da4f37fb5aebffbf",
+  "solver": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/architecture/olhoffSolve.m",
+  "limit": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/architecture/+olh/+move/limit.m"
+}

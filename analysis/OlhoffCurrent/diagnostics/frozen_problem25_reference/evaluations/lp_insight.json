@@ -1,0 +1,33 @@
+{
+  "linprog_exitflag": 1,
+  "bs_LP": 1.0017910540689408,
+  "bs_ref": 1.001792128848223,
+  "bs_LP_minus_ref": -1.0747792822396462E-6,
+  "G_LP": 0.00059972210329929958,
+  "max_fval_LP": 3.3095501647848221E-14,
+  "fval_LP": [
+    0,
+    -0.27799003142953205,
+    -4.9523384955428043,
+    3.3095501647848221E-14
+  ],
+  "dist2": 0.073958729700376633,
+  "dist2_rel": 0.073717584055198515,
+  "distInf_over_move": 1.9999999119843659,
+  "cosine": 0.99728314616938574,
+  "same_bound_side_frac": 0.99913194444444442,
+  "n_at_bound_LP": 28799,
+  "n_interior_LP": 1,
+  "image_abc_LP": [
+    48.161290733656166,
+    -14.769560146777824,
+    90.062301644329239
+  ],
+  "image_abc_ref": [
+    48.1609754600031,
+    -0.10373800450541193,
+    93.877859658723224
+  ],
+  "threshold_F11_over_lamref": 5.0632891994795896E-5,
+  "note": "LP = max F11'drho s.t. volume + box; evaluated through production deltaLambda; interpretation only"
+}

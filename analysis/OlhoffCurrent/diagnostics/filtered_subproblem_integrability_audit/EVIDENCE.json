@@ -1,0 +1,156 @@
+{
+ "schema": "olhoff_current_evidence/1",
+ "study": "filtered_subproblem_integrability_audit",
+ "generated": "2026-09-12T19:50:32+0200",
+ "evidenceRoot": "analysis/OlhoffCurrent/diagnostics/filtered_subproblem_integrability_audit/evaluations",
+ "implementation": "analysis/OlhoffCurrent",
+ "implTree": "edbfe47eb32109a2fb017f6f13d5327f2c240357caa96630064ffcf37ee152cb",
+ "matlab": "25.2.0.2998904 (R2025b)",
+ "scientific_runs": 0,
+ "density_updates": 0,
+ "source_state": {
+  "study": "three_rung_canary_preflight",
+  "trajectory": "analysis/OlhoffCurrent/evidence/three_rung_canary_preflight/C480x60_three_rung_trajectory.mat",
+  "rho386_sha256": "0a498a7d6ab0565b29c15ff9364060d937d4df10aa661fc90d02c038ce6e4a60",
+  "note": "read-only input; this audit produced no trajectory of its own"
+ },
+ "artifacts": [
+  {
+   "path": "analytic_verification.json",
+   "class": "required",
+   "bytes": 2742,
+   "sha256": "c06be1ee0afa4c293910895fc7bf98ebf713fc71eb040ce05175b187bab3d83b",
+   "present": true,
+   "description": "audit evaluation output (derived, regenerable from scripts/)"
+  },
+  {
+   "path": "asymmetry_decomposition.json",
+   "class": "required",
+   "bytes": 3712,
+   "sha256": "2f2a5f8adba624f616677bb4aca263133f247f028a014291cf3d7484f1659a44",
+   "present": true,
+   "description": "audit evaluation output (derived, regenerable from scripts/)"
+  },
+  {
+   "path": "closed_loops.json",
+   "class": "required",
+   "bytes": 11851,
+   "sha256": "d35ced3c9c2817a0be9be5f7388f053f093b6dad3efabaa4fdb3b93508115aa5",
+   "present": true,
+   "description": "audit evaluation output (derived, regenerable from scripts/)"
+  },
+  {
+   "path": "counterfactual_operators.json",
+   "class": "required",
+   "bytes": 6638,
+   "sha256": "1f22f44015fa729ab1c84a0acb8f164a3141042beb5bc9cbe3be8218424fb23e",
+   "present": true,
+   "description": "audit evaluation output (derived, regenerable from scripts/)"
+  },
+  {
+   "path": "fields.mat",
+   "class": "optional",
+   "bytes": 1621562,
+   "sha256": "8a1084f230865f026887e31bee4c6b19f9da8926ab48aaefd9ba5f34ed520c28",
+   "present": true,
+   "description": "audit evaluation output (derived, regenerable from scripts/)"
+  },
+  {
+   "path": "filter_operator.json",
+   "class": "required",
+   "bytes": 1731,
+   "sha256": "dd4ba257d1d41014f239cd52e22967bcea059ae229f714f7f307b9105ea52b3f",
+   "present": true,
+   "description": "audit evaluation output (derived, regenerable from scripts/)"
+  },
+  {
+   "path": "frozen_480_state.mat",
+   "class": "optional",
+   "bytes": 656263,
+   "sha256": "8a96b233358764eb06875e1153947b6d4ed514cc9b91b6b92a12b2d70e71db50",
+   "present": true,
+   "description": "audit evaluation output (derived, regenerable from scripts/)"
+  },
+  {
+   "path": "inner_convergence.json",
+   "class": "required",
+   "bytes": 18068,
+   "sha256": "f1afd669812eaecd5e932b3081faba907405462bc92a957e09d474529cdb030b",
+   "present": true,
+   "description": "audit evaluation output (derived, regenerable from scripts/)"
+  },
+  {
+   "path": "inner_kkt.json",
+   "class": "required",
+   "bytes": 20035,
+   "sha256": "06e2bf850ea43d635fccf56c6fcddaa966837a9aa133a35263bc5e3651fa9ee8",
+   "present": true,
+   "description": "audit evaluation output (derived, regenerable from scripts/)"
+  },
+  {
+   "path": "inner_kkt_refined.json",
+   "class": "required",
+   "bytes": 19921,
+   "sha256": "850710aae7c2f9de1b159cfa7a3e56fb7d2abb46aa7ed720c18da9f6cbd00df3",
+   "present": true,
+   "description": "audit evaluation output (derived, regenerable from scripts/)"
+  },
+  {
+   "path": "inner_kkt_state.mat",
+   "class": "optional",
+   "bytes": 813951478,
+   "sha256": "2952b301c19cb60f4f7ef71da25feb533669415685458d5c64d302ebc48518b6",
+   "present": true,
+   "description": "audit evaluation output (derived, regenerable from scripts/)"
+  },
+  {
+   "path": "jacobian_symmetry.json",
+   "class": "required",
+   "bytes": 17228,
+   "sha256": "95e2d1f89e6c96d96615aaa3b191361ab28af564fcd0da23e39b8aaece3c4aa1",
+   "present": true,
+   "description": "audit evaluation output (derived, regenerable from scripts/)"
+  },
+  {
+   "path": "loop_admissibility.json",
+   "class": "required",
+   "bytes": 7570,
+   "sha256": "583cc2cb4d68505f1f289f65cbb909129a5877f5285c41faa224a549eab6a2e4",
+   "present": true,
+   "description": "audit evaluation output (derived, regenerable from scripts/)"
+  },
+  {
+   "path": "mixed_partials.json",
+   "class": "required",
+   "bytes": 3467,
+   "sha256": "c01d52cd0b824b5fb743dbe0f79a79311d276a3a161ea2a396eb66093702d97d",
+   "present": true,
+   "description": "audit evaluation output (derived, regenerable from scripts/)"
+  },
+  {
+   "path": "mixed_partials.mat",
+   "class": "optional",
+   "bytes": 76744,
+   "sha256": "d15c420cb5f9caa46647ee015f6592b2772c826e141a77e574d28ea4405ec798",
+   "present": true,
+   "description": "audit evaluation output (derived, regenerable from scripts/)"
+  },
+  {
+   "path": "residual_by_class.json",
+   "class": "required",
+   "bytes": 1126,
+   "sha256": "5a182116555e2d446ca2fceea6b8f9dc06ec6ff3db90a7b57bbdc5aadf28e546",
+   "present": true,
+   "description": "audit evaluation output (derived, regenerable from scripts/)"
+  },
+  {
+   "path": "state_identity.json",
+   "class": "required",
+   "bytes": 2282,
+   "sha256": "0c22ce285e3a29f46be0fd7e63cba531ce4e57bdc0b57508d1d7ebd110e88493",
+   "present": true,
+   "description": "audit evaluation output (derived, regenerable from scripts/)"
+  }
+ ],
+ "declared_required_artifacts": 13
+}

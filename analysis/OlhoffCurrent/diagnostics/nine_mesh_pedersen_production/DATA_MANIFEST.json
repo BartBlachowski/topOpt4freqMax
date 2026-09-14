@@ -1,0 +1,1155 @@
+{
+ "schema": "nmp_data_manifest/1",
+ "raw_production_output_root": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b",
+ "raw_production_files": [
+  {
+   "path": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/BENCHMARK_NOTES.md",
+   "bytes": 7840,
+   "sha256": "1f143bb5c1dc4e06f9fdf910c8452ce81d59eee9295c5f576c5dafa4be279132"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/benchmark_manifest.json",
+   "bytes": 138071,
+   "sha256": "be45b6283fe6078e83c63c550a89dc0acf112adc4f6f1e81147781b996dd8386"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/benchmark_records.mat",
+   "bytes": 7760615,
+   "sha256": "261bf8fc94a1efb7da223aae64ac72da336a4d8f48341f0d8bf79b0a4d2abe82"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/benchmark_results.json",
+   "bytes": 562478,
+   "sha256": "f03360ec36d609255cb175b799c978eb96e66496f84e3807fa9e8a213960fec8"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/conference_performance_detailed.csv",
+   "bytes": 8921,
+   "sha256": "7ee1bfc80506be332e0a35edfb0530af952907e28b7ba07614c76b15fe40239b"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/conference_performance_table.csv",
+   "bytes": 3455,
+   "sha256": "ea294d4b0911a7c2925eb356e34384decca1753f9676453fd3de71a0940969ca"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/conference_performance_table.tex",
+   "bytes": 4758,
+   "sha256": "ee6fe89848e3a1e242281e4c1bf1d96b63b67ba236993f50d1cacbcb245e1e52"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/table1_complexity_fit.csv",
+   "bytes": 127,
+   "sha256": "84d12483e426ddff3d1659560a4b05eccf778dcce47cc2ad15ea02aa246937ef"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/table1_complexity_fit.png",
+   "bytes": 112042,
+   "sha256": "1b4db6b48cefff779b26dba1994487a9effb9fddce858b3c7b25a0d68bd58a23"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/table1_complexity_fit_fixedexp.csv",
+   "bytes": 127,
+   "sha256": "05c298079fe7bc45b5241216dc1086b9f190b2f082e18f840e3f8e24d60a72d8"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/table1_complexity_fit_fixedexp.png",
+   "bytes": 115353,
+   "sha256": "0ad86d853b32f546cffa103fd9d5eb91a84aba041c391a8cbb78c249b5fb5c95"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/table1_complexity_fit_fixedexp_linear.png",
+   "bytes": 101228,
+   "sha256": "c514869cfe7d23798c4a10b0259863d7c82d1adca8c39f60bfe312e567b4d796"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/table1_complexity_fit_linear.png",
+   "bytes": 96474,
+   "sha256": "7e3fd962c8866961155417c49b540b577ff34bc6efec8a5456398d8543d9fba5"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/timing_schema.json",
+   "bytes": 7118,
+   "sha256": "34f2526e8d234221511068fa7fcd0fe6be12f08b4f7c0e6d1c15e62be29efe09"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/runs/HOOK_EVENTS.log",
+   "bytes": 3215,
+   "sha256": "9f540af06e573e4a903e7b364764167211efd95ff82e3cc9ed0fbb90aa147fcc"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/runs/160x20/POSTCHECK.json",
+   "bytes": 2810,
+   "sha256": "a1e9639b0c09be5f93988f4909d7c5e4db19866188c1a763ed8c1264e0d291dc"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/runs/160x20/PRECHECK.json",
+   "bytes": 3275,
+   "sha256": "733ccf32b734c26ca30a9d9552c00108a9ded4c959b9335ffe83171004775923"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/runs/160x20/RUN_OUT.mat",
+   "bytes": 475245,
+   "sha256": "d89fd9323f1dd86261ce9ff95e057e944daba48a7d27ddd42264e23edbf3277e"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/runs/160x20/SOLVER_RESULT.mat",
+   "bytes": 166757,
+   "sha256": "85fb42ee310f825ae898fd84c0963c26638549269a19398a4c2c9493b094ffa7"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/runs/160x20/TAP.json",
+   "bytes": 1662,
+   "sha256": "bd14d07b79ad5ac3954a7b7a2a0872274e00d885c41bdeb3727d062b82ff4dea"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/runs/240x30/POSTCHECK.json",
+   "bytes": 2810,
+   "sha256": "4a6b1ed8665483d0894f85068bbc582ef41163d5280fb1aeb5c4fba2689f96cb"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/runs/240x30/PRECHECK.json",
+   "bytes": 3300,
+   "sha256": "92cb59edd6fa0b75d588709f7f33e84ee33451d6dc60504a09260ff5d50da854"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/runs/240x30/RUN_OUT.mat",
+   "bytes": 497358,
+   "sha256": "d9d76f4d351e25f2e9f0d3f55bd2e92d71c3fc128d73069d8866f419ba23fd8b"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/runs/240x30/SOLVER_RESULT.mat",
+   "bytes": 186142,
+   "sha256": "51c33ae914e09744d3808536fe81068bd7c2caddd0840481a5a6dd10de465062"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/runs/240x30/TAP.json",
+   "bytes": 1661,
+   "sha256": "c70e8f91d313bd9c92fe1de93bf998afba670632734b569f7d83f3a7b42bb2f2"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/runs/320x40/POSTCHECK.json",
+   "bytes": 2810,
+   "sha256": "63f95b80bdc42807efbe7bc89c945c556d56e849a5abad9806123b653de09d3b"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/runs/320x40/PRECHECK.json",
+   "bytes": 3274,
+   "sha256": "c4c135a7713ac419cc072e888dec6a315ace8b13c6cb4d26daf6bddc80fab437"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/runs/320x40/RUN_OUT.mat",
+   "bytes": 532027,
+   "sha256": "463672959f0a702ab643ad71cbe3dad6e96bccc337eafb601f0e594b7ce758d7"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/runs/320x40/SOLVER_RESULT.mat",
+   "bytes": 218099,
+   "sha256": "5c189fd647182cf7277e7877e0fb7000bba8b4b7da60102d00d1bb4d3a345964"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/runs/320x40/TAP.json",
+   "bytes": 1662,
+   "sha256": "81e64df15bef3c02b39c6a714835788195bdae7e519f280106fc91b5d4518982"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/runs/400x50/POSTCHECK.json",
+   "bytes": 2800,
+   "sha256": "9f99345a0efed5fef9718dfcb58a58e255e9d1f854860d0842ea7764ba77a305"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/runs/400x50/PRECHECK.json",
+   "bytes": 3283,
+   "sha256": "d6fde53a72cb1296bc823dc3799a9095c07adc13298f0be203de6a583b2d5830"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/runs/400x50/RUN_OUT.mat",
+   "bytes": 572550,
+   "sha256": "53e14dedc77d0626b136f041110c17f9f9f913277c9aa52c07861f727af581e3"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/runs/400x50/SOLVER_RESULT.mat",
+   "bytes": 256446,
+   "sha256": "8684d144b0027e972e68a91d19dfd716aaac9248fd813543b5f8610638cbc53c"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/runs/400x50/TAP.json",
+   "bytes": 1674,
+   "sha256": "f3127b6c8eb86f19eb67d1db837168cb1328b9c1968cea2d890a6b228cae5057"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/runs/480x60/POSTCHECK.json",
+   "bytes": 2810,
+   "sha256": "302b5769e5d46dfddc424e05f8d8641d079ed02a5c20f8f660c04ea72c6266d2"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/runs/480x60/PRECHECK.json",
+   "bytes": 3299,
+   "sha256": "375dd0560632e971c5fe79e4c2e039735e8017ea66fcf3b339fe482cbd78417b"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/runs/480x60/RUN_OUT.mat",
+   "bytes": 621540,
+   "sha256": "1cc59e24585ed4be017ea727700322e0b900d6856c28a0e2bbe6616aa8f4ee81"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/runs/480x60/SOLVER_RESULT.mat",
+   "bytes": 310604,
+   "sha256": "9342ee65f1042cbd93e37851cf4f51055f79cc6c7858964409a675d4ea94e962"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/runs/480x60/TAP.json",
+   "bytes": 1666,
+   "sha256": "5af133bd6435431ef94570a165c2081e2ddba54e4b1d5d4992d570eaddd63bd5"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/runs/560x70/POSTCHECK.json",
+   "bytes": 2800,
+   "sha256": "b0ea82d9c2473b23f7d7222f1554ff271f7b05178b0040f01de93ab02f6e4307"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/runs/560x70/PRECHECK.json",
+   "bytes": 3289,
+   "sha256": "174ed11538068f32c781619b21881cfa6f37b21d22916f48c1cb8671561b76dd"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/runs/560x70/RUN_OUT.mat",
+   "bytes": 684169,
+   "sha256": "4c846381da70dd09a8435768696bc50dd1ea6e9db930ec0383022e05bcae81c5"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/runs/560x70/SOLVER_RESULT.mat",
+   "bytes": 378121,
+   "sha256": "363e72c727c11a4bbabe7459ad8aa0fbd22d8fb22163849ebd0501fa0b2f3e13"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/runs/560x70/TAP.json",
+   "bytes": 1671,
+   "sha256": "f3fe45125d8cce87340dda04c68fbab554a6221c2ca5708335f11b1f7ed7079c"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/runs/640x80/POSTCHECK.json",
+   "bytes": 2810,
+   "sha256": "de8157689026d6623c4f2a98ccaa2e5d9bc74e5069d391859c7903e64d69d22c"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/runs/640x80/PRECHECK.json",
+   "bytes": 3271,
+   "sha256": "c26989ed4740819d925c68089d2ec1001efec60b4edbf2f3b7638a03d3bc7a00"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/runs/640x80/RUN_OUT.mat",
+   "bytes": 758298,
+   "sha256": "cfe7f3ca711eb62bc05a49f6b323b12991bc86e20bce735929c735c9aa81b710"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/runs/640x80/SOLVER_RESULT.mat",
+   "bytes": 459330,
+   "sha256": "ed87ea8259ebaeecb47317e35e1082f2dc065bb97dbbae678886c76f68e8734a"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/runs/640x80/TAP.json",
+   "bytes": 1670,
+   "sha256": "c6484cbd68143778488f7e5513d6e217c23ebcb705b3804b1dda5bdfc7a2244e"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/runs/720x90/POSTCHECK.json",
+   "bytes": 2810,
+   "sha256": "e7fd25dd2bc3efcd7ee8c29a583148d1f186a8c27c2c29535827c4fd9445686c"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/runs/720x90/PRECHECK.json",
+   "bytes": 3300,
+   "sha256": "a282ab6ff0975449671c72d4e4888c21216d9256132e854b50edb417115e919b"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/runs/720x90/RUN_OUT.mat",
+   "bytes": 844198,
+   "sha256": "1f41124ab1ae446c66a61e3450f9782a8a46f2ddf826b07a54794485d8a3e2ae"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/runs/720x90/SOLVER_RESULT.mat",
+   "bytes": 558278,
+   "sha256": "15b558e381c2271cded5cff143b1491ecd6a4b3b15f5eb21083cb82df1f40109"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/runs/720x90/TAP.json",
+   "bytes": 1673,
+   "sha256": "3fe7dc5e4740f8d369da49e44d2255a4ed3151359e01861274281737a5fa8062"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/runs/800x100/POSTCHECK.json",
+   "bytes": 2803,
+   "sha256": "1e9a1aa54be33a3300d06d2b410bd54315c07efb2dbaed37699d70f3902bfe61"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/runs/800x100/PRECHECK.json",
+   "bytes": 3283,
+   "sha256": "af13905d783f025951e0a3ad912ca0fc852140b756cfbc6b3044bed4ec4b6ce6"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/runs/800x100/RUN_OUT.mat",
+   "bytes": 927838,
+   "sha256": "0588c5460b0f2d494634438e0693587eb8ad2821a60788e684aaabd265cbd5ae"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/runs/800x100/SOLVER_RESULT.mat",
+   "bytes": 653342,
+   "sha256": "b8a763855ae4d95ff4f934c83cf89249a542d1e5eb34f9b2c4d7ac2252a6ff98"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/runs/800x100/TAP.json",
+   "bytes": 1660,
+   "sha256": "74f1bf24eb6591efae3c96fca4172dbde56d6a5f9154f5e7a6107d370992694a"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/runs/warmup_48x6/POSTCHECK.json",
+   "bytes": 2782,
+   "sha256": "31e05240f08e9f4cc6a377a8607c1787896aa431a74984619b359b3355f8a6e9"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/runs/warmup_48x6/PRECHECK.json",
+   "bytes": 3317,
+   "sha256": "45f5375981d97f421000909d83d61bdacad5a27fce04f4c5637a52f7524427ec"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/runs/warmup_48x6/RUN_OUT.mat",
+   "bytes": 457048,
+   "sha256": "6acc39c252f8afbbdce63ff04206ea35ed19914428a75f0df2b341e72f57e64b"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/runs/warmup_48x6/SOLVER_RESULT.mat",
+   "bytes": 117120,
+   "sha256": "a6d175a92e86eea8fa80d99c5c7b07572f224323aba9911c9e0017c40a10185f"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/runs/warmup_48x6/TAP.json",
+   "bytes": 1643,
+   "sha256": "10cf606c1eb29c4fb0da6e71d3c2a61b8ee919fd81afa073e586a3cbdd14cb4c"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/topologies/topology_olhoff_160x20.fig",
+   "bytes": 28605,
+   "sha256": "ee8200cd9d07aa4141757123c77726dd62a6e34224107ab956e8129656e8b5e7"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/topologies/topology_olhoff_160x20.png",
+   "bytes": 22583,
+   "sha256": "38c3ac9717faadb4d18d0650f80c4b30f594d21c5c30ac7a1c003e8e06fa2776"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/topologies/topology_olhoff_240x30.fig",
+   "bytes": 51792,
+   "sha256": "ed396c2402d2a84992b86678cf48b15eecadea37b54fe5eb4c8b133fbf78c476"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/topologies/topology_olhoff_240x30.png",
+   "bytes": 25812,
+   "sha256": "bdf4bbf784a34d569cdb12d2331731dc0756b59183fdb9e12bb24beb1b5ffc81"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/topologies/topology_olhoff_320x40.fig",
+   "bytes": 89116,
+   "sha256": "5e8e7eb9a2c48d1119dad3e023d52fd1ca38fd1df1af300d07c1b1c1fe0fcc12"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/topologies/topology_olhoff_320x40.png",
+   "bytes": 29976,
+   "sha256": "288a6f48ae481de792dd2c8b6436a8b9b0bec8240fa3a98a3cf2e7462a3815a5"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/topologies/topology_olhoff_400x50.fig",
+   "bytes": 129865,
+   "sha256": "a926058ad0edd8924e29f871180f921ff9c33b5be265c898159cbfcb128329e2"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/topologies/topology_olhoff_400x50.png",
+   "bytes": 32313,
+   "sha256": "55fbcb6ba6483e60992454b0b41897f15525e275158103926f9b425977594f73"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/topologies/topology_olhoff_480x60.fig",
+   "bytes": 184366,
+   "sha256": "3e68126f5c35973794f0e5e1986f5499cacf2cbc8e9c141f271c270c96e33814"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/topologies/topology_olhoff_480x60.png",
+   "bytes": 35760,
+   "sha256": "f77a61fece6aaa67978a598e632bd44debe7f74c9c7a0b8ac0ffb987dd3c4fe5"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/topologies/topology_olhoff_560x70.fig",
+   "bytes": 249823,
+   "sha256": "56a4b19a205c603940ef1f50fc93a1c4f81f47f80509b415e3f3d8d404005066"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/topologies/topology_olhoff_560x70.png",
+   "bytes": 40186,
+   "sha256": "448d814491f7c7191270c2d577aafb9fa9f4bf85b48d0c83e15c29a51e94f5ed"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/topologies/topology_olhoff_640x80.fig",
+   "bytes": 326278,
+   "sha256": "ae9add042202e40f62d5cb54cb3d60cd81f235b125f190a68b970c1f317ebe51"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/topologies/topology_olhoff_640x80.png",
+   "bytes": 40508,
+   "sha256": "82fb7790325928c820291cdfc446ac52cc59e89c37e8b7f530e781e4171970f9"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/topologies/topology_olhoff_720x90.fig",
+   "bytes": 423010,
+   "sha256": "80260f28733215d653734062eec15fe75bf8cd2868ed51b5f34d499431c4192a"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/topologies/topology_olhoff_720x90.png",
+   "bytes": 50638,
+   "sha256": "89f0fa68dca2ac1d181bfd3a8dac67c617e266e2419501b6b66d88e901819db0"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/topologies/topology_olhoff_800x100.fig",
+   "bytes": 516386,
+   "sha256": "2740f8f656f7e1aae129dcf3fc0038fe9aa4f6e71b21534fc645c0f22041c9c0"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/nine_mesh_pedersen_b21483b/topologies/topology_olhoff_800x100.png",
+   "bytes": 58634,
+   "sha256": "1c0477337481b1a863d45eeff502452d66ec99131e6d5c1ea7239dff44050d14"
+  }
+ ],
+ "smoke_output_root": "examples/Performance/conference_benchmark/smoke_nine_mesh_pedersen_b21483b",
+ "smoke_files": [
+  {
+   "path": "examples/Performance/conference_benchmark/smoke_nine_mesh_pedersen_b21483b/BENCHMARK_NOTES.md",
+   "bytes": 4779,
+   "sha256": "3b276c16073066b4adcfb604ad79595c1e31a50b8823fcf2c34e294861fecc34"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/smoke_nine_mesh_pedersen_b21483b/benchmark_manifest.json",
+   "bytes": 62053,
+   "sha256": "13c68be0b3889ced8d377d5dbc2266b3118db3f1ecaba9fef14f822c1d49eee0"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/smoke_nine_mesh_pedersen_b21483b/benchmark_records.mat",
+   "bytes": 1069655,
+   "sha256": "9dc284bbe60785c7e10fc3180f2b62a222fb068968e476ecb832a856a4d1c01e"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/smoke_nine_mesh_pedersen_b21483b/benchmark_results.json",
+   "bytes": 71213,
+   "sha256": "acfa22d43a10ae71d3d77cbe87f7fd1f89dccfae86497ad883cfccfb74ecc565"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/smoke_nine_mesh_pedersen_b21483b/conference_performance_detailed.csv",
+   "bytes": 2168,
+   "sha256": "a897d2b2ca430f2569ee0b325a2dd6d161eb7a0ebd01a6580f7c2f7353d357d6"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/smoke_nine_mesh_pedersen_b21483b/conference_performance_table.csv",
+   "bytes": 1333,
+   "sha256": "08353c220de9d8bb71929c1483a204e50fe319a612a1f6b6cde4ff9e50400848"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/smoke_nine_mesh_pedersen_b21483b/conference_performance_table.tex",
+   "bytes": 3028,
+   "sha256": "97b01cc988782e98f415d95e1af5ad916bb630e84c4d530bc1ad7d3288858e21"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/smoke_nine_mesh_pedersen_b21483b/table1_complexity_fit.csv",
+   "bytes": 103,
+   "sha256": "0c7900deac85e1dfa78462d479d40c5e47272554c001257ad41e4bd325100084"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/smoke_nine_mesh_pedersen_b21483b/table1_complexity_fit.png",
+   "bytes": 88134,
+   "sha256": "a8fe3782c906ae61f949db9c2dca7c7b59a194a3671aadb1502f2404fa20deb7"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/smoke_nine_mesh_pedersen_b21483b/table1_complexity_fit_fixedexp.csv",
+   "bytes": 103,
+   "sha256": "0c7900deac85e1dfa78462d479d40c5e47272554c001257ad41e4bd325100084"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/smoke_nine_mesh_pedersen_b21483b/table1_complexity_fit_fixedexp.png",
+   "bytes": 88134,
+   "sha256": "5e974eca7d5acdc494245b8ee91d2c9300f945c8d431fc1eaf068333af91239c"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/smoke_nine_mesh_pedersen_b21483b/table1_complexity_fit_fixedexp_linear.png",
+   "bytes": 71103,
+   "sha256": "a88f63c690009e8c22deec57b3654bff599b495dbc13f256f5bbb1d2daec3f86"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/smoke_nine_mesh_pedersen_b21483b/table1_complexity_fit_linear.png",
+   "bytes": 71103,
+   "sha256": "9a1fa3ea369e08d80544053cb07a1d26160b74839f8a2c412dbdf3f252fd9298"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/smoke_nine_mesh_pedersen_b21483b/timing_schema.json",
+   "bytes": 7118,
+   "sha256": "34f2526e8d234221511068fa7fcd0fe6be12f08b4f7c0e6d1c15e62be29efe09"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/smoke_nine_mesh_pedersen_b21483b/runs/HOOK_EVENTS.log",
+   "bytes": 620,
+   "sha256": "93922463e4d35a64559e02458ac85eabbde8f1797897c08ba61285c0f7c2a5c7"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/smoke_nine_mesh_pedersen_b21483b/runs/160x20/POSTCHECK.json",
+   "bytes": 2767,
+   "sha256": "6439b1f13c318c6197d7b7006124532a215a46d9471db5e8f6997c4780bb8113"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/smoke_nine_mesh_pedersen_b21483b/runs/160x20/PRECHECK.json",
+   "bytes": 3272,
+   "sha256": "8fdd9f7bb237f2ca108ff7d7f29f2ca2329afb5e038fe3becda1e7cbaa605f71"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/smoke_nine_mesh_pedersen_b21483b/runs/160x20/RUN_OUT.mat",
+   "bytes": 472583,
+   "sha256": "b71fbe8e2d5e7fa341dcf74c552a7bded54b26f1db76f31024403246cfc89915"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/smoke_nine_mesh_pedersen_b21483b/runs/160x20/SOLVER_RESULT.mat",
+   "bytes": 132095,
+   "sha256": "46adc4c4730266ab2e1ccbcfa8d281e9c3d13109f7a2a1fbeb14dcb50091e8ed"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/smoke_nine_mesh_pedersen_b21483b/runs/160x20/TAP.json",
+   "bytes": 1637,
+   "sha256": "da72adc65a7a7e4fc256cc55ed7ada7bfd6210e463f7e9773f6c20698956f0dd"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/smoke_nine_mesh_pedersen_b21483b/runs/warmup_48x6/POSTCHECK.json",
+   "bytes": 2779,
+   "sha256": "f9bb6f90bb1313fff84e32ca5581b9655627fe4865ce05f75961618cb0c87065"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/smoke_nine_mesh_pedersen_b21483b/runs/warmup_48x6/PRECHECK.json",
+   "bytes": 3322,
+   "sha256": "4f7c1d61e7b0634a38b29ecad7df1ae2ca93daec26663e209268be53059697c2"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/smoke_nine_mesh_pedersen_b21483b/runs/warmup_48x6/RUN_OUT.mat",
+   "bytes": 457048,
+   "sha256": "d3fa9f6b8eabe27158bfb06a51946ffb9c37bde8b086c8b954a602307939bb69"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/smoke_nine_mesh_pedersen_b21483b/runs/warmup_48x6/SOLVER_RESULT.mat",
+   "bytes": 117120,
+   "sha256": "d6830458f2efa3a493444edceebe5ad884c48ee4081605fa70149f77ac42fb76"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/smoke_nine_mesh_pedersen_b21483b/runs/warmup_48x6/TAP.json",
+   "bytes": 1658,
+   "sha256": "fa065492a3b93c1ebc62b61a13c5d1dcaef18472d199e319a8c270bd97995fd3"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/smoke_nine_mesh_pedersen_b21483b/topologies/topology_olhoff_160x20.fig",
+   "bytes": 30189,
+   "sha256": "d7e030bd70ecceaac919e5171ce16180b027440e78e214b64d9092430589aad5"
+  },
+  {
+   "path": "examples/Performance/conference_benchmark/smoke_nine_mesh_pedersen_b21483b/topologies/topology_olhoff_160x20.png",
+   "bytes": 24072,
+   "sha256": "b099eb20d4e7475e92ca73cce52b95132fc164a8d39c377f7a337b2efb7b7dc5"
+  }
+ ],
+ "diagnostics_files": [
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/CAMPAIGN_LOCK.json",
+   "bytes": 6496,
+   "sha256": "202c1f272c8387e8f3c5ac69203898b859d4798cd1833452ffbbdbd74921f9b5"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/CAMPAIGN_LOCK.json.sha256",
+   "bytes": 85,
+   "sha256": "76353e958e8fe4f71a848f168d1993054c936390af350436cef0f53c36a57380"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/EVIDENCE.json",
+   "bytes": 21863,
+   "sha256": "38bca1180954029dc05d2fe5d010a43a5782f6b5d7624a93e4aa93ea30fd6960"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/HISTORICAL_KKT_CONTEXT.md",
+   "bytes": 3172,
+   "sha256": "3849e17d510361054a320cebacbc08a4e69d0a03c206a6c38c867eb4199741f7"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/INTEGRITY_AUDIT.md",
+   "bytes": 9098,
+   "sha256": "807c58a5ce870fa5e03f7de4f1504332556c85dbfa773e0c78841b62e012c1a8"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/MESH_TREND.md",
+   "bytes": 5439,
+   "sha256": "8c7f337faaff131cc35dceecf20a526de017fe980fd742d21b2a060b8105eca2"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/METRICS.json",
+   "bytes": 95918,
+   "sha256": "64e7d1ae1817fd7f2cc24e4f445571b17d0571401b8c53d78ca0e2103727a23c"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/PERFORMANCE_AUDIT.md",
+   "bytes": 7493,
+   "sha256": "1973eee34ef73389578cf3bef3b52984b7f748cfc29731376a4e3708c5f683cb"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/PREREGISTRATION.md",
+   "bytes": 21764,
+   "sha256": "3cd5675118e4e4623f15f0aa77d22e930c122bb7d59cc71be7fa34aa162f5388"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/PREREGISTRATION.sha256",
+   "bytes": 85,
+   "sha256": "49c2d075d830f8e669ada606cf1051e0a3d6c80001ff553bd740ad098a8d91e6"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/REPORT.md",
+   "bytes": 16240,
+   "sha256": "793df3d070cd4be6f959a0d0a6536130504072f0050adc579616119bbc7b6cb7"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/RESULTS_TABLE.csv",
+   "bytes": 3571,
+   "sha256": "10c63917f478edf4ffca8bb3919b8e48836a0e065fe3e22c92ffdfebc81ba8d9"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/RESULTS_TABLE.md",
+   "bytes": 3029,
+   "sha256": "91f214c04dc79d70aa1cd00664db9d6326cf66490bae7578c23509505745eef8"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/RUNNER_AUDIT.md",
+   "bytes": 9017,
+   "sha256": "260b6b623a0d8f0f76f62c343587784c0054ee0d4c7400f168949ef8e28440a7"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/RUNNER_INVOCATION.md",
+   "bytes": 3607,
+   "sha256": "754d3b1901334fc959fad9cdcae37d2b11bb292c1a20d5d661c5c7795b537633"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/RUN_INDEX.json",
+   "bytes": 12475,
+   "sha256": "a85cfd560526d909bc29e9e8532ce76be1e36e712d7f31ad83d29761a255e3cd"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/SCIENTIFIC_INTERPRETATION.md",
+   "bytes": 6604,
+   "sha256": "254e5d3747b3a65c7b43413a18807ebaa4ebc60af7c6235f372a192a6e767310"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/SMOKE_LOCK.json",
+   "bytes": 6305,
+   "sha256": "fe4da0c52e27a0153d3572d67d831dddb6ee0b0330523d5decfdc5cc2f6ef4af"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/SMOKE_LOCK.json.sha256",
+   "bytes": 82,
+   "sha256": "dfdebbd6f67b921691a38a1eddd8814d9abf381c717c31864ee50d1711867bfe"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/SOURCE_SWEEP_COMPARISON.md",
+   "bytes": 7067,
+   "sha256": "bb1c7890d3b1936153f1128be97d44e10415bdbb768f22224b7ba705625bd638"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/SPECTRAL_AUDIT.md",
+   "bytes": 6511,
+   "sha256": "afcddfa26901aaae7dbe862577a4ec07608f7a5b34bf53b777ad8839bdf93cbe"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/TERMINATION_AUDIT.md",
+   "bytes": 5170,
+   "sha256": "903e855432d497defd16ae03fd7fa82fea5306b46faf1661f177f5dd7cf23c2e"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/TOPOLOGY_AUDIT.md",
+   "bytes": 5436,
+   "sha256": "e46c307cdf66509b8ec98618f1571c6da1a89b333d5b5f026c74e206ff8fcd00"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/evidence/EVIDENCE.run1_report_check_defect.json",
+   "bytes": 20304,
+   "sha256": "412cce5fe2b691d1e44c9b91ac7763af8595b7198d3e67e6cb6fa7f036781f23"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/evidence/EXTRACT.json",
+   "bytes": 165195,
+   "sha256": "75e585f099e0ca9b5eeb111f9d6634e76232150a9fb87c671b0dff2a9d824c2c"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/evidence/IDENTITY_CHECK.json",
+   "bytes": 31564,
+   "sha256": "c74d779e507fcca092eae1c64d5812c6fd902b8ad184d8b3cb2a27ba56133575"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/evidence/IDENTITY_CHECK.run1_check_script_defect.json",
+   "bytes": 30675,
+   "sha256": "3397f92ff043af8dc2c3bdabd2a1fbf1d1537cac75e3967e0ce327770e395d9d"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/evidence/ONLY_OLHOFF_CHECK_NEGATIVE_CONTROLS.json",
+   "bytes": 109,
+   "sha256": "10cb0f3e763e4e4d7393558bb63b1a12bf767fbc2a5c03b2eb97213a4a303f8f"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/evidence/RAW_OUTPUT_FREEZE_SHA256.txt",
+   "bytes": 13628,
+   "sha256": "64eb1dec10c90d7451bceea88ce5ba7fb380bed92e491484ffaf1996b70067ff"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/evidence/RUNNER_CONFIG_IDENTITY.json",
+   "bytes": 32432,
+   "sha256": "b0bc6f035b57dee87522fb3dd8ba841d4beb0e45b1256cd6f2b63de0181e5582"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/evidence/RUNNER_RESTORE.json",
+   "bytes": 711,
+   "sha256": "1ed872cd7d256fd1dec8efeeed2e496fddd237919625651c6d9a872bb5ba92e6"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/evidence/SYNTHETIC_ENDPATH.json",
+   "bytes": 2737,
+   "sha256": "296718cb21bf3c2267b452c9b2d64c862904d26e571ed888786eca890248c640"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/evidence/TERMINATION_TAIL_METRICS.json",
+   "bytes": 6826,
+   "sha256": "20532b0c3b9b6746aa137642626fcad4bb1cb04ab66e8a234d44b4886f7da929"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/evidence/TOPOLOGY_SYMMETRY.json",
+   "bytes": 5731,
+   "sha256": "ee7cac678fac4957bb03dcf6350773bc8f2ceda31087faadb350696522e5d99b"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/evidence/campaign_runner_edit.patch",
+   "bytes": 1061,
+   "sha256": "57e20f0c4f3165d81f1bdf8a1424277e1dbf4aca813070995ac42df1bb14c5a8"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/evidence/smoke_runner_edit.patch",
+   "bytes": 1635,
+   "sha256": "07b5ae2b597b6d4c7cb101c866463ddcca7fdce910701639eecac9d930638431"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/evidence/history/160x20.csv",
+   "bytes": 38428,
+   "sha256": "ce9b0318e5d495a1fa9be18a7e1d55f1f30e2c3dd815cb9bf8a622a9dacb4559"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/evidence/history/240x30.csv",
+   "bytes": 35008,
+   "sha256": "2deb5688eac85578326dbc2f3bb006e2eae01253c2c0c29ec5067ddcc91eacb6"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/evidence/history/320x40.csv",
+   "bytes": 31865,
+   "sha256": "229ad07fe35e35afc4a1ab39050f56081a2b5362d8714dfbfe210780e6c3a5f8"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/evidence/history/400x50.csv",
+   "bytes": 29227,
+   "sha256": "eca1c7887cc2cfd11d26698264cbd63bf2e07e01749f7702569e3dcfe4b9ccb7"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/evidence/history/480x60.csv",
+   "bytes": 35264,
+   "sha256": "8dc6fa877362b9fcfc983bedc3d9dcf9675df0ae73ee7c870a2ef08f6415df0b"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/evidence/history/560x70.csv",
+   "bytes": 40899,
+   "sha256": "594f0d5bdb16aafe11a998cf98e6555c68012da0049406269cdda40cf0ca461e"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/evidence/history/640x80.csv",
+   "bytes": 49225,
+   "sha256": "253350413fc9f3d0c311ff693f305be9c2098fc2bc49b4f10dd0a79b202777c5"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/evidence/history/720x90.csv",
+   "bytes": 64303,
+   "sha256": "58cc82614de007c5029a33804128b7dd87e7d3c3a3278a79a2115debc2215633"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/evidence/history/800x100.csv",
+   "bytes": 77407,
+   "sha256": "ffb94613d071b60d987f3ed171843001ec29a6f00448d677ab7aa4305bdcd70e"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/evidence/resolved_configs/160x20.txt",
+   "bytes": 2743,
+   "sha256": "a0d58595ac9571cd7f647df6691d6b679175814fda460f6667d3c85626c9ceef"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/evidence/resolved_configs/240x30.txt",
+   "bytes": 2743,
+   "sha256": "10a69ed8add0b689164cb570a2f74e5cc43a607d0654d646834596844d956c32"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/evidence/resolved_configs/320x40.txt",
+   "bytes": 2742,
+   "sha256": "46904c9212074eb85f6fa2c5191a62d6ce09ccd01f0b9ff3b58b5c8a49f006df"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/evidence/resolved_configs/400x50.txt",
+   "bytes": 2728,
+   "sha256": "35dca053bdf53ba4856630fe76ed09b342b1ec81ff77a5a9f912a4c38652b151"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/evidence/resolved_configs/480x60.txt",
+   "bytes": 2742,
+   "sha256": "3fd13ae347824947507e8614a713ff3484e1e1e61b09cabd9153795cf406ed7f"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/evidence/resolved_configs/560x70.txt",
+   "bytes": 2742,
+   "sha256": "71a2d02a766462eeb5a52af8a3adfc79e4bbb249918046f6acb1dcd75e19445f"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/evidence/resolved_configs/640x80.txt",
+   "bytes": 2742,
+   "sha256": "e8f2d1991c86d3ae99d2aa21003ed5006c80d224f7e49af6613ccd010742923a"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/evidence/resolved_configs/720x90.txt",
+   "bytes": 2742,
+   "sha256": "3275b1200b1591434bba436e3bc6e7f1dfaf49cee80db6ee0d4592f91de51a85"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/evidence/resolved_configs/800x100.txt",
+   "bytes": 2728,
+   "sha256": "9e2e5cf72d647a18da4495e7cfc16690e265b100ba2b2c0f3a298d8d5f50094b"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/evidence/topology_grid/160x20.bin",
+   "bytes": 640000,
+   "sha256": "4f1e112eabe8c5b747106a26830c5aba01a60d6373186486858c9b9afe6bba2a"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/evidence/topology_grid/240x30.bin",
+   "bytes": 640000,
+   "sha256": "92d4567ed216c5c7d27f2d2c3fb791fb807e0b0877b4790a7f5a2bcaadd248fc"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/evidence/topology_grid/320x40.bin",
+   "bytes": 640000,
+   "sha256": "339a48310f41e245cff3ec3d5a028ef9eec01a7afa95d3285b3c5307a26293a4"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/evidence/topology_grid/400x50.bin",
+   "bytes": 640000,
+   "sha256": "5de30fc09eb3a2a1c0a0ee11d20c1d0c24f70875d800b6de2b8e4fb921ce8623"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/evidence/topology_grid/480x60.bin",
+   "bytes": 640000,
+   "sha256": "b5a74449a369a8774523518b5d8ee9e5293f617858029d1223ffef65525e0581"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/evidence/topology_grid/560x70.bin",
+   "bytes": 640000,
+   "sha256": "87ef46054a34d6004347ce1e56be77bd1872886c860fca24296a5324e5fc54e7"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/evidence/topology_grid/640x80.bin",
+   "bytes": 640000,
+   "sha256": "ee94d2de94bfa3253fabb5f0afbd22cbb185ef3b91bc04a7d760be0d6fbd7fa9"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/evidence/topology_grid/720x90.bin",
+   "bytes": 640000,
+   "sha256": "776c7eb2ff0247bc4e6e062788cf93b01af97f1cdd19664177a09582b9954577"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/evidence/topology_grid/800x100.bin",
+   "bytes": 640000,
+   "sha256": "b89af0554b020c247cff5359718bb7ee11eb6e70113ed61e1baf8dc8e033febb"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/figures/Mnd_vs_mesh.png",
+   "bytes": 46210,
+   "sha256": "afa33e925b8af5bbe25bb7e7f56c09dc8043ecd44a03f57df977b1de4595f651"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/figures/design_change_over_eps.png",
+   "bytes": 109505,
+   "sha256": "75725e593a71fd213c21adf132552c395d8f79096aa7882fde01540f57ca33af"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/figures/gap_vs_mesh.png",
+   "bytes": 44103,
+   "sha256": "d39152db2b14149554b3ad28959f2e43d24fa164c0f93d80efff977521cb11c8"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/figures/gray_fraction_vs_mesh.png",
+   "bytes": 51118,
+   "sha256": "6e3cc461ce3ea9cf5fc5b93035e47336fe3fe7c1107fb69d8048af9599ad6fef"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/figures/histories_spectral_box_cost.png",
+   "bytes": 236762,
+   "sha256": "e8fbcea0b06ae1c6726c30557327d04591d4bd822b89e71c6e103d96ddb13267"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/figures/nine_final_topologies.png",
+   "bytes": 252981,
+   "sha256": "72f1ac114b694f2ed035ffaf39911e3f04202b3ee412e145eaae795bab32abc5"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/figures/omega1_vs_mesh.png",
+   "bytes": 44644,
+   "sha256": "c47e85e859a28a99e6c773a039def77dae411cf36ac3736aabb2543b88625d27"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/figures/omega2_vs_mesh.png",
+   "bytes": 47531,
+   "sha256": "2e9f928e0937d71e8134342f1022179caae20a7a5713e2523c540271bad293ca"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/figures/outer_iterations_vs_mesh.png",
+   "bytes": 41722,
+   "sha256": "10093d04f0fa83e3cf7babeecef60378faa7c0332df3dce2e37cc3a6973cfd6f"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/figures/time_per_outer_vs_size.png",
+   "bytes": 81155,
+   "sha256": "b7891a1581617425b03ebf8ddb7c9db9d74388ba58a3b56c70f3a7e6d3f863b3"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/figures/total_wall_vs_size.png",
+   "bytes": 47885,
+   "sha256": "dc143970a82d196d0f975be328c763f4bef415e4a0a3f17ee9ed6a85017cde8b"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/logs/PART1_identity_check.log",
+   "bytes": 1703,
+   "sha256": "b7c28e46bef57c528f43af0f7644c32c8f52d4a0472b78e544866123d4d8b8b5"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/logs/PART1_identity_check.run1_check_script_defect.log",
+   "bytes": 1703,
+   "sha256": "b17ef13ab5f9dfa6c354e5faabe819f844404e0ded2756feff5d506d60a616f0"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/logs/PART4_runner_config_identity.log",
+   "bytes": 1804,
+   "sha256": "4a9085265fa15c6324dd455f854475e8316d299f951f0bee64e3c465fb1a49bb"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/logs/POSTPROCESS_extract.log",
+   "bytes": 1269,
+   "sha256": "aed7146590995fbe2735c2288aab893c7328abdf080d7a0cfc38001ce6eeb253"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/logs/POSTPROCESS_report.log",
+   "bytes": 2238,
+   "sha256": "bfe025da1996cd8b939861de0c0e49a7c73494f7b07fd41c713b6ee960c379fe"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/logs/POSTPROCESS_report.run1_check_defect.txt",
+   "bytes": 745,
+   "sha256": "321dd157c0d9678d457830bb4d5dde0295e6169c701e7cc0f7a3d3db799d4ac1"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/logs/SYNTHETIC_ENDPATH.log",
+   "bytes": 4550,
+   "sha256": "a526e429a00ecb23ca22cfc0c24c7749b016f6a1231d5b9730be1cf75e2521cb"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/logs/campaign_AFTER_RUN.json",
+   "bytes": 1194,
+   "sha256": "ee69e25a1f848e159132db3914cdfd36ed9c8282a5cb9fee39a28ee836b7311f"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/logs/campaign_END.json",
+   "bytes": 129,
+   "sha256": "139f0bbbc5f54872cccc0873398383b69163f7a0e10fc5daa623608dbc2fe41d"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/logs/campaign_HOOKS_ARMED.json",
+   "bytes": 1979,
+   "sha256": "46140329411f497ae86927a84d5338453f5de4c2cba20bdad477cf2b89976004"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/logs/campaign_LAUNCH.json",
+   "bytes": 2132,
+   "sha256": "f77f99d2d2238b49fded7204cea0cfb9a0e6e627f4c85b3f1b1f705b7a1abcdc"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/logs/campaign_performance_comparison_stdout.log",
+   "bytes": 39202,
+   "sha256": "8276babce8e5bf1cb4af10e1a48077fb42246a5d58287aa99dc1e451fbe83eed"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/logs/smoke_AFTER_RUN.json",
+   "bytes": 1191,
+   "sha256": "b4c63317fc3009a7fc8c17dbcb438e2b8d5a3dde030e86e249d28a8a743aaf89"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/logs/smoke_END.json",
+   "bytes": 129,
+   "sha256": "70e7ccaa258e5cb95fce5c8d230b0b207721f4def88294d8e38382b826b3f422"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/logs/smoke_HOOKS_ARMED.json",
+   "bytes": 1988,
+   "sha256": "bde0e7d692658b5356486e621ba0b4ef3f0e466fa1da391509725d62cab00733"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/logs/smoke_LAUNCH.json",
+   "bytes": 2114,
+   "sha256": "c70a6df70adcb70619d310261b4d25df39a8ff902952319676fee0e82493c67f"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/logs/smoke_performance_comparison_stdout.log",
+   "bytes": 17512,
+   "sha256": "07893dd0a6c980ac6ae039efce6d14cbd87e37fae797e81588424e157d107dba"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/postprocess/nmp_extract.m",
+   "bytes": 18368,
+   "sha256": "7d9926c9d6298e58aade62eaa842e478f2002abf7bfba3a93168e02a34615d73"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/postprocess/nmp_finalize.py",
+   "bytes": 5368,
+   "sha256": "d0952734e8c12617178a71c167a474eb2cd22f9c8a0eb7daf51edfcc51377244"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/postprocess/nmp_report.py",
+   "bytes": 25845,
+   "sha256": "a7c2340bbd0400b86e22e1bfc885fb9aadf88967e849d1e1c924dc7a1af381f1"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/scripts/nmp_after_run.m",
+   "bytes": 803,
+   "sha256": "c41e9ec14a8e44d1bf2f5b490ec49c71ea2d376d6482d1d0a6b01dc1939bbbd4"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/scripts/nmp_arm_hooks.m",
+   "bytes": 3278,
+   "sha256": "e634ad6e54583b0fcc5303f650c9ad93f89a2c6562c541e8f3ea4db185eb53ab"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/scripts/nmp_ctx.m",
+   "bytes": 626,
+   "sha256": "5881df9ad3613454b55c65402e84d35e8a240c02cb320f0d64e4cac35ba6be86"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/scripts/nmp_hook_post.m",
+   "bytes": 5139,
+   "sha256": "c0f8fe1e017ead315183a13689323f9a60a78b11cbcf0bf4504df4e90b044b3f"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/scripts/nmp_hook_pre.m",
+   "bytes": 6400,
+   "sha256": "1ef81a52ec161bfe6f744d274a8d8f4038c8bbfb10f21e7d9d722ce564b8e6f3"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/scripts/nmp_hook_tap.m",
+   "bytes": 3115,
+   "sha256": "2d873e25fe3b4b8f069c9228b6710fe59c493fbcf1e885534dc2593b57bcede3"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/scripts/nmp_identity_check.m",
+   "bytes": 15675,
+   "sha256": "fb65688a8dfceb071a86596f3997711741a4d064c92d69c86a414009bdac0e52"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/scripts/nmp_identity_snapshot.m",
+   "bytes": 2152,
+   "sha256": "8fa0aadcc790dd0854866b05807bc8724ae54a42367d41420c5a84cdbb14753a"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/scripts/nmp_launch.sh",
+   "bytes": 3643,
+   "sha256": "c6631c18953f8d82a162bce558a132b1e69cb3185f94cb0f82846c0b61ea7ec7"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/scripts/nmp_make_lock.py",
+   "bytes": 6217,
+   "sha256": "4d1e8cd8f079f993ac9dc4a365b9a96025fb5d46962d84197590c5d3fcf4af36"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/scripts/nmp_now.m",
+   "bytes": 188,
+   "sha256": "d002df21053277f9fa7d292a23234379585253e78c51c1370174fd276157978c"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/scripts/nmp_synthetic_endpath.m",
+   "bytes": 5413,
+   "sha256": "03382e1c3b9270a22d23366508ae02c0b3d066f6604159f5cc6ed0fdbea9b5bd"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/scripts/nmp_util.m",
+   "bytes": 1409,
+   "sha256": "2f44ecdbdd0d2cbf03f47a282430c3fe99460f97c4d95783a597beab60fd445c"
+  }
+ ],
+ "read_only_inputs": [
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/postmerge_campaign_gate/CAMPAIGN_IDENTITY.json",
+   "sha256": "deb43641bc42d9db1b3154115478486403dc22ac4701cbde6de34c5d33c44e4f"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/postmerge_campaign_gate/NINE_MESH_CONFIGS.json",
+   "sha256": "ea2f4751a5bb7c73fa472b57f67a64eaffbfe931fd6f9403ff4a0a45112acf9f"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/scientific_delta_olhoff_migration/evaluations/sweep_verification.json",
+   "sha256": "b863e8d589f90b8ed5f78bc1dbc798a609d2a1203c2fa82915f82926974a05c3"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/scientific_delta_olhoff_migration/source_snapshot/+olhoff_6b08708/repro/results/S160x20/res.mat",
+   "sha256": "de7b15764509a1797d8713495f37481004cefb7b33f248d9b3981a4a3450daa0"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/scientific_delta_olhoff_migration/source_snapshot/+olhoff_6b08708/repro/results/S240x30/res.mat",
+   "sha256": "1114cd5452359e7de49b22ecdada18dcd52d317a04bf161a4189b3255629372e"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/scientific_delta_olhoff_migration/source_snapshot/+olhoff_6b08708/repro/results/S320x40/res.mat",
+   "sha256": "f9101323441f398f631393f40a8ae8112194abf3c49f03beeff4d720a03787e4"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/scientific_delta_olhoff_migration/source_snapshot/+olhoff_6b08708/repro/results/S400x50/res.mat",
+   "sha256": "593c546c1aa467ecf6830df88f54e653a69bcd336270555e69ccbfd7490a0bad"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/scientific_delta_olhoff_migration/source_snapshot/+olhoff_6b08708/repro/results/S480x60/res.mat",
+   "sha256": "e10d37561de49d381868d50690c6a3906b82612bde074f846f214e3109906542"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/scientific_delta_olhoff_migration/source_snapshot/+olhoff_6b08708/repro/results/S560x70/res.mat",
+   "sha256": "2fdd06ff262913d44b7195cc43305794e775b29f303a5b0112f8b58f14967eb2"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/scientific_delta_olhoff_migration/source_snapshot/+olhoff_6b08708/repro/results/S640x80/res.mat",
+   "sha256": "82c97856e8c094552473c61fc0246a1887f0207b3210ccdf266faffa33f3944a"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/scientific_delta_olhoff_migration/source_snapshot/+olhoff_6b08708/repro/results/S720x90/res.mat",
+   "sha256": "c38b490a89c91728b416509553feeac994caddd24a26d03360f57c3ede918dd4"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/scientific_delta_olhoff_migration/source_snapshot/+olhoff_6b08708/repro/results/S800x100/res.mat",
+   "sha256": "3fd2345a3086fce7c073af2ca131ee51210765ba6c2507a864ea98fd16990222"
+  }
+ ],
+ "verdicts": {
+  "identity": "NINE_MESH_CAMPAIGN_IDENTITY_PASS",
+  "runner_config_identity": "PERFORMANCE_RUNNER_CONFIG_IDENTITY_PASS",
+  "integrity": "NINE_MESH_CAMPAIGN_INTEGRITY_PASS",
+  "termination": "PEDERSEN_ADAPTIVE_CROSS_MESH_TERMINATION_PASS",
+  "mesh_trend": "PEDERSEN_ADAPTIVE_MESH_TREND_ACCEPTABLE",
+  "baseline": "OLHOFF_PRODUCTION_BASELINE_VALIDATED"
+ },
+ "note": "Raw production outputs stay in the output root; only derived evidence (JSON, CSV, 800x100 grids, figures) lives here."
+}

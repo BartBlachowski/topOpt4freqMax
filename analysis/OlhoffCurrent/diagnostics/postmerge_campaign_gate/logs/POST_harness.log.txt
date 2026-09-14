@@ -1,0 +1,15 @@
+HARNESS preflight=1 (38 checks, 0 failed) smoke=CAP_HIT export=1 PASS=1
+SUITE harness                                       failures=0 
+
+ans = 
+
+  struct with fields:
+
+       repo: '/Users/piotrek/Programming/topOpt4freqMax'
+       kind: 'harness'
+       when: '13-Sep-2026 22:37:00'
+     matlab: '25.2.0.2998904 (R2025b)'
+       head: 'b21483b158f58e05e7b56957f2fbe8e1d2891395'
+     suites: [1×1 struct]
+    harness: [1×1 struct]
+

@@ -1,0 +1,87 @@
+{
+ "study": "frozen_problem25_reference",
+ "generated": "2026-09-12T22:09:43+0200",
+ "head": "013cc48451d33bed61c5c4eea174bbd898d548a2",
+ "authoritative_state": {
+  "trajectory": "analysis/OlhoffCurrent/evidence/three_rung_canary_preflight/C480x60_three_rung_trajectory.mat",
+  "trajectory_sha256": "a87546bc391cdc683def34a9f27678884528032f6b140e156349d2e74135ab9b",
+  "trajectory_bytes": 155461014,
+  "rho386_sha256": "0a498a7d6ab0565b29c15ff9364060d937d4df10aa661fc90d02c038ce6e4a60",
+  "rho385_sha256": "9b1443e508a6e4ecb5288d30167c7258d837be127aa3a9a42d8cc092240f3ded",
+  "drho386_sha256": "0b12cd7f9ae32decc6e95bf63e89fa7ca4530d13ec6dc7d815b618d46af8a9fd",
+  "cfgHash": "03097a28b0ad7fdb0d977985d3b5fd279dd74553c9dd5dfbd3cc035ac2a1782e",
+  "implTree": "edbfe47eb32109a2fb017f6f13d5327f2c240357caa96630064ffcf37ee152cb"
+ },
+ "prior_retained_state": {
+  "path": "analysis/OlhoffCurrent/diagnostics/filtered_subproblem_integrability_audit/evaluations/inner_kkt_state.mat",
+  "bytes": 813951478,
+  "role": "ctx (reproduced bitwise here), P19 and M500 iterates",
+  "sha256_recorded_by_prior_audit": "2952b301c19cb60f4f7ef71da25feb533669415685458d5c64d302ebc48518b6"
+ },
+ "preregistration": {
+  "path": "AUDIT_PREREGISTRATION.md",
+  "sha256": "37cbbb6b10a9fc7db4fe7f7f2555724795a151cb3641bc96eea9579ca4ca6320"
+ },
+ "derived_here": [
+  {
+   "path": "evaluations/compare_fields.mat",
+   "sha256": "18262dc256e34e2d66db87d4dee10511049a36db22ad727c5b98d1b552931beb",
+   "bytes": 2084021
+  },
+  {
+   "path": "evaluations/coneprog_sweep.mat",
+   "sha256": "7afc95a91c5a445f3c4f468b3c17579639a59a174bb074852bdc699be4145b6b",
+   "bytes": 3185138
+  },
+  {
+   "path": "evaluations/conic_reference.mat",
+   "sha256": "7503189ab7771c77844719c96ac3767346fa7bef657c7e8c811c45e342494833",
+   "bytes": 887604
+  },
+  {
+   "path": "evaluations/fmincon_S3.mat",
+   "sha256": "81ec241b3c9f1e381bdab0a76f7ee7b9c09a7b43c9e0b4cd3004ee609088d729",
+   "bytes": 216233
+  },
+  {
+   "path": "evaluations/fmincon_main.mat",
+   "sha256": "21f307aaf94ff2326c3188c41122be3858caecbbf4c6436612b6e2f36fea2839",
+   "bytes": 641432
+  },
+  {
+   "path": "evaluations/fmincon_main_exact.mat",
+   "sha256": "26c15de6ee53a27b81bdd9ab209518cf2a53e5502733ac80831a4d33aded9c21",
+   "bytes": 1257792
+  },
+  {
+   "path": "evaluations/frozen_ctx.mat",
+   "sha256": "084f219ce55588c91d7ba967dd7942c87df7f7a321abdbbe805f5acf442a4667",
+   "bytes": 2155562
+  },
+  {
+   "path": "evaluations/mma_replay.mat",
+   "sha256": "b1caafe490a7a56748bc36db1fe6bfcb355c9338f637bf4d849306af966f327e",
+   "bytes": 59481256
+  }
+ ],
+ "locks": {
+  "topology_optimization_runs": 0,
+  "outer_iterations": 0,
+  "accepted_density_updates": 0,
+  "controller_transitions": 0,
+  "production_files_modified": 0,
+  "move_limit_changed": false,
+  "packages_installed": 0
+ },
+ "verdicts": {
+  "state": "FROZEN_480_PROBLEM25_STATE_PASS",
+  "cluster_reduction": "CLUSTER_CONSTRAINT_REDUCTION_PASS",
+  "socp_equivalence": "FROZEN_PROBLEM25_SOCP_EQUIVALENCE_PASS",
+  "convexity": "FROZEN_PROBLEM25_CONVEXITY_CERTIFIED",
+  "reference_kkt": "REFERENCE_PROBLEM25_KKT_PASS",
+  "reference_kkt_with_solver_duals": "REFERENCE_PROBLEM25_KKT_FAIL",
+  "global": "GLOBAL_PROBLEM25_REFERENCE_CERTIFIED",
+  "relationship": "REPEATED_MMA_REALIZATION_FAILS_PROBLEM25_REFERENCE",
+  "final": "FROZEN_INNER_SOLVER_STUDY_JUSTIFIED"
+ }
+}

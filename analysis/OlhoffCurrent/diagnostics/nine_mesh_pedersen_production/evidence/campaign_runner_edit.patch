@@ -1,0 +1,22 @@
+diff --git a/examples/Performance/performance_comparison.m b/examples/Performance/performance_comparison.m
+index 1a4dd08..18d70f6 100644
+--- a/examples/Performance/performance_comparison.m
++++ b/examples/Performance/performance_comparison.m
+@@ -89,7 +89,7 @@
+ cfg.yukselMaxIters = 5000;
+ 
+ % ---- Which methods -------------------------------------------------------
+-cfg.methods = struct('proposed', true, 'yuksel', true, 'olhoff', true);
++cfg.methods = struct('proposed', false, 'yuksel', false, 'olhoff', true);
+ 
+ % ---- Execution -----------------------------------------------------------
+ cfg.singleThread = true;    % pin maxNumCompThreads(1) for every measured run
+@@ -103,7 +103,7 @@
+ cfg.writeLaTeX = true;
+ 
+ cfg.outputDir = '';                  % auto: examples/Performance/conference_benchmark/<runLabel>
+-cfg.runLabel  = 'campaign_9mesh_r2';
++cfg.runLabel  = 'nine_mesh_pedersen_b21483b';
+ 
+ % ---- Timing-accounting tolerances (predeclared, recorded in the artifacts) --
+ cfg.timingTolAbs     = 1e-6;   % |T_total - (T1+T2+T_overhead)|, seconds

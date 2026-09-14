@@ -1,0 +1,378 @@
+{
+  "status": "RUNTIME_RESOLVED",
+  "resolved_by": "olh.config.resolve via cp_config -> tr_config -> cv_config",
+  "matlab": "25.2.0.2998904 (R2025b)",
+  "when": "2026-09-12T12:27:48",
+  "preset": "duOlhoffFrozenM4 (olhoffcurrent_preset().upstreamPreset)",
+  "production_preset_promoted_to_three_rung": false,
+  "meshes": {
+    "x480x60": {
+      "config_hash": "03097a28b0ad7fdb0d977985d3b5fd279dd74553c9dd5dfbd3cc035ac2a1782e",
+      "NE": 28800,
+      "free_DOF": 58678,
+      "free_DOF_closed_form": 58678,
+      "rminEl": 3.6,
+      "effective_config": {
+        "domain": {
+          "a": 8,
+          "b": 1,
+          "thickness": 1,
+          "mesh": {
+            "nelx": 480,
+            "nely": 60
+          },
+          "boundary": {
+            "condition": "simplySupported",
+            "support": "midHeight",
+            "axialRestraint": "bothEnds"
+          },
+          "element": {
+            "type": "Q4",
+            "massMatrix": "consistent"
+          }
+        },
+        "material": {
+          "solid": {
+            "E": 1.0E+7,
+            "nu": 0.3,
+            "density": 1
+          },
+          "stiffness": {
+            "model": "simp",
+            "p": 3,
+            "continuation": {
+              "enabled": false,
+              "schedule": [],
+              "driver": "moveLadderStage",
+              "blockStopUntilFinal": true
+            }
+          },
+          "mass": {
+            "model": "eq4b",
+            "q": 1,
+            "lowDensityExponent": 6,
+            "cutoff": 0.1,
+            "continuation": {
+              "enabled": false,
+              "lowPModel": "eq2"
+            }
+          }
+        },
+        "design": {
+          "initial": 0.5,
+          "minimum": 0.001,
+          "volumeFraction": 0.5
+        },
+        "filter": {
+          "type": "sensitivity",
+          "radiusPhysical": 0.06,
+          "radiusElements": [],
+          "applyTo": "all"
+        },
+        "projection": {
+          "enabled": false,
+          "eta": 0.5,
+          "beta": {
+            "levels": []
+          },
+          "continuation": {
+            "trigger": "outerConvergence"
+          }
+        },
+        "eigen": {
+          "targetMode": 1,
+          "maxCluster": 4,
+          "solver": "eigs",
+          "tolerance": 1E-12,
+          "maxIterations": 5000,
+          "krylovFactor": 4
+        },
+        "multiplicity": {
+          "method": "subspace",
+          "tolerance": 0.05,
+          "enterTolerance": 0.01,
+          "exitTolerance": 0.05,
+          "subspaceSize": 2,
+          "diagonalOffsets": true,
+          "offDiagonal": true
+        },
+        "optimizer": {
+          "inner": {
+            "type": "mma",
+            "variable": "increment",
+            "variant": "published",
+            "tolerance": 0.05,
+            "minIterations": 5,
+            "maxIterations": 500
+          }
+        },
+        "move": {
+          "policy": "ladder",
+          "initial": 0.04,
+          "minimum": 0.002,
+          "levels": [
+            0.04,
+            0.02,
+            0.01
+          ],
+          "geometric": {
+            "ratio": 0.97,
+            "afterCoalescence": true
+          },
+          "trust": {
+            "loRatio": 0.3,
+            "hiRatio": 0.7,
+            "shrink": 0.7,
+            "grow": 1.1
+          },
+          "continuation": {
+            "signal": "stageExhaustion",
+            "window": 10,
+            "tolerance": 0.005
+          }
+        },
+        "stop": {
+          "rule": "stageExhaustion",
+          "norm": "l2",
+          "tolerance": 0.15000000000000002,
+          "toleranceRule": "meshScaled",
+          "field": "designVariable",
+          "guards": {
+            "settledMove": true,
+            "ladderExhausted": false,
+            "maxDesignChange": false
+          }
+        },
+        "runtime": {
+          "maxOuter": 1600,
+          "singleThread": true,
+          "diagnostics": true,
+          "verbose": false,
+          "name": "CAN3_480x60"
+        }
+      },
+      "provenance": {
+        "preset": "duOlhoffFrozenM4",
+        "overrides": [
+          "domain.mesh.nelx",
+          480,
+          "domain.mesh.nely",
+          60,
+          "runtime.maxOuter",
+          1600,
+          "runtime.singleThread",
+          true,
+          "runtime.diagnostics",
+          true,
+          "runtime.verbose",
+          false,
+          "runtime.name",
+          "CV_C_480x60",
+          "move.continuation.signal",
+          "stageExhaustion",
+          "stop.rule",
+          "stageExhaustion",
+          "move.levels",
+          [
+            0.04,
+            0.02,
+            0.01
+          ],
+          "runtime.name",
+          "TR3_C_480x60",
+          "runtime.name",
+          "CAN3_480x60"
+        ],
+        "warnings": [],
+        "resolvedAt": "2026-09-12T12:27:49",
+        "schemaRows": 81,
+        "productionPreset": "duOlhoffFixedPenaltySensitivityFiltered",
+        "implementation": "analysis/OlhoffCurrent"
+      }
+    },
+    "x800x100": {
+      "config_hash": "7724af5ed26786e16132c30fbae840f5d8679d5ea798fc75d5c48eefd0e50ffe",
+      "NE": 80000,
+      "free_DOF": 161798,
+      "free_DOF_closed_form": 161798,
+      "rminEl": 6,
+      "effective_config": {
+        "domain": {
+          "a": 8,
+          "b": 1,
+          "thickness": 1,
+          "mesh": {
+            "nelx": 800,
+            "nely": 100
+          },
+          "boundary": {
+            "condition": "simplySupported",
+            "support": "midHeight",
+            "axialRestraint": "bothEnds"
+          },
+          "element": {
+            "type": "Q4",
+            "massMatrix": "consistent"
+          }
+        },
+        "material": {
+          "solid": {
+            "E": 1.0E+7,
+            "nu": 0.3,
+            "density": 1
+          },
+          "stiffness": {
+            "model": "simp",
+            "p": 3,
+            "continuation": {
+              "enabled": false,
+              "schedule": [],
+              "driver": "moveLadderStage",
+              "blockStopUntilFinal": true
+            }
+          },
+          "mass": {
+            "model": "eq4b",
+            "q": 1,
+            "lowDensityExponent": 6,
+            "cutoff": 0.1,
+            "continuation": {
+              "enabled": false,
+              "lowPModel": "eq2"
+            }
+          }
+        },
+        "design": {
+          "initial": 0.5,
+          "minimum": 0.001,
+          "volumeFraction": 0.5
+        },
+        "filter": {
+          "type": "sensitivity",
+          "radiusPhysical": 0.06,
+          "radiusElements": [],
+          "applyTo": "all"
+        },
+        "projection": {
+          "enabled": false,
+          "eta": 0.5,
+          "beta": {
+            "levels": []
+          },
+          "continuation": {
+            "trigger": "outerConvergence"
+          }
+        },
+        "eigen": {
+          "targetMode": 1,
+          "maxCluster": 4,
+          "solver": "eigs",
+          "tolerance": 1E-12,
+          "maxIterations": 5000,
+          "krylovFactor": 4
+        },
+        "multiplicity": {
+          "method": "subspace",
+          "tolerance": 0.05,
+          "enterTolerance": 0.01,
+          "exitTolerance": 0.05,
+          "subspaceSize": 2,
+          "diagonalOffsets": true,
+          "offDiagonal": true
+        },
+        "optimizer": {
+          "inner": {
+            "type": "mma",
+            "variable": "increment",
+            "variant": "published",
+            "tolerance": 0.05,
+            "minIterations": 5,
+            "maxIterations": 500
+          }
+        },
+        "move": {
+          "policy": "ladder",
+          "initial": 0.04,
+          "minimum": 0.002,
+          "levels": [
+            0.04,
+            0.02,
+            0.01
+          ],
+          "geometric": {
+            "ratio": 0.97,
+            "afterCoalescence": true
+          },
+          "trust": {
+            "loRatio": 0.3,
+            "hiRatio": 0.7,
+            "shrink": 0.7,
+            "grow": 1.1
+          },
+          "continuation": {
+            "signal": "stageExhaustion",
+            "window": 10,
+            "tolerance": 0.005
+          }
+        },
+        "stop": {
+          "rule": "stageExhaustion",
+          "norm": "l2",
+          "tolerance": 0.25,
+          "toleranceRule": "meshScaled",
+          "field": "designVariable",
+          "guards": {
+            "settledMove": true,
+            "ladderExhausted": false,
+            "maxDesignChange": false
+          }
+        },
+        "runtime": {
+          "maxOuter": 1600,
+          "singleThread": true,
+          "diagnostics": true,
+          "verbose": false,
+          "name": "CAN3_800x100"
+        }
+      },
+      "provenance": {
+        "preset": "duOlhoffFrozenM4",
+        "overrides": [
+          "domain.mesh.nelx",
+          800,
+          "domain.mesh.nely",
+          100,
+          "runtime.maxOuter",
+          1600,
+          "runtime.singleThread",
+          true,
+          "runtime.diagnostics",
+          true,
+          "runtime.verbose",
+          false,
+          "runtime.name",
+          "CV_C_800x100",
+          "move.continuation.signal",
+          "stageExhaustion",
+          "stop.rule",
+          "stageExhaustion",
+          "move.levels",
+          [
+            0.04,
+            0.02,
+            0.01
+          ],
+          "runtime.name",
+          "TR3_C_800x100",
+          "runtime.name",
+          "CAN3_800x100"
+        ],
+        "warnings": [],
+        "resolvedAt": "2026-09-12T12:27:50",
+        "schemaRows": 81,
+        "productionPreset": "duOlhoffFixedPenaltySensitivityFiltered",
+        "implementation": "analysis/OlhoffCurrent"
+      }
+    }
+  }
+}

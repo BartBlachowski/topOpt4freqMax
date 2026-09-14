@@ -1,0 +1,86 @@
+{
+  "results": [
+    {
+      "id": "P0",
+      "desc": "baseline compliant study",
+      "expect": true,
+      "got": true,
+      "nSup": 0,
+      "supRecorded": ""
+    },
+    {
+      "id": "P1",
+      "desc": "J1 replica: real historical digest, same path",
+      "expect": true,
+      "got": false,
+      "nSup": 0,
+      "supRecorded": ""
+    },
+    {
+      "id": "P2",
+      "desc": "J2 replica: fabricated digest",
+      "expect": false,
+      "got": false,
+      "nSup": 0,
+      "supRecorded": ""
+    },
+    {
+      "id": "P3",
+      "desc": "historical digest of a DIFFERENT source path (limit.m digest on olhoffSolve.m line)",
+      "expect": false,
+      "got": false,
+      "nSup": 0,
+      "supRecorded": ""
+    },
+    {
+      "id": "P4",
+      "desc": "historical digest of a NON-source file (README.md @013cc48)",
+      "expect": false,
+      "got": false,
+      "nSup": 0,
+      "supRecorded": ""
+    },
+    {
+      "id": "P5",
+      "desc": "DUPLICATE path: fabricated line FOLLOWED by real historical line",
+      "expect": false,
+      "got": false,
+      "nSup": 0,
+      "supRecorded": ""
+    },
+    {
+      "id": "P6",
+      "desc": "DUPLICATE path: real historical line followed by fabricated line",
+      "expect": false,
+      "got": false,
+      "nSup": 0,
+      "supRecorded": ""
+    },
+    {
+      "id": "P7",
+      "desc": "empty-content digest, path never deleted in history",
+      "expect": false,
+      "got": false,
+      "nSup": 0,
+      "supRecorded": ""
+    },
+    {
+      "id": "P8",
+      "desc": "real historical digest but +impl locally edited (manifest fails)",
+      "expect": false,
+      "got": false,
+      "nSup": 0,
+      "supRecorded": ""
+    },
+    {
+      "id": "P9",
+      "desc": "empty-content digest, path deleted+re-added in history (fabricated: content never empty)",
+      "expect": false,
+      "got": false,
+      "nSup": 0,
+      "supRecorded": ""
+    }
+  ],
+  "nFailOpen": 1,
+  "commit": "9b30ec45b038fb36e7cf20d57679b71cfd099fb3"
+}

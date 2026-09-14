@@ -1,0 +1,336 @@
+{
+  "study": "frozen_inner_solver_study",
+  "schema": "frozen_solver_audit/1",
+  "timestamp": "2026-09-13T10:27:09.883216+02:00",
+  "preregistration_sha256": "3a80b05bae0283a77aeae94aabe21f7556e7fff9f52e98940c74f61e61613ee7",
+  "repo_head": "013cc48451d33bed61c5c4eea174bbd898d548a2",
+  "verdicts": {
+    "oracle": "FROZEN_SOLVER_ORACLE_PASS",
+    "persistence": "PERSISTENT_STATE_NO_MATERIAL_EFFECT",
+    "stopping": "STOPPING_RULE_NOT_A_VALID_OPTIMALITY_PROXY",
+    "gcmma": "GCMMA_APPROACHES_BUT_DOES_NOT_REACH_ORACLE",
+    "socp_gate": "SOCP_INNER_SOLVER_CANDIDATE_JUSTIFIED",
+    "primary_cause": "MMA_FAILURE_MULTICAUSAL",
+    "c480_gate": "ONE_C480_CORRECTED_INNER_SOLVER_RUN_JUSTIFIED",
+    "filter_gate": "FILTER_FORMULATION_STUDY_STILL_DEFERRED",
+    "performance_gate": "PERFORMANCE_CAMPAIGN_STILL_BLOCKED"
+  },
+  "selected_candidate": "C. Exact SOCP, restricted to the proven N=2 reconstruction and independently certified before any future outer update.",
+  "topology_runs": 0,
+  "outer_density_updates": 0,
+  "accepted_rho_updates": 0,
+  "controller_transitions": 0,
+  "production_modifications": 0,
+  "reference_modifications": 0,
+  "oracle_identity": {
+    "rho386": "0a498a7d6ab0565b29c15ff9364060d937d4df10aa661fc90d02c038ce6e4a60",
+    "rho385": "9b1443e508a6e4ecb5288d30167c7258d837be127aa3a9a42d8cc092240f3ded",
+    "drho386": "0b12cd7f9ae32decc6e95bf63e89fa7ca4530d13ec6dc7d815b618d46af8a9fd",
+    "cfg": "03097a28b0ad7fdb0d977985d3b5fd279dd74553c9dd5dfbd3cc035ac2a1782e",
+    "implTree": "edbfe47eb32109a2fb017f6f13d5327f2c240357caa96630064ffcf37ee152cb",
+    "state": {
+      "mesh": [
+        480,
+        60
+      ],
+      "outer": 386,
+      "stage": 3,
+      "move": 0.01,
+      "N": 2
+    },
+    "xRef_sha256": "1c54f430042cbd109bc6bd96b995aeb4e4349aae7377c1005fefacccab6be529",
+    "dual_bound": -1.001792128857376,
+    "certified_gap": 9.152900659614716e-12,
+    "dual_feasible": true,
+    "kkt": {
+      "label": "authenticated oracle",
+      "primal": {
+        "fval": [
+          1.509903313490213e-14,
+          -0.27812985172765003,
+          -4.949581062320162,
+          4.042198674546348e-14
+        ],
+        "max_fval": 4.042198674546348e-14,
+        "box_violation_lower": 0,
+        "box_violation_upper": 0
+      },
+      "dual": {
+        "mu": [
+          0.9999999999999999,
+          0,
+          4.134063697312374e-17,
+          0.7291136447250609
+        ],
+        "min_mu": 0,
+        "min_xsi": 0,
+        "min_eta": 0
+      },
+      "complementarity": {
+        "mu_times_f": [
+          1.5099033134902126e-14,
+          0,
+          -2.0461883386642596e-16,
+          2.947222208301298e-14
+        ],
+        "max_abs_mu_f": 2.947222208301298e-14,
+        "max_xsi_gap": 6.133415211759151e-17,
+        "max_eta_gap": 3.192801072092752e-12,
+        "max_box_comp_normalized": 4.961894865931726e-07
+      },
+      "stationarity": {
+        "sRow0": 0.0006434640713600085,
+        "sRow_point": 0.0006434658569043786,
+        "raw_rms": 1.2486515465965056e-18,
+        "raw_max": 4.90059381963448e-17,
+        "norm_rms": 1.9405147888947226e-15,
+        "norm_max": 7.615955634129993e-14,
+        "norm_rms_pointscale": 1.9405094041874857e-15,
+        "bs_residual": -4.134063697312374e-17
+      },
+      "eigs": {
+        "e1": 48.160974020203184,
+        "e2": 7522.514493129465,
+        "separation": 7474.353519109262
+      },
+      "active_sweep_cols": [
+        "tol",
+        "n_at_minus_move",
+        "n_at_floor",
+        "n_at_plus_move",
+        "n_at_ceiling"
+      ],
+      "active_sweep": [
+        [
+          1e-08,
+          4710,
+          9398,
+          4570,
+          9684
+        ],
+        [
+          1e-07,
+          4888,
+          9404,
+          4772,
+          9686
+        ],
+        [
+          1e-06,
+          4906,
+          9404,
+          4788,
+          9686
+        ],
+        [
+          1e-05,
+          4908,
+          9404,
+          4796,
+          9686
+        ],
+        [
+          0.0001,
+          4910,
+          9404,
+          4796,
+          9686
+        ],
+        [
+          0.001,
+          4910,
+          9404,
+          4797,
+          9686
+        ]
+      ],
+      "active": {
+        "n_minus_move": 4906,
+        "n_floor": 9404,
+        "n_plus_move": 4788,
+        "n_ceiling": 9686,
+        "n_interior": 16,
+        "frac_move_bound": 0.3365972222222222,
+        "frac_any_bound": 0.9994444444444445
+      },
+      "verdict": "REFERENCE_PROBLEM25_KKT_PASS"
+    },
+    "beta": 26921.772248325255,
+    "bs": 1.001792128848223,
+    "constraints": [
+      1.509903313490213e-14,
+      -0.27812985172765003,
+      -4.949581062320162,
+      4.042198674546348e-14
+    ],
+    "equivalence": {
+      "points": 24,
+      "max_value_error": 2.3092638912203256e-14,
+      "max_gradient_relerr": 2.2079777242667298e-16,
+      "max_redundancy_violation": 0
+    },
+    "zero_density_updates": 0,
+    "topology_runs": 0,
+    "verdict": "FROZEN_SOLVER_ORACLE_PASS"
+  },
+  "results_validation": {
+    "points": 202,
+    "max_scalar_discrepancy": 0,
+    "max_conic_discrepancy": 1.0075273948473296e-14,
+    "max_box_violation": 0,
+    "g0_g1_bitwise": true,
+    "rho_hash_after": "9b1443e508a6e4ecb5288d30167c7258d837be127aa3a9a42d8cc092240f3ded",
+    "implTree_after": "edbfe47eb32109a2fb017f6f13d5327f2c240357caa96630064ffcf37ee152cb",
+    "checks": [
+      {
+        "method": "B0_CURRENT_REPEATED_MMA",
+        "checkpoints": 9,
+        "max_scalar_discrepancy": 0,
+        "max_conic_discrepancy": 6.050715484207103e-15
+      },
+      {
+        "method": "S1_PERSISTENT",
+        "checkpoints": 6,
+        "max_scalar_discrepancy": 0,
+        "max_conic_discrepancy": 6.050715484207103e-15
+      },
+      {
+        "method": "S2_ASYINIT_001",
+        "checkpoints": 9,
+        "max_scalar_discrepancy": 0,
+        "max_conic_discrepancy": 3.608224830031759e-15
+      },
+      {
+        "method": "S3_CANONICAL_CLAMP",
+        "checkpoints": 9,
+        "max_scalar_discrepancy": 0,
+        "max_conic_discrepancy": 3.469446951953614e-15
+      },
+      {
+        "method": "S4_SUBSOLV_ACCURACY",
+        "checkpoints": 9,
+        "max_scalar_discrepancy": 0,
+        "max_conic_discrepancy": 7.244205235679146e-15
+      },
+      {
+        "method": "S5_UNIT_BOX",
+        "checkpoints": 9,
+        "max_scalar_discrepancy": 0,
+        "max_conic_discrepancy": 1.0075273948473296e-14
+      },
+      {
+        "method": "G0_UNSAFE",
+        "checkpoints": 9,
+        "max_scalar_discrepancy": 0,
+        "max_conic_discrepancy": 9.298117831235686e-15
+      },
+      {
+        "method": "G1_GCMMA",
+        "checkpoints": 9,
+        "max_scalar_discrepancy": 0,
+        "max_conic_discrepancy": 9.298117831235686e-15
+      },
+      {
+        "method": "G2_GCMMA_ACCURATE",
+        "checkpoints": 9,
+        "max_scalar_discrepancy": 0,
+        "max_conic_discrepancy": 3.0253577421035516e-15
+      },
+      {
+        "method": "S34_CLAMP_ACCURACY",
+        "checkpoints": 9,
+        "max_scalar_discrepancy": 0,
+        "max_conic_discrepancy": 6.050715484207103e-15
+      },
+      {
+        "method": "B0_RETAINED_5000",
+        "checkpoints": 113,
+        "max_scalar_discrepancy": 0,
+        "max_conic_discrepancy": 1.0075273948473296e-14
+      },
+      {
+        "method": "SOCP_COST",
+        "checkpoints": 2,
+        "max_scalar_discrepancy": 0,
+        "max_conic_discrepancy": 2.831068712794149e-15
+      }
+    ],
+    "verdict": "FROZEN_VARIANTS_EXACT_PROBLEM_AND_METRICS_PASS"
+  },
+  "integrity": {
+    "timestamp": "2026-09-13T10:27:09.883216+02:00",
+    "protected_files_checked": 1817,
+    "protected_failures": [],
+    "preregistration_unchanged": true,
+    "production_unchanged": true,
+    "reference_unchanged": true,
+    "trajectory_unchanged": true,
+    "git_status_after": "?? analysis/OlhoffCurrent/diagnostics/filtered_subproblem_integrability_audit/\n?? analysis/OlhoffCurrent/diagnostics/frozen_inner_solver_study/\n?? analysis/OlhoffCurrent/diagnostics/frozen_problem25_reference/\n?? analysis/OlhoffCurrent/diagnostics/gray_kkt_forensic_audit/\n?? analysis/OlhoffCurrent/diagnostics/nine_mesh_campaign_audit/\n?? analysis/OlhoffCurrent/diagnostics/three_rung_canary_preflight/\n",
+    "verdict": "ZERO_UPDATE_AND_PROTECTED_FILES_PASS"
+  },
+  "limitations": [
+    "Fresh B0 extends to 500; the 5000-call replay is authenticated and re-evaluated, not freshly rerun.",
+    "MMA variant budgets are 500 calls or 1800 solver seconds, whichever fires first. Incomplete 500-call checkpoints cannot support strong registered attribution.",
+    "Timing is indicative on a shared host.",
+    "N>2 SDP formulation is analytical; no production SDP implementation is validated.",
+    "No future C480 topology run was executed."
+  ],
+  "input_hashes": {
+    "reference_manifest": "dcd425a0b099e7d98c05f7e8a4c0b3fd213b90e5b1bb12c371a21b0c1a8dc1f0",
+    "oracle_mat": "7503189ab7771c77844719c96ac3767346fa7bef657c7e8c811c45e342494833",
+    "frozen_context": "084f219ce55588c91d7ba967dd7942c87df7f7a321abdbbe805f5acf442a4667",
+    "upstream_archive": "df843fdbf40679383f776f4cc4118c541129249e32c209df0cb15637ea3022fc",
+    "pedersen2000": "df306a44770eaf1f6953a3818b828884eb4437be0012013459a05ce44fe6445e"
+  },
+  "required_files_present": [
+    "AUDIT_PREREGISTRATION.md",
+    "PROVENANCE.md",
+    "ORACLE_IDENTITY.md",
+    "RECONSTRUCTION_CHOICES.md",
+    "BASELINE_REPLAY.md",
+    "ORACLE_METRICS.md",
+    "PERSISTENT_STATE_TEST.md",
+    "ASYMPTOTE_INITIALIZATION_TEST.md",
+    "ASYMPTOTE_UPDATE_TEST.md",
+    "STOPPING_RULE_ANALYSIS.md",
+    "GCMMA_TEST.md",
+    "SOCP_ORACLE_COST.md",
+    "SOCP_GENERALIZATION.md",
+    "ORACLE_SIGN_STRUCTURE.md",
+    "FAILURE_LOCALIZATION.md",
+    "BOUND_STRUCTURE.md",
+    "WORK_NORMALIZED_COMPARISON.md",
+    "CAUSAL_ATTRIBUTION.md",
+    "INNER_SOLVER_SELECTION.md",
+    "SOCP_PROMOTION_GATE.md",
+    "C480_CAUSAL_RUN_GATE.md",
+    "FILTER_STUDY_GATE.md",
+    "PERFORMANCE_STATUS.md",
+    "REPORT.md",
+    "MASTER_METRICS.csv",
+    "METRICS.json"
+  ],
+  "figures": [
+    "figures/FIG_01_oracle_drho.png",
+    "figures/FIG_02_B0_19_drho.png",
+    "figures/FIG_03_B0_5000_drho.png",
+    "figures/FIG_04_oracle_minus_19.png",
+    "figures/FIG_05_oracle_minus_5000.png",
+    "figures/FIG_06_gain_vs_iteration.png",
+    "figures/FIG_07_d2_vs_iteration.png",
+    "figures/FIG_08_dinf_vs_iteration.png",
+    "figures/FIG_09_kkt_vs_iteration.png",
+    "figures/FIG_10_step_vs_distance.png",
+    "figures/FIG_11_sign_vs_iteration.png",
+    "figures/FIG_12_bounds_vs_iteration.png",
+    "figures/FIG_13_persistence_vs_B0.png",
+    "figures/FIG_14_gcmma_vs_B0.png",
+    "figures/FIG_15_gain_vs_work.png",
+    "figures/FIG_16_kkt_vs_work.png",
+    "figures/FIG_17_density_class_disagreement.png",
+    "figures/FIG_18_oracle_bound_categories.png",
+    "figures/FIG_19_threshold_structure.png",
+    "figures/FIG_20_causal_comparison.png",
+    "figures/FIG_21_d2_vs_calls.png"
+  ]
+}

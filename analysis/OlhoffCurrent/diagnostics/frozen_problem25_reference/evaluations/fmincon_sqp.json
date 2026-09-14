@@ -1,0 +1,13 @@
+{
+ "start": "S1_P19",
+ "algorithm": "sqp",
+ "cap_s": 1800,
+ "MaxIterations": 50,
+ "exitflag": null,
+ "iterations": 0,
+ "wall_s": 2086,
+ "viable": false,
+ "bs": null,
+ "rss_kB_at_kill": 20392896,
+ "message": "fmincon sqp printed iteration 0 and never completed its first dense QP subproblem (n = 28 801); the 30-min OutputFcn cap cannot fire inside a QP, so the process was killed at 34:46 wall with RSS 20.4 GB. Recorded as NOT NUMERICALLY VIABLE, not as a disagreement."
+}

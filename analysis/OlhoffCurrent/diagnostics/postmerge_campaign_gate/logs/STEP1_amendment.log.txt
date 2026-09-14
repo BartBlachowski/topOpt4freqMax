@@ -1,0 +1,104 @@
+  probe P0   expected=1 actual=1
+  probe P1   expected=1 actual=1
+  probe P2   expected=0 actual=0
+  probe P3   expected=0 actual=0
+  probe P4   expected=0 actual=0
+  probe P5   expected=0 actual=0
+  probe P6   expected=0 actual=0
+  probe P7   expected=0 actual=0
+  probe P8   expected=0 actual=0
+  probe P9   expected=0 actual=0
+  probe P10  expected=0 actual=0
+  probe P11  expected=1 actual=1
+  probe P12  expected=0 actual=0
+  probe P13  expected=0 actual=0
+  probe P14  expected=0 actual=0
+  probe P15  expected=0 actual=0
+  probe P16  expected=0 actual=0
+  probe P17  expected=0 actual=0
+  probe P18  expected=0 actual=0
+  probe P19  expected=1 actual=1
+  probe P20  expected=0 actual=0
+  probe P21  expected=0 actual=0
+  probe P22  expected=0 actual=0
+  probe P23  expected=0 actual=0
+  probe P24  expected=0 actual=0
+  probe P25  expected=0 actual=0
+  probe P26  expected=0 actual=0
+  probe P27  expected=0 actual=0
+  probe P28  expected=0 actual=0
+  probe P29  expected=0 actual=0
+  probe P30  expected=0 actual=0
+  probe P31  expected=0 actual=0
+  probe P32  expected=0 actual=0
+  probe P33  expected=0 actual=0
+  probe P34  expected=0 actual=0
+  probe P35  expected=0 actual=0
+  probe P36  expected=0 actual=0
+  probe P37  expected=0 actual=0
+  probe P38  expected=0 actual=0
+STEP1-A committed probes: 39/39 as expected
+
+========================================================================
+FINALIZATION GATE  /private/var/folders/6b/jnh3zrqx6rb4k17mvvy0wb6m0000gn/T/tpbb95f8a4_00a2_4e10_8896_61940c1a82e5_step1A/analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation
+========================================================================
+  [PASS] G1  declares raw evidence (EVIDENCE.json)
+  [FAIL] G2  required declared artifacts present + hash-valid
+  [PASS] G3  FINAL_SHA256.txt present
+  [FAIL] G4  every FINAL_SHA256.txt line verifies on its own
+  [FAIL] G5  no .mat named by its manifests is absent
+  [PASS] G6  current production source = committed HEAD
+        MISSING   analysis/OlhoffCurrent/evidence/two_branch_controller_validation/C160x20_trajectory.mat
+        MISSING   analysis/OlhoffCurrent/evidence/two_branch_controller_validation/C320x40_trajectory.mat
+        MISSING   analysis/OlhoffCurrent/evidence/two_branch_controller_validation/C400x50_trajectory.mat
+        MISSING   analysis/OlhoffCurrent/evidence/move_activity_400/F400_400x50_trajectory.mat
+        MISSING   analysis/OlhoffCurrent/evidence/move_activity_400/P400_400x50_trajectory.mat
+  HISTORICAL SOURCE: HISTORICAL_SOURCE_HASH_VERIFIED
+        line 103 HISTORICAL_VERIFIED  analysis/OlhoffCurrent/SOURCE_MANIFEST.json  digest = blob at freeze commit bba45e72ea18 (path last changed in 1438aa3f4bd9)
+        line 105 HISTORICAL_VERIFIED  analysis/OlhoffCurrent/+impl/architecture/+olh/+move/limit.m  digest = blob at freeze commit bba45e72ea18 (path last changed in 1438aa3f4bd9)
+        line 106 HISTORICAL_VERIFIED  analysis/OlhoffCurrent/+impl/architecture/olhoffSolve.m  digest = blob at freeze commit bba45e72ea18 (path last changed in 1438aa3f4bd9)
+        line 107 HISTORICAL_VERIFIED  analysis/OlhoffCurrent/+impl/architecture/+olh/+config/schema.m  digest = blob at freeze commit bba45e72ea18 (path last changed in 1438aa3f4bd9)
+        line 108 HISTORICAL_VERIFIED  analysis/OlhoffCurrent/+impl/architecture/+olh/+config/validate.m  digest = blob at freeze commit bba45e72ea18 (path last changed in 1438aa3f4bd9)
+        line 109 HISTORICAL_VERIFIED  analysis/OlhoffCurrent/+impl/architecture/+olh/+config/toLegacy.m  digest = blob at freeze commit bba45e72ea18 (path last changed in 1438aa3f4bd9)
+        line 110 HISTORICAL_VERIFIED  analysis/OlhoffCurrent/+impl/architecture/+olh/+config/fromLegacy.m  digest = blob at freeze commit bba45e72ea18 (path last changed in 1438aa3f4bd9)
+  CURRENT SOURCE:    CURRENT_SOURCE_HASH_VERIFIED (HEAD b21483b158f5, 79 files, tree 4ba9a3ae1088)
+        ABSENT .mat  analysis/OlhoffCurrent/evidence/move_activity_400/F400_400x50_trajectory.mat
+        ABSENT .mat  analysis/OlhoffCurrent/evidence/move_activity_400/P400_400x50_trajectory.mat
+        ABSENT .mat  analysis/OlhoffCurrent/evidence/two_branch_controller_validation/C160x20_trajectory.mat
+        ABSENT .mat  analysis/OlhoffCurrent/evidence/two_branch_controller_validation/C320x40_trajectory.mat
+        ABSENT .mat  analysis/OlhoffCurrent/evidence/two_branch_controller_validation/C400x50_trajectory.mat
+  RESULT: FAIL
+
+STEP1-B R1 ok=0 historical=7 HISTORICAL_SOURCE_HASH_VERIFIED CURRENT_SOURCE_HASH_VERIFIED
+STEP1-C original P0  expect=1 got=1  baseline compliant study
+STEP1-C original P1  expect=1 got=0  J1 replica: real historical digest, same path
+STEP1-C original P2  expect=0 got=0  J2 replica: fabricated digest
+STEP1-C original P3  expect=0 got=0  historical digest of a DIFFERENT source path (limit.m digest on olhoffSolve.m line)
+STEP1-C original P4  expect=0 got=0  historical digest of a NON-source file (README.md @013cc48)
+STEP1-C original P5  expect=0 got=0  DUPLICATE path: fabricated line FOLLOWED by real historical line
+STEP1-C original P6  expect=0 got=0  DUPLICATE path: real historical line followed by fabricated line
+STEP1-C original P7  expect=0 got=0  empty-content digest, path never deleted in history
+STEP1-C original P8  expect=0 got=0  real historical digest but +impl locally edited (manifest fails)
+STEP1-C original P9  expect=0 got=0  empty-content digest, path deleted+re-added in history (fabricated: content never empty)
+STEP1-C original P10 got=0
+[Warning: Removed
+'/private/var/folders/6b/jnh3zrqx6rb4k17mvvy0wb6m0000gn/T/tpdf8a3892_d96c_4d77_9526_efa3cb726f60_step1C/analysis/OlhoffCurrent'
+from the MATLAB path for this MATLAB session.
+	See 'doc path' for more information.] 
+[> In pmg_step1>local_rmrf (line 58)
+In pmg_step1>@()local_rmrf(C2) (line 36)
+In onCleanup/delete (line 29)
+In pmg_step1 (line 52)] 
+
+ans = 
+
+  struct with fields:
+
+          tip: 'b21483b158f58e05e7b56957f2fbe8e1d2891395'
+         when: '13-Sep-2026 22:23:45'
+       matlab: '25.2.0.2998904 (R2025b)'
+    cloneHead: 'b21483b158f58e05e7b56957f2fbe8e1d2891395'
+            A: [1×1 struct]
+            B: [1×1 struct]
+            C: [1×1 struct]
+

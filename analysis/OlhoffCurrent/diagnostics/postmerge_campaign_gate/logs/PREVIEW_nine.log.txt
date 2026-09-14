@@ -1,0 +1,46 @@
+PREVIEW 160x20   hash=b1a5744df798ad624fcd0b8b4306888eb99816ee5ce60f51040e39e03e90d4f4 harness=b1a5744df798 tol=0.05 R=0.06 rminEl=1.2 maxOuter=400
+PREVIEW 240x30   hash=2fac1384239527b1a0108e1d34725021cdc7c5a26f1939b602239415b34847e1 harness=2fac13842395 tol=0.075 R=0.06 rminEl=1.8 maxOuter=400
+PREVIEW 320x40   hash=a1203d43efb240308cfcb520c92a6d9bc37a0c703c728fc2f3d298f779bc5f6e harness=a1203d43efb2 tol=0.1 R=0.06 rminEl=2.4 maxOuter=400
+PREVIEW 400x50   hash=e40c6ba16c9addbb587d08ecab29669f7db560d09b980ca62c2096856b849280 harness=e40c6ba16c9a tol=0.125 R=0.06 rminEl=3 maxOuter=400
+PREVIEW 480x60   hash=8e55d18251152ec2d26836593489c14f4842390d912d7c66f43f3b18730c83de harness=8e55d1825115 tol=0.15 R=0.06 rminEl=3.6 maxOuter=400
+PREVIEW 560x70   hash=8b2533a3caf8432d40a54dbcbd8958900e333c410527d5547c53699b9e373ccf harness=8b2533a3caf8 tol=0.175 R=0.06 rminEl=4.2 maxOuter=400
+PREVIEW 640x80   hash=cbe8dcf070d3e318a889867b5168fdbb09f1b6babfd46f981447d96e9a073aaf harness=cbe8dcf070d3 tol=0.2 R=0.06 rminEl=4.8 maxOuter=400
+PREVIEW 720x90   hash=2893ad47136fc9a7775f1f4d9ff1dcba38e7fe14271dd12b5727ff4bd8bb54f3 harness=2893ad47136f tol=0.225 R=0.06 rminEl=5.4 maxOuter=400
+PREVIEW 800x100  hash=f9138743067afd0edce255ad26a6d7ae5c0f632a537516a4793eafecbacbe4cd harness=f9138743067a tol=0.25 R=0.06 rminEl=6 maxOuter=400
+                nine_meshes_resolved_not_solved: 1
+    preset_is_recorded_production_and_benchmark: 1
+             harness_route_hash_equals_api_hash: 1
+                      only_mesh_bound_rows_vary: 1
+             stop_tolerance_is_mesh_scaled_rule: 1
+                  material_pedersen_linear_mass: 1
+                                        no_eq4b: 1
+                              no_p_continuation: 1
+                                  no_projection: 1
+                     fixed_physical_radius_0p06: 1
+                                   adaptive_box: 1
+                     natural_design_change_stop: 1
+                            no_stage_exhaustion: 1
+                             nested_mma_no_socp: 1
+      maxOuter_400_single_thread_no_diagnostics: 1
+                       distinct_hashes_per_mesh: 1
+
+PREVIEW varying rows: domain.mesh.nelx, domain.mesh.nely, stop.tolerance, runtime.name
+PREVIEW PASS=1
+
+ans = 
+
+  struct with fields:
+
+                        preset: 'duOlhoffPedersenAdaptiveBoxSensitivityFiltered'
+    recorded_production_preset: 'duOlhoffPedersenAdaptiveBoxSensitivityFiltered'
+              benchmark_preset: 'duOlhoffPedersenAdaptiveBoxSensitivityFiltered'
+               upstream_preset: 'duOlhoffAdaptivePedersen'
+               upstream_commit: '253069262407885a8b759a9e721c4f0a7d3a397d'
+                          role: 'DISTINCT_FORMULATION'
+                 n_schema_rows: 87
+                        solved: 0
+                        meshes: [1×9 struct]
+    rows_varying_across_meshes: {1×4 cell}
+                        checks: [1×1 struct]
+                          pass: 1
+

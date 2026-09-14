@@ -1,0 +1,4 @@
+ Iter  Func-count            Fval   Feasibility   Step Length       Norm of   First-order  
+                                                                       step    optimality
+    0           1   -1.000005e+00     0.000e+00     1.000e+00     0.000e+00     1.000e+00  
+manual cap: sqp still inside its first QP after 34:46 (RSS 20392896 kB); killed at 35 min

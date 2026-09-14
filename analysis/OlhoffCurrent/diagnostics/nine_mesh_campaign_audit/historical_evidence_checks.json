@@ -1,0 +1,425 @@
+[
+  {
+    "study": "two_branch_controller_validation",
+    "path": "analysis/OlhoffCurrent/evidence/two_branch_controller_validation/C160x20_trajectory.mat",
+    "class": "required",
+    "exists": true,
+    "expected": "4d11a2fdc1c985b15dea74cc234ed9d1f658960c1d42bfd8092770cc1b658832",
+    "actual": "4d11a2fdc1c985b15dea74cc234ed9d1f658960c1d42bfd8092770cc1b658832",
+    "match": true
+  },
+  {
+    "study": "two_branch_controller_validation",
+    "path": "analysis/OlhoffCurrent/evidence/two_branch_controller_validation/C320x40_trajectory.mat",
+    "class": "required",
+    "exists": true,
+    "expected": "c9d4d76649de605690acecad185875f400dedea6c287cd91d4ee8b644ea328c0",
+    "actual": "c9d4d76649de605690acecad185875f400dedea6c287cd91d4ee8b644ea328c0",
+    "match": true
+  },
+  {
+    "study": "two_branch_controller_validation",
+    "path": "analysis/OlhoffCurrent/evidence/two_branch_controller_validation/C400x50_trajectory.mat",
+    "class": "required",
+    "exists": true,
+    "expected": "fa0e714c712889a1442c8063d1ec809244bc42701883cf74366efb0a2019045e",
+    "actual": "fa0e714c712889a1442c8063d1ec809244bc42701883cf74366efb0a2019045e",
+    "match": true
+  },
+  {
+    "study": "three_rung_resolution_240",
+    "path": "analysis/OlhoffCurrent/evidence/three_rung_resolution_240/C240x30_trajectory.mat",
+    "class": "required",
+    "exists": true,
+    "expected": "183d7ce60d512fc2c045c3cb575404b00c8f0e223adaf97db86c9eef1fd50b0d",
+    "actual": "183d7ce60d512fc2c045c3cb575404b00c8f0e223adaf97db86c9eef1fd50b0d",
+    "match": true
+  },
+  {
+    "study": "three_rung_resolution_240",
+    "path": "analysis/OlhoffCurrent/diagnostics/three_rung_resolution_240/runs/C240x30_iterations.csv",
+    "class": "required",
+    "exists": true,
+    "expected": "59e15066a7c3edee9327b851ebddec6ed5e45a94f411d9bb728d51a9f16c4da6",
+    "actual": "59e15066a7c3edee9327b851ebddec6ed5e45a94f411d9bb728d51a9f16c4da6",
+    "match": true
+  },
+  {
+    "study": "three_rung_resolution_240",
+    "path": "analysis/OlhoffCurrent/diagnostics/three_rung_resolution_240/runs/C240x30_record.json",
+    "class": "required",
+    "exists": true,
+    "expected": "070909b83c1fa68499521391f3c5fae0646e68d9453e0287560ea7ed47872c51",
+    "actual": "070909b83c1fa68499521391f3c5fae0646e68d9453e0287560ea7ed47872c51",
+    "match": true
+  },
+  {
+    "study": "three_rung_resolution_240",
+    "path": "analysis/OlhoffCurrent/evidence/two_branch_controller_validation/C160x20_trajectory.mat",
+    "class": "required",
+    "exists": true,
+    "expected": "4d11a2fdc1c985b15dea74cc234ed9d1f658960c1d42bfd8092770cc1b658832",
+    "actual": "4d11a2fdc1c985b15dea74cc234ed9d1f658960c1d42bfd8092770cc1b658832",
+    "match": true
+  },
+  {
+    "study": "three_rung_resolution_240",
+    "path": "analysis/OlhoffCurrent/evidence/two_branch_controller_validation/C320x40_trajectory.mat",
+    "class": "required",
+    "exists": true,
+    "expected": "c9d4d76649de605690acecad185875f400dedea6c287cd91d4ee8b644ea328c0",
+    "actual": "c9d4d76649de605690acecad185875f400dedea6c287cd91d4ee8b644ea328c0",
+    "match": true
+  },
+  {
+    "study": "three_rung_resolution_240",
+    "path": "analysis/OlhoffCurrent/evidence/two_branch_controller_validation/C400x50_trajectory.mat",
+    "class": "required",
+    "exists": true,
+    "expected": "fa0e714c712889a1442c8063d1ec809244bc42701883cf74366efb0a2019045e",
+    "actual": "fa0e714c712889a1442c8063d1ec809244bc42701883cf74366efb0a2019045e",
+    "match": true
+  },
+  {
+    "study": "three_rung_resolution_240",
+    "path": "analysis/OlhoffCurrent/diagnostics/three_rung_architecture/METRICS.json",
+    "class": "required",
+    "exists": true,
+    "expected": "e09fd62439da070818ac0eb37559deeaefabac1418393558e14619ac6f996437",
+    "actual": "e09fd62439da070818ac0eb37559deeaefabac1418393558e14619ac6f996437",
+    "match": true
+  },
+  {
+    "study": "three_rung_resolution_240",
+    "path": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/scripts/cv_config.m",
+    "class": "required",
+    "exists": true,
+    "expected": "b41fb5a5f496b75ff03ae4493feb4afc3127f64e74679807bbac22c868b96e20",
+    "actual": "b41fb5a5f496b75ff03ae4493feb4afc3127f64e74679807bbac22c868b96e20",
+    "match": true
+  },
+  {
+    "study": "three_rung_resolution_240",
+    "path": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/scripts/cv_telemetry.m",
+    "class": "required",
+    "exists": true,
+    "expected": "dd69a6c5f03ddd117dd1488628ac5c5fbefd3563e2e76d62ed7b4cbcfa842806",
+    "actual": "dd69a6c5f03ddd117dd1488628ac5c5fbefd3563e2e76d62ed7b4cbcfa842806",
+    "match": true
+  },
+  {
+    "study": "three_rung_resolution_240",
+    "path": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/scripts/cv_export.m",
+    "class": "required",
+    "exists": true,
+    "expected": "fb2f5099dcf31b560fe34b7cdc7979bf2b7b12ba7d58398803c1e035512ddf54",
+    "actual": "fb2f5099dcf31b560fe34b7cdc7979bf2b7b12ba7d58398803c1e035512ddf54",
+    "match": true
+  },
+  {
+    "study": "three_rung_resolution_240",
+    "path": "analysis/OlhoffCurrent/diagnostics/two_branch_maturity_240/METRICS.json",
+    "class": "optional",
+    "exists": true,
+    "expected": "fbf7433e2efeba0edb4f793c19b2529070762f452a785cef1b7d5192555eb7b1",
+    "actual": "fbf7433e2efeba0edb4f793c19b2529070762f452a785cef1b7d5192555eb7b1",
+    "match": true
+  },
+  {
+    "study": "three_rung_architecture",
+    "path": "analysis/OlhoffCurrent/evidence/two_branch_controller_validation/C160x20_trajectory.mat",
+    "class": "required",
+    "exists": true,
+    "expected": "4d11a2fdc1c985b15dea74cc234ed9d1f658960c1d42bfd8092770cc1b658832",
+    "actual": "4d11a2fdc1c985b15dea74cc234ed9d1f658960c1d42bfd8092770cc1b658832",
+    "match": true
+  },
+  {
+    "study": "three_rung_architecture",
+    "path": "analysis/OlhoffCurrent/evidence/two_branch_controller_validation/C320x40_trajectory.mat",
+    "class": "required",
+    "exists": true,
+    "expected": "c9d4d76649de605690acecad185875f400dedea6c287cd91d4ee8b644ea328c0",
+    "actual": "c9d4d76649de605690acecad185875f400dedea6c287cd91d4ee8b644ea328c0",
+    "match": true
+  },
+  {
+    "study": "three_rung_architecture",
+    "path": "analysis/OlhoffCurrent/evidence/two_branch_controller_validation/C400x50_trajectory.mat",
+    "class": "required",
+    "exists": true,
+    "expected": "fa0e714c712889a1442c8063d1ec809244bc42701883cf74366efb0a2019045e",
+    "actual": "fa0e714c712889a1442c8063d1ec809244bc42701883cf74366efb0a2019045e",
+    "match": true
+  },
+  {
+    "study": "three_rung_architecture",
+    "path": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/runs/C160x20_iterations.csv",
+    "class": "required",
+    "exists": true,
+    "expected": "7121c9d3a16f1ebcd5eb2c9b6f6c242b90b9ec2ac4690a385cfb7e1102de0ce9",
+    "actual": "7121c9d3a16f1ebcd5eb2c9b6f6c242b90b9ec2ac4690a385cfb7e1102de0ce9",
+    "match": true
+  },
+  {
+    "study": "three_rung_architecture",
+    "path": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/runs/C320x40_iterations.csv",
+    "class": "required",
+    "exists": true,
+    "expected": "ff570d6e4d024f360974ab065c3042127404b7073a66ed972bfd8718563b356c",
+    "actual": "ff570d6e4d024f360974ab065c3042127404b7073a66ed972bfd8718563b356c",
+    "match": true
+  },
+  {
+    "study": "three_rung_architecture",
+    "path": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/runs/C400x50_iterations.csv",
+    "class": "required",
+    "exists": true,
+    "expected": "e2346b67280dbee3b2531bc9852295fac03339f81f671205eabcf1255a0e355d",
+    "actual": "e2346b67280dbee3b2531bc9852295fac03339f81f671205eabcf1255a0e355d",
+    "match": true
+  },
+  {
+    "study": "three_rung_architecture",
+    "path": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/evidence/baselines.json",
+    "class": "required",
+    "exists": true,
+    "expected": "08b48346da8685398e293a320f1124b5d069344a265209279571570710b4c571",
+    "actual": "a4b55671c26187bb2aaf7c466eb990bf1164a7d9fe14dddc1b5f4bd8738f420e",
+    "match": false
+  },
+  {
+    "study": "three_rung_architecture",
+    "path": "analysis/OlhoffCurrent/evidence/move_activity_400/P400_400x50_trajectory.mat",
+    "class": "optional",
+    "exists": true,
+    "expected": "1dc20dbd6a0dacbd067802901fd6d78364306a5641be84a6e2216b4038917660",
+    "actual": "1dc20dbd6a0dacbd067802901fd6d78364306a5641be84a6e2216b4038917660",
+    "match": true
+  },
+  {
+    "study": "three_rung_architecture",
+    "path": "analysis/OlhoffCurrent/diagnostics/move_ladder_necessity/METRICS.json",
+    "class": "optional",
+    "exists": true,
+    "expected": "4ba10e376f40b576e0f4a243a2726f667ba7d8f9ab13916f399c9eb793b538dc",
+    "actual": "4ba10e376f40b576e0f4a243a2726f667ba7d8f9ab13916f399c9eb793b538dc",
+    "match": true
+  },
+  {
+    "study": "three_rung_architecture",
+    "path": "analysis/OlhoffCurrent/diagnostics/two_rung_architecture/METRICS.json",
+    "class": "required",
+    "exists": true,
+    "expected": "01c3003453321dbb8b606d6410a67bd8394520dd1ff59e40ad60c88303602afb",
+    "actual": "01c3003453321dbb8b606d6410a67bd8394520dd1ff59e40ad60c88303602afb",
+    "match": true
+  },
+  {
+    "study": "three_rung_architecture",
+    "path": "analysis/OlhoffCurrent/diagnostics/two_rung_architecture/evidence/event_verification.json",
+    "class": "required",
+    "exists": true,
+    "expected": "979d23c4e198a08b34bde6aec6b619010f297faca6b5a6e9aa7763698a7e9d61",
+    "actual": "979d23c4e198a08b34bde6aec6b619010f297faca6b5a6e9aa7763698a7e9d61",
+    "match": true
+  },
+  {
+    "study": "three_rung_promotion_validation_retry1",
+    "path": "analysis/OlhoffCurrent/evidence/three_rung_promotion_validation_retry1/C320x40_three_rung_trajectory.mat",
+    "class": "required",
+    "exists": false,
+    "expected": "fb29817e1a5de7e3803fd00ef991c1b3cf23baca4aca48e50876b86ca5bbaffe",
+    "actual": null,
+    "match": false
+  },
+  {
+    "study": "three_rung_promotion_validation_retry1",
+    "path": "analysis/OlhoffCurrent/diagnostics/three_rung_promotion_validation_retry1/runs/C320x40_three_rung_iterations.csv",
+    "class": "required",
+    "exists": true,
+    "expected": "1fb031dad81a9426f5bb7d534f4ccd971f122108f23b0d02d0ac88e9e57c5b6e",
+    "actual": "1fb031dad81a9426f5bb7d534f4ccd971f122108f23b0d02d0ac88e9e57c5b6e",
+    "match": true
+  },
+  {
+    "study": "three_rung_promotion_validation_retry1",
+    "path": "analysis/OlhoffCurrent/diagnostics/three_rung_promotion_validation_retry1/runs/C320x40_three_rung_record.json",
+    "class": "required",
+    "exists": true,
+    "expected": "fd57df3c9bfcdb46e5a8fb0f48a9e0ec2125b332d047a9866b2ba36b22d61603",
+    "actual": "fd57df3c9bfcdb46e5a8fb0f48a9e0ec2125b332d047a9866b2ba36b22d61603",
+    "match": true
+  },
+  {
+    "study": "three_rung_promotion_validation_retry1",
+    "path": "analysis/OlhoffCurrent/diagnostics/three_rung_promotion_validation_retry1/evidence/oracle_C320x40_iterations_HEAD.csv",
+    "class": "required",
+    "exists": true,
+    "expected": "ff570d6e4d024f360974ab065c3042127404b7073a66ed972bfd8718563b356c",
+    "actual": "ff570d6e4d024f360974ab065c3042127404b7073a66ed972bfd8718563b356c",
+    "match": true
+  },
+  {
+    "study": "three_rung_promotion_validation_retry1",
+    "path": "analysis/OlhoffCurrent/diagnostics/three_rung_promotion_validation_retry1/evidence/prefix_equivalence.json",
+    "class": "required",
+    "exists": true,
+    "expected": "5516ed82b5be121586afcd1bac182437ff5f328fee405d6ff8901a3c4e3419e4",
+    "actual": "5516ed82b5be121586afcd1bac182437ff5f328fee405d6ff8901a3c4e3419e4",
+    "match": true
+  },
+  {
+    "study": "three_rung_promotion_validation_retry1",
+    "path": "analysis/OlhoffCurrent/diagnostics/three_rung_promotion_validation_retry1/evidence/singlefactor.json",
+    "class": "required",
+    "exists": true,
+    "expected": "3db2af69550ede9b737f7534ab8d4479afde9329500cdf9842db1fe90981cd0b",
+    "actual": "3db2af69550ede9b737f7534ab8d4479afde9329500cdf9842db1fe90981cd0b",
+    "match": true
+  },
+  {
+    "study": "three_rung_promotion_validation_retry1",
+    "path": "analysis/OlhoffCurrent/diagnostics/three_rung_promotion_validation_retry1/evidence/software_tests.json",
+    "class": "required",
+    "exists": true,
+    "expected": "12ab240b7cdebdd7103e76e35ad08201c43a95265ecd9cf5d9c7df05b4a27bb5",
+    "actual": "12ab240b7cdebdd7103e76e35ad08201c43a95265ecd9cf5d9c7df05b4a27bb5",
+    "match": true
+  },
+  {
+    "study": "three_rung_promotion_validation_retry1",
+    "path": "analysis/OlhoffCurrent/diagnostics/three_rung_promotion_validation_retry1/evidence/inventory.json",
+    "class": "required",
+    "exists": true,
+    "expected": "911e80b112961acf76db69c46a6b76b5bf24bd7002d303c0d947f277a6dae07d",
+    "actual": "911e80b112961acf76db69c46a6b76b5bf24bd7002d303c0d947f277a6dae07d",
+    "match": true
+  },
+  {
+    "study": "three_rung_promotion_validation_retry1",
+    "path": "analysis/OlhoffCurrent/diagnostics/three_rung_promotion_validation_retry1/evidence/gates.json",
+    "class": "required",
+    "exists": true,
+    "expected": "95b409e9331cce4c96e73e6f1d7c0217fb8f696e8eb6a8de5443176729c823e7",
+    "actual": "95b409e9331cce4c96e73e6f1d7c0217fb8f696e8eb6a8de5443176729c823e7",
+    "match": true
+  },
+  {
+    "study": "three_rung_promotion_validation_retry1",
+    "path": "analysis/OlhoffCurrent/evidence/two_branch_controller_validation/C320x40_trajectory.mat",
+    "class": "optional",
+    "exists": true,
+    "expected": "4892c10ef17bca921063832d3edf1d08d15db10f739164ea9d388df143e52bf0",
+    "actual": "c9d4d76649de605690acecad185875f400dedea6c287cd91d4ee8b644ea328c0",
+    "match": false
+  },
+  {
+    "study": "three_rung_promotion_closure",
+    "path": "analysis/OlhoffCurrent/diagnostics/three_rung_promotion_closure/evidence/inventory.json",
+    "class": "required",
+    "exists": true,
+    "expected": "963b15e4007d62a86c71a9b57040a96cdf509dcc4784e896d97625c49270a8ce",
+    "actual": "963b15e4007d62a86c71a9b57040a96cdf509dcc4784e896d97625c49270a8ce",
+    "match": true
+  },
+  {
+    "study": "three_rung_promotion_closure",
+    "path": "analysis/OlhoffCurrent/diagnostics/three_rung_promotion_closure/evidence/blockers.json",
+    "class": "required",
+    "exists": true,
+    "expected": "1bea13654fb64caad37ee0e351e0e86fc1ce718de40c3d9795d483277b6c9eaa",
+    "actual": "1bea13654fb64caad37ee0e351e0e86fc1ce718de40c3d9795d483277b6c9eaa",
+    "match": true
+  },
+  {
+    "study": "three_rung_promotion_closure",
+    "path": "analysis/OlhoffCurrent/diagnostics/three_rung_promotion_closure/evidence/policy_recovery.json",
+    "class": "required",
+    "exists": true,
+    "expected": "54fb77ee0a7fb3240f20721850e2ec34e275ebf0b2ec6f8bf17cc00662ee6181",
+    "actual": "54fb77ee0a7fb3240f20721850e2ec34e275ebf0b2ec6f8bf17cc00662ee6181",
+    "match": true
+  },
+  {
+    "study": "three_rung_promotion_closure",
+    "path": "analysis/OlhoffCurrent/diagnostics/three_rung_promotion_closure/evidence/software_tests.json",
+    "class": "required",
+    "exists": true,
+    "expected": "2ee5f26ce2afd319d2192876552d59be23f2937e516793dc13cc9be60f79d791",
+    "actual": "2ee5f26ce2afd319d2192876552d59be23f2937e516793dc13cc9be60f79d791",
+    "match": true
+  },
+  {
+    "study": "three_rung_promotion_closure",
+    "path": "analysis/OlhoffCurrent/diagnostics/three_rung_promotion_closure/evidence/two_branch_FINAL_SHA256.BEFORE.txt",
+    "class": "required",
+    "exists": true,
+    "expected": "2fb9fc731d816e5c47c9835d5f777f8bb3be2fe61773ca00119049ed2bf5e0e0",
+    "actual": "2fb9fc731d816e5c47c9835d5f777f8bb3be2fe61773ca00119049ed2bf5e0e0",
+    "match": true
+  },
+  {
+    "study": "three_rung_promotion_closure",
+    "path": "analysis/OlhoffCurrent/diagnostics/three_rung_promotion_closure/evidence/preserved_working_copies/C320x40_iterations.WORKING_COPY.csv",
+    "class": "required",
+    "exists": true,
+    "expected": "6ac72fa880f2e9fb545afcabbd092fe6be32bc132845e55d61b6d5baa4325a22",
+    "actual": "6ac72fa880f2e9fb545afcabbd092fe6be32bc132845e55d61b6d5baa4325a22",
+    "match": true
+  },
+  {
+    "study": "three_rung_promotion_closure",
+    "path": "analysis/OlhoffCurrent/diagnostics/three_rung_promotion_closure/evidence/preserved_working_copies/C320x40_record.WORKING_COPY.json",
+    "class": "required",
+    "exists": true,
+    "expected": "765604214a4074ab133d131befec243d93fd502de404570be76d4a5e78c28e55",
+    "actual": "765604214a4074ab133d131befec243d93fd502de404570be76d4a5e78c28e55",
+    "match": true
+  },
+  {
+    "study": "three_rung_promotion_closure",
+    "path": "analysis/OlhoffCurrent/diagnostics/three_rung_promotion_validation_retry1/METRICS.json",
+    "class": "required",
+    "exists": true,
+    "expected": "f6723dffc858ad28bf7f937e6052b067dcb8a25b033e1d6074e1fc9c43608d79",
+    "actual": "f6723dffc858ad28bf7f937e6052b067dcb8a25b033e1d6074e1fc9c43608d79",
+    "match": true
+  },
+  {
+    "study": "three_rung_promotion_closure",
+    "path": "analysis/OlhoffCurrent/diagnostics/three_rung_promotion_validation_retry1/FINAL_SHA256.txt",
+    "class": "required",
+    "exists": true,
+    "expected": "f6bcf03f7f069dea91ece9482974abbc1b0ffb0502a3d1937f4e62dcf4a6d043",
+    "actual": "f6bcf03f7f069dea91ece9482974abbc1b0ffb0502a3d1937f4e62dcf4a6d043",
+    "match": true
+  },
+  {
+    "study": "three_rung_promotion_closure",
+    "path": "analysis/OlhoffCurrent/evidence/three_rung_promotion_validation_retry1/C320x40_three_rung_trajectory.mat",
+    "class": "optional",
+    "exists": false,
+    "expected": "fb29817e1a5de7e3803fd00ef991c1b3cf23baca4aca48e50876b86ca5bbaffe",
+    "actual": null,
+    "match": false
+  },
+  {
+    "study": "move_activity_400",
+    "path": "analysis/OlhoffCurrent/evidence/move_activity_400/P400_400x50_trajectory.mat",
+    "class": "required",
+    "exists": true,
+    "expected": "0f4d2dacb2fc40d14399cba603f158a160b4b2b0849a52e679f068cbc939c517",
+    "actual": "1dc20dbd6a0dacbd067802901fd6d78364306a5641be84a6e2216b4038917660",
+    "match": false
+  },
+  {
+    "study": "move_activity_400",
+    "path": "analysis/OlhoffCurrent/evidence/move_activity_400/F400_400x50_trajectory.mat",
+    "class": "required",
+    "exists": true,
+    "expected": "f03cec07b45f71633d5fe125dcec84df5a64d5d55c7e5b90305e5c5144fe165c",
+    "actual": "c53680e86b7010e962b9f5a48a55fdc7c3e659150e05994c9bbffa1275035ded",
+    "match": false
+  }
+]

@@ -1,0 +1,158 @@
+  ok   defaults cover every schema field
+  ok   defaults validate
+  ok   frozen preset resolves
+  ok   provenance records the preset
+  ok   mesh override applied
+  ok   mesh-scaled tolerance re-derived AFTER the override
+  ok   tolerance at 240x30 matches the stored historical value
+  ok   preset chain reaches the full formulation
+  ok   refuses unknown field            -> olh:config:unknownField
+  ok   refuses unknown override         -> olh:config:unknownOverride
+  ok   refuses unknown preset           -> olh:presets:unknown
+  ok   refuses bad enum                 -> olh:config:badEnum
+  ok   refuses bad type                 -> olh:config:badType
+  ok   refuses out of range             -> olh:config:outOfRange
+  ok   refuses projection + sens flt    -> olh:config:projectionNeedsDensityFilter
+  ok   refuses projection, no levels    -> olh:config:projectionNeedsSchedule
+  ok   refuses non-monotone beta        -> olh:config:projectionScheduleNotMonotone
+  ok   refuses ladder guard, no ladder  -> olh:config:ladderGuardNeedsLadder
+  ok   refuses p driver needs ladder    -> olh:config:pDriverNeedsLadder
+  ok   refuses mass cont. without p     -> olh:config:massContinuationNeedsP
+  ok   refuses inert mass schedule      -> olh:config:massContinuationIsNoOp
+  ok   refuses subspace > maxCluster    -> olh:config:subspaceTooLarge
+  ok   refuses odd nely, mid support    -> olh:config:midSupportNeedsEvenNely
+  ok   refuses ascending ladder         -> olh:config:ladderNotDescending
+  ok   refuses lp + projection          -> olh:config:projectionLpUnsupported
+  ok   refuses no filter radius         -> olh:config:noFilterRadius
+[Warning: move.policy='ladder' without stop.guards.settledMove: under a ladder
+||drho||_inf <= mv_k, so on an iteration where the move limit changes the
+measured step reports the SCHEDULE, not the design, and the convergence test is
+uninterpretable there.] 
+[> In olh.config.resolve (line 53)
+In test_config (line 74)
+In pmg_suites>local_run (line 97)
+In pmg_suites (line 78)] 
+  ok   ladder without settledMove WARNS
+  ok   and is NOT coerced back
+  ok   preset duOlhoffFrozenM4         validates
+  ok   preset duOlhoffOuterAsymptotes  validates
+  ok   preset duOlhoffAdaptiveMove     validates
+  ok   preset duOlhoffAdaptivePedersen validates
+  ok   preset duOlhoffMatureM4         validates
+  ok   preset restorationLadderGuard   validates
+  ok   preset noDescentFixedMove       validates
+  ok   preset pContinuationCoupled     validates
+  ok   preset pContinuationDecoupled   validates
+  ok   preset pMassCompatible          validates
+  ok   preset projectionIdentity       validates
+  ok   preset projected                validates
+  ok   preset legacyBinaryDiagonal     validates
+SUITE test_config                                   failures=0 
+  ok   mass value eq2 (bitwise vs the printed equation)
+  ok   mass value eq4 (bitwise vs the printed equation)
+  ok   mass value eq4a (bitwise vs the printed equation)
+  ok   mass value eq4b (bitwise vs the printed equation)
+  ok   mass derivative eq2 (max rel err 5.26e-10 vs central FD)
+  ok   mass derivative eq4 (max rel err 5.26e-10 vs central FD)
+  ok   mass derivative eq4a (max rel err 5.26e-10 vs central FD)
+  ok   mass derivative eq4b (max rel err 5.26e-10 vs central FD)
+  ok   mass continuity eq2   C0=1 C1=1  (jump 2.00e-09, slope jump 0.00e+00)
+  ok   mass continuity eq4   C0=0 C1=0  (jump 1.00e-01, slope jump 1.00e+00)
+  ok   mass continuity eq4a  C0=1 C1=0  (jump 7.00e-09, slope jump 5.00e+00)
+  ok   mass continuity eq4b  C0=1 C1=1  (jump 2.00e-09, slope jump 3.00e-07)
+  ok   eq4a refuses a cut-off its printed coefficients do not fit
+  ok   eq4b refuses a cut-off its printed coefficients do not fit
+  ok   legacy name 'lin' == eq2 (bitwise, value and derivative)
+  ok   legacy name '4' == eq4 (bitwise, value and derivative)
+  ok   legacy name '4a' == eq4a (bitwise, value and derivative)
+  ok   legacy name '4b' == eq4b (bitwise, value and derivative)
+SUITE test_mass                                     failures=0 
+  ok   multiplicity binary      canonical == legacy over 200 spectra
+  ok   multiplicity latch       canonical == legacy over 200 spectra
+  ok   multiplicity hysteresis  canonical == legacy over 200 spectra
+  ok   multiplicity subspace    canonical == legacy over 200 spectra
+  ok   move fixed       canonical == legacy bitwise over 120 iterations
+  ok   move geometric   canonical == legacy bitwise over 120 iterations
+  ok   move ladder      canonical == legacy bitwise over 120 iterations
+  ok   move trustRatio  canonical == legacy bitwise over 120 iterations
+  ok   move signal designRms maps to legacy s2Signal='drms'
+  ok   sensitivity and density filtering are different operators
+  ok   sensitivity filter preserves the sum of rho.*df (top88 form)
+  ok   projection at beta=0 is the EXACT identity
+  ok   projection beta=1 : P(0)=0, P(1)=1, monotone, dP matches FD (1.1e-10)
+  ok   projection beta=2 : P(0)=0, P(1)=1, monotone, dP matches FD (2.5e-10)
+  ok   projection beta=4 : P(0)=0, P(1)=1, monotone, dP matches FD (4.7e-10)
+  ok   projection beta=8 : P(0)=0, P(1)=1, monotone, dP matches FD (1.4e-08)
+  ok   projection beta=16: P(0)=0, P(1)=1, monotone, dP matches FD (9.2e-06)
+  ok   physical density stays inside [rhomin,1]
+  ok   projection chain rule matches FD (max rel err 7.0e-09)
+  ok   projected run exposes z, zTilde and rhoPhys separately
+  ok   res.rho IS the physical density the FE model used
+  ok   the three fields are genuinely distinct under projection
+  ok   hist.dxPhys2 is recorded under projection
+  ok   without projection the design variable IS the density
+  ok   a run stopped by the cap reports CAP_HIT
+  ok   a run meeting the criterion reports CONVERGED (got CONVERGED at outer 2 of 50)
+  ok   CONVERGED runs log the convergence line exactly once
+SUITE test_modules                                  failures=0 
+
+-- preset resolution unchanged since 6b08708 --
+  [PASS] 39 preset x mesh cases
+  test_preset_resolution_unchanged: 0 failure(s)
+SUITE test_preset_resolution_unchanged              failures=0 
+
+-- stage-exhaustion controller --
+  [PASS] 1  A true, B false -> E true
+  [PASS] 2  A false, B true -> E true
+  [PASS] 3  A false, B false -> E false
+  [PASS] 3b documented hole: low-amplitude cancellation -> E false
+  [PASS] 4  persistence boundary: 19 no declaration, 20 declares
+  [PASS] 5  window reset after descent (no pre-transition data, no decl before s+38)
+  [PASS] 6  exactly one rung per accepted transition, applied the iteration after declaration
+  [PASS] 7  move never drops below the last rung 0.005
+  [PASS] 8  beta stall alone cannot descend the move
+  [PASS] 9  beta stall alone cannot admit terminal convergence
+  [PASS] 10 last rung + E false cannot converge
+  [PASS] 11 last rung + persistent E true converges at the declaring iteration
+  [PASS] 12 defaults: stop.rule designChange, signal boundVariable (option off)
+  [PASS] 13 no preset selects the option
+  [PASS] 14 stop.rule without the signal is refused
+  [PASS] 15 the signal needs the ladder
+  [PASS] 16 the stop rule needs the ladder
+  [PASS] 17 signal + stop rule on the ladder resolves
+  [PASS] 18 projection + stage exhaustion is refused by the solver
+  [PASS] 19 CAP_HIT remains CAP_HIT; trace fields and res.exhaustion present with one entry per iteration
+  [PASS] 20 diagnostics recorder does not alter the trajectory under the option
+  [PASS] 21 option off: no trace fields, no res.exhaustion
+  test_stage_exhaustion: 0 failure(s)
+SUITE test_stage_exhaustion                         failures=0 
+
+-- outer timing telemetry --
+  [PASS] frozen, cap                              nOuter=6 numel(tOuter)=6
+  [PASS] adaptive Pedersen, cap                   nOuter=6 numel(tOuter)=6
+  [PASS] adaptive Pedersen, break at iteration 1  nOuter=1 numel(tOuter)=1
+  [PASS] stage exhaustion, cap                    nOuter=6 numel(tOuter)=6
+  [PASS] anchorRecord excludes tOuter from the science record
+  test_outer_timing: 0 failure(s)
+SUITE test_outer_timing                             failures=0 
+SUITE test_config                                   failures=0 
+SUITE test_mass                                     failures=0 
+SUITE test_modules                                  failures=0 
+SUITE test_preset_resolution_unchanged              failures=0 
+SUITE test_stage_exhaustion                         failures=0 
+SUITE test_outer_timing                             failures=0 
+
+ans = 
+
+  struct with fields:
+
+      repo: '/Users/piotrek/Programming/topOpt4freqMax'
+      kind: 'upstream'
+      when: '13-Sep-2026 22:35:02'
+    matlab: '25.2.0.2998904 (R2025b)'
+      head: 'b21483b158f58e05e7b56957f2fbe8e1d2891395'
+    suites: [1×6 struct]
+      tree: '4ba9a3ae10881344a0e60f2b8a8976c5ec9ceccf966bc2a3da4f37fb5aebffbf'
+    solver: '/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/architecture/olhoffSolve.m'
+     limit: '/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/architecture/+olh/+move/limit.m'
+

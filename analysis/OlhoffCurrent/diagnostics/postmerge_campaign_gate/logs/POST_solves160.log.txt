@@ -1,0 +1,71 @@
+
+========================================================================
+TEST_PRESET_EQUIVALENCE  (historical beta-stall preset vs frozen conference)
+========================================================================
+  --- 160x20 ---
+    [PASS] design vector rho (BITWISE)
+    [PASS] first eigenfrequency (BITWISE)
+    [PASS] volume (BITWISE)
+    [PASS] outer iteration count
+    [PASS] inner iteration count
+    [PASS] convergence status
+    outer 91/91  inner 2241/2241  omega1 169.49522702153845 / 169.49522702153845
+------------------------------------------------------------------------
+  failures: 0
+
+SUITE test_preset_equivalence                       failures=0 
+
+========================================================================
+TEST_NAMED_PRESET_REPRODUCTION
+========================================================================
+  --- duOlhoffPedersenAdaptiveBoxSensitivityFiltered @ 160x20 vs S160x20_reference.json ---
+    [PASS] design vector rho (bitwise)
+    [PASS] eigenvalues omega and lambda (bitwise)
+    [PASS] outer iterations 121 / 121
+    [PASS] cumulative inner iterations 2369 / 2369
+    [PASS] status CONVERGED / CONVERGED
+    [PASS] solver log text
+    [PASS] all 24 non-timing hist fields of the reference (bitwise)
+    [PASS] no hist field beyond the reference (timing excluded)
+    [PASS] res.aux (bitwise)
+    [PASS] additions limited to declared reporting fields {}
+    omega1 169.21057638627477 / 169.21057638627477
+------------------------------------------------------------------------
+  failures: 0
+
+SUITE test_named_preset_reproduction:pedersen       failures=0 
+
+========================================================================
+TEST_NAMED_PRESET_REPRODUCTION
+========================================================================
+  --- duOlhoffSimpEq4bThreeRungStageExhaustionSensitivityFiltered @ 160x20 vs EX3_160_reference.json ---
+    [PASS] design vector rho (bitwise)
+    [PASS] eigenvalues omega and lambda (bitwise)
+    [PASS] outer iterations 180 / 180
+    [PASS] cumulative inner iterations 4283 / 4283
+    [PASS] status CONVERGED / CONVERGED
+    [PASS] solver log text
+    [PASS] all 36 non-timing hist fields of the reference (bitwise)
+    [PASS] no hist field beyond the reference (timing excluded)
+    [PASS] res.exhaustion (bitwise)
+    [PASS] additions limited to declared reporting fields {aux}
+    omega1 169.97512028959605 / 169.97512028959605
+------------------------------------------------------------------------
+  failures: 0
+
+SUITE test_named_preset_reproduction:stageExhaustion failures=0 
+SUITE test_preset_equivalence                       failures=0 
+SUITE test_named_preset_reproduction:pedersen       failures=0 
+SUITE test_named_preset_reproduction:stageExhaustion failures=0 
+
+ans = 
+
+  struct with fields:
+
+      repo: '/Users/piotrek/Programming/topOpt4freqMax'
+      kind: 'solves160'
+      when: '13-Sep-2026 22:34:51'
+    matlab: '25.2.0.2998904 (R2025b)'
+      head: 'b21483b158f58e05e7b56957f2fbe8e1d2891395'
+    suites: [1×3 struct]
+

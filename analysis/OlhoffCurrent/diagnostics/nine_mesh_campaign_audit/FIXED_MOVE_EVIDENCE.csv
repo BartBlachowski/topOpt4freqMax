@@ -1,0 +1,5 @@
+mesh,policy,status,outer,inner,omega1,Mnd,native_stop_iter,evidence
+160x20,fixed_0.04,CAP_HIT,400,11429,169.56039582350002,12.275432989782246,,historical summary; raw trajectory missing
+320x40,fixed_0.04,NATIVE_CONVERGED,216,4070,166.53107093432882,13.282439317279476,216,historical summary; raw trajectory missing
+240x30,fixed_0.04_extended,CAP_HIT,1200,19317,167.01340943448125,13.450724864648356,147,historical summary; raw trajectory missing
+400x50,fixed_0.04_extended,CAP_HIT,1200,21717,166.15714783598264,15.224283309611986,369,historical summary; extended raw trajectory missing

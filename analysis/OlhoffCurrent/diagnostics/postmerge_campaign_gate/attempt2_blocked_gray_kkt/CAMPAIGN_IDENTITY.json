@@ -1,0 +1,129 @@
+{
+ "schema": "olhoffcurrent_campaign_identity/1",
+ "status": "FROZEN \u2014 identity valid for the definitive nine-mesh campaign; campaign NOT authorized by this gate (see CAMPAIGN_AUTHORIZATION.md)",
+ "generated": "2026-09-13",
+ "repository": {
+  "merged_target_branch": "benchmark-methodology-r2",
+  "merged_head": "b21483b158f58e05e7b56957f2fbe8e1d2891395",
+  "migration_branch_tip": "b21483b158f58e05e7b56957f2fbe8e1d2891395",
+  "migration_commits": [
+   "9b30ec45b038fb36e7cf20d57679b71cfd099fb3",
+   "b21483b158f58e05e7b56957f2fbe8e1d2891395"
+  ],
+  "merge_strategy": "fast-forward (no merge commit)",
+  "pre_merge_head": "013cc48451d33bed61c5c4eea174bbd898d548a2"
+ },
+ "implementation": {
+  "upstream_repository": "/Users/piotrek/Programming/Matlab/Olhoff",
+  "upstream_commit": "253069262407885a8b759a9e721c4f0a7d3a397d",
+  "upstream_archive_sha256": "f911240340cab69b9806f98f9413d9038649fde5e14adf3bbe4d57f3ddb0dbeb",
+  "parent_successful_science_commit": "6b0870850d7407a0f2fc31dbf0d0f318c2e5f2f7",
+  "impl_files": 79,
+  "impl_tree_sha256": "4ba9a3ae10881344a0e60f2b8a8976c5ec9ceccf966bc2a3da4f37fb5aebffbf",
+  "source_manifest_sha256": "aee44aa9172a8105314bbb9475e28bed8a53d4d154824a8748abf64a208b1836",
+  "impl_byte_identical_to_upstream": true
+ },
+ "config_schema": {
+  "n_rows": 87,
+  "schema_m_sha256": "3fa03435a0fc54f2863c537b3e926d00023d2df7bbb6eb00001e0ce05eb6584b",
+  "row_list_sha256": "119c548b515335ef9291b3c666cca8ee2294d6145eb5669ad892282f3cd43a86",
+  "n_rows_parsed": 87,
+  "hash_algorithm": "olhoffcurrent_config_hash: SHA-256 over '<row>=<value>' lines of all schema rows in order, runtime.name excluded"
+ },
+ "production": {
+  "preset": "duOlhoffPedersenAdaptiveBoxSensitivityFiltered",
+  "recorded_production_preset": "duOlhoffPedersenAdaptiveBoxSensitivityFiltered",
+  "benchmark_preset": "duOlhoffPedersenAdaptiveBoxSensitivityFiltered",
+  "upstream_preset": "duOlhoffAdaptivePedersen",
+  "role": "DISTINCT_FORMULATION",
+  "production_config_hash_160x20": "b1a5744df798ad624fcd0b8b4306888eb99816ee5ce60f51040e39e03e90d4f4",
+  "anchor_config_hash_160x20": "b1a5744df798ad624fcd0b8b4306888eb99816ee5ce60f51040e39e03e90d4f4",
+  "material_law": {
+   "stiffness": "pedersen",
+   "linearBelow": 0.1,
+   "p": 3,
+   "mass": "eq2",
+   "q": 1,
+   "p_continuation": false
+  },
+  "filter": {
+   "type": "sensitivity",
+   "convention": "sensitivity filtering",
+   "radiusPhysical": 0.06,
+   "domain_b": 1,
+   "radius_rule": "fixed physical R = 0.06*b; rminEl = R/(b/nely) derived at run time (1.2 at 160x20 ... 6 at 800x100)",
+   "radiusElements_row": "NaN (derived)"
+  },
+  "adaptive_box": {
+   "policy": "adaptive",
+   "initial_and_ceiling": 0.1,
+   "floor": 0.002,
+   "grow": 1.2,
+   "shrink": 0.7
+  },
+  "stop": {
+   "rule": "designChange",
+   "norm": "l2",
+   "toleranceRule": "meshScaled",
+   "tolerance": "0.05*sqrt(NE/3200)",
+   "guards": {
+    "settledMove": false,
+    "ladderExhausted": false,
+    "maxDesignChange": false,
+    "boxInactiveFraction": 0
+   }
+  },
+  "optimizer": {
+   "inner": "mma",
+   "variable": "increment",
+   "variant": "published",
+   "tolerance": 0.05,
+   "maxIterations": 500
+  },
+  "multiplicity": "subspace",
+  "maxCluster": 4,
+  "design_minimum": 0.001,
+  "volumeFraction": 0.5,
+  "maxOuter": 400,
+  "singleThread": true,
+  "diagnostics": false,
+  "absent": [
+   "stage exhaustion",
+   "eq.(4b) mass",
+   "p continuation",
+   "projection",
+   "SOCP"
+  ]
+ },
+ "nine_config_hashes": {
+  "160x20": "b1a5744df798ad624fcd0b8b4306888eb99816ee5ce60f51040e39e03e90d4f4",
+  "240x30": "2fac1384239527b1a0108e1d34725021cdc7c5a26f1939b602239415b34847e1",
+  "320x40": "a1203d43efb240308cfcb520c92a6d9bc37a0c703c728fc2f3d298f779bc5f6e",
+  "400x50": "e40c6ba16c9addbb587d08ecab29669f7db560d09b980ca62c2096856b849280",
+  "480x60": "8e55d18251152ec2d26836593489c14f4842390d912d7c66f43f3b18730c83de",
+  "560x70": "8b2533a3caf8432d40a54dbcbd8958900e333c410527d5547c53699b9e373ccf",
+  "640x80": "cbe8dcf070d3e318a889867b5168fdbb09f1b6babfd46f981447d96e9a073aaf",
+  "720x90": "2893ad47136fc9a7775f1f4d9ff1dcba38e7fe14271dd12b5727ff4bd8bb54f3",
+  "800x100": "f9138743067afd0edce255ad26a6d7ae5c0f632a537516a4793eafecbacbe4cd"
+ },
+ "anchors_160x20": {
+  "pedersen": {
+   "outer": 121,
+   "inner": 2369,
+   "omega1": "169.210576386275",
+   "PASS": true
+  },
+  "historical": {
+   "preset": "duOlhoffSimpEq4bBetaStallLadderSensitivityFiltered",
+   "outer": 91,
+   "inner": 2241,
+   "omega1": "169.495227021538",
+   "PASS": true
+  }
+ },
+ "historical_hashes_preserved_separately": {
+  "beta_stall_160x20_81row": "28756d22aacb59726be9f37583deca89fcfcecc93f9b867d46a49223ed1db697",
+  "beta_stall_160x20_87row": "c0fe56ce897ce32ec8efc90ca1fb6bdd9c8326ee56700f5ce33adfb26bded17d",
+  "note": "the 2026-09-11 campaign hashes (81-row) remain in PROVENANCE.json production_preset_events[1]; not reused for the migrated schema"
+ }
+}

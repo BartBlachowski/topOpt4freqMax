@@ -1,0 +1,487 @@
+{
+ "manifest_schema": "olhoff_current_data_manifest/1",
+ "study": "filtered_subproblem_integrability_audit",
+ "generated": "2026-09-12T19:50:33+0200",
+ "repo_head": "013cc48451d33bed61c5c4eea174bbd898d548a2",
+ "branch": "benchmark-methodology-r2",
+ "implTree": "edbfe47eb32109a2fb017f6f13d5327f2c240357caa96630064ffcf37ee152cb",
+ "optimization_runs": 0,
+ "density_updates": 0,
+ "n_files": 79,
+ "files": [
+  {
+   "path": "AUDIT_PREREGISTRATION.md",
+   "bytes": 10659,
+   "sha256": "53d6623a9f0807217c515ed66e158ce617ab5d4a834bc9e9c07058e533644f81",
+   "kind": "document"
+  },
+  {
+   "path": "CLOSED_LOOP_INTEGRALS.md",
+   "bytes": 3757,
+   "sha256": "5587f32165c18301bc30b65c477584fa1c23d02ca83ee32960d60e6c5030b559",
+   "kind": "document"
+  },
+  {
+   "path": "EFFECTIVE_OBJECTIVE.md",
+   "bytes": 3315,
+   "sha256": "363a57663a97f315eeebd4d3ebad788ed993b49be11d6db980ba3b6679dd084e",
+   "kind": "document"
+  },
+  {
+   "path": "EVIDENCE.json",
+   "bytes": 5431,
+   "sha256": "ddba6b15fc9f85a2ba50f2ac88d633d7fc175138ed714324c1bed87bce4f7c13",
+   "kind": "manifest"
+  },
+  {
+   "path": "FILTER_OPERATOR_ANALYSIS.md",
+   "bytes": 7621,
+   "sha256": "11f0d437aa763a65c308c646191d7184a3c1aae36f4ea0220b614673e19c1de2",
+   "kind": "document"
+  },
+  {
+   "path": "FINAL_SUBPROBLEM_RECOVERY.md",
+   "bytes": 5265,
+   "sha256": "ec23d148cfa8bac8160d60391d4a90dafa5e6205b55e33797282ad9513b9e435",
+   "kind": "document"
+  },
+  {
+   "path": "GRADIENT_OBJECTS.md",
+   "bytes": 3269,
+   "sha256": "6c03ad29fa5d63f56d1698fa11aaab1a78ec6199958c43fc83acae246b3653ca",
+   "kind": "document"
+  },
+  {
+   "path": "GRAYNESS_IMPLICATION.md",
+   "bytes": 5040,
+   "sha256": "d2eea40a515297fd5cd6fc6c753453a9ef13ce6a90fd8db8f073aeb461eb8070",
+   "kind": "document"
+  },
+  {
+   "path": "INNER_MMA_KKT.md",
+   "bytes": 7352,
+   "sha256": "ec861d55685be905489555f8e09582c39aba25dac58f310dd58e2637984d6fc3",
+   "kind": "document"
+  },
+  {
+   "path": "JACOBIAN_SYMMETRY.md",
+   "bytes": 4438,
+   "sha256": "5a4365d051f801f484fee2370c15daf336b39c788c2e3ee09b438c88fa8ea0f7",
+   "kind": "document"
+  },
+  {
+   "path": "LITERATURE_INTERPRETATION.md",
+   "bytes": 4534,
+   "sha256": "2bf997a87681fad1b86447f37a2c5210457fe27a9af51e47cc88253518127f9c",
+   "kind": "document"
+  },
+  {
+   "path": "METRICS.json",
+   "bytes": 7123,
+   "sha256": "5bfe54487ced2f569fdfcff4c0886699cbf45304e97e27bca22a457d9a858d83",
+   "kind": "manifest"
+  },
+  {
+   "path": "MIXED_PARTIAL_AUDIT.md",
+   "bytes": 3595,
+   "sha256": "dc5225e47ddaadbddc120c189558d10e1f248a29f57d4f478a4b97ad27ee1044",
+   "kind": "document"
+  },
+  {
+   "path": "MULTIPLICITY_CONTROL.md",
+   "bytes": 2776,
+   "sha256": "bf2252826d1ff3003eae889ef28b1ee7d3b94932a7ddfe7817d00a282f5e6038",
+   "kind": "document"
+  },
+  {
+   "path": "NEXT_ACTION.md",
+   "bytes": 4735,
+   "sha256": "e934114554fc65328492a387c181de6ca2c24a2f3bea80e5af98f81d78364c32",
+   "kind": "document"
+  },
+  {
+   "path": "PERFORMANCE_STATUS.md",
+   "bytes": 3436,
+   "sha256": "edce2771edcf590cfd42dbd164f4318d4974383b09138fbdc22d1bbaa3d83307",
+   "kind": "document"
+  },
+  {
+   "path": "PROVENANCE.md",
+   "bytes": 6012,
+   "sha256": "81e1016d7480f4e74b3eab4c1fc4faa1b33722ca47d4525d9c70dbddf6c67ff6",
+   "kind": "document"
+  },
+  {
+   "path": "REPORT.md",
+   "bytes": 17380,
+   "sha256": "17f9178a232dc72871792a3a0f64ac4b4567881c342bcda6a5144960d718a3f7",
+   "kind": "document"
+  },
+  {
+   "path": "STATE_IDENTITY.md",
+   "bytes": 3719,
+   "sha256": "f019b803445d8e0ff9887519fd4a35d26cc36c12f14408b41b961b33eb19e94f",
+   "kind": "document"
+  },
+  {
+   "path": "evaluations/analytic_verification.json",
+   "bytes": 2742,
+   "sha256": "c06be1ee0afa4c293910895fc7bf98ebf713fc71eb040ce05175b187bab3d83b",
+   "kind": "manifest"
+  },
+  {
+   "path": "evaluations/asymmetry_decomposition.json",
+   "bytes": 3712,
+   "sha256": "2f2a5f8adba624f616677bb4aca263133f247f028a014291cf3d7484f1659a44",
+   "kind": "manifest"
+  },
+  {
+   "path": "evaluations/closed_loops.json",
+   "bytes": 11851,
+   "sha256": "d35ced3c9c2817a0be9be5f7388f053f093b6dad3efabaa4fdb3b93508115aa5",
+   "kind": "manifest"
+  },
+  {
+   "path": "evaluations/counterfactual_operators.json",
+   "bytes": 6638,
+   "sha256": "1f22f44015fa729ab1c84a0acb8f164a3141042beb5bc9cbe3be8218424fb23e",
+   "kind": "manifest"
+  },
+  {
+   "path": "evaluations/fields.mat",
+   "bytes": 1621562,
+   "sha256": "8a1084f230865f026887e31bee4c6b19f9da8926ab48aaefd9ba5f34ed520c28",
+   "kind": "evaluation"
+  },
+  {
+   "path": "evaluations/filter_operator.json",
+   "bytes": 1731,
+   "sha256": "dd4ba257d1d41014f239cd52e22967bcea059ae229f714f7f307b9105ea52b3f",
+   "kind": "manifest"
+  },
+  {
+   "path": "evaluations/frozen_480_state.mat",
+   "bytes": 656263,
+   "sha256": "8a96b233358764eb06875e1153947b6d4ed514cc9b91b6b92a12b2d70e71db50",
+   "kind": "evaluation"
+  },
+  {
+   "path": "evaluations/inner_convergence.json",
+   "bytes": 18068,
+   "sha256": "f1afd669812eaecd5e932b3081faba907405462bc92a957e09d474529cdb030b",
+   "kind": "manifest"
+  },
+  {
+   "path": "evaluations/inner_kkt.json",
+   "bytes": 20035,
+   "sha256": "06e2bf850ea43d635fccf56c6fcddaa966837a9aa133a35263bc5e3651fa9ee8",
+   "kind": "manifest"
+  },
+  {
+   "path": "evaluations/inner_kkt_refined.json",
+   "bytes": 19921,
+   "sha256": "850710aae7c2f9de1b159cfa7a3e56fb7d2abb46aa7ed720c18da9f6cbd00df3",
+   "kind": "manifest"
+  },
+  {
+   "path": "evaluations/inner_kkt_state.mat",
+   "bytes": 813951478,
+   "sha256": "2952b301c19cb60f4f7ef71da25feb533669415685458d5c64d302ebc48518b6",
+   "kind": "evaluation"
+  },
+  {
+   "path": "evaluations/jacobian_symmetry.json",
+   "bytes": 17228,
+   "sha256": "95e2d1f89e6c96d96615aaa3b191361ab28af564fcd0da23e39b8aaece3c4aa1",
+   "kind": "manifest"
+  },
+  {
+   "path": "evaluations/loop_admissibility.json",
+   "bytes": 7570,
+   "sha256": "583cc2cb4d68505f1f289f65cbb909129a5877f5285c41faa224a549eab6a2e4",
+   "kind": "manifest"
+  },
+  {
+   "path": "evaluations/mixed_partials.json",
+   "bytes": 3467,
+   "sha256": "c01d52cd0b824b5fb743dbe0f79a79311d276a3a161ea2a396eb66093702d97d",
+   "kind": "manifest"
+  },
+  {
+   "path": "evaluations/mixed_partials.mat",
+   "bytes": 76744,
+   "sha256": "d15c420cb5f9caa46647ee015f6592b2772c826e141a77e574d28ea4405ec798",
+   "kind": "evaluation"
+  },
+  {
+   "path": "evaluations/residual_by_class.json",
+   "bytes": 1126,
+   "sha256": "5a182116555e2d446ca2fceea6b8f9dc06ec6ff3db90a7b57bbdc5aadf28e546",
+   "kind": "manifest"
+  },
+  {
+   "path": "evaluations/state_identity.json",
+   "bytes": 2282,
+   "sha256": "0c22ce285e3a29f46be0fd7e63cba531ce4e57bdc0b57508d1d7ebd110e88493",
+   "kind": "manifest"
+  },
+  {
+   "path": "figures/FIG_01_gradient_maps.png",
+   "bytes": 273526,
+   "sha256": "7ba2e7b2cc7c107c6a47e07f1ad43fa921ad0e98d87849c9aa69ff5600939a28",
+   "kind": "figure"
+  },
+  {
+   "path": "figures/FIG_01_gradient_maps.svg",
+   "bytes": 346857,
+   "sha256": "427a7a236242d11b6bbbf7e665dc931d465640c03a312963d8f09754da57a37a",
+   "kind": "figure"
+  },
+  {
+   "path": "figures/FIG_02_filtered_minus_physical.png",
+   "bytes": 238261,
+   "sha256": "34a970c496987c354949a7c250b71197ab35a1942ca1c4e77046fa3e15968f79",
+   "kind": "figure"
+  },
+  {
+   "path": "figures/FIG_02_filtered_minus_physical.svg",
+   "bytes": 307021,
+   "sha256": "1ce475a233ad04ca070d7d8e6af78f1e6dc2160b4c6695d98d7f2bde7255f092",
+   "kind": "figure"
+  },
+  {
+   "path": "figures/FIG_03_asymmetry_distribution.png",
+   "bytes": 35088,
+   "sha256": "12a1910af91f2ce198c928a37ea56db20eee17a260beafc78092fe4a03cce7bf",
+   "kind": "figure"
+  },
+  {
+   "path": "figures/FIG_03_asymmetry_distribution.svg",
+   "bytes": 63453,
+   "sha256": "f086cc6306cd22b2b94fae6bd26efaa2baff70bf58e271b2b94120c36d16845a",
+   "kind": "figure"
+  },
+  {
+   "path": "figures/FIG_04_uJv_vs_vJu.png",
+   "bytes": 50661,
+   "sha256": "3858308a1541ffc39a06119ccddffcb67eb24d03a819e5a5a52a5dae898bdabe",
+   "kind": "figure"
+  },
+  {
+   "path": "figures/FIG_04_uJv_vs_vJu.svg",
+   "bytes": 63442,
+   "sha256": "93d3d504312ebbe5566056163249240a8db4efaa354ca45a802b12b2c514e81b",
+   "kind": "figure"
+  },
+  {
+   "path": "figures/FIG_05_symmetry_vs_step.png",
+   "bytes": 53535,
+   "sha256": "a65e5deffaca6a56191233da1bcdb24eed190f72c0a74286fb62d8f9c0d870b2",
+   "kind": "figure"
+  },
+  {
+   "path": "figures/FIG_05_symmetry_vs_step.svg",
+   "bytes": 82686,
+   "sha256": "29b738995a2f0eb0460ee95ca430b750bdc4a8aa7aab499648e391223622fa0e",
+   "kind": "figure"
+  },
+  {
+   "path": "figures/FIG_06_07_loop_integrals.png",
+   "bytes": 147683,
+   "sha256": "f7fa52a049628e6646ac154dc9dfd12b7b54d4d8b9b371a712c459c0d97eb820",
+   "kind": "figure"
+  },
+  {
+   "path": "figures/FIG_06_07_loop_integrals.svg",
+   "bytes": 133933,
+   "sha256": "564a2384aa105f443a455c685f9c07a4a150e94f4cfda40e1f15076e1fe32c01",
+   "kind": "figure"
+  },
+  {
+   "path": "figures/FIG_08_mixed_partial_asymmetry.png",
+   "bytes": 59691,
+   "sha256": "f304b9f19816be9599ca6c8d00deb2e10f0163f0307341808fd59db361679135",
+   "kind": "figure"
+  },
+  {
+   "path": "figures/FIG_08_mixed_partial_asymmetry.svg",
+   "bytes": 79047,
+   "sha256": "7a77b7860556b2a10b2328ef83f881eaaba79221ed0883de24d9a229ba1fb212",
+   "kind": "figure"
+  },
+  {
+   "path": "figures/FIG_09_inner_kkt_breakdown.png",
+   "bytes": 71684,
+   "sha256": "368de370501786be54cbc96fc940f3f4fe1fa4472932d1badaab7b78c5297ad2",
+   "kind": "figure"
+  },
+  {
+   "path": "figures/FIG_09_inner_kkt_breakdown.svg",
+   "bytes": 81073,
+   "sha256": "d3afefa7e37ca8971b7f86779d843bbc64f0f9356c19fbf27e5a4c630374c6d2",
+   "kind": "figure"
+  },
+  {
+   "path": "figures/FIG_10_complementarity.png",
+   "bytes": 58060,
+   "sha256": "d09f2b227f1941b42a31662e4363d654ac879e386c3c4e16c98709110e14e78e",
+   "kind": "figure"
+  },
+  {
+   "path": "figures/FIG_10_complementarity.svg",
+   "bytes": 73998,
+   "sha256": "4bdd4a7644093935606a3761a492a9ef3b584b2b3aa4b8eef28d8c775bc1fe16",
+   "kind": "figure"
+  },
+  {
+   "path": "figures/FIG_11_residual_by_class.png",
+   "bytes": 51337,
+   "sha256": "63776478f88ba7a78f7a4fee4bf613697bb4d2504fbcb376e36b09ec52988620",
+   "kind": "figure"
+  },
+  {
+   "path": "figures/FIG_11_residual_by_class.svg",
+   "bytes": 65865,
+   "sha256": "b2ee51f8d2bd4e768cbd667bf388f4b0ed749c80e2fc08caaa78c304969a5f85",
+   "kind": "figure"
+  },
+  {
+   "path": "figures/FIG_12_core_and_mechanism.png",
+   "bytes": 77547,
+   "sha256": "c25d150c23853f97fde61b73383cf08d12bb8904c24351b198baf485c0734b59",
+   "kind": "figure"
+  },
+  {
+   "path": "figures/FIG_12_core_and_mechanism.svg",
+   "bytes": 78629,
+   "sha256": "59f991c55354cc90d84103b6c50546cc3da6c0e23776cf2b93bd09db8c3dbf92",
+   "kind": "figure"
+  },
+  {
+   "path": "figures/FIG_13_inner_convergence.png",
+   "bytes": 118998,
+   "sha256": "3c59d66183ee2513e1d0abe03117f6ee9c7e0c0bc63bfcc6981c0ad88a2ed98d",
+   "kind": "figure"
+  },
+  {
+   "path": "figures/FIG_13_inner_convergence.svg",
+   "bytes": 125734,
+   "sha256": "383ab288f43dc500b22e6e4384312d1c205825628abd8a42c41772b83bc74bd3",
+   "kind": "figure"
+  },
+  {
+   "path": "scripts/fi_admissibility.m",
+   "bytes": 2091,
+   "sha256": "68a42f82780dc9afc10fc4472661737e95f2012bd30fcc6f222f0b5b442097a9",
+   "kind": "script"
+  },
+  {
+   "path": "scripts/fi_analytic_verify.m",
+   "bytes": 3391,
+   "sha256": "04dfb1be18e9bd9863a5b3196bc50ac5150f4e0ead908b123c6f1a26a60a1947",
+   "kind": "script"
+  },
+  {
+   "path": "scripts/fi_counterfactual_operators.m",
+   "bytes": 3483,
+   "sha256": "5646e271466aaa500db3f293c3bec419339390a5825244039a1674b721c49534",
+   "kind": "script"
+  },
+  {
+   "path": "scripts/fi_decompose.m",
+   "bytes": 3262,
+   "sha256": "8df6d01dc53dfe35824ed73cc80aa126c3ac16382aac64987e4b23ad43d799da",
+   "kind": "script"
+  },
+  {
+   "path": "scripts/fi_directions.m",
+   "bytes": 3703,
+   "sha256": "eb2cd754d140648655f2940a206fc8d67081499776e266c5d505f37451730540",
+   "kind": "script"
+  },
+  {
+   "path": "scripts/fi_eval.m",
+   "bytes": 1863,
+   "sha256": "8d73c8cd44f78da943a01f16fecd2d7b34d7051048862353af985288ad475923",
+   "kind": "script"
+  },
+  {
+   "path": "scripts/fi_export_fields.m",
+   "bytes": 2684,
+   "sha256": "618e4264c3725c361e5c91dfea511c259eb8f4990a74edd2e173f67f4254b238",
+   "kind": "script"
+  },
+  {
+   "path": "scripts/fi_figures.py",
+   "bytes": 13201,
+   "sha256": "cb7a2a3e00955a66f0d07543dee8a2b92f4f9a301fa33943068f144a8a61867c",
+   "kind": "script"
+  },
+  {
+   "path": "scripts/fi_filter.m",
+   "bytes": 5055,
+   "sha256": "dd3363ee4e50429bdf03b8fa489c55807b967f7132feae151b3cfd4205eae2de",
+   "kind": "script"
+  },
+  {
+   "path": "scripts/fi_finalize.py",
+   "bytes": 9288,
+   "sha256": "ba1f7b634be7624b1197fb6eb6a062a3c2e26a485c4a59ec73171e66f68d1407",
+   "kind": "script"
+  },
+  {
+   "path": "scripts/fi_inner_converge.m",
+   "bytes": 3932,
+   "sha256": "24a6ebb0e7253692f5e84dc83337c8c05bb4cfbead31fb1bcb6f0c847df677f8",
+   "kind": "script"
+  },
+  {
+   "path": "scripts/fi_innerloop_audit.m",
+   "bytes": 4235,
+   "sha256": "a15dc389cd583170264b46dbe29f745eae4cfa4b0b8f2571d3b5c5cc8b0b62a4",
+   "kind": "script"
+  },
+  {
+   "path": "scripts/fi_kkt_refine.m",
+   "bytes": 6373,
+   "sha256": "a3657cb5b43847a2489061da8e44f9a085dda5511472f42c151c0c1d72116f96",
+   "kind": "script"
+  },
+  {
+   "path": "scripts/fi_loops.m",
+   "bytes": 5807,
+   "sha256": "4369c4495f200d7b64fb33db69f9417406795b28a7f747baa91b6ad4ea59c84b",
+   "kind": "script"
+  },
+  {
+   "path": "scripts/fi_mixed.m",
+   "bytes": 6425,
+   "sha256": "03ef662a28271b3336222c08251e3330cc713fcfa3dd181062c9f59d4112377b",
+   "kind": "script"
+  },
+  {
+   "path": "scripts/fi_setup.m",
+   "bytes": 3152,
+   "sha256": "7ed9fdaf15d0c18eb16fc1d092fba857e47006b3bf9a3ee22fa3755011bc624e",
+   "kind": "script"
+  },
+  {
+   "path": "scripts/fi_state.m",
+   "bytes": 4478,
+   "sha256": "8d898bb3a40c84a15cd343d18fbdb4b9b4c1efd4c7d6e34c3dd67afd49d6b546",
+   "kind": "script"
+  },
+  {
+   "path": "scripts/fi_subproblem.m",
+   "bytes": 8315,
+   "sha256": "dc77c9684103133e1c494787a90c4a80e3f86c847db6f10d409042058221eb59",
+   "kind": "script"
+  },
+  {
+   "path": "scripts/fi_symmetry.m",
+   "bytes": 4313,
+   "sha256": "c098fbdabd4ac256dfdf2e00181967e2fbffdd87c5deadcdff7b93c06a89402c",
+   "kind": "script"
+  }
+ ]
+}

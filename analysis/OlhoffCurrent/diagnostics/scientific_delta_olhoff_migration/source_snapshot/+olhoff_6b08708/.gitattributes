@@ -1,0 +1,3 @@
+# Byte-exact storage.  This tree holds immutable scientific evidence; git must
+# never normalize line endings or otherwise transform content on add/checkout.
+* -text

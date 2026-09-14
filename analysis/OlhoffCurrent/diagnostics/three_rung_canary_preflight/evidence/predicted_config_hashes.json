@@ -1,0 +1,22 @@
+{
+ "validated_c320_recorded": "afad9ea4b27da576553f128d66a8329edee963066c1ef477b1df70f9232daaab",
+ "validated_c320_offline": "afad9ea4b27da576553f128d66a8329edee963066c1ef477b1df70f9232daaab",
+ "c320_match": true,
+ "cap": 1600,
+ "meshes": {
+  "480x60": {
+   "nelx": 480,
+   "nely": 60,
+   "NE": 28800,
+   "predicted_config_hash": "03097a28b0ad7fdb0d977985d3b5fd279dd74553c9dd5dfbd3cc035ac2a1782e",
+   "stop_tolerance": 0.15000000000000002
+  },
+  "800x100": {
+   "nelx": 800,
+   "nely": 100,
+   "NE": 80000,
+   "predicted_config_hash": "7724af5ed26786e16132c30fbae840f5d8679d5ea798fc75d5c48eefd0e50ffe",
+   "stop_tolerance": 0.25
+  }
+ }
+}

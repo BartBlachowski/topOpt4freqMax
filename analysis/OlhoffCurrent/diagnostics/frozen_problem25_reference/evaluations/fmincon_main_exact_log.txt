@@ -1,0 +1,49 @@
+[fp_fmincon] gradient check max relerr per row = [7.03e-06 0.000135 1.44e-06 0.00385]  pass=0
+
+Local minimum found that satisfies the constraints.
+
+Optimization completed because the objective function is non-decreasing in 
+feasible directions, to within the value of the optimality tolerance,
+and constraints are satisfied to within the value of the constraint tolerance.
+
+[fp_fmincon] S0_zero    exact  ef=1 it=38 bs=1.0017918952 fo=8.98e-12 cv=0.00e+00 wall=25s minsep=7428.6 KKT=REFERENCE_PROBLEM25_KKT_INCONCLUSIVE statRMS=1.07e-10
+
+Local minimum possible. Constraints satisfied.
+
+fmincon stopped because the size of the current step is less than
+the value of the step size tolerance and constraints are 
+satisfied to within the value of the constraint tolerance.
+
+[fp_fmincon] S1_P19     exact  ef=2 it=39 bs=1.0017918919 fo=6.23e-10 cv=0.00e+00 wall=25s minsep=7430.9 KKT=REFERENCE_PROBLEM25_KKT_INCONCLUSIVE statRMS=5.70e-09
+
+Local minimum found that satisfies the constraints.
+
+Optimization completed because the objective function is non-decreasing in 
+feasible directions, to within the value of the optimality tolerance,
+and constraints are satisfied to within the value of the constraint tolerance.
+
+[fp_fmincon] S2_M500    exact  ef=1 it=39 bs=1.0017918973 fo=8.87e-12 cv=0.00e+00 wall=25s minsep=7407.3 KKT=REFERENCE_PROBLEM25_KKT_INCONCLUSIVE statRMS=3.22e-11
+
+Local minimum found that satisfies the constraints.
+
+Optimization completed because the objective function is non-decreasing in 
+feasible directions, to within the value of the optimality tolerance,
+and constraints are satisfied to within the value of the constraint tolerance.
+
+[fp_fmincon] S4_halfmax exact  ef=1 it=38 bs=1.0017918947 fo=2.46e-11 cv=0.00e+00 wall=23s minsep=7460.0 KKT=REFERENCE_PROBLEM25_KKT_INCONCLUSIVE statRMS=1.70e-11
+
+Local minimum found that satisfies the constraints.
+
+Optimization completed because the objective function is non-decreasing in 
+feasible directions, to within the value of the optimality tolerance,
+and constraints are satisfied to within the value of the constraint tolerance.
+
+[fp_fmincon] S5_halfmin exact  ef=1 it=39 bs=1.0017918994 fo=8.87e-12 cv=0.00e+00 wall=25s minsep=6964.4 KKT=REFERENCE_PROBLEM25_KKT_INCONCLUSIVE statRMS=1.41e-10
+
+Local minimum possible. Constraints satisfied.
+
+fmincon stopped because the size of the current step is less than
+the value of the step size tolerance and constraints are 
+satisfied to within the value of the constraint tolerance.
+
+[fp_fmincon] S6_rand    exact  ef=2 it=39 bs=1.0017918971 fo=6.79e-10 cv=0.00e+00 wall=25s minsep=7460.0 KKT=REFERENCE_PROBLEM25_KKT_INCONCLUSIVE statRMS=8.73e-09

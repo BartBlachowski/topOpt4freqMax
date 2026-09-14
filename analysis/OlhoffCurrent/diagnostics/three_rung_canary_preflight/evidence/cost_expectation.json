@@ -1,0 +1,66 @@
+{
+ "basis": "retained validated three-rung endpoints + legacy nine-mesh timings",
+ "not_an_acceptance_criterion": true,
+ "S1_fit": {
+  "C": 0.33640941009947545,
+  "p": 0.7128130738118711,
+  "R2_log": 0.9891151711808188,
+  "form": "S1_declaration = C * NE^p",
+  "basis_meshes": [
+   160,
+   240,
+   320,
+   400
+  ]
+ },
+ "inner_per_outer_validated": {
+  "3200": 23.794444444444444,
+  "7200": 19.387323943661972,
+  "12800": 18.460227272727273,
+  "20000": 18.987124463519315
+ },
+ "recorder_overhead": {
+  "note": "The canaries MUST run with runtime.diagnostics = true to retain trajectories; the legacy nine-mesh campaign ran with it false. Canary wall time is therefore NOT directly comparable to legacy wall time, and PERFORMANCE_DECOMPOSITION.md states this before any number is compared.",
+  "legacy_400x50_s_per_outer": 3.910726854016787,
+  "diagnostics_on_400x50_four_rung_s_per_outer": 7.008587631023102,
+  "ratio_upper_bound": 1.7921445021977025,
+  "confounds": [
+   "different controller (four-rung E vs legacy beta)",
+   "different stage mix, hence different inner counts per outer",
+   "different host session"
+  ]
+ },
+ "projection": {
+  "480x60": {
+   "NE": 28800,
+   "projected_S1_declaration": 508,
+   "projected_outer_total": 586,
+   "projected_inner_per_outer": 17.200847064482478,
+   "projected_inner_total": 10074,
+   "legacy_s_per_MMA_step": 0.24587678133121565,
+   "projected_s_per_outer_recorder_off": 4.511944802121213,
+   "projected_wall_s_recorder_off": 2642.5101943604536,
+   "projected_wall_h_recorder_off": 0.7340306095445704,
+   "projected_wall_h_recorder_on_upper": 1.3154889213401304,
+   "cap_1600_headroom": 1014,
+   "cap_adequate": true,
+   "RHO_DRHO_bytes_at_projected_outer": 270028800
+  },
+  "800x100": {
+   "NE": 80000,
+   "projected_S1_declaration": 1052,
+   "projected_outer_total": 1130,
+   "projected_inner_per_outer": 15.077919019406824,
+   "projected_inner_total": 17032,
+   "legacy_s_per_MMA_step": 0.4821132046637939,
+   "projected_s_per_outer_recorder_off": 8.41918696349955,
+   "projected_wall_s_recorder_off": 9510.399273985779,
+   "projected_wall_h_recorder_off": 2.641777576107161,
+   "projected_wall_h_recorder_on_upper": 4.734447159049621,
+   "cap_1600_headroom": 470,
+   "cap_adequate": true,
+   "RHO_DRHO_bytes_at_projected_outer": 1446400000
+  }
+ },
+ "projection_caveat": "A four-point log-log fit extrapolated 1.4x (480) and 4x (800) beyond its range.  It sizes a time budget and checks that cap 1600 is not obviously too small.  It is not evidence about any canary outcome and no gate reads it."
+}

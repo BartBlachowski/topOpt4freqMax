@@ -1,0 +1,12 @@
+                              scope: 'Observational barrier arithmetic at authenticated production call 19; no new variant'
+                            epsimin: 1.0000e-07
+                              sRow0: 6.4346e-04
+           normalized_barrier_scale: 0.0155
+    lower_artificial_comp_quantiles: [1.0000e-07 1.0000e-07 … ] (1×5 double)
+    upper_artificial_comp_quantiles: [1.0000e-07 1.0000e-07 … ] (1×5 double)
+            sum_artificial_box_comp: 0.0058
+              sum_physical_box_comp: 0.0714
+                certified_beta_gain: 0.0018
+                 sum_comp_over_gain: 3.2142
+                  raw_comp_required: 6.4346e-12
+

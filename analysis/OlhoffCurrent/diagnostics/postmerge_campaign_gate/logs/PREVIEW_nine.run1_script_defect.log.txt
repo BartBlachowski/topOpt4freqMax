@@ -1,0 +1,6 @@
+{Unrecognized field name "profile".
+
+Error in pmg_preview (line 31)
+        'harness_config_hash', mc.profile.effective_config_hash, ...
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+} 

@@ -1,0 +1,92 @@
+{
+  "rho_sha256": "0a498a7d6ab0565b29c15ff9364060d937d4df10aa661fc90d02c038ce6e4a60",
+  "cfgHash": "03097a28b0ad7fdb0d977985d3b5fd279dd74553c9dd5dfbd3cc035ac2a1782e",
+  "cfgHash_recorded": "03097a28b0ad7fdb0d977985d3b5fd279dd74553c9dd5dfbd3cc035ac2a1782e",
+  "implTree": "edbfe47eb32109a2fb017f6f13d5327f2c240357caa96630064ffcf37ee152cb",
+  "implTree_ok": true,
+  "nOuter": 386,
+  "stage": 3,
+  "move": 0.01,
+  "N": 2,
+  "multJ": 0,
+  "nInner_final": 19,
+  "innerConv_final": 1,
+  "omega_at_rho385": [
+    163.93172747916933,
+    185.20866045176069,
+    401.39842250345157,
+    559.43302514954519,
+    755.2308321724405
+  ],
+  "gap12_at_rho385": 0.129791427808232,
+  "beta_at_386": 26873.744667047969,
+  "volume_386": 0.4999984544949872,
+  "volErr_386": -1.5455050128010406E-6,
+  "Mnd_386": 26.341563025293119,
+  "gray_386": 0.28729166666666667,
+  "rho385_sha256": "9b1443e508a6e4ecb5288d30167c7258d837be127aa3a9a42d8cc092240f3ded",
+  "drho386_sha256": "0b12cd7f9ae32decc6e95bf63e89fa7ca4530d13ec6dc7d815b618d46af8a9fd",
+  "rho386_minmax": [
+    0.001015039971515184,
+    0.99989792253606091
+  ],
+  "rho385_minmax": [
+    0.0010125425191870787,
+    0.9998951138429818
+  ],
+  "omega_at_rho386": [
+    163.93225938567002,
+    185.21032464590309,
+    401.39946949684344,
+    559.43299915869557,
+    755.24241658939081
+  ],
+  "gap12_at_rho386": 0.12979791372346,
+  "N_detected_386": 2,
+  "dOff_386": [
+    0,
+    7429.0786881502136
+  ],
+  "filter": {
+    "type": "sensitivity",
+    "applyTo": "all",
+    "radiusPhysical": 0.06,
+    "rminEl": 3.6,
+    "nnzH": 1.03758E+6,
+    "Hsymmetric": true,
+    "HsMin": 19.760668037544377,
+    "HsMax": 49.042672150177516
+  },
+  "multiplicity": {
+    "method": "subspace",
+    "subspaceSize": 2,
+    "tolerance": 0.05,
+    "diagonalOffsets": true,
+    "offDiagonal": true
+  },
+  "mma": {
+    "variant": "published",
+    "variable": "increment",
+    "tolInner": 0.05,
+    "minInner": 5,
+    "maxInner": 500,
+    "a0": 1,
+    "a": 0,
+    "c": 1000,
+    "d": 0
+  },
+  "controller": {
+    "signal": "stageExhaustion",
+    "stopRule": "stageExhaustion",
+    "levels": [
+      0.04,
+      0.02,
+      0.01
+    ],
+    "terminalBranch": "B",
+    "terminalDeclIter": 386
+  },
+  "blockers": [],
+  "pass": true,
+  "verdict": "FROZEN_480_STATE_IDENTITY_PASS"
+}

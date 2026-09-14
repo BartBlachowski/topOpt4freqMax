@@ -1,0 +1,538 @@
+{
+  "tip": "b21483b158f58e05e7b56957f2fbe8e1d2891395",
+  "when": "13-Sep-2026 22:23:45",
+  "matlab": "25.2.0.2998904 (R2025b)",
+  "cloneHead": "b21483b158f58e05e7b56957f2fbe8e1d2891395",
+  "A": {
+    "probes": [
+      {
+        "probe": "P0",
+        "desc": "compliant study, no source lines",
+        "expected": true,
+        "actual": true,
+        "historical": "NO_HISTORICAL_SOURCE_LINES",
+        "current": "CURRENT_SOURCE_HASH_VERIFIED",
+        "reason": "G=111111",
+        "pass": true
+      },
+      {
+        "probe": "P1",
+        "desc": "genuine olhoffSolve.m digest at the freeze commit, after a promotion",
+        "expected": true,
+        "actual": true,
+        "historical": "HISTORICAL_SOURCE_HASH_VERIFIED",
+        "current": "CURRENT_SOURCE_HASH_VERIFIED",
+        "reason": "line 2 HISTORICAL_VERIFIED: digest = blob at freeze commit d70b9d1ebf89 (path last changed in 9b30ec45b038) | G=111111",
+        "pass": true
+      },
+      {
+        "probe": "P2",
+        "desc": "single fabricated digest on a source path",
+        "expected": false,
+        "actual": false,
+        "historical": "HISTORICAL_SOURCE_HASH_NOT_VERIFIED",
+        "current": "CURRENT_SOURCE_HASH_VERIFIED",
+        "reason": "line 2 MISMATCH: DIGEST_IS_NOT_THIS_PATH_AT_THE_FREEZE_COMMIT | G=111011",
+        "pass": true
+      },
+      {
+        "probe": "P3",
+        "desc": "limit.m freeze digest placed on the olhoffSolve.m line (wrong path, valid digest)",
+        "expected": false,
+        "actual": false,
+        "historical": "HISTORICAL_SOURCE_HASH_NOT_VERIFIED",
+        "current": "CURRENT_SOURCE_HASH_VERIFIED",
+        "reason": "line 2 MISMATCH: DIGEST_IS_NOT_THIS_PATH_AT_THE_FREEZE_COMMIT | G=111011",
+        "pass": true
+      },
+      {
+        "probe": "P4",
+        "desc": "non-source README.md carrying its freeze digest after it changed",
+        "expected": false,
+        "actual": false,
+        "historical": "NO_HISTORICAL_SOURCE_LINES",
+        "current": "CURRENT_SOURCE_HASH_VERIFIED",
+        "reason": "MISMATCH/MISSING: analysis/OlhoffCurrent/README.md | G=111011",
+        "pass": true
+      },
+      {
+        "probe": "P5",
+        "desc": "fabricated digest FOLLOWED by the genuine digest, same path",
+        "expected": false,
+        "actual": false,
+        "historical": "HISTORICAL_SOURCE_HASH_NOT_VERIFIED",
+        "current": "CURRENT_SOURCE_HASH_VERIFIED",
+        "reason": "line 2 MISMATCH: DIGEST_IS_NOT_THIS_PATH_AT_THE_FREEZE_COMMIT | line 3 HISTORICAL_VERIFIED: digest = blob at freeze commit 1dbdbd158778 (path last changed in 9b30ec45b038) | DUPLICATE_PATHS: analysis/OlhoffCurrent/+impl/architecture/olhoffSolve.m | G=111011",
+        "pass": true
+      },
+      {
+        "probe": "P6",
+        "desc": "genuine digest followed by a fabricated digest, same path",
+        "expected": false,
+        "actual": false,
+        "historical": "HISTORICAL_SOURCE_HASH_NOT_VERIFIED",
+        "current": "CURRENT_SOURCE_HASH_VERIFIED",
+        "reason": "line 2 HISTORICAL_VERIFIED: digest = blob at freeze commit e90751fa8520 (path last changed in 9b30ec45b038) | line 3 MISMATCH: DIGEST_IS_NOT_THIS_PATH_AT_THE_FREEZE_COMMIT | DUPLICATE_PATHS: analysis/OlhoffCurrent/+impl/architecture/olhoffSolve.m | G=111011",
+        "pass": true
+      },
+      {
+        "probe": "P7",
+        "desc": "empty-file digest on olhoffSolve.m (non-empty at the freeze commit)",
+        "expected": false,
+        "actual": false,
+        "historical": "HISTORICAL_SOURCE_HASH_NOT_VERIFIED",
+        "current": "CURRENT_SOURCE_HASH_VERIFIED",
+        "reason": "line 2 MISMATCH: DIGEST_IS_NOT_THIS_PATH_AT_THE_FREEZE_COMMIT | G=111011",
+        "pass": true
+      },
+      {
+        "probe": "P8",
+        "desc": "genuine superseded line; +impl locally edited, manifest unchanged",
+        "expected": false,
+        "actual": false,
+        "historical": "HISTORICAL_SOURCE_HASH_VERIFIED",
+        "current": "CURRENT_SOURCE_HASH_NOT_VERIFIED",
+        "reason": "line 2 HISTORICAL_VERIFIED: digest = blob at freeze commit 9661df4f0748 (path last changed in 9b30ec45b038) | CURRENT: MODIFIED_IN_WORKING_TREE: architecture/olhoffSolve.m | G=111110",
+        "pass": true
+      },
+      {
+        "probe": "P9",
+        "desc": "empty digest; probe path deleted before the freeze commit, re-added after",
+        "expected": false,
+        "actual": false,
+        "historical": "HISTORICAL_SOURCE_HASH_NOT_VERIFIED",
+        "current": "CURRENT_SOURCE_HASH_VERIFIED",
+        "reason": "line 2 MISMATCH: HISTORICAL_PATH_ABSENT_AT_FREEZE_COMMIT | G=111011",
+        "pass": true
+      },
+      {
+        "probe": "P10",
+        "desc": "genuine superseded line; +impl edited AND SOURCE_MANIFEST.json regenerated",
+        "expected": false,
+        "actual": false,
+        "historical": "HISTORICAL_SOURCE_HASH_VERIFIED",
+        "current": "CURRENT_SOURCE_HASH_NOT_VERIFIED",
+        "reason": "line 2 HISTORICAL_VERIFIED: digest = blob at freeze commit 1a3e40d3edfc (path last changed in 9b30ec45b038) | CURRENT: MODIFIED_IN_WORKING_TREE: architecture/olhoffSolve.m; SOURCE_MANIFEST_DIFFERS_FROM_HEAD; SOURCE_MANIFEST_ROWS_DISAGREE_WITH_HEAD; SOURCE_MANIFEST_TREE_DISAGREES_WITH_HEAD | G=111110",
+        "pass": true
+      },
+      {
+        "probe": "P11",
+        "desc": "two identical genuine lines, same path",
+        "expected": true,
+        "actual": true,
+        "historical": "HISTORICAL_SOURCE_HASH_VERIFIED",
+        "current": "CURRENT_SOURCE_HASH_VERIFIED",
+        "reason": "line 2 HISTORICAL_VERIFIED: digest = blob at freeze commit 9f2a68049e7d (path last changed in 9b30ec45b038) | line 3 HISTORICAL_VERIFIED: digest = blob at freeze commit 9f2a68049e7d (path last changed in 9b30ec45b038) | DUPLICATE_PATHS: analysis/OlhoffCurrent/+impl/architecture/olhoffSolve.m | G=111111",
+        "pass": true
+      },
+      {
+        "probe": "P12",
+        "desc": "olhoffSolve.m digest from an OLDER commit, not the freeze commit",
+        "expected": false,
+        "actual": false,
+        "historical": "HISTORICAL_SOURCE_HASH_NOT_VERIFIED",
+        "current": "CURRENT_SOURCE_HASH_VERIFIED",
+        "reason": "line 2 MISMATCH: DIGEST_IS_NOT_THIS_PATH_AT_THE_FREEZE_COMMIT | G=111011",
+        "pass": true
+      },
+      {
+        "probe": "P13",
+        "desc": "digest of a non-source file placed on a source-path line",
+        "expected": false,
+        "actual": false,
+        "historical": "HISTORICAL_SOURCE_HASH_NOT_VERIFIED",
+        "current": "CURRENT_SOURCE_HASH_VERIFIED",
+        "reason": "line 2 MISMATCH: DIGEST_IS_NOT_THIS_PATH_AT_THE_FREEZE_COMMIT | G=111011",
+        "pass": true
+      },
+      {
+        "probe": "P14",
+        "desc": "malformed: uppercase 64-hex digest on a source line",
+        "expected": false,
+        "actual": false,
+        "historical": "NO_HISTORICAL_SOURCE_LINES",
+        "current": "CURRENT_SOURCE_HASH_VERIFIED",
+        "reason": "MALFORMED line 2: names production source but is not a <64 lowercase hex> <path> line | G=111011",
+        "pass": true
+      },
+      {
+        "probe": "P15",
+        "desc": "malformed: 63-hex digest on a source line",
+        "expected": false,
+        "actual": false,
+        "historical": "NO_HISTORICAL_SOURCE_LINES",
+        "current": "CURRENT_SOURCE_HASH_VERIFIED",
+        "reason": "MALFORMED line 2: names production source but is not a <64 lowercase hex> <path> line | G=111011",
+        "pass": true
+      },
+      {
+        "probe": "P16",
+        "desc": "non-canonical source path (architecture/../architecture) with genuine digest",
+        "expected": false,
+        "actual": false,
+        "historical": "NO_HISTORICAL_SOURCE_LINES",
+        "current": "CURRENT_SOURCE_HASH_VERIFIED",
+        "reason": "MALFORMED line 2: names production source through a non-canonical path | G=111011",
+        "pass": true
+      },
+      {
+        "probe": "P17",
+        "desc": "missing: source path absent from working tree and history",
+        "expected": false,
+        "actual": false,
+        "historical": "NO_HISTORICAL_SOURCE_LINES",
+        "current": "CURRENT_SOURCE_HASH_VERIFIED",
+        "reason": "line 2 MISSING: production-source path absent from the repository working tree | G=111011",
+        "pass": true
+      },
+      {
+        "probe": "P18",
+        "desc": "empty digest; path never existed at the freeze commit, added later",
+        "expected": false,
+        "actual": false,
+        "historical": "HISTORICAL_SOURCE_HASH_NOT_VERIFIED",
+        "current": "CURRENT_SOURCE_HASH_VERIFIED",
+        "reason": "line 2 MISMATCH: HISTORICAL_PATH_ABSENT_AT_FREEZE_COMMIT | G=111011",
+        "pass": true
+      },
+      {
+        "probe": "P19",
+        "desc": "empty digest; genuinely EMPTY committed file at the freeze commit, non-empty now",
+        "expected": true,
+        "actual": true,
+        "historical": "HISTORICAL_SOURCE_HASH_VERIFIED",
+        "current": "CURRENT_SOURCE_HASH_VERIFIED",
+        "reason": "line 2 HISTORICAL_VERIFIED: digest = blob at freeze commit 852f14a0d1fe (path last changed in 55a7c789953e) | G=111111",
+        "pass": true
+      },
+      {
+        "probe": "P20",
+        "desc": "empty digest; path non-empty at the freeze commit, changed later",
+        "expected": false,
+        "actual": false,
+        "historical": "HISTORICAL_SOURCE_HASH_NOT_VERIFIED",
+        "current": "CURRENT_SOURCE_HASH_VERIFIED",
+        "reason": "line 2 MISMATCH: DIGEST_IS_NOT_THIS_PATH_AT_THE_FREEZE_COMMIT | G=111011",
+        "pass": true
+      },
+      {
+        "probe": "P21",
+        "desc": "study-local shadow copy of a source path with matching fabricated digest",
+        "expected": false,
+        "actual": false,
+        "historical": "HISTORICAL_SOURCE_HASH_NOT_VERIFIED",
+        "current": "CURRENT_SOURCE_HASH_VERIFIED",
+        "reason": "line 2 MISMATCH: DIGEST_IS_NOT_THIS_PATH_AT_THE_FREEZE_COMMIT | G=111011",
+        "pass": true
+      },
+      {
+        "probe": "P22",
+        "desc": "genuine superseded line; EVIDENCE.json declares no source tree",
+        "expected": false,
+        "actual": false,
+        "historical": "HISTORICAL_SOURCE_HASH_NOT_VERIFIED",
+        "current": "CURRENT_SOURCE_HASH_VERIFIED",
+        "reason": "line 2 MISMATCH: NO_DECLARED_SOURCE_TREE | G=111011",
+        "pass": true
+      },
+      {
+        "probe": "P23",
+        "desc": "genuine superseded line; declared source tree is not the freeze-commit tree",
+        "expected": false,
+        "actual": false,
+        "historical": "HISTORICAL_SOURCE_HASH_NOT_VERIFIED",
+        "current": "CURRENT_SOURCE_HASH_VERIFIED",
+        "reason": "line 2 MISMATCH: DECLARED_SOURCE_TREE_IS_NOT_THE_TREE_AT_THE_FREEZE_COMMIT | G=111011",
+        "pass": true
+      },
+      {
+        "probe": "P24",
+        "desc": "genuine superseded lines; hash file carries an uncommitted extra line",
+        "expected": false,
+        "actual": false,
+        "historical": "HISTORICAL_SOURCE_HASH_NOT_VERIFIED",
+        "current": "CURRENT_SOURCE_HASH_VERIFIED",
+        "reason": "line 2 MISMATCH: HASH_FILE_NOT_COMMITTED_UNMODIFIED_AT_HEAD | DUPLICATE_PATHS: EVIDENCE.json | G=111011",
+        "pass": true
+      },
+      {
+        "probe": "P25",
+        "desc": "SOURCE_MANIFEST.json tampered (consistent-looking rows), +impl clean",
+        "expected": false,
+        "actual": false,
+        "historical": "NO_HISTORICAL_SOURCE_LINES",
+        "current": "CURRENT_SOURCE_HASH_NOT_VERIFIED",
+        "reason": "CURRENT: SOURCE_MANIFEST_DIFFERS_FROM_HEAD; SOURCE_MANIFEST_ROWS_DISAGREE_WITH_HEAD; SOURCE_MANIFEST_TREE_DISAGREES_WITH_HEAD | G=111110",
+        "pass": true
+      },
+      {
+        "probe": "P26",
+        "desc": "untracked extra source file in +impl, manifest regenerated",
+        "expected": false,
+        "actual": false,
+        "historical": "NO_HISTORICAL_SOURCE_LINES",
+        "current": "CURRENT_SOURCE_HASH_NOT_VERIFIED",
+        "reason": "CURRENT: NOT_IN_HEAD: architecture/extra_probe.m; SOURCE_MANIFEST_DIFFERS_FROM_HEAD; SOURCE_MANIFEST_ROWS_DISAGREE_WITH_HEAD; SOURCE_MANIFEST_TREE_DISAGREES_WITH_HEAD | G=111110",
+        "pass": true
+      },
+      {
+        "probe": "P27",
+        "desc": "+impl file deleted in the working tree",
+        "expected": false,
+        "actual": false,
+        "historical": "NO_HISTORICAL_SOURCE_LINES",
+        "current": "CURRENT_SOURCE_HASH_NOT_VERIFIED",
+        "reason": "CURRENT: MISSING_IN_WORKING_TREE: architecture/+olh/+move/limit.m | G=111110",
+        "pass": true
+      },
+      {
+        "probe": "P28",
+        "desc": "+impl edit + regenerated manifest hidden with git update-index --skip-worktree",
+        "expected": false,
+        "actual": false,
+        "historical": "NO_HISTORICAL_SOURCE_LINES",
+        "current": "CURRENT_SOURCE_HASH_NOT_VERIFIED",
+        "reason": "CURRENT: MODIFIED_IN_WORKING_TREE: architecture/olhoffSolve.m; SOURCE_MANIFEST_DIFFERS_FROM_HEAD; SOURCE_MANIFEST_ROWS_DISAGREE_WITH_HEAD; SOURCE_MANIFEST_TREE_DISAGREES_WITH_HEAD | G=111110",
+        "pass": true
+      },
+      {
+        "probe": "P29",
+        "desc": "committed +impl change + committed manifest, PROVENANCE.md tree not updated",
+        "expected": false,
+        "actual": false,
+        "historical": "NO_HISTORICAL_SOURCE_LINES",
+        "current": "CURRENT_SOURCE_HASH_NOT_VERIFIED",
+        "reason": "CURRENT: PROVENANCE_MD_SOURCE_TREE_DISAGREES_WITH_HEAD | G=111110",
+        "pass": true
+      },
+      {
+        "probe": "P30",
+        "desc": "case-variant source path resolving to a study-local shadow copy (addition)",
+        "expected": false,
+        "actual": false,
+        "historical": "NO_HISTORICAL_SOURCE_LINES",
+        "current": "CURRENT_SOURCE_HASH_VERIFIED",
+        "reason": "MALFORMED line 2: names production source through a non-canonical path | G=111011",
+        "pass": true
+      },
+      {
+        "probe": "P31",
+        "desc": "OlhoffCurrent//+impl spelling + study-local shadow copy (ADDENDUM_1)",
+        "expected": false,
+        "actual": false,
+        "historical": "NO_HISTORICAL_SOURCE_LINES",
+        "current": "CURRENT_SOURCE_HASH_VERIFIED",
+        "reason": "MALFORMED line 2: names production source through a non-canonical path | G=111011",
+        "pass": true
+      },
+      {
+        "probe": "P32",
+        "desc": "OlhoffCurrent/./+impl spelling + study-local shadow copy (ADDENDUM_1)",
+        "expected": false,
+        "actual": false,
+        "historical": "NO_HISTORICAL_SOURCE_LINES",
+        "current": "CURRENT_SOURCE_HASH_VERIFIED",
+        "reason": "MALFORMED line 2: names production source through a non-canonical path | G=111011",
+        "pass": true
+      },
+      {
+        "probe": "P33",
+        "desc": "study-relative ../../+impl path to the REAL production file, current digest (ADDENDUM_1)",
+        "expected": false,
+        "actual": false,
+        "historical": "NO_HISTORICAL_SOURCE_LINES",
+        "current": "CURRENT_SOURCE_HASH_VERIFIED",
+        "reason": "MALFORMED line 2: resolves to production source through a non-canonical path or link | G=111011",
+        "pass": true
+      },
+      {
+        "probe": "P34",
+        "desc": "+impl//architecture spelling with the genuine freeze digest (ADDENDUM_1)",
+        "expected": false,
+        "actual": false,
+        "historical": "NO_HISTORICAL_SOURCE_LINES",
+        "current": "CURRENT_SOURCE_HASH_VERIFIED",
+        "reason": "MALFORMED line 2: names production source through a non-canonical path | G=111011",
+        "pass": true
+      },
+      {
+        "probe": "P35",
+        "desc": "freeze-commit blob forged with git replace, fabricated digest (ADDENDUM_1)",
+        "expected": false,
+        "actual": false,
+        "historical": "HISTORICAL_SOURCE_HASH_NOT_VERIFIED",
+        "current": "CURRENT_SOURCE_HASH_VERIFIED",
+        "reason": "line 2 MISMATCH: DIGEST_IS_NOT_THIS_PATH_AT_THE_FREEZE_COMMIT | G=111011",
+        "pass": true
+      },
+      {
+        "probe": "P36",
+        "desc": "dirty +impl, GIT_DIR redirected to a clone committing the edit (ADDENDUM_1)",
+        "expected": false,
+        "actual": false,
+        "historical": "NO_HISTORICAL_SOURCE_LINES",
+        "current": "CURRENT_SOURCE_HASH_NOT_VERIFIED",
+        "reason": "CURRENT: MODIFIED_IN_WORKING_TREE: architecture/olhoffSolve.m; SOURCE_MANIFEST_DIFFERS_FROM_HEAD; SOURCE_MANIFEST_ROWS_DISAGREE_WITH_HEAD; SOURCE_MANIFEST_TREE_DISAGREES_WITH_HEAD | G=111110",
+        "pass": true
+      },
+      {
+        "probe": "P37",
+        "desc": "dirty +impl, HEAD blobs substituted with git replace (ADDENDUM_1)",
+        "expected": false,
+        "actual": false,
+        "historical": "NO_HISTORICAL_SOURCE_LINES",
+        "current": "CURRENT_SOURCE_HASH_NOT_VERIFIED",
+        "reason": "CURRENT: MODIFIED_IN_WORKING_TREE: architecture/olhoffSolve.m; SOURCE_MANIFEST_DIFFERS_FROM_HEAD; SOURCE_MANIFEST_ROWS_DISAGREE_WITH_HEAD; SOURCE_MANIFEST_TREE_DISAGREES_WITH_HEAD | G=111110",
+        "pass": true
+      },
+      {
+        "probe": "P38",
+        "desc": "study-local symlink to the real production file, current digest (ADDENDUM_1)",
+        "expected": false,
+        "actual": false,
+        "historical": "NO_HISTORICAL_SOURCE_LINES",
+        "current": "CURRENT_SOURCE_HASH_VERIFIED",
+        "reason": "MALFORMED line 2: resolves to production source through a non-canonical path or link | G=111011",
+        "pass": true
+      }
+    ],
+    "meta": {
+      "repo": "/private/var/folders/6b/jnh3zrqx6rb4k17mvvy0wb6m0000gn/T/tpbb95f8a4_00a2_4e10_8896_61940c1a82e5_step1A",
+      "head": "b21483b158f58e05e7b56957f2fbe8e1d2891395",
+      "clone": "/private/var/folders/6b/jnh3zrqx6rb4k17mvvy0wb6m0000gn/T/tpf76dbe16_d3c9_4e3a_83ee_86b2dd160b99_gateprobe",
+      "repoTrackedStatusUnchanged": true,
+      "repoHeadUnchanged": true,
+      "nProbes": 39,
+      "nAsExpected": 39,
+      "gate": "/private/var/folders/6b/jnh3zrqx6rb4k17mvvy0wb6m0000gn/T/tpbb95f8a4_00a2_4e10_8896_61940c1a82e5_step1A/analysis/OlhoffCurrent/olhoffcurrent_finalization_gate.m"
+    },
+    "nAsExpected": 39,
+    "n": 39
+  },
+  "B": {
+    "ok": false,
+    "nHistorical": 7,
+    "paths": [
+      "analysis/OlhoffCurrent/SOURCE_MANIFEST.json",
+      "analysis/OlhoffCurrent/+impl/architecture/+olh/+move/limit.m",
+      "analysis/OlhoffCurrent/+impl/architecture/olhoffSolve.m",
+      "analysis/OlhoffCurrent/+impl/architecture/+olh/+config/schema.m",
+      "analysis/OlhoffCurrent/+impl/architecture/+olh/+config/validate.m",
+      "analysis/OlhoffCurrent/+impl/architecture/+olh/+config/toLegacy.m",
+      "analysis/OlhoffCurrent/+impl/architecture/+olh/+config/fromLegacy.m"
+    ],
+    "digests": [
+      "431e7b3084507cd8b53862847b828cfd9f8948172e349bbae0c72749e8134aeb",
+      "61fa923d430121ead764a229b4f48dfd77617540b4ab6db883ccd9d5904b1c1e",
+      "1e5a114cbf91717e01e5592e86203f401ed5cdb3e5f5ce9a727b8163cdf2fba3",
+      "d7a808995d9a34810442ddf17f15de980aa1e62efe90b3563f3e474ae5f5cf67",
+      "30e495ea8bcc25193de2c64f04984549870e213f9f9df871e52cc4c906cab141",
+      "685caacbd3db2bd19e14cc4fe3be0098b7bba423fe2b4a91f0cb83a3e4a21a04",
+      "7d0bad832c906c5304acb2ebf84304739fe3531281a0e007aa395fd58ae96ff8"
+    ],
+    "freeze": "bba45e72ea18eca7615315fcc543572d42a436bc",
+    "source": "1438aa3f4bd934f5b588587ef65f4f2ca35bac1c",
+    "declaredTree": "edbfe47eb32109a2fb017f6f13d5327f2c240357caa96630064ffcf37ee152cb",
+    "freezeTree": "edbfe47eb32109a2fb017f6f13d5327f2c240357caa96630064ffcf37ee152cb",
+    "historical": "HISTORICAL_SOURCE_HASH_VERIFIED",
+    "current": "CURRENT_SOURCE_HASH_VERIFIED",
+    "headTree": "4ba9a3ae10881344a0e60f2b8a8976c5ec9ceccf966bc2a3da4f37fb5aebffbf"
+  },
+  "C": {
+    "original": {
+      "results": [
+        {
+          "id": "P0",
+          "desc": "baseline compliant study",
+          "expect": true,
+          "got": true,
+          "nSup": 0,
+          "supRecorded": ""
+        },
+        {
+          "id": "P1",
+          "desc": "J1 replica: real historical digest, same path",
+          "expect": true,
+          "got": false,
+          "nSup": 0,
+          "supRecorded": ""
+        },
+        {
+          "id": "P2",
+          "desc": "J2 replica: fabricated digest",
+          "expect": false,
+          "got": false,
+          "nSup": 0,
+          "supRecorded": ""
+        },
+        {
+          "id": "P3",
+          "desc": "historical digest of a DIFFERENT source path (limit.m digest on olhoffSolve.m line)",
+          "expect": false,
+          "got": false,
+          "nSup": 0,
+          "supRecorded": ""
+        },
+        {
+          "id": "P4",
+          "desc": "historical digest of a NON-source file (README.md @013cc48)",
+          "expect": false,
+          "got": false,
+          "nSup": 0,
+          "supRecorded": ""
+        },
+        {
+          "id": "P5",
+          "desc": "DUPLICATE path: fabricated line FOLLOWED by real historical line",
+          "expect": false,
+          "got": false,
+          "nSup": 0,
+          "supRecorded": ""
+        },
+        {
+          "id": "P6",
+          "desc": "DUPLICATE path: real historical line followed by fabricated line",
+          "expect": false,
+          "got": false,
+          "nSup": 0,
+          "supRecorded": ""
+        },
+        {
+          "id": "P7",
+          "desc": "empty-content digest, path never deleted in history",
+          "expect": false,
+          "got": false,
+          "nSup": 0,
+          "supRecorded": ""
+        },
+        {
+          "id": "P8",
+          "desc": "real historical digest but +impl locally edited (manifest fails)",
+          "expect": false,
+          "got": false,
+          "nSup": 0,
+          "supRecorded": ""
+        },
+        {
+          "id": "P9",
+          "desc": "empty-content digest, path deleted+re-added in history (fabricated: content never empty)",
+          "expect": false,
+          "got": false,
+          "nSup": 0,
+          "supRecorded": ""
+        }
+      ],
+      "nFailOpen": 1,
+      "commit": "9b30ec45b038fb36e7cf20d57679b71cfd099fb3"
+    },
+    "p10": {
+      "id": "P10",
+      "desc": "+impl locally edited AND SOURCE_MANIFEST.json regenerated; real historical digest line",
+      "expect": false,
+      "manifestOk": true,
+      "got": false,
+      "nSup": 0,
+      "failOpen": false
+    }
+  }
+}

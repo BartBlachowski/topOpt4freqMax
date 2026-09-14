@@ -1,0 +1,633 @@
+  Research papers                                             Struct Multidisc Optim 20, 2–11  Springer-Verlag 2000
+
+
+
+
+Maximization of eigenvalues using topology optimization
+N.L. Pedersen
+
+
+
+
+Abstract Topology optimization is used to optimize            (1988). In the present paper, the SIMP method will be
+the eigenvalues of plates. The results are intended espe-     used, see Zhou and Rozvany (1991), Bendsøe (1989) or
+cially for MicroElectroMechanical Systems (MEMS) but          Bendsøe and Sigmund (1999) for a general discussion.
+can be seen as more general. The problem is not formu-        A speciﬁc example of reinforcement optimization is the
+lated as a case of reinforcement of an existing structure,    optimal design of the rib-reinforcement of a plate, see
+so there is a problem related to localized modes in low       Krog and Olhoﬀ (1995). In this case it is the reinforce-
+density areas. The topology optimization problem is for-      ment which is topology optimized and not the basic struc-
+mulated using the SIMP method. Special attention is           ture. Using the homogenization method the objective of
+paid to a numerical method for removing localized eigen-      Tenek and Hagiwara (1994) is to maximize the funda-
+modes in low density areas. The method is applied to nu-      mental eigenfrequencies of plates, with the density of the
+merical examples of maximizing the ﬁrst eigenfrequency.       individual plate ﬁnite element constrained to be higher
+One example is a practical MEMS application; a probe          than 10% of full density. The optimization formulated can
+used in an Atomic Force Microscope (AFM). For the             therefore not be considered a “true” topology optimiza-
+AFM probe the optimization is complicated by a con-           tion, but rather an optimization of reinforcement. Dı́az
+straint on the stiﬀness and constraints on higher order       and Kikuchi (1992) dealt with the reinforcement of given
+eigenvalues.                                                  2D structures where the eigenmodes are in-plane. The re-
+                                                              inforcement is in this case not the same as in the paper
+Key words Topology optimization, SIMP, eigenvalue,            by Tenek and Hagiwara (1994) because it includes the
+MEMS design, AFM probes, FEM                                  possibility of void elements around the structure that is
+                                                              reinforced. However in the optimal solutions shown, the
+                                                              low density areas are still grey (intermediate density),
+                                                              indicating that the void densities are constrained to be
+                                                              higher than a given value. In the recent paper by Kosaka
+                                                              and Swan (1999) there is an example of the optimiza-
+1
+                                                              tion of a weighted sum of the ﬁrst ﬁve eigenfrequencies
+Introduction
+                                                              of a rectangular plate with pin-supports at the corners.
+                                                              The problem is not formulated as a reinforcement and the
+Topology optimization is a very active area of research       elastic properties are obtained using a pure Reuss formu-
+that is, and has been, studied extensively, with the bulk     lation, for an explanation see e.g. Bendsøe and Sigmund
+part of the work done within compliance optimization.         (1999). Further examples of optimization of dynamic be-
+A review of topology optimization method can be found         haviour using topology optimization can be found in the
+e.g. in the book by Bendsøe (1995). The number of papers      papers of e.g. Ma et al. (1994, 1995).
+dealing with optimization of dynamics using topology op-          One of the main problems in the optimization of eigen-
+timization is, however, limited. In most papers that deal     frequencies or buckling loads using topology optimization
+with optimization of the dynamic behaviour the problem        is the possibility of localized modes in low density areas,
+is formulated as a case of reinforcement optimization, and    see e.g. Neves et al. (1995). Localized modes occur in
+the topology optimization problem is formulated using         areas that are at minimum density or close to minimum
+the homogenization method, see Bendsøe and Kikuchi            density. These areas are very ﬂexible compared with areas
+                                                              with full densities, and will therefore control the lowest
+Received June 10, 1999
+                                                              eigenmodes of the whole structure. This could be avoided
+N.L. Pedersen                                                 by removing low density elements but this cannot be done
+Department of Solid Mechanics, Technical University of Den-   in topology optimization because the algorithm must be
+mark, Building 404, DK-2800 Lyngby, Denmark                   allowed to add material to these low density areas. This is
+e-mail: niels@fam.dtu.dk                                      not possible if the elements are removed. In an initial de-
+                                                                                                                            3
+
+sign where the material is rather evenly distributed, there   2
+is no problem in calculating the eigenfrequencies, as the     Methods of avoiding localized modes
+problem occurs when there are areas with high densities
+and areas with low densities in the same design. Standard     The intention of this section is to present a numerical
+calculation of eigenmodes and eigenfrequencies in such        method that removes the possibility of localized modes in
+a design will result in localized modes in the low density    low density areas of the design. These modes inﬂuence the
+areas.                                                        optimization of the primary structure of interest, namely
+    When the optimization is formulated as a reinforce-       the high density areas. This problem often occurs in top-
+ment problem, the problem of localized modes is circum-       ology optimization where eigenfrequency/eigenmodes are
+vented because there is a lower limit on the stiﬀness and     the objective or constrained in the optimization.
+mass of the individual elements. In some problems, how-           In topology optimization we are normally working
+ever, it is not possible to describe the problem as a rein-   with a ﬁxed grid in the design domain. In the ﬁnal de-
+forcement, and there is therefore a need for an approach      sign the element in the ﬁnite element model should ei-
+to solve these problems. The main motivation for this pa-     ther be a void element or a solid element, i.e. we want
+per is to show a possible way to circumvent the problem of    a black/white design. This leads to a number of diﬀerent
+localized modes in topology optimization. This approach       problems because there is a big diﬀerence in the stiﬀ-
+is then used to optimize the probe in an Atomic Force         ness and mass of the void and solid elements. One idea
+Microscope (AFM).                                             is then to remove the elements from the ﬁnite element
+    An atomic force microscope (AFM) is a microscope          model when they become void. This is not applicable,
+based on interaction between a sample surface and             however, because once an element has been removed from
+a probe. The microscope was invented by Quate et al.          the model it is not possible for it to come back. One of the
+(1986). One of the essential parts of the AFM is the probe.   main problems in topology optimization is therefore that
+Most probes consist of a cantilever beam on which a tip       we have to work with a ﬁnite element model with a mix-
+is mounted at the end. The principle in using the AFM         ture of void and solid elements on a ﬁxed grid. Although
+is that the probe is scanned over a sample and due to at-     the ﬁnal design consists of both solid and void elements,
+tracting forces between the tip and the sample the beam       we still want the physical behaviour of the design to be
+will deﬂect; this deﬂection may be interpreted as an elev-    controlled solely by the solid elements. One physical be-
+ation map of the surface. The attractive force can be         haviour could be the eigenfrequencies of a design. In this
+divided into three: van der Waals forces, capillary forces    case we want to ﬁnd the eigenfrequencies of the solid areas
+and interatomic repulsive forces. The attractive forces are   of the design domain, neglecting the void elements. When
+very small, typically in the nN regime (Boisen 1997), so in   looking for eigenmodes and frequencies in such a design,
+order for the beam to deﬂect it must be very ﬂexible, with    there is the possibility of what could be termed localized
+stiﬀness in the range of 1 to 10 N/M. Micromachining is       modes or pseudo modes.
+used to produce the beams and a typical size of the beam          Localized modes are characteristic for designs where
+is L1 × L2 × T = 100 µm × 10 µm × 1.5 µm. Because of the      there is a high variation of densities, and they are also
+production methods the material used is typically silicon.    present in a ﬁnal “0-1” design (void/solid). This is illus-
+For a review article on AFM, see Meyer (1992).                trated with the design shown in Fig. 1. The ﬁrst eigen-
+    Previous optimization of AFM probes using beam            mode and the eigenfrequency of the solid part are shown
+elements can be found in the paper by Pedersen (1999).        in Fig. 2 together with the value of the ﬁrst eigenfre-
+The results shown in that paper are topologically re-         quency calculated using beam theory. It is the mode and
+stricted due to the use of beam elements. It is the inten-    frequency in Fig. 2 that we would like to reproduce when
+tion of this paper to redo the optimization of an AFM         using the whole design domain shown in Fig. 1.
+probe allowing the design to have holes, by using topology
+optimization.
+    The paper is organized as follows. Section 2 treats lo-
+calized modes, the main mechanisms responsible for the        Modulus of elasticity
+problem are described and a possible way of avoiding the      E + 1.8·10 11ĂNńm 2
+problem is presented. Section 3 describes the modelling of
+the plates and the formulation of the optimization prob-        Poisson's ratio
+                                                                  n + 0.06                                           L 2 + 1Ăm
+lem. Finally, the results of three diﬀerent optimization
+runs are shown in the last section. The ﬁrst two examples
+                                                                 Mass density
+are inspired by the literature: Tenek and Hagiwara (1994)      ^
+                                                               ò + 2300Ăkgńm 3
+and Kosaka and Swan (1999). The deﬁnition of the opti-
+mization problem is changed in both cases to ﬁt the new
+method of avoiding localized modes. The ﬁnal example is                                           L 1 + 1Ăm
+the optimization of an AFM probe and the results show                                       Thickness   T + 0.01Ăm
+topologically diﬀerent solutions from those found in the      Fig. 1 Plate clamped at one end seen from above; black
+paper by Pedersen (1999) based on a beam model.               squares are solid material and white squares are void elements
+4
+
+
+
+
+                                                     Analytical first eigenfrequency
+                                                           (using beam theory)
+                           w 1 + 142.3ĂHz                    w 1 + 142.9ĂHz
+
+
+
+Fig. 2 First eigenfrequency of beam using 10 × 2 shell elem-
+ents or using beam theory
+
+
+    In a topology optimization using the SIMP model we
+                                                                                                                                    w 1 + 142.3ĂHz
+analyse the full domain shown in Fig. 1 and express the
+stiﬀness and mass matrix as
+                                                                                       Fig. 4 First eigenmode of plate when values α = 3 and β = 6
+                                                                                       are used in the SIMP method
+        
+        NE                             
+                                       NE
+[S] =         ρα [se ] ,      [M] =          ρβ [me ] ,                        (1)
+        e=1                            e=1
+
+where ρ is the relative density factor, with 0 < ρmin ρ1.                                However these penalization factors cannot be used in
+The minimum density factor ρmin is introduced to avoid                                 an intermediate design step where the densities in an
+numerical problems when calculating the inverse of the                                 element may lie somewhere between the minimum and
+stiﬀness matrix (a typical value could be ρmin = 0.001).                               maximum allowed values.
+The element stiﬀness matrix is given by [se ] and the elem-                                From numerous numerical experiments, and also from
+ent mass matrix by [me ]. Typical values of the exponents                              papers, it is found that with a minimum density of ρmin =
+are α = 3 and β = 1. If we try to calculate the ﬁrst eigen-                            0.1 the problems of localized modes are removed, see e.g.
+mode of the plate shown in Fig. 1 using these values for                               Tenek and Hagiwara (1994). Choosing a minimum dens-
+the exponents, the result will be the one shown in Fig. 3.                             ity factor of 0.1 will change the problem from a topology
+The eigenmode shown in Fig. 3 is clearly not the eigen-                                optimization to an optimization of reinforcement, which
+mode wanted, and the eigenfrequency is oﬀ by a factor of                               is not the goal here. Following the lines of Buhl et al.
+more than one hundred.                                                                 (1999) (developed for nonlinear statics) a method can be
+                                                                                       proposed in which nodal degrees of freedom are ignored
+                                                                                       in the calculation of the eigenmode. The neglected nodes
+                                                                                       are those that are surrounded by elements that all have
+                                                                                       a density factor less than 1% (ρ < 0.01). This is done by
+                                                                                       setting the deﬂection of these nodes to zero in each it-
+                                                                                       eration step and removing them from the convergence
+                                                                                       criteria. A calculation of the ﬁrst eigenmode using this
+                                                                                       method will result in the mode shown in Fig. 5.
+
+
+
+
+                                                                w 1 + 0.997ĂHz
+
+Fig. 3 First eigenmode of plate when values α = 3 and β = 1
+are used in the SIMP method
+
+
+    In a pure “0-1” design (ρ = 1 or ρ = 0.001) the values
+of α and β can in principle be chosen freely within bounds
+dictated by round-oﬀ errors. By putting higher values on
+α and β, the stiﬀness and mass of the solid elements re-                                                                            w 1 + 142.3ĂHz
+main constant while the void elements become more ﬂex-
+ible and lighter. In Fig. 3 the problem is that the mass of                            Fig. 5 First eigenmode when nodes in low density are as are
+the void elements is high compared with their stiﬀness.                                removed from the convergence criterion
+By penalizing the mass more, it should be possible to ob-
+tain the right mode, i.e. the mode of the solid elements.
+If the values α = 3 and β = 6 are used, the eigenmode in                                  The reason why the void areas have a deﬂection is that
+Fig. 4 is found.                                                                       the last step in the calculation of the eigenmode and fre-
+                                                                                                                            5
+
+quency is a iteration step as given by inverse iteration         E = ρα Esolid + (1 − ρα)Evoid .                           (3)
+
+
+NE                         
+                           NE                                    But with (3) we face the same basic problems. To illus-
+      ρα [se ]{De }p+1 =          ρβ [me ]{De }p ,         (2)   trate this problem we choose a high value of the modu-
+e=1                        e=1                                   lus of elasticity for the void material Evoid = 10−3 Esolid .
+                                                                 With this value the ratio between penalization of mass
+where {De } is the part of the eigenmode that relates to         and stiﬀness is
+the element e and p is the iteration index. Although the                 ρ
+deﬂection of the nodes in the void areas are set to zero                           .                                       (4)
+                                                                 ρα + (1 − ρα)10−3
+in the right-hand part of (2), it will not be zero after the
+calculation of {De }p+1 .                                            In Fig. 7 this ratio is shown for α = 3. Although the
+    It will be seen from Fig. 5 that employing this method       behaviour is good for very small values of the density fac-
+of ignoring nodes does not solve the problem on its own.         tor, there is an unsatisfactory peak in the ratio. This peak
+A closer look at the eigenmode in Fig. 5 will show that the      will be even more pronounced if we choose a topologi-
+deﬂection of the solid part (the beam) is almost identi-         cally more realistic value of the void elasticity Evoid =
+cal to the deﬂection shown in Fig. 4. The reason why the         10−9 Esolid . At the limit Evoid → 0, Fig. 7 will converge to
+deﬂection of the solid area appears diﬀerent is that the         Fig. 6.
+modes are scaled so that the maximum node deﬂection is
+1/6 of the domain size. When looking closely at the void
+areas in Figs. 5 and 3 it will also be seen that these modes
+are not identical.
+    To remove entirely the possibility of localized modes,       50
+corrupting the design process, we must also look at the
+penalization put on mass and stiﬀness. The iteration
+equation used in inverse iteration to determine the eigen-       40
+                                                                                                            ò
+mode is given by (2). From this it is expected that the
+                                                                                                   ò 3 ) (1 * ò 3) 10 *3
+ratio between the penalization of the mass and the pe-           30
+nalization of the stiﬀness will have a big impact on the
+calculation of the eigenvalue. In Fig. 6 the ratio ρ/ρ3 is
+                                                                 20
+plotted.
+
+                                                                 10
+10000
+                                                                  0
+                                                                      0       0.2        0.4          0.6         0.8        1
+                                                                                                ò
+                                                                 Fig. 7 Ratio between penalization on mass and stiﬀness
+
+
+ 5000                                                                Instead it is proposed to use the SIMP method with
+                        òńò   3                                  a slight variation of the penalization of the stiﬀness for
+                                                                 density factors lower than 10%
+
+                                                                           penalization
+                                                                 mass     ρ      for 0 < ρmin  ρ  1
+                                                                                                                           (5)
+      0
+                                                                           ρ3
+                                                                                  for 0.1  ρ  1
+                                                                 stiﬀness
+          0       0.2             0.4        0.6     0.8    1              ρ/100 for ρmin  ρ  0.1
+                                        ò
+                                                                     Although the penalization of the stiﬀness in (5) is con-
+Fig. 6 Ratio between penalization on mass and stiﬀness
+                                                                 tinuous the ﬁrst derivative is not, but numerical experi-
+                                                                 ments indicate that this is not a problem. When using
+                                                                 the penalization scheme (5) the minimum allowed dens-
+   From Fig. 6 it will be seen that the ratio has unsatis-       ity factor can be less than ρmin = 0.001 without causing
+factorily high values for small values of ρ. Unsatisfactorily    numerical problems; a value of ρmin = 10−7 may even be
+high in the sense that the element has a large mass com-         chosen. With this penalization scheme the ratio between
+pared with the stiﬀness. One idea to prevent this is to use      penalization of mass and stiﬀness is restricted to be less
+a modulus of elasticity given by                                 than 100. The ratio is shown in Fig. 8.
+6
+
+                                                                       
+                                             ò                          r   − dist(k, i){i ∈ N E|dist(k, i)  rmin }
+100
+                                           òń100                   Hi = min                                                 (6)
+                                                                        0               {i ∈ N E|dist(k, i) > rmin }
+
+                                                                   where f is a constraint or objective functions, dist(k, i)
+                                                                   a function giving the distance from the centre of element
+                                                                   k to the centre of element i and rmin is the radius of the
+                                              ò                    circle that controls which sensitivities contribute to the
+    50                                                             ﬁltering of the sensitivity with respect to the design vari-
+                                              ò3
+                                                                   able k. For more details on this ﬁlter, see Sigmund (1994)
+                                                                   and Sigmund and Petersson (1998).
+                                                                       To perform the optimization we have to formulate the
+                                                                   objective and the constraints. When optimizing with re-
+                                                                   spect to eigenvalues we have to solve the matrix eigen-
+    0                                                              value problem
+         0              0.2           0.4      ò   0.6   0.8   1                
+                                                                    [S] − ω 2[M] {D} = {0} ,                               (7)
+Fig. 8 Ratio between penalization of mass and stiﬀness using
+the new method                                                     where [S] is the stiﬀness matrix, [M] the mass matrix,
+                                                                   {D} the eigenmode and ω 2 the eigenfrequency. The sen-
+                                                                   sitivities of (7) can be found in many papers on optimiza-
+   When using the penalization scheme (5) a calculation            tion and also in the book by Haftka (1990).
+of the eigenmode will result in the same basic picture                 Derivation of most of the constraints needed is straight-
+as shown in Fig. 3. The value of the ﬁrst eigenfrequency           forward. In the optimization of an AFM probe we need
+ω1 = 99 Hz. Thus, like the method of ignoring nodes, this          a constraint on the stiﬀness of the probe. The stiﬀness of
+method alone will not solve the problem.                           the probe is deﬁned by
+   The idea is now to combine scheme (5) with ignor-
+ing some nodes. If the two methods are combined, the                      P
+                                                                   K=       ,                                               (8)
+result will be that the localized modes are removed and                   u
+the result of a calculation will be the wanted eigenmode in
+                                                                   where P is a force applied at the end of the probe and u is
+Fig. 4. The proposed scheme has worked in numerous nu-
+                                                                   the corresponding translation of the probe end in the di-
+merical experiments, as shown by the examples in Sect. 4.
+                                                                   rection of the force. Enforcement of the constancy of this
+                                                                   stiﬀness coeﬃcient can be achieved by specifying that the
+3                                                                  potential energy from an applied constant force must be
+Modelling and optimization                                         constant
+                                                                                  P2
+The modelling of the plate and the formulation of the op-          Û = P u =        .                                      (9)
+                                                                                  K
+timization are described in this section. Many details can
+be found in the literature and the references given. This          This is seen directly from (9), because a change in the
+section is therefore kept short.                                   stiﬀness corresponds inversely to a change in the poten-
+    The plates are modelled using rectangular shell elem-          tial energy; Û is in optimization papers often referred
+ents. The element used in the modelling is an isopara-             to as compliance. The last constraints are the volume
+metric 4 node Mindlin plate element with 5 degrees of              constraint, a possible constraint on the second eigenfre-
+freedom per node (no “drilling” d.o.f.). The membrane              quency and constraints on the densities. The optimiza-
+and the bending part of the stiﬀness matrix are calculated         tion problem for the AFM probe may then be formulated
+with four Gauss points while the shear part is calculated          as
+using one Gauss point to prevent shear locking.
+    The rectangular design domain (the plate) is dis-              maximize: ω12 ,
+cretized and we allow for nonstructural masses and areas
+with prescribed density factors. The density factors are           subject to: Û = const. ,
+the design variables of the optimization problem. Filter-
+ing is used on the sensitivities of the optimization to pre-       
+                                                                   NE
+
+vent checkerboard patterns in the design. The ﬁlter is                   ρe Ve − V  0 ,
+                                                                   e=1
+given by
+
+dfˆ                1          
+                              NE
+                                           df                      ω22  cω12 ,    c is a given constant ,
+    =                              Hi ρi       ,
+dρk               E
+                  N                        dρi
+             ρk         Hi i=1                                     0 < ρmin  ρe  1 ,      e = 1, . . . , N E .           (10)
+                  i=1
+                                                                                                                       7
+
+   In the examples in the next section not all the con-
+straints are used but (10) corresponds to the most general
+optimization problem solved in this paper. The optimiza-
+tion method used is MMA (Method of Moving Asymp-
+totes) by Svanberg (1987). The case of multiple eigenval-
+ues is a special case that must be handled separately. In                                                   w 1 + 654 Hz
+the case of multiple eigenvalues (numerically identical)
+the method presented by Seyranian et al. (1994) or Peder-
+sen (1994) is used.
+
+
+
+4                                                             Fig. 9 Optimized results for a clamped plate with nonstruc-
+                                                              tural mass at centre
+Examples
+
+In this section three examples are shown. The ﬁrst ex-
+ample is inspired by an example found in the paper by
+Tenek and Hagiwara (1994). The second example is in-
+spired by an example found in the paper by Kosaka and
+Swan (1999). The ﬁnal example is the optimization of an
+AFM probe, which is an example found in the paper by                                                        w 1 + 331 Hz
+Pedersen (1999). In all the examples shown, the minimum
+density factor is ﬁxed at ρmin = 10−7 and we apply the
+penalization scheme (5) and ignore nodes.
+
+
+4.1
+Tenek and Hagiwara (1994)                                     Fig. 10 Optimized results for a simple supported plate with
+                                                              nonstructural mass at centre
+
+In this example we want to maximize the ﬁrst eigenfre-
+quency of a rectangular plate that is clamped at all four
+edges or simply supported at all four edges. The data for         Instead of adding a nonstructural mass we could also
+the plate are                                                 choose to specify a passive area. This is done in the
+                                                              next example. A centre square of 0.0125 m × 0.0125 m is
+E = 70 × 109 N/m2 ,    ν = 0.3 ,   ρ̂ = 2700 kg/m3 ,          ﬁxed to have a density factor of 1. The result of the op-
+                                                              timization is shown in Fig. 11. The problem deﬁnition
+                                                              of this optimization is almost identical to the optimiza-
+L1 = 0.15 m ,   L2 = 0.1 m ,   T = 0.00122 m ,                tion problem that resulted in Fig. 9. The reason for the
+                                                              diﬀerence between Figs. 9 and 11 is that the mass of
+E is the modulus of elasticity, ν is Poisson’s ratio, ρ̂ is   the passive area is approximately one sixth of the non-
+the mass density and L1 × L2 × T are the dimensions of        structural mass and the mass is smeared out over an
+the plate. There is no constraint on the stiﬀness or on       area.
+higher eigenfrequencies and the volume is constrained to
+be less than 60%. The minimum distance for the ﬁlter is
+rmin = 0.0055 m. Because this problem is not formulated
+as a reinforcement like the paper by Tenek and Hagiwara
+(1994) we need to place a nonstructural mass at the cen-
+tre. If we do not use a nonstructural mass the structure
+will disappear (no structure has the highest eigenfrequen-
+cies). The chosen size of the nonstructural mass is 10%
+of the allowed material; in this case Mu = 0.003 kg. The                                                    w 1 + 1157 Hz
+result from the clamped case is shown in Fig. 9 and the
+corresponding simply supported case in Fig. 10.
+    In both cases only one quarter is used in the analy-
+sis because of symmetry of the ﬁrst eigenmode; the dis-
+cretization of the whole plate is 120 × 80 elements. An
+analysis of the whole plate with the ﬁnal design has been     Fig. 11 Optimized results for a clamped plate with passive
+used to verify the eigenfrequencies.                          area at the centre
+8
+
+4.2
+Kosaka and Swan (1999)
+
+The second example is a rectangular plate with the fol-
+lowing data:
+
+E = 7.0 × 109 N/m2 ,            ν = 0.333 ,     ρ̂ = 1000 kg/m3 ,                                                  w 1 + 0.99 Hz
+
+L1 = 10 m ,         L2 = 10 m ,      T = 0.1 m .
+
+The objective is to maximize the ﬁrst eigenfrequency.
+There is no constraint on the stiﬀness or on higher order
+eigenfrequencies and the volume is constrained to be less
+than 50%. In the example from Kosaka and Swan (1999),
+                                                                           Fig. 13 Optimized plate with nonstructural mass at the cen-
+no assumption was made on a nonstructural mass; in the                     tre and supported at the corners
+present optimization a nonstructural mass of 10% of the
+total allowed material is added at the centre.
+    In the example given by Kosaka and Swan (1999), the
+interpolation of the modulus of elasticity is given by a for-              timization using the method from this paper is shown in
+mulation using the Reuss-bound                                             Fig. 13.
+                                                                               Only one quarter of the domain is used in the analy-
+1     ρ     1−ρ                                                            sis because of symmetry of the ﬁrst eigenmode. The dis-
+  =       +      .                                              (11)
+E   Esolid Evoid                                                           cretization of the total design domain is 120 × 120 elem-
+                                                                           ents, and a ﬁlter size of rmin = 0.275 m is used.
+With Evoid = 10−6 Esolid this corresponds to
+
+         10−6
+E=                   Esolid .                                   (12)       4.3
+      10−6 ρ + 1 − ρ
+                                                                           AFM probe
+With the relation (12) shown in Fig. 12a we obtain the re-
+lation between penalization of mass and penalization of                    This example is a practical MEMS application with the
+stiﬀness shown in Fig. 12b. From Fig. 12b it will be seen                  data
+that a density factor of approximately 50% corresponds
+to the element with the highest ratio between the penal-                   E = 180 × 109 N/m2 ,       ν = 0.06 ,   ρ̂ = 2300 kg/m3 ,
+ization of mass and stiﬀness. This is probably why there
+are no problems with localized modes reported in the pa-                   L1 = 40 µm ,   L2 = 38 µm ,       T = 0.5 µm .
+per by Kosaka and Swan (1999).
+    When using the four node element described in Sect. 3                      The plate is clamped at one edge and free at the re-
+and pin supports at the corners we obtain some zero en-                    maining edges. Two passive areas are needed: a circular
+ergy modes. To avoid this problem, the three nodes on                      domain with diameter of 5 µm at the free end of the can-
+the edge of the design domain that are closest to the                      tilever to be able to attach a tip, and a circular domain
+corners have ﬁxed translational d.o.f. The result of the op-               with a diameter of 10 µm to be able to reﬂect a laser beam
+
+
+
+      1.0                                                            250000
+
+      0.8        E                                                   200000
+                E solid
+      0.6                                                            150000          ò (10 *6ò ) 1 * ò)
+(a)                                                                                          10 *6
+                                                               (b)
+      0.4
+                                                                     100000
+      0.2
+                                                                       50000
+      0.0
+                                                                          0
+            0      0.2    0.4       0.6   0.8       1                          0   0.2    0.4       0.6    0.8      1
+                                ò                                                               ò
+Fig. 12 (a) Reuss interpolation between modulus of elasticity and density factor. (b) Ratio between penalization of mass and
+stiﬀness when using the Reuss formulation
+                                                                                                                                9
+
+                                                                      tion of the big circle with ﬁxed displacement of the free
+       5                                                              end of the probe. However this optimization also resulted
+                                                Laser                 in a maximization of the ﬁrst eigenfrequency, see Peder-
+       0                                      reflection   Tip        sen (1999) for further discussion. It is clear from Fig. 15
+                                                 area
+                                                                      that the result found here is topologically diﬀerent from
+      –5                                                              the results found using beam elements. The correspond-
+                                                                      ing eigenfrequencies are given in Table 1 and it should be
+           0         10            20               30           40
+                                                                      noted that the eigenvalue of the probe in Fig. 15a is found
+                          Length / m m
+                                                                      using beam elements.
+Fig. 14 Passive areas of AFM probe                                        The next example is a repetition of the previous opti-
+                                                                      mization; This time the constrain on higher order eigen-
+                                                                      frequencies is removed. The result is shown in Fig. 16 and
+from the probe. The tip is modelled by adding a nonstruc-             the ﬁrst eigenmode in Fig. 17. The eigenfrequency is given
+tural mass of Mu = 6.0 × 10−14 kg at the centre of the                in Table 1.
+smaller circular domain. The two passive areas are shown
+in Fig. 14.
+    More speciﬁc information on the problem deﬁnition                 Table 1 First eigenfrequencies for AFM probes
+can be found in the paper by Pedersen (1999). Only one
+half of the probe is used in the optimization because of                                      Fig. 15a    Fig. 15b    Fig. 16
+symmetry. An analysis of the total design domain based                 First eigenfrequency   504 KHz     531 KHz     584 KHz
+on the optimized result is used to check that the ﬁrst
+two eigenfrequencies found from analysis of half the de-
+sign domain correspond to the ones for the total domain.                 The result indicates that the optimal AFM probe is
+The total design domain is discretized using 80 × 76 elem-            built up of a plate consisting of the two ﬁxed circles; the
+ents and the ﬁlter size used is rmin = 0.66 µm. Contrary to           plate is then ﬁxed to the supports with two hinges. One
+standard topology optimization, there are no constraints              could argue from a production point of view that the de-
+on the total volume because it is not necessary to use                signs shown in Figs. 15 and 16 are diﬃcult to produce or
+a limited amount of material.                                         that they have other disadvantages. By adding more con-
+    In the ﬁrst example, the objective is to maximize the             straints to the optimization problem the result could be
+ﬁrst eigenfrequency of the AFM probe while constraining               modiﬁed to ﬁt the speciﬁc needs. In both examples it is
+the stiﬀness of the probe to 1 N/m. The higher eigen-                 possible to achieve higher ﬁrst eigenfrequencies than the
+frequencies are constrained to be 6 times higher than                 result reported by Pedersen (1999).
+the ﬁrst eigenfrequency. The result of the optimization is               As a ﬁnal example we repeat the last optimization
+shown in Fig. 15b together with the result from Pedersen              with diﬀerent limits on the allowed volume. The dis-
+(1999) in Fig. 15a.                                                   cretization of the design domain is 20 × 38. The starting
+    The result from Pedersen (1999) was achieved using                guess in each case has been the solution where 10% less
+a diﬀerent objective i.e. maximizing the angular rota-                material is allowed. It will be seen from the results that
+
+
+       20
+
+
+
+       10
+
+
+
+a)         0                                               (b)
+
+
+
+      –10
+
+
+
+      –20
+               0   10         20         30        40
+                          Length / m m
+Fig. 15 Optimization of AFM probe when there are constraints on higher eigenfrequencies, clamped at left edge. (a) Result from
+Pedersen (1999) using beam elements. (b) Result using topology optimization
+10
+
+                                                              Previous work has mainly focused on this problem as a re-
+                                                              inforcement problem using the homogenization method.
+                                                              This has the advantage that it removes the possibility of
+                                                              localized modes in low density areas. It is shown here that
+                                                              the basic mechanism for these local modes is the diﬀer-
+                                                              ence in the interpolation of the stiﬀness and the mass.
+                                                              A numerical method of removing the problem of localized
+                                                              modes is proposed. It consists of two aspects: the SIMP
+                                                              method is changed for density factors lower the 10% and
+                                                              the nodes in low density areas are neglected in the con-
+                                                              vergence criterion of the eigenvalue problem. The SIMP
+                                                              method is changed by restricting the maximum value of
+                                                              the ratio between the penalization of the stiﬀness and the
+Fig. 16 Optimized design of AFM probe when there is no        penalization of the mass. This is achieved by changing
+constraint in higher frequencies                              the penalization of the stiﬀness when the density factor
+                                                              is lower than 10%; it is proposed here that the penaliza-
+                                                              tion of the stiﬀness is one hundredth of the penalization of
+                                                              the mass. By using the proposed scheme the optimization
+                                                              problem does not need to be formulated as reinforcement
+                                                              problem.
+                                                                  Two examples found in literature are used as inspira-
+                                                              tion for the two examples shown. The results show that it
+                                                              is possible to solve topology optimization problems using
+                                                              the SIMP method without formulating the problem as
+                                                              a reinforcement problem.
+                                                                  The ﬁnal example is a practical MEMS application in
+                                                              which we optimize the performance of an AFM probe by
+                                                              maximizing the ﬁrst eigenfrequency. This optimization is
+                                                              complicated by constraints on higher order eigenvalues
+Fig. 17 First eigenmode of half of the AFM probe              and constraints on the stiﬀness of the probe. The results
+                                                              obtained are topologically diﬀerent from those reported
+                                                              by Pedersen (1999) using beam elements, and we ﬁnd an
+the solutions converge towards the result with no limit on    improved ﬁrst eigenfrequency.
+the volume, shown in Fig. 18.
+
+                                                              Acknowledgements The author wishes to thank Pauli Peder-
+5                                                             sen, Ole Sigmund and the rest of the TOPOPT group for
+Conclusions                                                   fruitful discussions. This work was supported by the Danish
+                                                              Technical Research Council through the THOR-programme
+In this paper the optimization of eigenvalues of structures   (Technology for Highly Oriente d Research): “Systematic de-
+using the topology optimization method is addressed.          sign of MEMS”. The support is highly appreciated.
+
+
+
+         V x 0.2                         V x 0.3                   V x 0.4
+      w 1 + 440ĂKHz                   w 1 + 513ĂKHz             w 1 + 531ĂKHz
+
+
+
+
+         V x 0.5                         V x 0.6
+      w 1 + 540ĂKHz                   w 1 + 578ĂKHz
+
+
+
+
+Fig. 18 Optimized AFM probes with diﬀerent constraints on the total volume
+                                                                                                                           11
+
+References                                                      Ma, Z.D.; Cheng, H.C.; Kikuchi, N. 1995: Topological design
+                                                                for vibrating structures. Comp. Meth. Appl. Mech. Eng. 121,
+                                                                259–280
+Bendsøe, M.P. 1989: Optimal shape design as a material dis-
+tribution problem. Struct. Optim. 10, 193–202                   Meyer, E. 1992: Atomic force microscopy. Prog. Surf. Sci. 41,
+                                                                3–49
+Bendsøe, M.P. 1995: Optimization of structural topology,
+                                                                Neves, M.M.; Rodrigues, H.; Guedes, J.M. 1995: Generalized
+shape and material . Berlin, Heidelberg, New York: Springer
+                                                                topology design of structures with a buckling load criterion.
+Bendsøe, M.P.; Kikuchi, N. 1988: Generating optimal topolo-     Struct. Optim. 10, 71–78
+gies in structural design using homogenization m. Comp.
+                                                                Pedersen, N.L. 1999: Design of cantilever probes for atomic
+Meth. Appl. Mech. Engrg. 71, 197–224
+                                                                force microscopy AFM. Eng. Opt. 32, 373–392
+Bendsøe, M.P.; Sigmund O. 1999: Material interpolations in
+                                                                Pedersen, P. 1994: Non-conservative dynamic systems: an-
+topology optimization. Arch. Appl. Mech. 69, 635–654
+                                                                alysis, sensitivity analysis, optimization. Lecture notes from
+Boisen, A. 1997: Passive & active AFM probes, design fabri-     IUTAM 5-th Summer School on Mechanics, Concurrent En-
+cation & characterization. Ph.D. Thesis, Technical University   gineering Tools for Dynamic Analysis and Optimization, Aal-
+of Denmark, DME A/S – Danish Micro Engineering, Mi-             borg
+croeletronik Centret                                            Quate, C.F.; Binning, G.; Gerber, C. 1986: Atomic force mi-
+Buhl, T.; Pedersen, C.B.W.; Sigmund O. 1999: Stiﬀness de-       croscope. Phys. Rev. Lett. 569, 930–933
+sign of geometrically nonlinear structures using topology op-   Seyranian, A.P.; Lund, E.; Olhoﬀ, N. 1994: Multiple eigenval-
+timization. Struct. Optim. 19, 93–104                           ues in optimization problems. Struct. Optim. 8, 207–226
+Dı́az, A.R.; Kikuchi, N. 1992: Solutions to shape and top-      Sigmund, O. 1994: Design of material structures using top-
+ology eigenvalue optimization problems using a homogeniza-      ology optimization. Ph.D. Thesis, Department of Solid Me-
+tion method. Int. J. Numer. Meth. Engng. 35, 1487–1502          chanics, Technical University of Denmark
+Haftka, R.T.; Gürdal, Z.; Kamat, M.P. 1990: Elements of        Sigmund, O.; Petersson, J. 1998: Numerical instabilities in
+structural optimization. Dordrecht: Kluwer                      topology optimization: A survey on procedures dealing with
+Kosaka, I.; Swan, C.C. 1999: A symmetry reduction method        checkerboards, mesh-dependencies and local minima. Struct.
+for continuum structural topology optimization. Comp. &         Optim. 16, 68–75
+Struct. 70, 47–61                                               Svanberg, K. 1987: The method of moving asymptotes – a new
+Krog, L.A.; Olhoﬀ, N. 1995: Topology optimization of plate      method for structural optimization. Int. J. Numer. Meth.
+and shell structures with multiple eigenfrequencies. In: Ol-    Engng. 24, 359–373
+hoﬀ, N.; Rozvany, G.I.N. (eds.) Proc. WCSMO-1 First World       Tenek, L.H.; Hagiwara, I. 1994: Eigenfrequency maximization
+Congress of Structural and Multidisciplinary Optimization       of plates by optimization of topology using homogenization
+(held in Goslar, Germany), pp. 675–682. Oxford: Pergamon        and mathematical programming. JSME Int. J. 37, 667–677
+Ma, Z.D.; Cheng, H.C.; Kikuchi, N. 1994: Structural design      Zhou, M.; Rozvany, G.I.N. 1991: The COC algorithm. Part II:
+for obtaining desires eigenfrequencies by using the topology    topology, geometry and generalized shape optimization.
+and shape optimization method. Comp. Sys. Engrg. 51, 77–89      Comp. Meth. Appl. Mech. Eng. 89, 197–224
+

@@ -1,0 +1,225 @@
+{
+  "schema": "olhoff_current_evidence/1",
+  "study": "postmerge_campaign_gate",
+  "generated": "2026-09-14T00:45:58+02:00",
+  "evidenceRoot": "analysis/OlhoffCurrent/evidence/postmerge_campaign_gate",
+  "implementation": "analysis/OlhoffCurrent",
+  "sourceTree": "4ba9a3ae10881344a0e60f2b8a8976c5ec9ceccf966bc2a3da4f37fb5aebffbf",
+  "matlab": "25.2.0.2998904 (R2025b)",
+  "attempt": 2,
+  "attempt1": "attempt1_blocked/ (OLHOFF_NINE_MESH_CAMPAIGN_BLOCKED, preserved byte-identical)",
+  "no_mesh_above_160x20_solved": true,
+  "artifacts": [
+    {
+      "path": "evidence/ANCHOR_COMPARISON.json",
+      "class": "required",
+      "description": "post-merge gate evidence (JSON)",
+      "bytes": 9408,
+      "sha256": "22019056c6c1e19d9ff02e317ec7baa8073999f8c768974510f3f671facb46b2",
+      "present": true,
+      "format": "JSON"
+    },
+    {
+      "path": "evidence/NINE_MESH_PREVIEW.json",
+      "class": "required",
+      "description": "post-merge gate evidence (JSON)",
+      "bytes": 17325,
+      "sha256": "1b8a5c9d3e2ba645324f66f9584e4dc48ac96e82b8ba5d199f9f52a3f967cbf0",
+      "present": true,
+      "format": "JSON"
+    },
+    {
+      "path": "evidence/POST_gates.json",
+      "class": "required",
+      "description": "post-merge gate evidence (JSON)",
+      "bytes": 657,
+      "sha256": "bdaf0f81cfa58d15276658dfbd129b410ffe117511bd3cbfc104ca5494836524",
+      "present": true,
+      "format": "JSON"
+    },
+    {
+      "path": "evidence/POST_harness.json",
+      "class": "required",
+      "description": "post-merge gate evidence (JSON)",
+      "bytes": 146630,
+      "sha256": "6185f579369e7422916bfa6306e2527f4e0de67d1e8971a76ded4276dc447fd6",
+      "present": true,
+      "format": "JSON"
+    },
+    {
+      "path": "evidence/POST_presets.json",
+      "class": "required",
+      "description": "post-merge gate evidence (JSON)",
+      "bytes": 491,
+      "sha256": "cdf1bdb61848cf08aab814996423612e06b143c971f3e027dc7b14f91d73ae46",
+      "present": true,
+      "format": "JSON"
+    },
+    {
+      "path": "evidence/POST_selftest.json",
+      "class": "required",
+      "description": "post-merge gate evidence (JSON)",
+      "bytes": 3615,
+      "sha256": "280a54d9dfef99efd55a18de994d0d1f580a6e32ae8822052310c05008f176c7",
+      "present": true,
+      "format": "JSON"
+    },
+    {
+      "path": "evidence/POST_selftest_selftest_report.json",
+      "class": "required",
+      "description": "post-merge gate evidence (JSON)",
+      "bytes": 3496,
+      "sha256": "ad0bc10c22b4c0c5dab1fd30b4a7fcbad1b4749cf38fc504cef50167ffb638e9",
+      "present": true,
+      "format": "JSON"
+    },
+    {
+      "path": "evidence/POST_solves160.json",
+      "class": "required",
+      "description": "post-merge gate evidence (JSON)",
+      "bytes": 534,
+      "sha256": "34709a771bf7c7ed390750e62d1326be6ae0b385c89cbb020fb80eb700014839",
+      "present": true,
+      "format": "JSON"
+    },
+    {
+      "path": "evidence/POST_studies.json",
+      "class": "required",
+      "description": "post-merge gate evidence (JSON)",
+      "bytes": 12473,
+      "sha256": "006480d6f9df4c5176800d50347547b9cdaa67c92a28e4b1c532d85b5a51b974",
+      "present": true,
+      "format": "JSON"
+    },
+    {
+      "path": "evidence/POST_upstream.json",
+      "class": "required",
+      "description": "post-merge gate evidence (JSON)",
+      "bytes": 1036,
+      "sha256": "b9401b3c14a386a28fdfa72b8365e15724e02ea967df74e4f879428ec5f821bb",
+      "present": true,
+      "format": "JSON"
+    },
+    {
+      "path": "evidence/RESOLVE_gates.json",
+      "class": "required",
+      "description": "post-merge gate evidence (JSON)",
+      "bytes": 657,
+      "sha256": "5c9db78e0b931108b32f56e9d6aa72fd07cd798d2c838f23ca8d748f751629c2",
+      "present": true,
+      "format": "JSON"
+    },
+    {
+      "path": "evidence/RESOLVE_studies.json",
+      "class": "required",
+      "description": "post-merge gate evidence (JSON)",
+      "bytes": 12440,
+      "sha256": "ca73ff083dae0bef3fcf9b9ec82ab448ea724e345b3b3b28ebc8a9f2515aa4b2",
+      "present": true,
+      "format": "JSON"
+    },
+    {
+      "path": "evidence/orig_gate_probe_p10_result.json",
+      "class": "required",
+      "description": "post-merge gate evidence (JSON)",
+      "bytes": 208,
+      "sha256": "034196af09a698483e1bcd89c3e3133a752a78d9142fb9b8eb709462d206f6aa",
+      "present": true,
+      "format": "JSON"
+    },
+    {
+      "path": "evidence/orig_gate_probe_results.json",
+      "class": "required",
+      "description": "post-merge gate evidence (JSON)",
+      "bytes": 1993,
+      "sha256": "46c74a48bb3ad5e98b941f0c0ea1cf6caab24e811347163a2ff486a644fdd75f",
+      "present": true,
+      "format": "JSON"
+    },
+    {
+      "path": "evidence/step1_amendment_evidence.json",
+      "class": "required",
+      "description": "post-merge gate evidence (JSON)",
+      "bytes": 22333,
+      "sha256": "5fc1b7bded877d3b6246fed39f88a5fc343cd796c82e45c07cc62b7ca67caddb",
+      "present": true,
+      "format": "JSON"
+    },
+    {
+      "path": "ANCHOR_HISTORICAL_S160.mat",
+      "class": "required",
+      "description": "160x20 anchor: full olhoffSolve result + cfg + meta",
+      "bytes": 454019,
+      "sha256": "cf00ec05994a1d87777593cb11974145960014e37ee2633436f615fcd3bc0ce2",
+      "present": true,
+      "format": "MAT-file (v7.3 = HDF5) -- read with load()",
+      "variables": [
+        {
+          "name": "cfg",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 22410
+        },
+        {
+          "name": "meta",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 2897
+        },
+        {
+          "name": "res",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 3.705343E+6
+        }
+      ]
+    },
+    {
+      "path": "ANCHOR_PEDERSEN_S160.mat",
+      "class": "required",
+      "description": "160x20 anchor: full olhoffSolve result + cfg + meta",
+      "bytes": 466110,
+      "sha256": "79b0d822da39574028907147d240958ecfddb561637f132fd01b4b97a2ef7c52",
+      "present": true,
+      "format": "MAT-file (v7.3 = HDF5) -- read with load()",
+      "variables": [
+        {
+          "name": "cfg",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 22808
+        },
+        {
+          "name": "meta",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 2885
+        },
+        {
+          "name": "res",
+          "size": [
+            1,
+            1
+          ],
+          "class": "struct",
+          "bytes": 3.713923E+6
+        }
+      ]
+    }
+  ]
+}

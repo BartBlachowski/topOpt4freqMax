@@ -1,0 +1,409 @@
+{
+  "tform_check_max": [
+    8.6042284408449632E-15,
+    7.9936057773011271E-15,
+    0
+  ],
+  "candidates": [
+    {
+      "form": "x",
+      "solver": "auto",
+      "tol": 1E-10,
+      "exitflag": -7,
+      "iterations": 26,
+      "wall_s": 3.1997204583333332,
+      "bs": 1.0017921288433158,
+      "max_fval": 7.8191280610755919E-14,
+      "box_viol": 0,
+      "dual_bound": -1.001792128865,
+      "gap": 2.1684209983163782E-11,
+      "mu": 1,
+      "nu": [
+        0,
+        0.72911065389276186
+      ],
+      "message": "Search direction is small and current iterate is not within the specified constraint and/or optimality tolerance."
+    },
+    {
+      "form": "x",
+      "solver": "auto",
+      "tol": 1E-8,
+      "exitflag": -7,
+      "iterations": 26,
+      "wall_s": 2.6403151666666669,
+      "bs": 1.0017921288433158,
+      "max_fval": 7.8191280610755919E-14,
+      "box_viol": 0,
+      "dual_bound": -1.001792128865,
+      "gap": 2.1684209983163782E-11,
+      "mu": 1,
+      "nu": [
+        0,
+        0.72911065389276186
+      ],
+      "message": "Search direction is small and current iterate is not within the specified constraint and/or optimality tolerance."
+    },
+    {
+      "form": "x",
+      "solver": "prodchol",
+      "tol": 1E-10,
+      "exitflag": -7,
+      "iterations": 28,
+      "wall_s": 45.702027333333334,
+      "bs": 1.0017921288468123,
+      "max_fval": 7.6928093524960177E-14,
+      "box_viol": 0,
+      "dual_bound": -1.0017921288650939,
+      "gap": 1.8281598457292603E-11,
+      "mu": 1,
+      "nu": [
+        0,
+        0.72911063561549894
+      ],
+      "message": "Search direction is small and current iterate is not within the specified constraint and/or optimality tolerance."
+    },
+    {
+      "form": "x",
+      "solver": "prodchol",
+      "tol": 1E-8,
+      "exitflag": -7,
+      "iterations": 28,
+      "wall_s": 45.542174041666669,
+      "bs": 1.0017921288468123,
+      "max_fval": 7.6928093524960177E-14,
+      "box_viol": 0,
+      "dual_bound": -1.0017921288650939,
+      "gap": 1.8281598457292603E-11,
+      "mu": 1,
+      "nu": [
+        0,
+        0.72911063561549894
+      ],
+      "message": "Search direction is small and current iterate is not within the specified constraint and/or optimality tolerance."
+    },
+    {
+      "form": "x",
+      "solver": "schur",
+      "tol": 1E-10,
+      "exitflag": -7,
+      "iterations": 27,
+      "wall_s": 44.362868666666664,
+      "bs": 1.001792128848223,
+      "max_fval": 4.0421986745463479E-14,
+      "box_viol": 0,
+      "dual_bound": -1.0017921288546681,
+      "gap": 6.4450667025539587E-12,
+      "mu": 1,
+      "nu": [
+        4.1340636973123739E-17,
+        0.72911364472506091
+      ],
+      "message": "Search direction is small and current iterate is not within the specified constraint and/or optimality tolerance."
+    },
+    {
+      "form": "x",
+      "solver": "schur",
+      "tol": 1E-8,
+      "exitflag": -7,
+      "iterations": 27,
+      "wall_s": 44.141129083333333,
+      "bs": 1.001792128848223,
+      "max_fval": 4.0421986745463479E-14,
+      "box_viol": 0,
+      "dual_bound": -1.0017921288546681,
+      "gap": 6.4450667025539587E-12,
+      "mu": 1,
+      "nu": [
+        4.1340636973123739E-17,
+        0.72911364472506091
+      ],
+      "message": "Search direction is small and current iterate is not within the specified constraint and/or optimality tolerance."
+    },
+    {
+      "form": "x",
+      "solver": "augmented",
+      "tol": 1E-10,
+      "exitflag": -7,
+      "iterations": 26,
+      "wall_s": 2.5899865416666668,
+      "bs": 1.0017921288433158,
+      "max_fval": 7.8191280610755919E-14,
+      "box_viol": 0,
+      "dual_bound": -1.001792128865,
+      "gap": 2.1684209983163782E-11,
+      "mu": 1,
+      "nu": [
+        0,
+        0.72911065389276186
+      ],
+      "message": "Search direction is small and current iterate is not within the specified constraint and/or optimality tolerance."
+    },
+    {
+      "form": "x",
+      "solver": "augmented",
+      "tol": 1E-8,
+      "exitflag": -7,
+      "iterations": 26,
+      "wall_s": 2.5899705,
+      "bs": 1.0017921288433158,
+      "max_fval": 7.8191280610755919E-14,
+      "box_viol": 0,
+      "dual_bound": -1.001792128865,
+      "gap": 2.1684209983163782E-11,
+      "mu": 1,
+      "nu": [
+        0,
+        0.72911065389276186
+      ],
+      "message": "Search direction is small and current iterate is not within the specified constraint and/or optimality tolerance."
+    },
+    {
+      "form": "x",
+      "solver": "normal",
+      "tol": 1E-10,
+      "exitflag": -7,
+      "iterations": 27,
+      "wall_s": 44.031141125,
+      "bs": 1.001792128848223,
+      "max_fval": 4.0421986745463479E-14,
+      "box_viol": 0,
+      "dual_bound": -1.0017921288546681,
+      "gap": 6.4450667025539587E-12,
+      "mu": 1,
+      "nu": [
+        4.1340636973123739E-17,
+        0.72911364472506091
+      ],
+      "message": "Search direction is small and current iterate is not within the specified constraint and/or optimality tolerance."
+    },
+    {
+      "form": "x",
+      "solver": "normal",
+      "tol": 1E-8,
+      "exitflag": -7,
+      "iterations": 27,
+      "wall_s": 44.182926666666667,
+      "bs": 1.001792128848223,
+      "max_fval": 4.0421986745463479E-14,
+      "box_viol": 0,
+      "dual_bound": -1.0017921288546681,
+      "gap": 6.4450667025539587E-12,
+      "mu": 1,
+      "nu": [
+        4.1340636973123739E-17,
+        0.72911364472506091
+      ],
+      "message": "Search direction is small and current iterate is not within the specified constraint and/or optimality tolerance."
+    },
+    {
+      "form": "t",
+      "solver": "auto",
+      "tol": 1E-10,
+      "exitflag": -7,
+      "iterations": 18,
+      "wall_s": 2.1099433333333333,
+      "bs": 1.0017921288455327,
+      "max_fval": 2.6905884927449127E-14,
+      "box_viol": 0,
+      "dual_bound": -1.0017921288655229,
+      "gap": 1.9990231692190719E-11,
+      "mu": 1,
+      "nu": [
+        0,
+        0.7291105521831861
+      ],
+      "message": "Search direction is small and current iterate is not within the specified constraint and/or optimality tolerance."
+    },
+    {
+      "form": "t",
+      "solver": "auto",
+      "tol": 1E-8,
+      "exitflag": 1,
+      "iterations": 10,
+      "wall_s": 1.2456065833333334,
+      "bs": 1.0017603565506459,
+      "max_fval": 8.6817941724604E-9,
+      "box_viol": 0,
+      "dual_bound": -1.0017921288496849,
+      "gap": 3.1772299039056762E-5,
+      "mu": 1,
+      "nu": [
+        0,
+        0.72911690986359068
+      ],
+      "message": "Optimal solution found."
+    },
+    {
+      "form": "t",
+      "solver": "prodchol",
+      "tol": 1E-10,
+      "exitflag": -7,
+      "iterations": 21,
+      "wall_s": 34.576753791666668,
+      "bs": 1.001792128849216,
+      "max_fval": 2.4505829464437233E-14,
+      "box_viol": 0,
+      "dual_bound": -1.0017921288611569,
+      "gap": 1.1940892719053409E-11,
+      "mu": 1,
+      "nu": [
+        2.2298071253785019E-18,
+        0.72912401928082748
+      ],
+      "message": "Search direction is small and current iterate is not within the specified constraint and/or optimality tolerance."
+    },
+    {
+      "form": "t",
+      "solver": "prodchol",
+      "tol": 1E-8,
+      "exitflag": 1,
+      "iterations": 10,
+      "wall_s": 17.274046916666666,
+      "bs": 1.0017603565494295,
+      "max_fval": 8.6810834076800347E-9,
+      "box_viol": 0,
+      "dual_bound": -1.0017921288496272,
+      "gap": 3.177230019768551E-5,
+      "mu": 1,
+      "nu": [
+        0,
+        0.72911686987234359
+      ],
+      "message": "Optimal solution found."
+    },
+    {
+      "form": "t",
+      "solver": "schur",
+      "tol": 1E-10,
+      "exitflag": -7,
+      "iterations": 19,
+      "wall_s": 31.534198333333332,
+      "bs": 1.0017921288482645,
+      "max_fval": -2.5263741715914674E-15,
+      "box_viol": 0,
+      "dual_bound": -1.0017921288652658,
+      "gap": 1.7001289265294872E-11,
+      "mu": 1,
+      "nu": [
+        0,
+        0.72911060221863067
+      ],
+      "message": "Search direction is small and current iterate is not within the specified constraint and/or optimality tolerance."
+    },
+    {
+      "form": "t",
+      "solver": "schur",
+      "tol": 1E-8,
+      "exitflag": 1,
+      "iterations": 10,
+      "wall_s": 17.429131375,
+      "bs": 1.0017603565494062,
+      "max_fval": 8.6810629795763816E-9,
+      "box_viol": 0,
+      "dual_bound": -1.0017921288496778,
+      "gap": 3.1772300271626364E-5,
+      "mu": 1,
+      "nu": [
+        0,
+        0.72911690507630633
+      ],
+      "message": "Optimal solution found."
+    },
+    {
+      "form": "t",
+      "solver": "augmented",
+      "tol": 1E-10,
+      "exitflag": -7,
+      "iterations": 18,
+      "wall_s": 2.1071343333333332,
+      "bs": 1.0017921288455327,
+      "max_fval": 2.6905884927449127E-14,
+      "box_viol": 0,
+      "dual_bound": -1.0017921288655229,
+      "gap": 1.9990231692190719E-11,
+      "mu": 1,
+      "nu": [
+        0,
+        0.7291105521831861
+      ],
+      "message": "Search direction is small and current iterate is not within the specified constraint and/or optimality tolerance."
+    },
+    {
+      "form": "t",
+      "solver": "augmented",
+      "tol": 1E-8,
+      "exitflag": 1,
+      "iterations": 10,
+      "wall_s": 1.2318367083333333,
+      "bs": 1.0017603565506459,
+      "max_fval": 8.6817941724604E-9,
+      "box_viol": 0,
+      "dual_bound": -1.0017921288496849,
+      "gap": 3.1772299039056762E-5,
+      "mu": 1,
+      "nu": [
+        0,
+        0.72911690986359068
+      ],
+      "message": "Optimal solution found."
+    },
+    {
+      "form": "t",
+      "solver": "normal",
+      "tol": 1E-10,
+      "exitflag": -7,
+      "iterations": 19,
+      "wall_s": 31.355334083333332,
+      "bs": 1.0017921288482645,
+      "max_fval": -2.5263741715914674E-15,
+      "box_viol": 0,
+      "dual_bound": -1.0017921288652658,
+      "gap": 1.7001289265294872E-11,
+      "mu": 1,
+      "nu": [
+        0,
+        0.72911060221863067
+      ],
+      "message": "Search direction is small and current iterate is not within the specified constraint and/or optimality tolerance."
+    },
+    {
+      "form": "t",
+      "solver": "normal",
+      "tol": 1E-8,
+      "exitflag": 1,
+      "iterations": 10,
+      "wall_s": 17.425092416666665,
+      "bs": 1.0017603565494062,
+      "max_fval": 8.6810629795763816E-9,
+      "box_viol": 0,
+      "dual_bound": -1.0017921288496778,
+      "gap": 3.1772300271626364E-5,
+      "mu": 1,
+      "nu": [
+        0,
+        0.72911690507630633
+      ],
+      "message": "Optimal solution found."
+    }
+  ],
+  "selected": {
+    "form": "t",
+    "solver": "auto",
+    "tol": 1E-8,
+    "exitflag": 1,
+    "iterations": 10,
+    "wall_s": 1.2456065833333334,
+    "bs": 1.0017603565506459,
+    "max_fval": 8.6817941724604E-9,
+    "box_viol": 0,
+    "dual_bound": -1.0017921288496849,
+    "gap": 3.1772299039056762E-5,
+    "mu": 1,
+    "nu": [
+      0,
+      0.72911690986359068
+    ],
+    "message": "Optimal solution found."
+  },
+  "selected_index": 12
+}

@@ -1,0 +1,9 @@
+{
+  "when": "2026-09-13T17:22:28",
+  "impl_manifest_ok": true,
+  "impl_tree": "edbfe47eb32109a2fb017f6f13d5327f2c240357caa96630064ffcf37ee152cb",
+  "source_head": "6b0870850d7407a0f2fc31dbf0d0f318c2e5f2f7",
+  "source_worktree_diff_sha256": "212952322dd931b576e21dcba9e467b5d50dbfac64a150b7bcab1038da4ae521  -",
+  "target_head": "013cc48451d33bed61c5c4eea174bbd898d548a2",
+  "target_status": "?? analysis/OlhoffCurrent/diagnostics/c480_socp_causal_run/\n?? analysis/OlhoffCurrent/diagnostics/filtered_subproblem_integrability_audit/\n?? analysis/OlhoffCurrent/diagnostics/frozen_inner_solver_study/\n?? analysis/OlhoffCurrent/diagnostics/frozen_problem25_reference/\n?? analysis/OlhoffCurrent/diagnostics/gray_kkt_forensic_audit/\n?? analysis/OlhoffCurrent/diagnostics/nine_mesh_campaign_audit/\n?? analysis/OlhoffCurrent/diagnostics/scientific_delta_olhoff_migration/\n?? analysis/OlhoffCurrent/diagnostics/three_rung_canary_preflight/"
+}

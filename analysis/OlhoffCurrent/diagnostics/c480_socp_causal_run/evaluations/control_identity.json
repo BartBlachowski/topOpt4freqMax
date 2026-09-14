@@ -1,0 +1,293 @@
+{
+  "matlab_checks": {
+    "rho0": true,
+    "rho386": true,
+    "cfg_stored": true,
+    "cfg_fresh": true,
+    "meta": true,
+    "implTree_now": true,
+    "mesh": true,
+    "levels": true,
+    "three_rung_policy": true,
+    "hist_columns": true,
+    "stage_lengths": true,
+    "events": true,
+    "status": true,
+    "metrics": true,
+    "inner": true,
+    "rebuild": true,
+    "N2": true
+  },
+  "matlab_all_pass": true,
+  "trajectory_sha256": "a87546bc391cdc683def34a9f27678884528032f6b140e156349d2e74135ab9b",
+  "trajectory_sha256_declared": "a87546bc391cdc683def34a9f27678884528032f6b140e156349d2e74135ab9b",
+  "state_sha256": "2210902c1cf043c19caa3fb95608e883964f9ddb526a646b56efadc19d01f92e",
+  "state_sha256_declared": "2210902c1cf043c19caa3fb95608e883964f9ddb526a646b56efadc19d01f92e",
+  "canary_final_sha256_header": [
+    "FINAL_SHA256 -- three_rung_canary_preflight",
+    "==============================================================================",
+    "generated 2026-09-12T12:55:20Z",
+    "branch    benchmark-methodology-r2",
+    "HEAD      013cc48451d33bed61c5c4eea174bbd898d548a2",
+    "implTree  edbfe47eb32109a2fb017f6f13d5327f2c240357caa96630064ffcf37ee152cb",
+    "scientific runs  0   (deployment preflight failed; canaries NOT_REACHED)",
+    "=============================================================================="
+  ],
+  "canary_manifest_checks": {
+    "runs/C480x60_three_rung_iterations.csv": {
+      "listed": "846d44b706c5c1bafb61dfc009b5cbb9c93d2ac1aa34a0a284da04b3e724a3b5",
+      "actual": "846d44b706c5c1bafb61dfc009b5cbb9c93d2ac1aa34a0a284da04b3e724a3b5",
+      "match": true
+    },
+    "runs/C480x60_three_rung_record.json": {
+      "listed": "00f792660d9af13a7ec2bbf5f994ca7ff12df8a0f0599080b0382433eb5fc741",
+      "actual": "00f792660d9af13a7ec2bbf5f994ca7ff12df8a0f0599080b0382433eb5fc741",
+      "match": true
+    },
+    "runs/C480x60_three_rung_supplement.csv": {
+      "listed": "1e748dbd9def7f9ed25500d7b609ca1b230ace7483a10a5f947172f5c799aaab",
+      "actual": "1e748dbd9def7f9ed25500d7b609ca1b230ace7483a10a5f947172f5c799aaab",
+      "match": true
+    },
+    "C480_REPORT.md": {
+      "listed": "099758c384a08690828988dcfddd4724437c65f5184937ba4365974774318acf",
+      "actual": "099758c384a08690828988dcfddd4724437c65f5184937ba4365974774318acf",
+      "match": true
+    },
+    "PREREGISTRATION.md": {
+      "listed": "7988b6b37dba1fed76c6bc1b2738a29313f57036615b2277f48a026f30c4b2aa",
+      "actual": "7988b6b37dba1fed76c6bc1b2738a29313f57036615b2277f48a026f30c4b2aa",
+      "match": true
+    },
+    "EFFECTIVE_CONFIG.json": {
+      "listed": "fd2b2c4d1dcaf06a501491113c270beba6c6c8af35809c043ba043a6e8de497f",
+      "actual": "fd2b2c4d1dcaf06a501491113c270beba6c6c8af35809c043ba043a6e8de497f",
+      "match": true
+    },
+    "EVIDENCE.json": {
+      "listed": "2f3aafbb4d71231a10bce69cc77bc4ba0d704282dba285deb4a134b5a39fe648",
+      "actual": "2f3aafbb4d71231a10bce69cc77bc4ba0d704282dba285deb4a134b5a39fe648",
+      "match": true
+    },
+    "evidence/analysis_480x60.json": {
+      "listed": "5e354100b18d533d2f5422de6a9525993670dd1d5d983438fc49038e0946d27e",
+      "actual": "5e354100b18d533d2f5422de6a9525993670dd1d5d983438fc49038e0946d27e",
+      "match": true
+    }
+  },
+  "rho386_sha256": "0a498a7d6ab0565b29c15ff9364060d937d4df10aa661fc90d02c038ce6e4a60",
+  "geometry_reproduction": {
+    "Mnd_percent": true,
+    "gray_fraction": true,
+    "mid_fraction": true,
+    "gray_area": true,
+    "mid_area": true,
+    "broad_core_fraction": true,
+    "broad_core_area": true,
+    "gray_components_4": true,
+    "gray_components_8": true,
+    "largest_gray_component_area": true,
+    "max_depth": true,
+    "gray_depth_p50_p90_p95_p99": true,
+    "gray_interface_distance_p50_p90_p95_p99": true,
+    "rho_quantiles": true,
+    "rho_lt_001": true,
+    "rho_gt_099": true,
+    "components": true
+  },
+  "geometry_reproduction_all_exact": true,
+  "geometry": {
+    "Mnd_percent": 26.34156302529313,
+    "gray_fraction": 0.28729166666666667,
+    "mid_fraction": 0.11861111111111111,
+    "gray_area": 2.2983333333333333,
+    "mid_area": 0.9488888888888889,
+    "broad_core_fraction": 0.1301388888888889,
+    "broad_core_area": 1.041111111111111,
+    "gray_components_4": 7,
+    "gray_components_8": 7,
+    "largest_gray_component_area": 0.7944444444444444,
+    "max_depth": 0.36666666666666664,
+    "max_depth_over_R": 6.111111111111111,
+    "gray_depth_p50_p90_p95_p99": [
+      0.04714045207910317,
+      0.2386303510546059,
+      0.2838231060987733,
+      0.35
+    ],
+    "gray_interface_distance_p50_p90_p95_p99": [
+      0.016666666666666666,
+      0.06666666666666667,
+      0.08333333333333334,
+      0.11666666666666667
+    ],
+    "rho_quantiles": {
+      "0": 0.001015039971515184,
+      "1": 0.0010291832315984055,
+      "5": 0.0010883040230154767,
+      "10": 0.002156429088701714,
+      "25": 0.002157355353591983,
+      "50": 0.49411124776162696,
+      "75": 0.9986063292548174,
+      "90": 0.9994193481558584,
+      "95": 0.9996504908241902,
+      "99": 0.9998164687601989,
+      "100": 0.9998979225360609
+    },
+    "rho_lt_001": 0.32708333333333334,
+    "rho_gt_099": 0.3368055555555556,
+    "components": [
+      {
+        "id": 4,
+        "elements": 2860,
+        "area": 0.7944444444444444,
+        "max_depth": 0.36666666666666664,
+        "bbox_x_span": 1.9166666666666667,
+        "bbox_y_span": 0.7666666666666667
+      },
+      {
+        "id": 3,
+        "elements": 2846,
+        "area": 0.7905555555555556,
+        "max_depth": 0.36666666666666664,
+        "bbox_x_span": 1.9166666666666667,
+        "bbox_y_span": 0.7666666666666667
+      },
+      {
+        "id": 5,
+        "elements": 2010,
+        "area": 0.5583333333333333,
+        "max_depth": 0.08333333333333333,
+        "bbox_x_span": 4.783333333333333,
+        "bbox_y_span": 0.7
+      },
+      {
+        "id": 2,
+        "elements": 140,
+        "area": 0.03888888888888889,
+        "max_depth": 0.037267799624996496,
+        "bbox_x_span": 0.85,
+        "bbox_y_span": 0.4
+      },
+      {
+        "id": 7,
+        "elements": 140,
+        "area": 0.03888888888888889,
+        "max_depth": 0.037267799624996496,
+        "bbox_x_span": 0.85,
+        "bbox_y_span": 0.4
+      },
+      {
+        "id": 1,
+        "elements": 139,
+        "area": 0.03861111111111111,
+        "max_depth": 0.037267799624996496,
+        "bbox_x_span": 0.85,
+        "bbox_y_span": 0.4
+      },
+      {
+        "id": 6,
+        "elements": 139,
+        "area": 0.03861111111111111,
+        "max_depth": 0.037267799624996496,
+        "bbox_x_span": 0.85,
+        "bbox_y_span": 0.4
+      }
+    ]
+  },
+  "per_iteration_gray_max_abs_diff": 0.0,
+  "summary": {
+    "mesh": [
+      480,
+      60
+    ],
+    "initial_rho_sha256": "8b5a00afc231e5bed8136c572955a0892a1b1b91bca392bccbc6de8dab063b07",
+    "final_rho_sha256": "0a498a7d6ab0565b29c15ff9364060d937d4df10aa661fc90d02c038ce6e4a60",
+    "config_hash": "03097a28b0ad7fdb0d977985d3b5fd279dd74553c9dd5dfbd3cc035ac2a1782e",
+    "impl_tree": "edbfe47eb32109a2fb017f6f13d5327f2c240357caa96630064ffcf37ee152cb",
+    "terminal_iteration": 386,
+    "terminal_status": "CONVERGED",
+    "stage_starts": [
+      1,
+      309,
+      348
+    ],
+    "stage_lengths": [
+      308,
+      39,
+      39
+    ],
+    "controller_events": [
+      {
+        "iter": 308,
+        "stage": 1,
+        "move": 0.04,
+        "branch": "B",
+        "amp": 0.1461249723539227,
+        "amp_over_eps": 0.9741664823594844,
+        "medcos": 0.9984784462068363,
+        "mednet": 0.9944238159601485,
+        "nA": 0,
+        "nB": 20,
+        "omega1": 163.86714331589417,
+        "terminal": false
+      },
+      {
+        "iter": 347,
+        "stage": 2,
+        "move": 0.02,
+        "branch": "B",
+        "amp": 0.03980061576497413,
+        "amp_over_eps": 0.2653374384331608,
+        "medcos": 0.9999113222230916,
+        "mednet": 0.9992702311665951,
+        "nA": 0,
+        "nB": 20,
+        "omega1": 163.91029974096054,
+        "terminal": false
+      },
+      {
+        "iter": 386,
+        "stage": 3,
+        "move": 0.01,
+        "branch": "B",
+        "amp": 0.007857751705070932,
+        "amp_over_eps": 0.052385011367139536,
+        "medcos": 0.8462065164689301,
+        "mednet": 0.9365386009599866,
+        "nA": 0,
+        "nB": 20,
+        "omega1": 163.93172747916933,
+        "terminal": true
+      }
+    ],
+    "final_move": 0.01,
+    "omega1": 163.93225938567002,
+    "omega2": 185.21032464590309,
+    "gap12": 0.12979791372346,
+    "volume": 0.4999984544949872,
+    "Mnd_percent": 26.34156302529313,
+    "gray_fraction": 0.28729166666666667,
+    "mid_fraction": 0.11861111111111111,
+    "broad_core_fraction": 0.1301388888888889,
+    "broad_core_area": 1.041111111111111,
+    "max_depth": 0.36666666666666664,
+    "total_outer": 386,
+    "inner_mma_total": 7300,
+    "wall_s": 2799.278047375,
+    "sum_tInner": 2686.937549708333,
+    "sum_tEig": 104.82606404166664,
+    "sum_tGrad": 6.509766958333332,
+    "sum_tOuter": 2798.8587867916667
+  },
+  "checks": {
+    "matlab_all": true,
+    "trajectory_hash": true,
+    "state_hash": true,
+    "rho386_python": true,
+    "canary_manifest": true,
+    "geometry_exact": true,
+    "per_iteration_gray": true
+  },
+  "verdict": "C480_CONTROL_EVIDENCE_PASS"
+}

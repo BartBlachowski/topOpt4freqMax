@@ -1,0 +1,12 @@
+{
+  "A2_vs_S240": [
+    "material.stiffness.model",
+    "material.mass.model",
+    "runtime.name",
+    "provenance.preset",
+    "provenance.overrides",
+    "provenance.resolvedAt",
+    "provenance.schemaRows",
+    "material.stiffness.linearBelow"
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "official_toy_x": [
+    2.0175188243977993,
+    1.7800102476976127,
+    1.2375085510472312
+  ],
+  "official_toy_f0": 8.7702461026230125,
+  "official_toy_kkt": 1.4473260062607971E-5,
+  "official_toy_converged_kkt": 5.4198790849601056E-7,
+  "quadratic": {
+    "x": [
+      0.50000000049949955,
+      0.50000000049949955
+    ],
+    "f0": 0.50000000099899911,
+    "lambda": 1.0000000008587677,
+    "constraint": -9.98999105661369E-10,
+    "stationarity": 4.9325229912790269E-16,
+    "corrections": 1
+  },
+  "verdict": "GCMMA_IMPLEMENTATION_VALIDATED",
+  "source": "official smoptit.se GCMMA-MMA-code-1.5, unmodified"
+}

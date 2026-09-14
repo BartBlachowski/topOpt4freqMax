@@ -1,0 +1,64 @@
+{
+ "schema": "olhoff_current_evidence/1",
+ "study": "three_rung_canary_preflight",
+ "generated": "2026-09-12T14:55:19+0200",
+ "evidenceRoot": "analysis/OlhoffCurrent/evidence/three_rung_canary_preflight",
+ "implementation": "analysis/OlhoffCurrent",
+ "sourceTree": "edbfe47eb32109a2fb017f6f13d5327f2c240357caa96630064ffcf37ee152cb",
+ "implTree": "edbfe47eb32109a2fb017f6f13d5327f2c240357caa96630064ffcf37ee152cb",
+ "matlab": "25.2.0.2998904 (R2025b)",
+ "scientific_runs": 2,
+ "candidate_cfg_hash_480x60_predicted": "03097a28b0ad7fdb0d977985d3b5fd279dd74553c9dd5dfbd3cc035ac2a1782e",
+ "candidate_cfg_hash_800x100_predicted": "7724af5ed26786e16132c30fbae840f5d8679d5ea798fc75d5c48eefd0e50ffe",
+ "cfg_hash_status": "RUNTIME_RESOLVED_AND_EQUAL_TO_THE_PRE_RUN_FROZEN_PREDICTION",
+ "artifacts": [
+  {
+   "path": "C480x60_three_rung_trajectory.mat",
+   "class": "required",
+   "description": "canary 1: RHO, DRHO, move, hist, cfg, meta, exh, log for all 386 outer iterations",
+   "sha256": "a87546bc391cdc683def34a9f27678884528032f6b140e156349d2e74135ab9b",
+   "bytes": 155461014,
+   "present": true,
+   "format": "MAT-file (v7.3 = HDF5) -- read with load()"
+  },
+  {
+   "path": "C800x100_three_rung_trajectory.mat",
+   "class": "required",
+   "description": "canary 2: the same, for all 468 outer iterations",
+   "sha256": "aef7af1c3ec669b41d6ff6799aaaea4bc35feac0d20ff739f91a532bece012eb",
+   "bytes": 536083874,
+   "present": true,
+   "format": "MAT-file (v7.3 = HDF5) -- read with load()"
+  },
+  {
+   "path": "C480x60_three_rung_state.mat",
+   "class": "required",
+   "description": "canary 1 terminal design + cfg, read by cp_fixedwork",
+   "sha256": "2210902c1cf043c19caa3fb95608e883964f9ddb526a646b56efadc19d01f92e",
+   "bytes": 247885,
+   "present": true,
+   "format": "MAT-file (v7.3 = HDF5) -- read with load()"
+  },
+  {
+   "path": "C800x100_three_rung_state.mat",
+   "class": "required",
+   "description": "canary 2 terminal design + cfg, read by cp_fixedwork",
+   "sha256": "4be416d0aaa41c3415fef472ac205d639efad6f5abdfca1e8d1052c974b33101",
+   "bytes": 539638,
+   "present": true,
+   "format": "MAT-file (v7.3 = HDF5) -- read with load()"
+  }
+ ],
+ "declared_required_artifacts": 4,
+ "rebuild_proof": "both trajectories were rebuilt from res.diag.drho and proved bitwise equal to res.rho; clamp-displacement residual 5.551e-17 at both meshes",
+ "reused_evidence_read_only": [
+  "diagnostics/nine_mesh_campaign_audit/MASTER_TABLE.csv",
+  "diagnostics/nine_mesh_campaign_audit/effective_configs.json",
+  "diagnostics/nine_mesh_campaign_audit/HISTORICAL_STAGE_WORK.csv",
+  "diagnostics/nine_mesh_campaign_audit/HISTORICAL_CONTROLLER_EVENTS.csv",
+  "diagnostics/nine_mesh_campaign_audit/LEGACY_VS_THREE_RUNG.csv",
+  "diagnostics/three_rung_promotion_validation_retry1/METRICS.json",
+  "diagnostics/two_branch_controller_validation/runs/*_record.json",
+  "analysis/OlhoffCurrent/SOURCE_MANIFEST.json"
+ ]
+}

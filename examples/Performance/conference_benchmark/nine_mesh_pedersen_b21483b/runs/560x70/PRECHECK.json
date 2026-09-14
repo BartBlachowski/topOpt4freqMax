@@ -1,0 +1,87 @@
+{
+  "schema": "nmp_precheck/1",
+  "mode": "campaign",
+  "mesh": "560x70",
+  "is_warmup": false,
+  "when": "2026-09-14T02:12:47.742+02:00",
+  "hook": "breakpoint condition at analysis/OlhoffCurrent/olhoffcurrent_run.m:124 (tCall = tic;), before the solver timer",
+  "run_dir_existed_before": false,
+  "identity": {
+    "when": "2026-09-14T02:12:47.743+02:00",
+    "head": "b21483b158f58e05e7b56957f2fbe8e1d2891395",
+    "branch": "benchmark-methodology-r2",
+    "tracked_changes": [
+      "examples/Performance/performance_comparison.m"
+    ],
+    "runner_sha256": "05d043c3005d6ffbf571889f88623bb49aa14e6b7dce1a4e836fbce4684c9950",
+    "olhoffcurrent_run_sha256": "eb3b5a18a2a83da252f8f5cfe0be30b793c4fcb1daef074c61c953325f8e969f",
+    "impl_tree_sha256": "4ba9a3ae10881344a0e60f2b8a8976c5ec9ceccf966bc2a3da4f37fb5aebffbf",
+    "impl_n_files": 79,
+    "impl_manifest_ok": true,
+    "source_manifest_sha256": "aee44aa9172a8105314bbb9475e28bed8a53d4d154824a8748abf64a208b1836",
+    "lock_sha256": "202c1f272c8387e8f3c5ac69203898b859d4798cd1833452ffbbdbd74921f9b5",
+    "checks": {
+      "head": true,
+      "branch": true,
+      "impl_tree": true,
+      "source_manifest": true,
+      "runner_is_locked_edit": true,
+      "olhoffcurrent_run_committed": true,
+      "tracked_changes_only_locked": true,
+      "lock_unchanged": true
+    },
+    "pass": true
+  },
+  "config_hash_of_cfg_about_to_be_solved": "8b2533a3caf8432d40a54dbcbd8958900e333c410527d5547c53699b9e373ccf",
+  "config_hash_recorded_by_olhoffcurrent_run": "8b2533a3caf8432d40a54dbcbd8958900e333c410527d5547c53699b9e373ccf",
+  "frozen_config_hash": "8b2533a3caf8432d40a54dbcbd8958900e333c410527d5547c53699b9e373ccf",
+  "preset": "duOlhoffPedersenAdaptiveBoxSensitivityFiltered",
+  "production_preset": "duOlhoffPedersenAdaptiveBoxSensitivityFiltered",
+  "olhoffcurrent_preset_stamp": "duOlhoffPedersenAdaptiveBoxSensitivityFiltered",
+  "formulation": {
+    "stiffness_model": "pedersen",
+    "linearBelow": 0.1,
+    "p": 3,
+    "p_continuation": false,
+    "mass_model": "eq2",
+    "mass_q": 1,
+    "mass_continuation": false,
+    "filter_type": "sensitivity",
+    "radiusPhysical": 0.06,
+    "domain_b": 1,
+    "radiusElements_derived": 4.2,
+    "projection": false,
+    "move_policy": "adaptive",
+    "continuation_signal": "boundVariable",
+    "stop_rule": "designChange",
+    "stop_tolerance": 0.17500000000000002,
+    "inner_type": "mma",
+    "maxOuter": 400,
+    "singleThread": true
+  },
+  "runner_output_fresh": {
+    "manifest_absent": true,
+    "records_absent": true,
+    "topology_absent": true
+  },
+  "maxNumCompThreads": 1,
+  "which_olhoffSolve": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/architecture/olhoffSolve.m",
+  "which_mmasub": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/+impl/mma_published/mmasub.m",
+  "rng_state_note": "recorded for completeness; +impl uses no random numbers (eigs start vector is fixed)",
+  "rng": {
+    "Type": "twister",
+    "Seed": 0
+  },
+  "checks": {
+    "identity": true,
+    "config_hash_equals_frozen": true,
+    "preset": true,
+    "formulation": true,
+    "run_dir_fresh": true,
+    "runner_output_fresh": true,
+    "single_thread": true,
+    "dispatch_inside_impl": true
+  },
+  "pass": true,
+  "hook_seconds": 0.08988525
+}

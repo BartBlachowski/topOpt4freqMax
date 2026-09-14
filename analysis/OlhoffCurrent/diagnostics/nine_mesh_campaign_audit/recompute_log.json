@@ -1,0 +1,228 @@
+{
+  "rows": 9,
+  "source_matches": 21,
+  "source_total": 21,
+  "impl_match": true,
+  "config_hashes_match": 9,
+  "replay": [
+    {
+      "mesh": "160x20",
+      "n_history": 219,
+      "rho_shape": [
+        219,
+        3200
+      ],
+      "drho_shape": [
+        219,
+        3200
+      ],
+      "rho_finite": true,
+      "drho_finite": true,
+      "max_csv_amp_error": 6.661338147750939e-16,
+      "A_all_match": true,
+      "B_all_match": true,
+      "nA_all_match": true,
+      "nB_all_match": true,
+      "max_Mnd_S3_error": 1.7763568394002505e-15,
+      "inner_sum_matches_record": true
+    },
+    {
+      "mesh": "240x30",
+      "n_history": 1358,
+      "rho_shape": [
+        1358,
+        7200
+      ],
+      "drho_shape": [
+        1358,
+        7200
+      ],
+      "rho_finite": true,
+      "drho_finite": true,
+      "max_csv_amp_error": 2.220446049250313e-15,
+      "A_all_match": true,
+      "B_all_match": true,
+      "nA_all_match": true,
+      "nB_all_match": true,
+      "max_Mnd_S3_error": 1.4210854715202004e-14,
+      "inner_sum_matches_record": true
+    },
+    {
+      "mesh": "320x40",
+      "n_history": 1600,
+      "rho_shape": [
+        1600,
+        12800
+      ],
+      "drho_shape": [
+        1600,
+        12800
+      ],
+      "rho_finite": true,
+      "drho_finite": true,
+      "max_csv_amp_error": 3.552713678800501e-15,
+      "A_all_match": true,
+      "B_all_match": true,
+      "nA_all_match": true,
+      "nB_all_match": true,
+      "max_Mnd_S3_error": 1.4210854715202004e-14,
+      "inner_sum_matches_record": true
+    },
+    {
+      "mesh": "400x50",
+      "n_history": 505,
+      "rho_shape": [
+        505,
+        20000
+      ],
+      "drho_shape": [
+        505,
+        20000
+      ],
+      "rho_finite": true,
+      "drho_finite": true,
+      "max_csv_amp_error": 5.329070518200751e-15,
+      "A_all_match": true,
+      "B_all_match": true,
+      "nA_all_match": true,
+      "nB_all_match": true,
+      "max_Mnd_S3_error": 7.105427357601002e-15,
+      "inner_sum_matches_record": true
+    }
+  ],
+  "fits_total": [
+    {
+      "metric": "runtime_total_s",
+      "subset": "all9",
+      "n": 9,
+      "C": 0.037018567270551535,
+      "p": 0.9825065636647999,
+      "R2_log": 0.9800214097023433,
+      "C_CI95_lo": 0.010445127854285767,
+      "C_CI95_hi": 0.1311974675544127,
+      "p_CI95_lo": 0.8571309076400144,
+      "p_CI95_hi": 1.1078822196895854,
+      "RMSE_log": 0.14186205901038712
+    },
+    {
+      "metric": "runtime_total_s",
+      "subset": "fine5",
+      "n": 5,
+      "C": 0.12175530394691651,
+      "p": 0.8765448854234682,
+      "R2_log": 0.8532437972019054,
+      "C_CI95_lo": 8.862452886043202e-05,
+      "C_CI95_hi": 167.2714566703283,
+      "p_CI95_lo": 0.20860668713542874,
+      "p_CI95_hi": 1.5444830837115076,
+      "RMSE_log": 0.13125999490556475
+    },
+    {
+      "metric": "runtime_total_s",
+      "subset": "fine4",
+      "n": 4,
+      "C": 1.4836350645467526,
+      "p": 0.6503071383526422,
+      "R2_log": 0.664011492602165,
+      "C_CI95_lo": 3.007421554685119e-07,
+      "C_CI95_hi": 7319136.890947489,
+      "p_CI95_lo": -0.7570821193842083,
+      "p_CI95_hi": 2.0576963960894927,
+      "RMSE_log": 0.1230369852607468
+    }
+  ],
+  "counterfactuals": [
+    {
+      "mesh": "160x20",
+      "old_policy": "four_rung_E",
+      "old_status": "CONVERGED",
+      "old_outer": 219,
+      "old_inner": 5074,
+      "old_omega1": 170.01131577599028,
+      "old_M_nd": 12.704121410327565,
+      "omega_endpoint_convention": "post-update rho_S3 from hist.omega(S3+1)",
+      "three_status": "CONVERGED_counterfactual_at_S3",
+      "three_outer": 180,
+      "three_inner": 4283,
+      "three_omega1": 169.97512028959605,
+      "three_M_nd": 12.756141959540171,
+      "delta_outer": -39,
+      "delta_inner": -791,
+      "delta_omega1": -0.03619548639423442,
+      "delta_M_nd": 0.05202054921260668,
+      "terminal_branch": "B",
+      "density_L1_S3_vs_F": 0.00042378908463427663,
+      "threshold_flip_fraction": 0.000625,
+      "source_record": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/runs/C160x20_record.json"
+    },
+    {
+      "mesh": "240x30",
+      "old_policy": "four_rung_E",
+      "old_status": "CONVERGED",
+      "old_outer": 1358,
+      "old_inner": 44181,
+      "old_omega1": 167.05075913598358,
+      "old_M_nd": 12.942486226218922,
+      "omega_endpoint_convention": "post-update rho_S3 from hist.omega(S3+1)",
+      "three_status": "CONVERGED_counterfactual_at_S3",
+      "three_outer": 284,
+      "three_inner": 5506,
+      "three_omega1": 167.0393810208395,
+      "three_M_nd": 12.91652409156148,
+      "delta_outer": -1074,
+      "delta_inner": -38675,
+      "delta_omega1": -0.011378115144083267,
+      "delta_M_nd": -0.02596213465744235,
+      "terminal_branch": "B",
+      "density_L1_S3_vs_F": 0.0021201151776686577,
+      "threshold_flip_fraction": 0.001388888888888889,
+      "source_record": "analysis/OlhoffCurrent/diagnostics/three_rung_resolution_240/runs/C240x30_record.json"
+    },
+    {
+      "mesh": "320x40",
+      "old_policy": "four_rung_E",
+      "old_status": "CAP_HIT",
+      "old_outer": 1600,
+      "old_inner": 76532,
+      "old_omega1": 166.42669695924684,
+      "old_M_nd": 12.923311188439127,
+      "omega_endpoint_convention": "post-update rho_S3 from hist.omega(S3+1)",
+      "three_status": "CONVERGED_validated_CSV_raw_missing",
+      "three_outer": 352,
+      "three_inner": 6498,
+      "three_omega1": 166.42630441353683,
+      "three_M_nd": 12.940093529981493,
+      "delta_outer": -1248,
+      "delta_inner": -70034,
+      "delta_omega1": -0.0003925457100137919,
+      "delta_M_nd": 0.01678234154236513,
+      "terminal_branch": "B",
+      "density_L1_S3_vs_F": 0.0017226450511304491,
+      "threshold_flip_fraction": 0.0009375,
+      "source_record": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/runs/C320x40_record.json"
+    },
+    {
+      "mesh": "400x50",
+      "old_policy": "four_rung_E",
+      "old_status": "CONVERGED",
+      "old_outer": 505,
+      "old_inner": 10301,
+      "old_omega1": 166.45627579395645,
+      "old_M_nd": 15.331077650456837,
+      "omega_endpoint_convention": "post-update rho_S3 from hist.omega(S3+1)",
+      "three_status": "CONVERGED_counterfactual_at_S3",
+      "three_outer": 466,
+      "three_inner": 8848,
+      "three_omega1": 166.45229843313905,
+      "three_M_nd": 15.373230197122789,
+      "delta_outer": -39,
+      "delta_inner": -1453,
+      "delta_omega1": -0.003977360817401632,
+      "delta_M_nd": 0.04215254666595136,
+      "terminal_branch": "B",
+      "density_L1_S3_vs_F": 0.00020825076528288412,
+      "threshold_flip_fraction": 0.0001,
+      "source_record": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/runs/C400x50_record.json"
+    }
+  ]
+}

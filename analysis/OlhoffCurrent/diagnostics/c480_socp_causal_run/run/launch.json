@@ -1,0 +1,20 @@
+{
+  "mode": "launch",
+  "time": "2026-09-13T11:43:07+0200",
+  "matlab": "25.2.0.2998904 (R2025b)",
+  "implTree": "edbfe47eb32109a2fb017f6f13d5327f2c240357caa96630064ffcf37ee152cb",
+  "cfgHash": "03097a28b0ad7fdb0d977985d3b5fd279dd74553c9dd5dfbd3cc035ac2a1782e",
+  "preregistration": "5b6186f2f2b438f73ce4cfeae8e4565326dc91d99b19e207aa47604c32286ddd",
+  "amendment1": "298efd23763f678f7519d37dc7c40f6e693bad2bec8a1933e4d853e0f09fa340",
+  "treat": {
+    "innerSolver": "exactSOCP",
+    "stopAfter": 0,
+    "checkpointEvery": 25,
+    "checkpointFile": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/evidence/c480_socp_causal_run/checkpoint.mat",
+    "resumeFrom": "",
+    "crossEvery": 1,
+    "progress": true
+  },
+  "host": "",
+  "pid": 1109
+}

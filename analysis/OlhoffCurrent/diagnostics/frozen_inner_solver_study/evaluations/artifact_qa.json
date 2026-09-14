@@ -1,0 +1,167 @@
+{
+  "verdict": "ARTIFACT_CONSISTENCY_PASS",
+  "metric_rows": 4620,
+  "matlab_checkpoints_validated": 202,
+  "markdown_tables_consistent": true,
+  "report_links_resolve": true,
+  "figures": [
+    {
+      "path": "figures/FIG_01_oracle_drho.png",
+      "pixels": [
+        1783,
+        345
+      ]
+    },
+    {
+      "path": "figures/FIG_02_B0_19_drho.png",
+      "pixels": [
+        1783,
+        345
+      ]
+    },
+    {
+      "path": "figures/FIG_03_B0_5000_drho.png",
+      "pixels": [
+        1783,
+        345
+      ]
+    },
+    {
+      "path": "figures/FIG_04_oracle_minus_19.png",
+      "pixels": [
+        1768,
+        345
+      ]
+    },
+    {
+      "path": "figures/FIG_05_oracle_minus_5000.png",
+      "pixels": [
+        1768,
+        345
+      ]
+    },
+    {
+      "path": "figures/FIG_06_gain_vs_iteration.png",
+      "pixels": [
+        1543,
+        845
+      ]
+    },
+    {
+      "path": "figures/FIG_07_d2_vs_iteration.png",
+      "pixels": [
+        1540,
+        845
+      ]
+    },
+    {
+      "path": "figures/FIG_08_dinf_vs_iteration.png",
+      "pixels": [
+        1540,
+        845
+      ]
+    },
+    {
+      "path": "figures/FIG_09_kkt_vs_iteration.png",
+      "pixels": [
+        1541,
+        845
+      ]
+    },
+    {
+      "path": "figures/FIG_10_step_vs_distance.png",
+      "pixels": [
+        1382,
+        845
+      ]
+    },
+    {
+      "path": "figures/FIG_11_sign_vs_iteration.png",
+      "pixels": [
+        1522,
+        845
+      ]
+    },
+    {
+      "path": "figures/FIG_12_bounds_vs_iteration.png",
+      "pixels": [
+        1522,
+        845
+      ]
+    },
+    {
+      "path": "figures/FIG_13_persistence_vs_B0.png",
+      "pixels": [
+        1538,
+        845
+      ]
+    },
+    {
+      "path": "figures/FIG_14_gcmma_vs_B0.png",
+      "pixels": [
+        1543,
+        845
+      ]
+    },
+    {
+      "path": "figures/FIG_15_gain_vs_work.png",
+      "pixels": [
+        1543,
+        845
+      ]
+    },
+    {
+      "path": "figures/FIG_16_kkt_vs_work.png",
+      "pixels": [
+        1541,
+        845
+      ]
+    },
+    {
+      "path": "figures/FIG_17_density_class_disagreement.png",
+      "pixels": [
+        1794,
+        674
+      ]
+    },
+    {
+      "path": "figures/FIG_18_oracle_bound_categories.png",
+      "pixels": [
+        1833,
+        347
+      ]
+    },
+    {
+      "path": "figures/FIG_19_threshold_structure.png",
+      "pixels": [
+        1959,
+        701
+      ]
+    },
+    {
+      "path": "figures/FIG_20_causal_comparison.png",
+      "pixels": [
+        2322,
+        890
+      ]
+    },
+    {
+      "path": "figures/FIG_21_d2_vs_calls.png",
+      "pixels": [
+        1540,
+        845
+      ]
+    }
+  ],
+  "visually_inspected_final_figures": [
+    6,
+    9,
+    17,
+    18,
+    19,
+    20
+  ],
+  "visual_findings": "Readable axes, legends, map categories and unclipped panels. The S34 transient is retained and disclosed.",
+  "only_socp_meets_fidelity": true,
+  "all_strong_attributions_single_factor": true
+}

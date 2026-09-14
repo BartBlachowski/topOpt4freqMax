@@ -1,0 +1,139 @@
+{
+  "rho386_sha256": "0a498a7d6ab0565b29c15ff9364060d937d4df10aa661fc90d02c038ce6e4a60",
+  "rho385_sha256": "9b1443e508a6e4ecb5288d30167c7258d837be127aa3a9a42d8cc092240f3ded",
+  "drho386_sha256": "0b12cd7f9ae32decc6e95bf63e89fa7ca4530d13ec6dc7d815b618d46af8a9fd",
+  "cfgHash": "03097a28b0ad7fdb0d977985d3b5fd279dd74553c9dd5dfbd3cc035ac2a1782e",
+  "cfgHash_recorded": "03097a28b0ad7fdb0d977985d3b5fd279dd74553c9dd5dfbd3cc035ac2a1782e",
+  "implTree": "edbfe47eb32109a2fb017f6f13d5327f2c240357caa96630064ffcf37ee152cb",
+  "implTree_ok": true,
+  "implTree_recorded": "edbfe47eb32109a2fb017f6f13d5327f2c240357caa96630064ffcf37ee152cb",
+  "nOuter": 386,
+  "stage": 3,
+  "move": 0.01,
+  "N_hist": 2,
+  "multJ": 0,
+  "nInner_final": 19,
+  "innerConv_final": 1,
+  "beta_recorded_386": 26873.744667047969,
+  "omega_hist_at_rho385": [
+    163.93172747916933,
+    185.20866045176069,
+    401.39842250345157,
+    559.43302514954519,
+    755.2308321724405
+  ],
+  "gap12_hist_at_rho385": 0.129791427808232,
+  "rhomin": 0.001,
+  "volfrac": 0.5,
+  "Vtot": 14400,
+  "rho385_minmax": [
+    0.0010125425191870787,
+    0.9998951138429818
+  ],
+  "rho385_mean": 0.49999840985113148,
+  "controller": {
+    "signal": "stageExhaustion",
+    "stopRule": "stageExhaustion",
+    "levels": [
+      0.04,
+      0.02,
+      0.01
+    ],
+    "terminalBranch": "B",
+    "terminalDeclIter": 386
+  },
+  "multiplicity": {
+    "method": "subspace",
+    "subspaceSize": 2,
+    "tolerance": 0.05,
+    "diagonalOffsets": true,
+    "offDiagonal": true
+  },
+  "filter": {
+    "type": "sensitivity",
+    "applyTo": "all",
+    "radiusPhysical": 0.06,
+    "rminEl": 3.6
+  },
+  "mma": {
+    "variant": "published",
+    "tolInner": 0.05,
+    "minInner": 5,
+    "maxInner": 500,
+    "a0": 1,
+    "a": 0,
+    "c": 1000,
+    "d": 0
+  },
+  "N": 2,
+  "J": 3,
+  "idx": [
+    1,
+    2
+  ],
+  "omega_fresh_at_rho385": [
+    163.93172747916933,
+    185.20866045176069,
+    401.39842250345157,
+    559.43302514954519,
+    755.2308321724405
+  ],
+  "lam_fresh_at_rho385": [
+    26873.611274304643,
+    34302.247906335586,
+    161120.69358825943,
+    312965.30962797167,
+    570373.609863877
+  ],
+  "lam_cluster": [
+    26873.611274304643,
+    34302.247906335586
+  ],
+  "lamJ": 161120.69358825943,
+  "lamref": 26873.611274304643,
+  "dOff": [
+    0,
+    7428.6366320309426
+  ],
+  "dOff_present": true,
+  "offDiag": true,
+  "gap12_fresh": 0.129791427808232,
+  "omega_hist_vs_fresh_maxrel": 0,
+  "filter_guard_active_count": 0,
+  "dOff_identity_check": {
+    "lam2_minus_dOff2_minus_lam1": 0,
+    "tol_4eps_lam1": 2.3868561593247367E-11
+  },
+  "prior_ctx_file": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/diagnostics/filtered_subproblem_integrability_audit/evaluations/inner_kkt_state.mat",
+  "prior_ctx_compare": {
+    "F_maxrel": 0,
+    "F_bitwise": true,
+    "fJJ_maxrel": 0,
+    "fJJ_bitwise": true,
+    "lam_maxrel": 0,
+    "lamJ_rel": 0,
+    "dOff_maxabs": 0,
+    "rho_bitwise": true,
+    "move_equal": true
+  },
+  "P19_bitwise_equals_DRHO386": true,
+  "P19_nInner": 19,
+  "M500_nInner": 500,
+  "P19_beta": 26873.744667047969,
+  "M500_beta": 26892.489471331457,
+  "bounds": {
+    "n_lower_move_limited": 19360,
+    "n_lower_floor_limited": 9440,
+    "n_upper_move_limited": 19100,
+    "n_upper_ceiling_limited": 9700,
+    "min_width": 0.010012542519187078,
+    "max_width": 0.02,
+    "bs_bounds": [
+      0,
+      5
+    ]
+  },
+  "blockers": [],
+  "pass": true,
+  "verdict": "FROZEN_480_PROBLEM25_STATE_PASS"
+}

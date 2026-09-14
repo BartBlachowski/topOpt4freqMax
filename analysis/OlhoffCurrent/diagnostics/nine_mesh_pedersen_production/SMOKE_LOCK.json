@@ -1,0 +1,125 @@
+{
+ "schema": "nmp_lock/1",
+ "mode": "smoke",
+ "created_local": "2026-09-14T01:27:15+02:00",
+ "repo_abs": "/Users/piotrek/Programming/topOpt4freqMax",
+ "head": "b21483b158f58e05e7b56957f2fbe8e1d2891395",
+ "branch": "benchmark-methodology-r2",
+ "upstream_commit": "253069262407885a8b759a9e721c4f0a7d3a397d",
+ "impl_tree_sha256": "4ba9a3ae10881344a0e60f2b8a8976c5ec9ceccf966bc2a3da4f37fb5aebffbf",
+ "source_manifest_sha256": "aee44aa9172a8105314bbb9475e28bed8a53d4d154824a8748abf64a208b1836",
+ "preset": "duOlhoffPedersenAdaptiveBoxSensitivityFiltered",
+ "upstream_preset": "duOlhoffAdaptivePedersen",
+ "meshes": [
+  "160x20",
+  "240x30",
+  "320x40",
+  "400x50",
+  "480x60",
+  "560x70",
+  "640x80",
+  "720x90",
+  "800x100"
+ ],
+ "nine_config_hashes": {
+  "160x20": "b1a5744df798ad624fcd0b8b4306888eb99816ee5ce60f51040e39e03e90d4f4",
+  "240x30": "2fac1384239527b1a0108e1d34725021cdc7c5a26f1939b602239415b34847e1",
+  "320x40": "a1203d43efb240308cfcb520c92a6d9bc37a0c703c728fc2f3d298f779bc5f6e",
+  "400x50": "e40c6ba16c9addbb587d08ecab29669f7db560d09b980ca62c2096856b849280",
+  "480x60": "8e55d18251152ec2d26836593489c14f4842390d912d7c66f43f3b18730c83de",
+  "560x70": "8b2533a3caf8432d40a54dbcbd8958900e333c410527d5547c53699b9e373ccf",
+  "640x80": "cbe8dcf070d3e318a889867b5168fdbb09f1b6babfd46f981447d96e9a073aaf",
+  "720x90": "2893ad47136fc9a7775f1f4d9ff1dcba38e7fe14271dd12b5727ff4bd8bb54f3",
+  "800x100": "f9138743067afd0edce255ad26a6d7ae5c0f632a537516a4793eafecbacbe4cd"
+ },
+ "frozen_sources": {
+  "campaign_identity": "analysis/OlhoffCurrent/diagnostics/postmerge_campaign_gate/CAMPAIGN_IDENTITY.json",
+  "campaign_identity_sha256": "deb43641bc42d9db1b3154115478486403dc22ac4701cbde6de34c5d33c44e4f",
+  "nine_mesh_configs": "analysis/OlhoffCurrent/diagnostics/postmerge_campaign_gate/NINE_MESH_CONFIGS.json",
+  "nine_mesh_configs_sha256": "ea2f4751a5bb7c73fa472b57f67a64eaffbfe931fd6f9403ff4a0a45112acf9f",
+  "identity_check": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/evidence/IDENTITY_CHECK.json",
+  "identity_check_sha256": "c74d779e507fcca092eae1c64d5812c6fd902b8ad184d8b3cb2a27ba56133575",
+  "identity_check_verdict": "NINE_MESH_CAMPAIGN_IDENTITY_PASS"
+ },
+ "runner": {
+  "path": "examples/Performance/performance_comparison.m",
+  "committed_blob_sha1": "1a4dd08b3dd07fc8ce6f88284e3839ea5b7d26c3",
+  "committed_sha256": "5ed7ddc3e474095a006ad0024ff83d2e3bea4ba724ec246b945887ec5e496f0f",
+  "edited_sha256": "3add5cc56b45664bbfabbb79e914520b3bc46f3b20dac40129a09acb957e53fc",
+  "edit_patch": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/evidence/smoke_runner_edit.patch",
+  "edit_patch_sha256": "07b5ae2b597b6d4c7cb101c866463ddcca7fdce910701639eecac9d930638431",
+  "run_label": "smoke_nine_mesh_pedersen_b21483b"
+ },
+ "allowed_tracked_changes": [
+  "examples/Performance/performance_comparison.m"
+ ],
+ "olhoffcurrent_run": {
+  "path": "analysis/OlhoffCurrent/olhoffcurrent_run.m",
+  "sha256": "eb3b5a18a2a83da252f8f5cfe0be30b793c4fcb1daef074c61c953325f8e969f",
+  "committed_blob_sha1": "79013f802ef4fbb3238185d75ec0d716b2ccde96",
+  "hook_lines": {
+   "precheck": 124,
+   "tap": 128,
+   "postcheck": 249
+  }
+ },
+ "output_root_abs": "/Users/piotrek/Programming/topOpt4freqMax/examples/Performance/conference_benchmark/smoke_nine_mesh_pedersen_b21483b",
+ "run_root_abs": "/Users/piotrek/Programming/topOpt4freqMax/examples/Performance/conference_benchmark/smoke_nine_mesh_pedersen_b21483b/runs",
+ "logs_dir_abs": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/logs",
+ "matlab_cwd_abs": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/logs/matlab_cwd_smoke",
+ "matlab_binary": "/Applications/MATLAB_R2025b.app/bin/matlab",
+ "preregistration": {
+  "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/PREREGISTRATION.md",
+  "sha256": "3cd5675118e4e4623f15f0aa77d22e930c122bb7d59cc71be7fa34aa162f5388"
+ },
+ "scripts": [
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/scripts/nmp_after_run.m",
+   "sha256": "c41e9ec14a8e44d1bf2f5b490ec49c71ea2d376d6482d1d0a6b01dc1939bbbd4"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/scripts/nmp_arm_hooks.m",
+   "sha256": "e634ad6e54583b0fcc5303f650c9ad93f89a2c6562c541e8f3ea4db185eb53ab"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/scripts/nmp_ctx.m",
+   "sha256": "5881df9ad3613454b55c65402e84d35e8a240c02cb320f0d64e4cac35ba6be86"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/scripts/nmp_hook_post.m",
+   "sha256": "c0f8fe1e017ead315183a13689323f9a60a78b11cbcf0bf4504df4e90b044b3f"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/scripts/nmp_hook_pre.m",
+   "sha256": "1ef81a52ec161bfe6f744d274a8d8f4038c8bbfb10f21e7d9d722ce564b8e6f3"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/scripts/nmp_hook_tap.m",
+   "sha256": "2d873e25fe3b4b8f069c9228b6710fe59c493fbcf1e885534dc2593b57bcede3"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/scripts/nmp_identity_check.m",
+   "sha256": "fb65688a8dfceb071a86596f3997711741a4d064c92d69c86a414009bdac0e52"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/scripts/nmp_identity_snapshot.m",
+   "sha256": "8fa0aadcc790dd0854866b05807bc8724ae54a42367d41420c5a84cdbb14753a"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/scripts/nmp_launch.sh",
+   "sha256": "c6631c18953f8d82a162bce558a132b1e69cb3185f94cb0f82846c0b61ea7ec7"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/scripts/nmp_make_lock.py",
+   "sha256": "4d1e8cd8f079f993ac9dc4a365b9a96025fb5d46962d84197590c5d3fcf4af36"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/scripts/nmp_now.m",
+   "sha256": "d002df21053277f9fa7d292a23234379585253e78c51c1370174fd276157978c"
+  },
+  {
+   "path": "analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/scripts/nmp_util.m",
+   "sha256": "2f44ecdbdd0d2cbf03f47a282430c3fe99460f97c4d95783a597beab60fd445c"
+  }
+ ]
+}

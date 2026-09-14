@@ -1,0 +1,50 @@
+{
+  "formula": "g_filt = diag(1./(Hs.*rho)) * H * diag(rho) * g_phys",
+  "rhomin": 0.001,
+  "max_guard_active": 0,
+  "H_symmetric": true,
+  "H_nnz": 1.03758E+6,
+  "H_rowsum_equals_Hs": 0,
+  "A": {
+    "nnz": 1.03758E+6,
+    "symmetric": false,
+    "skew_fro": 1479.194906361284,
+    "A_fro": 1046.4793427536792,
+    "skew_ratio": 1.4134965172546723,
+    "rowsum_min": 0.66826411556011922,
+    "rowsum_max": 245.09299976712794,
+    "rowsum_identity_maxerr": 1.4210854715202004E-13
+  },
+  "rho_tilde": {
+    "min": 0.0014416816584694591,
+    "max": 0.9998376490813724,
+    "mean": 0.50017955796824154
+  },
+  "symmetry_condition": {
+    "statement": "A is symmetric iff rho_i^2*Hs_i = rho_e^2*Hs_e for every pair with H_ei ~= 0",
+    "n_offdiag_pairs": 1.00878E+6,
+    "median_relative_violation": 0.05033082304019916,
+    "p90_relative_violation": 0.95083571525682831,
+    "max_relative_violation": 0.99999896755697082,
+    "frac_below_1e_6": 0.11568825710263883
+  },
+  "term1": {
+    "T1_fro": 11819.273568231629,
+    "skew_fro": 16712.636834982681,
+    "skew_ratio": 1.4140155685966735,
+    "max_abs_skew": 637.519935091649
+  },
+  "volume": {
+    "gradient_value": 6.9444444444444444E-5,
+    "is_constant_in_rho": true,
+    "statement": "the volume row gradient is 1/Vtot on every element and does not depend on rho, so it adds a CONSTANT vector field; the Jacobian of a constant field is zero and the antisymmetric part of J is therefore unchanged",
+    "proof": "d/drho_j [ lam_V / Vtot ] = 0 for all j, hence skew(J_reduced) = skew(J_filt)"
+  },
+  "plainAverage": {
+    "symmetric": false,
+    "skew_ratio": 0.072324459863668186,
+    "Hs_constant": false,
+    "Hs_min": 19.760668037544377,
+    "Hs_max": 49.042672150177516
+  }
+}

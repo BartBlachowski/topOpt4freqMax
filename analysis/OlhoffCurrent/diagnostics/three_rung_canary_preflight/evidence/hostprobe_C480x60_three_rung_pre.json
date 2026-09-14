@@ -1,0 +1,13 @@
+{
+  "label": "C480x60_three_rung_pre",
+  "when": "2026-09-12T11:40:13",
+  "loadavg": "{ 11.11 36.72 21.42 }",
+  "swap": "total = 0.00M  used = 0.00M  free = 0.00M  (encrypted)",
+  "vm_stat": "Mach Virtual Memory Statistics: (page size of 16384 bytes)\nPages free:                                  2269152.\nPages active:                                 853259.\nPages inactive:                               560537.\nPages speculative:                            291932.\nPages throttled:                                   0.",
+  "freeRAM_pages": "2269164.",
+  "matlabProcs": "2",
+  "topCPU": "%CPU COMM\n278.3 /Applications/MATLAB_R2025b.app/bin/maca64/../../Contents/MacOS/MATLAB_maca64\n 14.0 /System/Library/PrivateFrameworks/SkyLight.framework/Resources/WindowServer\n  8.1 /System/Library/Frameworks/WebKit.framework/Versions/A/XPCServices/com.apple.WebKit.WebContent.xpc/Contents/MacOS/com.apple.WebKit.WebContent\n  4.7 /private/var/folders/6b/jnh3zrqx6rb4k17mvvy0wb6m0000gn/T/AppTranslocation/BC714BD1-BAE0-4D8C-8072-E098BAB03FA7/d/Visual Studio Code.app/Contents/Frameworks/Code Helper (Renderer).app/Contents/MacOS/Code Helper (Renderer)\n  3.9 /usr/libexec/trustd\nps: stdout: Broken pipe",
+  "threads": 1,
+  "calib_dgemm_s": 0.0126765,
+  "calib_spsolve_s": 0.0027622083333333335
+}

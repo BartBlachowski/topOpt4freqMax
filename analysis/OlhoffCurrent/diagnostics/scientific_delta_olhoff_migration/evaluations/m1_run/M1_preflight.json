@@ -1,0 +1,53 @@
+{
+  "when": "2026-09-13T16:44:09",
+  "diff": [
+    {
+      "path": "material.stiffness.model",
+      "s480": "pedersen",
+      "m1": "simp",
+      "allowed": true
+    },
+    {
+      "path": "material.mass.model",
+      "s480": "eq2",
+      "m1": "eq4b",
+      "allowed": true
+    },
+    {
+      "path": "runtime.diagnostics",
+      "s480": "false",
+      "m1": "true",
+      "allowed": true
+    },
+    {
+      "path": "runtime.name",
+      "s480": "S480x60",
+      "m1": "M1_480x60_simp4b_adaptive",
+      "allowed": true
+    },
+    {
+      "path": "provenance.preset",
+      "s480": "duOlhoffAdaptivePedersen",
+      "m1": "duOlhoffAdaptiveMove",
+      "allowed": false
+    },
+    {
+      "path": "provenance.overrides",
+      "s480": "domain.mesh.nelx | 480 | domain.mesh.nely | 60 | runtime.name | S480x60 | runtime.verbose | true",
+      "m1": "domain.mesh.nelx | 480 | domain.mesh.nely | 60 | runtime.name | M1_480x60_simp4b_adaptive | runtime.verbose | true | move.initial | 0.10000000000000001 | runtime.diagnostics | true",
+      "allowed": false
+    },
+    {
+      "path": "provenance.resolvedAt",
+      "s480": "2026-09-13T11:51:29",
+      "m1": "2026-09-13T16:44:09",
+      "allowed": false
+    }
+  ],
+  "blocking": [],
+  "olhoffSolve": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/diagnostics/scientific_delta_olhoff_migration/source_snapshot/+olhoff_6b08708/architecture/olhoffSolve.m",
+  "innerLoop": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/diagnostics/scientific_delta_olhoff_migration/source_snapshot/+olhoff_6b08708/algo/innerLoop.m",
+  "limit": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/diagnostics/scientific_delta_olhoff_migration/source_snapshot/+olhoff_6b08708/architecture/+olh/+move/limit.m",
+  "matlab": "25.2.0.2998904 (R2025b)",
+  "host": ""
+}

@@ -1,0 +1,28 @@
+       bitwise_vs_migration_post: 1
+                 vs_premigration: 1
+    bitwise_vs_upstream_snapshot: 1
+                 campaign_record: 1
+                  old_81row_hash: 1
+                   frozen_values: 1
+        single_thread_clean_impl: 1
+
+                     vs_committed_S160: 1
+             bitwise_vs_migration_post: 1
+          bitwise_vs_upstream_snapshot: 1
+    committed_artifact_is_6b08708_blob: 1
+                  box_and_multiplicity: 1
+                                  stop: 1
+                         frozen_values: 1
+              single_thread_clean_impl: 1
+
+PMGCOMPARE historical PASS=1 pedersen PASS=1
+
+ans = 
+
+  struct with fields:
+
+      standard: 'bitwise (class+size+raw bytes for numeric/logical; recursive for struct/cell); excluded: tEig tGrad tInner tOuter wallclock provenance.resolvedAt'
+          when: '13-Sep-2026 22:41:09'
+    historical: [1×1 struct]
+      pedersen: [1×1 struct]
+

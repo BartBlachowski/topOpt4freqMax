@@ -1,0 +1,20 @@
+{
+  "480": {
+    "broad_fit_threshold": 1.3531508910850845,
+    "broad_fit_mu": 0.7250698905194373,
+    "filtered_gray_threshold": 1.3584651238512537,
+    "raw_broad_RMS_best_core_fit": 0.06062992249889352,
+    "raw_broad_RMS_filtered_gray_dual": 0.06064446406556256,
+    "raw_allgray_RMS_core_fit": 0.3705950199415201,
+    "interpretation": "Local core-only compatibility is not a global KKT certificate; no common dual removes residuals throughout gray."
+  },
+  "800": {
+    "broad_fit_threshold": 0.1528869713916724,
+    "broad_fit_mu": 0.2331797789166109,
+    "filtered_gray_threshold": 1.2221022306161746,
+    "raw_broad_RMS_best_core_fit": 0.18258529750254684,
+    "raw_broad_RMS_filtered_gray_dual": 0.37088636275252346,
+    "raw_allgray_RMS_core_fit": 1.1896143875304976,
+    "interpretation": "Local core-only compatibility is not a global KKT certificate; no common dual removes residuals throughout gray."
+  }
+}

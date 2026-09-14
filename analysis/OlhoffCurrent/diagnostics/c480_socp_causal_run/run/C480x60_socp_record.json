@@ -1,0 +1,70 @@
+{
+  "tag": "C480x60_socp",
+  "NE": 28800,
+  "nOuter": 14,
+  "status": "SOCP_CERTIFICATE_FAILURE",
+  "termination": "SOCP_CERTIFICATE_FAILURE",
+  "rebuildExact": true,
+  "clampDisplacementMax": 5.5511151231257827E-17,
+  "files": {
+    "trajectory": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/evidence/c480_socp_causal_run/C480x60_socp_trajectory.mat",
+    "state": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/evidence/c480_socp_causal_run/C480x60_socp_state.mat",
+    "diag": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/evidence/c480_socp_causal_run/C480x60_socp_diag.mat",
+    "socpCsv": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/diagnostics/c480_socp_causal_run/run/C480x60_socp_socp_iterations.csv",
+    "csv": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/diagnostics/c480_socp_causal_run/run/C480x60_socp_iterations.csv",
+    "supplement": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/diagnostics/c480_socp_causal_run/run/C480x60_socp_supplement.csv"
+  },
+  "Mnd_final": 48.12729348219181,
+  "gray_final": 0.54513888888888884,
+  "mid_final": 0.30732638888888891,
+  "omega": [
+    148.02874209264877,
+    150.14759330564755,
+    327.32281410590406,
+    449.24747919931832,
+    646.14678276807763
+  ],
+  "omega1": 148.02874209264877,
+  "omega2": 150.14759330564755,
+  "omega3": 327.32281410590406,
+  "gap23": 1.1800070643795819,
+  "gap12": 0.01431378246579048,
+  "volume_final": 0.50000000000000533,
+  "rho_sha256": "79ab22ae5ab9dafa617fe76bd64eacf9fd87bc9791c7f3305d7954812a67a1c8",
+  "move_final": 0.04,
+  "stage_final": 1,
+  "N_unique": 2,
+  "multJ_count": 1,
+  "terminal_l2": 5.330065665613561,
+  "terminal_max": 0.04,
+  "t": {
+    "eig": 4.7304599583333342,
+    "grad": 0.18944758333333334,
+    "inner": 595.5569826666665,
+    "outer": 600.52777575
+  },
+  "stageStarts": 1,
+  "descents": [],
+  "terminalDeclared": false,
+  "terminalDeclIter": null,
+  "terminalDeclBegin": null,
+  "terminalBranch": "",
+  "eventBranch": [],
+  "log": [
+    "iter 8: omega_J (J=3) is itself multiple -- (25b) undefined",
+    "iter 15: SOCP_CERTIFICATE_FAILURE -- schur: no candidate passes: dualboundGeneral[C3,C6] dualboundAligned[C3,C6] | augmented: no candidate passes: dualboundGeneral[C3,C6] dualboundAligned[C3,C6]; no update applied"
+  ],
+  "meta": {
+    "matlab": "25.2.0.2998904 (R2025b)",
+    "cfgHash": "03097a28b0ad7fdb0d977985d3b5fd279dd74553c9dd5dfbd3cc035ac2a1782e",
+    "implTree_pre": "edbfe47eb32109a2fb017f6f13d5327f2c240357caa96630064ffcf37ee152cb",
+    "implTree_post": "edbfe47eb32109a2fb017f6f13d5327f2c240357caa96630064ffcf37ee152cb",
+    "implTree_post_ok": true,
+    "preregistration": "5b6186f2f2b438f73ce4cfeae8e4565326dc91d99b19e207aa47604c32286ddd",
+    "amendment1": "298efd23763f678f7519d37dc7c40f6e693bad2bec8a1933e4d853e0f09fa340",
+    "mode": "launch",
+    "wall_this_process_s": 667.35536579166671,
+    "finished": "2026-09-13T11:54:15+0200"
+  },
+  "wallclock_solver": 667.33995058333335
+}

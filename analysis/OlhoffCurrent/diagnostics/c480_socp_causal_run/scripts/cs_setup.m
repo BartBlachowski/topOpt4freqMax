@@ -1,0 +1,36 @@
+function S = cs_setup()
+%CS_SETUP  Paths and fixed identities for c480_socp_causal_run.
+%   Adds the OlhoffCurrent root, this study's scripts, and the frozen
+%   builders the control was resolved with (cp_config -> tr_config -> cv_config).
+%   The production path guard is NOT installed here; callers hold it.
+here  = fileparts(mfilename('fullpath'));
+study = fileparts(here);
+root  = fileparts(fileparts(study));            % analysis/OlhoffCurrent
+S = struct();
+S.here = here; S.study = study; S.root = root;
+S.repo = fileparts(fileparts(root));
+S.evDir = fullfile(root, 'evidence', 'c480_socp_causal_run');
+S.controlTraj = fullfile(root, 'evidence', 'three_rung_canary_preflight', ...
+                         'C480x60_three_rung_trajectory.mat');
+S.controlRecord = fullfile(root, 'diagnostics', 'three_rung_canary_preflight', ...
+                           'runs', 'C480x60_three_rung_record.json');
+S.frozenCtx = fullfile(root, 'diagnostics', 'frozen_problem25_reference', ...
+                       'evaluations', 'frozen_ctx.mat');
+S.conicRef = fullfile(root, 'diagnostics', 'frozen_problem25_reference', ...
+                      'evaluations', 'conic_reference.mat');
+S.expect = struct( ...
+    'trajSha', 'a87546bc391cdc683def34a9f27678884528032f6b140e156349d2e74135ab9b', ...
+    'rho0Sha', '8b5a00afc231e5bed8136c572955a0892a1b1b91bca392bccbc6de8dab063b07', ...
+    'rho386Sha', '0a498a7d6ab0565b29c15ff9364060d937d4df10aa661fc90d02c038ce6e4a60', ...
+    'cfgHash', '03097a28b0ad7fdb0d977985d3b5fd279dd74553c9dd5dfbd3cc035ac2a1782e', ...
+    'implTree', 'edbfe47eb32109a2fb017f6f13d5327f2c240357caa96630064ffcf37ee152cb', ...
+    'frozenCtxSha', '084f219ce55588c91d7ba967dd7942c87df7f7a321abdbbe805f5acf442a4667', ...
+    'conicRefSha', '7503189ab7771c77844719c96ac3767346fa7bef657c7e8c811c45e342494833');
+addpath(root);
+addpath(here);
+addpath(fullfile(root,'diagnostics','three_rung_canary_preflight','scripts'));
+addpath(fullfile(root,'diagnostics','two_branch_controller_validation','scripts'));
+addpath(fullfile(root,'diagnostics','three_rung_promotion_validation_retry1','scripts'));
+addpath(fullfile(root,'diagnostics','dynamical_regime','scripts'));
+if ~isfolder(S.evDir), mkdir(S.evDir); end
+end

@@ -1,0 +1,1522 @@
+{
+  "schema": "olhoff_current_evidence/1",
+  "study": "gray_kkt_forensic_audit",
+  "implementation": "analysis/OlhoffCurrent",
+  "evidenceRoot": "analysis/OlhoffCurrent/diagnostics/gray_kkt_forensic_audit/evaluations",
+  "sourceTree": "edbfe47eb32109a2fb017f6f13d5327f2c240357caa96630064ffcf37ee152cb",
+  "implTree": "edbfe47eb32109a2fb017f6f13d5327f2c240357caa96630064ffcf37ee152cb",
+  "generated": "2026-09-12T13:54:43.518362+00:00",
+  "optimization_runs": 0,
+  "rho_updates": 0,
+  "analysis_label": "OFFLINE FROZEN-STATE ANALYSIS \u2014 NOT OPTIMIZATION",
+  "artifacts": [
+    {
+      "path": "analysis/OlhoffCurrent/evidence/two_branch_controller_validation/C400x50_trajectory.mat",
+      "class": "required",
+      "bytes": 139808729,
+      "sha256": "fa0e714c712889a1442c8063d1ec809244bc42701883cf74366efb0a2019045e",
+      "present": true,
+      "format": "MATLAB v7.3 HDF5",
+      "variables": [
+        {
+          "name": "DRHO",
+          "size_matlab": [
+            20000,
+            505
+          ],
+          "precision": "float64"
+        },
+        {
+          "name": "RHO",
+          "size_matlab": [
+            20000,
+            505
+          ],
+          "precision": "float64"
+        },
+        {
+          "name": "log",
+          "size_matlab": [
+            1,
+            7
+          ],
+          "precision": "object"
+        },
+        {
+          "name": "move",
+          "size_matlab": [
+            505,
+            1
+          ],
+          "precision": "float64"
+        }
+      ]
+    },
+    {
+      "path": "analysis/OlhoffCurrent/evidence/three_rung_canary_preflight/C480x60_three_rung_trajectory.mat",
+      "class": "required",
+      "bytes": 155461014,
+      "sha256": "a87546bc391cdc683def34a9f27678884528032f6b140e156349d2e74135ab9b",
+      "present": true,
+      "format": "MATLAB v7.3 HDF5",
+      "variables": [
+        {
+          "name": "DRHO",
+          "size_matlab": [
+            28800,
+            386
+          ],
+          "precision": "float64"
+        },
+        {
+          "name": "RHO",
+          "size_matlab": [
+            28800,
+            386
+          ],
+          "precision": "float64"
+        },
+        {
+          "name": "log",
+          "size_matlab": [
+            1,
+            8
+          ],
+          "precision": "object"
+        },
+        {
+          "name": "move",
+          "size_matlab": [
+            386,
+            1
+          ],
+          "precision": "float64"
+        }
+      ]
+    },
+    {
+      "path": "analysis/OlhoffCurrent/evidence/three_rung_canary_preflight/C480x60_three_rung_state.mat",
+      "class": "required",
+      "bytes": 247885,
+      "sha256": "2210902c1cf043c19caa3fb95608e883964f9ddb526a646b56efadc19d01f92e",
+      "present": true,
+      "format": "MATLAB v7.3 HDF5",
+      "variables": []
+    },
+    {
+      "path": "analysis/OlhoffCurrent/evidence/three_rung_canary_preflight/C800x100_three_rung_trajectory.mat",
+      "class": "required",
+      "bytes": 536083874,
+      "sha256": "aef7af1c3ec669b41d6ff6799aaaea4bc35feac0d20ff739f91a532bece012eb",
+      "present": true,
+      "format": "MATLAB v7.3 HDF5",
+      "variables": [
+        {
+          "name": "DRHO",
+          "size_matlab": [
+            80000,
+            468
+          ],
+          "precision": "float64"
+        },
+        {
+          "name": "RHO",
+          "size_matlab": [
+            80000,
+            468
+          ],
+          "precision": "float64"
+        },
+        {
+          "name": "log",
+          "size_matlab": [
+            1,
+            85
+          ],
+          "precision": "object"
+        },
+        {
+          "name": "move",
+          "size_matlab": [
+            468,
+            1
+          ],
+          "precision": "float64"
+        }
+      ]
+    },
+    {
+      "path": "analysis/OlhoffCurrent/evidence/three_rung_canary_preflight/C800x100_three_rung_state.mat",
+      "class": "required",
+      "bytes": 539638,
+      "sha256": "4be416d0aaa41c3415fef472ac205d639efad6f5abdfca1e8d1052c974b33101",
+      "present": true,
+      "format": "MATLAB v7.3 HDF5",
+      "variables": []
+    },
+    {
+      "path": "analysis/OlhoffCurrent/SOURCE_MANIFEST.json",
+      "class": "required",
+      "bytes": 11075,
+      "sha256": "431e7b3084507cd8b53862847b828cfd9f8948172e349bbae0c72749e8134aeb",
+      "present": true,
+      "format": "JSON"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/three_rung_architecture/EVIDENCE.json",
+      "class": "required",
+      "bytes": 11078,
+      "sha256": "47560482e8351d776fa5fcabe5c51722a8e72d96dca7f16448a7b1a9947183f6",
+      "present": true,
+      "format": "JSON"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/three_rung_architecture/METRICS.json",
+      "class": "required",
+      "bytes": 70946,
+      "sha256": "e09fd62439da070818ac0eb37559deeaefabac1418393558e14619ac6f996437",
+      "present": true,
+      "format": "JSON"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/three_rung_architecture/COUNTERFACTUAL_VALIDITY.md",
+      "class": "required",
+      "bytes": 8870,
+      "sha256": "5e56863cb2d1f0f0274eb160e1f25affd21f72164a4138b26da813321e575787",
+      "present": true,
+      "format": "Markdown"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/three_rung_architecture/PROVENANCE.md",
+      "class": "required",
+      "bytes": 6981,
+      "sha256": "369b437b425785f02b92574031ebdd187bf98d766d13d40c77edf19609b6f415",
+      "present": true,
+      "format": "Markdown"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/runs/C400x50_record.json",
+      "class": "required",
+      "bytes": 3155,
+      "sha256": "f0546e4ad9d51d9dca745a027ddb58a0c25e2a3dd90a1c650fa8e87fca6a271f",
+      "present": true,
+      "format": "JSON"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/two_branch_controller_validation/PROVENANCE.md",
+      "class": "required",
+      "bytes": 18301,
+      "sha256": "0e987a9bc7b39425661ffcee0cd81ebc5fa88010d35e094daff8d4df35459a33",
+      "present": true,
+      "format": "Markdown"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/three_rung_canary_preflight/EVIDENCE.json",
+      "class": "required",
+      "bytes": 2906,
+      "sha256": "2f3aafbb4d71231a10bce69cc77bc4ba0d704282dba285deb4a134b5a39fe648",
+      "present": true,
+      "format": "JSON"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/three_rung_canary_preflight/PROVENANCE.md",
+      "class": "required",
+      "bytes": 6257,
+      "sha256": "eab2457ba0e8e44b55122448646cdea61102cfa8e69fa7a68946000177decf95",
+      "present": true,
+      "format": "Markdown"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/three_rung_canary_preflight/scripts/cp_confighash.py",
+      "class": "required",
+      "bytes": 1671,
+      "sha256": "a5a5d43a5a5ce5d74afd0143a9810beb234f45b84958a306fc9f011f78d0c5f3",
+      "present": true,
+      "format": "Python source"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/three_rung_canary_preflight/runs/C480x60_three_rung_record.json",
+      "class": "required",
+      "bytes": 13855,
+      "sha256": "00f792660d9af13a7ec2bbf5f994ca7ff12df8a0f0599080b0382433eb5fc741",
+      "present": true,
+      "format": "JSON"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/three_rung_canary_preflight/runs/C800x100_three_rung_record.json",
+      "class": "required",
+      "bytes": 13727,
+      "sha256": "84eb0aef45b1f8772690df268848b5039a19f647733568884f90a590d317ca35",
+      "present": true,
+      "format": "JSON"
+    },
+    {
+      "path": "references/Du2007_Topological.pdf",
+      "class": "required",
+      "bytes": 852415,
+      "sha256": "b4dc8153ddc505b54f05cb72afe4641ba40c79512e5d32be4ab9c1e1b0378bc4",
+      "present": true,
+      "format": "PDF"
+    },
+    {
+      "path": "docs/olhoff_penalty_continuation_experiment.md",
+      "class": "required",
+      "bytes": 3893,
+      "sha256": "f25e3c6c1d9a9a5276c7c24af256bf247c36ea5bbdb7f83c4a0c8614dd123865",
+      "present": true,
+      "format": "Markdown"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/gray_kkt_forensic_audit/evaluations/EXECUTION_NOTES.md",
+      "class": "required",
+      "bytes": 1002,
+      "sha256": "70e410c35400bd9fa27e6bdbee1067d59086455ab4b4c8545318c7e277809d4e",
+      "present": true,
+      "format": "Markdown"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/gray_kkt_forensic_audit/evaluations/FD_RESULTS_400.csv",
+      "class": "required",
+      "bytes": 10985,
+      "sha256": "2f292e243d574687acbe2f943d89cee3d6adf873eccc9883aa5b837d0de3fd00",
+      "present": true,
+      "format": "CSV"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/gray_kkt_forensic_audit/evaluations/FD_RESULTS_480.csv",
+      "class": "required",
+      "bytes": 13673,
+      "sha256": "749f0a5399e9047fbf4e0ed9411a8a0a1780b0fda380883b97b5c2b437f415c6",
+      "present": true,
+      "format": "CSV"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/gray_kkt_forensic_audit/evaluations/FD_RESULTS_800.csv",
+      "class": "required",
+      "bytes": 13698,
+      "sha256": "e6d17434c54a52130dd322fe56a417c4ffa3ce67da4aaa97c0a120107f7d869e",
+      "present": true,
+      "format": "CSV"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/gray_kkt_forensic_audit/evaluations/FD_SAMPLE_PREREGISTERED.json",
+      "class": "required",
+      "bytes": 2021,
+      "sha256": "9821ef957a493aa62e21a20f8076ce35c5eb14a3ead02c077a8fcd43a6cdac2c",
+      "present": true,
+      "format": "JSON"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/gray_kkt_forensic_audit/evaluations/FINAL_VALIDATION.json",
+      "class": "required",
+      "bytes": 487,
+      "sha256": "c797a327783d6c58b6c72112190620173ffdb7feb36b41566d242e2fd4ad5f96",
+      "present": true,
+      "format": "JSON"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/gray_kkt_forensic_audit/evaluations/cluster_robustness.json",
+      "class": "required",
+      "bytes": 4969,
+      "sha256": "1e443a6769c589228cee87f26ad51d1953d80daf166c28a0e3a39e471c574b5a",
+      "present": true,
+      "format": "JSON"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/gray_kkt_forensic_audit/evaluations/config_400.json",
+      "class": "required",
+      "bytes": 3332,
+      "sha256": "34fc919c5f5c40ab351e03ee5ce51c1685e1ad3a7d77eadc92d3937713bd0efd",
+      "present": true,
+      "format": "JSON"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/gray_kkt_forensic_audit/evaluations/config_480.json",
+      "class": "required",
+      "bytes": 3499,
+      "sha256": "efc71e48fcd29d6e7da1720b7a71118c725790438a93d2f72855af37b3cd66ff",
+      "present": true,
+      "format": "JSON"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/gray_kkt_forensic_audit/evaluations/config_800.json",
+      "class": "required",
+      "bytes": 3490,
+      "sha256": "4159f6e92c4f86b227d6155faa32c65dc75f5ccaf1538319a4b4470e1eb27bd7",
+      "present": true,
+      "format": "JSON"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/gray_kkt_forensic_audit/evaluations/fd_400.mat",
+      "class": "required",
+      "bytes": 1148,
+      "sha256": "3b00c35e22697244ce80200a29e5807e02635c09eb24868b3171ac1a9f3c1fcd",
+      "present": true,
+      "format": "MATLAB v5/v7",
+      "variables": [
+        {
+          "name": "ids",
+          "size": [
+            1,
+            12
+          ],
+          "class": "double"
+        },
+        {
+          "name": "deltas",
+          "size": [
+            1,
+            3
+          ],
+          "class": "double"
+        },
+        {
+          "name": "fd",
+          "size": [
+            36,
+            9
+          ],
+          "class": "double"
+        }
+      ]
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/gray_kkt_forensic_audit/evaluations/fd_400_INVALID_INTEGER_SERIALIZATION.mat",
+      "class": "scratch",
+      "bytes": 450,
+      "sha256": "a7c123b3b34aaa5944e839b21963ab1a1a626d6122c6d2f26f1ebe9dbe83e29b",
+      "present": true,
+      "format": "MATLAB v5/v7",
+      "variables": [
+        {
+          "name": "ids",
+          "size": [
+            1,
+            12
+          ],
+          "class": "int64"
+        },
+        {
+          "name": "deltas",
+          "size": [
+            1,
+            3
+          ],
+          "class": "double"
+        },
+        {
+          "name": "fd",
+          "size": [
+            36,
+            9
+          ],
+          "class": "double"
+        }
+      ]
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/gray_kkt_forensic_audit/evaluations/fd_480.mat",
+      "class": "required",
+      "bytes": 1327,
+      "sha256": "e6005267e6912d3caf76294831f0d61326fa5d6aea4197c6fcf0ad3ebdbcb6b8",
+      "present": true,
+      "format": "MATLAB v5/v7",
+      "variables": [
+        {
+          "name": "ids",
+          "size": [
+            1,
+            15
+          ],
+          "class": "double"
+        },
+        {
+          "name": "deltas",
+          "size": [
+            1,
+            3
+          ],
+          "class": "double"
+        },
+        {
+          "name": "fd",
+          "size": [
+            45,
+            9
+          ],
+          "class": "double"
+        }
+      ]
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/gray_kkt_forensic_audit/evaluations/fd_480_INVALID_INTEGER_SERIALIZATION.mat",
+      "class": "scratch",
+      "bytes": 472,
+      "sha256": "e8fc260e0fbcdfaa2bb7be12a90075341b25ad5f55752b0e8e89f13b7f84a61b",
+      "present": true,
+      "format": "MATLAB v5/v7",
+      "variables": [
+        {
+          "name": "ids",
+          "size": [
+            1,
+            15
+          ],
+          "class": "int64"
+        },
+        {
+          "name": "deltas",
+          "size": [
+            1,
+            3
+          ],
+          "class": "double"
+        },
+        {
+          "name": "fd",
+          "size": [
+            45,
+            9
+          ],
+          "class": "double"
+        }
+      ]
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/gray_kkt_forensic_audit/evaluations/fd_800.mat",
+      "class": "required",
+      "bytes": 1620,
+      "sha256": "27ef291808c5d9e8c2de67a70b9ee66d40abf89f5db03348415927503db90a3c",
+      "present": true,
+      "format": "MATLAB v5/v7",
+      "variables": [
+        {
+          "name": "ids",
+          "size": [
+            1,
+            15
+          ],
+          "class": "double"
+        },
+        {
+          "name": "deltas",
+          "size": [
+            1,
+            3
+          ],
+          "class": "double"
+        },
+        {
+          "name": "fd",
+          "size": [
+            45,
+            9
+          ],
+          "class": "double"
+        }
+      ]
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/gray_kkt_forensic_audit/evaluations/fd_800_INVALID_INTEGER_SERIALIZATION.mat",
+      "class": "scratch",
+      "bytes": 469,
+      "sha256": "e0eff1904f27fc18b4c27404470f6e8c4d0ec293560cbb1b4ffb73a0f3e72991",
+      "present": true,
+      "format": "MATLAB v5/v7",
+      "variables": [
+        {
+          "name": "ids",
+          "size": [
+            1,
+            15
+          ],
+          "class": "int64"
+        },
+        {
+          "name": "deltas",
+          "size": [
+            1,
+            3
+          ],
+          "class": "double"
+        },
+        {
+          "name": "fd",
+          "size": [
+            45,
+            9
+          ],
+          "class": "double"
+        }
+      ]
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/gray_kkt_forensic_audit/evaluations/final_patch_history_400.csv",
+      "class": "required",
+      "bytes": 70025,
+      "sha256": "5e611ea0997d29b631dbf4c8c5939dda796924ac79a60362c4b0ff50f7f86f0a",
+      "present": true,
+      "format": "CSV"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/gray_kkt_forensic_audit/evaluations/final_patch_history_480.csv",
+      "class": "required",
+      "bytes": 58025,
+      "sha256": "c588f729104c0e7492c62f106fdaaea8b9e1c18f2d5a86abb650bf6ce1c26f43",
+      "present": true,
+      "format": "CSV"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/gray_kkt_forensic_audit/evaluations/final_patch_history_800.csv",
+      "class": "required",
+      "bytes": 70325,
+      "sha256": "32e321c3e48a079b39a893eb4b398ba6d486044a336d70ffa7895b0125fb9682",
+      "present": true,
+      "format": "CSV"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/gray_kkt_forensic_audit/evaluations/frozen_evaluation.log",
+      "class": "required",
+      "bytes": 2500,
+      "sha256": "9971f40c6a60deac8fa74daac52793fbcd9fd23578c3769ef1c0a3f0192c3b3a",
+      "present": true,
+      "format": "text or binary"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/gray_kkt_forensic_audit/evaluations/frozen_evaluation_float_recording.log",
+      "class": "required",
+      "bytes": 7060,
+      "sha256": "3aec18cbbafd175c3df0ba2d7b09e16f5ce4cdf2c7768159bb2952d66adbcc68",
+      "present": true,
+      "format": "text or binary"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/gray_kkt_forensic_audit/evaluations/frozen_evaluation_resume.log",
+      "class": "required",
+      "bytes": 5023,
+      "sha256": "a55315c90cffd5a90484fabe3ea1acd81edb16b0df04740cae85f74f9c89952e",
+      "present": true,
+      "format": "text or binary"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/gray_kkt_forensic_audit/evaluations/geometry.json",
+      "class": "required",
+      "bytes": 12531,
+      "sha256": "6fe9fb0e5c60a588a0ab2a48f13ba79b0039535fa08ae3a6230b171d4d704db5",
+      "present": true,
+      "format": "JSON"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/gray_kkt_forensic_audit/evaluations/geometry_400.npz",
+      "class": "required",
+      "bytes": 123005,
+      "sha256": "7c9010c3ac65f2d42032159e3d8e8c44b5eeec8f30e6aed3b405a6808a4c4f4a",
+      "present": true,
+      "format": "NumPy compressed archive",
+      "variables": [
+        {
+          "name": "rho",
+          "size": [
+            20000
+          ],
+          "precision": "float64"
+        },
+        {
+          "name": "depth",
+          "size": [
+            50,
+            400
+          ],
+          "precision": "float64"
+        },
+        {
+          "name": "interface_distance",
+          "size": [
+            50,
+            400
+          ],
+          "precision": "float64"
+        },
+        {
+          "name": "labels",
+          "size": [
+            50,
+            400
+          ],
+          "precision": "int32"
+        }
+      ]
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/gray_kkt_forensic_audit/evaluations/geometry_480.npz",
+      "class": "required",
+      "bytes": 180165,
+      "sha256": "08dc2e19f74a55b657c1c75db301d39244a70287b24bb9c1c15581d3309bd0e6",
+      "present": true,
+      "format": "NumPy compressed archive",
+      "variables": [
+        {
+          "name": "rho",
+          "size": [
+            28800
+          ],
+          "precision": "float64"
+        },
+        {
+          "name": "depth",
+          "size": [
+            60,
+            480
+          ],
+          "precision": "float64"
+        },
+        {
+          "name": "interface_distance",
+          "size": [
+            60,
+            480
+          ],
+          "precision": "float64"
+        },
+        {
+          "name": "labels",
+          "size": [
+            60,
+            480
+          ],
+          "precision": "int32"
+        }
+      ]
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/gray_kkt_forensic_audit/evaluations/geometry_800.npz",
+      "class": "required",
+      "bytes": 503786,
+      "sha256": "de497ad03156a480f8db8ccb30eac7b7b0f2c68b5c0f233efdb4e7c8d5a33197",
+      "present": true,
+      "format": "NumPy compressed archive",
+      "variables": [
+        {
+          "name": "rho",
+          "size": [
+            80000
+          ],
+          "precision": "float64"
+        },
+        {
+          "name": "depth",
+          "size": [
+            100,
+            800
+          ],
+          "precision": "float64"
+        },
+        {
+          "name": "interface_distance",
+          "size": [
+            100,
+            800
+          ],
+          "precision": "float64"
+        },
+        {
+          "name": "labels",
+          "size": [
+            100,
+            800
+          ],
+          "precision": "int32"
+        }
+      ]
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/gray_kkt_forensic_audit/evaluations/identity.json",
+      "class": "required",
+      "bytes": 52241,
+      "sha256": "985c3ae86386def91b3bbb9288f7017224fef388cdaa2b282e1babdbf9d04d3f",
+      "present": true,
+      "format": "JSON"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/gray_kkt_forensic_audit/evaluations/kkt_400.npz",
+      "class": "required",
+      "bytes": 721913,
+      "sha256": "cc150922619bdacfa3f48ebe265e08f06e07c796073b2f68b5849bcd006ca49e",
+      "present": true,
+      "format": "NumPy compressed archive",
+      "variables": [
+        {
+          "name": "rho",
+          "size": [
+            20000
+          ],
+          "precision": "float64"
+        },
+        {
+          "name": "raw_reduced",
+          "size": [
+            20000
+          ],
+          "precision": "float64"
+        },
+        {
+          "name": "filtered_reduced",
+          "size": [
+            20000
+          ],
+          "precision": "float64"
+        },
+        {
+          "name": "raw_grayfit",
+          "size": [
+            20000
+          ],
+          "precision": "float64"
+        },
+        {
+          "name": "filtered_grayfit",
+          "size": [
+            20000
+          ],
+          "precision": "float64"
+        },
+        {
+          "name": "raw_scale",
+          "size": [],
+          "precision": "float64"
+        },
+        {
+          "name": "cancellation",
+          "size": [
+            20000
+          ],
+          "precision": "float64"
+        }
+      ]
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/gray_kkt_forensic_audit/evaluations/kkt_480.npz",
+      "class": "required",
+      "bytes": 1036738,
+      "sha256": "b596baf88ad1d1432c6bc5e712e7e59322256d540e5732e25efa15c784b08993",
+      "present": true,
+      "format": "NumPy compressed archive",
+      "variables": [
+        {
+          "name": "rho",
+          "size": [
+            28800
+          ],
+          "precision": "float64"
+        },
+        {
+          "name": "raw_reduced",
+          "size": [
+            28800
+          ],
+          "precision": "float64"
+        },
+        {
+          "name": "filtered_reduced",
+          "size": [
+            28800
+          ],
+          "precision": "float64"
+        },
+        {
+          "name": "raw_grayfit",
+          "size": [
+            28800
+          ],
+          "precision": "float64"
+        },
+        {
+          "name": "filtered_grayfit",
+          "size": [
+            28800
+          ],
+          "precision": "float64"
+        },
+        {
+          "name": "raw_scale",
+          "size": [],
+          "precision": "float64"
+        },
+        {
+          "name": "cancellation",
+          "size": [
+            28800
+          ],
+          "precision": "float64"
+        }
+      ]
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/gray_kkt_forensic_audit/evaluations/kkt_800.npz",
+      "class": "required",
+      "bytes": 2817977,
+      "sha256": "a18ff85c474e4307457b925eddee699f05bd512130f76c57a5a222e83fa0ebcb",
+      "present": true,
+      "format": "NumPy compressed archive",
+      "variables": [
+        {
+          "name": "rho",
+          "size": [
+            80000
+          ],
+          "precision": "float64"
+        },
+        {
+          "name": "raw_reduced",
+          "size": [
+            80000
+          ],
+          "precision": "float64"
+        },
+        {
+          "name": "filtered_reduced",
+          "size": [
+            80000
+          ],
+          "precision": "float64"
+        },
+        {
+          "name": "raw_grayfit",
+          "size": [
+            80000
+          ],
+          "precision": "float64"
+        },
+        {
+          "name": "filtered_grayfit",
+          "size": [
+            80000
+          ],
+          "precision": "float64"
+        },
+        {
+          "name": "raw_scale",
+          "size": [],
+          "precision": "float64"
+        },
+        {
+          "name": "cancellation",
+          "size": [
+            80000
+          ],
+          "precision": "float64"
+        }
+      ]
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/gray_kkt_forensic_audit/evaluations/local_core.json",
+      "class": "required",
+      "bytes": 922,
+      "sha256": "cc3dd992a3dc19f1dfae0aff38ba76fc7cdd3978cc2dad19fae0918758928486",
+      "present": true,
+      "format": "JSON"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/gray_kkt_forensic_audit/evaluations/sample_400.mat",
+      "class": "required",
+      "bytes": 368,
+      "sha256": "6591d64ac0f20947955c66d156fef0ca8e7f29708ade23e55ced5fe73420d9f4",
+      "present": true,
+      "format": "MATLAB v5/v7",
+      "variables": [
+        {
+          "name": "ids",
+          "size": [
+            1,
+            12
+          ],
+          "class": "int64"
+        },
+        {
+          "name": "deltas",
+          "size": [
+            1,
+            3
+          ],
+          "class": "double"
+        }
+      ]
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/gray_kkt_forensic_audit/evaluations/sample_480.mat",
+      "class": "required",
+      "bytes": 392,
+      "sha256": "ea15f4e4a36755dd438d86d3f4862cd357d388fd7d29d8dd5a198865548241bd",
+      "present": true,
+      "format": "MATLAB v5/v7",
+      "variables": [
+        {
+          "name": "ids",
+          "size": [
+            1,
+            15
+          ],
+          "class": "int64"
+        },
+        {
+          "name": "deltas",
+          "size": [
+            1,
+            3
+          ],
+          "class": "double"
+        }
+      ]
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/gray_kkt_forensic_audit/evaluations/sample_800.mat",
+      "class": "required",
+      "bytes": 392,
+      "sha256": "4deca5fa55d6618ad90e544b28201e0ca17add7c0ffea15f06f8a27eaec485fa",
+      "present": true,
+      "format": "MATLAB v5/v7",
+      "variables": [
+        {
+          "name": "ids",
+          "size": [
+            1,
+            15
+          ],
+          "class": "int64"
+        },
+        {
+          "name": "deltas",
+          "size": [
+            1,
+            3
+          ],
+          "class": "double"
+        }
+      ]
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/gray_kkt_forensic_audit/evaluations/spectral_400.mat",
+      "class": "required",
+      "bytes": 2919590,
+      "sha256": "d2a2f8ced64fb00df303f30ba50a50fc9213ab7575bb933f8c1a01f1de523332",
+      "present": true,
+      "format": "MATLAB v5/v7",
+      "variables": [
+        {
+          "name": "rho",
+          "size": [
+            20000,
+            1
+          ],
+          "class": "double"
+        },
+        {
+          "name": "omega",
+          "size": [
+            5,
+            1
+          ],
+          "class": "double"
+        },
+        {
+          "name": "lam",
+          "size": [
+            5,
+            1
+          ],
+          "class": "double"
+        },
+        {
+          "name": "Fraw",
+          "size": [
+            20000,
+            2,
+            2
+          ],
+          "class": "double"
+        },
+        {
+          "name": "GK",
+          "size": [
+            20000,
+            2,
+            2
+          ],
+          "class": "double"
+        },
+        {
+          "name": "GM",
+          "size": [
+            20000,
+            2,
+            2
+          ],
+          "class": "double"
+        },
+        {
+          "name": "Ffiltered",
+          "size": [
+            20000,
+            2,
+            2
+          ],
+          "class": "double"
+        },
+        {
+          "name": "fJraw",
+          "size": [
+            20000,
+            1
+          ],
+          "class": "double"
+        },
+        {
+          "name": "fJfiltered",
+          "size": [
+            20000,
+            1
+          ],
+          "class": "double"
+        },
+        {
+          "name": "dOff",
+          "size": [
+            2,
+            1
+          ],
+          "class": "double"
+        },
+        {
+          "name": "Vraw",
+          "size": [
+            2,
+            2
+          ],
+          "class": "double"
+        },
+        {
+          "name": "Vfiltered",
+          "size": [
+            2,
+            2
+          ],
+          "class": "double"
+        },
+        {
+          "name": "massOrth",
+          "size": [
+            1,
+            1
+          ],
+          "class": "double"
+        },
+        {
+          "name": "eigResidual",
+          "size": [
+            5,
+            1
+          ],
+          "class": "double"
+        },
+        {
+          "name": "gK",
+          "size": [
+            20000,
+            1
+          ],
+          "class": "double"
+        },
+        {
+          "name": "gM",
+          "size": [
+            20000,
+            1
+          ],
+          "class": "double"
+        },
+        {
+          "name": "gRaw",
+          "size": [
+            20000,
+            1
+          ],
+          "class": "double"
+        },
+        {
+          "name": "gFiltered",
+          "size": [
+            20000,
+            1
+          ],
+          "class": "double"
+        }
+      ]
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/gray_kkt_forensic_audit/evaluations/spectral_480.mat",
+      "class": "required",
+      "bytes": 4159503,
+      "sha256": "068e0d2b3796ad4a47f4a3df3de8ca50d1eb2f1d189fc246360a6241f90cac41",
+      "present": true,
+      "format": "MATLAB v5/v7",
+      "variables": [
+        {
+          "name": "rho",
+          "size": [
+            28800,
+            1
+          ],
+          "class": "double"
+        },
+        {
+          "name": "omega",
+          "size": [
+            5,
+            1
+          ],
+          "class": "double"
+        },
+        {
+          "name": "lam",
+          "size": [
+            5,
+            1
+          ],
+          "class": "double"
+        },
+        {
+          "name": "Fraw",
+          "size": [
+            28800,
+            2,
+            2
+          ],
+          "class": "double"
+        },
+        {
+          "name": "GK",
+          "size": [
+            28800,
+            2,
+            2
+          ],
+          "class": "double"
+        },
+        {
+          "name": "GM",
+          "size": [
+            28800,
+            2,
+            2
+          ],
+          "class": "double"
+        },
+        {
+          "name": "Ffiltered",
+          "size": [
+            28800,
+            2,
+            2
+          ],
+          "class": "double"
+        },
+        {
+          "name": "fJraw",
+          "size": [
+            28800,
+            1
+          ],
+          "class": "double"
+        },
+        {
+          "name": "fJfiltered",
+          "size": [
+            28800,
+            1
+          ],
+          "class": "double"
+        },
+        {
+          "name": "dOff",
+          "size": [
+            2,
+            1
+          ],
+          "class": "double"
+        },
+        {
+          "name": "Vraw",
+          "size": [
+            2,
+            2
+          ],
+          "class": "double"
+        },
+        {
+          "name": "Vfiltered",
+          "size": [
+            2,
+            2
+          ],
+          "class": "double"
+        },
+        {
+          "name": "massOrth",
+          "size": [
+            1,
+            1
+          ],
+          "class": "double"
+        },
+        {
+          "name": "eigResidual",
+          "size": [
+            5,
+            1
+          ],
+          "class": "double"
+        },
+        {
+          "name": "gK",
+          "size": [
+            28800,
+            1
+          ],
+          "class": "double"
+        },
+        {
+          "name": "gM",
+          "size": [
+            28800,
+            1
+          ],
+          "class": "double"
+        },
+        {
+          "name": "gRaw",
+          "size": [
+            28800,
+            1
+          ],
+          "class": "double"
+        },
+        {
+          "name": "gFiltered",
+          "size": [
+            28800,
+            1
+          ],
+          "class": "double"
+        }
+      ]
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/gray_kkt_forensic_audit/evaluations/spectral_800.mat",
+      "class": "required",
+      "bytes": 11488339,
+      "sha256": "b191c05fa595d78ff4c95ff954a027e43194f573df98eb204dd938bbb66d5abd",
+      "present": true,
+      "format": "MATLAB v5/v7",
+      "variables": [
+        {
+          "name": "rho",
+          "size": [
+            80000,
+            1
+          ],
+          "class": "double"
+        },
+        {
+          "name": "omega",
+          "size": [
+            5,
+            1
+          ],
+          "class": "double"
+        },
+        {
+          "name": "lam",
+          "size": [
+            5,
+            1
+          ],
+          "class": "double"
+        },
+        {
+          "name": "Fraw",
+          "size": [
+            80000,
+            2,
+            2
+          ],
+          "class": "double"
+        },
+        {
+          "name": "GK",
+          "size": [
+            80000,
+            2,
+            2
+          ],
+          "class": "double"
+        },
+        {
+          "name": "GM",
+          "size": [
+            80000,
+            2,
+            2
+          ],
+          "class": "double"
+        },
+        {
+          "name": "Ffiltered",
+          "size": [
+            80000,
+            2,
+            2
+          ],
+          "class": "double"
+        },
+        {
+          "name": "fJraw",
+          "size": [
+            80000,
+            1
+          ],
+          "class": "double"
+        },
+        {
+          "name": "fJfiltered",
+          "size": [
+            80000,
+            1
+          ],
+          "class": "double"
+        },
+        {
+          "name": "dOff",
+          "size": [
+            2,
+            1
+          ],
+          "class": "double"
+        },
+        {
+          "name": "Vraw",
+          "size": [
+            2,
+            2
+          ],
+          "class": "double"
+        },
+        {
+          "name": "Vfiltered",
+          "size": [
+            2,
+            2
+          ],
+          "class": "double"
+        },
+        {
+          "name": "massOrth",
+          "size": [
+            1,
+            1
+          ],
+          "class": "double"
+        },
+        {
+          "name": "eigResidual",
+          "size": [
+            5,
+            1
+          ],
+          "class": "double"
+        },
+        {
+          "name": "gK",
+          "size": [
+            80000,
+            1
+          ],
+          "class": "double"
+        },
+        {
+          "name": "gM",
+          "size": [
+            80000,
+            1
+          ],
+          "class": "double"
+        },
+        {
+          "name": "gRaw",
+          "size": [
+            80000,
+            1
+          ],
+          "class": "double"
+        },
+        {
+          "name": "gFiltered",
+          "size": [
+            80000,
+            1
+          ],
+          "class": "double"
+        }
+      ]
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/gray_kkt_forensic_audit/evaluations/stationarity.json",
+      "class": "required",
+      "bytes": 79445,
+      "sha256": "442091108fe2d0eac7da6446a77c936fc2022eee6f8e394a2eee57aa09629a7a",
+      "present": true,
+      "format": "JSON"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/gray_kkt_forensic_audit/evaluations/timeline.json",
+      "class": "required",
+      "bytes": 1083,
+      "sha256": "63f287e35c9b6aecdf19177a0b37176252126a230102622e8cde788eae12e8ea",
+      "present": true,
+      "format": "JSON"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/gray_kkt_forensic_audit/evaluations/trajectory_400.csv",
+      "class": "required",
+      "bytes": 186583,
+      "sha256": "2c7ca1972d2fe0cad86fa971be93b4c1f64d449e89c2bdbed0400d0190e26b3c",
+      "present": true,
+      "format": "CSV"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/gray_kkt_forensic_audit/evaluations/trajectory_480.csv",
+      "class": "required",
+      "bytes": 154583,
+      "sha256": "90ab96e07919be5846b1785ba5c0764da2da0eef60f13006acff30a1ca6a9921",
+      "present": true,
+      "format": "CSV"
+    },
+    {
+      "path": "analysis/OlhoffCurrent/diagnostics/gray_kkt_forensic_audit/evaluations/trajectory_800.csv",
+      "class": "required",
+      "bytes": 187383,
+      "sha256": "252b66d68575ba1d186ad2cbd9d74f93a1692b955d13e4b24d106d2fadfc3492",
+      "present": true,
+      "format": "CSV"
+    }
+  ],
+  "verdicts": [
+    "GRAY_FORENSICS_EVIDENCE_PASS",
+    "FINAL_STATE_SENSITIVITY_VALIDATED",
+    "GRAY_REGIONS_NOT_KKT_STATIONARY",
+    "MULTIPLICITY_SECONDARY_OR_TRANSIENT",
+    "PROJECTION_CANARY_EXPERIMENT_PREMATURE",
+    "P_CONTINUATION_REOPENING_NOT_JUSTIFIED",
+    "PERFORMANCE_CAMPAIGN_BLOCKED_BY_OPTIMALITY_ISSUE"
+  ],
+  "note": "All paths are repository-relative. INVALID_INTEGER_SERIALIZATION files are declared scratch and never support a conclusion. Prior authoritative evidence is reused read-only. No original optimization result is generated in this audit."
+}

@@ -1,0 +1,101 @@
+{
+  "repo": "/Users/piotrek/Programming/topOpt4freqMax",
+  "kind": "selftest",
+  "when": "13-Sep-2026 22:36:45",
+  "matlab": "25.2.0.2998904 (R2025b)",
+  "head": "b21483b158f58e05e7b56957f2fbe8e1d2891395",
+  "suites": {
+    "name": "confbench_selftest",
+    "nFail": 1,
+    "error": ""
+  },
+  "selftest": [
+    {
+      "id": "T1",
+      "name": "a raising solver yields RUN_ERROR, not a crash",
+      "pass": true,
+      "detail": "status=RUN_ERROR ok=0 note=run_topopt_from_json:UnsupportedOurFilter: Unsupported optimization.filter.type \"no_such_filter\" for ourApproach. | warm-up or overridden budget; NOT a benchmark observation"
+    },
+    {
+      "id": "T2",
+      "name": "dispatch gate refuses a shadowing non-production implementation",
+      "pass": false,
+      "detail": "refused=0, guard then resolves correctly=1 | olhoffcurrent_paths must be called with an output argument the caller keeps alive:  guard = olhoffcurrent_paths();  Discarding the guard restores the path immediately and leaves the solver unreachable."
+    },
+    {
+      "id": "T3",
+      "name": "all three methods produce the same record field set",
+      "pass": true,
+      "detail": "26 fields, struct array built=1. "
+    },
+    {
+      "id": "T4",
+      "name": "timing-accounting identity passes and TIMING_ACCOUNTING_FAIL fires",
+      "pass": true,
+      "detail": "consistent: residual 0.000e+00, fail=0 | inconsistent: residual -4.000e-01, fail=1"
+    },
+    {
+      "id": "T5",
+      "name": "no memory column in the exported tables",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "id": "T6",
+      "name": "the production Olhoff configuration rejects an odd nely",
+      "pass": true,
+      "detail": "The simply-supported idealization pins the supports at MID HEIGHT, which requires an even nely (got 21)."
+    },
+    {
+      "id": "T7",
+      "name": "preflight refuses a mesh above 160x20 without acknowledgement",
+      "pass": true,
+      "detail": "check present=1, refused=1, overall preflight pass=0"
+    },
+    {
+      "id": "T8",
+      "name": "Stage-1 at cap + Stage-2 tolerance stop => CAP_HIT",
+      "pass": true,
+      "detail": "n1=1000/1000 n2=966/5000 -> CAP_HIT (ok=0), want CAP_HIT"
+    },
+    {
+      "id": "T9",
+      "name": "Stage-2 at cap => CAP_HIT",
+      "pass": true,
+      "detail": "n1=300/5000 n2=5000/5000 -> CAP_HIT (ok=0), want CAP_HIT"
+    },
+    {
+      "id": "T10",
+      "name": "both stages below cap + tolerance stop => NATIVE_CONVERGED",
+      "pass": true,
+      "detail": "n1=300/5000 n2=400/5000 -> NATIVE_CONVERGED (ok=1), want NATIVE_CONVERGED"
+    },
+    {
+      "id": "T11",
+      "name": "failed subproblem outranks a cap state => SOLVER_FAILURE",
+      "pass": true,
+      "detail": "n1=5000/5000 n2=5000/5000 -> SOLVER_FAILURE (ok=0), want SOLVER_FAILURE"
+    },
+    {
+      "id": "T12",
+      "name": "scaling fit excludes CAP_HIT and names the points used",
+      "pass": true,
+      "detail": "n=4 meshes={160x20,360x20,640x20,1000x20} C=8.486e-06 p=1.5956"
+    },
+    {
+      "id": "T13",
+      "name": "Olhoff preset assertions accept only their own formulation",
+      "pass": true,
+      "detail": "own sets pass=1; Pedersen set on beta-stall cfg fails 5 check(s); beta-stall set on Pedersen cfg fails 4 check(s); stage-exhaustion diagnostic refused=1"
+    },
+    {
+      "id": "T14",
+      "name": "per-outer-iteration cost fit uses the ok rows and only methods with outer counts",
+      "pass": true,
+      "detail": "per-outer quantities=5 n=[4 4 4 4 4] p(total/outer)=1.0771; Yuksel per-outer fits=0"
+    }
+  ],
+  "failed_ids": [
+    "T2"
+  ]
+}

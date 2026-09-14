@@ -1,0 +1,398 @@
+{
+  "label": "FROZEN-SUBPROBLEM REFERENCE (coneprog) -- drho discarded, never applied",
+  "exitflag": -7,
+  "output": {
+    "iterations": 26,
+    "primalfeasibility": 3.3459242930897837E-12,
+    "dualfeasibility": 0.029504557443808952,
+    "dualitygap": 3.2239797679212504E-14,
+    "algorithm": "interior-point",
+    "linearsolver": "augmented",
+    "message": "Search direction is small and current iterate is not within the specified constraint and/or optimality tolerance."
+  },
+  "wall_s": 2.6520874166666668,
+  "fval_solver": -1.0017921288433158,
+  "options": {
+    "OptimalityTolerance": 1E-10,
+    "ConstraintTolerance": 1E-10,
+    "MaxIterations": 500,
+    "LinearSolver": "auto"
+  },
+  "bs": 1.0017921288433158,
+  "beta": 26921.772248193382,
+  "omega_pred": 164.0785551136814,
+  "bs_minus_1": 0.00179212884331581,
+  "lambda_fields": [
+    "eqlin",
+    "ineqlin",
+    "soc",
+    "lower",
+    "upper"
+  ],
+  "lambda_soc": 1.0007130659768433,
+  "lambda_ineqlin": [
+    1.9241349830643642E-16,
+    0.72911679052077039
+  ],
+  "lambda_lower_stats": [
+    1.4939651391469877E-15,
+    0.0075537012911551229,
+    14314
+  ],
+  "lambda_upper_stats": [
+    5.7012143151844635E-15,
+    0.00086225950504518686,
+    14482
+  ],
+  "cone": {
+    "norm_Acx_minus_bc": 0.13906493093547473,
+    "dcx_minus_gamma": 0.13906493093540528,
+    "residual": 6.9444450190303542E-14,
+    "separation_e2_minus_e1": 7474.35379169594,
+    "separation_over_d2": 1.0061541790142048
+  },
+  "production_fval": [
+    6.94999613415348E-14,
+    -0.27812986187087985,
+    -4.9495811423553331,
+    7.8191280610755919E-14
+  ],
+  "evals": [
+    48.160973886868526,
+    7522.5147655828086
+  ],
+  "duality": {
+    "primal": -1.0017921288433158,
+    "dual_bound": -1.0025064853647596,
+    "gap": 0.00071435652144380413,
+    "mu_used": 1.0007130659768433,
+    "nu_used": [
+      1.9241349830643642E-16,
+      0.72911679052077039
+    ],
+    "w_norm": 1,
+    "w": [
+      -0.99999999961477937,
+      -2.7756822946129553E-5
+    ],
+    "mu_negative_clipped": false,
+    "nu_negative_clipped": false
+  },
+  "box_multiplier_compare": {
+    "max_abs_xsi_diff": 0.00071306597683678521,
+    "max_abs_eta_diff": 6.5095389622637362E-7,
+    "max_xsi": 0.0075537012911551229,
+    "max_eta": 0.00086225950504518686
+  },
+  "kkt": {
+    "label": "coneprog reference, solver multipliers",
+    "primal": {
+      "fval": [
+        6.94999613415348E-14,
+        -0.27812986187087985,
+        -4.9495811423553331,
+        7.8191280610755919E-14
+      ],
+      "max_fval": 7.8191280610755919E-14,
+      "box_violation_lower": 0,
+      "box_violation_upper": 0
+    },
+    "dual": {
+      "mu": [
+        1.0007130659768433,
+        0,
+        1.9241349830643642E-16,
+        0.72911679052077039
+      ],
+      "min_mu": 0,
+      "min_xsi": 1.4939651391469877E-15,
+      "min_eta": 5.7012143151844635E-15
+    },
+    "complementarity": {
+      "mu_times_f": [
+        6.9549519399359378E-14,
+        -0,
+        -9.5236622275215744E-16,
+        5.70105755656233E-14
+      ],
+      "max_abs_mu_f": 6.9549519399359378E-14,
+      "max_xsi_gap": 6.7048578919383932E-15,
+      "max_eta_gap": 2.2838941870230571E-14,
+      "max_box_comp_normalized": 3.549373288544113E-9
+    },
+    "stationarity": {
+      "sRow0": 0.00064346407136000846,
+      "sRow_point": 0.000643465856801902,
+      "raw_rms": 4.5883344384962628E-7,
+      "raw_max": 5.3501987405235554E-6,
+      "norm_rms": 0.00071306769759475178,
+      "norm_max": 0.0083146813919470573,
+      "norm_rms_pointscale": 0.00071306571902677218,
+      "bs_residual": 0.00071306597684252715
+    },
+    "eigs": {
+      "e1": 48.160973886868526,
+      "e2": 7522.5147655828086,
+      "separation": 7474.35379169594
+    },
+    "active_sweep_cols": [
+      "tol",
+      "n_at_minus_move",
+      "n_at_floor",
+      "n_at_plus_move",
+      "n_at_ceiling"
+    ],
+    "active_sweep": [
+      [
+        1E-8,
+        3922,
+        9368,
+        4038,
+        9654
+      ],
+      [
+        1E-7,
+        4822,
+        9400,
+        4678,
+        9684
+      ],
+      [
+        1E-6,
+        4898,
+        9404,
+        4784,
+        9686
+      ],
+      [
+        1E-5,
+        4906,
+        9404,
+        4796,
+        9686
+      ],
+      [
+        0.0001,
+        4910,
+        9404,
+        4796,
+        9686
+      ],
+      [
+        0.001,
+        4910,
+        9404,
+        4796,
+        9686
+      ]
+    ],
+    "active": {
+      "n_minus_move": 4898,
+      "n_floor": 9404,
+      "n_plus_move": 4784,
+      "n_ceiling": 9686,
+      "n_interior": 28,
+      "frac_move_bound": 0.33618055555555554,
+      "frac_any_bound": 0.99902777777777774
+    },
+    "verdict": "REFERENCE_PROBLEM25_KKT_INCONCLUSIVE"
+  },
+  "kkt_implied_box": {
+    "label": "coneprog reference, implied box multipliers",
+    "primal": {
+      "fval": [
+        6.94999613415348E-14,
+        -0.27812986187087985,
+        -4.9495811423553331,
+        7.8191280610755919E-14
+      ],
+      "max_fval": 7.8191280610755919E-14,
+      "box_violation_lower": 0,
+      "box_violation_upper": 0
+    },
+    "dual": {
+      "mu": [
+        1.0007130659768433,
+        0,
+        1.9241349830643642E-16,
+        0.72911679052077039
+      ],
+      "min_mu": 0,
+      "min_xsi": 0,
+      "min_eta": 0
+    },
+    "complementarity": {
+      "mu_times_f": [
+        6.9549519399359378E-14,
+        -0,
+        -9.5236622275215744E-16,
+        5.70105755656233E-14
+      ],
+      "max_abs_mu_f": 6.9549519399359378E-14,
+      "max_xsi_gap": 0.00071434388294776643,
+      "max_eta_gap": 7.1409099293123664E-10,
+      "max_box_comp_normalized": 111.01534875722716
+    },
+    "stationarity": {
+      "sRow0": 0.00064346407136000846,
+      "sRow_point": 0.000643465856801902,
+      "raw_rms": 1.1553610248235816E-18,
+      "raw_max": 4.4235448637408581E-17,
+      "norm_rms": 1.7955330782985931E-15,
+      "norm_max": 6.8745794219580465E-14,
+      "norm_rms_pointscale": 1.79552809618502E-15,
+      "bs_residual": 2.9598719308854271E-17
+    },
+    "eigs": {
+      "e1": 48.160973886868526,
+      "e2": 7522.5147655828086,
+      "separation": 7474.35379169594
+    },
+    "active_sweep_cols": [
+      "tol",
+      "n_at_minus_move",
+      "n_at_floor",
+      "n_at_plus_move",
+      "n_at_ceiling"
+    ],
+    "active_sweep": [
+      [
+        1E-8,
+        3922,
+        9368,
+        4038,
+        9654
+      ],
+      [
+        1E-7,
+        4822,
+        9400,
+        4678,
+        9684
+      ],
+      [
+        1E-6,
+        4898,
+        9404,
+        4784,
+        9686
+      ],
+      [
+        1E-5,
+        4906,
+        9404,
+        4796,
+        9686
+      ],
+      [
+        0.0001,
+        4910,
+        9404,
+        4796,
+        9686
+      ],
+      [
+        0.001,
+        4910,
+        9404,
+        4796,
+        9686
+      ]
+    ],
+    "active": {
+      "n_minus_move": 4898,
+      "n_floor": 9404,
+      "n_plus_move": 4784,
+      "n_ceiling": 9686,
+      "n_interior": 28,
+      "frac_move_bound": 0.33618055555555554,
+      "frac_any_bound": 0.99902777777777774
+    },
+    "verdict": "REFERENCE_PROBLEM25_KKT_FAIL"
+  },
+  "solution": {
+    "bs": 1.0017921288433158,
+    "beta": 26921.772248193382,
+    "max_abs_drho": 0.0099999999946171134,
+    "max_abs_drho_over_move": 0.99999999946171136,
+    "norm2_drho": 1.0032122744773138,
+    "mean_abs_drho": 0.0040556313865300142,
+    "volume_change": 3.1802978129018893E-6,
+    "volume_row": 7.8191280610755919E-14,
+    "nextmode_row": -4.9495811423553331,
+    "cluster1_row": 6.94999613415348E-14,
+    "cluster2_row": -0.27812986187087985,
+    "image_abc": [
+      48.16097532650609,
+      -0.1037321574165091,
+      93.878132112228954
+    ],
+    "fJJ_drho": -1185.8017497800925,
+    "sum_drho": 0.045796288505787208,
+    "n_positive": 14484,
+    "n_negative": 14316
+  },
+  "active": {
+    "n_minus_move": 4898,
+    "n_floor": 9404,
+    "n_plus_move": 4784,
+    "n_ceiling": 9686,
+    "n_interior": 28,
+    "frac_move_bound": 0.33618055555555554,
+    "frac_any_bound": 0.99902777777777774
+  },
+  "active_sweep": [
+    [
+      1E-8,
+      3922,
+      9368,
+      4038,
+      9654
+    ],
+    [
+      1E-7,
+      4822,
+      9400,
+      4678,
+      9684
+    ],
+    [
+      1E-6,
+      4898,
+      9404,
+      4784,
+      9686
+    ],
+    [
+      1E-5,
+      4906,
+      9404,
+      4796,
+      9686
+    ],
+    [
+      0.0001,
+      4910,
+      9404,
+      4796,
+      9686
+    ],
+    [
+      0.001,
+      4910,
+      9404,
+      4796,
+      9686
+    ]
+  ],
+  "active_sweep_cols": [
+    "tol",
+    "n_at_minus_move",
+    "n_at_floor",
+    "n_at_plus_move",
+    "n_at_ceiling"
+  ],
+  "gain_over_P19": {
+    "bs_ref": 1.0017921288433158
+  }
+}

@@ -1,0 +1,32 @@
+[
+  {
+    "path": "analysis/OlhoffCurrent/diagnostics/move_stop/runs/baseline_160x20_iterations.csv",
+    "bytes": 22658,
+    "sha256": "f438612943aee5789b3f289eb0563159efd1d5121de147381cf94fa164308a20"
+  },
+  {
+    "path": "analysis/OlhoffCurrent/diagnostics/move_stop/runs/baseline_320x40_iterations.csv",
+    "bytes": 33214,
+    "sha256": "73baa20070133e9e30e073438927f401b557a962a8e05bf31700101e41642804"
+  },
+  {
+    "path": "analysis/OlhoffCurrent/diagnostics/move_activity_400/runs/P400_400x50_iterations.csv",
+    "bytes": 60967,
+    "sha256": "72665ec768d9959227b213a3eedd1eeac48e8fac3ebcadc22a0fc0a1bfb2ff41"
+  },
+  {
+    "path": "analysis/OlhoffCurrent/diagnostics/move_stop/METRICS.json",
+    "bytes": 13385,
+    "sha256": "e2fc17dbed6fc8f7b95983a26457ae52403da8e2cc7992bd2cf153ccc9662a6e"
+  },
+  {
+    "path": "analysis/OlhoffCurrent/diagnostics/two_branch_maturity_240/METRICS.json",
+    "bytes": 7517,
+    "sha256": "fbf7433e2efeba0edb4f793c19b2529070762f452a785cef1b7d5192555eb7b1"
+  },
+  {
+    "path": "analysis/OlhoffCurrent/diagnostics/fixedmove_400_dynamics/METRICS.json",
+    "bytes": 8645,
+    "sha256": "20b8602e80e15c6b444f5c9d8aa85cbe3d7eb3082ac3bdada23c4eaf50e162fe"
+  }
+]

@@ -1,0 +1,21 @@
+{
+ "schema": "nmp_launch/1",
+ "start_local": "2026-09-14T01:27:22+0200",
+ "cwd": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/logs/matlab_cwd_smoke",
+ "stdout_stderr_log": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/logs/smoke_performance_comparison_stdout.log",
+ "env": {
+  "NMP_LOCK": "/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/SMOKE_LOCK.json",
+  "NMP_LOCK_SHA256": "fe4da0c52e27a0153d3572d67d831dddb6ee0b0330523d5decfdc5cc2f6ef4af"
+ },
+ "command": [
+  "/usr/bin/caffeinate",
+  "-i",
+  "-s",
+  "/Applications/MATLAB_R2025b.app/bin/matlab",
+  "-batch",
+  "addpath('/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/scripts'); addpath('/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent'); nmp_arm_hooks(); run('/Users/piotrek/Programming/topOpt4freqMax/examples/Performance/performance_comparison.m'); nmp_after_run();"
+ ],
+ "shell_form": "cd \"/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/logs/matlab_cwd_smoke\" && NMP_LOCK=\"/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/SMOKE_LOCK.json\" NMP_LOCK_SHA256=fe4da0c52e27a0153d3572d67d831dddb6ee0b0330523d5decfdc5cc2f6ef4af /usr/bin/caffeinate -i -s /Applications/MATLAB_R2025b.app/bin/matlab -batch \"addpath('/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/scripts'); addpath('/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent'); nmp_arm_hooks(); run('/Users/piotrek/Programming/topOpt4freqMax/examples/Performance/performance_comparison.m'); nmp_after_run();\" > \"/Users/piotrek/Programming/topOpt4freqMax/analysis/OlhoffCurrent/diagnostics/nine_mesh_pedersen_production/logs/smoke_performance_comparison_stdout.log\" 2>&1",
+ "host": "PMS.local",
+ "platform": "macOS-26.6.2-arm64-arm-64bit-Mach-O"
+}

@@ -1,0 +1,124 @@
+{
+  "matlab": "25.2.0.2998904 (R2025b)",
+  "P1": {
+    "cfgHash_stored": "03097a28b0ad7fdb0d977985d3b5fd279dd74553c9dd5dfbd3cc035ac2a1782e",
+    "cfgHash_fresh": "03097a28b0ad7fdb0d977985d3b5fd279dd74553c9dd5dfbd3cc035ac2a1782e",
+    "treatment_cfg_isequal_control_cfg": true,
+    "pass": true
+  },
+  "P4": {
+    "wall_s": 40.781344916666669,
+    "accepted": true,
+    "termination": "",
+    "reason": "",
+    "bs": 1.001792128848223,
+    "bsO": 1.001792128848223,
+    "abs_dbs": 0,
+    "gainRecovery": 1,
+    "d2": 0,
+    "dinf": 0,
+    "gap": 6.4450667025539587E-12,
+    "boxComp": 4.9618949127851132E-7,
+    "candidate": "dualboundGeneral",
+    "solver": "schur",
+    "attempts": 1,
+    "exitflags": -7,
+    "tSolve": 37.945050166666668,
+    "tCertificate": 0.90958266666666665,
+    "candidateGaps": [
+      1.678147133188636,
+      1.8886333696954694E-7,
+      6.4450667025539587E-12,
+      9.1529006596147156E-12
+    ],
+    "candidateNames": [
+      "solverDuals",
+      "complementarySlackness",
+      "dualboundGeneral",
+      "dualboundAligned"
+    ],
+    "beta": 26921.772248325255,
+    "nInterior": 16,
+    "nGrayFullMove": 8260,
+    "nGray": 8272,
+    "pass": true
+  },
+  "P5": {
+    "N3": {
+      "rejected": true,
+      "reason": "eligibility failed: E1"
+    },
+    "inconsistentOffsets": {
+      "rejected": true,
+      "reason": "eligibility failed: E3,E4"
+    },
+    "asymmetricF": {
+      "rejected": true,
+      "reason": "eligibility failed: E2"
+    },
+    "offDiagFalse": {
+      "rejected": true,
+      "reason": "eligibility failed: E6"
+    },
+    "volFun": {
+      "rejected": true,
+      "reason": "eligibility failed: E7"
+    },
+    "infeasibleX": {
+      "rejected": true,
+      "reason": "no candidate passes: solverDuals[C1,C3,C7] complementarySlackness[C1,C3] dualboundGeneral[C1,C3,C5] dualboundAligned[C1,C3,C5]",
+      "maxRow": 1.0000000150167665E-6
+    },
+    "suboptimalX": {
+      "rejected": true,
+      "reason": "no candidate passes: solverDuals[C3,C7] complementarySlackness[C3,C5,C6,C7] dualboundGeneral[C3,C5,C6] dualboundAligned[C3,C5,C6]",
+      "bestGap": 0.0017921288495139631
+    },
+    "oracleCertifies": {
+      "certified": true,
+      "candidate": "dualboundGeneral",
+      "bestGap": 1.4552803406786552E-12
+    },
+    "pass": true
+  },
+  "P3": {
+    "wall_s": 8.903633833333334,
+    "n": 3,
+    "drho_bitwise": true,
+    "rho_bitwise": true,
+    "omega_bitwise": true,
+    "beta_bitwise": true,
+    "nInner_bitwise": true,
+    "ex_bitwise": true,
+    "termination": "",
+    "status": "STOPPED_OTHER",
+    "pass": true
+  },
+  "P6": {
+    "wall_straight_s": 2.8129531666666665,
+    "straight_status": "STOPPED_OTHER",
+    "straight_n": 6,
+    "all_accepted": true,
+    "nAccepted": 6,
+    "solvers": [
+      "schur",
+      "schur",
+      "schur",
+      "schur",
+      "schur",
+      "schur"
+    ],
+    "resume_rho_bitwise": true,
+    "resume_hist_bitwise": true,
+    "resume_drho_bitwise": true,
+    "resume_n": 6,
+    "postprocess_errors": [],
+    "postprocess_rebuildExact": true,
+    "pass": true
+  },
+  "P7": {
+    "treeHash": "edbfe47eb32109a2fb017f6f13d5327f2c240357caa96630064ffcf37ee152cb",
+    "ok": true,
+    "pass": true
+  }
+}

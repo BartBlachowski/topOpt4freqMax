@@ -1,0 +1,145 @@
+{
+ "schema": "olhoffcurrent_postmerge_campaign_gate_metrics/1",
+ "generated": "2026-09-13T20:55:11+02:00",
+ "verdicts": {
+  "PREREGISTRATION_AMENDMENT_REVIEW": "FAIL",
+  "FINALIZATION_GATE_PROVENANCE_LOGIC": "FAIL",
+  "MIGRATION_COMMIT_REVIEW": "FAIL",
+  "OLHOFF_MIGRATION_MERGE": "FAIL (NOT EXECUTED)",
+  "POSTMERGE_IMPLEMENTATION_IDENTITY": "FAIL (NOT EXECUTED)",
+  "POSTMERGE_TEST_SUITE": "FAIL (NOT EXECUTED)",
+  "POSTMERGE_HISTORICAL_S160": "FAIL (NOT EXECUTED)",
+  "POSTMERGE_PEDERSEN_S160": "FAIL (NOT EXECUTED)",
+  "NINE_MESH_CONFIG_PREVIEW": "FAIL (NOT EXECUTED)",
+  "CAMPAIGN": "OLHOFF_NINE_MESH_CAMPAIGN_BLOCKED"
+ },
+ "blocker": "finalization-gate SUPERSEDED_PRODUCTION_SOURCE rule (9b30ec4, Amendment A2) not strictly fail-closed: P5, P9, P10",
+ "amendments": {
+  "A1": "ACCEPTABLE",
+  "A2": "NOT_ACCEPTABLE_AS_IMPLEMENTED",
+  "A3": "ACCEPTABLE",
+  "A4": "ACCEPTABLE",
+  "A5": "ACCEPTABLE"
+ },
+ "gate_probes": {
+  "n": 11,
+  "n_fail_open": 3,
+  "probes": [
+   {
+    "id": "P0",
+    "expect_ok": true,
+    "gate_ok": true,
+    "fail_open": false,
+    "desc": "baseline compliant study"
+   },
+   {
+    "id": "P1",
+    "expect_ok": true,
+    "gate_ok": true,
+    "fail_open": false,
+    "desc": "J1 replica: real historical digest, same path"
+   },
+   {
+    "id": "P2",
+    "expect_ok": false,
+    "gate_ok": false,
+    "fail_open": false,
+    "desc": "J2 replica: fabricated digest"
+   },
+   {
+    "id": "P3",
+    "expect_ok": false,
+    "gate_ok": false,
+    "fail_open": false,
+    "desc": "historical digest of a DIFFERENT source path (limit.m digest on olhoffSolve.m line)"
+   },
+   {
+    "id": "P4",
+    "expect_ok": false,
+    "gate_ok": false,
+    "fail_open": false,
+    "desc": "historical digest of a NON-source file (README.md @013cc48)"
+   },
+   {
+    "id": "P5",
+    "expect_ok": false,
+    "gate_ok": true,
+    "fail_open": true,
+    "desc": "DUPLICATE path: fabricated line FOLLOWED by real historical line"
+   },
+   {
+    "id": "P6",
+    "expect_ok": false,
+    "gate_ok": false,
+    "fail_open": false,
+    "desc": "DUPLICATE path: real historical line followed by fabricated line"
+   },
+   {
+    "id": "P7",
+    "expect_ok": false,
+    "gate_ok": false,
+    "fail_open": false,
+    "desc": "empty-content digest, path never deleted in history"
+   },
+   {
+    "id": "P8",
+    "expect_ok": false,
+    "gate_ok": false,
+    "fail_open": false,
+    "desc": "real historical digest but +impl locally edited (manifest fails)"
+   },
+   {
+    "id": "P9",
+    "expect_ok": false,
+    "gate_ok": true,
+    "fail_open": true,
+    "desc": "empty-content digest, path deleted+re-added in history (fabricated: content never empty)"
+   },
+   {
+    "id": "P10",
+    "expect_ok": false,
+    "gate_ok": true,
+    "fail_open": true,
+    "desc": "+impl locally edited AND SOURCE_MANIFEST.json regenerated; real historical digest line"
+   }
+  ],
+  "matlab": "25.2.0.2998904 (R2025b)",
+  "probe_repo": "throwaway git clone --shared at 9b30ec45b038fb36e7cf20d57679b71cfd099fb3 (session scratchpad)"
+ },
+ "real_superseded_lines": {
+  "study": "two_branch_controller_validation",
+  "n_source_lines": 8,
+  "n_superseded": 7,
+  "all_match_same_path_at": "1438aa3",
+  "n_match_current": 1
+ },
+ "commit_review": {
+  "parent": "013cc48451d33bed61c5c4eea174bbd898d548a2",
+  "commits_after_target": 1,
+  "changed_paths": 121,
+  "added_paths": 77,
+  "added_paths_present_on_disk_in_primary": 0,
+  "paths_outside_OlhoffCurrent_or_examples_Performance": 0,
+  "proposed_yuksel_evaluator_paths": 0,
+  "impl_files": 79,
+  "impl_blob_equal_upstream_253069": 79,
+  "impl_tree_sha256": "4ba9a3ae10881344a0e60f2b8a8976c5ec9ceccf966bc2a3da4f37fb5aebffbf",
+  "impl_deletion_commits_in_history": 0
+ },
+ "step0_normal_checkout": {
+  "branch": "benchmark-methodology-r2",
+  "head": "013cc48451d33bed61c5c4eea174bbd898d548a2",
+  "tracked_modifications": 0,
+  "untracked_dirs": 8,
+  "impl_files": 75,
+  "impl_tree_sha256": "edbfe47eb32109a2fb017f6f13d5327f2c240357caa96630064ffcf37ee152cb",
+  "source_manifest_sha256": "431e7b3084507cd8b53862847b828cfd9f8948172e349bbae0c72749e8134aeb"
+ },
+ "preexisting_failures_verified_identical_on_013cc48": [
+  "test_finalization_gate H move_activity_400",
+  "test_finalization_gate I (same seven studies)",
+  "confbench_selftest T2"
+ ],
+ "solves_run": 0,
+ "max_mesh_solved": null
+}

@@ -1,0 +1,13 @@
+{
+  "label": "C800x100_three_rung_post",
+  "when": "2026-09-12T14:34:03",
+  "loadavg": "{ 2.85 2.79 2.88 }",
+  "swap": "total = 0.00M  used = 0.00M  free = 0.00M  (encrypted)",
+  "vm_stat": "Mach Virtual Memory Statistics: (page size of 16384 bytes)\nPages free:                                  1428121.\nPages active:                                1290313.\nPages inactive:                               938741.\nPages speculative:                            313360.\nPages throttled:                                   0.",
+  "freeRAM_pages": "1428127.",
+  "matlabProcs": "2",
+  "topCPU": "%CPU COMM\n 89.4 /Applications/MATLAB_R2025b.app/bin/maca64/../../Contents/MacOS/MATLAB_maca64\n 29.8 /System/Library/PrivateFrameworks/SkyLight.framework/Resources/WindowServer\n 14.6 /System/Library/Frameworks/WebKit.framework/Versions/A/XPCServices/com.apple.WebKit.WebContent.xpc/Contents/MacOS/com.apple.WebKit.WebContent\n  3.5 /System/Library/Frameworks/WebKit.framework/Versions/A/XPCServices/com.apple.WebKit.GPU.xpc/Contents/MacOS/com.apple.WebKit.GPU\n  3.5 /System/Applications/Utilities/Activity Monitor.app/Contents/MacOS/Activity Monitor\nps: stdout: Broken pipe",
+  "threads": 1,
+  "calib_dgemm_s": 0.011952708333333333,
+  "calib_spsolve_s": 0.002682375
+}

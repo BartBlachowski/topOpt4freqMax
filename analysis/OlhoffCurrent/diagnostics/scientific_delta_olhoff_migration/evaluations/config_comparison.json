@@ -1,0 +1,266 @@
+{
+ "configs": [
+  "S480_source_native",
+  "M1_source_simp4b",
+  "C480_target_threerung",
+  "PROD_target_canonical"
+ ],
+ "n_leaves": 96,
+ "n_identical": 70,
+ "differing": [
+  {
+   "path": "material.mass.model",
+   "S480_source_native": "eq2",
+   "M1_source_simp4b": "eq4b",
+   "C480_target_threerung": "eq4b",
+   "PROD_target_canonical": "eq4b"
+  },
+  {
+   "path": "material.stiffness.linearBelow",
+   "S480_source_native": "0.10000000000000001",
+   "M1_source_simp4b": "0.10000000000000001",
+   "C480_target_threerung": "<absent>",
+   "PROD_target_canonical": "<absent>"
+  },
+  {
+   "path": "material.stiffness.model",
+   "S480_source_native": "pedersen",
+   "M1_source_simp4b": "simp",
+   "C480_target_threerung": "simp",
+   "PROD_target_canonical": "simp"
+  },
+  {
+   "path": "move.adaptive.grow",
+   "S480_source_native": "1.2",
+   "M1_source_simp4b": "1.2",
+   "C480_target_threerung": "<absent>",
+   "PROD_target_canonical": "<absent>"
+  },
+  {
+   "path": "move.adaptive.shrink",
+   "S480_source_native": "0.69999999999999996",
+   "M1_source_simp4b": "0.69999999999999996",
+   "C480_target_threerung": "<absent>",
+   "PROD_target_canonical": "<absent>"
+  },
+  {
+   "path": "move.continuation.signal",
+   "S480_source_native": "boundVariable",
+   "M1_source_simp4b": "boundVariable",
+   "C480_target_threerung": "stageExhaustion",
+   "PROD_target_canonical": "boundVariable"
+  },
+  {
+   "path": "move.initial",
+   "S480_source_native": "0.10000000000000001",
+   "M1_source_simp4b": "0.10000000000000001",
+   "C480_target_threerung": "0.040000000000000001",
+   "PROD_target_canonical": "0.040000000000000001"
+  },
+  {
+   "path": "move.levels",
+   "S480_source_native": "[0.040000000000000001 0.02 0.01 0.0050000000000000001]",
+   "M1_source_simp4b": "[0.040000000000000001 0.02 0.01 0.0050000000000000001]",
+   "C480_target_threerung": "[0.040000000000000001 0.02 0.01]",
+   "PROD_target_canonical": "[0.040000000000000001 0.02 0.01 0.0050000000000000001]"
+  },
+  {
+   "path": "move.policy",
+   "S480_source_native": "adaptive",
+   "M1_source_simp4b": "adaptive",
+   "C480_target_threerung": "ladder",
+   "PROD_target_canonical": "ladder"
+  },
+  {
+   "path": "optimizer.inner.asymptoteHistory",
+   "S480_source_native": "inner",
+   "M1_source_simp4b": "inner",
+   "C480_target_threerung": "<absent>",
+   "PROD_target_canonical": "<absent>"
+  },
+  {
+   "path": "provenance.historicalAliases",
+   "S480_source_native": "<absent>",
+   "M1_source_simp4b": "<absent>",
+   "C480_target_threerung": "<absent>",
+   "PROD_target_canonical": "M4 | TMA | B0 | REG160 | duOlhoffFrozenM4"
+  },
+  {
+   "path": "provenance.implementation",
+   "S480_source_native": "<absent>",
+   "M1_source_simp4b": "<absent>",
+   "C480_target_threerung": "analysis/OlhoffCurrent",
+   "PROD_target_canonical": "analysis/OlhoffCurrent"
+  },
+  {
+   "path": "provenance.overrides",
+   "S480_source_native": "domain.mesh.nelx | 480 | domain.mesh.nely | 60 | runtime.name | S480x60 | runtime.verbose | true",
+   "M1_source_simp4b": "domain.mesh.nelx | 480 | domain.mesh.nely | 60 | runtime.name | M1_480x60_simp4b_adaptive | runtime.verbose | true | move.initial | 0.10000000000000001 | runtime.diagnostics | true",
+   "C480_target_threerung": "domain.mesh.nelx | 480 | domain.mesh.nely | 60 | runtime.maxOuter | 1600 | runtime.singleThread | true | runtime.diagnostics | true | runtime.verbose | false | runtime.name | CV_C_480x60 | move.continuation.signal | stageExhaustion | stop.rule | stageExhaustion | move.levels | [0.040000000000000001 0.02 0.01] | runtime.name | TR3_C_480x60 | runtime.name | CAN3_480x60",
+   "PROD_target_canonical": "domain.mesh.nelx | 480 | domain.mesh.nely | 60 | runtime.maxOuter | 400 | runtime.singleThread | true | runtime.diagnostics | false | runtime.verbose | false | runtime.name | OLHOFF_CURRENT_480x60"
+  },
+  {
+   "path": "provenance.preset",
+   "S480_source_native": "duOlhoffAdaptivePedersen",
+   "M1_source_simp4b": "duOlhoffAdaptiveMove",
+   "C480_target_threerung": "duOlhoffFrozenM4",
+   "PROD_target_canonical": "duOlhoffFrozenM4"
+  },
+  {
+   "path": "provenance.productionPreset",
+   "S480_source_native": "<absent>",
+   "M1_source_simp4b": "<absent>",
+   "C480_target_threerung": "duOlhoffFixedPenaltySensitivityFiltered",
+   "PROD_target_canonical": "duOlhoffFixedPenaltySensitivityFiltered"
+  },
+  {
+   "path": "provenance.resolvedAt",
+   "S480_source_native": "2026-09-13T11:51:29",
+   "M1_source_simp4b": "2026-09-13T16:44:09",
+   "C480_target_threerung": "2026-09-12T11:40:12",
+   "PROD_target_canonical": "2026-09-13T16:56:02"
+  },
+  {
+   "path": "provenance.schemaRows",
+   "S480_source_native": "86",
+   "M1_source_simp4b": "86",
+   "C480_target_threerung": "81",
+   "PROD_target_canonical": "81"
+  },
+  {
+   "path": "provenance.upstreamPreset",
+   "S480_source_native": "<absent>",
+   "M1_source_simp4b": "<absent>",
+   "C480_target_threerung": "<absent>",
+   "PROD_target_canonical": "duOlhoffFrozenM4"
+  },
+  {
+   "path": "runtime.diagnostics",
+   "S480_source_native": "false",
+   "M1_source_simp4b": "true",
+   "C480_target_threerung": "true",
+   "PROD_target_canonical": "false"
+  },
+  {
+   "path": "runtime.maxOuter",
+   "S480_source_native": "400",
+   "M1_source_simp4b": "400",
+   "C480_target_threerung": "1600",
+   "PROD_target_canonical": "400"
+  },
+  {
+   "path": "runtime.name",
+   "S480_source_native": "S480x60",
+   "M1_source_simp4b": "M1_480x60_simp4b_adaptive",
+   "C480_target_threerung": "CAN3_480x60",
+   "PROD_target_canonical": "OLHOFF_CURRENT_480x60"
+  },
+  {
+   "path": "runtime.verbose",
+   "S480_source_native": "true",
+   "M1_source_simp4b": "true",
+   "C480_target_threerung": "false",
+   "PROD_target_canonical": "false"
+  },
+  {
+   "path": "stop.guards.boxInactiveFraction",
+   "S480_source_native": "0",
+   "M1_source_simp4b": "0",
+   "C480_target_threerung": "<absent>",
+   "PROD_target_canonical": "<absent>"
+  },
+  {
+   "path": "stop.guards.settledMove",
+   "S480_source_native": "false",
+   "M1_source_simp4b": "false",
+   "C480_target_threerung": "true",
+   "PROD_target_canonical": "true"
+  },
+  {
+   "path": "stop.guards.settledWindow",
+   "S480_source_native": "1",
+   "M1_source_simp4b": "1",
+   "C480_target_threerung": "<absent>",
+   "PROD_target_canonical": "<absent>"
+  },
+  {
+   "path": "stop.rule",
+   "S480_source_native": "<absent>",
+   "M1_source_simp4b": "<absent>",
+   "C480_target_threerung": "stageExhaustion",
+   "PROD_target_canonical": "designChange"
+  }
+ ],
+ "identical_paths": [
+  "design.initial",
+  "design.minimum",
+  "design.volumeFraction",
+  "domain.a",
+  "domain.b",
+  "domain.boundary.axialRestraint",
+  "domain.boundary.condition",
+  "domain.boundary.support",
+  "domain.element.massMatrix",
+  "domain.element.type",
+  "domain.mesh.nelx",
+  "domain.mesh.nely",
+  "domain.thickness",
+  "eigen.krylovFactor",
+  "eigen.maxCluster",
+  "eigen.maxIterations",
+  "eigen.solver",
+  "eigen.targetMode",
+  "eigen.tolerance",
+  "filter.applyTo",
+  "filter.radiusElements",
+  "filter.radiusPhysical",
+  "filter.type",
+  "material.mass.continuation.enabled",
+  "material.mass.continuation.lowPModel",
+  "material.mass.cutoff",
+  "material.mass.lowDensityExponent",
+  "material.mass.q",
+  "material.solid.E",
+  "material.solid.density",
+  "material.solid.nu",
+  "material.stiffness.continuation.blockStopUntilFinal",
+  "material.stiffness.continuation.driver",
+  "material.stiffness.continuation.enabled",
+  "material.stiffness.continuation.schedule",
+  "material.stiffness.p",
+  "move.continuation.tolerance",
+  "move.continuation.window",
+  "move.geometric.afterCoalescence",
+  "move.geometric.ratio",
+  "move.minimum",
+  "move.trust.grow",
+  "move.trust.hiRatio",
+  "move.trust.loRatio",
+  "move.trust.shrink",
+  "multiplicity.diagonalOffsets",
+  "multiplicity.enterTolerance",
+  "multiplicity.exitTolerance",
+  "multiplicity.method",
+  "multiplicity.offDiagonal",
+  "multiplicity.subspaceSize",
+  "multiplicity.tolerance",
+  "optimizer.inner.maxIterations",
+  "optimizer.inner.minIterations",
+  "optimizer.inner.tolerance",
+  "optimizer.inner.type",
+  "optimizer.inner.variable",
+  "optimizer.inner.variant",
+  "projection.beta.levels",
+  "projection.continuation.trigger",
+  "projection.enabled",
+  "projection.eta",
+  "provenance.warnings",
+  "runtime.singleThread",
+  "stop.field",
+  "stop.guards.ladderExhausted",
+  "stop.guards.maxDesignChange",
+  "stop.norm",
+  "stop.tolerance",
+  "stop.toleranceRule"
+ ]
+}

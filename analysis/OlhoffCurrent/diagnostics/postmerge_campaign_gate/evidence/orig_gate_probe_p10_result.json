@@ -1,0 +1,9 @@
+{
+  "id": "P10",
+  "desc": "+impl locally edited AND SOURCE_MANIFEST.json regenerated; real historical digest line",
+  "expect": false,
+  "manifestOk": true,
+  "got": false,
+  "nSup": 0,
+  "failOpen": false
+}

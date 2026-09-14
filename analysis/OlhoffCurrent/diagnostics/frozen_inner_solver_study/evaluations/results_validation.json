@@ -1,0 +1,84 @@
+{
+  "points": 202,
+  "max_scalar_discrepancy": 0,
+  "max_conic_discrepancy": 1.0075273948473296E-14,
+  "max_box_violation": 0,
+  "g0_g1_bitwise": true,
+  "rho_hash_after": "9b1443e508a6e4ecb5288d30167c7258d837be127aa3a9a42d8cc092240f3ded",
+  "implTree_after": "edbfe47eb32109a2fb017f6f13d5327f2c240357caa96630064ffcf37ee152cb",
+  "checks": [
+    {
+      "method": "B0_CURRENT_REPEATED_MMA",
+      "checkpoints": 9,
+      "max_scalar_discrepancy": 0,
+      "max_conic_discrepancy": 6.0507154842071031E-15
+    },
+    {
+      "method": "S1_PERSISTENT",
+      "checkpoints": 6,
+      "max_scalar_discrepancy": 0,
+      "max_conic_discrepancy": 6.0507154842071031E-15
+    },
+    {
+      "method": "S2_ASYINIT_001",
+      "checkpoints": 9,
+      "max_scalar_discrepancy": 0,
+      "max_conic_discrepancy": 3.6082248300317588E-15
+    },
+    {
+      "method": "S3_CANONICAL_CLAMP",
+      "checkpoints": 9,
+      "max_scalar_discrepancy": 0,
+      "max_conic_discrepancy": 3.4694469519536142E-15
+    },
+    {
+      "method": "S4_SUBSOLV_ACCURACY",
+      "checkpoints": 9,
+      "max_scalar_discrepancy": 0,
+      "max_conic_discrepancy": 7.2442052356791464E-15
+    },
+    {
+      "method": "S5_UNIT_BOX",
+      "checkpoints": 9,
+      "max_scalar_discrepancy": 0,
+      "max_conic_discrepancy": 1.0075273948473296E-14
+    },
+    {
+      "method": "G0_UNSAFE",
+      "checkpoints": 9,
+      "max_scalar_discrepancy": 0,
+      "max_conic_discrepancy": 9.298117831235686E-15
+    },
+    {
+      "method": "G1_GCMMA",
+      "checkpoints": 9,
+      "max_scalar_discrepancy": 0,
+      "max_conic_discrepancy": 9.298117831235686E-15
+    },
+    {
+      "method": "G2_GCMMA_ACCURATE",
+      "checkpoints": 9,
+      "max_scalar_discrepancy": 0,
+      "max_conic_discrepancy": 3.0253577421035516E-15
+    },
+    {
+      "method": "S34_CLAMP_ACCURACY",
+      "checkpoints": 9,
+      "max_scalar_discrepancy": 0,
+      "max_conic_discrepancy": 6.0507154842071031E-15
+    },
+    {
+      "method": "B0_RETAINED_5000",
+      "checkpoints": 113,
+      "max_scalar_discrepancy": 0,
+      "max_conic_discrepancy": 1.0075273948473296E-14
+    },
+    {
+      "method": "SOCP_COST",
+      "checkpoints": 2,
+      "max_scalar_discrepancy": 0,
+      "max_conic_discrepancy": 2.8310687127941492E-15
+    }
+  ],
+  "verdict": "FROZEN_VARIANTS_EXACT_PROBLEM_AND_METRICS_PASS"
+}

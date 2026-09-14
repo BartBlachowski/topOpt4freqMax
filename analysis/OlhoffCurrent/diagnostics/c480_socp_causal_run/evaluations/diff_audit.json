@@ -1,0 +1,44 @@
+{
+  "production_sha256": "1e5a114cbf91717e01e5592e86203f401ed5cdb3e5f5ce9a727b8163cdf2fba3",
+  "study_driver_sha256": "48f5fa77fd7da0706fec89763ea026a6c6e274b24a99dcb7e740c9f4b5f9f084",
+  "production_lines": 647,
+  "study_lines": 720,
+  "reconstruction_exact": true,
+  "first_mismatch": null,
+  "tagged_line_counts": {
+    "signature": 7,
+    "telemetry": 5,
+    "failclosed": 24,
+    "dispatch": 9,
+    "checkpoint": 18,
+    "identity": 6,
+    "preflight": 4
+  },
+  "replaced_production_lines": [
+    "%CS-ORIG%function res = olhoffSolve(cfg)",
+    "%CS-ORIG%for outer = 1:maxOuter",
+    "%CS-ORIG%    if innerLP"
+  ],
+  "categories_permitted": true,
+  "unpermitted_categories": [],
+  "byte_identical_copies": {
+    "fp_problem.m": {
+      "reference": "5ae495fe52427e03842929978fcfd608290ac576b02eed912b6011eecad1a94f",
+      "study": "5ae495fe52427e03842929978fcfd608290ac576b02eed912b6011eecad1a94f",
+      "identical": true
+    },
+    "fp_dualbound.m": {
+      "reference": "f643384cd9c8a69751d18f24cc8520dccce1aef337bc64b0695cccd647f7db74",
+      "study": "f643384cd9c8a69751d18f24cc8520dccce1aef337bc64b0695cccd647f7db74",
+      "identical": true
+    },
+    "fp_kkt.m": {
+      "reference": "7a632985168d5789c97c37c52966c0ec872212645d1eacf59758566fea19a3bf",
+      "study": "7a632985168d5789c97c37c52966c0ec872212645d1eacf59758566fea19a3bf",
+      "identical": true
+    }
+  },
+  "diff_file": "evaluations/olhoffSolve_vs_study_driver.diff",
+  "diff_hunks": 10,
+  "pass": true
+}

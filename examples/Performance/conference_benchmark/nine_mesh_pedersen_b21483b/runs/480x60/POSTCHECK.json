@@ -1,0 +1,65 @@
+{
+  "schema": "nmp_postcheck/1",
+  "mode": "campaign",
+  "mesh": "480x60",
+  "is_warmup": false,
+  "when": "2026-09-14T02:12:45.489+02:00",
+  "hook": "breakpoint condition at analysis/OlhoffCurrent/olhoffcurrent_run.m:249 (if out.is_warmup), after the result is assembled",
+  "identity": {
+    "when": "2026-09-14T02:12:45.489+02:00",
+    "head": "b21483b158f58e05e7b56957f2fbe8e1d2891395",
+    "branch": "benchmark-methodology-r2",
+    "tracked_changes": [
+      "examples/Performance/performance_comparison.m"
+    ],
+    "runner_sha256": "05d043c3005d6ffbf571889f88623bb49aa14e6b7dce1a4e836fbce4684c9950",
+    "olhoffcurrent_run_sha256": "eb3b5a18a2a83da252f8f5cfe0be30b793c4fcb1daef074c61c953325f8e969f",
+    "impl_tree_sha256": "4ba9a3ae10881344a0e60f2b8a8976c5ec9ceccf966bc2a3da4f37fb5aebffbf",
+    "impl_n_files": 79,
+    "impl_manifest_ok": true,
+    "source_manifest_sha256": "aee44aa9172a8105314bbb9475e28bed8a53d4d154824a8748abf64a208b1836",
+    "lock_sha256": "202c1f272c8387e8f3c5ac69203898b859d4798cd1833452ffbbdbd74921f9b5",
+    "checks": {
+      "head": true,
+      "branch": true,
+      "impl_tree": true,
+      "source_manifest": true,
+      "runner_is_locked_edit": true,
+      "olhoffcurrent_run_committed": true,
+      "tracked_changes_only_locked": true,
+      "lock_unchanged": true
+    },
+    "pass": true
+  },
+  "status": "NATIVE_CONVERGED",
+  "status_note": "||drho||_2 = 1.484e-01 < eps = 1.500e-01, no stop guard; largest per-element move box 0.1",
+  "ok": true,
+  "preset": "duOlhoffPedersenAdaptiveBoxSensitivityFiltered",
+  "production_preset": "duOlhoffPedersenAdaptiveBoxSensitivityFiltered",
+  "frozen_config_hash": "8e55d18251152ec2d26836593489c14f4842390d912d7c66f43f3b18730c83de",
+  "effective_config_hash": "8e55d18251152ec2d26836593489c14f4842390d912d7c66f43f3b18730c83de",
+  "config_hash_rehashed_from_out_configuration": "8e55d18251152ec2d26836593489c14f4842390d912d7c66f43f3b18730c83de",
+  "config_hash_rehashed_from_solver_effective_cfg": "8e55d18251152ec2d26836593489c14f4842390d912d7c66f43f3b18730c83de",
+  "x_sha256": "acf85ed42f2241b297ff938f9a7bf10f839e97a88397833cdf4a2b0a9f1e590f",
+  "tap_present": true,
+  "tap_crosscheck": {
+    "rho_sha256_equals_out_x": true,
+    "outer_equals_accounting": true,
+    "inner_equals_accounting": true,
+    "sum_tOuter_equals_accounting": true,
+    "sum_tInner_equals_accounting": true,
+    "sum_tEig_equals_accounting": true,
+    "callWall_equals_accounting": true,
+    "omega123_equals_out": true
+  },
+  "file": "RUN_OUT.mat",
+  "file_sha256": "1cc59e24585ed4be017ea727700322e0b900d6856c28a0e2bbe6616aa8f4ee81",
+  "checks": {
+    "identity": true,
+    "config_hash_unchanged": true,
+    "preset_unchanged": true,
+    "tap_consistent_with_runner_accounting": true
+  },
+  "pass": true,
+  "hook_seconds": 0.11068616666666667
+}
