@@ -8,6 +8,7 @@ function plotFiles = confbench_complexity_plots(cfg, records, scaling)
 %       table1_complexity_fit_linear.png       free exponent,      linear
 %       table1_complexity_fit_fixedexp.png     exponent fixed 1.5, log-log
 %       table1_complexity_fit_fixedexp_linear.png                  linear
+%       (each PNG also as a MATLAB .fig of the same name)
 %       table1_complexity_fit.csv              free-exponent fit table
 %       table1_complexity_fit_fixedexp.csv     fixed-exponent fit table
 %
@@ -75,11 +76,13 @@ nMethods = numel(keys);
 tTotal_all   = NaN(nRes, nMethods);   % every measured point, plotted
 tTotal_fit   = NaN(nRes, nMethods);   % only the points allowed into the fit
 fitMask      = false(nRes, nMethods);
-methodLabels = cell(1, nMethods);
+methodLabels = cell(1, nMethods);   % record identity: CSV, metadata, cross-check
+legendLabels = cell(1, nMethods);   % paper-facing figure legend
 
 for m = 1:nMethods
     sel = records(strcmp({records.method_key}, keys{m}));
     methodLabels{m} = sel(1).method;
+    legendLabels{m} = confbench_paper_label(keys{m});
     for i = 1:numel(sel)
         r = find(Ne == sel(i).mesh(1)*sel(i).mesh(2), 1);
         if isempty(r); continue; end
@@ -126,16 +129,20 @@ print_complexity_fit_table(methodLabels, methodLabels, C_fix, exp_fix, R2_fix, n
      'absolute run-time error sum((T - C*N_e^exp)^2); R^2 is on T, not log(T))', noteFixed}, csvFixed);
 
 % ---- The four figures ---------------------------------------------------
-plot_table1_complexity(Ne, methodLabels, tTotal_all, C_free, exp_free, ...
+plot_table1_complexity(Ne, legendLabels, tTotal_all, C_free, exp_free, ...
     cfg.outputDir, 'table1_complexity_fit', titleFree, fitMask, 'Stage time T = Time 1 + Time 2 (s)');
 
-plot_table1_complexity(Ne, methodLabels, tTotal_all, C_fix, exp_fix, ...
+plot_table1_complexity(Ne, legendLabels, tTotal_all, C_fix, exp_fix, ...
     cfg.outputDir, 'table1_complexity_fit_fixedexp', titleFixed, fitMask, 'Stage time T = Time 1 + Time 2 (s)');
 
 plotFiles.complexity_fit_png        = fullfile(cfg.outputDir, 'table1_complexity_fit.png');
 plotFiles.complexity_fit_lin_png    = fullfile(cfg.outputDir, 'table1_complexity_fit_linear.png');
 plotFiles.complexity_fixed_png      = fullfile(cfg.outputDir, 'table1_complexity_fit_fixedexp.png');
 plotFiles.complexity_fixed_lin_png  = fullfile(cfg.outputDir, 'table1_complexity_fit_fixedexp_linear.png');
+plotFiles.complexity_fit_fig        = fullfile(cfg.outputDir, 'table1_complexity_fit.fig');
+plotFiles.complexity_fit_lin_fig    = fullfile(cfg.outputDir, 'table1_complexity_fit_linear.fig');
+plotFiles.complexity_fixed_fig      = fullfile(cfg.outputDir, 'table1_complexity_fit_fixedexp.fig');
+plotFiles.complexity_fixed_lin_fig  = fullfile(cfg.outputDir, 'table1_complexity_fit_fixedexp_linear.fig');
 plotFiles.complexity_fit_csv        = csvFree;
 plotFiles.complexity_fixed_csv      = csvFixed;
 

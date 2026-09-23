@@ -9,7 +9,7 @@ od = fullfile(cfg.outputDir, 'complexity_diagnostics');
 if exist(od, 'dir') ~= 7; mkdir(od); end
 allowed = isfield(scaling,'fitted') && scaling.fitted;
 keys = {'proposed','yuksel','olhoff'};
-names = {'Proposed','Yuksel','Du-Olhoff (Pedersen/adaptive box)'};
+names = cellfun(@confbench_paper_label, keys, 'UniformOutput', false);
 colors = [0 .447 .741; .85 .325 .098];
 units = {{'Reference solve','SIMP iteration'}, ...
     {'Stage 1 iteration','Stage 2 iteration'}, ...
@@ -25,9 +25,6 @@ for m = 1:3
     R = records(strcmp({records.method_key},keys{m}));
     if isempty(R); continue; end
     [x,order] = sort(arrayfun(@(r) prod(r.mesh), R)); x=x(:); R=R(order);
-    if strcmp(keys{m},'olhoff') && ~contains(R(1).method,'Pedersen')
-        names{m}=R(1).method;
-    end
     dofs = arrayfun(@(r) 2*prod(r.mesh+1),R); dofs=dofs(:);
     high = dofs >= 2^17;
     count = nan(numel(R),2); time = count;
@@ -143,7 +140,11 @@ figs={countsFig,costFig,resFig,ratioFig,cvFig};
 base={'native_counts','cost_per_native_unit','stage_time_residuals','transition_ratios','stage_time_validation'};
 for k=1:numel(figs)
     files.(base{k})=fullfile(od,[base{k} '.png']);
-    exportgraphics(figs{k},files.(base{k}),'Resolution',180,'BackgroundColor','white'); close(figs{k});
+    exportgraphics(figs{k},files.(base{k}),'Resolution',180,'BackgroundColor','white');
+    % The figures are built invisible; the CreateFcn makes a reopened .fig show.
+    set(figs{k},'CreateFcn','set(gcbo,''Visible'',''on'')');
+    files.([base{k} '_fig'])=fullfile(od,[base{k} '.fig']);
+    savefig(figs{k},files.([base{k} '_fig'])); close(figs{k});
 end
 writetable(struct2table(raw),fullfile(od,'native_costs.csv'));
 writetable(struct2table(fits),fullfile(od,'prethreshold_fits.csv'));
@@ -158,6 +159,7 @@ fprintf(fid,['# Complexity diagnostics\n\nDerived from recorded timings and coun
     '- transition_ratios.png: observed unit cost divided by that below-threshold prediction.\n' ...
     '- stage_time_residuals.png: free and fixed 1.5 exponents fitted in the SAME log-time space.\n' ...
     '- stage_time_validation.png: leave-one-mesh-out and below-to-above-threshold prediction MAPE.\n\n' ...
+    'Each PNG has a MATLAB .fig of the same name for re-opening and restyling.\n\n' ...
     'The CSVs contain full-precision observations, fitted parameters, residuals, predictions, ' ...
     'MAPE, RMSE in seconds and RMSE in log time. Residual sign is prediction / observation - 1. ' ...
     'Fits require the campaign scaling gate and finite positive ok records. ' ...

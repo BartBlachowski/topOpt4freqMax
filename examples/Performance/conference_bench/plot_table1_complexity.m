@@ -22,8 +22,8 @@ function plot_table1_complexity(Ne, methodLabels, tTotal_all, complexity_C, comp
 %                  fitted through.  Default: all true (previous behaviour).
 %
 % Saves:
-%   <filePrefix>.png        (log-log axes)
-%   <filePrefix>_linear.png (linear axes)
+%   <filePrefix>.png / .fig        (log-log axes)
+%   <filePrefix>_linear.png / .fig (linear axes)
 
 if nargin < 7 || isempty(filePrefix)
     filePrefix = 'table1_complexity_fit';
@@ -63,6 +63,7 @@ catch plotErr
     warning('performance_comparison:PlotSaveFailed', ...
         'Failed to save log-log complexity fit plot (%s).', plotErr.message);
 end
+saveFigFile(fig1, logPath, 'log-log');
 
 % ---- Linear-linear plot ----
 fig2 = figure('Color', 'white');
@@ -83,6 +84,22 @@ try
 catch plotErr
     warning('performance_comparison:PlotSaveFailed', ...
         'Failed to save linear complexity fit plot (%s).', plotErr.message);
+end
+saveFigFile(fig2, linPath, 'linear');
+end
+
+function saveFigFile(fig, pngPath, tag)
+% MATLAB figure next to the PNG, so the plot can be reopened and restyled.
+[folder, base] = fileparts(pngPath);
+figPath = fullfile(folder, [base, '.fig']);
+try
+    % Opened .fig files must show even when the figure was saved invisible.
+    set(fig, 'CreateFcn', 'set(gcbo, ''Visible'', ''on'')');
+    savefig(fig, figPath);
+    fprintf('Complexity fit figure (%s) saved to: %s\n', tag, figPath);
+catch figErr
+    warning('performance_comparison:PlotSaveFailed', ...
+        'Failed to save %s complexity fit .fig (%s).', tag, figErr.message);
 end
 end
 
@@ -125,7 +142,7 @@ for m = 1:nMethods
         NeFine = linspace(min(Ne(validMask)), max(Ne(validMask)), 100);
         Tfit = complexity_C(m) * NeFine .^ complexity_exp(m);
         plot(ax, NeFine, Tfit, '-', 'Color', colors(ci,:), 'LineWidth', 2, ...
-            'DisplayName', sprintf('%s fit: C=%.3g, exp=%.2f', ...
+            'DisplayName', sprintf('%s fit: C=%.2e, exp=%.2f', ...
                 methodLabels{m}, complexity_C(m), complexity_exp(m)));
     end
 end

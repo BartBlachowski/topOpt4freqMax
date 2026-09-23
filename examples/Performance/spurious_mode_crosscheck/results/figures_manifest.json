@@ -1,0 +1,32 @@
+{
+  "F1": [
+    "/Users/piotrek/Programming/topOpt4freqMax/examples/Performance/spurious_mode_crosscheck/figures/F1_frequencies_by_model.png",
+    "/Users/piotrek/Programming/topOpt4freqMax/examples/Performance/spurious_mode_crosscheck/figures/F1_frequencies_by_model.fig"
+  ],
+  "F2": [
+    "/Users/piotrek/Programming/topOpt4freqMax/examples/Performance/spurious_mode_crosscheck/figures/F2_stiffness_to_mass_ratio.png",
+    "/Users/piotrek/Programming/topOpt4freqMax/examples/Performance/spurious_mode_crosscheck/figures/F2_stiffness_to_mass_ratio.fig"
+  ],
+  "representatives": [
+    {
+      "method": "proposed",
+      "nelx": 160
+    },
+    {
+      "method": "yuksel",
+      "nelx": 160
+    },
+    {
+      "method": "olhoff",
+      "nelx": 800
+    }
+  ],
+  "F3": [
+    "/Users/piotrek/Programming/topOpt4freqMax/examples/Performance/spurious_mode_crosscheck/figures/F3_mode_energy_localization.png",
+    "/Users/piotrek/Programming/topOpt4freqMax/examples/Performance/spurious_mode_crosscheck/figures/F3_mode_energy_localization.fig"
+  ],
+  "F4": [
+    "/Users/piotrek/Programming/topOpt4freqMax/examples/Performance/spurious_mode_crosscheck/figures/F4_low_density_fractions.png",
+    "/Users/piotrek/Programming/topOpt4freqMax/examples/Performance/spurious_mode_crosscheck/figures/F4_low_density_fractions.fig"
+  ]
+}

@@ -2,12 +2,15 @@ function files = confbench_export(cfg, records, manifest, scaling, opts)
 %CONFBENCH_EXPORT  Write every benchmark artifact.  Runs OUTSIDE all solver timing.
 %
 %   files = CONFBENCH_EXPORT(cfg, records, manifest, scaling)
-%   Optional opts.tables_only writes just CSV/LaTeX views; opts.caveats carries
-%   the recorded method descriptions when refreshing a historical campaign.
+%   Optional opts.tables_only writes just CSV/LaTeX views; opts.latex_only
+%   writes just the LaTeX table; opts.caveats carries the recorded method
+%   descriptions when refreshing a historical campaign.
 %
 %   Produces, in cfg.outputDir:
 %     conference_performance_table.csv       the primary, method-native table
-%     conference_performance_table.tex       the same table for the slide
+%     conference_performance_table.tex       the same table, paper-ready: methods
+%                                            carry CONFBENCH_PAPER_LABEL and no
+%                                            internal caveat is rendered
 %     conference_performance_detailed.csv    explicit method-specific fields
 %     benchmark_results.json                 every record, full precision
 %     benchmark_manifest.json                exactly what was run
@@ -50,6 +53,11 @@ files.manifest_json= fullfile(od, 'benchmark_manifest.json');
 files.schema_json  = fullfile(od, 'timing_schema.json');
 files.notes_md     = fullfile(od, 'BENCHMARK_NOTES.md');
 
+if isfield(opts, 'latex_only') && opts.latex_only
+    writeLatex(files.primary_tex, records, cav);
+    files = struct('primary_tex', files.primary_tex);
+    return
+end
 writePrimaryCsv(files.primary_csv, records, cav);
 writeLatex(files.primary_tex, records, cav);
 writeDetailedCsv(files.detailed_csv, records, cav);
@@ -97,42 +105,47 @@ end
 
 % =========================================================================
 function writeLatex(path, R, cav)
+%WRITELATEX  The paper-facing table.  Rows carry CONFBENCH_PAPER_LABEL, and no
+%   caption or notes block is rendered: the method caveats (formulation,
+%   provenance, count/time semantics) are internal and live in the CSV tables
+%   and BENCHMARK_NOTES.md, never in what the reader sees.  Columns: counts,
+%   stage times and the common-evaluator (E1) omega_1 only; Other, total wall
+%   time and the native omega_1 stay in the CSV tables.
 fid = fopen(path, 'w');
 c = onCleanup(@() fclose(fid));
 fprintf(fid, '%% Conference performance table -- generated, do not edit by hand.\n');
-fprintf(fid, '%% %s\n', cav.olhoff_label);
-fprintf(fid, '%% Columns: %s\n', cav.other_column);
-fprintf(fid, '%% omega_1: %s\n', cav.omega1_columns);
+fprintf(fid, '%% Method provenance and caveats: conference_performance_table.csv, BENCHMARK_NOTES.md.\n');
+fprintf(fid, '%% Columns: Stage time [s] = Time 1 + Time 2, summed before rounding. Other, total wall time and native omega_1 are in the CSV only.\n');
+fprintf(fid, ['%% omega_1: first structural eigenfrequency of each final design under the common ' ...
+    'evaluator E1 (SIMP p = 3, E_min = 1e-6 E_0, linear mass, rho_min = 1e-6; lowest mode passing ' ...
+    'the structural-mode classifier), computed outside every timer.\n']);
 fprintf(fid, '\\begin{table}[t]\n\\centering\n');
-fprintf(fid, '\\begingroup\n\\setlength{\\tabcolsep}{3pt}\n\\scriptsize\n\\begin{tabular}{llrrrrrrrrr}\n\\hline\n');
-fprintf(fid, ['Method & Mesh & Count 1 & Count 2 & Time 1 [s] & Time 2 [s] & ' ...
-    'Stage time [s] & Other [s] & Total wall time [s] & $\\omega_1$ native & $\\omega_1$ E1 \\\\\n\\hline\n']);
-for i = 1:numel(R)
+fprintf(fid, '\\begingroup\n\\setlength{\\tabcolsep}{3pt}\n\\scriptsize\n\\begin{tabular}{llrrrrrr}\n\\hline\n');
+fprintf(fid, ['Mesh & Method & Count 1 & Count 2 & Time 1 [s] & Time 2 [s] & ' ...
+    'Stage time [s] & $\\omega_1$ \\\\\n\\hline\n']);
+% Rows are grouped by mesh (stable, so the method order within a group is the
+% record order) and the mesh is printed on the first row of its group only.
+[~, order] = sort(arrayfun(@(r) prod(r.mesh), R), 'ascend');
+prevMesh = [];
+for i = order(:).'
     r = R(i);
-    [c1, c2, t1, t2, st, ov, tt] = primaryCells(r, '%.2f');
-    [nat, e1, flagged] = omega1Cells(r, cav.omega1_native_flag_tol, '%.2f');
-    if flagged; nat = [nat '\textsuperscript{\textdagger}']; end
-    fprintf(fid, '%s & $%d\\times%d$ & %s & %s & %s & %s & %s & %s & %s & %s & %s \\\\\n', ...
-        texEscape(r.method), r.mesh(1), r.mesh(2), c1, c2, t1, t2, st, ov, tt, nat, e1);
+    [c1, c2, t1, t2, st] = primaryCells(r, '%.2f');
+    [~, e1] = omega1Cells(r, cav.omega1_native_flag_tol, '%.2f');
+    meshCell = '';
+    if ~isequal(r.mesh(:).', prevMesh)
+        meshCell = sprintf('$%d\\times%d$', r.mesh(1), r.mesh(2));
+        prevMesh = r.mesh(:).';
+    end
+    fprintf(fid, '%s & %s & %s & %s & %s & %s & %s & %s \\\\\n', ...
+        meshCell, texEscape(confbench_paper_label(r.method_key)), c1, c2, t1, t2, st, e1);
 end
 fprintf(fid, '\\hline\n\\end{tabular}\n\\endgroup\n');
-% Column semantics go in a notes block under the tabular, not in the caption:
-% LaTeX's \@makecaption measures the caption as ONE line, and a caption longer
-% than about 16000 pt (the Olhoff caveat plus these notes) raises "Dimension
-% too large".
-fprintf(fid, '\\par\\vspace{2pt}\\begin{minipage}{\\linewidth}\\footnotesize\n');
-fprintf(fid, '%s\n\n', texEscape(cav.other_column));
-fprintf(fid, '%s\n', texEscape(cav.omega1_columns));
-fprintf(fid, '\\end{minipage}\n');
-fprintf(fid, '\\caption{%s\n', texEscape(cav.table_caption));
-fprintf(fid, '%s\n', texEscape(interpretationSentence(R)));
-fprintf(fid, '%s}\n', texEscape(cav.olhoff));
 fprintf(fid, '\\label{tab:conference-performance}\n\\end{table}\n');
 
 % Olhoff-specific exposure, required alongside the primary table.
 olh = R(strcmp({R.method_key}, 'olhoff'));
 if ~isempty(olh)
-    fprintf(fid, '\n%% Nested-scheme detail for the %s:\n', olh(1).method);
+    fprintf(fid, '\n%% Nested-scheme detail for %s:\n', confbench_paper_label('olhoff'));
     for i = 1:numel(olh)
         r = olh(i);
         if isfield(r.counts, 'inner_iterations_per_outer_mean')
@@ -143,17 +156,6 @@ if ~isempty(olh)
     end
 end
 
-% Flagged native omega_1 values, so the fragment carries its own audit trail.
-fl = flaggedRows(R, cav.omega1_native_flag_tol);
-if ~isempty(fl)
-    fprintf(fid, '\n%% Native omega_1 values marked with a dagger (deviation from E1 > %g%%):\n', ...
-        100*cav.omega1_native_flag_tol);
-    for i = 1:numel(fl)
-        r = fl(i);
-        fprintf(fid, '%%   %s %dx%d: native omega_1..3 = %s | E1 omega_1 = %s (selected mode void-KE share %s)\n', ...
-            r.method, r.mesh(1), r.mesh(2), omegaTriple(r, '%.2f'), num(e1Of(r), '%.2f'), num(voidKEOf(r), '%.3f'));
-    end
-end
 fprintf(fid, '\n%% Scaling caveat: %s\n', cav.sparse_step);
 end
 
