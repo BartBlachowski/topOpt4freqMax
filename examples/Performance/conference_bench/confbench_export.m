@@ -108,36 +108,40 @@ function writeLatex(path, R, cav)
 %WRITELATEX  The paper-facing table.  Rows carry CONFBENCH_PAPER_LABEL, and no
 %   caption or notes block is rendered: the method caveats (formulation,
 %   provenance, count/time semantics) are internal and live in the CSV tables
-%   and BENCHMARK_NOTES.md, never in what the reader sees.  Columns: counts,
-%   stage times and the common-evaluator (E1) omega_1 only; Other, total wall
-%   time and the native omega_1 stay in the CSV tables.
+%   and BENCHMARK_NOTES.md, never in what the reader sees.  Columns: counts
+%   and stage times only; Other, total wall time and both omega_1 values
+%   (native and E1) stay in the CSV tables.  Rows are grouped by mesh, in the
+%   order Du-Olhoff, Yuksel-Yilmaz, Proposed; the mesh is printed once per
+%   group and a thin rule separates consecutive groups.
 fid = fopen(path, 'w');
 c = onCleanup(@() fclose(fid));
 fprintf(fid, '%% Conference performance table -- generated, do not edit by hand.\n');
 fprintf(fid, '%% Method provenance and caveats: conference_performance_table.csv, BENCHMARK_NOTES.md.\n');
-fprintf(fid, '%% Columns: Stage time [s] = Time 1 + Time 2, summed before rounding. Other, total wall time and native omega_1 are in the CSV only.\n');
-fprintf(fid, ['%% omega_1: first structural eigenfrequency of each final design under the common ' ...
-    'evaluator E1 (SIMP p = 3, E_min = 1e-6 E_0, linear mass, rho_min = 1e-6; lowest mode passing ' ...
-    'the structural-mode classifier), computed outside every timer.\n']);
+fprintf(fid, '%% Columns: Stage time [s] = Time 1 + Time 2, summed before rounding. Other, total wall time and omega_1 (native and common evaluator E1) are in the CSV only.\n');
 fprintf(fid, '\\begin{table}[t]\n\\centering\n');
-fprintf(fid, '\\begingroup\n\\setlength{\\tabcolsep}{3pt}\n\\scriptsize\n\\begin{tabular}{llrrrrrr}\n\\hline\n');
+fprintf(fid, '\\begingroup\n\\setlength{\\tabcolsep}{3pt}\n\\scriptsize\n');
+% Thin (0.2 pt) rule between mesh groups; \arrayrulewidth must be set
+% globally for \hline to see it, and is restored to the LaTeX default 0.4 pt.
+fprintf(fid, ['\\providecommand{\\thinhline}{\\noalign{\\global\\setlength{\\arrayrulewidth}{0.2pt}}' ...
+    '\\hline\\noalign{\\global\\setlength{\\arrayrulewidth}{0.4pt}}}\n']);
+fprintf(fid, '\\begin{tabular}{llrrrrr}\n\\hline\n');
 fprintf(fid, ['Mesh & Method & Count 1 & Count 2 & Time 1 [s] & Time 2 [s] & ' ...
-    'Stage time [s] & $\\omega_1$ \\\\\n\\hline\n']);
-% Rows are grouped by mesh (stable, so the method order within a group is the
-% record order) and the mesh is printed on the first row of its group only.
-[~, order] = sort(arrayfun(@(r) prod(r.mesh), R), 'ascend');
+    'Stage time [s] \\\\\n\\hline\n']);
+methodOrder = {'olhoff', 'yuksel', 'proposed'};
+rank = cellfun(@(k) find(strcmp(methodOrder, k)), {R.method_key});
+[~, order] = sortrows([arrayfun(@(r) prod(r.mesh), R(:)), rank(:)]);
 prevMesh = [];
 for i = order(:).'
     r = R(i);
     [c1, c2, t1, t2, st] = primaryCells(r, '%.2f');
-    [~, e1] = omega1Cells(r, cav.omega1_native_flag_tol, '%.2f');
     meshCell = '';
     if ~isequal(r.mesh(:).', prevMesh)
+        if ~isempty(prevMesh); fprintf(fid, '\\thinhline\n'); end
         meshCell = sprintf('$%d\\times%d$', r.mesh(1), r.mesh(2));
         prevMesh = r.mesh(:).';
     end
-    fprintf(fid, '%s & %s & %s & %s & %s & %s & %s & %s \\\\\n', ...
-        meshCell, texEscape(confbench_paper_label(r.method_key)), c1, c2, t1, t2, st, e1);
+    fprintf(fid, '%s & %s & %s & %s & %s & %s & %s \\\\\n', ...
+        meshCell, texEscape(confbench_paper_label(r.method_key)), c1, c2, t1, t2, st);
 end
 fprintf(fid, '\\hline\n\\end{tabular}\n\\endgroup\n');
 fprintf(fid, '\\label{tab:conference-performance}\n\\end{table}\n');

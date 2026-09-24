@@ -1,43 +1,51 @@
 % Conference performance table -- generated, do not edit by hand.
 % Method provenance and caveats: conference_performance_table.csv, BENCHMARK_NOTES.md.
-% Columns: Stage time [s] = Time 1 + Time 2, summed before rounding. Other, total wall time and native omega_1 are in the CSV only.
-% omega_1: first structural eigenfrequency of each final design under the common evaluator E1 (SIMP p = 3, E_min = 1e-6 E_0, linear mass, rho_min = 1e-6; lowest mode passing the structural-mode classifier), computed outside every timer.
+% Columns: Stage time [s] = Time 1 + Time 2, summed before rounding. Other, total wall time and omega_1 (native and common evaluator E1) are in the CSV only.
 \begin{table}[t]
 \centering
 \begingroup
 \setlength{\tabcolsep}{3pt}
 \scriptsize
-\begin{tabular}{llrrrrrr}
+\providecommand{\thinhline}{\noalign{\global\setlength{\arrayrulewidth}{0.2pt}}\hline\noalign{\global\setlength{\arrayrulewidth}{0.4pt}}}
+\begin{tabular}{llrrrrr}
 \hline
-Mesh & Method & Count 1 & Count 2 & Time 1 [s] & Time 2 [s] & Stage time [s] & $\omega_1$ \\
+Mesh & Method & Count 1 & Count 2 & Time 1 [s] & Time 2 [s] & Stage time [s] \\
 \hline
-$160\times20$ & Proposed & 1 & 107 & 0.03 & 1.34 & 1.37 & 153.68 \\
- & Yuksel-Yilmaz & 121 & 123 & 1.47 & 2.36 & 3.83 & 157.17 \\
- & Du-Olhoff & 121 & 2369 & 4.29 & 219.58 & 223.87 & 169.20 \\
-$240\times30$ & Proposed & 1 & 236 & 0.06 & 6.42 & 6.48 & 157.64 \\
- & Yuksel-Yilmaz & 168 & 152 & 4.07 & 4.94 & 9.00 & 159.44 \\
- & Du-Olhoff & 111 & 2077 & 7.44 & 347.43 & 354.86 & 167.33 \\
-$320\times40$ & Proposed & 1 & 207 & 0.11 & 10.64 & 10.75 & 158.76 \\
- & Yuksel-Yilmaz & 252 & 320 & 10.38 & 16.64 & 27.01 & 160.69 \\
- & Du-Olhoff & 101 & 2001 & 11.70 & 415.37 & 427.07 & 165.85 \\
-$400\times50$ & Proposed & 1 & 182 & 0.19 & 14.94 & 15.13 & 159.52 \\
- & Yuksel-Yilmaz & 315 & 417 & 19.65 & 33.19 & 52.85 & 159.97 \\
- & Du-Olhoff & 93 & 1913 & 17.33 & 552.57 & 569.90 & 166.45 \\
-$480\times60$ & Proposed & 1 & 219 & 0.26 & 26.04 & 26.31 & 160.25 \\
- & Yuksel-Yilmaz & 586 & 615 & 52.61 & 69.02 & 121.63 & 160.55 \\
- & Du-Olhoff & 112 & 2137 & 32.11 & 948.95 & 981.06 & 166.00 \\
-$560\times70$ & Proposed & 1 & 256 & 0.36 & 42.87 & 43.23 & 160.72 \\
- & Yuksel-Yilmaz & 833 & 771 & 104.31 & 117.67 & 221.98 & 160.34 \\
- & Du-Olhoff & 130 & 2371 & 51.10 & 1373.50 & 1424.60 & 165.80 \\
-$640\times80$ & Proposed & 1 & 309 & 0.49 & 68.88 & 69.38 & 160.85 \\
- & Yuksel-Yilmaz & 1542 & 2000 & 256.82 & 400.20 & 657.02 & 160.85 \\
- & Du-Olhoff & 156 & 2868 & 81.21 & 2134.00 & 2215.21 & 165.64 \\
-$720\times90$ & Proposed & 1 & 297 & 0.94 & 163.77 & 164.71 & 161.07 \\
- & Yuksel-Yilmaz & 1162 & 907 & 339.01 & 371.12 & 710.12 & 160.60 \\
- & Du-Olhoff & 204 & 3752 & 189.37 & 3347.10 & 3536.48 & 165.41 \\
-$800\times100$ & Proposed & 1 & 330 & 1.26 & 239.20 & 240.46 & 161.36 \\
- & Yuksel-Yilmaz & 1150 & 1171 & 417.75 & 597.60 & 1015.35 & 160.86 \\
- & Du-Olhoff & 246 & 4650 & 284.96 & 4614.75 & 4899.71 & 165.42 \\
+$160\times20$ & Du-Olhoff & 121 & 2369 & 4.29 & 219.58 & 223.87 \\
+ & Yuksel-Yilmaz & 121 & 123 & 1.47 & 2.36 & 3.83 \\
+ & Proposed & 1 & 107 & 0.03 & 1.34 & 1.37 \\
+\thinhline
+$240\times30$ & Du-Olhoff & 111 & 2077 & 7.44 & 347.43 & 354.86 \\
+ & Yuksel-Yilmaz & 168 & 152 & 4.07 & 4.94 & 9.00 \\
+ & Proposed & 1 & 236 & 0.06 & 6.42 & 6.48 \\
+\thinhline
+$320\times40$ & Du-Olhoff & 101 & 2001 & 11.70 & 415.37 & 427.07 \\
+ & Yuksel-Yilmaz & 252 & 320 & 10.38 & 16.64 & 27.01 \\
+ & Proposed & 1 & 207 & 0.11 & 10.64 & 10.75 \\
+\thinhline
+$400\times50$ & Du-Olhoff & 93 & 1913 & 17.33 & 552.57 & 569.90 \\
+ & Yuksel-Yilmaz & 315 & 417 & 19.65 & 33.19 & 52.85 \\
+ & Proposed & 1 & 182 & 0.19 & 14.94 & 15.13 \\
+\thinhline
+$480\times60$ & Du-Olhoff & 112 & 2137 & 32.11 & 948.95 & 981.06 \\
+ & Yuksel-Yilmaz & 586 & 615 & 52.61 & 69.02 & 121.63 \\
+ & Proposed & 1 & 219 & 0.26 & 26.04 & 26.31 \\
+\thinhline
+$560\times70$ & Du-Olhoff & 130 & 2371 & 51.10 & 1373.50 & 1424.60 \\
+ & Yuksel-Yilmaz & 833 & 771 & 104.31 & 117.67 & 221.98 \\
+ & Proposed & 1 & 256 & 0.36 & 42.87 & 43.23 \\
+\thinhline
+$640\times80$ & Du-Olhoff & 156 & 2868 & 81.21 & 2134.00 & 2215.21 \\
+ & Yuksel-Yilmaz & 1542 & 2000 & 256.82 & 400.20 & 657.02 \\
+ & Proposed & 1 & 309 & 0.49 & 68.88 & 69.38 \\
+\thinhline
+$720\times90$ & Du-Olhoff & 204 & 3752 & 189.37 & 3347.10 & 3536.48 \\
+ & Yuksel-Yilmaz & 1162 & 907 & 339.01 & 371.12 & 710.12 \\
+ & Proposed & 1 & 297 & 0.94 & 163.77 & 164.71 \\
+\thinhline
+$800\times100$ & Du-Olhoff & 246 & 4650 & 284.96 & 4614.75 & 4899.71 \\
+ & Yuksel-Yilmaz & 1150 & 1171 & 417.75 & 597.60 & 1015.35 \\
+ & Proposed & 1 & 330 & 1.26 & 239.20 & 240.46 \\
 \hline
 \end{tabular}
 \endgroup
