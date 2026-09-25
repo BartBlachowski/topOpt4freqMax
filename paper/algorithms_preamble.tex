@@ -1,0 +1,40 @@
+% =====================================================================
+%  Preamble requirements for paper/algorithms_body.tex
+%  \input this file (or copy its contents) into the manuscript preamble.
+%  If the manuscript already loads amsmath/booktabs/xcolor/tabularx,
+%  the duplicate \usepackage lines are harmless.
+% =====================================================================
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=2.4cm]{geometry}
+\usepackage{amsmath,amssymb,bm}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{xcolor}
+\usepackage{microtype}
+\usepackage[linesnumbered,ruled,vlined]{algorithm2e}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+
+% ---------------------------------------------------------------------
+%  Shared notation macros
+% ---------------------------------------------------------------------
+\newcommand{\Kmat}{\mathbf{K}}
+\newcommand{\Mmat}{\mathbf{M}}
+\newcommand{\uvec}{\mathbf{u}}
+\newcommand{\fvec}{\mathbf{f}}
+\newcommand{\phivec}{\bm{\varphi}}
+\newcommand{\Phivec}{\bm{\Phi}}
+\newcommand{\xvec}{\mathbf{x}}
+\newcommand{\Ne}{N_e}
+\newcommand{\Ndof}{N_{\mathrm{dof}}}
+\newcommand{\assign}{\leftarrow}
+
+% Timer typography: unnumbered, set apart from the algorithmic content.
+\definecolor{timercol}{rgb}{0.35,0.35,0.35}
+\newcommand{\timer}[1]{\textcolor{timercol}{\small #1}}
+\newcommand{\Tic}[1]{\timer{$#1 \assign$ \texttt{tic}}\;}
+\newcommand{\Toc}[1]{\timer{$#1 \assign$ \texttt{toc}}\;}
+\SetKwComment{Comment}{$\triangleright$\ }{}
+\SetKwFor{Repeat}{repeat}{}{}
+\SetKwInput{KwCount}{Counters}
+\SetKwInput{KwTimers}{Timers}

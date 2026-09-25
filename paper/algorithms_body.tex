@@ -1,0 +1,390 @@
+% =====================================================================
+%  Algorithms of the three compared methods -- body only.
+%  Requires the macros and packages of paper/algorithms_preamble.tex.
+%  Compile paper/algorithms.tex for the standalone version.
+% =====================================================================
+\section{Purpose and common notation}
+
+The three methods compared in this work differ not only in their
+optimization formulation but in their \emph{loop architecture}: a nested
+double loop (Du--Olhoff), two sequential stages (Yuksel--Yilmaz), and a
+single loop preceded by one initialization solve (proposed).  Because the
+architectures differ, the iteration counts and the component times reported
+for each method are \emph{method-native} quantities and are not
+mathematically identical across methods; the only directly comparable
+performance quantity is the total wall time.  The pseudocode below therefore
+carries the instrumentation explicitly: every algorithm declares which
+counters it increments, which intervals its timers bracket, and how many
+state equations it solves.
+
+\paragraph{Notation.}
+$\Ne$ is the number of finite elements and $\Ndof \approx 2\Ne$ the number of
+degrees of freedom of the plane Q4 mesh;
+$x_e \in [x_{\min},1]$ is the element design variable and
+$\bm{\rho}$ the physical density field obtained from $\xvec$ by filtering
+(and, where used, projection);
+$\Kmat(\xvec)$ and $\Mmat(\xvec)$ are the SIMP-interpolated stiffness and
+mass matrices, with
+$E(\rho_e) = E_{\min} + \rho_e^{\,p}\,(E_0 - E_{\min})$;
+$\Kmat_e^0$ is the element stiffness matrix at unit density;
+$(\omega_j,\phivec_j)$ is the $j$-th eigenpair of
+$\Kmat\phivec_j = \omega_j^2\Mmat\phivec_j$ with
+$\phivec_j^\top \Mmat \phivec_k = \delta_{jk}$;
+$J$ is the number of tracked modes and $n$ the index of the targeted
+frequency;
+$V_f$ is the prescribed volume fraction, $V^\ast = V_f V_0$ the material
+volume, and $r_{\min}$ the filter radius;
+$c = \fvec^\top\uvec$ is the compliance of the static sub-problem.
+Tolerances are named per method.
+
+\paragraph{Timing convention.}
+$\texttt{tic}/\texttt{toc}$ pairs delimit disjoint intervals.  Per-method
+stage times sum to the \emph{stage time}
+$t_{\mathrm{stage}} = t^{(1)} + t^{(2)}$, and the total wall time additionally
+contains the overhead outside the named stages (configuration dispatch, model
+build, filter preparation, the final modal analysis, result assembly):
+\begin{equation}
+  t_{\mathrm{total}} \;=\; t^{(1)} + t^{(2)} + t_{\mathrm{other}} .
+  \label{eq:timing-identity}
+\end{equation}
+Equation~\eqref{eq:timing-identity} is an accounting identity checked at
+runtime; the residual is reported alongside each measurement.
+
+% =====================================================================
+\section{Algorithm 1 --- Du--Olhoff bound formulation}
+% =====================================================================
+
+The objective is a scalar bound variable $\beta \le \omega_j^2$,
+$j = n,\ldots,J$, maximized by a \emph{nested} double loop.  Each outer
+iteration solves one generalized eigenproblem and assembles the
+sensitivities; the inner loop then runs MMA to convergence on the resulting
+convex sub-problem.  Because the inner loop consumes no state solve, the
+eigenproblem count equals the outer iteration count.
+
+\begin{algorithm}[htbp]
+\DontPrintSemicolon
+\caption{Du--Olhoff bound formulation (nested outer/MMA loop).}
+\label{alg:olhoff}
+\KwIn{mesh and boundary conditions; $J \ge n$; $V_f$; tolerances
+      $\varepsilon$, $\varepsilon_{\mathrm{inner}}$}
+\KwOut{$\xvec^\ast$, $\omega_1(\xvec^\ast)$}
+\KwCount{$k$ --- outer iterations ($n_{\mathrm{outer}}$ on exit);\newline
+         $m$ --- MMA sub-iterations, accumulated over the whole run
+         ($n_{\mathrm{inner}}$ on exit)}
+\KwTimers{$\mathbf{t}_1,\mathbf{t}_2 \in \mathbb{R}^{1\times n_{\mathrm{outer}}}$
+          --- per-outer-iteration vectors}
+\BlankLine
+$x_e \assign V_f$ for all $e = 1,\ldots,\Ne$; \quad
+$\beta \assign 0$; \quad $k \assign 0$; \quad $m \assign 0$\;
+\BlankLine
+\While{$\lVert \Delta\bm{\rho} \rVert > \varepsilon$}{
+  $k \assign k+1$\;
+  \Tic{t_1[k]}
+  \textbf{Step 1 --- eigenproblem at the current density field.}\;
+  \quad solve $\Kmat(\bm{\rho})\,\phivec_j = \omega_j^2\,\Mmat(\bm{\rho})\,\phivec_j$,
+        $\phivec_j^\top\Mmat\phivec_k = \delta_{jk}$, $j = 1,\ldots,J$
+        \Comment*[r]{one state solve}
+  \quad detect the multiplicity $N$ of $\omega_n$\;
+  \textbf{Step 2 --- computation of gradients.}\;
+  \uIf{$N > 1$}{
+    generalized gradients
+    $\mathbf{f}_{sk} = \bigl\{\phivec_s^\top
+      (\Kmat'_{\rho_e} - \tilde{\lambda}\,\Mmat'_{\rho_e})\phivec_k\bigr\}^\top$,
+    $s,k = n,\ldots,n{+}N{-}1$\;
+  }
+  \Else{
+    $(\lambda_j)'_{\rho_e} = \phivec_j^\top
+      (\Kmat'_{\rho_e} - \lambda_j \Mmat'_{\rho_e})\phivec_j$,
+    $j = n,\ldots,J$\;
+  }
+  \quad filter the sensitivities (radius $r_{\min}$)\;
+  \Toc{t_1[k]}
+  \BlankLine
+  \Tic{t_2[k]}
+  \textbf{Step 3 --- optimal increment of the density vector (MMA).}\;
+  \Repeat{}{
+    $m \assign m+1$\;
+    solve the MMA sub-problem in bound form for
+      $\Delta x_e$ \Comment*[r]{no state solve}
+    \textbf{until} $\lVert \Delta\bm{\rho}\rVert < \varepsilon_{\mathrm{inner}}$\;
+  }
+  \Toc{t_2[k]}
+  \BlankLine
+  $x_e \assign x_e + \Delta x_e$ for all $e$; \quad
+  $\beta \assign \min_{j = n,\ldots,J}\,\omega_j^2(\xvec)$\;
+}
+\Return $\xvec^\ast \assign \xvec$\;
+\end{algorithm}
+
+\paragraph{Accounting (Algorithm~\ref{alg:olhoff}).}
+$\mathbf{t}_1$ and $\mathbf{t}_2$ are vectors of length
+$n_{\mathrm{outer}}$, one entry per outer iteration, and
+\begin{equation}
+  t^{(1)} = \textstyle\sum_{k} t_1[k],\qquad
+  t^{(2)} = \textstyle\sum_{k} t_2[k],\qquad
+  t_{\mathrm{stage}} = \textstyle\sum_{k}\bigl(t_1[k] + t_2[k]\bigr).
+\end{equation}
+In the implementation $t_1[k]$ is obtained as
+$t_{\mathrm{outer}}[k] - t_2[k]$, so the nested MMA solve cannot be
+double-counted.  The two counters are different objects and
+$n_{\mathrm{outer}} + n_{\mathrm{inner}}$ must never be reported as a single
+iteration count.  \emph{State equations:} one generalized eigenproblem per
+outer iteration, i.e.\ $n_{\mathrm{outer}}$ in total.
+
+% =====================================================================
+\section{Algorithm 2 --- Yuksel--Yilmaz two-stage static method}
+% =====================================================================
+
+Two sequential compliance minimizations replace the eigensolve entirely.
+Stage~1 minimizes compliance under a fixed unit point load and yields a first
+estimate of the fundamental mode shape.  Stage~2 repeats the minimization,
+but the external load is replaced by the design-dependent inertial load
+$\fvec_d = \Mmat(\xvec)\,\hat{\uvec}_d$, recomputed at every iteration from
+the current displacement estimate.  The stages are disjoint in time and each
+has its own counter and tolerance.
+
+\begin{algorithm}[htbp]
+\DontPrintSemicolon
+\caption{Yuksel--Yilmaz two-stage static method.}
+\label{alg:yuksel}
+\KwIn{mesh and boundary conditions; $V_f$; unit point load $\fvec_s$;
+      tolerances $\varepsilon_1$, $\varepsilon_2$}
+\KwOut{$\xvec^\ast$, $\omega_1(\xvec^\ast)$}
+\KwCount{$n_1$ --- Stage-1 iterations; \quad $n_2$ --- Stage-2 iterations}
+\KwTimers{$t_{s1}$ --- Stage-1 loop; \quad $t_{s2}$ --- Stage-2 loop
+          (disjoint from Stage~1)}
+\BlankLine
+$x_e \assign V_f$ for all $e$; \quad $n_1 \assign 0$; \quad $n_2 \assign 0$\;
+\BlankLine
+\Tic{t_{s1}}
+\textbf{Stage 1 --- optimal topology by SIMP under the unit load.}\;
+\Repeat{}{
+  $n_1 \assign n_1 + 1$\;
+  solve $\Kmat(\bm{\rho})\,\uvec_s = \fvec_s$ \Comment*[r]{one state solve}
+  $\dfrac{\partial c}{\partial x_e}
+    = -p\,x_e^{\,p-1}(E_0 - E_{\min})\,
+      \uvec_{s,e}^\top \Kmat_e^0 \uvec_{s,e}$,\quad $e = 1,\ldots,\Ne$\;
+  filter the sensitivities; update $\xvec$ by OC bisection on
+    $\sum_e x_e V_e = V^\ast$\;
+  \textbf{until} $\max_e |\Delta x_e| < \varepsilon_1$\;
+}
+\Toc{t_{s1}}
+\BlankLine
+$\uvec_d \assign \uvec_s$ \Comment*[r]{seed the mode estimate with the Stage-1 field}
+\BlankLine
+\Tic{t_{s2}}
+\textbf{Stage 2 --- design-dependent inertial load for SIMP.}\;
+\Repeat{}{
+  $n_2 \assign n_2 + 1$\;
+  $\hat{\uvec}_d \assign \uvec_d / \lVert \uvec_d \rVert$\;
+  $\fvec_d \assign \Mmat(\bm{\rho})\,\hat{\uvec}_d$
+    \Comment*[r]{inertial load, refreshed each iteration}
+  solve $\Kmat(\bm{\rho})\,\uvec_d = \fvec_d$ \Comment*[r]{one state solve}
+  $\dfrac{\partial c}{\partial x_e}
+    = -p\,x_e^{\,p-1}(E_0 - E_{\min})\,
+      \uvec_{d,e}^\top \Kmat_e^0 \uvec_{d,e}$
+    \Comment*[r]{$\partial\fvec_d/\partial x_e$ ignored}
+  filter the sensitivities; update $\xvec$ by OC bisection on
+    $\sum_e x_e V_e = V^\ast$\;
+  \textbf{until} $\max_e |\Delta x_e| < \varepsilon_2$\;
+}
+\Toc{t_{s2}}
+\BlankLine
+apply the Heaviside post-processing to obtain the solid--void design
+$\xvec^\ast$\;
+solve $\Kmat(\xvec^\ast)\phivec = \omega_1^2\,\Mmat(\xvec^\ast)\phivec$
+  \Comment*[r]{final modal analysis (untimed)}
+\Return $\xvec^\ast$\;
+\end{algorithm}
+
+\paragraph{Accounting (Algorithm~\ref{alg:yuksel}).}
+$t^{(1)} = t_{s1}$, $t^{(2)} = t_{s2}$, and
+$t_{\mathrm{stage}} = t_{s1} + t_{s2}$ with $n_1 + n_2$ optimization
+iterations in total.  \emph{State equations:} one static solve per iteration
+in both stages, i.e.\ $n_1 + n_2$ linear systems, plus the final modal
+analysis, which is accounted as overhead in
+Eq.~\eqref{eq:timing-identity} and not as a stage cost.  For asymmetric
+boundary conditions the placement of $\fvec_s$ additionally requires one
+eigensolve of the fully solid beam, likewise outside the stage timers.
+
+% =====================================================================
+\section{Algorithm 3 --- Proposed quasi-static approximation}
+% =====================================================================
+
+The proposed method performs \emph{one} eigenanalysis, on the solid reference
+domain, and freezes the resulting eigenpairs.  Every subsequent iteration is
+an ordinary compliance minimization driven by the semi-harmonic load
+\begin{equation}
+  \fvec_\ell(\bm{\rho}) \;=\;
+  \bigl(\omega_{m(\ell)}^{(0)}\bigr)^{2}\,
+  \Mmat(\bm{\rho})\,\Phivec_{m(\ell)}^{(0)},
+  \qquad \ell = 1,\ldots,n_c ,
+  \label{eq:semiharmonic}
+\end{equation}
+in which the frequency $\omega_{m(\ell)}^{(0)}$ and the mode shape
+$\Phivec_{m(\ell)}^{(0)}$ are the frozen reference quantities and only
+$\Mmat(\bm{\rho})$ depends on the design.  Several modes are targeted
+simultaneously by declaring several load cases, $n_c > 1$: each case
+$\ell$ is assigned a reference mode $m(\ell)$ and a load factor, is solved
+separately, and its compliance and sensitivity are accumulated into the
+common objective.  There is neither an inner loop nor a second stage, and no
+eigenproblem is solved inside the optimization loop.
+
+\begin{algorithm}[htbp]
+\DontPrintSemicolon
+\caption{Proposed quasi-static approximation (one reference eigenanalysis,
+         then SIMP).}
+\label{alg:proposed}
+\KwIn{mesh and boundary conditions; $V_f$; load cases
+      $\ell = 1,\ldots,n_c$ with reference modes $m(\ell)$; tolerance
+      $\varepsilon_{\mathrm{tol}}$}
+\KwOut{$\xvec^\ast$, $\omega_1(\xvec^\ast)$}
+\KwCount{$n_{\mathrm{I}} = 1$ --- reference eigenanalyses (a \emph{solve}
+         count, not an iteration count); \quad
+         $n_{\mathrm{II}}$ --- SIMP iterations}
+\KwTimers{$t_{\mathrm{I}}$ --- the reference eigenanalysis alone; \quad
+          $t_{\mathrm{II}}$ --- the SIMP loop alone}
+\BlankLine
+\Tic{t_{\mathrm{I}}}
+\textbf{Step I --- initialization: eigenvalue problem on the design domain.}\;
+assemble $\Kmat_0$ and $\Mmat_0$ on the solid reference domain\;
+solve $\Kmat_0\,\Phivec_j^{(0)}
+       = (\omega_j^{(0)})^2\,\Mmat_0\,\Phivec_j^{(0)}$,
+      $j = 1,\ldots,n_{\mathrm{modes}}$,
+      $n_{\mathrm{modes}} = \max_\ell m(\ell)$
+      \Comment*[r]{once; frozen}
+$n_{\mathrm{I}} \assign 1$\;
+\Toc{t_{\mathrm{I}}}
+\BlankLine
+$x_e \assign V_f$ for all $e$; \quad $n_{\mathrm{II}} \assign 0$\;
+\BlankLine
+\Tic{t_{\mathrm{II}}}
+\textbf{Step II --- optimal topology under the design-dependent inertial load.}\;
+\Repeat{}{
+  $n_{\mathrm{II}} \assign n_{\mathrm{II}} + 1$\;
+  assemble $\Kmat(\bm{\rho})$ and $\Mmat(\bm{\rho})$\;
+  $c \assign 0$; \quad $\partial c/\partial x_e \assign 0$ for all $e$\;
+  \For{$\ell \assign 1$ \KwTo $n_c$}{
+    $\fvec_\ell \assign (\omega_{m(\ell)}^{(0)})^2\,
+       \Mmat(\bm{\rho})\,\Phivec_{m(\ell)}^{(0)}$
+       \Comment*[r]{frozen $\Phivec^{(0)}$}
+    solve $\Kmat(\bm{\rho})\,\uvec_\ell = \fvec_\ell$
+      \Comment*[r]{one state solve}
+    $c \assign c + \uvec_\ell^\top \Kmat(\bm{\rho})\,\uvec_\ell$\;
+    $\dfrac{\partial c}{\partial x_e} \mathrel{{-}{=}}
+       p\,x_e^{\,p-1}(E_0 - E_{\min})\,
+       \uvec_{\ell,e}^\top \Kmat_e^0 \uvec_{\ell,e}$
+       \Comment*[r]{$\partial\fvec_\ell/\partial x_e$ omitted}
+  }
+  apply the density-weighted sensitivity filter of radius $r_{\min}$\;
+  update $\xvec$ by OC bisection on $\sum_e x_e V_e = V^\ast$\;
+  \textbf{until} $\max_e |\Delta x_e| < \varepsilon_{\mathrm{tol}}$\;
+}
+\Toc{t_{\mathrm{II}}}
+\BlankLine
+solve $\Kmat(\xvec^\ast)\phivec_j = \omega_j^2\,\Mmat(\xvec^\ast)\phivec_j$,
+  $j = 1,2,3$
+  \Comment*[r]{final modal analysis (untimed)}
+\Return $\xvec^\ast$\;
+\end{algorithm}
+
+\paragraph{Accounting (Algorithm~\ref{alg:proposed}).}
+$t^{(1)} = t_{\mathrm{I}}$, $t^{(2)} = t_{\mathrm{II}}$, and
+$t_{\mathrm{stage}} = t_{\mathrm{I}} + t_{\mathrm{II}}$.  The timer
+$t_{\mathrm{I}}$ brackets the reference eigenanalysis and nothing else:
+the assembly of $\Kmat_0,\Mmat_0$, the eigensolve, and the extraction of the
+frozen modes.  Mesh generation, element matrices, connectivity, the filter
+and the boundary conditions are solver preparation and belong to
+$t_{\mathrm{other}}$, where the other two methods also place their setup, so
+that the overhead term means the same thing on every row.  Note that
+$n_{\mathrm{I}} = 1$ is a \emph{solve} count and must not be read as an
+optimization iteration.  \emph{State equations:} one eigenproblem at Step~I
+plus $n_c\,n_{\mathrm{II}}$ static solves at Step~II; in the single-mode
+benchmark configuration $n_c = 1$, so the loop costs exactly one linear
+system per iteration.
+
+% =====================================================================
+\section{Side-by-side comparison}
+% =====================================================================
+
+\begin{table}[htbp]
+\centering
+\caption{Loop architecture, instrumentation and state-equation count of the
+three algorithms.  Counts and component times are method-native: they
+measure the stages each method actually has, and are not mathematically
+identical quantities across columns.  The comparable quantity is the total
+wall time.}
+\label{tab:algo-accounting}
+\renewcommand{\arraystretch}{1.35}
+\begin{tabularx}{\textwidth}{@{}p{3.1cm}XXX@{}}
+\toprule
+ & \textbf{Du--Olhoff}
+ & \textbf{Yuksel--Yilmaz}
+ & \textbf{Proposed} \\
+\midrule
+Architecture
+  & nested: an outer loop, each iteration of which contains a complete MMA
+    sub-optimization
+  & two sequential, disjoint optimization stages
+  & one reference eigenanalysis, then a single SIMP loop \\
+Counter 1
+  & $n_{\mathrm{outer}}$, outer iterations
+  & $n_1$, Stage-1 iterations
+  & $n_{\mathrm{I}} = 1$, reference eigenanalyses (solve count) \\
+Counter 2
+  & $n_{\mathrm{inner}}$, cumulative MMA sub-iterations
+  & $n_2$, Stage-2 iterations
+  & $n_{\mathrm{II}}$, SIMP iterations \\
+Timer 1
+  & $\mathbf{t}_1$, vector $1\times n_{\mathrm{outer}}$: eigenproblem,
+    sensitivities, filtering, update, convergence test
+  & $t_{s1}$, the Stage-1 loop only
+  & $t_{\mathrm{I}}$, the reference eigenanalysis only \\
+Timer 2
+  & $\mathbf{t}_2$, vector $1\times n_{\mathrm{outer}}$: the nested MMA loop
+    only
+  & $t_{s2}$, the Stage-2 loop only
+  & $t_{\mathrm{II}}$, the SIMP loop only \\
+Stage time
+  & $\sum_k \bigl(t_1[k] + t_2[k]\bigr)$
+  & $t_{s1} + t_{s2}$
+  & $t_{\mathrm{I}} + t_{\mathrm{II}}$ \\
+State equations
+  & one eigenproblem per outer iteration: $n_{\mathrm{outer}}$ eigensolves
+  & one static solve per iteration in both stages: $n_1 + n_2$ linear
+    systems
+  & one eigenproblem at Step~I $+$ $n_c\,n_{\mathrm{II}}$ static solves
+    at Step~II ($n_c = 1$ for a single targeted mode) \\
+Mode shape
+  & recomputed every outer iteration
+  & updated self-consistently every Stage-2 iteration
+  & frozen after Step~I \\
+Design update
+  & MMA on the bound sub-problem
+  & OC bisection
+  & OC bisection \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\paragraph{Asymptotics.}
+All three methods share the same per-iteration asymptotic class,
+$O(\Ne^{1.5})$, set by the sparse factorization of a planar finite-element
+graph: with nested-dissection ordering the top-level separator has size
+$O(\sqrt{\Ne})$ and the factorization work is
+$O\bigl((\sqrt{\Ne})^3\bigr) = O(\Ne^{1.5})$, while a triangular solve costs
+$O(\Ndof \cdot bw) = O(\Ne^{1.5})$ for a half-bandwidth
+$bw = O(\sqrt{\Ne})$.  The methods are therefore separated not by their
+complexity class but by two constants: the cost of one state equation
+(a shift-invert eigensolve requires one factorization \emph{plus}
+$k_{\mathrm{Krylov}} \approx 3J$--$5J$ triangular solves, whereas a static
+solve requires one of each), and the number of iterations to convergence.
+Table~\ref{tab:algo-accounting} makes both visible: the row
+``State equations'' fixes the first constant, the counter rows the second.
+
+\paragraph{Note on the benchmarked realization.}
+Algorithm~\ref{alg:olhoff} states the canonical bound formulation.  The
+figures reported in the performance table are produced by a reconstruction of
+it at a named preset (fixed penalization, sensitivity filtering) and should
+be labelled as such rather than attributed directly to the original
+publication.

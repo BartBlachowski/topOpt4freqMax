@@ -1,0 +1,32 @@
+% =====================================================================
+%  Algorithms of the three compared methods, in a uniform notation.
+%
+%  Standalone build:
+%      pdflatex paper/algorithms.tex
+%
+%  Reuse inside the manuscript:
+%      \input{algorithms_preamble}   % in the preamble
+%      \input{algorithms_body}       % where the algorithms should appear
+%
+%  The instrumentation (tic/toc timers, iteration counters, the
+%  state-equation tally) mirrors the measurement schema actually used by
+%  the benchmark driver, examples/Performance/conference_bench/
+%  confbench_timing_schema.m -- so that the pseudocode, the reported
+%  columns and the code agree line by line.
+% =====================================================================
+\documentclass[11pt,a4paper]{article}
+
+\input{algorithms_preamble}
+
+\title{\textbf{Algorithms of the Three Compared Methods}\\[4pt]
+\large Uniform pseudocode, timing instrumentation and
+state-equation accounting}
+\author{Piotr Tauzowski \and Andrzej Szczepa\'nczyk \and Bart{\l}omiej B{\l}achowski}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\input{algorithms_body}
+
+\end{document}
