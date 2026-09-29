@@ -22,7 +22,11 @@ it = 1:nIt;
 iSplit = size(info.stage1.omegaHist,1) + 0.5;
 
 figure('Name',sprintf('%s - Frequency Convergence', caseLabel),'Color','w');
-theme("light");
+try
+    theme("light");
+catch
+    % theme() is cosmetic and does not exist before R2024b.
+end
 hold on;
 h = [];
 h(end+1) = plot(it, om(:,1), 'b-',  'LineWidth', 2.0);

@@ -29,7 +29,11 @@ visualizationQuality = 'regular'; % set 'smooth' for high-quality final display
     nelx, nely, volfrac, penal, rmin, ft, ftBC, eta, beta, move, maxit, stage1_maxit, bcType);
 
 figure('Name','Yuksel Figure 4 benchmark','Color','w');
-theme("light");
+try
+    theme("light");
+catch
+    % theme() is cosmetic and does not exist before R2024b.
+end
 tiledlayout(2,1,'TileSpacing','compact','Padding','compact');
 
 nexttile;

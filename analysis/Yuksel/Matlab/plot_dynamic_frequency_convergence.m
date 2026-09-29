@@ -18,7 +18,11 @@ nIter = size(omegaHist,1);
 it = 0:(nIter-1);
 
 figure('Name',sprintf('%s - Figure 6 history', caseLabel),'Color','w');
-theme("light");
+try
+    theme("light");
+catch
+    % theme() is cosmetic and does not exist before R2024b.
+end
 hold on;
 
 plot(it, omegaHist(:,1), 'b-', 'LineWidth', 2.0);

@@ -106,7 +106,31 @@ cfg.writeJSON  = true;
 cfg.writeLaTeX = true;
 
 cfg.outputDir = '';                  % auto: examples/Performance/conference_benchmark/<runLabel>
-cfg.runLabel  = 'campaign_9mesh_r2';
+
+% The label IS the output directory, so it is the only thing standing between a
+% new campaign and the artifacts of an earlier one.  Every writer in this driver
+% (confbench_export, confbench_complexity_plots, confbench_topology_images,
+% confbench_complexity_diagnostics) is confined to cfg.outputDir, and the
+% repoRoot/results figure writer in run_topopt_from_json stays off because
+% confbench_method_config leaves postprocessing.save_frequency_iterations at its
+% false default.  So a fresh label is SUFFICIENT to protect earlier evidence --
+% and a reused one silently buries it, which the preflight can only warn about.
+%
+% 'campaign_9mesh_r2' is NOT reused here on purpose.  That directory already
+% holds a completed nine-mesh campaign whose Olhoff column was produced at the
+% SUPERSEDED preset duOlhoffFixedPenaltySensitivityFiltered (the M4 fixed-penalty
+% formulation; see its benchmark_manifest.json).  This driver now runs
+% duOlhoffPedersenAdaptiveBoxSensitivityFiltered, a DISTINCT formulation, so
+% writing into that directory would leave one label covering two different
+% material laws and controllers.  The comparable local reference is
+% conference_benchmark/nine_mesh_pedersen_b21483b.
+%
+% 2026-09-28: recomputation on a second machine (Windows 11, MATLAB R2024a,
+% hostname BIO-2_HELI) at a paper reviewer's request, to show the reported
+% scaling is not an artifact of one host.  The label records the machine because
+% the quantity being reported is wall-clock time, which is a property of the
+% host as much as of the method.
+cfg.runLabel  = 'campaign_9mesh_r2_recompute_bio2heli';
 
 % ---- Timing-accounting tolerances (predeclared, recorded in the artifacts) --
 cfg.timingTolAbs     = 1e-6;   % |T_total - (T1+T2+T_overhead)|, seconds
@@ -199,6 +223,30 @@ if isempty(cfg.runLabel)
 end
 if isempty(cfg.outputDir)
     cfg.outputDir = fullfile(scriptDir, 'conference_benchmark', cfg.runLabel);
+end
+
+% EVERY campaign gets a directory of its own.  A rerun under the same label
+% otherwise lands on top of the previous attempt, and the preflight can only
+% WARN about that -- which is no protection for an 8-hour campaign launched over
+% ssh and restarted after a dropped connection, precisely when a restart is most
+% likely and the earlier artifacts are most valuable.  So exclusivity is
+% enforced here instead of trusted: a non-empty target is not written into, the
+% next free _2, _3, ... is taken, and cfg.runLabel follows the directory so that
+% the manifest, the run label in runOpts and the artifacts all name the same
+% place.  Candidates are derived from the target's own parent, so this works
+% whether cfg.outputDir was auto-derived above or set by hand.
+if ~isEmptyDir(cfg.outputDir)
+    [parentDir, baseName] = fileparts(cfg.outputDir);
+    n = 1;
+    while true
+        n = n + 1;
+        candidate = fullfile(parentDir, sprintf('%s_%d', baseName, n));
+        if isEmptyDir(candidate); break; end
+    end
+    fprintf(['Output directory %s already holds artifacts; this run writes to ' ...
+        '%s instead, so the earlier run is preserved.\n'], cfg.outputDir, candidate);
+    cfg.outputDir = candidate;
+    cfg.runLabel  = sprintf('%s_%d', baseName, n);
 end
 if exist(cfg.outputDir, 'dir') ~= 7; mkdir(cfg.outputDir); end
 
@@ -526,6 +574,19 @@ elseif used < frozen
 else
     s = '';
 end
+end
+
+function tf = isEmptyDir(d)
+% True when d does not exist, or exists and contains nothing.  A directory that
+% exists but is empty is safe to write into: mkdir leaves one behind when a run
+% dies before its first artifact, and refusing that would push every restart to
+% a new suffix for no reason.
+if exist(d, 'dir') ~= 7
+    tf = true;
+    return;
+end
+entries = dir(d);
+tf = isempty(setdiff({entries.name}, {'.', '..'}));
 end
 
 function s = pluralIes(n)

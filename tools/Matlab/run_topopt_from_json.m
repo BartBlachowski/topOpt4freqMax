@@ -1206,7 +1206,11 @@ function localSaveTopologyModePlot( ...
 
     % --- Plot ---
     fig = figure('Color', 'white', 'Visible', 'on');
-    theme("light");
+    try
+        theme("light");
+    catch
+        % theme() is cosmetic and does not exist before R2024b.
+    end
     ax  = axes('Parent', fig);
     hold(ax, 'on');
 
@@ -1473,7 +1477,11 @@ function localSaveSingleModePlot( ...
     yDef = yGrid + scale * uy;
 
     fig = figure('Color', 'white', 'Visible', 'off');
-    theme("light");
+    try
+        theme("light");
+    catch
+        % theme() is cosmetic and does not exist before R2024b.
+    end
     ax = axes('Parent', fig);
     hold(ax, 'on');
 
@@ -2135,7 +2143,11 @@ function writeCorrelationHeatmap(C, omegaInit, omegaTopo, outPath)
 %WRITECORRELATIONHEATMAP  Save a correlation matrix heatmap as PNG (no extra toolboxes).
     [nI, nT] = size(C);
     fig = figure('Color', 'white', 'Visible', 'off');
-    theme("light");
+    try
+        theme("light");
+    catch
+        % theme() is cosmetic and does not exist before R2024b.
+    end
     ax  = axes('Parent', fig);
     imagesc(ax, C);
     colormap(ax, parula(256));

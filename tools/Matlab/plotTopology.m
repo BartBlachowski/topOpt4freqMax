@@ -68,7 +68,11 @@ plotCallCount = plotCallCount + 1;
 
 if isempty(figHandle) || ~isgraphics(figHandle, 'figure')
     figHandle = figure('Name', 'Topology', 'NumberTitle', 'off');
-    theme("light");
+    try
+        theme("light");
+    catch
+        % theme() is cosmetic and does not exist before R2024b.
+    end
     if isprop(figHandle, 'GraphicsSmoothing')
         set(figHandle, 'GraphicsSmoothing', 'off');
     end
