@@ -103,6 +103,11 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
             'runtime will increase and comparisons are not fair.\n']);
         info.freq_iter_omega = NaN(maxIters, 3);
     end
+    % Opt-in: the physical density of every iteration, i.e. the field the
+    % per-iteration K and M are assembled from, for post-hoc evaluation of the
+    % design path.  Reporting only; default off.
+    recordDesignHistory = logical(localOpt(runCfg, 'record_design_history', false));
+    xHist = {};
 
     ndof = 2*(nelx+1)*(nely+1);
     nNodes = (nelx+1) * (nely+1);
@@ -527,6 +532,9 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
 
         U(:) = 0;
         U(free,:) = Kf \ F(free,:);
+        if recordDesignHistory
+            xHist{end+1} = xPhys(:); %#ok<AGROW>
+        end
         if saveFrqIterations
             if isempty(Mf)
                 Mf = M(free, free);
@@ -706,6 +714,9 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
         'xPhys_at_native_stop', xPhysAtNativeStop);
     if saveFrqIterations
         info.freq_iter_omega = info.freq_iter_omega(1:loop,:);
+    end
+    if recordDesignHistory
+        info.x_history = [xHist{:}];
     end
     info.last_F = F;
     info.last_U = U;

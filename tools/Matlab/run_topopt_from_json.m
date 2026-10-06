@@ -226,6 +226,7 @@ function [x, omega, tIter, nIter, mem_usage, nIterStage, telemetry] = run_topopt
         'xPhys_at_native_stop', []);
     Emin = E0 * EminRatio;
     freqIterOmega = [];
+    designHistory = [];
 
     % --- Memory sampling setup ---------------------------------------
     % Historically gated on nargout >= 5 alone.  The sampler forks `ps` at
@@ -448,6 +449,7 @@ function [x, omega, tIter, nIter, mem_usage, nIterStage, telemetry] = run_topopt
             runCfg.pasV = pasV;
             runCfg.record_history = recordHistory;
             runCfg.extend_beyond_native_stop = extendBeyondNativeStop;
+            runCfg.record_design_history = postproc.recordDesignHistory;
             if hasFieldPath(cfg, {'optimization','harmonic_normalize'})
                 runCfg.harmonic_normalize = parseBool( ...
                     getFieldPath(cfg, {'optimization','harmonic_normalize'}), ...
@@ -488,6 +490,7 @@ function [x, omega, tIter, nIter, mem_usage, nIterStage, telemetry] = run_topopt
             tIter = tOut;
             nIter = itOut;
             if isfield(infoOur, 'history'), solverHistory = infoOur.history; end
+            if isfield(infoOur, 'x_history'), designHistory = infoOur.x_history; end
             if isfield(infoOur, 'extension'), solverExtension = infoOur.extension; end
             if isfield(infoOur, 'timing'), solverTiming = infoOur.timing; end
             if isfield(infoOur, 'stopping'), solverStopping = infoOur.stopping; end
@@ -537,7 +540,11 @@ function [x, omega, tIter, nIter, mem_usage, nIterStage, telemetry] = run_topopt
 
     if postproc.saveFrequencyIterations
         if ~isempty(freqIterOmega)
-            saveFrequencyIterationPlot(freqIterOmega, approach, nelx, nely, repoRoot);
+            freqIterDir = postproc.frequencyIterationsDir;
+            if isempty(freqIterDir)
+                freqIterDir = fullfile(repoRoot, 'results');
+            end
+            save_frequency_iteration_plot(freqIterOmega, approach, nelx, nely, freqIterDir);
         else
             warning('run_topopt_from_json:MissingFrequencyHistory', ...
                 'save_frequency_iterations requested, but no iteration history was returned by "%s".', approach);
@@ -734,6 +741,7 @@ function [x, omega, tIter, nIter, mem_usage, nIterStage, telemetry] = run_topopt
     telemetry.objective_final = objectiveFinal;
     telemetry.objective_history = objectiveHistory;
     telemetry.history = solverHistory;
+    telemetry.design_history = designHistory;
     telemetry.extension = solverExtension;
     telemetry.diagnostics_enabled = benchmarkDiagnosticsEnabled;
     telemetry.yuksel = struct( ...
@@ -755,106 +763,6 @@ function value = telemetryValue(s, name, defaultValue)
         value = s.(name);
     else
         value = defaultValue;
-    end
-end
-
-function saveFrequencyIterationPlot(freqIterOmega, approachName, nelx, nely, repoRoot)
-    if isempty(freqIterOmega)
-        return;
-    end
-    if ~isnumeric(freqIterOmega)
-        warning('run_topopt_from_json:InvalidFrequencyHistoryType', ...
-            'Frequency history must be numeric to save iteration plot.');
-        return;
-    end
-
-    freqIterOmega = double(freqIterOmega);
-    nIter = size(freqIterOmega, 1);
-    if nIter < 1
-        return;
-    end
-    if size(freqIterOmega, 2) < 3
-        tmp = NaN(nIter, 3);
-        tmp(:,1:size(freqIterOmega,2)) = freqIterOmega;
-        freqIterOmega = tmp;
-    else
-        freqIterOmega = freqIterOmega(:,1:3);
-    end
-
-    resultsDir = fullfile(repoRoot, 'results');
-    if exist(resultsDir, 'dir') ~= 7
-        mkdir(resultsDir);
-    end
-
-    nameRaw = char(string(approachName));
-    nameDisplay = strrep(nameRaw, '_', ' ');
-    nameSafe = regexprep(nameRaw, '[^\w\-]', '_');
-    outPath = fullfile(resultsDir, sprintf('%s_%dx%d_freq_iterations.png', nameSafe, nelx, nely));
-
-    fig = figure('Color', 'white', 'Visible', 'off');
-    if exist('theme', 'file') == 2 || exist('theme', 'builtin') == 5
-        try
-            theme("light");
-        catch
-            % Some MATLAB releases/toolboxes may not expose theme in scripts.
-        end
-    end
-    ax = axes('Parent', fig);
-    set(ax, 'FontSize', 22);
-    hold(ax, 'on');
-    colors = [0.0000, 0.4470, 0.7410; ...
-              0.8500, 0.3250, 0.0980; ...
-              0.4660, 0.6740, 0.1880];
-    xIter = (1:nIter)';
-    for j = 1:3
-        plot(ax, xIter, freqIterOmega(:,j), '-', 'LineWidth', 3.2, ...
-            'Color', colors(j,:), 'DisplayName', sprintf('\\omega_{%d}', j));
-    end
-
-    xlabel(ax, 'Outer iteration', 'FontSize', 22);
-    ylabel(ax, 'Frequency (rad/s)', 'FontSize', 22);
-    title(ax, sprintf('%s frequency history', nameDisplay), 'Interpreter', 'none', 'FontSize', 22);
-    grid(ax, 'on');
-    box(ax, 'on');
-    % MATLAB requires strictly increasing limits; handle single-iteration runs.
-    if nIter == 1
-        xlim(ax, [0.5, 1.5]);
-    else
-        xlim(ax, [1, nIter]);
-    end
-    legend(ax, 'Location', 'best', 'FontSize', 22);
-
-    didWritePng = false;
-    try
-        exportgraphics(fig, outPath, 'Resolution', 180, 'BackgroundColor', 'white');
-        didWritePng = true;
-    catch pngErr
-        warning('run_topopt_from_json:ExportGraphicsFailed', ...
-            'exportgraphics failed (%s); falling back to print().', pngErr.message);
-        try
-            print(fig, outPath, '-dpng', '-r180');
-            didWritePng = true;
-        catch pngErr2
-            warning('run_topopt_from_json:PrintFailed', ...
-                'Failed to save frequency iteration PNG (%s).', pngErr2.message);
-        end
-    end
-    figPath = fullfile(resultsDir, sprintf('%s_%dx%d_freq_iterations.fig', nameSafe, nelx, nely));
-    didWriteFig = false;
-    try
-        set(fig, 'Visible', 'on');   % savefig records visibility; keep it 'on' so the file opens correctly
-        savefig(fig, figPath);
-        didWriteFig = true;
-    catch figErr
-        warning('run_topopt_from_json:SaveFigFailed', ...
-            'Failed to save MATLAB figure file (%s).', figErr.message);
-    end
-    close(fig);
-    if didWritePng
-        fprintf('Saved frequency iteration plot: %s\n', outPath);
-    end
-    if didWriteFig
-        fprintf('Saved frequency iteration figure: %s\n', figPath);
     end
 end
 
@@ -1917,6 +1825,24 @@ function postproc = parsePostprocessingBlock(cfg)
             'postprocessing.save_frequency_iterations');
     else
         postproc.saveFrequencyIterations = false;
+    end
+
+    % Optional per-iteration physical density field (n_e x n_iter), returned as
+    % telemetry.design_history.  Reporting only; supported by ourApproach.
+    if hasFieldPath(cfg, {'postprocessing','record_design_history'})
+        postproc.recordDesignHistory = parseBool( ...
+            getFieldPath(cfg, {'postprocessing','record_design_history'}), ...
+            'postprocessing.record_design_history');
+    else
+        postproc.recordDesignHistory = false;
+    end
+
+    % Optional destination of the frequency-history plot; empty means <repo>/results.
+    if hasFieldPath(cfg, {'postprocessing','frequency_iterations_dir'})
+        postproc.frequencyIterationsDir = reqStr(cfg, {'postprocessing','frequency_iterations_dir'}, ...
+            'postprocessing.frequency_iterations_dir');
+    else
+        postproc.frequencyIterationsDir = '';
     end
 
     % ---- Correlation block ----
