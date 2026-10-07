@@ -112,8 +112,15 @@ function rec = runOlhoff(rec, mcfg, opts)
 nelx = mcfg.nelx; nely = mcfg.nely;
 % The preset is the one confbench_method_config resolved -- named, never implied.
 args = {'Preset', mcfg.olhoff_preset};
+% A stopping rule changed by the driver (cfg.stop.olhoff); empty = the preset's.
+if ~isempty(getOpt(mcfg, 'olhoff_stop_factor', []))
+    args = [args, {'StopToleranceFactor', double(mcfg.olhoff_stop_factor)}];
+end
+% max_outer_override (smoke tests) takes precedence over a changed budget.
 if isfield(opts, 'max_outer_override') && ~isempty(opts.max_outer_override)
     args = [args, {'MaxOuter', double(opts.max_outer_override)}];
+elseif ~isempty(getOpt(mcfg, 'olhoff_max_outer', []))
+    args = [args, {'MaxOuter', double(mcfg.olhoff_max_outer)}];
 end
 if getOpt(opts, 'warmup', false); args = [args, {'Warmup', true}]; end
 

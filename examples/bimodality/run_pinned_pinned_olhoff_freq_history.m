@@ -7,9 +7,9 @@
 %   defaults domain.boundary.condition = simplySupported, support = midHeight).
 %
 %   Uses the production preset (olhoffcurrent_production_preset, currently
-%   duOlhoffPedersenAdaptiveBoxSensitivityFiltered), i.e. exactly the
-%   configuration of the Du-Olhoff rows of the paper's Table 1 (111 outer
-%   iterations at 240x30).  With this preset omega_1 and omega_2 run together
+%   duOlhoffPedersenAdaptiveBoxSensitivityFiltered); with the default stop
+%   parameters below this is exactly the configuration of the Du-Olhoff rows
+%   of the paper's Table 1 (111 outer iterations at 240x30).  With this preset omega_1 and omega_2 run together
 %   over roughly outer iterations 8-25 and then separate (final 167.3 / 187.2
 %   rad/s): the converged design is not bimodal at this mesh.  (At 400x50:
 %   93 outer, 166.5 / 198.1 rad/s.  The historical SIMP / eq. (4b) preset
@@ -31,25 +31,87 @@
 %   runner takes the same canonical route it does (path guard -> named preset
 %   config -> olhoffSolve) and reads res.hist.omega.
 %
+%   Stop parameters.  The run stops when ||drho||_2 < eps (Du & Olhoff sec.
+%   3.5, Fig. 1).  The paper gives no value for eps; analysis/Olhoff uses
+%   eps = 0.05*sqrt(NE/3200) (olh.config.epsilonForMesh), i.e. the same RMS
+%   design change on every mesh.  stop_c replaces the 0.05 and max_iter caps
+%   the outer iterations (a run that reaches the cap is CAP_HIT, not
+%   converged).  stop_c = 0.2 stops at outer iteration 52 at 240x30, after
+%   omega_1 has settled; at 160x20 stop_c >= 0.225 stops before the topology
+%   has settled.
+%
+%   Every save_every_it-th iterate (and the last one) is also rendered, so the
+%   topology can be compared with the frequency plateau of the history; the
+%   snapshot of outer iteration k is the design whose omega_1..3 are plotted
+%   at k (the design analysed at the start of iteration k).  olhoffSolve keeps
+%   no design history, so the run switches on its per-iteration diagnostic
+%   recorder (runtime.diagnostics, bitwise inert on the trajectory) and the
+%   designs are rebuilt by replaying the solver's own update on the recorded
+%   increments; the replay must reproduce res.rho exactly.
+%
 %   Output (next to this file):
 %     Olhoff_240x30_freq_iterations.fig / .png
+%     topologies/Olhoff_240x30_it<k>.png
 
-nelx = 240;
-nely = 30;
+nelx = 800;
+nely = 100;
+save_every_it = 25;   % topology snapshot every save_every_it iterations (+ last); 0 = none
+stop_c = 0.05;        % stop when ||drho||_2 < stop_c*sqrt(NE/3200); 0.05 = Table 1
+max_iter = [];        % outer-iteration cap; [] = preset default (400)
+
+% Release the path guard of an earlier run in this session first: overwriting
+% it would restore its saved path AFTER the new guard installed, removing the
+% solver from the path.
+clear guard
 
 here = fileparts(mfilename('fullpath'));
 repo = fileparts(fileparts(here));
 addpath(fullfile(repo, 'analysis', 'Olhoff'));
 addpath(fullfile(repo, 'tools', 'Matlab'));
 
+% The MATLAB path is session state: adding the repository with subfolders puts
+% development/ (every historical Olhoff tree) on it, and the guard below then
+% refuses to run.  Remove what the session handed us first, as
+% examples/Performance/performance_comparison.m does; the guard re-checks.
+pathScrub = olhoffcurrent_scrub_forbidden_paths(repo);
+if ~isempty(pathScrub)
+    fprintf('Removed %d non-production Olhoff path entries inherited from this MATLAB session.\n', ...
+        numel(pathScrub));
+end
 guard = olhoffcurrent_paths(); %#ok<NASGU>  keep the fail-closed path guard alive
 preset = olhoffcurrent_production_preset().name;
-cfg = olhoffcurrent_config(nelx, nely, 'Preset', preset);
+cfgArgs = {'Preset', preset, 'Diagnostics', save_every_it > 0};
+if ~isempty(max_iter)
+    cfgArgs = [cfgArgs, {'MaxOuter', max_iter}];
+end
+cfg = olhoffcurrent_config(nelx, nely, cfgArgs{:});
+cfg.stop.tolerance = stop_c*sqrt(nelx*nely/3200);   % the law of olh.config.epsilonForMesh
 res = olhoffSolve(cfg);
 
 omegaHist = double(res.hist.omega).';        % nOuter x Jcalc, rad/s
 save_frequency_iteration_plot(omegaHist, 'Olhoff', nelx, nely, here);
 
+if save_every_it > 0
+    % Replay of olhoffSolve's step 4 without projection:
+    % rho_1 = design.initial, rho_{k+1} = min(1, max(rhomin, rho_k + drho_k)).
+    assert(~cfg.projection.enabled, ...
+        'The design replay assumes the unprojected update (projection.enabled = false).');
+    nOuter = size(omegaHist, 1);
+    assert(numel(res.diag.drho) == nOuter, 'Diagnostic record does not cover every outer iteration.');
+    rho = cfg.design.initial*ones(numel(res.rho), 1);
+    rhoHist = zeros(numel(rho), nOuter);
+    for k = 1:nOuter
+        rhoHist(:,k) = rho;
+        rho = min(1, max(cfg.design.minimum, rho + res.diag.drho{k}));
+    end
+    assert(isequal(rho, res.rho), 'Replayed design history does not reproduce res.rho.');
+    % model2D numbers element rows top-down (top88); the renderer expects bottom-up.
+    rhoHist = reshape(flip(reshape(rhoHist, nely, nelx, nOuter), 1), nelx*nely, nOuter);
+    save_topology_snapshots(rhoHist, omegaHist, save_every_it, ...
+        'Olhoff', nelx, nely, fullfile(here, 'topologies'));
+end
+
 w = double(res.omega(:));
-fprintf('Olhoff (%s) pinned-pinned %dx%d: %d outer iterations, omega_1..3 = %.2f, %.2f, %.2f rad/s\n', ...
-    preset, nelx, nely, size(omegaHist, 1), w(1), w(2), w(3));
+fprintf(['Olhoff (%s) pinned-pinned %dx%d, stop_c = %g (eps = %.4g): %s after %d outer ' ...
+    'iterations, omega_1..3 = %.2f, %.2f, %.2f rad/s\n'], ...
+    preset, nelx, nely, stop_c, cfg.stop.tolerance, res.status, size(omegaHist, 1), w(1), w(2), w(3));

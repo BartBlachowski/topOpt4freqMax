@@ -91,6 +91,35 @@ cfg.maxOuterOverride = [];
 % treated exactly like cfg.maxOuterOverride.
 cfg.yukselMaxIters = 5000;
 
+% ---- Stopping rules ------------------------------------------------------
+% [] = the PRODUCTION setting: the frozen rule the Table 1 campaign ran with,
+% whose value is given in the comment.  Setting a value changes WHERE a method
+% stops, so the run is no longer the production regime; it stays a valid run
+% and is recorded as such (run_class.production_stop_rules = false in
+% benchmark_manifest.json, and in every Olhoff row's effective configuration
+% hash).  As for cfg.yukselMaxIters, RAISING a safety budget keeps the run
+% scientific and LOWERING it below the production value is truncation, treated
+% like cfg.maxOuterOverride.  (2026-10-07, simply supported beam, 160x20 to
+% 400x50: proposed.tol = 0.025 and olhoff.c = 0.2 stop where the design has
+% stagnated; see examples/bimodality.)
+cfg.stop = struct();
+
+% Proposed: stops when max|x - x_old| <= tol on the raw design field.
+cfg.stop.proposed.tol      = 0.04;   % production: 0.01  (profile proposed_practical_move02_tol001)
+cfg.stop.proposed.maxIters = [];   % production: 2000  (safety budget)
+
+% Yuksel: each stage stops when max|x - x_old| < its tolerance, from its
+% second iteration on, and the run ends when stage 2 stops.  stage1Tol also
+% sets the design stage 2 starts from.  Per-stage budget: cfg.yukselMaxIters.
+cfg.stop.yuksel.stage1Tol  = 0.04;   % production: 0.01  (profile yuksel_practical_move01_tol001)
+cfg.stop.yuksel.stage2Tol  = 0.04;   % production: 0.01
+
+% Du-Olhoff: stops when ||drho||_2 < c*sqrt(NE/3200) (sec. 3.5 of the paper,
+% which gives no value for epsilon; c and the mesh scaling are this
+% reconstruction's, olh.config.epsilonForMesh).
+cfg.stop.olhoff.c          = 0.2;   % production: 0.05
+cfg.stop.olhoff.maxOuter   = 1000;   % production: 400   (preset runtime default; safety budget)
+
 % ---- Which methods -------------------------------------------------------
 cfg.methods = struct('proposed', true, 'yuksel', true, 'olhoff', true);
 
@@ -130,7 +159,7 @@ cfg.outputDir = '';                  % auto: examples/Performance/conference_ben
 % scaling is not an artifact of one host.  The label records the machine because
 % the quantity being reported is wall-clock time, which is a property of the
 % host as much as of the method.
-cfg.runLabel  = 'campaign_9mesh_r2_recompute_bio2heli';
+cfg.runLabel  = 'campaign_mac_convergence_corrected';
 
 % ---- Timing-accounting tolerances (predeclared, recorded in the artifacts) --
 cfg.timingTolAbs     = 1e-6;   % |T_total - (T1+T2+T_overhead)|, seconds
@@ -206,12 +235,22 @@ validateattributes(cfg.yukselMaxIters, {'numeric'}, ...
     {'scalar','integer','positive','finite'}, mfilename, 'cfg.yukselMaxIters');
 yukselBudgetTruncated = cfg.yukselMaxIters < yukselFrozenBudget;
 
+% The stopping rules.  The other two budgets follow the Yuksel rule above, read
+% from the same frozen sources; a changed tolerance leaves the run scientific
+% but not the production regime.
+validateStop(cfg.stop);
+budgetTruncated = yukselBudgetTruncated ...
+    || belowBudget(cfg.stop.proposed.maxIters, confbench_frozen_budget('proposed')) ...
+    || belowBudget(cfg.stop.olhoff.maxOuter, confbench_frozen_budget('olhoff'));
+cfg.productionStopRules = isempty(cfg.stop.proposed.tol) && isempty(cfg.stop.yuksel.stage1Tol) ...
+    && isempty(cfg.stop.yuksel.stage2Tol) && isempty(cfg.stop.olhoff.c);
+
 cfg.scientificEvidence  = isempty(cfg.maxOuterOverride) && all(elementCounts >= 3200) ...
-    && ~yukselBudgetTruncated;
+    && ~budgetTruncated;
 cfg.performanceCampaign = cfg.scientificEvidence && isequal(cfg.resolutions, CAMPAIGN_MESHES);
 
 if isempty(cfg.runLabel)
-    if ~isempty(cfg.maxOuterOverride) || yukselBudgetTruncated
+    if ~isempty(cfg.maxOuterOverride) || budgetTruncated
         cfg.runLabel = 'smoke';
     elseif cfg.performanceCampaign
         cfg.runLabel = 'campaign_9mesh';
@@ -219,6 +258,9 @@ if isempty(cfg.runLabel)
         cfg.runLabel = sprintf('preflight_%dx%d', cfg.resolutions(1,1), cfg.resolutions(1,2));
     else
         cfg.runLabel = sprintf('partial_%dmesh', size(cfg.resolutions,1));
+    end
+    if ~cfg.productionStopRules
+        cfg.runLabel = [cfg.runLabel '_stoprules'];
     end
 end
 if isempty(cfg.outputDir)
@@ -267,10 +309,12 @@ fprintf('  tables CSV/JSON/TeX  : %d / %d / %d\n', cfg.writeCSV, cfg.writeJSON, 
 fprintf('  outer budget override: %s\n', mat2str(cfg.maxOuterOverride));
 fprintf('  Yuksel stage budget  : %d (frozen %d)%s\n', cfg.yukselMaxIters, ...
     yukselFrozenBudget, budgetNote(cfg.yukselMaxIters, yukselFrozenBudget));
+fprintf('  stopping rules       : %s\n', stopSummary(cfg.stop));
 fprintf('  run label            : %s\n', cfg.runLabel);
 fprintf('  output directory     : %s\n', cfg.outputDir);
 fprintf('  DERIVED scientific_evidence  : %d\n', cfg.scientificEvidence);
 fprintf('  DERIVED performance_campaign : %d\n', cfg.performanceCampaign);
+fprintf('  DERIVED production_stop_rules: %d\n', cfg.productionStopRules);
 fprintf('  memory               : NOT MEASURED, NOT REPORTED\n\n');
 
 %% ============================================================
@@ -284,8 +328,14 @@ methodConfigs = cell(nRes, nMet);
 profileIds = cell(1, nMet);
 for m = 1:nMet
     for r = 1:nRes
+        stopM = cfg.stop.(methodKeys{m});
+        if strcmp(methodKeys{m}, 'yuksel')
+            % so the configuration printed and recorded carries the budget the
+            % run uses (confbench_run_case applies the same value)
+            stopM.maxIters = cfg.yukselMaxIters;
+        end
         [mc, pid] = confbench_method_config(methodKeys{m}, ...
-            cfg.resolutions(r,1), cfg.resolutions(r,2), cfg.outputDir);
+            cfg.resolutions(r,1), cfg.resolutions(r,2), cfg.outputDir, stopM);
         methodConfigs{r, m} = mc;
         if r == 1
             profileIds{m} = pid;
@@ -299,6 +349,9 @@ end
 fprintf('Frozen scientific settings bound for this run:\n');
 for m = 1:nMet
     fprintf('  %-30s %s\n', confbench_display_name(methodKeys{m}), profileIds{m});
+end
+if ~cfg.productionStopRules
+    fprintf('  ...with NON-PRODUCTION stopping rules: %s\n', stopSummary(cfg.stop));
 end
 printMethodSettings(methodKeys, methodConfigs);
 
@@ -573,6 +626,50 @@ elseif used < frozen
     s = '  TRUNCATED -- run is NOT scientific evidence';
 else
     s = '';
+end
+end
+
+function validateStop(stop)
+% Empty = production; anything else must be a usable tolerance or budget.
+tols = {stop.proposed.tol, stop.yuksel.stage1Tol, stop.yuksel.stage2Tol, stop.olhoff.c};
+names = {'proposed.tol', 'yuksel.stage1Tol', 'yuksel.stage2Tol', 'olhoff.c'};
+for k = 1:numel(tols)
+    if ~isempty(tols{k})
+        validateattributes(tols{k}, {'numeric'}, {'scalar','positive','finite'}, ...
+            mfilename, ['cfg.stop.' names{k}]);
+    end
+end
+budgets = {stop.proposed.maxIters, stop.olhoff.maxOuter};
+names = {'proposed.maxIters', 'olhoff.maxOuter'};
+for k = 1:numel(budgets)
+    if ~isempty(budgets{k})
+        validateattributes(budgets{k}, {'numeric'}, {'scalar','integer','positive','finite'}, ...
+            mfilename, ['cfg.stop.' names{k}]);
+    end
+end
+end
+
+function tf = belowBudget(used, frozen)
+tf = ~isempty(used) && used < frozen;
+end
+
+function s = stopSummary(stop)
+% "production", or every setting that differs from it.
+parts = {};
+meths = fieldnames(stop);
+for i = 1:numel(meths)
+    f = fieldnames(stop.(meths{i}));
+    for j = 1:numel(f)
+        v = stop.(meths{i}).(f{j});
+        if ~isempty(v)
+            parts{end+1} = sprintf('%s.%s = %g', meths{i}, f{j}, v); %#ok<AGROW>
+        end
+    end
+end
+if isempty(parts)
+    s = 'production';
+else
+    s = ['CHANGED: ' strjoin(parts, ', ')];
 end
 end
 

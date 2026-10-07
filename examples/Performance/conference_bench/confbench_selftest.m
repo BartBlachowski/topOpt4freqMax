@@ -66,7 +66,10 @@ try
     addpath(superseded, '-begin');
     refused = false; msg = '';
     try
-        olhoffcurrent_paths();
+        % Held like any caller must hold it: called without an output, the
+        % guard refuses before it ever checks the path.
+        gBad = olhoffcurrent_paths(); %#ok<NASGU>
+        clear gBad
     catch ME
         refused = strcmp(ME.identifier, 'olhoffcurrent_assert_dispatch:PathContaminated');
         msg = firstLine(ME.message);

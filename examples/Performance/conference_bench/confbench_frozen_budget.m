@@ -2,9 +2,10 @@ function n = confbench_frozen_budget(methodKey)
 %CONFBENCH_FROZEN_BUDGET  The frozen per-stage safety budget of a method.
 %
 %   n = CONFBENCH_FROZEN_BUDGET(methodKey) reads max_iters from the profile
-%   freeze manifest that CONFBENCH_METHOD_CONFIG reads, so the number the
-%   driver compares against is the frozen number itself and not a copy of it
-%   that can drift.
+%   freeze manifest that CONFBENCH_METHOD_CONFIG reads (Proposed, Yuksel), or
+%   the runtime default maxOuter of the benchmark's Olhoff preset, so the
+%   number the driver compares against is the frozen number itself and not a
+%   copy of it that can drift.
 %
 %   The manifest records this value's role explicitly:
 %
@@ -26,12 +27,15 @@ freezePath = fullfile(repo, 'examples', 'Performance', 'benchmark_profile', ...
 switch lower(char(string(methodKey)))
     case 'yuksel';                    field = 'yuksel_practical';
     case {'proposed', 'ourapproach'}; field = 'proposed_practical';
+    case 'olhoff'
+        % Not in this manifest: the Du-Olhoff budget is frozen by the named
+        % preset the benchmark runs (olhoffcurrent_presets.m, runtime default
+        % maxOuter), so it is read from there.
+        n = double(olhoffcurrent_preset(confbench_olhoff_preset()).runtimeDefaults.maxOuter);
+        return
     otherwise
         error('confbench_frozen_budget:UnknownMethod', ...
-            ['"%s" has no per-stage budget in the profile freeze manifest. ' ...
-             'The Du-Olhoff reconstruction is frozen by its named OlhoffCurrent ' ...
-             'preset (olhoffcurrent_presets.m, runtime default maxOuter), not by ' ...
-             'this manifest.'], methodKey);
+            '"%s" has no frozen safety budget.', methodKey);
 end
 
 freeze = jsondecode(fileread(freezePath));

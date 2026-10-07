@@ -1,13 +1,17 @@
-function [pngPath, figPath] = save_frequency_iteration_plot(freqIterOmega, approachName, nelx, nely, outDir)
+function [pngPath, figPath] = save_frequency_iteration_plot(freqIterOmega, approachName, nelx, nely, outDir, stageEnds)
 %SAVE_FREQUENCY_ITERATION_PLOT  Plot omega_1..omega_3 against outer iteration.
 %
 %   [pngPath, figPath] = SAVE_FREQUENCY_ITERATION_PLOT(freqIterOmega, approachName, nelx, nely, outDir)
+%   [pngPath, figPath] = SAVE_FREQUENCY_ITERATION_PLOT(..., stageEnds)
 %
 %   freqIterOmega : nIter x k matrix of circular frequencies [rad/s]; the first
 %                   three columns are plotted (missing columns are NaN-padded).
 %   approachName  : shown in the title as "<name> frequency history" and used in
 %                   the file names <name>_<nelx>x<nely>_freq_iterations.{png,fig}.
 %   outDir        : destination folder, created when missing.
+%   stageEnds     : optional; for a multi-stage method, the last iteration of
+%                   each stage but the final one.  A dashed line labelled
+%                   "stage s+1" is drawn after each.
 %
 %   Returns the written paths, or '' for a file that could not be written.
 %   Extracted from run_topopt_from_json so that runners whose solver is not
@@ -15,6 +19,9 @@ function [pngPath, figPath] = save_frequency_iteration_plot(freqIterOmega, appro
 
     pngPath = '';
     figPath = '';
+    if nargin < 6
+        stageEnds = [];
+    end
     if isempty(freqIterOmega)
         return;
     end
@@ -64,6 +71,12 @@ function [pngPath, figPath] = save_frequency_iteration_plot(freqIterOmega, appro
     for j = 1:3
         plot(ax, xIter, freqIterOmega(:,j), '-', 'LineWidth', 3.2, ...
             'Color', colors(j,:), 'DisplayName', sprintf('\\omega_{%d}', j));
+    end
+
+    for s = 1:numel(stageEnds)
+        xline(ax, stageEnds(s) + 0.5, '--', sprintf('stage %d', s + 1), ...
+            'Color', [0.35 0.35 0.35], 'LineWidth', 1.5, 'FontSize', 18, ...
+            'LabelVerticalAlignment', 'bottom', 'HandleVisibility', 'off');
     end
 
     xlabel(ax, 'Outer iteration', 'FontSize', 22);

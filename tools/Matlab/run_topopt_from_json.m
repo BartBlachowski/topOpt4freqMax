@@ -374,11 +374,25 @@ function [x, omega, tIter, nIter, mem_usage, nIterStage, telemetry] = run_topopt
                 assertPositive(runCfg.stage2_tol, 'optimization.yuksel.stage2_tol');
             end
 
+            % The solver keeps its per-iteration designs only alongside a mode
+            % history, so postprocessing.record_design_history requests a
+            % one-mode history when none is configured.  Both are filled outside
+            % the design update and leave the design path unchanged.
+            if postproc.recordDesignHistory
+                nHistModes = max(nHistModes, 1);
+            end
+
             [xPhysStage2, ~, info] = top99neo_inertial_freq( ...
                 nelx, nely, volfrac, penal, rmin_elem, ft, ftBC, eta, beta, move, ...
                 maxiter, stage1MaxIter, bcType, nHistModes, runCfg);
 
             x = xPhysStage2(:);
+            if postproc.recordDesignHistory
+                % Column k is the design AFTER the update of global iteration k
+                % (stage 1, then stage 2) -- not, as for ourApproach, the design
+                % analysed at iteration k.
+                designHistory = [info.stage1.xHist, info.stage2.xHist];
+            end
             if isfield(info, 'stage2') && isfield(info.stage2, 'omegaFinal') && ~isempty(info.stage2.omegaFinal)
                 omega = toVec3(info.stage2.omegaFinal(:));
             elseif isfield(info, 'stage2') && isfield(info.stage2, 'omegaHist') && ~isempty(info.stage2.omegaHist)
@@ -1828,7 +1842,8 @@ function postproc = parsePostprocessingBlock(cfg)
     end
 
     % Optional per-iteration physical density field (n_e x n_iter), returned as
-    % telemetry.design_history.  Reporting only; supported by ourApproach.
+    % telemetry.design_history.  Reporting only; supported by ourApproach and
+    % Yuksel.
     if hasFieldPath(cfg, {'postprocessing','record_design_history'})
         postproc.recordDesignHistory = parseBool( ...
             getFieldPath(cfg, {'postprocessing','record_design_history'}), ...

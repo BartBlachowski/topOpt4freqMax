@@ -48,13 +48,26 @@ yukselUsed   = yukselFrozen;
 if isfield(cfg, 'yukselMaxIters') && ~isempty(cfg.yukselMaxIters)
     yukselUsed = cfg.yukselMaxIters;
 end
+% The Proposed and Olhoff budgets of cfg.stop follow the same rule.
+proposedFrozen = confbench_frozen_budget('proposed');
+olhoffFrozen   = confbench_frozen_budget('olhoff');
+proposedUsed = stopValue(cfg, 'proposed', 'maxIters', proposedFrozen);
+olhoffUsed   = stopValue(cfg, 'olhoff', 'maxOuter', olhoffFrozen);
 ok = cfg.scientificEvidence == (isempty(cfg.maxOuterOverride) && all(NE >= 3200) ...
-    && yukselUsed >= yukselFrozen);
+    && yukselUsed >= yukselFrozen && proposedUsed >= proposedFrozen ...
+    && olhoffUsed >= olhoffFrozen);
 pre = add(pre, 'scientific_evidence derived from cfg, not declared', ok, ...
     sprintf(['scientific_evidence=%d (min NE = %d, floor 3200 = 160x20; override=%s; ' ...
-             'yuksel budget %d vs frozen %d)'], ...
+             'budgets used/frozen: yuksel %d/%d, proposed %d/%d, olhoff %d/%d)'], ...
         cfg.scientificEvidence, min(NE), mat2str(cfg.maxOuterOverride), ...
-        yukselUsed, yukselFrozen));
+        yukselUsed, yukselFrozen, proposedUsed, proposedFrozen, olhoffUsed, olhoffFrozen));
+if isfield(cfg, 'productionStopRules') && ~cfg.productionStopRules
+    % Like the other runtime overrides, cfg.stop is applied on top of the frozen
+    % configurations; the per-preset Olhoff assertions below check the preset.
+    pre = note(pre, ['stopping tolerances differ from production (cfg.stop): a valid ' ...
+        'run, but NOT the regime of the Table 1 campaign; the Olhoff assertions ' ...
+        'below check the production preset, the changed rule is applied on top']);
+end
 
 ok = ~cfg.performanceCampaign || cfg.scientificEvidence;
 pre = add(pre, 'a performance campaign is also scientific evidence', ok, ...
@@ -297,3 +310,11 @@ parts = arrayfun(@(i) sprintf('%dx%d', R(i,1), R(i,2)), 1:size(R,1), 'UniformOut
 s = strjoin(parts, ', ');
 end
 
+function v = stopValue(cfg, method, name, dflt)
+% A cfg.stop setting, or dflt when it is absent or empty (= production).
+v = dflt;
+if isfield(cfg, 'stop') && isfield(cfg.stop, method) && isfield(cfg.stop.(method), name) ...
+        && ~isempty(cfg.stop.(method).(name))
+    v = cfg.stop.(method).(name);
+end
+end

@@ -1,7 +1,22 @@
-function [mcfg, profileId, profile] = confbench_method_config(methodKey, nelx, nely, outputDir)
+function [mcfg, profileId, profile] = confbench_method_config(methodKey, nelx, nely, outputDir, stop)
 %CONFBENCH_METHOD_CONFIG  The frozen scientific configuration of one method.
 %
 %   [mcfg, profileId, profile] = CONFBENCH_METHOD_CONFIG(methodKey, nelx, nely, outputDir)
+%   [...] = CONFBENCH_METHOD_CONFIG(..., stop)
+%
+%   stop (optional) changes this method's stopping rule away from the frozen
+%   one; an absent or empty field keeps the frozen value.  It is the driver's
+%   cfg.stop.<method> (performance_comparison.m), where the production values
+%   are listed:
+%     olhoff    .c         c in ||drho||_2 < c*sqrt(NE/3200)
+%               .maxOuter  outer-iteration safety budget
+%     proposed  .tol       max|x - x_old| tolerance
+%               .maxIters  iteration safety budget
+%     yuksel    .stage1Tol, .stage2Tol   per-stage max|x - x_old| tolerances
+%               .maxIters  per-stage safety budget, both stages (the driver
+%                          passes cfg.yukselMaxIters)
+%   The returned configuration is the effective one, so everything that
+%   prints or hashes it reports the rule that actually runs.
 %
 %   The conference benchmark driver owns the RUN configuration -- which meshes,
 %   which methods, where the output goes.  It does NOT own the science.  Each
@@ -36,6 +51,9 @@ repo = fileparts(fileparts(fileparts(here)));
 freezePath = fullfile(repo, 'examples', 'Performance', 'benchmark_profile', 'profile_freeze_manifest.json');
 
 methodKey = lower(char(string(methodKey)));
+if nargin < 5 || isempty(stop)
+    stop = struct();
+end
 
 switch methodKey
     case 'olhoff'
@@ -45,7 +63,10 @@ switch methodKey
         % returns; confbench_run_case installs its own for the solve.
         guard = olhoffcurrent_paths(); %#ok<NASGU>
         preset = olhoffcurrent_preset(confbench_olhoff_preset());
-        cfg = olhoffcurrent_config(nelx, nely, 'Preset', preset.name);
+        stopArgs = {};
+        if hasValue(stop, 'c'); stopArgs = [stopArgs, {'StopToleranceFactor', stop.c}]; end
+        if hasValue(stop, 'maxOuter'); stopArgs = [stopArgs, {'MaxOuter', stop.maxOuter}]; end
+        cfg = olhoffcurrent_config(nelx, nely, 'Preset', preset.name, stopArgs{:});
 
         % mcfg carries BOTH renderings.  The canonical cfg is the
         % configuration; the flat view exists only so that checks and manifests
@@ -56,6 +77,10 @@ switch methodKey
         mcfg.nely = nely;
         mcfg.canonical = cfg;
         mcfg.olhoff_preset = preset.name;
+        % Forwarded by confbench_run_case to olhoffcurrent_run, which resolves
+        % the configuration again for the solve; empty = the preset's own.
+        mcfg.olhoff_stop_factor = valueOr(stop, 'c', []);
+        mcfg.olhoff_max_outer = valueOr(stop, 'maxOuter', []);
 
         profileId = preset.name;
         profile = struct( ...
@@ -105,6 +130,20 @@ switch methodKey
 end
 
 % ---- dispatched methods only, from here down ---------------------------
+if hasValue(stop, 'tol'); mcfg.optimization.convergence_tol = stop.tol; end
+if hasValue(stop, 'maxIters')
+    mcfg.optimization.max_iters = stop.maxIters;
+    if isfield(mcfg.optimization, 'yuksel')
+        mcfg.optimization.yuksel.stage1_max_iters = stop.maxIters;   % per stage
+    end
+end
+if hasValue(stop, 'stage1Tol'); mcfg.optimization.yuksel.stage1_tol = stop.stage1Tol; end
+if hasValue(stop, 'stage2Tol')
+    % stage2_tol is the rule Yuksel applies; convergence_tol mirrors it in
+    % every frozen configuration and is kept equal to it.
+    mcfg.optimization.yuksel.stage2_tol = stop.stage2Tol;
+    mcfg.optimization.convergence_tol = stop.stage2Tol;
+end
 mcfg.meta.profile_id = profileId;
 mcfg.meta.frozen_by = 'examples/Performance/benchmark_profile/profile_freeze_manifest.json';
 mcfg.meta.source_implementation = char(profile.source_implementation);
@@ -115,4 +154,12 @@ mcfg.postprocessing.save_snapshot_image = false;
 if nargin >= 4 && ~isempty(outputDir)
     mcfg.meta.output_dir = char(outputDir);
 end
+end
+
+function tf = hasValue(s, name)
+tf = isfield(s, name) && ~isempty(s.(name));
+end
+
+function v = valueOr(s, name, default)
+if hasValue(s, name); v = s.(name); else; v = default; end
 end

@@ -21,6 +21,13 @@ function [cfg, info] = olhoffcurrent_config(nelx, nely, varargin)
 %                 historical stage-exhaustion diagnostic)  outer iteration cap.
 %                 A run that reaches it is CAP_HIT and is NOT converged.  A
 %                 RUNTIME override, not a different preset.
+%     'StopToleranceFactor' (default [] = the preset's rule)  c in the outer
+%                 stop test ||drho||_2 < c*sqrt(NE/3200).  The preset's
+%                 meshScaled rule is the same law with c = 0.05
+%                 (olh.config.epsilonForMesh); the paper gives no value.  A
+%                 value here resolves stop.toleranceRule = 'explicit', so the
+%                 configuration hash records the change.  A RUNTIME override,
+%                 not a different preset.
 %     'Diagnostics' (default false)  per-iteration recorder.  Purely additive
 %                 and proved bitwise inert, but it costs measurable time per
 %                 outer iteration, so benchmarks leave it off.
@@ -36,6 +43,8 @@ p.addRequired('nelx', @(v) isnumeric(v) && isscalar(v) && v > 0 && mod(v,1) == 0
 p.addRequired('nely', @(v) isnumeric(v) && isscalar(v) && v > 0 && mod(v,1) == 0);
 p.addParameter('Preset', '', @(v) ischar(v) || isstring(v));
 p.addParameter('MaxOuter', [], @(v) isnumeric(v) && isscalar(v) && v >= 1);
+p.addParameter('StopToleranceFactor', [], ...
+    @(v) isempty(v) || (isnumeric(v) && isscalar(v) && isfinite(v) && v > 0));
 p.addParameter('Diagnostics', false, @(v) islogical(v) && isscalar(v));
 p.addParameter('Name', '', @(v) ischar(v) || isstring(v));
 p.parse(nelx, nely, varargin{:});
@@ -65,10 +74,18 @@ if isempty(name); name = sprintf('OLHOFF_CURRENT_%dx%d', nelx, nely); end
 maxOuter = info.runtimeDefaults.maxOuter;
 if ~isempty(opt.MaxOuter); maxOuter = double(opt.MaxOuter); end
 
+% Applied after the preset's own overrides, so it wins over them.
+stopArgs = {};
+if ~isempty(opt.StopToleranceFactor)
+    stopArgs = {'stop.toleranceRule', 'explicit', ...
+                'stop.tolerance', double(opt.StopToleranceFactor)*sqrt(nelx*nely/3200)};
+end
+
 cfg = olh.config.resolve(info.upstreamPreset, ...
     'domain.mesh.nelx',    nelx, ...
     'domain.mesh.nely',    nely, ...
     info.overrides{:}, ...
+    stopArgs{:}, ...
     'runtime.maxOuter',    maxOuter, ...
     'runtime.singleThread', true, ...
     'runtime.diagnostics', logical(opt.Diagnostics), ...
