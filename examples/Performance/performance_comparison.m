@@ -117,7 +117,7 @@ cfg.stop.yuksel.stage2Tol  = 0.04;   % production: 0.01
 % Du-Olhoff: stops when ||drho||_2 < c*sqrt(NE/3200) (sec. 3.5 of the paper,
 % which gives no value for epsilon; c and the mesh scaling are this
 % reconstruction's, olh.config.epsilonForMesh).
-cfg.stop.olhoff.c          = 0.2;   % production: 0.05
+cfg.stop.olhoff.c          = 0.08;   % production: 0.05
 cfg.stop.olhoff.maxOuter   = 1000;   % production: 400   (preset runtime default; safety budget)
 
 % ---- Which methods -------------------------------------------------------
@@ -159,7 +159,7 @@ cfg.outputDir = '';                  % auto: examples/Performance/conference_ben
 % scaling is not an artifact of one host.  The label records the machine because
 % the quantity being reported is wall-clock time, which is a property of the
 % host as much as of the method.
-cfg.runLabel  = 'campaign_mac_convergence_corrected';
+cfg.runLabel  = 'campaign_mac_convergence_corrected_olhoff_08';
 
 % ---- Timing-accounting tolerances (predeclared, recorded in the artifacts) --
 cfg.timingTolAbs     = 1e-6;   % |T_total - (T1+T2+T_overhead)|, seconds

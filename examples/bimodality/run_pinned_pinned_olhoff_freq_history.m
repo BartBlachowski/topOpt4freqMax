@@ -56,7 +56,7 @@
 nelx = 800;
 nely = 100;
 save_every_it = 25;   % topology snapshot every save_every_it iterations (+ last); 0 = none
-stop_c = 0.05;        % stop when ||drho||_2 < stop_c*sqrt(NE/3200); 0.05 = Table 1
+stop_c = 0.08;        % stop when ||drho||_2 < stop_c*sqrt(NE/3200); 0.05 = Table 1
 max_iter = [];        % outer-iteration cap; [] = preset default (400)
 
 % Release the path guard of an earlier run in this session first: overwriting
