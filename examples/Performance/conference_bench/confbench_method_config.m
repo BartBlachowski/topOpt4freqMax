@@ -8,7 +8,11 @@ function [mcfg, profileId, profile] = confbench_method_config(methodKey, nelx, n
 %   one; an absent or empty field keeps the frozen value.  It is the driver's
 %   cfg.stop.<method> (performance_comparison.m), where the production values
 %   are listed:
-%     olhoff    .c         c in ||drho||_2 < c*sqrt(NE/3200)
+%     olhoff    .useC      true (default): the method's own rule,
+%                          ||drho||_2 < c*sqrt(NE/3200); false: the Proposed
+%                          rule, max|drho| <= tol, no mesh scaling, no guards
+%               .c         c in ||drho||_2 < c*sqrt(NE/3200)   (useC = true)
+%               .tol       max|drho| tolerance                 (useC = false)
 %               .maxOuter  outer-iteration safety budget
 %     proposed  .tol       max|x - x_old| tolerance
 %               .maxIters  iteration safety budget
@@ -63,8 +67,21 @@ switch methodKey
         % returns; confbench_run_case installs its own for the solve.
         guard = olhoffcurrent_paths(); %#ok<NASGU>
         preset = olhoffcurrent_preset(confbench_olhoff_preset());
+        % useC = false switches to the Proposed rule, which needs .tol; .c is
+        % then ignored, as .tol is when useC = true.
+        stopFactor = []; stopMaxTol = [];
+        if valueOr(stop, 'useC', true)
+            stopFactor = valueOr(stop, 'c', []);
+        else
+            if ~hasValue(stop, 'tol')
+                error('confbench_method_config:OlhoffTolRequired', ...
+                    'stop.olhoff.useC = false requires stop.olhoff.tol.');
+            end
+            stopMaxTol = stop.tol;
+        end
         stopArgs = {};
-        if hasValue(stop, 'c'); stopArgs = [stopArgs, {'StopToleranceFactor', stop.c}]; end
+        if ~isempty(stopFactor); stopArgs = [stopArgs, {'StopToleranceFactor', stopFactor}]; end
+        if ~isempty(stopMaxTol); stopArgs = [stopArgs, {'StopMaxChangeTolerance', stopMaxTol}]; end
         if hasValue(stop, 'maxOuter'); stopArgs = [stopArgs, {'MaxOuter', stop.maxOuter}]; end
         cfg = olhoffcurrent_config(nelx, nely, 'Preset', preset.name, stopArgs{:});
 
@@ -79,7 +96,8 @@ switch methodKey
         mcfg.olhoff_preset = preset.name;
         % Forwarded by confbench_run_case to olhoffcurrent_run, which resolves
         % the configuration again for the solve; empty = the preset's own.
-        mcfg.olhoff_stop_factor = valueOr(stop, 'c', []);
+        mcfg.olhoff_stop_factor = stopFactor;
+        mcfg.olhoff_stop_max_change_tol = stopMaxTol;
         mcfg.olhoff_max_outer = valueOr(stop, 'maxOuter', []);
 
         profileId = preset.name;

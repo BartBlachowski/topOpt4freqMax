@@ -28,6 +28,16 @@ function [cfg, info] = olhoffcurrent_config(nelx, nely, varargin)
 %                 value here resolves stop.toleranceRule = 'explicit', so the
 %                 configuration hash records the change.  A RUNTIME override,
 %                 not a different preset.
+%     'StopMaxChangeTolerance' (default [] = off)  replaces the outer stop by
+%                 the Proposed method's rule: stop at the first outer
+%                 iteration with max|drho| <= tol, on the design variable, with
+%                 no mesh scaling and no guards (stop.norm = 'max',
+%                 stop.rule = 'designChange', every stop.guards.* off).  The
+%                 solver tests max|drho| < stop.tolerance, so stop.tolerance is
+%                 set to the next double above tol, which makes the test
+%                 exactly max|drho| <= tol.  Cannot be combined with
+%                 'StopToleranceFactor'.  A RUNTIME override, not a different
+%                 preset.
 %     'Diagnostics' (default false)  per-iteration recorder.  Purely additive
 %                 and proved bitwise inert, but it costs measurable time per
 %                 outer iteration, so benchmarks leave it off.
@@ -44,6 +54,8 @@ p.addRequired('nely', @(v) isnumeric(v) && isscalar(v) && v > 0 && mod(v,1) == 0
 p.addParameter('Preset', '', @(v) ischar(v) || isstring(v));
 p.addParameter('MaxOuter', [], @(v) isnumeric(v) && isscalar(v) && v >= 1);
 p.addParameter('StopToleranceFactor', [], ...
+    @(v) isempty(v) || (isnumeric(v) && isscalar(v) && isfinite(v) && v > 0));
+p.addParameter('StopMaxChangeTolerance', [], ...
     @(v) isempty(v) || (isnumeric(v) && isscalar(v) && isfinite(v) && v > 0));
 p.addParameter('Diagnostics', false, @(v) islogical(v) && isscalar(v));
 p.addParameter('Name', '', @(v) ischar(v) || isstring(v));
@@ -76,9 +88,27 @@ if ~isempty(opt.MaxOuter); maxOuter = double(opt.MaxOuter); end
 
 % Applied after the preset's own overrides, so it wins over them.
 stopArgs = {};
+if ~isempty(opt.StopToleranceFactor) && ~isempty(opt.StopMaxChangeTolerance)
+    error('olhoffcurrent_config:StopRuleConflict', ...
+        'Give either ''StopToleranceFactor'' or ''StopMaxChangeTolerance'', not both.');
+end
 if ~isempty(opt.StopToleranceFactor)
     stopArgs = {'stop.toleranceRule', 'explicit', ...
                 'stop.tolerance', double(opt.StopToleranceFactor)*sqrt(nelx*nely/3200)};
+end
+if ~isempty(opt.StopMaxChangeTolerance)
+    % olhoffSolve tests max|drho| < stop.tolerance.  For a positive double tol,
+    % x < tol + eps(tol) holds exactly when x <= tol, which is the Proposed
+    % method's test (topopt_freq: stop when max|x - x_old| <= conv_tol).
+    tolMax = double(opt.StopMaxChangeTolerance);
+    stopArgs = {'stop.rule',                      'designChange', ...
+                'stop.norm',                      'max', ...
+                'stop.toleranceRule',             'explicit', ...
+                'stop.tolerance',                 tolMax + eps(tolMax), ...
+                'stop.guards.settledMove',        false, ...
+                'stop.guards.boxInactiveFraction', 0, ...
+                'stop.guards.ladderExhausted',    false, ...
+                'stop.guards.maxDesignChange',    false};
 end
 
 cfg = olh.config.resolve(info.upstreamPreset, ...

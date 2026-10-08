@@ -116,6 +116,9 @@ args = {'Preset', mcfg.olhoff_preset};
 if ~isempty(getOpt(mcfg, 'olhoff_stop_factor', []))
     args = [args, {'StopToleranceFactor', double(mcfg.olhoff_stop_factor)}];
 end
+if ~isempty(getOpt(mcfg, 'olhoff_stop_max_change_tol', []))
+    args = [args, {'StopMaxChangeTolerance', double(mcfg.olhoff_stop_max_change_tol)}];
+end
 % max_outer_override (smoke tests) takes precedence over a changed budget.
 if isfield(opts, 'max_outer_override') && ~isempty(opts.max_outer_override)
     args = [args, {'MaxOuter', double(opts.max_outer_override)}];

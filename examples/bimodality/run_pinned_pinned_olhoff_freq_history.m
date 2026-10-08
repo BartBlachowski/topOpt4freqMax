@@ -40,6 +40,11 @@
 %   omega_1 has settled; at 160x20 stop_c >= 0.225 stops before the topology
 %   has settled.
 %
+%   use_c = false replaces this rule by the proposed method's: stop when
+%   max|drho| <= stop_tol on the design variable, with no mesh scaling and no
+%   guards (olhoffcurrent_config 'StopMaxChangeTolerance'); stop_c is then
+%   ignored, as stop_tol is when use_c = true.
+%
 %   Every save_every_it-th iterate (and the last one) is also rendered, so the
 %   topology can be compared with the frequency plateau of the history; the
 %   snapshot of outer iteration k is the design whose omega_1..3 are plotted
@@ -56,7 +61,9 @@
 nelx = 800;
 nely = 100;
 save_every_it = 25;   % topology snapshot every save_every_it iterations (+ last); 0 = none
-stop_c = 0.08;        % stop when ||drho||_2 < stop_c*sqrt(NE/3200); 0.05 = Table 1
+use_c = false;         % true: stop on stop_c (Table 1 rule); false: stop on stop_tol (proposed rule)
+stop_c = 0.08;        % stop when ||drho||_2 < stop_c*sqrt(NE/3200); 0.05 = Table 1  (use_c = true)
+stop_tol = 0.02;      % stop when max|drho| <= stop_tol                              (use_c = false)
 max_iter = [];        % outer-iteration cap; [] = preset default (400)
 
 % Release the path guard of an earlier run in this session first: overwriting
@@ -84,8 +91,14 @@ cfgArgs = {'Preset', preset, 'Diagnostics', save_every_it > 0};
 if ~isempty(max_iter)
     cfgArgs = [cfgArgs, {'MaxOuter', max_iter}];
 end
+if use_c
+    cfgArgs = [cfgArgs, {'StopToleranceFactor', stop_c}];   % eps = stop_c*sqrt(NE/3200)
+    stopDesc = sprintf('stop_c = %g (||drho||_2 < %.4g)', stop_c, stop_c*sqrt(nelx*nely/3200));
+else
+    cfgArgs = [cfgArgs, {'StopMaxChangeTolerance', stop_tol}];
+    stopDesc = sprintf('stop_tol = %g (max|drho| <= %g)', stop_tol, stop_tol);
+end
 cfg = olhoffcurrent_config(nelx, nely, cfgArgs{:});
-cfg.stop.tolerance = stop_c*sqrt(nelx*nely/3200);   % the law of olh.config.epsilonForMesh
 res = olhoffSolve(cfg);
 
 omegaHist = double(res.hist.omega).';        % nOuter x Jcalc, rad/s
@@ -112,6 +125,6 @@ if save_every_it > 0
 end
 
 w = double(res.omega(:));
-fprintf(['Olhoff (%s) pinned-pinned %dx%d, stop_c = %g (eps = %.4g): %s after %d outer ' ...
+fprintf(['Olhoff (%s) pinned-pinned %dx%d, %s: %s after %d outer ' ...
     'iterations, omega_1..3 = %.2f, %.2f, %.2f rad/s\n'], ...
-    preset, nelx, nely, stop_c, cfg.stop.tolerance, res.status, size(omegaHist, 1), w(1), w(2), w(3));
+    preset, nelx, nely, stopDesc, res.status, size(omegaHist, 1), w(1), w(2), w(3));

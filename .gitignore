@@ -111,3 +111,6 @@ codegen/
 
 # Paths above that point into development/ were re-pointed by the 2026-09-14
 # repository cleanup (development/repository_cleanup/MIGRATION_MANIFEST.tsv).
+
+# SAND heat-sink reproduction outputs (large npy/png per case; summaries are regenerable)
+examples/sand/results/

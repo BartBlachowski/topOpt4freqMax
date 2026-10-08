@@ -114,10 +114,14 @@ cfg.stop.proposed.maxIters = [];   % production: 2000  (safety budget)
 cfg.stop.yuksel.stage1Tol  = 0.04;   % production: 0.01  (profile yuksel_practical_move01_tol001)
 cfg.stop.yuksel.stage2Tol  = 0.04;   % production: 0.01
 
-% Du-Olhoff: stops when ||drho||_2 < c*sqrt(NE/3200) (sec. 3.5 of the paper,
-% which gives no value for epsilon; c and the mesh scaling are this
-% reconstruction's, olh.config.epsilonForMesh).
-cfg.stop.olhoff.c          = 0.08;   % production: 0.05
+% Du-Olhoff.  useC = true (production): stops when ||drho||_2 < c*sqrt(NE/3200)
+% (sec. 3.5 of the paper, which gives no value for epsilon; c and the mesh
+% scaling are this reconstruction's, olh.config.epsilonForMesh); tol is ignored.
+% useC = false: the Proposed rule instead -- stops when max|drho| <= tol on the
+% design variable, no mesh scaling and no guards; c is ignored.
+cfg.stop.olhoff.useC       = true;   % production: true
+cfg.stop.olhoff.c          = 0.08;   % production: 0.05  (useC = true)
+cfg.stop.olhoff.tol        = 0.04;   % no production value (useC = false)
 cfg.stop.olhoff.maxOuter   = 1000;   % production: 400   (preset runtime default; safety budget)
 
 % ---- Which methods -------------------------------------------------------
@@ -243,7 +247,7 @@ budgetTruncated = yukselBudgetTruncated ...
     || belowBudget(cfg.stop.proposed.maxIters, confbench_frozen_budget('proposed')) ...
     || belowBudget(cfg.stop.olhoff.maxOuter, confbench_frozen_budget('olhoff'));
 cfg.productionStopRules = isempty(cfg.stop.proposed.tol) && isempty(cfg.stop.yuksel.stage1Tol) ...
-    && isempty(cfg.stop.yuksel.stage2Tol) && isempty(cfg.stop.olhoff.c);
+    && isempty(cfg.stop.yuksel.stage2Tol) && cfg.stop.olhoff.useC && isempty(cfg.stop.olhoff.c);
 
 cfg.scientificEvidence  = isempty(cfg.maxOuterOverride) && all(elementCounts >= 3200) ...
     && ~budgetTruncated;
@@ -631,8 +635,13 @@ end
 
 function validateStop(stop)
 % Empty = production; anything else must be a usable tolerance or budget.
-tols = {stop.proposed.tol, stop.yuksel.stage1Tol, stop.yuksel.stage2Tol, stop.olhoff.c};
-names = {'proposed.tol', 'yuksel.stage1Tol', 'yuksel.stage2Tol', 'olhoff.c'};
+validateattributes(stop.olhoff.useC, {'logical'}, {'scalar'}, mfilename, 'cfg.stop.olhoff.useC');
+if ~stop.olhoff.useC && isempty(stop.olhoff.tol)
+    error('performance_comparison:OlhoffTolRequired', ...
+        'cfg.stop.olhoff.useC = false requires cfg.stop.olhoff.tol (it has no production value).');
+end
+tols = {stop.proposed.tol, stop.yuksel.stage1Tol, stop.yuksel.stage2Tol, stop.olhoff.c, stop.olhoff.tol};
+names = {'proposed.tol', 'yuksel.stage1Tol', 'yuksel.stage2Tol', 'olhoff.c', 'olhoff.tol'};
 for k = 1:numel(tols)
     if ~isempty(tols{k})
         validateattributes(tols{k}, {'numeric'}, {'scalar','positive','finite'}, ...
@@ -654,13 +663,22 @@ tf = ~isempty(used) && used < frozen;
 end
 
 function s = stopSummary(stop)
-% "production", or every setting that differs from it.
+% "production", or every setting that differs from it.  The Olhoff field the
+% useC switch leaves unused is not reported.
 parts = {};
+if ~stop.olhoff.useC
+    parts{end+1} = 'olhoff.useC = false';
+end
 meths = fieldnames(stop);
 for i = 1:numel(meths)
     f = fieldnames(stop.(meths{i}));
     for j = 1:numel(f)
         v = stop.(meths{i}).(f{j});
+        if strcmp(meths{i}, 'olhoff') && (strcmp(f{j}, 'useC') ...
+                || (stop.olhoff.useC && strcmp(f{j}, 'tol')) ...
+                || (~stop.olhoff.useC && strcmp(f{j}, 'c')))
+            continue
+        end
         if ~isempty(v)
             parts{end+1} = sprintf('%s.%s = %g', meths{i}, f{j}, v); %#ok<AGROW>
         end
