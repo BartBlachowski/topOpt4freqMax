@@ -121,6 +121,22 @@ _DYNAMIC_POST_KEYS = {
 _DYNAMIC_LOAD_TYPES = {"semi_harmonic", "harmonic"}
 
 
+def _require_native_stop_criterion(cfg: dict) -> None:
+    """optimization.stop_criterion: the Python ports implement only "max_change".
+
+    "relative_l2_change" (||x - x_old||_2 / ||x_old||_2) is implemented by the
+    MATLAB dispatcher only; refusing it here keeps a shared JSON task from
+    silently running a different stopping rule in Python.
+    """
+    if not has_field_path(cfg, ["optimization", "stop_criterion"]):
+        return
+    crit = str(get_field_path(cfg, ["optimization", "stop_criterion"])).strip().lower()
+    if crit != "max_change":
+        raise NotImplementedError(
+            f'optimization.stop_criterion "{crit}" is implemented by the MATLAB '
+            'dispatcher only; the Python ports stop on "max_change".')
+
+
 def _map_supports_to_code(supports: list[dict]) -> str:
     """Collapse hinge/clamp edge supports to the legacy support code."""
     left_type = ""
@@ -250,6 +266,7 @@ def _run_elastic2d(cfg: dict) -> tuple[np.ndarray, np.ndarray, float, int]:
     move     = req_num(cfg, ["optimization", "move_limit"],        "optimization.move_limit")
     max_iters = req_int(cfg, ["optimization", "max_iters"],        "optimization.max_iters")
     conv_tol  = req_num(cfg, ["optimization", "convergence_tol"],  "optimization.convergence_tol")
+    _require_native_stop_criterion(cfg)
 
     filter_type   = req_str(cfg, ["optimization", "filter", "type"],         "optimization.filter.type").lower()
     filter_radius = req_num(cfg, ["optimization", "filter", "radius"],        "optimization.filter.radius")
@@ -440,6 +457,7 @@ def run_topopt_from_json(json_input: str | dict) -> tuple[np.ndarray, np.ndarray
     move = req_num(cfg, ["optimization", "move_limit"], "optimization.move_limit")
     max_iters = req_int(cfg, ["optimization", "max_iters"], "optimization.max_iters")
     conv_tol = req_num(cfg, ["optimization", "convergence_tol"], "optimization.convergence_tol")
+    _require_native_stop_criterion(cfg)
 
     filter_type = req_str(cfg, ["optimization", "filter", "type"], "optimization.filter.type").lower()
     filter_radius = req_num(cfg, ["optimization", "filter", "radius"], "optimization.filter.radius")

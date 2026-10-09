@@ -28,6 +28,11 @@
 %   stops at iteration 42, after the topology has frozen.  Avoid 0.02: at
 %   320x40 conv_tol = 0.019 stops at 98 and 0.020 at 47.
 %
+%   stop_criterion = 'relative_l2_change' replaces that rule by
+%   ||x - x_old||_2/||x_old||_2 < rel_tol on the same raw design field
+%   (optimization.stop_criterion); conv_tol is then ignored, as rel_tol is
+%   with 'max_change'.
+%
 %   Every save_every_it-th iterate (and the last one) is also rendered, so the
 %   topology can be compared with the frequency plateau of the history; the
 %   snapshot of iteration k is the design whose omega_1..3 are plotted at k.
@@ -41,6 +46,8 @@ nely = 100;
 save_every_it = 25;   % topology snapshot every save_every_it iterations (+ last); 0 = none
 conv_tol = 0.01;      % stop when max|x - x_old| <= conv_tol; 0.01 = Table 1
 conv_tol = 0.04;	
+stop_criterion = 'max_change';   % 'max_change' (Table 1 rule, conv_tol) | 'relative_l2_change' (rel_tol)
+rel_tol = 1e-3;       % stop when ||x - x_old||_2/||x_old||_2 < rel_tol; no calibrated value
 max_iter = [];        % iteration cap; [] = frozen profile value (2000)
 
 here = fileparts(mfilename('fullpath'));
@@ -52,7 +59,18 @@ addpath(fullfile(repo, 'examples', 'Performance', 'benchmark_profile'));
 [cfg, profileId] = confbench_method_config('proposed', nelx, nely);
 cfg.optimization.approach = 'OurApproach';
 cfg.postprocessing.record_design_history = true;
-cfg.optimization.convergence_tol = conv_tol;
+switch stop_criterion
+    case 'max_change'
+        cfg.optimization.convergence_tol = conv_tol;
+        stopDesc = sprintf('conv_tol = %g', conv_tol);
+    case 'relative_l2_change'
+        cfg.optimization.stop_criterion = stop_criterion;
+        cfg.optimization.convergence_tol = rel_tol;
+        stopDesc = sprintf('rel_tol = %g (||dx||_2/||x||_2)', rel_tol);
+    otherwise
+        error('stop_criterion must be ''max_change'' or ''relative_l2_change'' (got ''%s'').', ...
+            stop_criterion);
+end
 if ~isempty(max_iter)
     cfg.optimization.max_iters = max_iter;
 end
@@ -69,7 +87,7 @@ wFinal = e1_structural_omegas(x, nelx, nely, 3);
 assert(abs(wFinal(1) - ev.selected_omega_raw_E1) <= 1e-8*ev.selected_omega_raw_E1, ...
     'e1_structural_omegas disagrees with study_evaluate_design.');
 
-fprintf(['OurApproach (%s) pinned-pinned %dx%d, conv_tol = %g: %d iterations (%s); E1 structural ' ...
+fprintf(['OurApproach (%s) pinned-pinned %dx%d, %s: %d iterations (%s); E1 structural ' ...
     'omega_1..3 of the last iterate = %.2f, %.2f, %.2f rad/s; final design E1 omega_1 = %.2f rad/s\n'], ...
-    profileId, nelx, nely, conv_tol, nIter, telemetry.stopping.stop_reason, omegaE1(end,:), ...
+    profileId, nelx, nely, stopDesc, nIter, telemetry.stopping.stop_reason, omegaE1(end,:), ...
     ev.selected_omega_raw_E1);

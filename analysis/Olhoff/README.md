@@ -67,7 +67,9 @@ olh.config.describe(cfg);               % the mathematics, in scientific terms,
 
 ## 3. Presets — one shared solver, named formulations
 
-The solver in `+impl/` is byte-identical to upstream Olhoff `253069`. Scientific
+The solver in `+impl/` is byte-identical to upstream Olhoff `253069` except for one
+local, default-off option, the relative-increment stop `stop.norm = 'relativeL2'`
+(2026-10-08; `PROVENANCE.md` §7). Scientific
 behaviour is selected by an **explicitly named preset**
 ([`olhoffcurrent_presets.m`](olhoffcurrent_presets.m)); nothing is selected by
 editing the solver.
@@ -181,7 +183,7 @@ test_pedersen_adaptive_units() % adaptive move-box rule and Pedersen stiffness l
 
 | Path | What |
 |---|---|
-| `+impl/` | the promoted implementation, 79 files, byte-identical to upstream `253069` (no adaptations) |
+| `+impl/` | the promoted implementation, 79 files, byte-identical to upstream `253069` except five files carrying the default-off `relativeL2` stop (PROVENANCE.md §7) |
 | `+impl/architecture/+olh/` | the canonical configuration package: schema, validation, presets |
 | `+impl/architecture/olhoffSolve.m` | the canonical solver — branches on no experiment identifier |
 | `+impl/architecture/docs/` | upstream's configuration reference, presets, terminology, field-level provenance |

@@ -71,8 +71,10 @@ hist = struct('omega',[],'N',[],'beta',[],'nInner',[],'dxOuter',[], ...
               'tOuter',[]);
 % Additive per-iteration diagnostics kept OUT of hist so that the anchor digests
 % over hist stay bitwise: Mnd = 4*mean(rho.*(1-rho)) after the update (grey
-% measure), moveMean = mean of the per-element box (adaptive move policy).
-aux = struct('Mnd',[],'moveMean',[]);
+% measure), moveMean = mean of the per-element box (adaptive move policy),
+% dxRel = ||drho||_2/||x||_2 with x the design variable before the update (the
+% stop.norm = 'relativeL2' metric, recorded whatever the norm in force).
+aux = struct('Mnd',[],'moveMean',[],'dxRel',[]);
 log = {};
 cumInner = 0;
 wantDiag = g('runtime.diagnostics');
@@ -105,6 +107,7 @@ guardMaxChange= g('stop.guards.maxDesignChange');
 anyStopGuard  = guardLadder || guardMaxChange;
 tolOuter      = g('stop.tolerance');
 stopNormL2    = strcmp(g('stop.norm'),'l2');
+stopNormRel   = strcmp(g('stop.norm'),'relativeL2');
 % ---- the stage-exhaustion controller, if selected ------------------------
 % Two INDEPENDENT switches, both defaulting to the historical behaviour, so a
 % configuration that names neither is bitwise the solver that existed before:
@@ -372,6 +375,10 @@ for outer = 1:maxOuter
     % Under projection the update is applied to the DESIGN VARIABLE z (drho
     % holds dz), and the physical density is recomputed from the map so that
     % hist.vol records the post-update PHYSICAL volume.
+    % ||x||_2 of the design variable the increment is applied to (z under
+    % projection, rho without), taken BEFORE the update: the denominator of the
+    % relativeL2 metric.  Read only; nothing below depends on it otherwise.
+    if useProj, xPrevNorm = norm(z); else, xPrevNorm = norm(rho); end
     if useProj
         z   = min(1, max(0, z + drho));
         rhoPrev = rho;
@@ -388,6 +395,7 @@ for outer = 1:maxOuter
     % hist.dxPhys2.
     dxOuter = max(abs(drho));
     dxNorm2 = norm(drho);
+    dxRel   = dxNorm2/max(xPrevNorm, realmin);
 
     if wantDiag
         dg.drho{end+1}  = drho;
@@ -412,6 +420,7 @@ for outer = 1:maxOuter
         end
     end
     aux.Mnd(outer)       = 4*mean(rho.*(1-rho));
+    aux.dxRel(outer)     = dxRel;
     hist.omega(:,outer)  = w(1:min(Jcalc,numel(w)));
     hist.N(outer)        = N;
     hist.beta(outer)     = st.beta;
@@ -470,9 +479,12 @@ for outer = 1:maxOuter
     % Sec. 3.5.1 tests "the norm of the vector drho ... less than a small,
     % predefined value epsilon".  The norm is unqualified; l2 is the natural
     % reading and 'max' is kept as a labelled alternative.  epsilon itself is
-    % unstated and is a per-run recorded parameter.
-    if stopNormL2, convOuter = dxNorm2 < tolOuter;
-    else,          convOuter = dxOuter < tolOuter;
+    % unstated and is a per-run recorded parameter.  'relativeL2' divides the l2
+    % norm by ||x||_2 of the design before the update (a later modification,
+    % not the paper's test; olh.config.validate keeps it off the absolute scales).
+    if stopNormL2,      convOuter = dxNorm2 < tolOuter;
+    elseif stopNormRel, convOuter = dxRel   < tolOuter;
+    else,               convOuter = dxOuter < tolOuter;
     end
 
     % ---- guard: the metric may only be believed on a settled move -------

@@ -140,7 +140,7 @@ The evidence for each letter is in `SCIENTIFIC_CONFIG_PROVENANCE.md`.
 | Field | Type | Default | Admissible | Class | Meaning |
 |---|---|---|---|---|---|
 | `stop.rule` | enum | `'designChange'` | `designChange`, `stageExhaustion` | C | what admits outer convergence: the sec. 3.5.1 design-increment test with its guards, or the frozen two-branch exhaustion rule at the last move level |
-| `stop.norm` | enum | `'l2'` | `l2`, `max` | B | sec. 3.5.1 writes "the norm" unqualified; l2 is the natural reading |
+| `stop.norm` | enum | `'l2'` | `l2`, `max`, `relativeL2` | B | sec. 3.5.1 writes "the norm" unqualified; l2 is the natural reading. relativeL2 = \|\|d\|\|_2/\|\|x\|\|_2, the increment relative to the design variable it is applied to (class D, dimensionless: needs toleranceRule explicit) |
 | `stop.tolerance` | double | `0.05` | [0, Inf] | C | epsilon of Fig. 1; never given in the paper |
 | `stop.toleranceRule` | enum | `'meshScaled'` | `explicit`, `meshScaled` | C | meshScaled recomputes stop.tolerance as 0.05*sqrt(NE/3200) AFTER mesh overrides, so eps means the same RMS density change at every resolution |
 | `stop.field` | enum | `'designVariable'` | `designVariable` | A | sec. 3.5.1 monitors the DESIGN increment. Under projection that is dz, not d(rho_phys) |

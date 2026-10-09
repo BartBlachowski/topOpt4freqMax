@@ -160,8 +160,13 @@ switch g('move.policy')
 end
 push('');
 push('STOPPING');
-push('  metric            %s norm of the %s increment  [%s]', ...
-     upper(g('stop.norm')), g('stop.field'), cls('stop.norm'));
+if strcmp(g('stop.norm'),'relativeL2')
+    push('  metric            ||d||_2/||x||_2 of the %s increment, x before the update  [%s]', ...
+         g('stop.field'), cls('stop.norm'));
+else
+    push('  metric            %s norm of the %s increment  [%s]', ...
+         upper(g('stop.norm')), g('stop.field'), cls('stop.norm'));
+end
 push('  threshold         eps = %.6g  (%s)  [%s]', g('stop.tolerance'), ...
      g('stop.toleranceRule'), cls('stop.tolerance'));
 if strcmp(g('stop.rule'),'stageExhaustion')

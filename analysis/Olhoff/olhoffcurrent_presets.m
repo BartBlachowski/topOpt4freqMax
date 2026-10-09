@@ -7,7 +7,8 @@ function R = olhoffcurrent_presets()
 %   move controller and stop, and the filter -- and never by an audit code.
 %
 %   The shared solver lives in +impl/ and is byte-identical to upstream
-%   Olhoff@253069262407885a8b759a9e721c4f0a7d3a397d.  Presets are how science is
+%   Olhoff@253069262407885a8b759a9e721c4f0a7d3a397d except the default-off
+%   stop.norm = 'relativeL2' option (PROVENANCE.md sec. 7).  Presets are how science is
 %   selected; nothing here restates mathematics.  Each entry names the promoted
 %   upstream preset it delegates to plus, where a realization was only ever run
 %   as upstream preset + overrides, exactly those overrides.

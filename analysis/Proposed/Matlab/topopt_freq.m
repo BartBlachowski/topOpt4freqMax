@@ -60,6 +60,10 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
     nu = localOpt(runCfg, 'nu', 0.3);
     move = localOpt(runCfg, 'move', 0.2);
     convTol = localOpt(runCfg, 'conv_tol', 0.01);
+    % Stopping criterion on the design variable x, both tested against conv_tol:
+    %   'max_change'          max|x - x_old| <= conv_tol   (default; the native rule)
+    %   'relative_l2_change'  ||x - x_old||_2 / ||x_old||_2 < conv_tol
+    stopCriterion = localParseStopCriterion(localOpt(runCfg, 'stop_criterion', 'max_change'));
     maxIters = localOpt(runCfg, 'max_iters', 2000);
     supportType = upper(string(localOpt(runCfg, 'supportType', "SS")));
     approachName = localApproachName(runCfg, 'ourApproach');
@@ -405,6 +409,7 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
     % ------------------------------------------------------------------
     loop   = 0;
     change = 1;
+    relChange = NaN;
     rmsChange = NaN;
     relativeObjectiveChange = NaN;
     previousObjective = NaN;
@@ -434,7 +439,8 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
 
     loop_tic = tic;
 
-    while (change > convTol || extendBeyondNativeStop) && loop < maxIters
+    converged = false;
+    while (~converged || extendBeyondNativeStop) && loop < maxIters
         loop = loop + 1;
         mmaConstraintPre = NaN;
         mmaConstraintPost = NaN;
@@ -644,7 +650,9 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
         % Current volume and change
         vol    = mean(xPhys);
         change = max(abs(x - xold));
+        relChange = norm(x - xold) / max(norm(xold), realmin);
         rmsChange = sqrt(mean((x - xold).^2));
+        converged = localStopMet(stopCriterion, change, relChange, convTol);
         if isfinite(previousObjective)
             relativeObjectiveChange = abs(obj - previousObjective) / max(abs(previousObjective), eps);
         end
@@ -653,7 +661,7 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
 
         % Mirrors the while condition exactly: the native run exits at the top
         % of the next iteration, so this is its last executed iteration.
-        if isnan(nativeStopIter) && change <= convTol
+        if isnan(nativeStopIter) && converged
             nativeStopIter = loop;
             xPhysAtNativeStop = xPhys;   % checkpoint for the paired prefix test
         end
@@ -771,7 +779,9 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
         xPhys, nelx, nely, ...
         formatTopologyTitle(approachName, volfrac, omega1_final, omega2_final), ...
         visualizeLive, visualizationQuality, true);
-    if change <= convTol
+    if converged && strcmp(stopCriterion, 'relative_l2_change')
+        stopReason = 'relative_change_tolerance';
+    elseif converged
         stopReason = 'density_change_tolerance';
     else
         stopReason = 'max_iterations';
@@ -791,13 +801,32 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
         'stage1_reference_eigen_modes', info.stage1_reference_eigen_modes);
     info.stopping = struct( ...
         'stop_reason', stopReason, ...
+        'stop_criterion', stopCriterion, ...
         'final_max_density_change', change, ...
+        'final_relative_l2_density_change', relChange, ...
         'final_rms_density_change', rmsChange, ...
         'final_relative_objective_change', relativeObjectiveChange, ...
         'final_grayness', mean(4*xPhys.*(1-xPhys)), ...
         'convergence_tolerance', convTol);
 
     xOut = xPhys(:);
+end
+
+function c = localParseStopCriterion(v)
+c = lower(strtrim(char(string(v))));
+if ~any(strcmp(c, {'max_change', 'relative_l2_change'}))
+    error('topopt_freq:InvalidStopCriterion', ...
+        'runCfg.stop_criterion must be "max_change" or "relative_l2_change" (got "%s").', c);
+end
+end
+
+function tf = localStopMet(criterion, maxChange, relChange, tol)
+% max_change keeps the native non-strict test; the relative rule is strict.
+if strcmp(criterion, 'relative_l2_change')
+    tf = relChange < tol;
+else
+    tf = maxChange <= tol;
+end
 end
 
 function [loadCases, usingConfiguredLoadCases, maxHarmonicMode, modeUpdateAfter, maxSemiHarmonicMode] = localResolveLoadCases(runCfg, nodeX, nodeY, nodeIds)

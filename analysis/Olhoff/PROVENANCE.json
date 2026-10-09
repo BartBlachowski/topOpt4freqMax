@@ -43,7 +43,7 @@
   "promoted_content": {
     "layout": "analysis/OlhoffCurrent/+impl/{algo,fem,filter,mma,mma_published,architecture/{+olh,olhoffSolve.m,legacy,docs}}",
     "n_files": 79,
-    "verbatim": "All 79 promoted files are byte-identical to upstream 253069262407885a8b759a9e721c4f0a7d3a397d. There are NO target-local adaptations.",
+    "verbatim": "All 79 promoted files are byte-identical to upstream 253069262407885a8b759a9e721c4f0a7d3a397d. EXCEPT the five local adaptations recorded under adaptations (2026-10-08, default-off relativeL2 stop metric).",
     "promoted_by_this_event": "16 replaced + 4 added (the other 59 were already byte-identical); see diagnostics/upstream_253069_migration/PROMOTION_MAP.md",
     "excluded_from_promotion": [
       "audit_*/",
@@ -62,8 +62,54 @@
     ],
     "exclusion_rationale": "Those are upstream evidence, upstream regression harness and upstream path setup. They remain upstream; production carries only the executable implementation plus its own repository-local gate."
   },
-  "adaptations": [],
-  "adaptations_note": "hist.tOuter (the former single documented adaptation) and the stage-exhaustion controller (the former undocumented six-file local divergence plus exhaustion.m) are now supplied by upstream 253069 itself.",
+  "adaptations": [
+    {
+      "file": "+impl/architecture/olhoffSolve.m",
+      "kind": "STOPPING CRITERION OPTION (default-off)",
+      "change": "stopNormRel branch in the convergence metric (||drho||_2/||x||_2 < stop.tolerance, x the design variable before the update); ||x||_2 taken before the update; aux.dxRel recorded every iteration (outside hist).",
+      "why": "Owner request 2026-10-08: a selectable stop on the normalized design increment ||delta x||/||x|| < epsilon for all three methods; implemented locally first, not yet in upstream.",
+      "trajectory_effect": "NONE unless stop.norm = 'relativeL2' is selected. Proved at 160x20 on the production preset with the default rule, StopToleranceFactor 0.2 and StopMaxChangeTolerance 0.03: rho, omega, log and hist (isequaln) bitwise equal to HEAD be43b90.",
+      "upstream_sha256": "6c891b42a6c3bbdd80e3d1035f05f626bd8e73a2beaa3540532a68ec6e3cd7f7",
+      "promoted_sha256": "b591a08bd078cefc5adb4dc207e216736e24d1ca4038e5b5700ddf1483a22987"
+    },
+    {
+      "file": "+impl/architecture/+olh/+config/schema.m",
+      "kind": "STOPPING CRITERION OPTION (default-off)",
+      "change": "stop.norm domain gains 'relativeL2'; doc string extended. No row added, so every configuration hash is unchanged.",
+      "why": "Owner request 2026-10-08: a selectable stop on the normalized design increment ||delta x||/||x|| < epsilon for all three methods; implemented locally first, not yet in upstream.",
+      "trajectory_effect": "NONE unless stop.norm = 'relativeL2' is selected. Proved at 160x20 on the production preset with the default rule, StopToleranceFactor 0.2 and StopMaxChangeTolerance 0.03: rho, omega, log and hist (isequaln) bitwise equal to HEAD be43b90.",
+      "upstream_sha256": "3fa03435a0fc54f2863c537b3e926d00023d2df7bbb6eb00001e0ce05eb6584b",
+      "promoted_sha256": "5f9c712fe33492be7298a6ce1b9f067a5eab470224cfbb8888e7860694cb2873"
+    },
+    {
+      "file": "+impl/architecture/+olh/+config/validate.m",
+      "kind": "STOPPING CRITERION OPTION (default-off)",
+      "change": "relativeL2 is refused with toleranceRule meshScaled, with the RMS guards (ladderExhausted, maxDesignChange) and with stage exhaustion, all of which read stop.tolerance as an absolute l2 scale.",
+      "why": "Owner request 2026-10-08: a selectable stop on the normalized design increment ||delta x||/||x|| < epsilon for all three methods; implemented locally first, not yet in upstream.",
+      "trajectory_effect": "NONE unless stop.norm = 'relativeL2' is selected. Proved at 160x20 on the production preset with the default rule, StopToleranceFactor 0.2 and StopMaxChangeTolerance 0.03: rho, omega, log and hist (isequaln) bitwise equal to HEAD be43b90.",
+      "upstream_sha256": "10493fbe6717cfce186e93257e239e1acacb7d4826638b527c54a8d604373e22",
+      "promoted_sha256": "4fc03e402237d8dcb3e624d22deb01f2fb2284d0f14cc4ddf5328fbcd74ef7b4"
+    },
+    {
+      "file": "+impl/architecture/+olh/+config/describe.m",
+      "kind": "STOPPING CRITERION OPTION (default-off)",
+      "change": "STOPPING metric line names the relative metric when it is selected.",
+      "why": "Owner request 2026-10-08: a selectable stop on the normalized design increment ||delta x||/||x|| < epsilon for all three methods; implemented locally first, not yet in upstream.",
+      "trajectory_effect": "NONE unless stop.norm = 'relativeL2' is selected. Proved at 160x20 on the production preset with the default rule, StopToleranceFactor 0.2 and StopMaxChangeTolerance 0.03: rho, omega, log and hist (isequaln) bitwise equal to HEAD be43b90.",
+      "upstream_sha256": "ba09e574bde8d46d2d9504e7b59d187f797249771c00bdd2999f536825256185",
+      "promoted_sha256": "7c91240c883ac98ed28452da219a4179ca928274fdaa037e0fc141ac7ab932a9"
+    },
+    {
+      "file": "+impl/architecture/docs/CONFIG_REFERENCE.md",
+      "kind": "STOPPING CRITERION OPTION (default-off)",
+      "change": "stop.norm row mirrors the schema.",
+      "why": "Owner request 2026-10-08: a selectable stop on the normalized design increment ||delta x||/||x|| < epsilon for all three methods; implemented locally first, not yet in upstream.",
+      "trajectory_effect": "NONE unless stop.norm = 'relativeL2' is selected. Proved at 160x20 on the production preset with the default rule, StopToleranceFactor 0.2 and StopMaxChangeTolerance 0.03: rho, omega, log and hist (isequaln) bitwise equal to HEAD be43b90.",
+      "upstream_sha256": "94a05f13413892aedd7237b47e423f4c06c389723f09dcdf19620883ebc3edca",
+      "promoted_sha256": "a9aa2dfb24c058718f77ecda5853c8a383d2c5358dd634649d642266cc2f099e"
+    }
+  ],
+  "adaptations_note": "hist.tOuter (the former single documented adaptation) and the stage-exhaustion controller (the former undocumented six-file local divergence plus exhaustion.m) are now supplied by upstream 253069 itself. Since 2026-10-08 +impl carries five local adaptations (stop.norm = relativeL2), recorded above with their upstream and promoted hashes; SOURCE_MANIFEST.json was re-recorded for them. They should be offered upstream and come back through a promotion.",
   "presets": {
     "registry": "analysis/OlhoffCurrent/olhoffcurrent_presets.m",
     "selection_rule": "Every configuration resolution names its preset explicitly; there is no unnamed default. Compatibility aliases resolve only to the formulation they always named; historical audit codes are provenance aliases and are refused as names.",
@@ -229,6 +275,10 @@
     {
       "date": "2026-09-13",
       "event": "upstream 253069 absorbed both local capabilities as default-off options on top of 6b08708; this promotion byte-copies it: 79 files, zero adaptations"
+    },
+    {
+      "date": "2026-10-08",
+      "event": "local adaptation: default-off relative-increment stop metric stop.norm = relativeL2 (five files under +impl/architecture); default trajectories proved bitwise unchanged; SOURCE_MANIFEST.json re-recorded"
     }
   ],
   "history": [

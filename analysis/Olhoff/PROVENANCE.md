@@ -42,8 +42,8 @@ analysis/OlhoffCurrent/+impl/
     mma/             mma_published/  architecture/{+olh/, olhoffSolve.m, legacy/, docs/}
 ```
 
-**79 files. All 79 are byte-identical to upstream `253069`. There are no local
-adaptations.**
+**79 files. All 79 were byte-identical to upstream `253069` at promotion. Since
+2026-10-08 five carry a local, default-off adaptation (§7).**
 
 This event replaced 16 files and added 4; the other 59 were already identical.
 The per-file record is `diagnostics/upstream_253069_migration/PROMOTION_MAP.md`
@@ -123,7 +123,33 @@ reproduces the recorded hash exactly. Old hashes remain valid identifiers of
 the evidence that recorded them. Details:
 `diagnostics/upstream_253069_migration/CONFIG_HASH_TRANSITION.md`.
 
-## 7. Adaptations: none
+## 7. Adaptations
+
+**2026-10-08 — relative-increment stop metric (local, default-off).**
+`stop.norm = 'relativeL2'` stops on ||Δρ||₂/||ρ||₂ < `stop.tolerance`, where ρ
+is the design variable before the update (z under projection). It is selected
+from outside through `olhoffcurrent_config(..., 'StopRelativeChangeTolerance', tol)`.
+
+| file | change |
+|---|---|
+| `architecture/olhoffSolve.m` | the metric branch, plus `aux.dxRel` (kept outside `hist`) |
+| `architecture/+olh/+config/schema.m` | `relativeL2` added to the `stop.norm` domain; no row added, so every config hash is unchanged |
+| `architecture/+olh/+config/validate.m` | refuses `relativeL2` together with `meshScaled`, the RMS guards, or stage exhaustion |
+| `architecture/+olh/+config/describe.m` | the STOPPING line names the relative metric |
+| `architecture/docs/CONFIG_REFERENCE.md` | the `stop.norm` row |
+
+The upstream and promoted SHA-256 of each file are listed under `adaptations` in
+`PROVENANCE.json`. `SOURCE_MANIFEST.json` was re-recorded for them.
+
+Unselected, the option leaves the trajectory unchanged. This was checked at
+160x20 on the production preset under the default rule, `StopToleranceFactor`
+0.2, and `StopMaxChangeTolerance` 0.03. In each case ρ, ω, the log and `hist`
+(compared with `isequaln`) are bitwise equal to HEAD `be43b90`.
+
+The change is not in upstream. It should be offered there, then come back
+through a normal promotion.
+
+### Before 2026-10-08: none
 
 Until 2026-09-13 this file claimed "74 files, one adaptation" (`hist.tOuter`).
 That had been stale since commit `1438aa3` (2026-09-09), which added the

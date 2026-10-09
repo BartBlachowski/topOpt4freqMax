@@ -7,16 +7,24 @@ function [mcfg, profileId, profile] = confbench_method_config(methodKey, nelx, n
 %   stop (optional) changes this method's stopping rule away from the frozen
 %   one; an absent or empty field keeps the frozen value.  It is the driver's
 %   cfg.stop.<method> (performance_comparison.m), where the production values
-%   are listed:
-%     olhoff    .useC      true (default): the method's own rule,
-%                          ||drho||_2 < c*sqrt(NE/3200); false: the Proposed
-%                          rule, max|drho| <= tol, no mesh scaling, no guards
-%               .c         c in ||drho||_2 < c*sqrt(NE/3200)   (useC = true)
-%               .tol       max|drho| tolerance                 (useC = false)
+%   are listed.  .criterion selects WHAT the tolerance is compared with, on the
+%   design variable x (rho for Olhoff):
+%     'max_change'          max|x - x_old|                 (Proposed/Yuksel native)
+%     'relative_l2_change'  ||x - x_old||_2 / ||x_old||_2  (strict <, no
+%                           production value: its tolerance must be given)
+%     'l2_change'           Olhoff only, its native rule ||drho||_2 < c*sqrt(NE/3200)
+%   Fields:
+%     olhoff    .criterion 'l2_change' (default) | 'max_change' (max|drho| <=
+%                          tol) | 'relative_l2_change'; the last two use no
+%                          mesh scaling and no guards
+%               .c         c in ||drho||_2 < c*sqrt(NE/3200)   (l2_change)
+%               .tol       tolerance of max_change / relative_l2_change
 %               .maxOuter  outer-iteration safety budget
-%     proposed  .tol       max|x - x_old| tolerance
+%     proposed  .criterion 'max_change' (default) | 'relative_l2_change'
+%               .tol       tolerance of the selected criterion
 %               .maxIters  iteration safety budget
-%     yuksel    .stage1Tol, .stage2Tol   per-stage max|x - x_old| tolerances
+%     yuksel    .criterion 'max_change' (default) | 'relative_l2_change', both stages
+%               .stage1Tol, .stage2Tol   per-stage tolerances of that criterion
 %               .maxIters  per-stage safety budget, both stages (the driver
 %                          passes cfg.yukselMaxIters)
 %   The returned configuration is the effective one, so everything that
@@ -58,6 +66,11 @@ methodKey = lower(char(string(methodKey)));
 if nargin < 5 || isempty(stop)
     stop = struct();
 end
+if isfield(stop, 'useC')
+    error('confbench_method_config:UseCRetired', ...
+        ['stop.useC was replaced by stop.criterion (''l2_change'' = useC true, ' ...
+         '''max_change'' = useC false).']);
+end
 
 switch methodKey
     case 'olhoff'
@@ -67,21 +80,30 @@ switch methodKey
         % returns; confbench_run_case installs its own for the solve.
         guard = olhoffcurrent_paths(); %#ok<NASGU>
         preset = olhoffcurrent_preset(confbench_olhoff_preset());
-        % useC = false switches to the Proposed rule, which needs .tol; .c is
-        % then ignored, as .tol is when useC = true.
-        stopFactor = []; stopMaxTol = [];
-        if valueOr(stop, 'useC', true)
-            stopFactor = valueOr(stop, 'c', []);
-        else
-            if ~hasValue(stop, 'tol')
-                error('confbench_method_config:OlhoffTolRequired', ...
-                    'stop.olhoff.useC = false requires stop.olhoff.tol.');
-            end
-            stopMaxTol = stop.tol;
+        % l2_change reads .c; the other two criteria read .tol, which has no
+        % production value for them.  The field a criterion does not read is
+        % ignored.
+        stopFactor = []; stopMaxTol = []; stopRelTol = [];
+        criterion = char(valueOr(stop, 'criterion', 'l2_change'));
+        switch criterion
+            case 'l2_change'
+                stopFactor = valueOr(stop, 'c', []);
+            case {'max_change', 'relative_l2_change'}
+                if ~hasValue(stop, 'tol')
+                    error('confbench_method_config:OlhoffTolRequired', ...
+                        'stop.olhoff.criterion = ''%s'' requires stop.olhoff.tol.', criterion);
+                end
+                if strcmp(criterion, 'max_change'); stopMaxTol = stop.tol;
+                else;                               stopRelTol = stop.tol; end
+            otherwise
+                error('confbench_method_config:UnknownCriterion', ...
+                    ['stop.olhoff.criterion must be ''l2_change'', ''max_change'' or ' ...
+                     '''relative_l2_change'' (got ''%s'').'], criterion);
         end
         stopArgs = {};
         if ~isempty(stopFactor); stopArgs = [stopArgs, {'StopToleranceFactor', stopFactor}]; end
         if ~isempty(stopMaxTol); stopArgs = [stopArgs, {'StopMaxChangeTolerance', stopMaxTol}]; end
+        if ~isempty(stopRelTol); stopArgs = [stopArgs, {'StopRelativeChangeTolerance', stopRelTol}]; end
         if hasValue(stop, 'maxOuter'); stopArgs = [stopArgs, {'MaxOuter', stop.maxOuter}]; end
         cfg = olhoffcurrent_config(nelx, nely, 'Preset', preset.name, stopArgs{:});
 
@@ -98,6 +120,7 @@ switch methodKey
         % the configuration again for the solve; empty = the preset's own.
         mcfg.olhoff_stop_factor = stopFactor;
         mcfg.olhoff_stop_max_change_tol = stopMaxTol;
+        mcfg.olhoff_stop_relative_tol = stopRelTol;
         mcfg.olhoff_max_outer = valueOr(stop, 'maxOuter', []);
 
         profileId = preset.name;
@@ -148,6 +171,27 @@ switch methodKey
 end
 
 % ---- dispatched methods only, from here down ---------------------------
+criterion = char(valueOr(stop, 'criterion', 'max_change'));
+if ~any(strcmp(criterion, {'max_change', 'relative_l2_change'}))
+    error('confbench_method_config:UnknownCriterion', ...
+        'stop.%s.criterion must be ''max_change'' or ''relative_l2_change'' (got ''%s'').', ...
+        methodKey, criterion);
+end
+if strcmp(criterion, 'relative_l2_change')
+    % The frozen tolerances are max|x - x_old| values; a relative criterion
+    % has no production tolerance, so every one it uses must be given.
+    if isfield(mcfg.optimization, 'yuksel'); need = {'stage1Tol', 'stage2Tol'};
+    else;                                    need = {'tol'}; end
+    missing = need(~cellfun(@(n) hasValue(stop, n), need));
+    if ~isempty(missing)
+        error('confbench_method_config:RelativeTolRequired', ...
+            'stop.%s.criterion = ''relative_l2_change'' requires stop.%s.%s.', ...
+            methodKey, methodKey, strjoin(missing, sprintf(' and stop.%s.', methodKey)));
+    end
+    % Set only when it departs from the native rule, so a production
+    % configuration stays field-for-field what it was.
+    mcfg.optimization.stop_criterion = criterion;
+end
 if hasValue(stop, 'tol'); mcfg.optimization.convergence_tol = stop.tol; end
 if hasValue(stop, 'maxIters')
     mcfg.optimization.max_iters = stop.maxIters;

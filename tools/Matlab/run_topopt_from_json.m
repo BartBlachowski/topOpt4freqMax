@@ -76,6 +76,20 @@ function [x, omega, tIter, nIter, mem_usage, nIterStage, telemetry] = run_topopt
     move = reqNum(cfg, {'optimization','move_limit'}, 'optimization.move_limit');
     maxiter = reqInt(cfg, {'optimization','max_iters'}, 'optimization.max_iters');
     convTol = reqNum(cfg, {'optimization','convergence_tol'}, 'optimization.convergence_tol');
+    % What convergence_tol (and Yuksel's stage1_tol/stage2_tol) is compared
+    % with, on the design variable x:
+    %   "max_change"          max|x - x_old|                 (default; native rule)
+    %   "relative_l2_change"  ||x - x_old||_2 / ||x_old||_2  (strict <)
+    stopCriterion = 'max_change';
+    if hasFieldPath(cfg, {'optimization','stop_criterion'})
+        stopCriterion = lower(strtrim(reqStr(cfg, {'optimization','stop_criterion'}, ...
+            'optimization.stop_criterion')));
+        if ~any(strcmp(stopCriterion, {'max_change', 'relative_l2_change'}))
+            error('run_topopt_from_json:InvalidStopCriterion', ...
+                ['optimization.stop_criterion must be "max_change" or ' ...
+                 '"relative_l2_change" (got "%s").'], stopCriterion);
+        end
+    end
 
     filterType = reqStr(cfg, {'optimization','filter','type'}, 'optimization.filter.type');
     filterRadius = reqNum(cfg, {'optimization','filter','radius'}, 'optimization.filter.radius');
@@ -290,6 +304,7 @@ function [x, omega, tIter, nIter, mem_usage, nIterStage, telemetry] = run_topopt
             runCfg.beamL = L;
             runCfg.beamH = H;
             runCfg.conv_tol = convTol;
+            runCfg.stop_criterion = stopCriterion;
             runCfg.approach_name = approach;
             runCfg.save_frq_iterations = postproc.saveFrequencyIterations;
             runCfg.visualization_quality = postproc.visualizeQuality;
@@ -450,6 +465,7 @@ function [x, omega, tIter, nIter, mem_usage, nIterStage, telemetry] = run_topopt
             runCfg.rho_min = rho_min;
             runCfg.move = move;
             runCfg.conv_tol = convTol;
+            runCfg.stop_criterion = stopCriterion;
             runCfg.max_iters = maxiter;
             runCfg.supportType = supportCode;
             runCfg.approach_name = approach;
@@ -514,6 +530,11 @@ function [x, omega, tIter, nIter, mem_usage, nIterStage, telemetry] = run_topopt
             if isfield(infoOur, 'last_obj'), objectiveFinal = infoOur.last_obj; end
 
         case {'elastic2d', 'elastc2d'}
+            if ~strcmp(stopCriterion, 'max_change')
+                error('run_topopt_from_json:StopCriterionNotSupported', ...
+                    ['optimization.stop_criterion "%s" is implemented for ourApproach ' ...
+                     'and Yuksel only; elastic2D stops on max_change.'], stopCriterion);
+            end
             addpath(fullfile(repoRoot, 'analysis', 'elastic2D', 'Matlab'));
             [xOut, cOut, tOut, itOut] = runElastic2D(cfg, repoRoot, ...
                 nelx, nely, volfrac, penal, rmin_phys, ...
@@ -715,8 +736,11 @@ function [x, omega, tIter, nIter, mem_usage, nIterStage, telemetry] = run_topopt
         'total_iterations', nIter, ...
         'iter_stage1', nIterStage.stage1, ...
         'iter_stage2', nIterStage.stage2, ...
+        'stop_criterion', telemetryValue(solverStopping, 'stop_criterion', stopCriterion), ...
         'final_max_density_change', ...
             telemetryValue(solverStopping, 'final_max_density_change', NaN), ...
+        'final_relative_l2_density_change', ...
+            telemetryValue(solverStopping, 'final_relative_l2_density_change', NaN), ...
         'final_rms_density_change', ...
             telemetryValue(solverStopping, 'final_rms_density_change', NaN), ...
         'final_relative_objective_change', ...

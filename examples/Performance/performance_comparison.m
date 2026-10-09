@@ -102,26 +102,37 @@ cfg.yukselMaxIters = 5000;
 % like cfg.maxOuterOverride.  (2026-10-07, simply supported beam, 160x20 to
 % 400x50: proposed.tol = 0.025 and olhoff.c = 0.2 stop where the design has
 % stagnated; see examples/bimodality.)
+%
+% criterion selects WHAT each tolerance is compared with, on the design
+% variable x (rho for Du-Olhoff); [] = the method's production criterion:
+%   'max_change'          max|x - x_old|                  (Proposed, Yuksel production)
+%   'relative_l2_change'  ||x - x_old||_2 / ||x_old||_2 < tol, x_old the design
+%                         before the update.  It has NO production tolerance:
+%                         the tolerances it uses must be set.
+%   'l2_change'           Du-Olhoff only, its production rule (below)
 cfg.stop = struct();
 
-% Proposed: stops when max|x - x_old| <= tol on the raw design field.
-cfg.stop.proposed.tol      = 0.04;   % production: 0.01  (profile proposed_practical_move02_tol001)
+% Proposed: stops when the criterion falls to tol (max_change: <= tol).
+cfg.stop.proposed.criterion = [];     % production: 'max_change'
+cfg.stop.proposed.tol      = 0.04;   % production: 0.01 with max_change  (profile proposed_practical_move02_tol001)
 cfg.stop.proposed.maxIters = [];   % production: 2000  (safety budget)
 
-% Yuksel: each stage stops when max|x - x_old| < its tolerance, from its
+% Yuksel: each stage stops when the criterion is below its tolerance, from its
 % second iteration on, and the run ends when stage 2 stops.  stage1Tol also
 % sets the design stage 2 starts from.  Per-stage budget: cfg.yukselMaxIters.
-cfg.stop.yuksel.stage1Tol  = 0.04;   % production: 0.01  (profile yuksel_practical_move01_tol001)
-cfg.stop.yuksel.stage2Tol  = 0.04;   % production: 0.01
+cfg.stop.yuksel.criterion  = [];     % production: 'max_change' (both stages)
+cfg.stop.yuksel.stage1Tol  = 0.04;   % production: 0.01 with max_change  (profile yuksel_practical_move01_tol001)
+cfg.stop.yuksel.stage2Tol  = 0.04;   % production: 0.01 with max_change
 
-% Du-Olhoff.  useC = true (production): stops when ||drho||_2 < c*sqrt(NE/3200)
-% (sec. 3.5 of the paper, which gives no value for epsilon; c and the mesh
-% scaling are this reconstruction's, olh.config.epsilonForMesh); tol is ignored.
-% useC = false: the Proposed rule instead -- stops when max|drho| <= tol on the
-% design variable, no mesh scaling and no guards; c is ignored.
-cfg.stop.olhoff.useC       = true;   % production: true
-cfg.stop.olhoff.c          = 0.08;   % production: 0.05  (useC = true)
-cfg.stop.olhoff.tol        = 0.04;   % no production value (useC = false)
+% Du-Olhoff.  criterion = 'l2_change' (production): stops when
+% ||drho||_2 < c*sqrt(NE/3200) (sec. 3.5 of the paper, which gives no value for
+% epsilon; c and the mesh scaling are this reconstruction's,
+% olh.config.epsilonForMesh); tol is ignored.  'max_change' (max|drho| <= tol)
+% or 'relative_l2_change' (||drho||_2/||rho||_2 < tol): no mesh scaling and no
+% guards; c is ignored.
+cfg.stop.olhoff.criterion  = 'relative_l2_change';   % production: 'l2_change'
+cfg.stop.olhoff.c          = 0.08;   % production: 0.05  (l2_change)
+cfg.stop.olhoff.tol        = 1e-3; %0.04;   % no production value (max_change / relative_l2_change)
 cfg.stop.olhoff.maxOuter   = 1000;   % production: 400   (preset runtime default; safety budget)
 
 % ---- Which methods -------------------------------------------------------
@@ -163,7 +174,7 @@ cfg.outputDir = '';                  % auto: examples/Performance/conference_ben
 % scaling is not an artifact of one host.  The label records the machine because
 % the quantity being reported is wall-clock time, which is a property of the
 % host as much as of the method.
-cfg.runLabel  = 'campaign_mac_convergence_corrected_olhoff_08';
+cfg.runLabel  = 'campaign_mac_convergence_relative_l2_change';
 
 % ---- Timing-accounting tolerances (predeclared, recorded in the artifacts) --
 cfg.timingTolAbs     = 1e-6;   % |T_total - (T1+T2+T_overhead)|, seconds
@@ -247,7 +258,10 @@ budgetTruncated = yukselBudgetTruncated ...
     || belowBudget(cfg.stop.proposed.maxIters, confbench_frozen_budget('proposed')) ...
     || belowBudget(cfg.stop.olhoff.maxOuter, confbench_frozen_budget('olhoff'));
 cfg.productionStopRules = isempty(cfg.stop.proposed.tol) && isempty(cfg.stop.yuksel.stage1Tol) ...
-    && isempty(cfg.stop.yuksel.stage2Tol) && cfg.stop.olhoff.useC && isempty(cfg.stop.olhoff.c);
+    && isempty(cfg.stop.yuksel.stage2Tol) && isempty(cfg.stop.olhoff.c) ...
+    && isProductionCriterion(cfg.stop.proposed.criterion, 'max_change') ...
+    && isProductionCriterion(cfg.stop.yuksel.criterion, 'max_change') ...
+    && isProductionCriterion(cfg.stop.olhoff.criterion, 'l2_change');
 
 cfg.scientificEvidence  = isempty(cfg.maxOuterOverride) && all(elementCounts >= 3200) ...
     && ~budgetTruncated;
@@ -634,11 +648,36 @@ end
 end
 
 function validateStop(stop)
-% Empty = production; anything else must be a usable tolerance or budget.
-validateattributes(stop.olhoff.useC, {'logical'}, {'scalar'}, mfilename, 'cfg.stop.olhoff.useC');
-if ~stop.olhoff.useC && isempty(stop.olhoff.tol)
+% Empty = production; anything else must be a usable criterion, tolerance or
+% budget.  A criterion without a production tolerance needs its tolerances.
+if isfield(stop.olhoff, 'useC')
+    error('performance_comparison:UseCRetired', ['cfg.stop.olhoff.useC was replaced by ' ...
+        'cfg.stop.olhoff.criterion (''l2_change'' = useC true, ''max_change'' = useC false).']);
+end
+crits = {'proposed', {'max_change','relative_l2_change'}; ...
+         'yuksel',   {'max_change','relative_l2_change'}; ...
+         'olhoff',   {'l2_change','max_change','relative_l2_change'}};
+for k = 1:size(crits, 1)
+    c = stop.(crits{k,1}).criterion;
+    if ~isempty(c) && ~any(strcmp(char(c), crits{k,2}))
+        error('performance_comparison:UnknownCriterion', ...
+            'cfg.stop.%s.criterion must be one of %s (got ''%s'').', ...
+            crits{k,1}, strjoin(crits{k,2}, ', '), char(c));
+    end
+end
+if ~isProductionCriterion(stop.olhoff.criterion, 'l2_change') && isempty(stop.olhoff.tol)
     error('performance_comparison:OlhoffTolRequired', ...
-        'cfg.stop.olhoff.useC = false requires cfg.stop.olhoff.tol (it has no production value).');
+        'cfg.stop.olhoff.criterion = ''%s'' requires cfg.stop.olhoff.tol (it has no production value).', ...
+        char(stop.olhoff.criterion));
+end
+if strcmp(char(stop.proposed.criterion), 'relative_l2_change') && isempty(stop.proposed.tol)
+    error('performance_comparison:RelativeTolRequired', ...
+        'cfg.stop.proposed.criterion = ''relative_l2_change'' requires cfg.stop.proposed.tol.');
+end
+if strcmp(char(stop.yuksel.criterion), 'relative_l2_change') ...
+        && (isempty(stop.yuksel.stage1Tol) || isempty(stop.yuksel.stage2Tol))
+    error('performance_comparison:RelativeTolRequired', ['cfg.stop.yuksel.criterion = ' ...
+        '''relative_l2_change'' requires cfg.stop.yuksel.stage1Tol and stage2Tol.']);
 end
 tols = {stop.proposed.tol, stop.yuksel.stage1Tol, stop.yuksel.stage2Tol, stop.olhoff.c, stop.olhoff.tol};
 names = {'proposed.tol', 'yuksel.stage1Tol', 'yuksel.stage2Tol', 'olhoff.c', 'olhoff.tol'};
@@ -658,26 +697,36 @@ for k = 1:numel(budgets)
 end
 end
 
+function tf = isProductionCriterion(c, production)
+tf = isempty(c) || strcmp(char(c), production);
+end
+
 function tf = belowBudget(used, frozen)
 tf = ~isempty(used) && used < frozen;
 end
 
 function s = stopSummary(stop)
-% "production", or every setting that differs from it.  The Olhoff field the
-% useC switch leaves unused is not reported.
+% "production", or every setting that differs from it.  A production
+% criterion is not reported, nor is the Olhoff field its criterion leaves
+% unused (c outside l2_change, tol inside it).
 parts = {};
-if ~stop.olhoff.useC
-    parts{end+1} = 'olhoff.useC = false';
-end
+production = struct('proposed', 'max_change', 'yuksel', 'max_change', 'olhoff', 'l2_change');
 meths = fieldnames(stop);
 for i = 1:numel(meths)
     f = fieldnames(stop.(meths{i}));
     for j = 1:numel(f)
         v = stop.(meths{i}).(f{j});
-        if strcmp(meths{i}, 'olhoff') && (strcmp(f{j}, 'useC') ...
-                || (stop.olhoff.useC && strcmp(f{j}, 'tol')) ...
-                || (~stop.olhoff.useC && strcmp(f{j}, 'c')))
+        if strcmp(f{j}, 'criterion')
+            if ~isProductionCriterion(v, production.(meths{i}))
+                parts{end+1} = sprintf('%s.criterion = %s', meths{i}, char(v)); %#ok<AGROW>
+            end
             continue
+        end
+        if strcmp(meths{i}, 'olhoff')
+            olhL2 = isProductionCriterion(stop.olhoff.criterion, 'l2_change');
+            if (olhL2 && strcmp(f{j}, 'tol')) || (~olhL2 && strcmp(f{j}, 'c'))
+                continue
+            end
         end
         if ~isempty(v)
             parts{end+1} = sprintf('%s.%s = %g', meths{i}, f{j}, v); %#ok<AGROW>
@@ -808,14 +857,20 @@ for m = 1:numel(methodKeys)
                 otherwise
                     fprintf('    move: policy %s, initial %g\n', gp('move.policy'), mc.move);
             end
-            fprintf(['    outer stop: rule=%s, %s norm < %.6g  (per-element RMS %.6e), ' ...
-                'guard=%s, cap=%d\n'], gp('stop.rule'), mc.outerNorm, mc.tolOuter, ...
-                mc.tolOuter/sqrt(mc.nelx*mc.nely), mc.outerGuard, mc.maxOuter);
+            if strcmp(mc.outerNorm, 'l2')
+                rmsNote = sprintf('  (per-element RMS %.6e)', mc.tolOuter/sqrt(mc.nelx*mc.nely));
+            else
+                rmsNote = '';   % max and relativeL2 tolerances have no RMS reading
+            end
+            fprintf('    outer stop: rule=%s, %s norm < %.6g%s, guard=%s, cap=%d\n', ...
+                gp('stop.rule'), mc.outerNorm, mc.tolOuter, rmsNote, mc.outerGuard, mc.maxOuter);
             fprintf('    threads=%d, diagnostics recorder=%d\n', mc.threads, mc.diag);
         otherwise
             o = mc.optimization;
-            fprintf('    optimizer=%s move=%g rmin=%g el tol=%g maxIters=%d volfrac=%g p=%g\n', ...
-                o.optimizer, o.move_limit, o.filter.radius, o.convergence_tol, ...
+            crit = 'max_change';
+            if isfield(o, 'stop_criterion'); crit = o.stop_criterion; end
+            fprintf('    optimizer=%s move=%g rmin=%g el stop=%s tol=%g maxIters=%d volfrac=%g p=%g\n', ...
+                o.optimizer, o.move_limit, o.filter.radius, crit, o.convergence_tol, ...
                 o.max_iters, o.volume_fraction, o.penalization);
             if isfield(o, 'yuksel')
                 fprintf('    stage1: tol=%g maxIters=%d | stage2: tol=%g\n', ...

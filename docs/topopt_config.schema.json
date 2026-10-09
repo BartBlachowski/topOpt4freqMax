@@ -417,7 +417,13 @@
         },
         "convergence_tol": {
           "type": "number", "exclusiveMinimum": 0,
-          "description": "Convergence declared when max |Δxₑ| < convergence_tol."
+          "description": "Tolerance of the stopping criterion selected by stop_criterion (default: max |Δxₑ| against convergence_tol)."
+        },
+        "stop_criterion": {
+          "type": "string",
+          "enum": ["max_change", "relative_l2_change"],
+          "default": "max_change",
+          "description": "Quantity compared with convergence_tol (and, for Yuksel, with stage1_tol/stage2_tol) on the design variable x: max_change = max |x − x_old| (the native rule); relative_l2_change = ‖x − x_old‖₂ / ‖x_old‖₂ < tol. Implemented by the MATLAB dispatcher for ourApproach and yuksel; the Python dispatcher and elastic2D accept only max_change."
         },
         "seed": {
           "type": ["integer", "null"],

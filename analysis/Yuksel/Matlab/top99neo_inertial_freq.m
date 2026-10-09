@@ -59,6 +59,15 @@ if isfield(runCfg, 'conv_tol') && ~isempty(runCfg.conv_tol)
 end
 if isfield(runCfg, 'stage1_tol') && ~isempty(runCfg.stage1_tol), stage1Tol = runCfg.stage1_tol; end
 if isfield(runCfg, 'stage2_tol') && ~isempty(runCfg.stage2_tol), stage2Tol = runCfg.stage2_tol; end
+% Stopping criterion of BOTH stages, on the design variable x, each stage
+% against its own tolerance (from its second iteration on):
+%   'max_change'          max|x - x_old| < tol   (default; the native rule)
+%   'relative_l2_change'  ||x - x_old||_2 / ||x_old||_2 < tol
+stopCriterion = lower(strtrim(char(string(localOpt(runCfg, 'stop_criterion', 'max_change')))));
+if ~any(strcmp(stopCriterion, {'max_change', 'relative_l2_change'}))
+    error('top99neo_inertial_freq:InvalidStopCriterion', ...
+        'runCfg.stop_criterion must be "max_change" or "relative_l2_change" (got "%s").', stopCriterion);
+end
 finalModes = max(1, floor(double(localOpt(runCfg, 'final_modes', 3))));
 if isfield(runCfg, 'visualize_live') && ~isempty(runCfg.visualize_live)
     doPlot = localParseVisualizeLive(runCfg.visualize_live, true);
@@ -200,6 +209,8 @@ info.stage1.loadDof = lcDof;
 % handoff into stage 2 and stays active (plan section 4.3).
 info.stage2.extend_beyond_native_stop = ...
     logical(localOpt(runCfg, 'extend_beyond_native_stop', false));
+info.stage1.stop_criterion = stopCriterion;
+info.stage2.stop_criterion = stopCriterion;
 
 recordHistory = logical(localOpt(runCfg, 'record_history', false));
 if recordHistory
@@ -309,7 +320,9 @@ info.stopping = struct( ...
     'stop_reason', localOpt(info.stage2, 'stop_reason', 'N/A'), ...
     'stage1_stop_reason', localOpt(info.stage1, 'stop_reason', 'N/A'), ...
     'stage2_stop_reason', localOpt(info.stage2, 'stop_reason', 'N/A'), ...
+    'stop_criterion', stopCriterion, ...
     'final_max_density_change', localLast(info.stage2.ch), ...
+    'final_relative_l2_density_change', localLast(info.stage2.rel_ch), ...
     'final_rms_density_change', localLast(info.stage2.rms_ch), ...
     'final_relative_objective_change', localRelativeLast(info.stage2.c), ...
     'final_grayness', mean(4*xPhys_stage2.*(1-xPhys_stage2)), ...
@@ -478,6 +491,9 @@ histStage = 1;
 recordHistory = isfield(stageInfo, 'history') && ~isempty(stageInfo.history);
 xPhysPrevHist = [];
 stageInfo.rms_ch = [];
+stageInfo.rel_ch = [];
+stopRelative = strcmp(localOpt(stageInfo, 'stop_criterion', 'max_change'), 'relative_l2_change');
+stopMet = false;
 auditCollect = isfield(stageInfo, 'audit_collect') && stageInfo.audit_collect;
 auditSnapshotEvery = localOpt(stageInfo, 'audit_snapshot_every', 10);
 while loop < maxit
@@ -531,6 +547,10 @@ while loop < maxit
     xOldAudit = x;
     [x, ch, lambdaOC] = localOcUpdate(x, act, dc, dV0, move, mean(xPhys));
     rmsCh = sqrt(mean((x - xOldAudit).^2));
+    relCh = norm(x - xOldAudit) / max(norm(xOldAudit), realmin);
+    if stopRelative, stopMet = loop > 1 && relCh < tolX;
+    else,            stopMet = loop > 1 && ch < tolX;
+    end
 
     penalLog = penal;
     [penal,beta] = deal(cnt(penal,penalCnt,loop), cnt(beta,betaCnt,loop));
@@ -540,6 +560,7 @@ while loop < maxit
     stageInfo.v(end+1,1)  = mean(xPhys);
     stageInfo.ch(end+1,1) = ch;
     stageInfo.rms_ch(end+1,1) = rmsCh;
+    stageInfo.rel_ch(end+1,1) = relCh;
     if recordHistory
         % omega1 stays NaN: this method eigensolves only at the end, and
         % plan section 5 forbids adding a solve merely to fill a column.
@@ -575,12 +596,14 @@ while loop < maxit
             formatTopologyTitle(approachName, volfrac, NaN), ...
             true, 'regular', false);
     end
-    if loop > 1 && ch < tolX, break; end
+    if stopMet, break; end
 end
 stageInfo.iterations = loop;
 stageInfo.loop_time = toc(loop_tic);
 stageInfo.t_iter = stageInfo.loop_time / max(loop, 1);
-if loop > 1 && ch < tolX
+if stopMet && stopRelative
+    stageInfo.stop_reason = 'relative_change_tolerance';
+elseif stopMet
     stageInfo.stop_reason = 'density_change_tolerance';
 else
     stageInfo.stop_reason = 'max_iterations';
@@ -628,6 +651,9 @@ if isfield(stageInfo, 'history_xphys_prev')
     xPhysPrevHist = stageInfo.history_xphys_prev;
 end
 stageInfo.rms_ch = [];
+stageInfo.rel_ch = [];
+stopRelative = strcmp(localOpt(stageInfo, 'stop_criterion', 'max_change'), 'relative_l2_change');
+stopMet = false;
 auditCollect = isfield(stageInfo, 'audit_collect') && stageInfo.audit_collect;
 auditSnapshotEvery = localOpt(stageInfo, 'audit_snapshot_every', 10);
 auditFreezeMode = isfield(stageInfo, 'audit_freeze_mode') && stageInfo.audit_freeze_mode;
@@ -732,6 +758,10 @@ while loop < maxit
     xOldAudit = x;
     [x, ch, lambdaOC] = localOcUpdate(x, act, dc, dV0, move, mean(xPhys));
     rmsCh = sqrt(mean((x - xOldAudit).^2));
+    relCh = norm(x - xOldAudit) / max(norm(xOldAudit), realmin);
+    if stopRelative, stopMet = loop > 1 && relCh < tolX;
+    else,            stopMet = loop > 1 && ch < tolX;
+    end
 
     penalLog = penal;
     [penal,beta] = deal(cnt(penal,penalCnt,loop), cnt(beta,betaCnt,loop));
@@ -741,6 +771,7 @@ while loop < maxit
     stageInfo.v(end+1,1)  = mean(xPhys);
     stageInfo.ch(end+1,1) = ch;
     stageInfo.rms_ch(end+1,1) = rmsCh;
+    stageInfo.rel_ch(end+1,1) = relCh;
     if recordHistory
         % omega1 stays NaN: this method eigensolves only at the end, and
         % plan section 5 forbids adding a solve merely to fill a column.
@@ -776,7 +807,7 @@ while loop < maxit
             formatTopologyTitle(approachName, volfrac, NaN), ...
             true, 'regular', false);
     end
-    if loop > 1 && ch < tolX
+    if stopMet
         % Extension mode disables ONLY this final native termination.  Stage 1's
         % identical test is left alone: it controls the handoff into this loop,
         % which plan section 4.3 requires to stay active.
@@ -792,7 +823,9 @@ end
 stageInfo.iterations = loop;
 stageInfo.loop_time = toc(loop_tic);
 stageInfo.t_iter = stageInfo.loop_time / max(loop, 1);
-if loop > 1 && ch < tolX
+if stopMet && stopRelative
+    stageInfo.stop_reason = 'relative_change_tolerance';
+elseif stopMet
     stageInfo.stop_reason = 'density_change_tolerance';
 else
     stageInfo.stop_reason = 'max_iterations';

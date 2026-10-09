@@ -36,6 +36,11 @@
 %   design stage 2 starts from, so changing it changes the whole of stage 2,
 %   not only where stage 1 ends.
 %
+%   stop_criterion = 'relative_l2_change' makes both stages test
+%   ||x - x_old||_2/||x_old||_2 < tolerance instead (optimization.stop_criterion),
+%   with stage1_rel_tol and stage2_rel_tol; stage1_tol and stage2_tol are then
+%   ignored, as the relative tolerances are with 'max_change'.
+%
 %   Every save_every_it-th iterate (and the last one) is also rendered, so the
 %   topology can be compared with the frequency history; the snapshot of
 %   iteration k is the design whose omega_1..3 are plotted at k.
@@ -49,6 +54,9 @@ nely = 30;
 save_every_it = 25;   % topology snapshot every save_every_it iterations (+ last); 0 = none
 stage1_tol = 0.04;    % stage 1 stops when max|x - x_old| < stage1_tol; 0.01 = Table 1
 stage2_tol = 0.04;    % stage 2 (the run) stops when max|x - x_old| < stage2_tol; 0.01 = Table 1
+stop_criterion = 'max_change';   % 'max_change' (Table 1 rule) | 'relative_l2_change'
+stage1_rel_tol = 1e-3;   % stage 1: ||x - x_old||_2/||x_old||_2 < stage1_rel_tol; no calibrated value
+stage2_rel_tol = 1e-3;   % stage 2: ||x - x_old||_2/||x_old||_2 < stage2_rel_tol; no calibrated value
 max_iter = [];        % iteration cap of EACH stage; [] = frozen profile value (1000)
 
 here = fileparts(mfilename('fullpath'));
@@ -59,8 +67,21 @@ addpath(fullfile(repo, 'examples', 'Performance', 'benchmark_profile'));
 
 [cfg, profileId] = confbench_method_config('yuksel', nelx, nely);
 cfg.postprocessing.record_design_history = true;
-cfg.optimization.yuksel.stage1_tol = stage1_tol;
-cfg.optimization.yuksel.stage2_tol = stage2_tol;
+switch stop_criterion
+    case 'max_change'
+        tol1 = stage1_tol; tol2 = stage2_tol;
+        stopDesc = sprintf('stage1_tol = %g, stage2_tol = %g', tol1, tol2);
+    case 'relative_l2_change'
+        cfg.optimization.stop_criterion = stop_criterion;
+        tol1 = stage1_rel_tol; tol2 = stage2_rel_tol;
+        stopDesc = sprintf('||dx||_2/||x||_2: stage1_rel_tol = %g, stage2_rel_tol = %g', tol1, tol2);
+    otherwise
+        error('stop_criterion must be ''max_change'' or ''relative_l2_change'' (got ''%s'').', ...
+            stop_criterion);
+end
+cfg.optimization.yuksel.stage1_tol = tol1;
+cfg.optimization.yuksel.stage2_tol = tol2;
+cfg.optimization.convergence_tol = tol2;   % mirrors stage2_tol, as in the frozen profile
 if ~isempty(max_iter)
     cfg.optimization.max_iters = max_iter;
     cfg.optimization.yuksel.stage1_max_iters = max_iter;
@@ -82,8 +103,8 @@ ev = study_evaluate_design(x, nelx, nely, 0.5, 'ComputeBinaryDiagnostic', false)
 assert(abs(omegaE1(end,1) - ev.selected_omega_raw_E1) <= 1e-8*ev.selected_omega_raw_E1, ...
     'e1_structural_omegas disagrees with study_evaluate_design.');
 
-fprintf(['Yuksel (%s) pinned-pinned %dx%d, stage1_tol = %g, stage2_tol = %g: %d iterations ' ...
+fprintf(['Yuksel (%s) pinned-pinned %dx%d, %s: %d iterations ' ...
     '(stage 1: %d, stage 2: %d, %s); E1 structural omega_1..3 of the final design = ' ...
     '%.2f, %.2f, %.2f rad/s\n'], ...
-    profileId, nelx, nely, stage1_tol, stage2_tol, nIter, nStage1, ...
+    profileId, nelx, nely, stopDesc, nIter, nStage1, ...
     telemetry.stopping.iter_stage2, telemetry.stopping.stop_reason, omegaE1(end,:));
