@@ -1,0 +1,190 @@
+{
+  "domain": {
+    "a": 8,
+    "b": 1,
+    "thickness": 1,
+    "mesh": {
+      "nelx": 240,
+      "nely": 30
+    },
+    "boundary": {
+      "condition": "simplySupported",
+      "support": "midHeight",
+      "axialRestraint": "bothEnds"
+    },
+    "element": {
+      "type": "Q4",
+      "massMatrix": "consistent"
+    }
+  },
+  "material": {
+    "solid": {
+      "E": 1.0E+7,
+      "nu": 0.3,
+      "density": 1
+    },
+    "stiffness": {
+      "model": "pedersen",
+      "linearBelow": 0.1,
+      "p": 3,
+      "continuation": {
+        "enabled": false,
+        "schedule": [],
+        "driver": "moveLadderStage",
+        "blockStopUntilFinal": true
+      }
+    },
+    "mass": {
+      "model": "eq2",
+      "q": 1,
+      "lowDensityExponent": 6,
+      "cutoff": 0.1,
+      "continuation": {
+        "enabled": false,
+        "lowPModel": "eq2"
+      }
+    }
+  },
+  "design": {
+    "initial": 0.5,
+    "minimum": 0.001,
+    "volumeFraction": 0.5
+  },
+  "filter": {
+    "type": "sensitivity",
+    "radiusPhysical": 0.06,
+    "radiusElements": [],
+    "applyTo": "all"
+  },
+  "projection": {
+    "enabled": false,
+    "eta": 0.5,
+    "beta": {
+      "levels": []
+    },
+    "continuation": {
+      "trigger": "outerConvergence"
+    }
+  },
+  "eigen": {
+    "targetMode": 1,
+    "maxCluster": 4,
+    "solver": "eigs",
+    "tolerance": 1E-12,
+    "maxIterations": 5000,
+    "krylovFactor": 4
+  },
+  "multiplicity": {
+    "method": "subspace",
+    "tolerance": 0.05,
+    "enterTolerance": 0.01,
+    "exitTolerance": 0.05,
+    "subspaceSize": 2,
+    "diagonalOffsets": true,
+    "offDiagonal": true
+  },
+  "optimizer": {
+    "inner": {
+      "type": "mma",
+      "variable": "increment",
+      "variant": "published",
+      "asymptoteHistory": "inner",
+      "tolerance": 0.05,
+      "minIterations": 5,
+      "maxIterations": 500
+    }
+  },
+  "move": {
+    "policy": "adaptive",
+    "initial": 0.1,
+    "minimum": 0.002,
+    "levels": [
+      0.04,
+      0.02,
+      0.01,
+      0.005
+    ],
+    "geometric": {
+      "ratio": 0.97,
+      "afterCoalescence": true
+    },
+    "adaptive": {
+      "grow": 1.2,
+      "shrink": 0.7
+    },
+    "trust": {
+      "loRatio": 0.3,
+      "hiRatio": 0.7,
+      "shrink": 0.7,
+      "grow": 1.1
+    },
+    "continuation": {
+      "signal": "boundVariable",
+      "window": 10,
+      "tolerance": 0.005
+    }
+  },
+  "stop": {
+    "rule": "designChange",
+    "norm": "l2",
+    "tolerance": 0.075000000000000011,
+    "toleranceRule": "meshScaled",
+    "field": "designVariable",
+    "guards": {
+      "settledMove": false,
+      "settledWindow": 1,
+      "boxInactiveFraction": 0,
+      "ladderExhausted": false,
+      "maxDesignChange": false
+    }
+  },
+  "runtime": {
+    "maxOuter": 400,
+    "singleThread": true,
+    "diagnostics": false,
+    "verbose": false,
+    "name": "OLHOFF_CURRENT_240x30"
+  },
+  "provenance": {
+    "preset": "duOlhoffAdaptivePedersen",
+    "overrides": [
+      "domain.mesh.nelx",
+      240,
+      "domain.mesh.nely",
+      30,
+      "runtime.maxOuter",
+      400,
+      "runtime.singleThread",
+      true,
+      "runtime.diagnostics",
+      false,
+      "runtime.verbose",
+      false,
+      "runtime.name",
+      "OLHOFF_CURRENT_240x30"
+    ],
+    "warnings": [],
+    "resolvedAt": "2026-10-09T10:09:01",
+    "schemaRows": 87,
+    "olhoffCurrentPreset": "duOlhoffPedersenAdaptiveBoxSensitivityFiltered",
+    "requestedPresetName": "duOlhoffPedersenAdaptiveBoxSensitivityFiltered",
+    "presetResolvedVia": "canonical",
+    "presetRole": "DISTINCT_FORMULATION",
+    "upstreamPreset": "duOlhoffAdaptivePedersen",
+    "upstreamCommit": "253069262407885a8b759a9e721c4f0a7d3a397d",
+    "compatibilityAliases": [],
+    "historicalAliases": [
+      "duOlhoffAdaptivePedersen",
+      "S160x20",
+      "S240x30",
+      "S320x40",
+      "S400x50",
+      "S480x60",
+      "S560x70",
+      "S640x80",
+      "S720x90",
+      "S800x100"
+    ],
+    "implementation": "analysis/Olhoff"
+  }
+}
