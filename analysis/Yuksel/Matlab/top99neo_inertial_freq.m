@@ -59,15 +59,23 @@ if isfield(runCfg, 'conv_tol') && ~isempty(runCfg.conv_tol)
 end
 if isfield(runCfg, 'stage1_tol') && ~isempty(runCfg.stage1_tol), stage1Tol = runCfg.stage1_tol; end
 if isfield(runCfg, 'stage2_tol') && ~isempty(runCfg.stage2_tol), stage2Tol = runCfg.stage2_tol; end
-% Stopping criterion of BOTH stages, on the design variable x, each stage
-% against its own tolerance (from its second iteration on):
+% Stopping criterion of BOTH stages; stage1_stop_criterion, when given,
+% overrides it for stage 1 only.  The first two act on the design variable x,
+% each stage against its own tolerance (from its second iteration on):
 %   'max_change'          max|x - x_old| < tol   (default; the native rule)
 %   'relative_l2_change'  ||x - x_old||_2 / ||x_old||_2 < tol
-stopCriterion = lower(strtrim(char(string(localOpt(runCfg, 'stop_criterion', 'max_change')))));
-if ~any(strcmp(stopCriterion, {'max_change', 'relative_l2_change'}))
-    error('top99neo_inertial_freq:InvalidStopCriterion', ...
-        'runCfg.stop_criterion must be "max_change" or "relative_l2_change" (got "%s").', stopCriterion);
-end
+% 'stagnation' ignores the stage tolerance: stop once, over the stage's last
+% W+1 analysed designs, the stage's compliance has varied by less than
+% stagnation_objective_tol relative to its latest value AND the grayness
+% 4*mean(xPhys.*(1-xPhys)) by less than stagnation_grayness_tol (both strict).
+% Both belong to the design analysed at the top of an iteration, so the window
+% trails the update by one; the design a stage starts from is never in it.
+stopCriterion = localParseStopCriterion(localOpt(runCfg, 'stop_criterion', 'max_change'));
+stage1Criterion = localParseStopCriterion(localOpt(runCfg, 'stage1_stop_criterion', stopCriterion));
+stagnation = struct( ...
+    'window', localOpt(runCfg, 'stagnation_window', 10), ...
+    'objective_tol', localOpt(runCfg, 'stagnation_objective_tol', 1e-3), ...
+    'grayness_tol', localOpt(runCfg, 'stagnation_grayness_tol', 5e-3));
 finalModes = max(1, floor(double(localOpt(runCfg, 'final_modes', 3))));
 if isfield(runCfg, 'visualize_live') && ~isempty(runCfg.visualize_live)
     doPlot = localParseVisualizeLive(runCfg.visualize_live, true);
@@ -209,8 +217,10 @@ info.stage1.loadDof = lcDof;
 % handoff into stage 2 and stays active (plan section 4.3).
 info.stage2.extend_beyond_native_stop = ...
     logical(localOpt(runCfg, 'extend_beyond_native_stop', false));
-info.stage1.stop_criterion = stopCriterion;
+info.stage1.stop_criterion = stage1Criterion;
 info.stage2.stop_criterion = stopCriterion;
+info.stage1.stagnation = stagnation;
+info.stage2.stagnation = stagnation;
 
 recordHistory = logical(localOpt(runCfg, 'record_history', false));
 if recordHistory
@@ -321,6 +331,12 @@ info.stopping = struct( ...
     'stage1_stop_reason', localOpt(info.stage1, 'stop_reason', 'N/A'), ...
     'stage2_stop_reason', localOpt(info.stage2, 'stop_reason', 'N/A'), ...
     'stop_criterion', stopCriterion, ...
+    'stage1_stop_criterion', stage1Criterion, ...
+    'stagnation_window', stagnation.window, ...
+    'stagnation_objective_tol', stagnation.objective_tol, ...
+    'stagnation_grayness_tol', stagnation.grayness_tol, ...
+    'final_stagnation_objective_range', info.stage2.stagnation_range(1), ...
+    'final_stagnation_grayness_range', info.stage2.stagnation_range(2), ...
     'final_max_density_change', localLast(info.stage2.ch), ...
     'final_relative_l2_density_change', localLast(info.stage2.rel_ch), ...
     'final_rms_density_change', localLast(info.stage2.rms_ch), ...
@@ -492,7 +508,10 @@ recordHistory = isfield(stageInfo, 'history') && ~isempty(stageInfo.history);
 xPhysPrevHist = [];
 stageInfo.rms_ch = [];
 stageInfo.rel_ch = [];
+stageInfo.gray = [];
+stageInfo.stagnation_range = [NaN NaN];
 stopRelative = strcmp(localOpt(stageInfo, 'stop_criterion', 'max_change'), 'relative_l2_change');
+stopStagnation = strcmp(localOpt(stageInfo, 'stop_criterion', 'max_change'), 'stagnation');
 stopMet = false;
 auditCollect = isfield(stageInfo, 'audit_collect') && stageInfo.audit_collect;
 auditSnapshotEvery = localOpt(stageInfo, 'audit_snapshot_every', 10);
@@ -548,9 +567,9 @@ while loop < maxit
     [x, ch, lambdaOC] = localOcUpdate(x, act, dc, dV0, move, mean(xPhys));
     rmsCh = sqrt(mean((x - xOldAudit).^2));
     relCh = norm(x - xOldAudit) / max(norm(xOldAudit), realmin);
-    if stopRelative, stopMet = loop > 1 && relCh < tolX;
-    else,            stopMet = loop > 1 && ch < tolX;
-    end
+    if stopRelative,       stopMet = loop > 1 && relCh < tolX;
+    elseif ~stopStagnation, stopMet = loop > 1 && ch < tolX;
+    end   % stagnation is tested below, once this design's compliance is known
 
     penalLog = penal;
     [penal,beta] = deal(cnt(penal,penalCnt,loop), cnt(beta,betaCnt,loop));
@@ -561,6 +580,12 @@ while loop < maxit
     stageInfo.ch(end+1,1) = ch;
     stageInfo.rms_ch(end+1,1) = rmsCh;
     stageInfo.rel_ch(end+1,1) = relCh;
+    stageInfo.gray(end+1,1) = mean(4*xPhys.*(1-xPhys));   % xPhys is still pre-update
+    if stopStagnation
+        [stopMet, stageInfo.stagnation_range] = localStagnationMet(stageInfo.c, ...
+            stageInfo.gray, loop, stageInfo.stagnation.window, ...
+            stageInfo.stagnation.objective_tol, stageInfo.stagnation.grayness_tol);
+    end
     if recordHistory
         % omega1 stays NaN: this method eigensolves only at the end, and
         % plan section 5 forbids adding a solve merely to fill a column.
@@ -603,6 +628,8 @@ stageInfo.loop_time = toc(loop_tic);
 stageInfo.t_iter = stageInfo.loop_time / max(loop, 1);
 if stopMet && stopRelative
     stageInfo.stop_reason = 'relative_change_tolerance';
+elseif stopMet && stopStagnation
+    stageInfo.stop_reason = 'stagnation_tolerance';
 elseif stopMet
     stageInfo.stop_reason = 'density_change_tolerance';
 else
@@ -652,7 +679,10 @@ if isfield(stageInfo, 'history_xphys_prev')
 end
 stageInfo.rms_ch = [];
 stageInfo.rel_ch = [];
+stageInfo.gray = [];
+stageInfo.stagnation_range = [NaN NaN];
 stopRelative = strcmp(localOpt(stageInfo, 'stop_criterion', 'max_change'), 'relative_l2_change');
+stopStagnation = strcmp(localOpt(stageInfo, 'stop_criterion', 'max_change'), 'stagnation');
 stopMet = false;
 auditCollect = isfield(stageInfo, 'audit_collect') && stageInfo.audit_collect;
 auditSnapshotEvery = localOpt(stageInfo, 'audit_snapshot_every', 10);
@@ -759,9 +789,9 @@ while loop < maxit
     [x, ch, lambdaOC] = localOcUpdate(x, act, dc, dV0, move, mean(xPhys));
     rmsCh = sqrt(mean((x - xOldAudit).^2));
     relCh = norm(x - xOldAudit) / max(norm(xOldAudit), realmin);
-    if stopRelative, stopMet = loop > 1 && relCh < tolX;
-    else,            stopMet = loop > 1 && ch < tolX;
-    end
+    if stopRelative,       stopMet = loop > 1 && relCh < tolX;
+    elseif ~stopStagnation, stopMet = loop > 1 && ch < tolX;
+    end   % stagnation is tested below, once this design's compliance is known
 
     penalLog = penal;
     [penal,beta] = deal(cnt(penal,penalCnt,loop), cnt(beta,betaCnt,loop));
@@ -772,6 +802,12 @@ while loop < maxit
     stageInfo.ch(end+1,1) = ch;
     stageInfo.rms_ch(end+1,1) = rmsCh;
     stageInfo.rel_ch(end+1,1) = relCh;
+    stageInfo.gray(end+1,1) = mean(4*xPhys.*(1-xPhys));   % xPhys is still pre-update
+    if stopStagnation
+        [stopMet, stageInfo.stagnation_range] = localStagnationMet(stageInfo.c, ...
+            stageInfo.gray, loop, stageInfo.stagnation.window, ...
+            stageInfo.stagnation.objective_tol, stageInfo.stagnation.grayness_tol);
+    end
     if recordHistory
         % omega1 stays NaN: this method eigensolves only at the end, and
         % plan section 5 forbids adding a solve merely to fill a column.
@@ -825,6 +861,8 @@ stageInfo.loop_time = toc(loop_tic);
 stageInfo.t_iter = stageInfo.loop_time / max(loop, 1);
 if stopMet && stopRelative
     stageInfo.stop_reason = 'relative_change_tolerance';
+elseif stopMet && stopStagnation
+    stageInfo.stop_reason = 'stagnation_tolerance';
 elseif stopMet
     stageInfo.stop_reason = 'density_change_tolerance';
 else
@@ -1044,6 +1082,26 @@ if isstruct(s) && isfield(s, name) && ~isempty(s.(name))
 else
     v = defaultVal;
 end
+end
+
+function c = localParseStopCriterion(v)
+c = lower(strtrim(char(string(v))));
+if ~any(strcmp(c, {'max_change', 'relative_l2_change', 'stagnation'}))
+    error('top99neo_inertial_freq:InvalidStopCriterion', ...
+        ['runCfg.stop_criterion and stage1_stop_criterion must be "max_change", ' ...
+         '"relative_l2_change" or "stagnation" (got "%s").'], c);
+end
+end
+
+function [met, r] = localStagnationMet(f, g, k, W, objTol, grayTol)
+% f(j), g(j): stage objective and grayness of the design analysed at stage
+% iteration j.  Window j = k-W..k, never reaching the stage's starting design
+% (j = 1).  r = [range(f)/|f(k)|, range(g)], NaN while the window is incomplete.
+met = false;  r = [NaN NaN];
+if k - W < 2, return; end
+fw = f(k-W:k);  gw = g(k-W:k);
+r = [(max(fw) - min(fw)) / max(abs(fw(end)), realmin), max(gw) - min(gw)];
+met = r(1) < objTol && r(2) < grayTol;
 end
 
 function v = localLast(values)

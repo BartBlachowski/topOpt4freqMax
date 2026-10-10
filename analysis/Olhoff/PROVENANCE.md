@@ -125,6 +125,37 @@ the evidence that recorded them. Details:
 
 ## 7. Adaptations
 
+**2026-10-10 — stagnation stop rule (local, default-off).**
+`stop.rule = 'stagnation'` replaces the sec. 3.5.1 design-increment test. The
+run stops when, over the W+1 most recent designs whose eigenvalues are known,
+ω_n varied by less than `stop.stagnation.objectiveTolerance` relative to its
+latest value, and 4·mean(ρ(1−ρ)) varied by less than
+`stop.stagnation.graynessTolerance`. W is `stop.stagnation.window`; the
+defaults are 10, 1e-3 and 5e-3. Both quantities are taken at the top of each
+outer iteration, for the design whose ω is evaluated there anyway. So the
+window trails the update by one and never contains the initial design. This is
+rule R1 of `examples/Performance/stop_criterion_study`, and it is the common rule
+of all three methods. It is selected from outside through
+`olhoffcurrent_config(..., 'StopStagnation', true | struct)`.
+
+| file | change |
+|---|---|
+| `architecture/olhoffSolve.m` | ω_n and the grey measure recorded per outer iteration when selected; the admission branch; `aux.stagObjRange` and `aux.stagMndRange`, created only when selected |
+| `architecture/+olh/+config/schema.m` | `stagnation` added to the `stop.rule` domain; three rows `stop.stagnation.*` |
+| `architecture/+olh/+config/validate.m` | refuses `stagnation` together with any `stop.guards.*` (they qualify a test it does not use) and with projection (continuation would consume a stale window) |
+| `architecture/+olh/+config/describe.m` | the STOPPING section names the rule and its thresholds |
+| `architecture/docs/CONFIG_REFERENCE.md` | the `stop.rule` row and the three new rows |
+
+**Configuration hashes change.** `olhoffcurrent_config_hash` iterates schema
+rows, so all three rows enter every hash, including runs that never select the
+rule (87 → 90 rows). No scientific value changes. The 87-row list is frozen in
+`tests/fixtures/schema_rows_pre_stagnation.json`, so a hash recorded before this
+change can be recomputed from a current configuration, as was done for the
+81 → 87 transition.
+
+Unselected, the option leaves the trajectory unchanged: see
+`trajectory_effect` in `PROVENANCE.json`. The change is not in upstream.
+
 **2026-10-08 — relative-increment stop metric (local, default-off).**
 `stop.norm = 'relativeL2'` stops on ||Δρ||₂/||ρ||₂ < `stop.tolerance`, where ρ
 is the design variable before the update (z under projection). It is selected

@@ -108,6 +108,26 @@ anyStopGuard  = guardLadder || guardMaxChange;
 tolOuter      = g('stop.tolerance');
 stopNormL2    = strcmp(g('stop.norm'),'l2');
 stopNormRel   = strcmp(g('stop.norm'),'relativeL2');
+% ---- the stagnation rule, if selected ------------------------------------
+% stop.rule == 'stagnation' replaces the sec. 3.5.1 design-increment test: the
+% run stops when, over the W+1 most recent designs whose eigenvalues are known,
+% omega_n has varied by less than objectiveTolerance (relative to its latest
+% value) AND the grey measure 4*mean(rho.*(1-rho)) by less than
+% graynessTolerance.  Both are recorded for the PRE-update design at the top of
+% each outer iteration, where omega_n is evaluated anyway, so the window trails
+% the update by one and the returned design is one update past its last
+% member.  The initial design is never in the window.  Class D.
+ruleStagnation = strcmp(g('stop.rule'),'stagnation');
+stagW      = g('stop.stagnation.window');
+stagObjTol = g('stop.stagnation.objectiveTolerance');
+stagMndTol = g('stop.stagnation.graynessTolerance');
+stagObj    = [];   % omega_n of the design analysed at the top of each outer
+stagMnd    = [];   % its grey measure
+if ruleStagnation
+    % Created only when selected, so an unselected run's aux is unchanged.
+    aux.stagObjRange = [];
+    aux.stagMndRange = [];
+end
 % ---- the stage-exhaustion controller, if selected ------------------------
 % Two INDEPENDENT switches, both defaulting to the historical behaviour, so a
 % configuration that names neither is bitwise the solver that existed before:
@@ -231,6 +251,10 @@ for outer = 1:maxOuter
     [K,M] = assemble2D(mdl, rho, stiffNow, massNowCfg);
     [w, Phi, lam] = eigSolve(K, M, Jcalc, g('eigen.solver'), [], eigOpts);
     tEig = toc(te);
+    if ruleStagnation
+        stagObj(outer) = w(n);                    %#ok<AGROW>
+        stagMnd(outer) = 4*mean(rho.*(1-rho));    %#ok<AGROW>
+    end
 
     [N, multState] = olh.multi.detect(cfg, w, n, Jcalc, multState);
     if N >= Nmax
@@ -573,6 +597,16 @@ for outer = 1:maxOuter
         end
     end
 
+    % ---- stagnation admission --------------------------------------------
+    % Replaces the design-increment test computed above, which stays recorded
+    % as the counterfactual.  olh.config.validate refuses the guards with it.
+    if ruleStagnation
+        [convOuter, stagR] = local_stagnation(stagObj, stagMnd, outer, ...
+                                              stagW, stagObjTol, stagMndTol);
+        aux.stagObjRange(outer) = stagR(1);
+        aux.stagMndRange(outer) = stagR(2);
+    end
+
     % ---- projection continuation ----------------------------------------
     % The trigger is the EXISTING outer convergence event -- the frozen test
     % together with whatever guards are configured, i.e. the very event that
@@ -611,7 +645,13 @@ for outer = 1:maxOuter
     hist.tOuter(outer) = toc(tOuterTic);
 
     if convOuter
-        log{end+1} = sprintf('converged at outer iteration %d (||drho||_2 = %.3e, max|drho| = %.3e)',outer,dxNorm2,dxOuter); %#ok<AGROW>
+        if ruleStagnation
+            log{end+1} = sprintf(['converged at outer iteration %d (stagnation over the designs ' ...
+                'analysed at outer %d-%d: range(omega_%d)/omega_%d = %.3e, range(Mnd) = %.3e)'], ...
+                outer, outer-stagW, outer, n, n, stagR(1), stagR(2)); %#ok<AGROW>
+        else
+            log{end+1} = sprintf('converged at outer iteration %d (||drho||_2 = %.3e, max|drho| = %.3e)',outer,dxNorm2,dxOuter); %#ok<AGROW>
+        end
         break
     end
 end
@@ -666,6 +706,18 @@ function [Vsum, gradV] = local_projVolume(H, Hs, z, dz, betaProj, eta, rhomin)
 [rhoT, sT] = projDensityField(H, Hs, z + dz, betaProj, eta, rhomin);
 Vsum  = sum(rhoT);
 gradV = projChain(H, Hs, sT, ones(numel(rhoT),1));
+end
+
+function [met, r] = local_stagnation(f, m, k, W, objTol, mndTol)
+%LOCAL_STAGNATION  Windowed stagnation of the objective and the grey measure.
+%   f(j), m(j) belong to the design analysed at the top of outer j; the window
+%   is j = k-W..k and must not reach the initial design (j = 1).
+%   r = [range(f)/|f(k)|, range(m)], NaN while the window is incomplete.
+met = false;  r = [NaN NaN];
+if k - W < 2, return; end
+fw = f(k-W:k);  mw = m(k-W:k);
+r  = [(max(fw) - min(fw))/max(abs(fw(end)), realmin), max(mw) - min(mw)];
+met = r(1) < objTol && r(2) < mndTol;
 end
 
 function s = local_yesno(tf)

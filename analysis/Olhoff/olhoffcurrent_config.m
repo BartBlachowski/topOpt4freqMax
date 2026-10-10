@@ -43,8 +43,16 @@ function [cfg, info] = olhoffcurrent_config(nelx, nely, varargin)
 %                 iteration with ||drho||_2/||rho||_2 < tol, rho the design
 %                 variable BEFORE the update, with no mesh scaling and no guards
 %                 (stop.norm = 'relativeL2', stop.rule = 'designChange', every
-%                 stop.guards.* off).  At most one of the three Stop* options may
-%                 be given.  A RUNTIME override, not a different preset.
+%                 stop.guards.* off).  A RUNTIME override, not a different preset.
+%     'StopStagnation' (default [] = off)  replaces the outer stop by windowed
+%                 stagnation (stop.rule = 'stagnation', every stop.guards.* off):
+%                 stop once, over the last W+1 analysed designs, omega_n has
+%                 varied by less than objectiveTolerance relative to its latest
+%                 value AND 4*mean(rho.*(1-rho)) by less than graynessTolerance.
+%                 true takes the schema defaults W = 10, 1e-3, 5e-3; a struct may
+%                 set any of .window, .objectiveTolerance, .graynessTolerance.
+%                 A RUNTIME override, not a different preset.
+%     At most one of the four Stop* options may be given.
 %     'Diagnostics' (default false)  per-iteration recorder.  Purely additive
 %                 and proved bitwise inert, but it costs measurable time per
 %                 outer iteration, so benchmarks leave it off.
@@ -66,6 +74,8 @@ p.addParameter('StopMaxChangeTolerance', [], ...
     @(v) isempty(v) || (isnumeric(v) && isscalar(v) && isfinite(v) && v > 0));
 p.addParameter('StopRelativeChangeTolerance', [], ...
     @(v) isempty(v) || (isnumeric(v) && isscalar(v) && isfinite(v) && v > 0));
+p.addParameter('StopStagnation', [], ...
+    @(v) isempty(v) || (islogical(v) && isscalar(v)) || (isstruct(v) && isscalar(v)));
 p.addParameter('Diagnostics', false, @(v) islogical(v) && isscalar(v));
 p.addParameter('Name', '', @(v) ischar(v) || isstring(v));
 p.parse(nelx, nely, varargin{:});
@@ -97,11 +107,12 @@ if ~isempty(opt.MaxOuter); maxOuter = double(opt.MaxOuter); end
 
 % Applied after the preset's own overrides, so it wins over them.
 stopArgs = {};
+useStagnation = isstruct(opt.StopStagnation) || isequal(opt.StopStagnation, true);
 if (~isempty(opt.StopToleranceFactor) + ~isempty(opt.StopMaxChangeTolerance) ...
-        + ~isempty(opt.StopRelativeChangeTolerance)) > 1
+        + ~isempty(opt.StopRelativeChangeTolerance) + useStagnation) > 1
     error('olhoffcurrent_config:StopRuleConflict', ...
-        ['Give at most one of ''StopToleranceFactor'', ''StopMaxChangeTolerance'' ' ...
-         'and ''StopRelativeChangeTolerance''.']);
+        ['Give at most one of ''StopToleranceFactor'', ''StopMaxChangeTolerance'', ' ...
+         '''StopRelativeChangeTolerance'' and ''StopStagnation''.']);
 end
 if ~isempty(opt.StopToleranceFactor)
     stopArgs = {'stop.toleranceRule', 'explicit', ...
@@ -131,6 +142,29 @@ if ~isempty(opt.StopRelativeChangeTolerance)
                 'stop.guards.boxInactiveFraction', 0, ...
                 'stop.guards.ladderExhausted',    false, ...
                 'stop.guards.maxDesignChange',    false};
+end
+if useStagnation
+    % olhoffSolve tests range(omega_n)/omega_n < objectiveTolerance and
+    % range(Mnd) < graynessTolerance over the window (both strict).
+    stopArgs = {'stop.rule',                      'stagnation', ...
+                'stop.guards.settledMove',        false, ...
+                'stop.guards.boxInactiveFraction', 0, ...
+                'stop.guards.ladderExhausted',    false, ...
+                'stop.guards.maxDesignChange',    false};
+    if isstruct(opt.StopStagnation)
+        known = {'window', 'objectiveTolerance', 'graynessTolerance'};
+        f = fieldnames(opt.StopStagnation);
+        bad = setdiff(f, known);
+        if ~isempty(bad)
+            error('olhoffcurrent_config:UnknownStagnationField', ...
+                'StopStagnation has unknown field(s) %s; allowed: %s.', ...
+                strjoin(bad, ', '), strjoin(known, ', '));
+        end
+        for k = 1:numel(f)
+            stopArgs = [stopArgs, {['stop.stagnation.' f{k}], ...
+                double(opt.StopStagnation.(f{k}))}]; %#ok<AGROW>
+        end
+    end
 end
 
 cfg = olh.config.resolve(info.upstreamPreset, ...

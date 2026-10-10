@@ -139,7 +139,7 @@ The evidence for each letter is in `SCIENTIFIC_CONFIG_PROVENANCE.md`.
 
 | Field | Type | Default | Admissible | Class | Meaning |
 |---|---|---|---|---|---|
-| `stop.rule` | enum | `'designChange'` | `designChange`, `stageExhaustion` | C | what admits outer convergence: the sec. 3.5.1 design-increment test with its guards, or the frozen two-branch exhaustion rule at the last move level |
+| `stop.rule` | enum | `'designChange'` | `designChange`, `stageExhaustion`, `stagnation` | C | what admits outer convergence: the sec. 3.5.1 design-increment test with its guards, the frozen two-branch exhaustion rule at the last move level, or stagnation = windowed stagnation of omega_n and the grey measure (stop.stagnation.*; class D) |
 | `stop.norm` | enum | `'l2'` | `l2`, `max`, `relativeL2` | B | sec. 3.5.1 writes "the norm" unqualified; l2 is the natural reading. relativeL2 = \|\|d\|\|_2/\|\|x\|\|_2, the increment relative to the design variable it is applied to (class D, dimensionless: needs toleranceRule explicit) |
 | `stop.tolerance` | double | `0.05` | [0, Inf] | C | epsilon of Fig. 1; never given in the paper |
 | `stop.toleranceRule` | enum | `'meshScaled'` | `explicit`, `meshScaled` | C | meshScaled recomputes stop.tolerance as 0.05*sqrt(NE/3200) AFTER mesh overrides, so eps means the same RMS density change at every resolution |
@@ -149,6 +149,9 @@ The evidence for each letter is in `SCIENTIFIC_CONFIG_PROVENANCE.md`.
 | `stop.guards.boxInactiveFraction` | double | `0` | [0, Inf] | C | assert convergence only when max|drho| <= fraction * move limit, i.e. the step is small because the design stopped and not because the move box bound it; 0 = off |
 | `stop.guards.ladderExhausted` | logical | `false` | `true`, `false` | D | assert convergence only when no remaining ladder level exceeds epsilon/sqrt(NE) |
 | `stop.guards.maxDesignChange` | logical | `false` | `true`, `false` | D | assert convergence only when max|d(design)| < epsilon/sqrt(NE) |
+| `stop.stagnation.window` | int | `10` | [1, Inf] | D | stop.rule=stagnation: W; the test spans the W+1 most recent designs whose omega_n is known, never the initial design |
+| `stop.stagnation.objectiveTolerance` | double | `0.001` | [0, Inf] | D | stop.rule=stagnation: (max-min)/\|last\| of omega_n over the window must be below this |
+| `stop.stagnation.graynessTolerance` | double | `0.005` | [0, Inf] | D | stop.rule=stagnation: max-min of 4*mean(rho.*(1-rho)) over the window must be below this (absolute) |
 
 ## cfg.runtime
 

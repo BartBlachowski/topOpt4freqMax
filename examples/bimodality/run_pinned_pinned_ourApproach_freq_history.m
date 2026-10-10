@@ -33,6 +33,13 @@
 %   (optimization.stop_criterion); conv_tol is then ignored, as rel_tol is
 %   with 'max_change'.
 %
+%   stop_criterion = 'stagnation' is the common rule of all three methods (R1,
+%   examples/Performance/stop_criterion_study): stop once, over the last
+%   stag_window+1 analysed designs, the compliance objective has varied by
+%   < stag_obj_tol relative to its latest value AND the grayness
+%   4*mean(xPhys(1-xPhys)) by < stag_gray_tol; conv_tol and rel_tol are then
+%   ignored.
+%
 %   Every save_every_it-th iterate (and the last one) is also rendered, so the
 %   topology can be compared with the frequency plateau of the history; the
 %   snapshot of iteration k is the design whose omega_1..3 are plotted at k.
@@ -46,8 +53,12 @@ nely = 100;
 save_every_it = 25;   % topology snapshot every save_every_it iterations (+ last); 0 = none
 conv_tol = 0.01;      % stop when max|x - x_old| <= conv_tol; 0.01 = Table 1
 conv_tol = 0.04;	
-stop_criterion = 'max_change';   % 'max_change' (Table 1 rule, conv_tol) | 'relative_l2_change' (rel_tol)
+% stop_criterion = 'max_change';   % previous setting
+stop_criterion = 'stagnation';   % 'max_change' (Table 1 rule, conv_tol) | 'relative_l2_change' (rel_tol) | 'stagnation'
 rel_tol = 1e-3;       % stop when ||x - x_old||_2/||x_old||_2 < rel_tol; no calibrated value
+stag_window = 10;     % ('stagnation') window W: the last W+1 analysed designs
+stag_obj_tol = 1e-3;  % ('stagnation') range(objective)/objective over the window
+stag_gray_tol = 5e-3; % ('stagnation') range(4*mean(xPhys(1-xPhys))) over the window
 max_iter = [];        % iteration cap; [] = frozen profile value (2000)
 
 here = fileparts(mfilename('fullpath'));
@@ -67,9 +78,15 @@ switch stop_criterion
         cfg.optimization.stop_criterion = stop_criterion;
         cfg.optimization.convergence_tol = rel_tol;
         stopDesc = sprintf('rel_tol = %g (||dx||_2/||x||_2)', rel_tol);
+    case 'stagnation'
+        cfg.optimization.stop_criterion = stop_criterion;
+        cfg.optimization.stagnation = struct('window', stag_window, ...
+            'objective_tol', stag_obj_tol, 'grayness_tol', stag_gray_tol);
+        stopDesc = sprintf('stagnation over %d+1 designs (objective %g, grayness %g)', ...
+            stag_window, stag_obj_tol, stag_gray_tol);
     otherwise
-        error('stop_criterion must be ''max_change'' or ''relative_l2_change'' (got ''%s'').', ...
-            stop_criterion);
+        error(['stop_criterion must be ''max_change'', ''relative_l2_change'' or ' ...
+               '''stagnation'' (got ''%s'').'], stop_criterion);
 end
 if ~isempty(max_iter)
     cfg.optimization.max_iters = max_iter;

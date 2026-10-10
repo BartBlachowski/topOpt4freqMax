@@ -47,7 +47,13 @@
 %                           'StopMaxChangeTolerance')
 %     'relative_l2_change'  ||drho||_2/||rho||_2 < stop_rel_tol, rho the design
 %                           before the update ('StopRelativeChangeTolerance')
-%   The last two use no mesh scaling and no guards.
+%     'stagnation'          the common rule of all three methods (R1,
+%                           examples/Performance/stop_criterion_study): stop once,
+%                           over the last stag_window+1 analysed designs, omega_1
+%                           has varied by < stag_obj_tol relative to its latest
+%                           value AND 4*mean(rho(1-rho)) by < stag_gray_tol
+%                           ('StopStagnation')
+%   The last three use no mesh scaling and no guards.
 %
 %   Every save_every_it-th iterate (and the last one) is also rendered, so the
 %   topology can be compared with the frequency plateau of the history; the
@@ -65,10 +71,14 @@
 nelx = 800;
 nely = 100;
 save_every_it = 25;   % topology snapshot every save_every_it iterations (+ last); 0 = none
-stop_criterion = 'relative_l2_change';   % 'l2_change' (Table 1 rule) | 'max_change' | 'relative_l2_change'
+% stop_criterion = 'relative_l2_change';   % previous setting
+stop_criterion = 'stagnation';   % 'l2_change' (Table 1 rule) | 'max_change' | 'relative_l2_change' | 'stagnation'
 stop_c = 0.08;        % stop when ||drho||_2 < stop_c*sqrt(NE/3200); 0.05 = Table 1  ('l2_change')
 stop_tol = 0.02;      % stop when max|drho| <= stop_tol                              ('max_change')
 stop_rel_tol = 1e-3;  % stop when ||drho||_2/||rho||_2 < stop_rel_tol; no calibrated value ('relative_l2_change')
+stag_window = 10;     % ('stagnation') window W: the last W+1 analysed designs
+stag_obj_tol = 1e-3;  % ('stagnation') range(omega_1)/omega_1 over the window
+stag_gray_tol = 5e-3; % ('stagnation') range(4*mean(rho(1-rho))) over the window
 max_iter = [];        % outer-iteration cap; [] = preset default (400)
 
 % Release the path guard of an earlier run in this session first: overwriting
@@ -106,9 +116,14 @@ switch stop_criterion
     case 'relative_l2_change'
         cfgArgs = [cfgArgs, {'StopRelativeChangeTolerance', stop_rel_tol}];
         stopDesc = sprintf('stop_rel_tol = %g (||drho||_2/||rho||_2 < %g)', stop_rel_tol, stop_rel_tol);
+    case 'stagnation'
+        cfgArgs = [cfgArgs, {'StopStagnation', struct('window', stag_window, ...
+            'objectiveTolerance', stag_obj_tol, 'graynessTolerance', stag_gray_tol)}];
+        stopDesc = sprintf('stagnation over %d+1 designs (omega_1 %g, Mnd %g)', ...
+            stag_window, stag_obj_tol, stag_gray_tol);
     otherwise
-        error(['stop_criterion must be ''l2_change'', ''max_change'' or ' ...
-               '''relative_l2_change'' (got ''%s'').'], stop_criterion);
+        error(['stop_criterion must be ''l2_change'', ''max_change'', ' ...
+               '''relative_l2_change'' or ''stagnation'' (got ''%s'').'], stop_criterion);
 end
 cfg = olhoffcurrent_config(nelx, nely, cfgArgs{:});
 res = olhoffSolve(cfg);

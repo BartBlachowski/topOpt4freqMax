@@ -122,6 +122,9 @@ end
 if ~isempty(getOpt(mcfg, 'olhoff_stop_relative_tol', []))
     args = [args, {'StopRelativeChangeTolerance', double(mcfg.olhoff_stop_relative_tol)}];
 end
+if ~isempty(getOpt(mcfg, 'olhoff_stop_stagnation', []))
+    args = [args, {'StopStagnation', mcfg.olhoff_stop_stagnation}];
+end
 % max_outer_override (smoke tests) takes precedence over a changed budget.
 if isfield(opts, 'max_outer_override') && ~isempty(opts.max_outer_override)
     args = [args, {'MaxOuter', double(opts.max_outer_override)}];

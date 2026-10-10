@@ -124,9 +124,10 @@ _DYNAMIC_LOAD_TYPES = {"semi_harmonic", "harmonic"}
 def _require_native_stop_criterion(cfg: dict) -> None:
     """optimization.stop_criterion: the Python ports implement only "max_change".
 
-    "relative_l2_change" (||x - x_old||_2 / ||x_old||_2) is implemented by the
-    MATLAB dispatcher only; refusing it here keeps a shared JSON task from
-    silently running a different stopping rule in Python.
+    "relative_l2_change" (||x - x_old||_2 / ||x_old||_2) and "stagnation"
+    (windowed objective and grayness, optimization.stagnation.*) are implemented
+    by the MATLAB dispatcher only; refusing them here keeps a shared JSON task
+    from silently running a different stopping rule in Python.
     """
     if not has_field_path(cfg, ["optimization", "stop_criterion"]):
         return

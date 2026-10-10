@@ -80,14 +80,30 @@ function [x, omega, tIter, nIter, mem_usage, nIterStage, telemetry] = run_topopt
     % with, on the design variable x:
     %   "max_change"          max|x - x_old|                 (default; native rule)
     %   "relative_l2_change"  ||x - x_old||_2 / ||x_old||_2  (strict <)
+    % or "stagnation", which ignores those tolerances: stop once, over the last
+    % optimization.stagnation.window + 1 analysed designs, the method's
+    % objective has varied by less than objective_tol (relative) AND the
+    % grayness 4*mean(x.*(1-x)) by less than grayness_tol (absolute); defaults
+    % 10, 1e-3, 5e-3.  optimization.yuksel.stage1_stop_criterion, when given,
+    % overrides the criterion for Yuksel's stage 1 only.
     stopCriterion = 'max_change';
     if hasFieldPath(cfg, {'optimization','stop_criterion'})
-        stopCriterion = lower(strtrim(reqStr(cfg, {'optimization','stop_criterion'}, ...
-            'optimization.stop_criterion')));
-        if ~any(strcmp(stopCriterion, {'max_change', 'relative_l2_change'}))
-            error('run_topopt_from_json:InvalidStopCriterion', ...
-                ['optimization.stop_criterion must be "max_change" or ' ...
-                 '"relative_l2_change" (got "%s").'], stopCriterion);
+        stopCriterion = parseStopCriterion(reqStr(cfg, {'optimization','stop_criterion'}, ...
+            'optimization.stop_criterion'), 'optimization.stop_criterion');
+    end
+    stagnationCfg = struct();
+    stagnationKeys = {'window', 'objective_tol', 'grayness_tol'};
+    for k = 1:numel(stagnationKeys)
+        key = stagnationKeys{k};
+        if hasFieldPath(cfg, {'optimization','stagnation',key})
+            label = ['optimization.stagnation.' key];
+            if strcmp(key, 'window')
+                v = reqInt(cfg, {'optimization','stagnation',key}, label);
+            else
+                v = reqNum(cfg, {'optimization','stagnation',key}, label);
+            end
+            assertPositive(v, label);
+            stagnationCfg.(['stagnation_' key]) = v;
         end
     end
 
@@ -305,6 +321,7 @@ function [x, omega, tIter, nIter, mem_usage, nIterStage, telemetry] = run_topopt
             runCfg.beamH = H;
             runCfg.conv_tol = convTol;
             runCfg.stop_criterion = stopCriterion;
+            runCfg = copyFields(runCfg, stagnationCfg);
             runCfg.approach_name = approach;
             runCfg.save_frq_iterations = postproc.saveFrequencyIterations;
             runCfg.visualization_quality = postproc.visualizeQuality;
@@ -388,6 +405,12 @@ function [x, omega, tIter, nIter, mem_usage, nIterStage, telemetry] = run_topopt
                     'optimization.yuksel.stage2_tol');
                 assertPositive(runCfg.stage2_tol, 'optimization.yuksel.stage2_tol');
             end
+            if hasFieldPath(cfg, {'optimization','yuksel','stage1_stop_criterion'})
+                runCfg.stage1_stop_criterion = parseStopCriterion(reqStr(cfg, ...
+                    {'optimization','yuksel','stage1_stop_criterion'}, ...
+                    'optimization.yuksel.stage1_stop_criterion'), ...
+                    'optimization.yuksel.stage1_stop_criterion');
+            end
 
             % The solver keeps its per-iteration designs only alongside a mode
             % history, so postprocessing.record_design_history requests a
@@ -466,6 +489,7 @@ function [x, omega, tIter, nIter, mem_usage, nIterStage, telemetry] = run_topopt
             runCfg.move = move;
             runCfg.conv_tol = convTol;
             runCfg.stop_criterion = stopCriterion;
+            runCfg = copyFields(runCfg, stagnationCfg);
             runCfg.max_iters = maxiter;
             runCfg.supportType = supportCode;
             runCfg.approach_name = approach;
@@ -749,6 +773,17 @@ function [x, omega, tIter, nIter, mem_usage, nIterStage, telemetry] = run_topopt
             mean(4*x.*(1-x))), ...
         'convergence_tolerance', ...
             telemetryValue(solverStopping, 'convergence_tolerance', convTol), ...
+        'stage1_stop_criterion', ...
+            telemetryValue(solverStopping, 'stage1_stop_criterion', 'N/A'), ...
+        'stagnation_window', telemetryValue(solverStopping, 'stagnation_window', NaN), ...
+        'stagnation_objective_tol', ...
+            telemetryValue(solverStopping, 'stagnation_objective_tol', NaN), ...
+        'stagnation_grayness_tol', ...
+            telemetryValue(solverStopping, 'stagnation_grayness_tol', NaN), ...
+        'final_stagnation_objective_range', ...
+            telemetryValue(solverStopping, 'final_stagnation_objective_range', NaN), ...
+        'final_stagnation_grayness_range', ...
+            telemetryValue(solverStopping, 'final_stagnation_grayness_range', NaN), ...
         ... % Precedence-ordered status and the RAW native record it came from.
         ... % A solver that reports a failed subproblem must never reach a
         ... % results table as a converged run; carrying both here means the
@@ -1598,6 +1633,20 @@ function out = toVec3(v)
     v = v(:);
     n = min(3, numel(v));
     out(1:n) = v(1:n);
+end
+
+function c = parseStopCriterion(v, label)
+    c = lower(strtrim(char(v)));
+    if ~any(strcmp(c, {'max_change', 'relative_l2_change', 'stagnation'}))
+        error('run_topopt_from_json:InvalidStopCriterion', ...
+            '%s must be "max_change", "relative_l2_change" or "stagnation" (got "%s").', ...
+            label, c);
+    end
+end
+
+function s = copyFields(s, src)
+    f = fieldnames(src);
+    for k = 1:numel(f), s.(f{k}) = src.(f{k}); end
 end
 
 function assertPositive(v, label)

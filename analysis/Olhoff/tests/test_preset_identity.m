@@ -16,7 +16,9 @@ function nFail = test_preset_identity()
 %        diagnostic is not eligible
 %     6. distinct identity: Pedersen and beta-stall differ in material law and
 %        controller, and the formulation text says so
-%     7. schema has 87 rows
+%     7. schema has 90 rows; the 87-row hash recomputed from a current
+%        configuration equals the hash recorded before the stop.stagnation.*
+%        rows were added (production 160x20 at HEAD 2b63e6f)
 
 here = fileparts(mfilename('fullpath'));
 root = fileparts(here);
@@ -144,7 +146,11 @@ nFail = nFail + chk('caveats differ and the Pedersen caveat states the formulati
     contains(olhoffcurrent_caveat(PED), 'not a bug'));
 
 % ---- 7. schema ----------------------------------------------------------------
-nFail = nFail + chk('configuration schema has 87 rows', size(olh.config.schema(), 1) == 87);
+nFail = nFail + chk('configuration schema has 90 rows', size(olh.config.schema(), 1) == 90);
+F87 = jsondecode(fileread(fullfile(here, 'fixtures', 'schema_rows_pre_stagnation.json')));
+nFail = nFail + chk('87 pre-stagnation rows recorded', numel(F87.rows) == 87);
+nFail = nFail + chk('production 160x20: pre-stagnation hash b1a5744d... reproduced from the current config', ...
+    strcmp(oldHash(cP, F87.rows), 'b1a5744df798ad624fcd0b8b4306888eb99816ee5ce60f51040e39e03e90d4f4'));
 
 fprintf('%s\n  failures: %d\n\n', repmat('-',1,72), nFail);
 end

@@ -65,51 +65,121 @@
   "adaptations": [
     {
       "file": "+impl/architecture/olhoffSolve.m",
-      "kind": "STOPPING CRITERION OPTION (default-off)",
-      "change": "stopNormRel branch in the convergence metric (||drho||_2/||x||_2 < stop.tolerance, x the design variable before the update); ||x||_2 taken before the update; aux.dxRel recorded every iteration (outside hist).",
-      "why": "Owner request 2026-10-08: a selectable stop on the normalized design increment ||delta x||/||x|| < epsilon for all three methods; implemented locally first, not yet in upstream.",
-      "trajectory_effect": "NONE unless stop.norm = 'relativeL2' is selected. Proved at 160x20 on the production preset with the default rule, StopToleranceFactor 0.2 and StopMaxChangeTolerance 0.03: rho, omega, log and hist (isequaln) bitwise equal to HEAD be43b90.",
+      "kind": "STOPPING CRITERION OPTIONS (default-off)",
+      "change": "relativeL2 (2026-10-08) and stagnation (2026-10-10); see history.",
+      "why": "Owner requests 2026-10-08 and 2026-10-10: selectable stopping rules common to the three methods.",
+      "trajectory_effect": "NONE unless stop.norm = 'relativeL2' or stop.rule = 'stagnation' is selected; see history.",
       "upstream_sha256": "6c891b42a6c3bbdd80e3d1035f05f626bd8e73a2beaa3540532a68ec6e3cd7f7",
-      "promoted_sha256": "b591a08bd078cefc5adb4dc207e216736e24d1ca4038e5b5700ddf1483a22987"
+      "promoted_sha256": "2250270be50fbef64902f44114e5f0547eba3da67995d54f2ebbe77486b8e218",
+      "history": [
+        {
+          "date": "2026-10-08",
+          "change": "stopNormRel branch in the convergence metric (||drho||_2/||x||_2 < stop.tolerance, x the design variable before the update); ||x||_2 taken before the update; aux.dxRel recorded every iteration (outside hist).",
+          "why": "Owner request 2026-10-08: a selectable stop on the normalized design increment ||delta x||/||x|| < epsilon for all three methods; implemented locally first, not yet in upstream.",
+          "trajectory_effect": "NONE unless stop.norm = 'relativeL2' is selected. Proved at 160x20 on the production preset with the default rule, StopToleranceFactor 0.2 and StopMaxChangeTolerance 0.03: rho, omega, log and hist (isequaln) bitwise equal to HEAD be43b90."
+        },
+        {
+          "date": "2026-10-10",
+          "change": "stop.rule = 'stagnation': omega_n and 4*mean(rho.*(1-rho)) recorded at the top of each outer iteration when selected; local_stagnation admits convergence on their window ranges, replacing the design-increment test; aux.stagObjRange / aux.stagMndRange created only when selected; dedicated convergence log line.",
+          "why": "Owner request 2026-10-10: one stopping rule for all three methods, rule R1 of examples/Performance/stop_criterion_study (windowed stagnation of the method's objective and of the grey measure); implemented locally first, not yet in upstream.",
+          "trajectory_effect": "NONE unless stop.rule = 'stagnation' is selected. Proved at 160x20 on the production preset with the default rule: rho, omega, log, status, aux and hist (isequaln, timing fields excluded) bitwise equal to HEAD 2b63e6f. Selected (defaults 10 / 1e-3 / 5e-3) the trajectory is the default one truncated at outer 67, one after the offline replay's k* = 66."
+        }
+      ]
     },
     {
       "file": "+impl/architecture/+olh/+config/schema.m",
-      "kind": "STOPPING CRITERION OPTION (default-off)",
-      "change": "stop.norm domain gains 'relativeL2'; doc string extended. No row added, so every configuration hash is unchanged.",
-      "why": "Owner request 2026-10-08: a selectable stop on the normalized design increment ||delta x||/||x|| < epsilon for all three methods; implemented locally first, not yet in upstream.",
-      "trajectory_effect": "NONE unless stop.norm = 'relativeL2' is selected. Proved at 160x20 on the production preset with the default rule, StopToleranceFactor 0.2 and StopMaxChangeTolerance 0.03: rho, omega, log and hist (isequaln) bitwise equal to HEAD be43b90.",
+      "kind": "STOPPING CRITERION OPTIONS (default-off)",
+      "change": "relativeL2 (2026-10-08) and stagnation (2026-10-10); see history.",
+      "why": "Owner requests 2026-10-08 and 2026-10-10: selectable stopping rules common to the three methods.",
+      "trajectory_effect": "NONE unless stop.norm = 'relativeL2' or stop.rule = 'stagnation' is selected; see history.",
       "upstream_sha256": "3fa03435a0fc54f2863c537b3e926d00023d2df7bbb6eb00001e0ce05eb6584b",
-      "promoted_sha256": "5f9c712fe33492be7298a6ce1b9f067a5eab470224cfbb8888e7860694cb2873"
+      "promoted_sha256": "54f6321eb6caed2bd05221f0fae10fb761ebba0876c00e915ec5bbe7ba511ad4",
+      "history": [
+        {
+          "date": "2026-10-08",
+          "change": "stop.norm domain gains 'relativeL2'; doc string extended. No row added, so every configuration hash is unchanged.",
+          "why": "Owner request 2026-10-08: a selectable stop on the normalized design increment ||delta x||/||x|| < epsilon for all three methods; implemented locally first, not yet in upstream.",
+          "trajectory_effect": "NONE unless stop.norm = 'relativeL2' is selected. Proved at 160x20 on the production preset with the default rule, StopToleranceFactor 0.2 and StopMaxChangeTolerance 0.03: rho, omega, log and hist (isequaln) bitwise equal to HEAD be43b90."
+        },
+        {
+          "date": "2026-10-10",
+          "change": "stop.rule domain gains 'stagnation'; rows stop.stagnation.window (10), .objectiveTolerance (1e-3), .graynessTolerance (5e-3). Three rows added: every configuration hash changes (see config_hash_transition_2026_10_10).",
+          "why": "Owner request 2026-10-10: one stopping rule for all three methods, rule R1 of examples/Performance/stop_criterion_study (windowed stagnation of the method's objective and of the grey measure); implemented locally first, not yet in upstream.",
+          "trajectory_effect": "NONE unless stop.rule = 'stagnation' is selected. Proved at 160x20 on the production preset with the default rule: rho, omega, log, status, aux and hist (isequaln, timing fields excluded) bitwise equal to HEAD 2b63e6f. Selected (defaults 10 / 1e-3 / 5e-3) the trajectory is the default one truncated at outer 67, one after the offline replay's k* = 66."
+        }
+      ]
     },
     {
       "file": "+impl/architecture/+olh/+config/validate.m",
-      "kind": "STOPPING CRITERION OPTION (default-off)",
-      "change": "relativeL2 is refused with toleranceRule meshScaled, with the RMS guards (ladderExhausted, maxDesignChange) and with stage exhaustion, all of which read stop.tolerance as an absolute l2 scale.",
-      "why": "Owner request 2026-10-08: a selectable stop on the normalized design increment ||delta x||/||x|| < epsilon for all three methods; implemented locally first, not yet in upstream.",
-      "trajectory_effect": "NONE unless stop.norm = 'relativeL2' is selected. Proved at 160x20 on the production preset with the default rule, StopToleranceFactor 0.2 and StopMaxChangeTolerance 0.03: rho, omega, log and hist (isequaln) bitwise equal to HEAD be43b90.",
+      "kind": "STOPPING CRITERION OPTIONS (default-off)",
+      "change": "relativeL2 (2026-10-08) and stagnation (2026-10-10); see history.",
+      "why": "Owner requests 2026-10-08 and 2026-10-10: selectable stopping rules common to the three methods.",
+      "trajectory_effect": "NONE unless stop.norm = 'relativeL2' or stop.rule = 'stagnation' is selected; see history.",
       "upstream_sha256": "10493fbe6717cfce186e93257e239e1acacb7d4826638b527c54a8d604373e22",
-      "promoted_sha256": "4fc03e402237d8dcb3e624d22deb01f2fb2284d0f14cc4ddf5328fbcd74ef7b4"
+      "promoted_sha256": "ac92334a2528234dcab15c5e38bbb9796d478b5922239068f007ba2aa214bfe9",
+      "history": [
+        {
+          "date": "2026-10-08",
+          "change": "relativeL2 is refused with toleranceRule meshScaled, with the RMS guards (ladderExhausted, maxDesignChange) and with stage exhaustion, all of which read stop.tolerance as an absolute l2 scale.",
+          "why": "Owner request 2026-10-08: a selectable stop on the normalized design increment ||delta x||/||x|| < epsilon for all three methods; implemented locally first, not yet in upstream.",
+          "trajectory_effect": "NONE unless stop.norm = 'relativeL2' is selected. Proved at 160x20 on the production preset with the default rule, StopToleranceFactor 0.2 and StopMaxChangeTolerance 0.03: rho, omega, log and hist (isequaln) bitwise equal to HEAD be43b90."
+        },
+        {
+          "date": "2026-10-10",
+          "change": "stagnation is refused with any stop.guards.* (they qualify the increment test it does not use) and with projection (continuation would consume a stale window).",
+          "why": "Owner request 2026-10-10: one stopping rule for all three methods, rule R1 of examples/Performance/stop_criterion_study (windowed stagnation of the method's objective and of the grey measure); implemented locally first, not yet in upstream.",
+          "trajectory_effect": "NONE unless stop.rule = 'stagnation' is selected. Proved at 160x20 on the production preset with the default rule: rho, omega, log, status, aux and hist (isequaln, timing fields excluded) bitwise equal to HEAD 2b63e6f. Selected (defaults 10 / 1e-3 / 5e-3) the trajectory is the default one truncated at outer 67, one after the offline replay's k* = 66."
+        }
+      ]
     },
     {
       "file": "+impl/architecture/+olh/+config/describe.m",
-      "kind": "STOPPING CRITERION OPTION (default-off)",
-      "change": "STOPPING metric line names the relative metric when it is selected.",
-      "why": "Owner request 2026-10-08: a selectable stop on the normalized design increment ||delta x||/||x|| < epsilon for all three methods; implemented locally first, not yet in upstream.",
-      "trajectory_effect": "NONE unless stop.norm = 'relativeL2' is selected. Proved at 160x20 on the production preset with the default rule, StopToleranceFactor 0.2 and StopMaxChangeTolerance 0.03: rho, omega, log and hist (isequaln) bitwise equal to HEAD be43b90.",
+      "kind": "STOPPING CRITERION OPTIONS (default-off)",
+      "change": "relativeL2 (2026-10-08) and stagnation (2026-10-10); see history.",
+      "why": "Owner requests 2026-10-08 and 2026-10-10: selectable stopping rules common to the three methods.",
+      "trajectory_effect": "NONE unless stop.norm = 'relativeL2' or stop.rule = 'stagnation' is selected; see history.",
       "upstream_sha256": "ba09e574bde8d46d2d9504e7b59d187f797249771c00bdd2999f536825256185",
-      "promoted_sha256": "7c91240c883ac98ed28452da219a4179ca928274fdaa037e0fc141ac7ab932a9"
+      "promoted_sha256": "fa733da113f562ce196f6a9057a6e03557b81599f344b4c12cb623c9602046f9",
+      "history": [
+        {
+          "date": "2026-10-08",
+          "change": "STOPPING metric line names the relative metric when it is selected.",
+          "why": "Owner request 2026-10-08: a selectable stop on the normalized design increment ||delta x||/||x|| < epsilon for all three methods; implemented locally first, not yet in upstream.",
+          "trajectory_effect": "NONE unless stop.norm = 'relativeL2' is selected. Proved at 160x20 on the production preset with the default rule, StopToleranceFactor 0.2 and StopMaxChangeTolerance 0.03: rho, omega, log and hist (isequaln) bitwise equal to HEAD be43b90."
+        },
+        {
+          "date": "2026-10-10",
+          "change": "the STOPPING section names the stagnation rule and its thresholds.",
+          "why": "Owner request 2026-10-10: one stopping rule for all three methods, rule R1 of examples/Performance/stop_criterion_study (windowed stagnation of the method's objective and of the grey measure); implemented locally first, not yet in upstream.",
+          "trajectory_effect": "NONE unless stop.rule = 'stagnation' is selected. Proved at 160x20 on the production preset with the default rule: rho, omega, log, status, aux and hist (isequaln, timing fields excluded) bitwise equal to HEAD 2b63e6f. Selected (defaults 10 / 1e-3 / 5e-3) the trajectory is the default one truncated at outer 67, one after the offline replay's k* = 66."
+        }
+      ]
     },
     {
       "file": "+impl/architecture/docs/CONFIG_REFERENCE.md",
-      "kind": "STOPPING CRITERION OPTION (default-off)",
-      "change": "stop.norm row mirrors the schema.",
-      "why": "Owner request 2026-10-08: a selectable stop on the normalized design increment ||delta x||/||x|| < epsilon for all three methods; implemented locally first, not yet in upstream.",
-      "trajectory_effect": "NONE unless stop.norm = 'relativeL2' is selected. Proved at 160x20 on the production preset with the default rule, StopToleranceFactor 0.2 and StopMaxChangeTolerance 0.03: rho, omega, log and hist (isequaln) bitwise equal to HEAD be43b90.",
+      "kind": "STOPPING CRITERION OPTIONS (default-off)",
+      "change": "relativeL2 (2026-10-08) and stagnation (2026-10-10); see history.",
+      "why": "Owner requests 2026-10-08 and 2026-10-10: selectable stopping rules common to the three methods.",
+      "trajectory_effect": "NONE unless stop.norm = 'relativeL2' or stop.rule = 'stagnation' is selected; see history.",
       "upstream_sha256": "94a05f13413892aedd7237b47e423f4c06c389723f09dcdf19620883ebc3edca",
-      "promoted_sha256": "a9aa2dfb24c058718f77ecda5853c8a383d2c5358dd634649d642266cc2f099e"
+      "promoted_sha256": "f6c185f2554c2d4be59f9644452469a75eb6b1360409965795229bc2a65d3268",
+      "history": [
+        {
+          "date": "2026-10-08",
+          "change": "stop.norm row mirrors the schema.",
+          "why": "Owner request 2026-10-08: a selectable stop on the normalized design increment ||delta x||/||x|| < epsilon for all three methods; implemented locally first, not yet in upstream.",
+          "trajectory_effect": "NONE unless stop.norm = 'relativeL2' is selected. Proved at 160x20 on the production preset with the default rule, StopToleranceFactor 0.2 and StopMaxChangeTolerance 0.03: rho, omega, log and hist (isequaln) bitwise equal to HEAD be43b90."
+        },
+        {
+          "date": "2026-10-10",
+          "change": "the stop.rule row and the three stop.stagnation.* rows.",
+          "why": "Owner request 2026-10-10: one stopping rule for all three methods, rule R1 of examples/Performance/stop_criterion_study (windowed stagnation of the method's objective and of the grey measure); implemented locally first, not yet in upstream.",
+          "trajectory_effect": "NONE unless stop.rule = 'stagnation' is selected. Proved at 160x20 on the production preset with the default rule: rho, omega, log, status, aux and hist (isequaln, timing fields excluded) bitwise equal to HEAD 2b63e6f. Selected (defaults 10 / 1e-3 / 5e-3) the trajectory is the default one truncated at outer 67, one after the offline replay's k* = 66."
+        }
+      ]
     }
   ],
-  "adaptations_note": "hist.tOuter (the former single documented adaptation) and the stage-exhaustion controller (the former undocumented six-file local divergence plus exhaustion.m) are now supplied by upstream 253069 itself. Since 2026-10-08 +impl carries five local adaptations (stop.norm = relativeL2), recorded above with their upstream and promoted hashes; SOURCE_MANIFEST.json was re-recorded for them. They should be offered upstream and come back through a promotion.",
+  "adaptations_note": "hist.tOuter (the former single documented adaptation) and the stage-exhaustion controller (the former undocumented six-file local divergence plus exhaustion.m) are now supplied by upstream 253069 itself. Since 2026-10-08 +impl carries five locally adapted files (stop.norm = relativeL2; since 2026-10-10 also stop.rule = stagnation), recorded above with their upstream and promoted hashes; SOURCE_MANIFEST.json was re-recorded for them. They should be offered upstream and come back through a promotion.",
   "presets": {
     "registry": "analysis/OlhoffCurrent/olhoffcurrent_presets.m",
     "selection_rule": "Every configuration resolution names its preset explicitly; there is no unnamed default. Compatibility aliases resolve only to the formulation they always named; historical audit codes are provenance aliases and are refused as names.",
@@ -353,5 +423,16 @@
       "alias_statement": "Historical audit IDs (M4, S2, R2, P1, PD1, PM1, T800, TMA, B0, REG160) are provenance aliases, not canonical API terminology.",
       "equivalence_evidence": "analysis/OLHOFF_CURRENT_PROMOTION_REPORT.md"
     }
-  ]
+  ],
+  "config_hash_transition_2026_10_10": {
+    "schema_rows_before": 87,
+    "schema_rows_after": 90,
+    "added_rows": [
+      "stop.stagnation.window",
+      "stop.stagnation.objectiveTolerance",
+      "stop.stagnation.graynessTolerance"
+    ],
+    "explanation": "olhoffcurrent_config_hash iterates schema rows, so every configuration hash changes, although no scientific value changes for a configuration that does not select stop.rule = 'stagnation'. The 87 pre-change rows are frozen in tests/fixtures/schema_rows_pre_stagnation.json; hashing a current configuration over them reproduces a pre-change hash.",
+    "example": "production preset at 160x20: b1a5744df798... (87 rows) -> a08a14f4ef7c... (90 rows)"
+  }
 }

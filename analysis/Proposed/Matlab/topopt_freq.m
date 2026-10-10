@@ -60,10 +60,21 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
     nu = localOpt(runCfg, 'nu', 0.3);
     move = localOpt(runCfg, 'move', 0.2);
     convTol = localOpt(runCfg, 'conv_tol', 0.01);
-    % Stopping criterion on the design variable x, both tested against conv_tol:
+    % Stopping criterion.  The first two act on the design variable x and are
+    % tested against conv_tol:
     %   'max_change'          max|x - x_old| <= conv_tol   (default; the native rule)
     %   'relative_l2_change'  ||x - x_old||_2 / ||x_old||_2 < conv_tol
+    % 'stagnation' ignores conv_tol: stop once, over the last W+1 analysed
+    % designs, the objective has varied by less than stagnation_objective_tol
+    % relative to its latest value AND the grayness 4*mean(xPhys.*(1-xPhys)) by
+    % less than stagnation_grayness_tol (both strict).  Both quantities belong to
+    % the design analysed at the top of an iteration, so the window trails the
+    % update by one and the returned design is one update past its last member;
+    % the initial design is never in the window.
     stopCriterion = localParseStopCriterion(localOpt(runCfg, 'stop_criterion', 'max_change'));
+    stagWindow = localOpt(runCfg, 'stagnation_window', 10);
+    stagObjTol = localOpt(runCfg, 'stagnation_objective_tol', 1e-3);
+    stagGrayTol = localOpt(runCfg, 'stagnation_grayness_tol', 5e-3);
     maxIters = localOpt(runCfg, 'max_iters', 2000);
     supportType = upper(string(localOpt(runCfg, 'supportType', "SS")));
     approachName = localApproachName(runCfg, 'ourApproach');
@@ -414,6 +425,8 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
     relativeObjectiveChange = NaN;
     previousObjective = NaN;
     objectiveHistory = NaN(maxIters, 1);
+    grayHistory = NaN(maxIters, 1);   % grayness of the design analysed at iteration k
+    stagRange = [NaN NaN];            % [objective, grayness] window ranges
     dv = ones(nelx*nely, 1);
     dc = ones(nelx*nely, 1);
     initialization_time = toc(solver_tic);
@@ -582,6 +595,7 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
             end
         end
         clear K M;
+        grayHistory(loop) = mean(4*xPhys.*(1-xPhys));   % xPhys is still pre-update here
 
         dv = ones(nEl, 1);
         % Passive elements are excluded from the volume constraint and OC update.
@@ -652,12 +666,17 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
         change = max(abs(x - xold));
         relChange = norm(x - xold) / max(norm(xold), realmin);
         rmsChange = sqrt(mean((x - xold).^2));
-        converged = localStopMet(stopCriterion, change, relChange, convTol);
         if isfinite(previousObjective)
             relativeObjectiveChange = abs(obj - previousObjective) / max(abs(previousObjective), eps);
         end
         previousObjective = obj;
         objectiveHistory(loop) = obj;
+        if strcmp(stopCriterion, 'stagnation')
+            [converged, stagRange] = localStagnationMet(objectiveHistory, grayHistory, ...
+                loop, stagWindow, stagObjTol, stagGrayTol);
+        else
+            converged = localStopMet(stopCriterion, change, relChange, convTol);
+        end
 
         % Mirrors the while condition exactly: the native run exits at the top
         % of the next iteration, so this is its last executed iteration.
@@ -781,6 +800,8 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
         visualizeLive, visualizationQuality, true);
     if converged && strcmp(stopCriterion, 'relative_l2_change')
         stopReason = 'relative_change_tolerance';
+    elseif converged && strcmp(stopCriterion, 'stagnation')
+        stopReason = 'stagnation_tolerance';
     elseif converged
         stopReason = 'density_change_tolerance';
     else
@@ -807,17 +828,34 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
         'final_rms_density_change', rmsChange, ...
         'final_relative_objective_change', relativeObjectiveChange, ...
         'final_grayness', mean(4*xPhys.*(1-xPhys)), ...
-        'convergence_tolerance', convTol);
+        'convergence_tolerance', convTol, ...
+        'stagnation_window', stagWindow, ...
+        'stagnation_objective_tol', stagObjTol, ...
+        'stagnation_grayness_tol', stagGrayTol, ...
+        'final_stagnation_objective_range', stagRange(1), ...
+        'final_stagnation_grayness_range', stagRange(2));
 
     xOut = xPhys(:);
 end
 
 function c = localParseStopCriterion(v)
 c = lower(strtrim(char(string(v))));
-if ~any(strcmp(c, {'max_change', 'relative_l2_change'}))
+if ~any(strcmp(c, {'max_change', 'relative_l2_change', 'stagnation'}))
     error('topopt_freq:InvalidStopCriterion', ...
-        'runCfg.stop_criterion must be "max_change" or "relative_l2_change" (got "%s").', c);
+        ['runCfg.stop_criterion must be "max_change", "relative_l2_change" or ' ...
+         '"stagnation" (got "%s").'], c);
 end
+end
+
+function [met, r] = localStagnationMet(f, g, k, W, objTol, grayTol)
+% f(j), g(j): objective and grayness of the design analysed at iteration j.
+% Window j = k-W..k, never reaching the initial design (j = 1).
+% r = [range(f)/|f(k)|, range(g)], NaN while the window is incomplete.
+met = false;  r = [NaN NaN];
+if k - W < 2, return; end
+fw = f(k-W:k);  gw = g(k-W:k);
+r = [(max(fw) - min(fw)) / max(abs(fw(end)), realmin), max(gw) - min(gw)];
+met = r(1) < objTol && r(2) < grayTol;
 end
 
 function tf = localStopMet(criterion, maxChange, relChange, tol)

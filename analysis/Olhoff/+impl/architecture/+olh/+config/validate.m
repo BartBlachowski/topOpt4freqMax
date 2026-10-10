@@ -130,6 +130,28 @@ if strcmp(g('move.continuation.signal'),'stageExhaustion') && ...
          'it requires move.policy=''ladder'' (got ''%s'').'], g('move.policy'));
 end
 
+% ---- the stagnation rule replaces the design-change test ------------------
+% stop.rule = 'stagnation' admits convergence on windowed stagnation of omega_n
+% and of the grey measure.  The guards qualify the design-increment test, which
+% this rule does not use, so a guard switched on would be silently ignored.
+% Projection continuation consumes each convergence event to raise beta; a
+% window that still spans the previous beta would then fire again at once and
+% exhaust the beta levels in consecutive iterations.
+if strcmp(g('stop.rule'),'stagnation')
+    if g('stop.guards.settledMove') || g('stop.guards.boxInactiveFraction') > 0 || ...
+            g('stop.guards.ladderExhausted') || g('stop.guards.maxDesignChange')
+        error('olh:config:stagnationWithGuard', ...
+            ['stop.rule=''stagnation'' does not use the design-increment test that ' ...
+             'stop.guards.* qualify; switch every guard off (settledMove=false, ' ...
+             'boxInactiveFraction=0, ladderExhausted=false, maxDesignChange=false).']);
+    end
+    if g('projection.enabled')
+        error('olh:config:stagnationUnderProjection', ...
+            ['stop.rule=''stagnation'' has no window reset at a projection ' ...
+             'continuation step; projection.enabled must be false.']);
+    end
+end
+
 % ---- the relative metric is dimensionless ---------------------------------
 % stop.norm = 'relativeL2' tests ||d||_2/||x||_2 < stop.tolerance.  Everything
 % else that reads stop.tolerance reads it as an ABSOLUTE l2 scale: the mesh
