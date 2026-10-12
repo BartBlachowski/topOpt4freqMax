@@ -58,8 +58,8 @@
 %     Yuksel_240x30_freq_iterations.fig / .png
 %     topologies/Yuksel_240x30_it<k>.png
 
-nelx = 800;
-nely = 100;
+nelx = 480;
+nely = 60;
 save_every_it = 25;   % topology snapshot every save_every_it iterations (+ last); 0 = none
 % stage1_tol = 0.04;  % previous setting
 stage1_tol = 0.01;    % stage 1 stops when max|x - x_old| < stage1_tol; 0.01 = Table 1 (also under 'stagnation')
