@@ -222,7 +222,7 @@ cfg.outputDir = '';                  % auto: examples/Performance/conference_ben
 % the quantity being reported is wall-clock time, which is a property of the
 % host as much as of the method.
 % cfg.runLabel  = 'campaign_mac_convergence_relative_l2_change';   % previous stop rules
-cfg.runLabel  = 'campaign_mac_convergence_stagnation_r1';
+cfg.runLabel  = 'campaign_windows_convergence_stagnation_r1';
 
 % ---- Timing-accounting tolerances (predeclared, recorded in the artifacts) --
 cfg.timingTolAbs     = 1e-6;   % |T_total - (T1+T2+T_overhead)|, seconds
@@ -235,7 +235,7 @@ cfg.crosscheckTolRel = 0.05;   % caller-side total vs solver self-reported total
 scriptDir = fileparts(mfilename('fullpath'));
 repoRoot  = fileparts(fileparts(scriptDir));
 addpath(scriptDir);
-addpath(fullfile(scriptDir, 'conference_bench'));
+addpath(fullfile(scriptDir, 'paper_bench'));
 addpath(fullfile(repoRoot, 'tools', 'Matlab'));
 addpath(fullfile(scriptDir, 'benchmark_profile'));   % frozen Proposed/Yuksel profile, base config, common evaluator
 % THE production Du-Olhoff implementation.  analysis/Olhoff (named
@@ -331,7 +331,7 @@ if isempty(cfg.runLabel)
     end
 end
 if isempty(cfg.outputDir)
-    cfg.outputDir = fullfile(scriptDir, 'conference_benchmark', cfg.runLabel);
+    cfg.outputDir = fullfile(scriptDir, 'paper_benchmark', cfg.runLabel);
 end
 
 % EVERY campaign gets a directory of its own.  A rerun under the same label

@@ -222,6 +222,10 @@ end
 % Memory is out of the benchmark contract, and the sampler it would otherwise
 % start forks `ps` at 10 Hz inside the timed loop.  Off, explicitly.
 mcfg.benchmark.measure_memory = false;
+% The structural-mode check behind the figure titles costs extra eigensolves
+% inside the timed call on coarse meshes; nobody sees this run's figure, and the
+% table reports omega from the common evaluator.  Off, explicitly.
+mcfg.postprocessing.structural_mode_check = false;
 
 tCall = tic;
 [x, omega, tIter, nIter, ~, nIterStage, tel] = run_topopt_from_json(mcfg); %#ok<ASGLU>
@@ -271,6 +275,7 @@ if isfield(opts, 'max_outer_override') && ~isempty(opts.max_outer_override)
     mcfg.optimization.yuksel.stage1_max_iters = double(opts.max_outer_override);
 end
 mcfg.benchmark.measure_memory = false;
+mcfg.postprocessing.structural_mode_check = false;   % as in runProposed
 
 tCall = tic;
 [x, omega, tIter, nIter, ~, nIterStage, tel] = run_topopt_from_json(mcfg); %#ok<ASGLU>

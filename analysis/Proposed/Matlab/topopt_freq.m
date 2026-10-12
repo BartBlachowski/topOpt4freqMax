@@ -702,18 +702,14 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
         localLogLoadCaseDiagnostics(debugLoadCases, loop, loadCases, caseDiag);
 
         if visualizeLive
-            if usingConfiguredLoadCases && ~isempty(harmonicOmegas) && isfinite(harmonicOmegas(1))
-                omegaTitle = harmonicOmegas(1);
-            elseif ~usingConfiguredLoadCases
-                omegaTitle = omegaLegacy;
-            else
-                omegaTitle = NaN;
-            end
-            omega2Title = NaN;
-            if numel(harmonicOmegas) >= 2, omega2Title = harmonicOmegas(2); end
+            % No omega in the progress title: the only frequencies at hand here
+            % are those of the load modes (the initial design, the solid
+            % baseline or the cached harmonic modes), not of the current design,
+            % and evaluating the current one would add an eigensolve to every
+            % iteration.  The final figure reports the structural omega_1, omega_2.
             plotTopology( ...
                 xPhys, nelx, nely, ...
-                formatTopologyTitle(approachName, volfrac, omegaTitle, omega2Title), ...
+                formatTopologyTitle(approachName, volfrac, NaN), ...
                 true, 'regular', false);
         end
 
@@ -774,9 +770,17 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
     clear K_final sK_final M_final sM_final rhoPhys_final;
     nReq = min(3, max(1, size(Kf_final, 1) - 1));
     finalEigOpts = struct('v0', localDeterministicEigsStartVector(size(Kf_final,1)));
-    [~, Lam_final] = eigs(Kf_final, Mf_final, nReq, 'smallestabs', finalEigOpts);
-    lam_vals = sort(real(diag(Lam_final)), 'ascend');
-    lam_vals = lam_vals(lam_vals > 0);
+    % structural_mode_check (default true): the figure reports structural modes
+    % (below).  Timed benchmark runs switch it off so their final analysis is
+    % exactly the one solve it always was; the title then carries no omega.
+    structuralCheck = logical(localOpt(runCfg, 'structural_mode_check', true));
+    if structuralCheck
+        [V_final, Lam_final] = eigs(Kf_final, Mf_final, nReq, 'smallestabs', finalEigOpts);
+    else
+        [~, Lam_final] = eigs(Kf_final, Mf_final, nReq, 'smallestabs', finalEigOpts);
+    end
+    [lam_all, ixFinal] = sort(real(diag(Lam_final)), 'ascend');
+    lam_vals = lam_all(lam_all > 0);
     fHz = NaN(3,1);
     if ~isempty(lam_vals)
         nOk = min(3, numel(lam_vals));
@@ -792,11 +796,44 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
     end
     fprintf('[Final Eigen] lambda1=%.6e, omega1=%.6e rad/s, f1=%.6e Hz\n', ...
             lam1_final, omega1_final, f1_final);
-    omega2_final = NaN;
-    if numel(lam_vals) >= 2, omega2_final = sqrt(lam_vals(2)); end
+
+    % The figure reports the lowest STRUCTURAL modes; fHz above keeps the
+    % solver's raw spectrum.  With E_min = 1e-9 E_0 and a linear mass,
+    % near-void elements carry dozens of modes below the first structural one
+    % on coarse meshes (100 % of their kinetic energy in x <= 0.1).  The modes
+    % already computed are classified first, so a design without void modes
+    % costs nothing more.  Otherwise the design is re-evaluated with the
+    % stiffness floor of the common evaluator E1, E_min = 1e-6 E_0, which lifts
+    % the void-local frequencies far above the structural ones (one small
+    % eigensolve; the structural frequencies move by ~0.1 %).
+    omegaStruct = [];
+    info.final_structural_omega_emin = NaN;
+    if structuralCheck
+        Ee_final = Emin + xPhys.^penal * (Emax - Emin);
+        rho_final = rho_min + xPhys.^pmass * (rho0 - rho_min);
+        keepFinal = structural_mode_mask(V_final(:, ixFinal), lam_all, Kf_final, Mf_final, ...
+            free, ndof, edofMat, KE, ME, Ee_final, rho_final, xPhys);
+        omegaStruct = sqrt(lam_all(keepFinal));
+        info.final_structural_omega_emin = Emin;
+        if numel(omegaStruct) < 2
+            EminFig = max(Emin, 1e-6 * Emax);
+            Ee_fig = EminFig + xPhys.^penal * (Emax - EminFig);
+            K_fig = sparse(iK, jK, reshape(KE(:) * Ee_fig', [], 1), ndof, ndof);
+            K_fig = (K_fig + K_fig') / 2;
+            omegaStruct = lowest_structural_modes(K_fig(free, free), Mf_final, ...
+                free, ndof, edofMat, KE, ME, Ee_fig, rho_final, xPhys, 2, nReq);
+            clear K_fig;
+            info.final_structural_omega_emin = EminFig;
+            fprintf(['[Final Eigen] void-localized modes among the lowest %d; figure omega from ' ...
+                     'E_min = %.1e E_0: omega1=%.6e, omega2=%.6e rad/s\n'], ...
+                    nReq, EminFig / Emax, omegaStruct(1), omegaStruct(2));
+        end
+    end
+    omegaStruct = [omegaStruct(:); NaN; NaN];
+    info.final_structural_omega = omegaStruct(1:2);
     plotTopology( ...
         xPhys, nelx, nely, ...
-        formatTopologyTitle(approachName, volfrac, omega1_final, omega2_final), ...
+        formatTopologyTitle(approachName, volfrac, omegaStruct(1), omegaStruct(2)), ...
         visualizeLive, visualizationQuality, true);
     if converged && strcmp(stopCriterion, 'relative_l2_change')
         stopReason = 'relative_change_tolerance';

@@ -490,6 +490,7 @@ function [x, omega, tIter, nIter, mem_usage, nIterStage, telemetry] = run_topopt
             runCfg.conv_tol = convTol;
             runCfg.stop_criterion = stopCriterion;
             runCfg = copyFields(runCfg, stagnationCfg);
+            runCfg.structural_mode_check = postproc.structuralModeCheck;
             runCfg.max_iters = maxiter;
             runCfg.supportType = supportCode;
             runCfg.approach_name = approach;
@@ -621,7 +622,8 @@ function [x, omega, tIter, nIter, mem_usage, nIterStage, telemetry] = run_topopt
         try
             [modesT.omega, modesT.phi, modesT.free, modesT.ndof, modesT.Mff, modesT.Mfull] = ...
                 localSolveTopologyModes(x, nTopo, L, H, nelx, nely, thickness, ...
-                    E0, Emin, nu, rho0, rho_min, penal, supportCode, extraFixedDofs);
+                    E0, Emin, nu, rho0, rho_min, penal, supportCode, extraFixedDofs, ...
+                    postproc.structuralModeCheck);
             fprintf('[Eigensolve] Topology modes done: omega_1 = %.4f rad/s.\n', modesT.omega(1));
         catch eigenErr
             warning('run_topopt_from_json:TopologyEigenSolveFailed', ...
@@ -1074,14 +1076,16 @@ end
 function [omegaVals, modeShapes, free, ndof, Mff, Mfull] = localSolveTopologyModes( ...
     xDens, nModes, L, H, nelx, nely, thickness, ...
     E0, Emin, nu, rho0, rho_min, penal, ...
-    supportCode, extraFixedDofs)
+    supportCode, extraFixedDofs, structuralCheck)
 % Solve generalised eigenvalue problem K*phi = lambda*M*phi for optimised topology.
+% structuralCheck (default true): return structural modes only (see below).
+    if nargin < 16 || isempty(structuralCheck), structuralCheck = true; end
 % Returns both Mff (restricted to free DOFs) and Mfull (all DOFs).
     nNode = (nelx + 1) * (nely + 1);
     ndof = 2 * nNode;
 
     [KE, ME] = localQ4ElementMatrices(L / nelx, H / nely, nu, thickness);
-    [iK, jK] = localBuildQ4AssemblyIndices(nelx, nely);
+    [iK, jK, edofMat] = localBuildQ4AssemblyIndices(nelx, nely);
 
     xEl = max(0, min(1, xDens(:)));  % ensure [0,1]
     Ee = Emin + (xEl .^ penal) * (E0 - Emin);
@@ -1113,7 +1117,48 @@ function [omegaVals, modeShapes, free, ndof, Mff, Mfull] = localSolveTopologyMod
     if numel(free) > 1
         nReq = min(nReq, numel(free) - 1);
     end
-    [omegaVals, modeShapes] = localSolveLowestModes(K(free, free), Mff, nReq);
+    % Only STRUCTURAL modes are returned: every consumer here (snapshot titles,
+    % mode plots, correlation) means modes of the structure.  With a small E_min
+    % and a linear mass, near-void elements carry dozens of modes below the first
+    % structural one on coarse meshes.  The usual solve is classified first, so a
+    % design without void modes costs exactly what it always did; otherwise the
+    % design is re-evaluated with the stiffness floor of the common evaluator E1,
+    % E_min = 1e-6 E_0, which lifts the void-local frequencies far above the
+    % structural ones (the structural frequencies move by ~0.1 %).
+    Kff = K(free, free);
+    [omegaAll, shapesAll] = localSolveLowestModes(Kff, Mff, nReq);
+    if ~structuralCheck
+        [omegaVals, modeShapes] = deal(omegaAll, shapesAll);   % the raw spectrum, as before
+        return
+    end
+    keep = structural_mode_mask(shapesAll, omegaAll.^2, Kff, Mff, free, ndof, ...
+        edofMat, KE, ME, Ee, rhoEl, xEl);
+    if nnz(keep) < nReq
+        EminFig = max(Emin, 1e-6 * E0);
+        Ee = EminFig + (xEl .^ penal) * (E0 - EminFig);
+        K = sparse(iK, jK, reshape(KE(:) * Ee', [], 1), ndof, ndof);
+        Kff = (K(free, free) + K(free, free)') / 2;
+        fprintf(['[Eigensolve] void-localized modes among the lowest %d; topology modes ' ...
+                 'evaluated with E_min = %.1e E_0.\n'], nReq, EminFig / E0);
+        limit = max(nReq, numel(free) - 1);
+        k = nReq;
+        while true
+            [omegaAll, shapesAll] = localSolveLowestModes(Kff, Mff, k);
+            keep = structural_mode_mask(shapesAll, omegaAll.^2, Kff, Mff, free, ndof, ...
+                edofMat, KE, ME, Ee, rhoEl, xEl);
+            if nnz(keep) >= nReq || k >= limit, break; end
+            k = min(2*k, limit);
+        end
+    end
+    sel = find(keep);
+    if isempty(sel)
+        warning('run_topopt_from_json:NoStructuralTopologyModes', ...
+            'No structural mode among the %d lowest; reporting the raw spectrum.', numel(omegaAll));
+        sel = (1:min(nReq, numel(omegaAll)))';
+    end
+    sel = sel(1:min(nReq, numel(sel)));
+    omegaVals = omegaAll(sel);
+    modeShapes = shapesAll(:, sel);
 end
 
 function localSaveTopologyModePlot( ...
@@ -1294,7 +1339,7 @@ function [omegaVals, modeShapes, free, ndof] = localSolveReferenceModes( ...
     [omegaVals, modeShapes] = localSolveLowestModes(K(free, free), M(free, free), nReq);
 end
 
-function [iK, jK] = localBuildQ4AssemblyIndices(nelx, nely)
+function [iK, jK, edofMat] = localBuildQ4AssemblyIndices(nelx, nely)
     nEl = nelx * nely;
     edofMat = zeros(nEl, 8);
     for elx = 0:nelx-1
@@ -1896,6 +1941,18 @@ function postproc = parsePostprocessingBlock(cfg)
             'postprocessing.write_correlation_table');
     else
         postproc.writeCorrelationTable = false;
+    end
+
+    % structural_mode_check (default true): figure titles and topology modes
+    % skip void-localized modes (see structural_mode_mask).  Timed benchmark runs
+    % switch it off so their measured time stays what it was; their figure titles
+    % then carry no omega instead of a possibly void one.
+    if hasFieldPath(cfg, {'postprocessing','structural_mode_check'})
+        postproc.structuralModeCheck = parseBool( ...
+            getFieldPath(cfg, {'postprocessing','structural_mode_check'}), ...
+            'postprocessing.structural_mode_check');
+    else
+        postproc.structuralModeCheck = true;
     end
 
     if hasFieldPath(cfg, {'postprocessing','save_final_image'})

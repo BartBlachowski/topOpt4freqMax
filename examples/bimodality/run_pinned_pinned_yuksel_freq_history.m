@@ -58,16 +58,16 @@
 %     Yuksel_240x30_freq_iterations.fig / .png
 %     topologies/Yuksel_240x30_it<k>.png
 
-nelx = 240;
-nely = 30;
+nelx = 800;
+nely = 100;
 save_every_it = 25;   % topology snapshot every save_every_it iterations (+ last); 0 = none
 % stage1_tol = 0.04;  % previous setting
 stage1_tol = 0.01;    % stage 1 stops when max|x - x_old| < stage1_tol; 0.01 = Table 1 (also under 'stagnation')
 stage2_tol = 0.04;    % stage 2 (the run) stops when max|x - x_old| < stage2_tol; 0.01 = Table 1
 % stop_criterion = 'max_change';   % previous setting
 stop_criterion = 'stagnation';   % 'max_change' (Table 1 rule) | 'relative_l2_change' | 'stagnation' (stage 2)
-stage1_rel_tol = 1e-3;   % stage 1: ||x - x_old||_2/||x_old||_2 < stage1_rel_tol; no calibrated value
-stage2_rel_tol = 1e-3;   % stage 2: ||x - x_old||_2/||x_old||_2 < stage2_rel_tol; no calibrated value
+stage1_rel_tol = 1e-1;   % stage 1: ||x - x_old||_2/||x_old||_2 < stage1_rel_tol; no calibrated value
+stage2_rel_tol = 1e-2;   % stage 2: ||x - x_old||_2/||x_old||_2 < stage2_rel_tol; no calibrated value
 stag_window = 10;     % ('stagnation') window W: the last W+1 analysed designs of stage 2
 stag_obj_tol = 1e-3;  % ('stagnation') range(compliance)/compliance over the window
 stag_gray_tol = 5e-3; % ('stagnation') range(4*mean(xPhys(1-xPhys))) over the window

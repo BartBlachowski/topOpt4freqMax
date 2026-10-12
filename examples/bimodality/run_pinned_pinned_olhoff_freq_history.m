@@ -68,11 +68,11 @@
 %     Olhoff_240x30_freq_iterations.fig / .png
 %     topologies/Olhoff_240x30_it<k>.png
 
-nelx = 800;
-nely = 100;
+nelx = 160;
+nely = 20;
 save_every_it = 25;   % topology snapshot every save_every_it iterations (+ last); 0 = none
 % stop_criterion = 'relative_l2_change';   % previous setting
-stop_criterion = 'stagnation';   % 'l2_change' (Table 1 rule) | 'max_change' | 'relative_l2_change' | 'stagnation'
+stop_criterion = 'relative_l2_change';   % 'l2_change' (Table 1 rule) | 'max_change' | 'relative_l2_change' | 'stagnation'
 stop_c = 0.08;        % stop when ||drho||_2 < stop_c*sqrt(NE/3200); 0.05 = Table 1  ('l2_change')
 stop_tol = 0.02;      % stop when max|drho| <= stop_tol                              ('max_change')
 stop_rel_tol = 1e-3;  % stop when ||drho||_2/||rho||_2 < stop_rel_tol; no calibrated value ('relative_l2_change')
