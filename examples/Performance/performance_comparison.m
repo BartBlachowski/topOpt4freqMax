@@ -185,6 +185,7 @@ cfg.stop.olhoff.maxOuter      = 1000;   % production: 400   (preset runtime defa
 % cfg.stop.olhoff.criterion  = 'relative_l2_change';   % production: 'l2_change'
 % cfg.stop.olhoff.c          = 0.08;   % production: 0.05  (l2_change)
 % cfg.stop.olhoff.tol        = 1e-3; %0.04;   % no production value (max_change / relative_l2_change)
+% %   campaign_mac_convergence_relative_l2_change_2: identical, but tol = 5e-4
 % cfg.stop.olhoff.maxOuter   = 1000;   % production: 400   (preset runtime default; safety budget)
 
 % ---- Which methods -------------------------------------------------------
@@ -227,6 +228,7 @@ cfg.outputDir = '';                  % auto: examples/Performance/conference_ben
 % the quantity being reported is wall-clock time, which is a property of the
 % host as much as of the method.
 % cfg.runLabel  = 'campaign_mac_convergence_relative_l2_change';   % previous stop rules
+% cfg.runLabel  = 'campaign_mac_convergence_relative_l2_change_2'; % previous, Olhoff tol = 5e-4
 % cfg.runLabel  = 'campaign_windows_convergence_stagnation_r1';   % R1 10/1e-3/5e-3, Yuksel stage 1 on max_change
 cfg.runLabel  = 'campaign_windows_stagnation_w10_obj1e-2_gray1e-2';
 
