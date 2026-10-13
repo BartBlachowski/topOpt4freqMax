@@ -1,0 +1,66 @@
+% Conference performance table -- generated, do not edit by hand.
+% Method provenance and caveats: conference_performance_table.csv, BENCHMARK_NOTES.md.
+% Columns: Stage time [s] = Time 1 + Time 2, summed before rounding. Other, total wall time and omega_1 (native and common evaluator E1) are in the CSV only.
+\begin{table}[t]
+\centering
+\begingroup
+\setlength{\tabcolsep}{3pt}
+\scriptsize
+\providecommand{\thinhline}{\noalign{\global\setlength{\arrayrulewidth}{0.2pt}}\hline\noalign{\global\setlength{\arrayrulewidth}{0.4pt}}}
+\begin{tabular}{llrrrrr}
+\hline
+Mesh & Method & Count 1 & Count 2 & Time 1 [s] & Time 2 [s] & Stage time [s] \\
+\hline
+$160\times20$ & Du-Olhoff & 63 & 1249 & 3.45 & 171.91 & 175.36 \\
+ & Yuksel-Yilmaz & 121 & 101 & 1.71 & 1.87 & 3.58 \\
+ & Proposed & 1 & 45 & 0.07 & 1.07 & 1.13 \\
+\thinhline
+$240\times30$ & Du-Olhoff & 55 & 1149 & 7.15 & 292.33 & 299.48 \\
+ & Yuksel-Yilmaz & 168 & 41 & 6.04 & 1.91 & 7.95 \\
+ & Proposed & 1 & 47 & 0.11 & 2.56 & 2.67 \\
+\thinhline
+$320\times40$ & Du-Olhoff & 93 & 1835 & 21.18 & 854.33 & 875.51 \\
+ & Yuksel-Yilmaz & 252 & 113 & 18.03 & 10.18 & 28.20 \\
+ & Proposed & 1 & 55 & 0.20 & 5.53 & 5.73 \\
+\thinhline
+$400\times50$ & Du-Olhoff & 80 & 1609 & 38.58 & 1115.34 & 1153.92 \\
+ & Yuksel-Yilmaz & 315 & 133 & 36.57 & 19.48 & 56.05 \\
+ & Proposed & 1 & 92 & 0.35 & 15.23 & 15.58 \\
+\thinhline
+$480\times60$ & Du-Olhoff & 82 & 1644 & 47.86 & 1382.65 & 1430.51 \\
+ & Yuksel-Yilmaz & 586 & 133 & 100.70 & 28.43 & 129.13 \\
+ & Proposed & 1 & 63 & 0.50 & 14.86 & 15.36 \\
+\thinhline
+$560\times70$ & Du-Olhoff & 116 & 2191 & 113.76 & 3243.15 & 3356.91 \\
+ & Yuksel-Yilmaz & 833 & 178 & 202.05 & 52.44 & 254.49 \\
+ & Proposed & 1 & 65 & 0.85 & 21.85 & 22.70 \\
+\thinhline
+$640\times80$ & Du-Olhoff & 134 & 2525 & 163.52 & 5305.50 & 5469.03 \\
+ & Yuksel-Yilmaz & 1311 & 160 & 460.39 & 85.55 & 545.94 \\
+ & Proposed & 1 & 68 & 1.04 & 30.36 & 31.40 \\
+\thinhline
+$720\times90$ & Du-Olhoff & 201 & 3718 & 434.97 & 10025.33 & 10460.30 \\
+ & Yuksel-Yilmaz & 1162 & 164 & 654.40 & 130.14 & 784.54 \\
+ & Proposed & 1 & 83 & 2.01 & 90.59 & 92.60 \\
+\thinhline
+$800\times100$ & Du-Olhoff & 227 & 4287 & 590.32 & 14793.77 & 15384.10 \\
+ & Yuksel-Yilmaz & 1150 & 143 & 819.82 & 143.52 & 963.33 \\
+ & Proposed & 1 & 99 & 2.63 & 140.26 & 142.89 \\
+\hline
+\end{tabular}
+\endgroup
+\label{tab:conference-performance}
+\end{table}
+
+% Nested-scheme detail for Du-Olhoff:
+%   160x20: 19.83 inner MMA iterations per outer, inner time share 98.0%
+%   240x30: 20.89 inner MMA iterations per outer, inner time share 97.6%
+%   320x40: 19.73 inner MMA iterations per outer, inner time share 97.6%
+%   400x50: 20.11 inner MMA iterations per outer, inner time share 96.6%
+%   480x60: 20.05 inner MMA iterations per outer, inner time share 96.6%
+%   560x70: 18.89 inner MMA iterations per outer, inner time share 96.6%
+%   640x80: 18.84 inner MMA iterations per outer, inner time share 97.0%
+%   720x90: 18.50 inner MMA iterations per outer, inner time share 95.8%
+%   800x100: 18.89 inner MMA iterations per outer, inner time share 96.1%
+
+% Scaling caveat: Per-iteration cost of all three methods steps up between 640x80 and 720x90 while the Du-Olhoff inner MMA, which does no sparse assembly, does not. The step coincides with the number of DOFs crossing 2^17 = 131072 (103842 at 640x80, 131222 at 720x90). All three solvers assemble K and M with MATLAB sparse(i,j,v,n,n) every iteration, and in isolation that call measured about 4x slower for n >= 131072 (MATLAB R2025b, Apple silicon, 1 thread, 2026-09-14: 0.086 s at n = 131000, 0.382 s at n = 131072, 4e6 triplets), whereas backslash, decomposition and eigs scale smoothly across the same sizes. Exponents fitted across this boundary include the step: they describe the assembly primitive as much as the methods.

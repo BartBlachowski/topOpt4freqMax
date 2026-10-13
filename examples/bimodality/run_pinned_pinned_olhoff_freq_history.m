@@ -68,17 +68,17 @@
 %     Olhoff_240x30_freq_iterations.fig / .png
 %     topologies/Olhoff_240x30_it<k>.png
 
-nelx = 160;
-nely = 20;
+nelx = 800;
+nely = 100;
 save_every_it = 25;   % topology snapshot every save_every_it iterations (+ last); 0 = none
 % stop_criterion = 'relative_l2_change';   % previous setting
-stop_criterion = 'relative_l2_change';   % 'l2_change' (Table 1 rule) | 'max_change' | 'relative_l2_change' | 'stagnation'
+stop_criterion = 'stagnation';   % 'l2_change' (Table 1 rule) | 'max_change' | 'relative_l2_change' | 'stagnation'
 stop_c = 0.08;        % stop when ||drho||_2 < stop_c*sqrt(NE/3200); 0.05 = Table 1  ('l2_change')
 stop_tol = 0.02;      % stop when max|drho| <= stop_tol                              ('max_change')
 stop_rel_tol = 1e-3;  % stop when ||drho||_2/||rho||_2 < stop_rel_tol; no calibrated value ('relative_l2_change')
-stag_window = 10;     % ('stagnation') window W: the last W+1 analysed designs
-stag_obj_tol = 1e-3;  % ('stagnation') range(omega_1)/omega_1 over the window
-stag_gray_tol = 5e-3; % ('stagnation') range(4*mean(rho(1-rho))) over the window
+stag_window = 10;     % ('stagnation') stag_window = 10 window W: the last W+1 analysed designs
+stag_obj_tol = 1e-2;  % ('stagnation') stag_obj_tol = 1e-3 range(omega_1)/omega_1 over the window
+stag_gray_tol = 1e-2; % ('stagnaton') stag_gray_tol = 5e-3 range(4*mean(rho(1-rho))) over the window
 max_iter = [];        % outer-iteration cap; [] = preset default (400)
 
 % Release the path guard of an earlier run in this session first: overwriting

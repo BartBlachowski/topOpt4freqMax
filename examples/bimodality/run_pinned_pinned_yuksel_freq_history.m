@@ -42,13 +42,13 @@
 %   ignored, as the relative tolerances are with 'max_change'.
 %
 %   stop_criterion = 'stagnation' is the common rule of all three methods (R1,
-%   examples/Performance/stop_criterion_study), applied to stage 2 only: it
-%   stops once, over the last stag_window+1 analysed designs of stage 2, the
-%   stage-2 compliance has varied by < stag_obj_tol relative to its latest
-%   value AND the grayness 4*mean(xPhys(1-xPhys)) by < stag_gray_tol.  Stage 1
-%   keeps max|x - x_old| < stage1_tol (optimization.yuksel.stage1_stop_criterion
-%   = 'max_change'), because its tolerance is part of the method: it decides
-%   the design stage 2 starts from.  stage2_tol is then ignored.
+%   examples/Performance/stop_criterion_study), applied to BOTH stages: each
+%   stops once, over its last stag_window+1 analysed designs, its compliance
+%   has varied by < stag_obj_tol relative to the latest value AND the grayness
+%   4*mean(xPhys(1-xPhys)) by < stag_gray_tol.  The window restarts at the
+%   handoff.  stage1_tol and stage2_tol are then ignored.  (Until 2026-10-13
+%   stage 1 kept max|x - x_old| < stage1_tol, which stops on the design-change
+%   noise floor: 121 ... 1311 iterations, growing with the mesh.)
 %
 %   Every save_every_it-th iterate (and the last one) is also rendered, so the
 %   topology can be compared with the frequency history; the snapshot of
@@ -58,19 +58,19 @@
 %     Yuksel_240x30_freq_iterations.fig / .png
 %     topologies/Yuksel_240x30_it<k>.png
 
-nelx = 480;
-nely = 60;
+nelx = 160;
+nely = 20;
 save_every_it = 25;   % topology snapshot every save_every_it iterations (+ last); 0 = none
 % stage1_tol = 0.04;  % previous setting
-stage1_tol = 0.01;    % stage 1 stops when max|x - x_old| < stage1_tol; 0.01 = Table 1 (also under 'stagnation')
+stage1_tol = 0.01;    % stage 1 stops when max|x - x_old| < stage1_tol; 0.01 = Table 1
 stage2_tol = 0.04;    % stage 2 (the run) stops when max|x - x_old| < stage2_tol; 0.01 = Table 1
 % stop_criterion = 'max_change';   % previous setting
-stop_criterion = 'stagnation';   % 'max_change' (Table 1 rule) | 'relative_l2_change' | 'stagnation' (stage 2)
-stage1_rel_tol = 1e-1;   % stage 1: ||x - x_old||_2/||x_old||_2 < stage1_rel_tol; no calibrated value
+stop_criterion = 'stagnation';   % 'max_change' (Table 1 rule) | 'relative_l2_change' | 'stagnation' (both stages)
+stage1_rel_tol = 1e-2;   % stage 1: ||x - x_old||_2/||x_old||_2 < stage1_rel_tol; no calibrated value
 stage2_rel_tol = 1e-2;   % stage 2: ||x - x_old||_2/||x_old||_2 < stage2_rel_tol; no calibrated value
-stag_window = 10;     % ('stagnation') window W: the last W+1 analysed designs of stage 2
-stag_obj_tol = 1e-3;  % ('stagnation') range(compliance)/compliance over the window
-stag_gray_tol = 5e-3; % ('stagnation') range(4*mean(xPhys(1-xPhys))) over the window
+stag_window = 10;     % ('stagnation') stag_window = 10 window W: the last W+1 analysed designs of each stage
+stag_obj_tol = 1e-2;  % ('stagnation') stag_obj_tol = 1e-3  range(compliance)/compliance over the window
+stag_gray_tol = 1e-2; % ('stagnation') stag_gray_tol = 5e-3 range(4*mean(xPhys(1-xPhys))) over the window
 max_iter = [];        % iteration cap of EACH stage; [] = frozen profile value (1000)
 
 here = fileparts(mfilename('fullpath'));
@@ -90,13 +90,13 @@ switch stop_criterion
         tol1 = stage1_rel_tol; tol2 = stage2_rel_tol;
         stopDesc = sprintf('||dx||_2/||x||_2: stage1_rel_tol = %g, stage2_rel_tol = %g', tol1, tol2);
     case 'stagnation'
-        cfg.optimization.stop_criterion = stop_criterion;
-        cfg.optimization.yuksel.stage1_stop_criterion = 'max_change';
+        cfg.optimization.stop_criterion = stop_criterion;   % both stages
+        % cfg.optimization.yuksel.stage1_stop_criterion = 'max_change';   % previous: stage 1 on stage1_tol
         cfg.optimization.stagnation = struct('window', stag_window, ...
             'objective_tol', stag_obj_tol, 'grayness_tol', stag_gray_tol);
-        tol1 = stage1_tol; tol2 = stage2_tol;   % tol2 is not read by stage 2
-        stopDesc = sprintf(['stage1_tol = %g, stage 2 stagnation over %d+1 designs ' ...
-            '(objective %g, grayness %g)'], tol1, stag_window, stag_obj_tol, stag_gray_tol);
+        tol1 = stage1_tol; tol2 = stage2_tol;   % not read by either stage
+        stopDesc = sprintf('stagnation in both stages over %d+1 designs (objective %g, grayness %g)', ...
+            stag_window, stag_obj_tol, stag_gray_tol);
     otherwise
         error(['stop_criterion must be ''max_change'', ''relative_l2_change'' or ' ...
                '''stagnation'' (got ''%s'').'], stop_criterion);

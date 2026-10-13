@@ -1,0 +1,428 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage[margin=2.3cm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{makecell}
+\usepackage{graphicx}
+\usepackage{pdflscape}
+\usepackage{caption}
+\usepackage{microtype}
+\usepackage[round,authoryear]{natbib}
+\usepackage[hidelinks]{hyperref}
+
+\captionsetup{font=small,labelfont=bf}
+\renewcommand{\theadfont}{\footnotesize\bfseries}
+\graphicspath{{./}}
+
+% notation
+\newcommand{\Mnd}{M_{\mathrm{nd}}}
+\newcommand{\kstag}{k_{\mathrm{stag}}}
+\newcommand{\dx}{\Delta x}
+\newcommand{\maxdx}{\max_e|\Delta x_e|}
+\newcommand{\relL}{\|\Delta x\|_2/\|x\|_2}
+\newcommand{\RMS}{\mathrm{RMS}}
+\newcommand{\me}[2]{$#1\times#2$}
+
+\title{A common stagnation-based stopping criterion for comparing density-based topology optimization methods across mesh resolutions}
+\author{Piotr Tauzowski \and Bartłomiej Błachowski\\[0.3em]
+  \small Institute of Fundamental Technological Research, Polish Academy of Sciences, Warsaw, Poland}
+\date{October 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Comparisons of topology optimization methods depend on the criteria used to terminate each run. This study examines whether a common stopping criterion can be used for three methods for fundamental-frequency maximization across multiple mesh resolutions. We analyze 23 extended iteration histories for a simply supported beam: nine meshes for each of two static surrogate methods and five meshes for a direct eigenvalue method. Candidate stopping criteria are evaluated retrospectively on the recorded histories, while the native first-stage handoff criterion of the two-stage method is retained. The tested design-change criteria exhibit a trade-off between delayed termination caused by persistent density changes and premature termination on intermediate plateaus. We therefore assess a criterion that combines the relative range of a method-specific objective signal with the absolute range of a grayness measure over a window spanning ten updates. Using the same tolerances for all methods, this criterion terminates all 23 recorded runs, with a maximum observed fundamental-frequency deficit of 0.91\,\% relative to the recorded end states. The criterion is dimensionless and contains no explicit mesh-size parameter. Its tolerances were calibrated on this benchmark; further studies are needed to assess their transferability to other problems.
+\end{abstract}
+
+%======================================================================
+\section{Introduction}
+\label{sec:intro}
+
+Topology optimization distributes a fixed amount of material over a design domain so that a structural response, here the lowest natural frequency of free vibration, is maximized. Density-based methods assign each finite element a continuous density between void and solid and improve the layout iteratively, and several methods exist for the frequency problem alone: direct maximization of the eigenvalue with a nested optimizer \citep{Du2007,Olhoff2014}, and faster surrogate methods that replace the eigenvalue solve by static analyses under inertial loads \citep{Yuksel2025,Tauzowski2026}. When such methods are compared, the reported performance measures are the achieved frequency, the number of iterations and the wall-clock time. The stopping criterion directly affects the iteration count and the total runtime, and it is rarely examined on its own.
+
+Stopping criteria in density-based topology optimization fall into a few families, reviewed in Section~\ref{sec:related}. The most common criterion stops when the largest change of any element density in one iteration falls below a tolerance inherited from the educational codes from which many implementations descend \citep{Andreassen2011}. Variants use a Euclidean norm of the design change \citep{Yago2022} or the change of the objective between iterations \citep{Dunning2025}. Benchmarks that compare optimizers have added a method-independent optimality test \citep{RojasLabanda2015,Kim2025}, papers on projection methods have added a gray-level indicator \citep{Dunning2025}, and methods with eigenvalue objectives often run to a fixed iteration cap \citep{Zhang2023}.
+
+What these studies leave open is whether one tolerance of a design-change criterion can serve several methods on several meshes at once. The comparative studies either work on a single mesh \citep{Yago2022} or aggregate over mesh sizes without resolving the stopping behavior per mesh \citep{RojasLabanda2015}. \citet{Kim2025} observe that the iteration counts of the optimality criteria (OC) update and of the method of moving asymptotes (MMA) grow under mesh refinement, but they compare at a fixed iteration budget rather than at a common stop, and \citet{Dunning2025} report that OC needs hundreds of extra iterations because of oscillations before an objective-change tolerance is met, without analyzing the oscillation itself. For the benchmark of the companion study \citep{Tauzowski2026}, which compares three frequency-maximization methods on nine meshes of the same beam, the consequence was concrete: each implementation terminated on its own criterion, and every attempt at a common design-change tolerance produced either long tails of unproductive iterations on the coarse meshes or unfinished, gray designs on the fine ones.
+
+The aim of this study is to determine why a satisfactory common design-change tolerance could not be found on this benchmark and to assess a stopping criterion that is the same for all three methods and all mesh resolutions. The approach is to run every method with its stopping criterion disabled, record the complete iteration history of each run, and evaluate all candidate criteria retrospectively on the recorded histories. Because a stopping criterion only observes the history, the iteration at which any criterion would have stopped a run can be reconstructed without rerunning the optimization, and the frequency that the criterion leaves unrealized can be read off the remainder of the record. The reference against which every criterion is judged is the iteration at which the frequency and the grayness of the design have measurably stopped changing.
+
+The study makes two contributions. First, it shows on 23 recorded histories that the tested per-iteration design-change criteria, in maximum, Euclidean, root-mean-square and relative form, do not provide a satisfactory compromise between delayed and premature termination, and it identifies the mechanism: persistent density changes after the frequency and grayness have stabilized, which make threshold crossings irregular and sensitive to mesh resolution and tolerance. Second, it proposes and assesses a criterion that stops when the method's own objective signal and the grayness measure have both stagnated over a window spanning ten updates, with two dimensionless tolerances and no explicit mesh-size parameter. Section~\ref{sec:related} reviews how existing studies stop their runs and compare methods, Section~\ref{sec:setting} describes the benchmark and the three methods, Section~\ref{sec:protocol} describes the recording and replay protocol, Section~\ref{sec:results} presents the diagnosis and the replay of candidate criteria, and Sections~\ref{sec:discussion} and~\ref{sec:conclusions} discuss what changes for benchmark reporting.
+
+%======================================================================
+\section{Related work}
+\label{sec:related}
+
+Throughout this paper, the \emph{native} stopping criterion of a method is the criterion used in its reference implementation.
+
+\subsection{Stopping criteria used in density-based topology optimization}
+
+The design-change criterion is the default of the field. The 88-line MATLAB code of \citet{Andreassen2011} stops when the largest change of any element density between two consecutive iterations drops below $0.01$, and because that code is the starting point of many research implementations the criterion has propagated with its tolerance. \citet{RojasLabanda2015} note that the OC solver of that code "does not compute estimates of the Lagrangian multipliers and does not compute the KKT error" and therefore stops on this change parameter alone, in contrast to every other solver in their benchmark. The criterion has two appealing properties: it costs nothing to evaluate and it is independent of the objective. Its weakness, which the present study quantifies, is that it measures changes in the design variables between iterations rather than the state of the design.
+
+Objective-change criteria and optimality tests form the second family. \citet{Dunning2025} stop when the relative change of the objective between two consecutive iterations is below $10^{-5}$ and all constraints are satisfied, and they use the same tolerance for every problem and every optimizer in their paper. \citet{Yago2022} smooth the objective signal by taking a moving mean of its relative change over the last $n$ iterations, with $n$ between $2$ and $5$ depending on the method, and stop when that mean is below $10^{-3}$. Optimality tests measure instead how far the current design is from satisfying the first-order conditions of the optimization problem. \citet{RojasLabanda2015} measure the Euclidean norm of the Karush--Kuhn--Tucker residual, and \citet{Kim2025} the norm of the projected-gradient residual, in both cases with a tolerance that is independent of the solver. \citet{Kim2025} warn explicitly against objective change as the sole test: "important design changes can occur when the function value increments are very small", and the size of those increments depends on the step size of the optimizer.
+
+A third family tests the design itself. The gray-level indicator of \citet{Sigmund2007}, four times the mean of $x_e(1 - x_e)$ over the elements, is zero for a black-and-white design and one for a uniformly half-dense one. \citet{Dunning2025} add the condition that this indicator is below $0.01$ to their stopping criterion, so that a run cannot terminate while the design is still gray, and they report that tightening the threshold to $0.001$ costs $10$ to $20\,\%$ more iterations. The remaining option is to stop on a fixed iteration count. \citet{Zhang2023} terminate the outer loop of their eigenvalue-constrained optimization after $800$ iterations "when a discrete topology has emerged", with tolerances only on the inner sub-problem, and \citet{RojasLabanda2015} report that on compliant-mechanism problems the OC solver "stops because it reaches the maximum number of allowed iterations and not because the change parameter is satisfied".
+
+\subsection{Stopping criteria in comparisons of methods}
+
+Studies that compare optimizers have recognized that the stopping criterion is part of the comparison, and have resolved the problem in three different ways. \citet{RojasLabanda2015} let each of six solvers stop on its own native criterion, because "the solvers have different implementations of the optimality conditions (different scalings and norms)", and then apply one common post-hoc acceptance test: a run counts as solved only if its final KKT residual is below $10^{-3}$ and its feasibility error below $10^{-4}$. They show that the outcome of the comparison depends on that threshold, with the success rate of MMA falling from $82$ to $52\,\%$ when the test is tightened from $10^{-2}$ to $10^{-4}$, and they state that the tolerances "will significantly affect the final design". \citet{Yago2022} go further and replace the native criteria of six methods, among them the maximum design change of the SIMP codes, by three common conditions: the moving mean of the objective change, a Euclidean norm of the design change normalized by the domain size with tolerance $2.5\cdot10^{-3}$, and the volume constraint. They argue that "it is important to define equivalent convergence criteria for the different techniques in order to guarantee a fair comparison in terms of the computational cost", and they count cost in iterations rather than time, assuming equal cost per iteration. \citet{Kim2025} take the third route and define a single method-independent stationarity measure for comparing their mirror-descent method with OC and MMA, because their own KKT estimator is not available for the other two.
+
+Each of these choices has a cost that the authors acknowledge. The post-hoc acceptance test of \citet{RojasLabanda2015} does not control where a run stops, so OC runs to its iteration cap without penalty. The common conditions of \citet{Yago2022} needed method-specific window lengths and a smoothing step to make the topology criterion comparable across design-variable types, and the objective criterion had to be dropped for the compliant mechanism because the normalized objective "oscillates significantly more" there. The stationarity measure of \citet{Kim2025} was not reached by OC or MMA within $300$ iterations on their beam, so the comparison for those two methods ended at the budget rather than at the tolerance. None of the three studies varies the mesh and examines the stopping behavior per mesh.
+
+\subsection{Oscillation, mesh dependence and eigenvalue objectives}
+
+Oscillation of the iterates near convergence appears throughout the literature as an obstacle to stopping, but it is treated as a nuisance rather than analyzed. \citet{Dunning2025} report that OC with a reduced move limit reached the gray-level target at iteration $240$ but "due to oscillations, another 250 iterations are necessary" to satisfy the objective-change tolerance, and that on a compliant-mechanism problem "oscillations in the objective function caused by fluctuations in the densities around the two thin hinges prevent the stopping criterion being met", so the run was stopped by hand. Their remedy is an adaptive move limit that detects oscillation through a sign change of consecutive objective differences. \citet{Yago2022} likewise observe "small amplitude oscillations" in the convergence criteria of their SIMP variants, and \citet{Kim2025} limit the OC and MMA updates with a move limit chosen "to obtain stable convergence behavior". What has not been established is the level at which such persistent changes settle and how that level relates to the tolerances in use.
+
+Mesh dependence of the iteration count is documented but, again, not resolved at the level of the stopping criterion. \citet{Kim2025} state that for many implementations of MMA and OC "the number of optimization steps increases after mesh refinement when starting from the same initial guess", attribute the effect to the use of vector norms in place of function-space norms, and show that their own method is nearly mesh independent. Their mesh study compares the objective at a fixed iteration count rather than the iterations needed to reach a common tolerance. \citet{Dunning2025} report iteration counts growing from $139$ to $215$ across three refinements of a cantilever under their fixed stopping criterion, and the Du--Olhoff implementation of the companion study scales its tolerance with the square root of the element count for the same reason.
+
+Eigenvalue objectives add two sources of non-smooth behavior. When eigenvalues are repeated, the eigenvalue is not differentiable and only directional derivatives exist, which is why \citet{Du2007} optimize design increments in an inner loop with a bound formulation and why \citet{Zhang2023} adopt the same two-loop structure for buckling constraints. Low-density regions also host spurious modes with near-zero eigenvalues, which the mass interpolation of \citet{Du2007} and the pseudo-mass matrix of \citet{Zhang2023} are designed to suppress. \citet{Zhang2023} describe their objective as "experiencing lots of oscillations" while the optimizer searches for feasible designs and as "decreasing smoothly after a few oscillations" afterwards, and they judge convergence from the history plots under a fixed cap. The combination of oscillating iterates, mesh-dependent iteration counts and the absence of a stopping criterion tested across methods and meshes is the situation this study addresses.
+
+%======================================================================
+\section{Benchmark problem and the three methods compared}
+\label{sec:setting}
+
+The benchmark is the simply supported beam of \citet{Du2007}, reproduced by \citet{Yuksel2025} and used as the first example of the companion study \citep{Tauzowski2026}. The design domain is a rectangle of length $8$\,m and height $1$\,m, pinned at the mid-height node of each end, with Young's modulus $10^{7}$\,Pa, Poisson's ratio $0.3$ and mass density $1$\,kg/m$^3$. The task is to distribute a prescribed amount of material, half of the domain volume, so that the lowest natural frequency of free vibration, $\omega_1$ in rad/s, is maximized. The domain was discretized with nine meshes of four-node plane-stress elements, from $160\times20$ ($n_e = 3200$ elements) to $800\times100$ ($n_e = 80\,000$ elements), all with the same aspect ratio. Each element $e$ carries one design variable $x_e \in [x_{\min}, 1]$, its material density, with $x_e = 1$ solid and $x_e = x_{\min}$ void. Stiffness is interpolated with the power law of the Solid Isotropic Material with Penalization (SIMP) scheme with exponent $3$, and a sensitivity filter removes checkerboard patterns; these are standard components of density-based topology optimization \citep{Andreassen2011}. The filter radius is two element widths in the two static methods, so its physical size shrinks under refinement, and a fixed $0.06$\,m, three elements of the coarsest mesh, in the Du--Olhoff implementation. The quantities reported in the benchmark are $\omega_1$ of the final design together with the number of iterations and the wall-clock time needed to reach it.
+
+Three methods were compared, each with its own production configuration. The Du--Olhoff method \citep{Du2007,Olhoff2014} maximizes $\omega_1$ directly. Every outer iteration solves the generalized eigenvalue problem for the current design and then solves an inner sub-problem for the design increments with the method of moving asymptotes (MMA) of \citet{Svanberg1987}, a gradient-based optimizer that builds a separable convex approximation of the problem around the current design. The implementation used here applies a per-element adaptive move box, that is, a limit on how far each $x_e$ may move in one outer iteration that adapts during the run. The Yuksel--Yilmaz method \citep{Yuksel2025} avoids the eigenvalue solve inside the loop. It runs two stages of static compliance minimization: stage~1 under a point load, to obtain an estimate of the fundamental mode shape, and stage~2 under inertial loads proportional to the current mass distribution, updated every iteration. The quasi-static method of \citet{Tauzowski2026} solves the eigenvalue problem once, on the solid reference domain, and then minimizes compliance under an inertial load built from that fixed reference mode and the mass matrix of the current design. Both static methods update the densities with the optimality criteria (OC) rule, a fixed-point update with a move limit per iteration, $0.2$ for the quasi-static method and $0.1$ for the Yuksel--Yilmaz method; their objective is a compliance-type quantity, not $\omega_1$. For these two methods, $\omega_1$ is therefore not available inside the loop. In this study it was evaluated after the fact by one common eigenvalue analysis of recorded designs, with a classifier that discards modes localized in void regions and keeps the lowest structural mode (evaluator E1 of the companion benchmark). For the Du--Olhoff method the solver's own $\omega_1$ was used.
+
+In the production campaign each implementation terminated on its native criterion, and the criteria differed in kind. The two static methods stopped when the largest element-wise density change in one iteration, $\maxdx$, fell below $0.01$. The Du--Olhoff method stopped when the Euclidean norm of the density change fell below $c\sqrt{n_e/3200}$, with $c = 0.05$, a tolerance that grows with the mesh so that the per-element change it admits stays constant. Because $\|\dx\|_2 = \sqrt{n_e}\,\RMS(\dx)$, this criterion is identical to $\RMS(\dx) < 8.84\cdot10^{-4}$, where $\RMS$ denotes the root mean square over elements. Both are design-change criteria: they ask whether the design variables are still changing, not whether the quantities of interest have settled.
+
+Two more quantities are needed. The grayness measure of \citet{Sigmund2007},
+\begin{equation}
+\label{eq:Mnd}
+\Mnd = \frac{4}{n_e}\sum_{e=1}^{n_e} x_e\,(1 - x_e),
+\end{equation}
+is $0$ for a design in which every element is fully solid or fully void and $1$ for a design in which every element is half-dense; it measures how far the design is from a black-and-white layout. The relative change norm $\relL$ is the Euclidean norm of the one-iteration density change divided by the Euclidean norm of the design before the update. In this study $\Mnd$, $\relL$ and $\RMS(\dx)$ were computed on the physical (filtered) densities after each update, whereas $\maxdx$ is the solver's own measure on its design variables, so that the replay of the native criteria matches the production runs.
+
+%======================================================================
+\section{Recording and replay protocol}
+\label{sec:protocol}
+
+Each static method was run on all nine meshes and the Du--Olhoff method on five, with the stopping criterion disabled or extended, so that the full history beyond the usual stop was recorded (Table~\ref{tab:recording}); this gives the 23 recorded runs analyzed below. The quasi-static method ran for 300 iterations. Its history holds the design at the start of each iteration, so 299 completed updates are replayable. The Yuksel--Yilmaz method ran stage~1 on its native criterion, with a budget of 2000 iterations, and stage~2 for 600 iterations; the handoff to stage~2 occurred after $120$, $167$, $251$, $314$, $585$, $832$, $1541$, $1161$ and $1149$ recorded updates on the nine meshes in order of refinement. The Du--Olhoff method ran 300 outer iterations on five meshes; the four meshes between $480\times60$ and $720\times90$ were not recorded because each run with the criterion disabled costs one to three hours. Every iteration was recorded with its physical density field, the change norms $\maxdx$, $\relL$ and $\RMS(\dx)$, the grayness $\Mnd$ and the method's own objective. No solver code was changed; the recording runners only set existing configuration fields.
+
+\begin{table}[htb]
+\centering\small
+\caption{Recorded runs. Each method used its production configuration with the stopping criterion disabled or extended.}
+\label{tab:recording}
+\begin{tabular}{@{}l p{2.9cm} p{4.6cm} p{4.6cm}@{}}
+\toprule
+method & meshes & horizon & $\omega_1$ evaluated \\
+\midrule
+quasi-static & \me{160}{20} to \me{800}{100} (9)
+  & 300 iterations (native stop at $\maxdx \le 0.01$ recorded but not acted on)
+  & E1 structural $\omega_1$, every iteration up to \me{320}{40}, every fifth iteration from \me{400}{50} \\
+\addlinespace
+Yuksel--Yilmaz & \me{160}{20} to \me{800}{100} (9)
+  & stage~1 on its native criterion ($\maxdx < 0.01$, budget 2000); stage~2 extended to 600 iterations
+  & E1 structural $\omega_1$, every fifth iteration \\
+\addlinespace
+Du--Olhoff & \me{160}{20}, \me{240}{30}, \me{320}{40}, \me{400}{50}, \me{800}{100}
+  & 300 outer iterations, stop disabled
+  & solver-native $\omega_1$, every iteration \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The frequency was not evaluated at every recorded design. For the quasi-static method from \me{400}{50} upward and for the Yuksel--Yilmaz method on all meshes, $\omega_1$ was evaluated every fifth iteration, because each evaluation is an eigenvalue solve of the full model. In the replay, iterations without an evaluation carry the most recent evaluated value forward. Consequently the frequency deficit quoted for a stop is the value at the most recent evaluated design, at most four updates earlier, and the frequency component of the stagnation reference defined below is subject to the same sampling. The Du--Olhoff frequency is available at every outer iteration.
+
+A stopping criterion observes the history and decides when the loop exits; it does not change what the loop does. Any candidate criterion can therefore be applied to the recorded histories after the fact, and the iteration at which it would have stopped the run is reconstructed without rerunning the optimization. Two qualifications apply. First, the stage-1 tolerance of the Yuksel--Yilmaz method selects the design that is handed to stage~2, so changing it changes the trajectory. For this reason the candidate criteria were applied to stage~2 only, with the stage-1 handoff kept native; the first two stage-2 iterations, during which the load changes, were excluded from the criterion evaluation. All iteration numbers quoted for the Yuksel--Yilmaz method are total-run counts that include stage~1. Second, the window of the objective-based criteria is evaluated on the designs at the start of each iteration, because the objective of the static methods is known only there, so an online implementation of such a criterion stops one iteration after the replayed stop. The replay was verified against the production campaign: it reproduced the production stop iterations $107/236/207/182$ of the quasi-static method and $121/111/101/93$ of the Du--Olhoff method at $c = 0.05$ on the four coarsest meshes, and $58/52/67/62$ at $c = 0.2$.
+
+To judge a criterion, a reference point is needed for when the design has stopped changing in the quantities that matter. For each recorded run, the stagnation iteration $\kstag$ was defined as the last iteration at which $\omega_1$ differs by more than $0.5\,\%$, or $\Mnd$ by more than $0.01$, from its value at the end of the record; from iteration $\kstag + 1$ onward both stay within these bands. A criterion was then scored by two numbers: the ratio $k^*/\kstag$ between its stop iteration $k^*$ and the stagnation iteration, and the signed frequency deficit at the stop,
+\begin{equation}
+\label{eq:deficit}
+\delta = 100\,\frac{\omega_{1,\mathrm{end}} - \omega_1(k^*)}{\omega_{1,\mathrm{end}}}\ [\%],
+\end{equation}
+where $\omega_{1,\mathrm{end}}$ is the frequency at the end of the record. A ratio near one means the criterion stops when the design has just settled. A positive deficit means that running to the end of the record would have raised $\omega_1$; a negative deficit means that the frequency at the stop was higher than at the end.
+
+Three caveats of the records apply to everything that follows. First, stage~2 of the Yuksel--Yilmaz method is still improving slowly at the 600-iteration cap on the finer meshes, so its end state is a cap rather than a converged state, and the deficits quoted for that method are relative to that cap. Second, for the two static methods the late history lowers $\omega_1$: the quasi-static method at \me{800}{100} peaks at $163.4$\,rad/s and ends at $161.4$, and the Yuksel--Yilmaz method at \me{160}{20} peaks at $158.3$ and ends at $156.9$ (Table~\ref{tab:B}). The cause is that their objective is a static surrogate for $\omega_1$, not $\omega_1$ itself, so a negative deficit in the tables means that termination occurred before the subsequent frequency decrease. Third, the study used one load case, one starting design and one filter radius per method, and the thresholds of the criteria were chosen after seeing these data. They are calibrated on this benchmark and should be fixed in advance, not re-tuned, for any other case.
+
+%======================================================================
+\section{Results}
+\label{sec:results}
+
+\subsection{Limitations of the tested design-change criteria}
+\label{sec:diagnosis}
+
+Figures~\ref{fig:traces-proposed} to~\ref{fig:traces-olhoff} show the change norms, $\Mnd$ and $\omega_1$ per iteration for every recorded mesh, and Table~\ref{tab:B} gives their typical levels near stagnation and at the end of each record. Five observations follow from them.
+
+The change norms did not approach zero when the frequency and grayness stopped changing. Over the 20 updates after $\kstag$ the median $\maxdx$ was $0.014$ to $0.074$ for the quasi-static method, $0.03$ to $0.10$ for the Yuksel--Yilmaz method and $0.011$ to $0.073$ for the Du--Olhoff method; the median $\relL$ was $2.5$ to $7.5\cdot10^{-3}$, $0.9$ to $4.8\cdot10^{-3}$ and $1.5$ to $6.4\cdot10^{-3}$. These levels are three to ten times the native thresholds of $0.01$ and $10^{-3}$, while $\omega_1$ and $\Mnd$ are already flat (lower panels of the figures). The norms then decay slowly and non-monotonically; on several meshes their end-of-record medians are below the thresholds (Table~\ref{tab:B}). For the quasi-static and Du--Olhoff methods the persistent changes coincide with elements crossing the half-density threshold: in the same 20 updates, a median of $4$ to $64$ elements per update changed side of $x_e = 0.5$ in the quasi-static runs and $2$ to $26$ in the Du--Olhoff runs. An element that crosses $0.5$ within one move-limited update must have had intermediate density before it, and in a filtered design such elements lie on the solid--void interface, so these records point to oscillation of interface elements, consistent with the period-two cycle documented for the \me{160}{20} mesh. For the Yuksel--Yilmaz method such crossings were rare, a median of $0$ to $4$ elements per update, so the persistent $\maxdx$ at the move limit on its fine meshes is not localized by these records.
+
+A threshold below the level at stagnation was crossed irregularly. With $\maxdx \le 0.01$ the quasi-static method stopped at iterations $107$, $236$, $207$, $182$, $219$, $256$, never, $297$ and never on the nine meshes from \me{160}{20} to \me{800}{100}, although $\kstag$ was between $29$ and $95$ (Table~\ref{tab:A}). The stop is the first update at which no element changed by more than the threshold. The delay tends to increase with the number of elements, though not monotonically. The same mechanism produced the long tail of the \me{240}{30} run under $\relL < 10^{-3}$, which stopped at $271$, and the earlier observation that tolerances $0.019$ and $0.020$ gave $98$ and $47$ iterations at \me{320}{40}: a change of $0.001$ in the threshold moved the stop by a factor of two.
+
+A threshold near the level at stagnation caused premature stops on plateaus in the middle of a run. The $\RMS(\dx)$ of the Du--Olhoff method dips during the transitions of its adaptive move box, well before the design is finished. With $c = 0.2$, which corresponds to $\RMS(\dx) < 3.5\cdot10^{-3}$, the production campaign stopped the \me{640}{80}, \me{720}{90} and \me{800}{100} runs at outer iterations $38$, $33$ and $37$ with $\omega_1 = 156$, $154$ and $153$\,rad/s, $7\,\%$ below the converged value of $165$.
+
+The \me{800}{100} record (Fig.~\ref{fig:traces-olhoff}) shows what those runs were interrupted in. On this mesh the Du--Olhoff method removes gray material in two slow phases, $\Mnd = 0.53 \to 0.30$ between iterations $25$ and $100$ and $0.26 \to 0.16$ between $175$ and $240$, while $\omega_1$ stays flat at $163.6$ to $163.8$\,rad/s between iterations $125$ and $175$ as the second phase is being prepared. Its stagnation iteration is $232$, against $34$ to $59$ on the four coarser meshes. A gray \me{800}{100} design stopped at iteration $125$ is therefore an unfinished run, not a mesh effect, and every criterion that fired on that plateau produced it: the single-iteration $\RMS(\dx) < 3.5\cdot10^{-3}$ and $\relL < 5\cdot10^{-3}$ criteria (both at iteration $37$), $\maxdx \le 0.04$ with persistence ($105$) and the objective-only window ($122$).
+
+The design-change criteria that waited for the second phase on \me{800}{100}, $\relL < 10^{-3}$ ($256$) and the native Euclidean criterion with $c = 0.05$ ($246$), are the same criteria that stopped the \me{160}{20} and \me{240}{30} runs of this method at $111$ to $122$, roughly twice to three times their stagnation iterations. This is the dilemma of the opening question restated: the timing of the threshold crossings differs between the two meshes, the physics does not. Scaling the tolerance with the number of elements cannot repair the criterion. The Du--Olhoff criterion $\|\dx\|_2 < 0.05\sqrt{n_e/3200}$ is literally $\RMS(\dx) < 8.84\cdot10^{-4}$, so it can be expressed as a mesh-normalized RMS threshold with no reference to the $3200$-element mesh. The relative norm is the same quantity up to a factor of about $1.4$ to $1.5$, because $\relL \approx \RMS(\dx)/\sqrt{\overline{x^2}}$ with $\overline{x^2}$ the mean squared density. Both inherit the level at stagnation and the irregular crossings: Table~\ref{tab:A} shows the RMS criterion stopping the quasi-static method at iterations $209$ to $289$ and the relative-$L_2$ criterion at $219$ to $294$, for designs that stagnated at $30$ to $95$. Across meshes the level at stagnation was nearly flat (Table~\ref{tab:B}), while the delay to the first crossing of a given threshold was erratic, from $107$ to never for the quasi-static method at $0.01$. No monotone function of $n_e$ maps onto that behavior.
+
+\begin{figure}[p]
+\centering
+\includegraphics[width=\textwidth]{fig/traces_proposed.png}
+\caption{Quasi-static method: per-iteration $\maxdx$ (solver-native), $\relL$, $\Mnd$ and $\omega_1$ for every recorded mesh. The dashed and dotted lines mark the thresholds $0.01$ and $0.04$ (left) and $10^{-3}$ and $5\cdot10^{-3}$ (right). The change norms keep oscillating long after $\Mnd$ and $\omega_1$ have settled.}
+\label{fig:traces-proposed}
+\vspace{1.5em}
+\includegraphics[width=\textwidth]{fig/traces_yuksel.png}
+\caption{Yuksel--Yilmaz method: same quantities as Fig.~\ref{fig:traces-proposed}. The vertical lines mark the handoff from stage~1 to stage~2. On the finer meshes $\maxdx$ repeatedly reaches the move limit $0.1$ during stage~2.}
+\label{fig:traces-yuksel}
+\end{figure}
+
+\begin{figure}[tbp]
+\centering
+\includegraphics[width=\textwidth]{fig/traces_olhoff.png}
+\caption{Du--Olhoff method: same quantities as Fig.~\ref{fig:traces-proposed}. The \me{800}{100} run removes gray material in two phases, the second one between outer iterations $175$ and $240$, with $\omega_1$ flat in between.}
+\label{fig:traces-olhoff}
+\end{figure}
+
+\subsection{Candidate common criteria replayed on every record}
+\label{sec:candidates}
+
+Table~\ref{tab:C} and Fig.~\ref{fig:summary} give, per method and mesh, the stop iteration and the frequency deficit of each candidate criterion, and Table~\ref{tab:D} summarizes all candidates over the 23 records.
+
+The recommended criterion, R1, stops on windowed stagnation of an objective signal and of the grayness. For the Du--Olhoff method the monitored signal $f_k$ is the fundamental frequency $\omega_1$ at iteration $k$, which is the quantity the method maximizes. For the two static methods $f_k$ is the recorded compliance-type objective, a surrogate whose relationship to the frequency is empirical. Let $\Mnd^{(k)}$ be the grayness of Eq.~\eqref{eq:Mnd} evaluated on the physical densities. R1 stops at the first iteration $k \ge W$ at which
+\begin{equation}
+\label{eq:R1}
+\frac{\max\limits_{k-W\le j\le k} f_j - \min\limits_{k-W\le j\le k} f_j}{|f_k|} < 10^{-3}
+\quad\text{and}\quad
+\max_{k-W\le j\le k} \Mnd^{(j)} - \min_{k-W\le j\le k} \Mnd^{(j)} < 5\cdot10^{-3},
+\qquad W = 10 .
+\end{equation}
+The ranges are evaluated over $W + 1$ consecutive states, spanning $W$ updates. In words: over the last ten updates the objective signal varied by less than $0.1\,\%$ of its current value and the grayness by less than $0.005$. The criterion is dimensionless and contains no element count, no move limit and no filter radius. Both quantities are already computed or trivially available in every loop, so no extra eigenvalue solve is needed. The grayness condition limits changes in an aggregate measure of intermediate densities; it does not impose an absolute discreteness target and does not establish optimality. Neither half suffices alone on this benchmark. The objective window alone stopped the Du--Olhoff \me{800}{100} run on its plateau at iteration $122$, with $1.09\,\%$ of $\omega_1$ and half of the gray removal still to come; the $\Mnd$ window alone stopped the Yuksel--Yilmaz runs while $\omega_1$ was still moving, with deficits up to $2.71\,\%$ (last column of Table~\ref{tab:C}). The conjunction is what made the criterion terminate every record close to stagnation. It is also the candidate that resolved the dilemma of the opening question: it stopped the Du--Olhoff method at iteration $57$ on \me{240}{30} (stagnation $34$) and at $241$ on \me{800}{100} (stagnation $232$) with the same two numbers in the criterion.
+
+In the replay R1 triggered termination in all 23 recorded runs. Its stop iteration relative to $\kstag$ was $0.48$ to $2.68$ for the quasi-static method, $0.81$ to $1.23$ for the Yuksel--Yilmaz method in total-run counts and $1.04$ to $1.68$ for the Du--Olhoff method. Because the Yuksel--Yilmaz counts include the unchanged stage~1, the stage-2-only ratios, obtained by subtracting the handoff iteration from both $k^*$ and $\kstag$, are wider, $0.44$ to $1.74$. The frequency deficit at the stop was $-0.24$ to $+0.33\,\%$, $-0.46$ to $+0.91\,\%$ and $-0.13$ to $+0.27\,\%$ for the three methods respectively, relative to the end of the extended record, with a 300-iteration cap for the quasi-static and Du--Olhoff methods and a 600-iteration stage-2 cap for the Yuksel--Yilmaz method; the worst case was the Yuksel--Yilmaz method at \me{480}{60} with $+0.91\,\%$. The grayness at the stop exceeded its end value by at most $0.010$.
+
+The second candidate, R2, is a persistence version of the current criterion: $\maxdx \le 0.04$ for $10$ consecutive updates. On the coarse meshes it behaved like R1 in $\omega_1$, but it did not terminate every record. It never fired for the quasi-static method at \me{800}{100} within 300 iterations, because single OC elements kept changing by $0.05$ to $0.1$. It stopped the Du--Olhoff \me{800}{100} run at iteration $105$ with $\Mnd = 0.29$, a gray design with a deficit of $1.3\,\%$. It never fired for the Yuksel--Yilmaz method on \me{640}{80} to \me{800}{100}, because some element moved by the full move limit of $0.1$ in most stage-2 updates (median $\maxdx = 0.100$ at the end of those records, Table~\ref{tab:B}). Its threshold is also $20\,\%$ of the move limit of one method and $40\,\%$ of another's. R2 is acceptable as a documented fallback, not as the common criterion.
+
+The remaining candidates are not recommended. The single-iteration criterion $\maxdx \le 0.025$ had a worst deficit of $1.05\,\%$ but failed to terminate three records. The objective-only windows let the Du--Olhoff method stop on its \me{800}{100} plateau with $1.09\,\%$ unrealized. Criteria based on $\Mnd$ alone reached deficits of $2.71\,\%$, and criteria based on the fraction of elements crossing the density $0.5$ in one update reached $2.82$ and $3.29\,\%$. The single-iteration relative-$L_2$ and RMS criteria at $5\cdot10^{-3}$ and $3.5\cdot10^{-3}$ and $\maxdx \le 0.04$ without persistence produced the $7$ to $9\,\%$ deficits of the Du--Olhoff \me{800}{100} plateau (bottom rows of Table~\ref{tab:D}).
+
+\begin{figure}[tbp]
+\centering
+\includegraphics[width=0.92\textwidth]{fig/stop_rules_summary.png}
+\caption{Stop iteration (left) and frequency deficit at the stop (right) of the current and candidate criteria, per method and mesh. The black marks are the stagnation iteration $\kstag$. A missing bar means that the criterion never fired within the record. Yuksel--Yilmaz iteration numbers are total-run counts including stage~1.}
+\label{fig:summary}
+\end{figure}
+
+\subsection{Sensitivity of R1 to its two tolerances and to the window}
+\label{sec:sensitivity}
+
+The thresholds $10^{-3}$, $5\cdot10^{-3}$ and $W = 10$ were chosen on these data. Table~\ref{tab:D} reports the tighter settings: halving the objective tolerance to $5\cdot10^{-4}$ reduced the worst deficit from $0.91$ to $0.72\,\%$, and doubling the window to $W = 20$ reduced it further to $0.33\,\%$. The cost is later termination: the median ratio $k^*/\kstag$ rose from $1.25$ to $1.37$ and $1.58$, and the per-run overhead varied widely, from a few iterations to a tripling of the stop iteration on the coarsest quasi-static mesh under $W = 20$. Loosening the grayness tolerance to $10^{-2}$ gave the same worst deficit as the objective-only window, $1.09\,\%$, with a different distribution of stop iterations (median ratio $1.25$ against $1.13$). The chosen setting is the loosest of those tested that still waits for the second gray-removal phase of the Du--Olhoff \me{800}{100} run.
+
+%======================================================================
+\section{Discussion}
+\label{sec:discussion}
+
+The results change how a cross-method benchmark should be reported. One sentence can replace three: the quasi-static and Du--Olhoff implementations, and stage~2 of the Yuksel--Yilmaz implementation, terminate on the same criterion, the first iteration at which, over the preceding ten updates, the method's objective signal has varied by less than $0.1\,\%$ and the grayness $\Mnd$ by less than $0.005$, while the native stage-1 handoff criterion of the Yuksel--Yilmaz method is retained. The criterion is a stagnation test, not an optimality test, and the extended records are the evidence that it was adequate here: on every mesh, $\omega_1$ at the stop was within one percent of the value at the end of the extended record.
+
+The stage-1 tolerance of the Yuksel--Yilmaz method deserves a separate statement. It is part of the algorithm, not of the benchmark, because it selects the design handed to stage~2. A benchmark must therefore either keep the published stage-1 criterion and apply R1 to stage~2 only, which is what the replay did, or apply R1 to both stages after new runs and say so; the replay cannot support the second option. Mixing a modified stage-1 tolerance with a native stage-2 criterion is the one choice a reviewer can legitimately call unfair.
+
+Regenerating a benchmark table under R1 is cheap, because the criteria are observers. The iteration counts and the designs at the new stop follow from the recorded histories without rerunning anything; only clean timing requires a second pass in which each run is repeated to the discovered stop with history recording switched off. The expected effect on this benchmark is a Du--Olhoff count of $57$ to $78$ instead of $93$ to $121$ outer iterations on \me{160}{20} to \me{400}{50}, where its cost is dominated by the tail of nested MMA solves, and about $240$ at \me{800}{100}, where the method genuinely needs them; a quasi-static count of $44$ to $98$ instead of $107$ to $297$; and a Yuksel--Yilmaz stage-2 count unchanged in order of magnitude. The scaling of the Du--Olhoff iteration count with mesh size will steepen accordingly: the count is flat up to \me{400}{50} and then grows, and that growth is a property of the method on fine meshes, not of the stopping criterion.
+
+The extended records also show what the tail of a run does. For the quasi-static method the extended tail lowered $\omega_1$ by up to $1.2\,\%$ while reducing $\Mnd$ slightly; for the Yuksel--Yilmaz method the tail lowered $\omega_1$ on the coarse meshes and raised it on the fine ones, with $\Mnd$ increasing slightly on every mesh between $\kstag$ and the end of the record (Table~\ref{tab:B}); for the Du--Olhoff method the tail added at most $0.3\,\%$. These observations support stopping at stagnation on this benchmark. They do not show that the gray material remaining at the stop is final in any stronger sense: a small range of $\Mnd$ bounds the change of an aggregate measure, not the amount of intermediate density or the topology.
+
+Three limitations bound the conclusions. The Du--Olhoff method was not recorded on the four meshes between \me{480}{60} and \me{720}{90}, so its replay rests on five meshes. The thresholds of R1 were calibrated on the same records used to assess it, and should be frozen before any other example is run and reported as such. Stage~2 of the Yuksel--Yilmaz method on the fine meshes is the one place where stagnation and the end of the record differ by up to $0.9\,\%$ in $\omega_1$ within 600 iterations; for applications requiring smaller frequency deficits, tighter stopping tolerances or additional validation runs are needed.
+
+%======================================================================
+\section{Conclusions}
+\label{sec:conclusions}
+
+A benchmark that compares topology optimization methods by iteration count and wall-clock time is only as fair as its stopping criterion, and the three implementations compared here arrived with different native criteria. The replay of 23 recorded histories shows that, on this benchmark, the difficulty is not one of choosing a tolerance. The tested per-iteration design-change norms, maximum, Euclidean, root mean square and relative, remained three to ten times above the native thresholds after the frequency and grayness had stabilized, and then decayed slowly and irregularly. A threshold below that level fired on an irregular crossing whose delay tended to grow with the mesh; a threshold near it fired on plateaus in the middle of a run. None of the tested tolerances avoided both, so none of them provided a satisfactory compromise between delayed and premature termination across the recorded runs.
+
+Stopping instead on stagnation of the quantities the benchmark reports resolved the problem on these records. The criterion R1, which stops when the method's own objective signal has varied by less than $0.1\,\%$ and the grayness measure by less than $0.005$ over a window spanning ten updates, is dimensionless, identical for all three methods and free of any explicit mesh-size parameter. It terminated all 23 recorded runs within $0.48$ to $2.68$ times the stagnation iteration and produced a frequency deficit of at most $0.91\,\%$ relative to the recorded end states. The conjunction of the two conditions was essential: either one alone stopped too early on at least one method.
+
+The study covers one benchmark problem, one starting design and one filter radius per method, and its thresholds were calibrated on the recorded data. The criterion should therefore be fixed in advance for any new problem rather than re-tuned, its transferability to other problems remains to be assessed, and its two tolerances and window are the parameters a reader should report alongside the iteration counts.
+
+%======================================================================
+\section*{Data and code availability}
+
+The recording runners, the replay script, the per-iteration histories of all 23 records and the figure scripts are provided in the folder \path{examples/Performance/stop_criterion_study/} of the public repository of the companion benchmark, \url{https://github.com/BartBlachowski/topOpt4freqMax}. The recording runners \path{stopstudy_proposed.m}, \path{stopstudy_yuksel.m} and \path{stopstudy_olhoff.m} only set existing configuration fields and run the production code paths. The script \path{replay.py} performs the criterion replay and computes $\kstag$; \path{make_tables.py}, \path{plots.py} and \path{plot_summary.py} produce the tables and figures. The per-iteration histories are stored as one CSV file per method and mesh, and the replay results in \path{replay_all.csv}. The commit identifier of the version analyzed here should be cited together with the repository.
+
+%======================================================================
+\appendix
+\setcounter{table}{0}
+\renewcommand{\thetable}{A\arabic{table}}
+\section{Replay tables}
+\label{app:tables}
+
+\begin{landscape}
+\begin{table}[p]
+\centering\small
+\caption{Where the current criteria stop, versus where the design has stagnated. $\kstag$ is the last iteration at which $\omega_1$ differs by more than $0.5\,\%$, or $\Mnd$ by more than $0.01$, from the end of the extended record (300 iterations for the quasi-static and Du--Olhoff methods, stage-2 cap 600 for the Yuksel--Yilmaz method). Entries: stop iteration (frequency deficit $\delta$ of Eq.~\eqref{eq:deficit}, \%). Yuksel--Yilmaz iteration numbers are total-run counts including stage~1; the handoff occurred after $120/167/251/314/585/832/1541/1161/1149$ updates. \textit{none}: the criterion never fired within the record.}
+\label{tab:A}
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{@{}lrrcccccc@{}}
+\toprule
+mesh & record & $\kstag$
+  & $\maxdx \le 0.01$
+  & \makecell{$\RMS(\dx) < 8.8\cdot10^{-4}$\\$(\|\dx\|_2 < 0.05\sqrt{n_e/3200})$}
+  & $\relL < 10^{-3}$
+  & $\maxdx \le 0.04$
+  & \makecell{$\RMS(\dx) < 3.5\cdot10^{-3}$\\$(\|\dx\|_2 < 0.2\sqrt{n_e/3200})$}
+  & $\relL < 5\cdot10^{-3}$ \\
+\midrule
+\multicolumn{9}{@{}l}{\textit{Quasi-static}} \\
+$160\times20$ & $299$ & $29$ & 107 $(-0.12)$ & \textit{none} & \textit{none} & 32 $(-0.13)$ & 43 $(-0.24)$ & 45 $(-0.22)$ \\
+$240\times30$ & $299$ & $95$ & 236 $(-0.03)$ & 266 $(-0.01)$ & 271 $(-0.00)$ & 36 $(+0.31)$ & 42 $(+0.33)$ & 43 $(+0.33)$ \\
+$320\times40$ & $299$ & $30$ & 207 $(-0.05)$ & 209 $(-0.05)$ & 219 $(-0.04)$ & 35 $(-0.26)$ & 40 $(-0.17)$ & 41 $(-0.16)$ \\
+$400\times50$ & $299$ & $34$ & 182 $(-0.01)$ & 221 $(+0.01)$ & 249 $(+0.01)$ & 32 $(-0.66)$ & 38 $(-0.42)$ & 38 $(-0.42)$ \\
+$480\times60$ & $299$ & $30$ & 219 $(+0.03)$ & 257 $(+0.01)$ & 277 $(+0.00)$ & 50 $(+0.01)$ & 50 $(+0.01)$ & 51 $(+0.01)$ \\
+$560\times70$ & $299$ & $39$ & 256 $(-0.02)$ & 254 $(-0.02)$ & 280 $(-0.01)$ & 57 $(-0.06)$ & 52 $(-0.09)$ & 52 $(-0.09)$ \\
+$640\times80$ & $299$ & $39$ & \textit{none} & 289 $(+0.00)$ & \textit{none} & 47 $(-0.18)$ & 46 $(-0.18)$ & 47 $(-0.18)$ \\
+$720\times90$ & $299$ & $39$ & 297 $(+0.00)$ & 234 $(+0.02)$ & 285 $(+0.01)$ & 45 $(-0.31)$ & 50 $(-0.19)$ & 50 $(-0.19)$ \\
+$800\times100$ & $299$ & $44$ & \textit{none} & 263 $(+0.02)$ & 294 $(+0.01)$ & 56 $(-0.18)$ & 55 $(-0.18)$ & 55 $(-0.18)$ \\
+\midrule
+\multicolumn{9}{@{}l}{\textit{Yuksel--Yilmaz (criteria applied to stage 2; total-run counts)}} \\
+$160\times20$ & $720$ & $179$ & 244 $(-0.17)$ & 245 $(-0.16)$ & 251 $(-0.15)$ & 151 $(-0.77)$ & 149 $(-0.88)$ & 149 $(-0.88)$ \\
+$240\times30$ & $767$ & $201$ & 320 $(-0.07)$ & 270 $(-0.09)$ & 312 $(-0.07)$ & 220 $(-0.40)$ & 199 $(-0.39)$ & 199 $(-0.39)$ \\
+$320\times40$ & $851$ & $394$ & 572 $(-0.02)$ & 507 $(+0.03)$ & 531 $(+0.00)$ & 311 $(+1.05)$ & 282 $(+1.77)$ & 283 $(+1.77)$ \\
+$400\times50$ & $914$ & $414$ & 732 $(+0.03)$ & 669 $(+0.06)$ & 682 $(+0.06)$ & 400 $(+0.56)$ & 351 $(+1.42)$ & 351 $(+1.42)$ \\
+$480\times60$ & $1185$ & $884$ & \textit{none} & 781 $(+0.72)$ & 782 $(+0.72)$ & 781 $(+0.72)$ & 639 $(+1.58)$ & 639 $(+1.58)$ \\
+$560\times70$ & $1432$ & $1119$ & \textit{none} & 1045 $(+0.70)$ & 1068 $(+0.63)$ & 1073 $(+0.62)$ & 882 $(+1.72)$ & 883 $(+1.72)$ \\
+$640\times80$ & $2141$ & $1749$ & \textit{none} & 1853 $(+0.28)$ & 1854 $(+0.28)$ & 2006 $(+0.09)$ & 1583 $(+1.78)$ & 1583 $(+1.78)$ \\
+$720\times90$ & $1761$ & $1374$ & \textit{none} & 1383 $(+0.48)$ & 1491 $(+0.31)$ & 1491 $(+0.31)$ & 1212 $(+1.51)$ & 1212 $(+1.51)$ \\
+$800\times100$ & $1749$ & $1329$ & \textit{none} & 1424 $(+0.33)$ & 1509 $(+0.19)$ & 1604 $(+0.12)$ & 1203 $(+1.42)$ & 1203 $(+1.42)$ \\
+\midrule
+\multicolumn{9}{@{}l}{\textit{Du--Olhoff}} \\
+$160\times20$ & $300$ & $53$ & 122 $(-0.01)$ & 121 $(-0.01)$ & 122 $(-0.01)$ & 67 $(+0.25)$ & 58 $(+0.32)$ & 58 $(+0.32)$ \\
+$240\times30$ & $300$ & $34$ & 89 $(-0.04)$ & 111 $(-0.02)$ & 114 $(-0.03)$ & 61 $(-0.04)$ & 52 $(-0.07)$ & 52 $(-0.07)$ \\
+$320\times40$ & $300$ & $59$ & 85 $(-0.10)$ & 101 $(-0.08)$ & 128 $(-0.06)$ & 67 $(-0.22)$ & 67 $(-0.22)$ & 67 $(-0.22)$ \\
+$400\times50$ & $300$ & $52$ & 79 $(-0.13)$ & 93 $(-0.08)$ & 105 $(-0.06)$ & 60 $(-0.33)$ & 62 $(-0.31)$ & 62 $(-0.31)$ \\
+$800\times100$ & $300$ & $232$ & 245 $(-0.04)$ & 246 $(-0.04)$ & 256 $(-0.04)$ & 18 $(+9.27)$ & 37 $(+7.35)$ & 37 $(+7.35)$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[p]
+\centering\footnotesize
+\setlength{\tabcolsep}{3.5pt}
+\caption{Typical levels of the per-iteration change norms near stagnation and near the end of each record: median over the 20 updates after $\kstag$ (``after stagnation'') and over the last 20 recorded updates (``end''). These medians characterize typical design-change magnitudes near the reference stagnation point and near the end of each record. $\omega_1$ in rad/s; ``after stag.'' gives the values at iteration $\kstag + 1$.}
+\label{tab:B}
+\begin{tabular}{@{}lr ccc ccc ccc cc@{}}
+\toprule
+ & & \multicolumn{3}{c}{after stagnation} & \multicolumn{3}{c}{end}
+   & \multicolumn{3}{c}{$\omega_1$} & \multicolumn{2}{c}{$\Mnd$} \\
+\cmidrule(lr){3-5}\cmidrule(lr){6-8}\cmidrule(lr){9-11}\cmidrule(l){12-13}
+mesh & $\kstag$ & $\maxdx$ & rel-$L_2$ & RMS & $\maxdx$ & rel-$L_2$ & RMS
+  & after stag. & max & end & after stag. & end \\
+\midrule
+\multicolumn{13}{@{}l}{\textit{Quasi-static}} \\
+$160\times20$ & $29$ & $0.021$ & $0.0061$ & $0.0040$ & $0.006$ & $0.0021$ & $0.0014$ & $153.6$ & $153.9$ & $153.5$ & $0.261$ & $0.252$ \\
+$240\times30$ & $95$ & $0.014$ & $0.0025$ & $0.0017$ & $0.003$ & $0.0005$ & $0.0004$ & $157.1$ & $157.7$ & $157.6$ & $0.171$ & $0.161$ \\
+$320\times40$ & $30$ & $0.025$ & $0.0050$ & $0.0034$ & $0.002$ & $0.0004$ & $0.0002$ & $159.2$ & $159.2$ & $158.7$ & $0.129$ & $0.121$ \\
+$400\times50$ & $34$ & $0.021$ & $0.0037$ & $0.0026$ & $0.008$ & $0.0007$ & $0.0005$ & $160.2$ & $160.8$ & $159.5$ & $0.099$ & $0.097$ \\
+$480\times60$ & $30$ & $0.074$ & $0.0075$ & $0.0052$ & $0.041$ & $0.0013$ & $0.0009$ & $160.9$ & $160.9$ & $160.3$ & $0.100$ & $0.091$ \\
+$560\times70$ & $39$ & $0.055$ & $0.0055$ & $0.0038$ & $0.017$ & $0.0010$ & $0.0007$ & $161.1$ & $161.5$ & $160.7$ & $0.081$ & $0.077$ \\
+$640\times80$ & $39$ & $0.033$ & $0.0041$ & $0.0028$ & $0.052$ & $0.0013$ & $0.0009$ & $161.4$ & $162.3$ & $160.9$ & $0.072$ & $0.070$ \\
+$720\times90$ & $39$ & $0.041$ & $0.0050$ & $0.0035$ & $0.035$ & $0.0010$ & $0.0007$ & $161.9$ & $163.3$ & $161.1$ & $0.065$ & $0.063$ \\
+$800\times100$ & $44$ & $0.073$ & $0.0050$ & $0.0035$ & $0.041$ & $0.0011$ & $0.0008$ & $162.0$ & $163.4$ & $161.4$ & $0.058$ & $0.055$ \\
+\midrule
+\multicolumn{13}{@{}l}{\textit{Yuksel--Yilmaz (stage 2; total-run counts)}} \\
+$160\times20$ & $179$ & $0.030$ & $0.0033$ & $0.0023$ & $0.001$ & $0.0001$ & $0.0001$ & $157.7$ & $158.3$ & $156.9$ & $0.077$ & $0.080$ \\
+$240\times30$ & $201$ & $0.100$ & $0.0048$ & $0.0034$ & $0.001$ & $0.0000$ & $0.0000$ & $160.0$ & $160.1$ & $159.3$ & $0.036$ & $0.046$ \\
+$320\times40$ & $394$ & $0.091$ & $0.0040$ & $0.0028$ & $0.021$ & $0.0007$ & $0.0005$ & $160.9$ & $160.9$ & $160.7$ & $0.026$ & $0.035$ \\
+$400\times50$ & $414$ & $0.086$ & $0.0027$ & $0.0019$ & $0.013$ & $0.0006$ & $0.0004$ & $159.2$ & $160.0$ & $160.0$ & $0.029$ & $0.037$ \\
+$480\times60$ & $884$ & $0.031$ & $0.0009$ & $0.0006$ & $0.016$ & $0.0008$ & $0.0005$ & $159.7$ & $160.5$ & $160.5$ & $0.024$ & $0.029$ \\
+$560\times70$ & $1119$ & $0.100$ & $0.0019$ & $0.0014$ & $0.049$ & $0.0012$ & $0.0009$ & $159.5$ & $160.3$ & $160.3$ & $0.019$ & $0.023$ \\
+$640\times80$ & $1749$ & $0.100$ & $0.0019$ & $0.0013$ & $0.078$ & $0.0012$ & $0.0009$ & $158.9$ & $159.7$ & $159.7$ & $0.012$ & $0.014$ \\
+$720\times90$ & $1374$ & $0.100$ & $0.0018$ & $0.0013$ & $0.100$ & $0.0020$ & $0.0014$ & $159.5$ & $160.3$ & $160.3$ & $0.012$ & $0.015$ \\
+$800\times100$ & $1329$ & $0.100$ & $0.0018$ & $0.0012$ & $0.100$ & $0.0014$ & $0.0010$ & $159.5$ & $160.3$ & $160.3$ & $0.009$ & $0.013$ \\
+\midrule
+\multicolumn{13}{@{}l}{\textit{Du--Olhoff}} \\
+$160\times20$ & $53$ & $0.056$ & $0.0055$ & $0.0038$ & $0.013$ & $0.0007$ & $0.0005$ & $168.6$ & $169.2$ & $169.2$ & $0.126$ & $0.116$ \\
+$240\times30$ & $34$ & $0.073$ & $0.0064$ & $0.0044$ & $0.007$ & $0.0009$ & $0.0006$ & $167.5$ & $167.7$ & $167.3$ & $0.127$ & $0.123$ \\
+$320\times40$ & $59$ & $0.049$ & $0.0053$ & $0.0036$ & $0.006$ & $0.0008$ & $0.0005$ & $166.3$ & $166.3$ & $165.7$ & $0.151$ & $0.142$ \\
+$400\times50$ & $52$ & $0.028$ & $0.0043$ & $0.0030$ & $0.003$ & $0.0005$ & $0.0003$ & $167.0$ & $167.0$ & $166.3$ & $0.132$ & $0.123$ \\
+$800\times100$ & $232$ & $0.011$ & $0.0015$ & $0.0010$ & $0.004$ & $0.0006$ & $0.0004$ & $165.4$ & $165.4$ & $165.4$ & $0.169$ & $0.159$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[p]
+\centering\footnotesize
+\setlength{\tabcolsep}{3pt}
+\caption{Candidate common criteria replayed on every recorded history. Entries: stop iteration (frequency deficit $\delta$, \%). Yuksel--Yilmaz: criteria applied to stage~2 only, stage-1 handoff kept native, total-run counts. ``range$(f)$'' is the relative range of the objective signal and ``range$(\Mnd)$'' the absolute range of the grayness over a window spanning $W$ updates, as in Eq.~\eqref{eq:R1}.}
+\label{tab:C}
+\begin{tabular}{@{}lrcccccc@{}}
+\toprule
+mesh & $\kstag$
+  & \makecell{\textbf{R1}: range$(f) < 10^{-3}$\\and range$(\Mnd) < 5\cdot10^{-3}$, $W{=}10$}
+  & \makecell{R1 tight: $5\cdot10^{-4}$\\/ $5\cdot10^{-3}$, $W{=}10$}
+  & \makecell{range$(f) < 10^{-3}$\\only, $W{=}10$}
+  & \makecell{R2: $\maxdx \le 0.04$\\for 10 consecutive updates}
+  & \makecell{$\maxdx \le 0.025$\\(single update)}
+  & \makecell{range$(\Mnd) < 5\cdot10^{-3}$\\only, $W{=}10$} \\
+\midrule
+\multicolumn{8}{@{}l}{\textit{Quasi-static}} \\
+$160\times20$ & $29$ & 44 $(-0.24)$ & 48 $(-0.24)$ & 44 $(-0.24)$ & 41 $(-0.22)$ & 36 $(-0.21)$ & 41 $(-0.22)$ \\
+$240\times30$ & $95$ & 46 $(+0.33)$ & 48 $(+0.33)$ & 46 $(+0.33)$ & 45 $(+0.33)$ & 42 $(+0.33)$ & 39 $(+0.32)$ \\
+$320\times40$ & $30$ & 54 $(-0.13)$ & 56 $(-0.13)$ & 54 $(-0.13)$ & 44 $(-0.14)$ & 41 $(-0.16)$ & 41 $(-0.16)$ \\
+$400\times50$ & $34$ & 91 $(-0.09)$ & 132 $(-0.04)$ & 91 $(-0.09)$ & 41 $(-0.32)$ & 37 $(-0.42)$ & 36 $(-0.42)$ \\
+$480\times60$ & $30$ & 62 $(+0.03)$ & 71 $(+0.03)$ & 62 $(+0.03)$ & 59 $(+0.02)$ & 59 $(+0.02)$ & 42 $(-0.09)$ \\
+$560\times70$ & $39$ & 64 $(-0.05)$ & 68 $(-0.04)$ & 64 $(-0.05)$ & 76 $(-0.05)$ & 69 $(-0.04)$ & 42 $(-0.26)$ \\
+$640\times80$ & $39$ & 67 $(-0.03)$ & 72 $(-0.03)$ & 67 $(-0.03)$ & 56 $(-0.06)$ & 55 $(-0.06)$ & 38 $(-0.57)$ \\
+$720\times90$ & $39$ & 82 $(+0.02)$ & 96 $(+0.04)$ & 82 $(+0.02)$ & 68 $(-0.03)$ & 60 $(-0.06)$ & 36 $(-0.76)$ \\
+$800\times100$ & $44$ & 98 $(+0.08)$ & 106 $(+0.09)$ & 98 $(+0.08)$ & \textit{none} & 126 $(+0.09)$ & 42 $(-0.56)$ \\
+\midrule
+\multicolumn{8}{@{}l}{\textit{Yuksel--Yilmaz (stage 2; total-run counts)}} \\
+$160\times20$ & $179$ & 221 $(-0.22)$ & 225 $(-0.21)$ & 221 $(-0.22)$ & 176 $(-0.53)$ & 208 $(-0.26)$ & 147 $(-0.88)$ \\
+$240\times30$ & $201$ & 208 $(-0.46)$ & 263 $(-0.10)$ & 208 $(-0.46)$ & 229 $(-0.39)$ & 223 $(-0.40)$ & 193 $(-0.26)$ \\
+$320\times40$ & $394$ & 364 $(-0.15)$ & 364 $(-0.15)$ & 364 $(-0.15)$ & 449 $(+0.13)$ & 473 $(+0.11)$ & 273 $(+2.36)$ \\
+$400\times50$ & $414$ & 447 $(+0.33)$ & 533 $(+0.15)$ & 447 $(+0.33)$ & 409 $(+0.53)$ & 671 $(+0.06)$ & 335 $(+2.11)$ \\
+$480\times60$ & $884$ & 718 $(+0.91)$ & 788 $(+0.72)$ & 718 $(+0.91)$ & 790 $(+0.71)$ & 784 $(+0.72)$ & 607 $(+2.62)$ \\
+$560\times70$ & $1119$ & 1010 $(+0.81)$ & 1235 $(+0.23)$ & 1010 $(+0.81)$ & 1291 $(+0.13)$ & 1191 $(+0.30)$ & 853 $(+2.71)$ \\
+$640\times80$ & $1749$ & 1719 $(+0.61)$ & 1770 $(+0.45)$ & 1719 $(+0.61)$ & \textit{none} & \textit{none} & 1563 $(+2.40)$ \\
+$720\times90$ & $1374$ & 1325 $(+0.65)$ & 1389 $(+0.47)$ & 1325 $(+0.65)$ & \textit{none} & \textit{none} & 1182 $(+2.42)$ \\
+$800\times100$ & $1329$ & 1292 $(+0.64)$ & 1342 $(+0.47)$ & 1292 $(+0.64)$ & \textit{none} & \textit{none} & 1171 $(+2.28)$ \\
+\midrule
+\multicolumn{8}{@{}l}{\textit{Du--Olhoff}} \\
+$160\times20$ & $53$ & 66 $(+0.27)$ & 77 $(+0.22)$ & 66 $(+0.27)$ & 81 $(+0.23)$ & 72 $(+0.21)$ & 62 $(+0.29)$ \\
+$240\times30$ & $34$ & 57 $(-0.05)$ & 60 $(-0.05)$ & 46 $(-0.16)$ & 70 $(-0.04)$ & 64 $(-0.05)$ & 47 $(-0.12)$ \\
+$320\times40$ & $59$ & 78 $(-0.10)$ & 81 $(-0.10)$ & 65 $(-0.28)$ & 90 $(-0.10)$ & 69 $(-0.18)$ & 71 $(-0.15)$ \\
+$400\times50$ & $52$ & 78 $(-0.13)$ & 84 $(-0.11)$ & 59 $(-0.35)$ & 69 $(-0.21)$ & 64 $(-0.30)$ & 67 $(-0.25)$ \\
+$800\times100$ & $232$ & 241 $(-0.04)$ & 241 $(-0.04)$ & 122 $(+1.09)$ & 105 $(+1.31)$ & 130 $(+1.05)$ & 241 $(-0.04)$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+\end{landscape}
+
+\begin{table}[htbp]
+\centering\footnotesize
+\caption{Summary over all 23 recorded histories (methods $\times$ meshes), sorted by worst frequency deficit. Worst deficit: largest $\delta$ at the stop relative to the end state. Ratio: $k^*/\kstag$ (1 = stops exactly at stagnation, $<1$ before, $>1$ after; Yuksel--Yilmaz in total-run counts). ``range$(f)$'' and ``range$(\Mnd)$'' are window ranges as in Eq.~\eqref{eq:R1}; criteria without $W$ act on a single update. ``flip'': fraction of elements crossing density $0.5$ in one update.}
+\label{tab:D}
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+criterion & \makecell{never\\fired} & \makecell{worst $\omega_1$\\deficit [\%]}
+  & \makecell{worst $\Mnd$\\excess} & \makecell{$k^*/\kstag$\\min / median / max} \\
+\midrule
+$\maxdx \le 0.01$                                       & 7 & 0.03 & $+0.005$ & 1.06 / 2.39 / 7.62 \\
+range$(f)<5\cdot10^{-4}$ \& range$(\Mnd)<5\cdot10^{-3}$, $W{=}20$ & 0 & 0.33 & $+0.011$ & 0.71 / 1.58 / 5.79 \\
+range$(f)<5\cdot10^{-4}$ \& range$(\Mnd)<5\cdot10^{-3}$, $W{=}10$ & 0 & 0.72 & $+0.010$ & 0.51 / 1.37 / 3.88 \\
+$\relL < 10^{-3}$                                       & 2 & 0.72 & $+0.003$ & 0.88 / 2.02 / 9.23 \\
+$\RMS(\dx) < 8.8\cdot10^{-4}$ (Du--Olhoff $c{=}0.05$)    & 1 & 0.72 & $+0.005$ & 0.88 / 1.75 / 8.57 \\
+\textbf{R1}: range$(f)<10^{-3}$ \& range$(\Mnd)<5\cdot10^{-3}$, $W{=}10$ & 0 & 0.91 & $+0.010$ & 0.48 / 1.25 / 2.68 \\
+$\maxdx \le 0.02$, $W{=}10$                              & 6 & 0.98 & $+0.094$ & 0.58 / 1.71 / 3.53 \\
+range$(f)<10^{-3}$ only, $W{=}20$                        & 0 & 1.01 & $+0.104$ & 0.60 / 1.49 / 4.15 \\
+range$(f)<5\cdot10^{-4}$ only, $W{=}10$                  & 0 & 1.03 & $+0.108$ & 0.51 / 1.37 / 3.88 \\
+$\maxdx \le 0.025$                                      & 3 & 1.05 & $+0.111$ & 0.44 / 1.24 / 2.86 \\
+range$(f)<10^{-3}$ only, $W{=}10$                        & 0 & 1.09 & $+0.118$ & 0.48 / 1.13 / 2.68 \\
+range$(f)<10^{-3}$ \& range$(\Mnd)<10^{-2}$, $W{=}10$     & 0 & 1.09 & $+0.118$ & 0.48 / 1.25 / 2.68 \\
+$\relL < 2\cdot10^{-3}$                                 & 0 & 1.22 & $+0.009$ & 0.84 / 1.42 / 8.07 \\
+R2: $\maxdx \le 0.04$, $W{=}10$                          & 4 & 1.31 & $+0.134$ & 0.45 / 1.33 / 2.06 \\
+range$(\omega_1)<10^{-3}$, $W{=}10$                      & 0 & 1.51 & $+0.118$ & 0.43 / 1.10 / 1.67 \\
+range$(\Mnd) < 5\cdot10^{-3}$ only, $W{=}10$             & 0 & 2.71 & $+0.008$ & 0.41 / 0.96 / 1.41 \\
+flip $<10^{-3}$, $W{=}5$                                 & 0 & 2.82 & $+0.084$ & 0.60 / 1.27 / 2.93 \\
+flip $<10^{-3}$                                         & 0 & 3.29 & $+0.102$ & 0.36 / 0.94 / 1.57 \\
+$\relL < 5\cdot10^{-3}$                                 & 0 & 7.35 & $+0.328$ & 0.16 / 1.09 / 1.70 \\
+$\RMS(\dx) < 3.5\cdot10^{-3}$ ($c{=}0.2$)                & 0 & 7.35 & $+0.328$ & 0.16 / 1.09 / 1.67 \\
+$\maxdx \le 0.04$                                       & 0 & 9.27 & $+0.405$ & 0.08 / 1.14 / 1.79 \\
+$\relL < 10^{-2}$                                       & 0 & 9.67 & $+0.418$ & 0.07 / 0.91 / 1.27 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\bibliographystyle{plainnat}
+\bibliography{references}
+
+\end{document}

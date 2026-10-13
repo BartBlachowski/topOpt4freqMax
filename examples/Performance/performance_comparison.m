@@ -125,7 +125,9 @@ cfg.stop = struct();
 % benchmark and are to be kept frozen, not re-tuned per case.  A live run stops
 % one iteration after the replayed k*: the window holds designs whose objective
 % is known, which trails the update by one.
-R1 = struct('window', 10, 'objectiveTol', 1e-3, 'graynessTol', 5e-3);
+% R1 = struct('window', 10, 'objectiveTol', 1e-3, 'graynessTol', 5e-3);   % calibrated R1 (campaign_windows_convergence_stagnation_r1)
+% 2026-10-13: loosened objective/grayness tolerances (same window), Windows campaign.
+R1 = struct('window', 10, 'objectiveTol', 1e-2, 'graynessTol', 1e-2);
 
 % Proposed
 cfg.stop.proposed.criterion   = 'stagnation';   % production: 'max_change'
@@ -135,12 +137,15 @@ cfg.stop.proposed.objectiveTol = R1.objectiveTol;
 cfg.stop.proposed.graynessTol = R1.graynessTol;
 cfg.stop.proposed.maxIters    = [];   % production: 2000  (safety budget)
 
-% Yuksel.  Stage 1 keeps the published rule max|x - x_old| < 0.01: its
-% tolerance decides the design stage 2 starts from, so it is part of the method,
-% and it is the stage-1 rule the replay was recorded with.  R1 ends stage 2.
+% Yuksel.  R1 ends BOTH stages (2026-10-13); the window restarts at the
+% handoff.  Under the published stage-1 rule max|x - x_old| < 0.01, stage 1
+% stopped on the design-change noise floor (121 ... 1311 iterations on the
+% Windows campaign, growing with the mesh); R1 replayed on the recorded stage-1
+% histories stops it at 81-102 iterations from 240x30 on.
 cfg.stop.yuksel.criterion     = 'stagnation';   % production: 'max_change' (both stages)
-cfg.stop.yuksel.stage1Criterion = 'max_change'; % stage 1 only
-cfg.stop.yuksel.stage1Tol     = 0.01;           % production: 0.01 with max_change
+% cfg.stop.yuksel.stage1Criterion = 'max_change'; % previous: stage 1 on the published rule
+% cfg.stop.yuksel.stage1Tol     = 0.01;           % previous (with stage1Criterion = 'max_change')
+cfg.stop.yuksel.stage1Tol     = [];             % not read by 'stagnation'
 cfg.stop.yuksel.stage2Tol     = [];             % not read by 'stagnation'
 cfg.stop.yuksel.window        = R1.window;
 cfg.stop.yuksel.objectiveTol  = R1.objectiveTol;
@@ -222,7 +227,8 @@ cfg.outputDir = '';                  % auto: examples/Performance/conference_ben
 % the quantity being reported is wall-clock time, which is a property of the
 % host as much as of the method.
 % cfg.runLabel  = 'campaign_mac_convergence_relative_l2_change';   % previous stop rules
-cfg.runLabel  = 'campaign_windows_convergence_stagnation_r1';
+% cfg.runLabel  = 'campaign_windows_convergence_stagnation_r1';   % R1 10/1e-3/5e-3, Yuksel stage 1 on max_change
+cfg.runLabel  = 'campaign_windows_stagnation_w10_obj1e-2_gray1e-2';
 
 % ---- Timing-accounting tolerances (predeclared, recorded in the artifacts) --
 cfg.timingTolAbs     = 1e-6;   % |T_total - (T1+T2+T_overhead)|, seconds
@@ -235,7 +241,7 @@ cfg.crosscheckTolRel = 0.05;   % caller-side total vs solver self-reported total
 scriptDir = fileparts(mfilename('fullpath'));
 repoRoot  = fileparts(fileparts(scriptDir));
 addpath(scriptDir);
-addpath(fullfile(scriptDir, 'paper_bench'));
+addpath(fullfile(scriptDir, 'conference_bench'));   % paper_bench does not exist
 addpath(fullfile(repoRoot, 'tools', 'Matlab'));
 addpath(fullfile(scriptDir, 'benchmark_profile'));   % frozen Proposed/Yuksel profile, base config, common evaluator
 % THE production Du-Olhoff implementation.  analysis/Olhoff (named
