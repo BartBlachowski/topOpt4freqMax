@@ -43,7 +43,7 @@
   "promoted_content": {
     "layout": "analysis/OlhoffCurrent/+impl/{algo,fem,filter,mma,mma_published,architecture/{+olh,olhoffSolve.m,legacy,docs}}",
     "n_files": 79,
-    "verbatim": "All 79 promoted files are byte-identical to upstream 253069262407885a8b759a9e721c4f0a7d3a397d. EXCEPT the five local adaptations recorded under adaptations (2026-10-08, default-off relativeL2 stop metric).",
+    "verbatim": "All 79 promoted files are byte-identical to upstream 253069262407885a8b759a9e721c4f0a7d3a397d. EXCEPT the seven local adaptations recorded under adaptations (default-off stop options: relativeL2 2026-10-08, stagnation 2026-10-10, stagnation_x 2026-10-14; lower-triangle assembly in fem/assemble2D.m and fem/model2D.m 2026-10-14).",
     "promoted_by_this_event": "16 replaced + 4 added (the other 59 were already byte-identical); see diagnostics/upstream_253069_migration/PROMOTION_MAP.md",
     "excluded_from_promotion": [
       "audit_*/",
@@ -66,11 +66,11 @@
     {
       "file": "+impl/architecture/olhoffSolve.m",
       "kind": "STOPPING CRITERION OPTIONS (default-off)",
-      "change": "relativeL2 (2026-10-08) and stagnation (2026-10-10); see history.",
-      "why": "Owner requests 2026-10-08 and 2026-10-10: selectable stopping rules common to the three methods.",
-      "trajectory_effect": "NONE unless stop.norm = 'relativeL2' or stop.rule = 'stagnation' is selected; see history.",
+      "change": "relativeL2 (2026-10-08), stagnation (2026-10-10) and stagnation_x (2026-10-14); see history.",
+      "why": "Owner requests 2026-10-08, 2026-10-10 and 2026-10-14: selectable stopping rules common to the three methods.",
+      "trajectory_effect": "NONE unless stop.norm = 'relativeL2' or stop.rule = 'stagnation' / 'stagnation_x' is selected; see history.",
       "upstream_sha256": "6c891b42a6c3bbdd80e3d1035f05f626bd8e73a2beaa3540532a68ec6e3cd7f7",
-      "promoted_sha256": "2250270be50fbef64902f44114e5f0547eba3da67995d54f2ebbe77486b8e218",
+      "promoted_sha256": "062a009f3c692023821c813ba62a2297e23209cce0b24984a78881e602105b32",
       "history": [
         {
           "date": "2026-10-08",
@@ -83,17 +83,23 @@
           "change": "stop.rule = 'stagnation': omega_n and 4*mean(rho.*(1-rho)) recorded at the top of each outer iteration when selected; local_stagnation admits convergence on their window ranges, replacing the design-increment test; aux.stagObjRange / aux.stagMndRange created only when selected; dedicated convergence log line.",
           "why": "Owner request 2026-10-10: one stopping rule for all three methods, rule R1 of examples/Performance/stop_criterion_study (windowed stagnation of the method's objective and of the grey measure); implemented locally first, not yet in upstream.",
           "trajectory_effect": "NONE unless stop.rule = 'stagnation' is selected. Proved at 160x20 on the production preset with the default rule: rho, omega, log, status, aux and hist (isequaln, timing fields excluded) bitwise equal to HEAD 2b63e6f. Selected (defaults 10 / 1e-3 / 5e-3) the trajectory is the default one truncated at outer 67, one after the offline replay's k* = 66."
+        },
+        {
+          "date": "2026-10-14",
+          "change": "stop.rule = 'stagnation_x': the relative change ||rho_j - rho_{j-1}||_2/||rho_{j-1}||_2 of the density field passed to assemble2D and the grey measure recorded at the top of each outer iteration when selected; local_stagnation_x admits convergence when the largest of the W changes in the window of W+1 analysed designs is below stop.stagnation.relativeChangeTolerance and the grey-measure range below stop.stagnation.graynessTolerance, replacing the design-increment test; aux.stagXRel / aux.stagMndRange created only when selected; dedicated convergence log line.",
+          "why": "Owner request 2026-10-14: a stop strategy structurally identical to 'stagnation' whose first test acts on the physical density field instead of the objective; implemented locally first, not yet in upstream.",
+          "trajectory_effect": "NONE unless stop.rule = 'stagnation_x' is selected. Proved at 160x20 on the production preset (outer cap 120, fresh session, macOS arm64 R2025b) for the default l2_change rule, StopMaxChangeTolerance 0.03, StopRelativeChangeTolerance 1e-3 and StopStagnation (defaults): final rho, omega, outer-iteration count, every pre-existing out.stopping field and the solver log bitwise equal to HEAD f6b2e8b (tools/Matlab/tests/test_stop_strategies_unchanged; aux and hist were not compared). Selected (W = 10, relativeChangeTolerance 5e-3, graynessTolerance 1e-2) the run stops at outer 80, exactly where the rule recomputed from the replayed analysed designs first holds (tests/test_olhoff_stagnation_x)."
         }
       ]
     },
     {
       "file": "+impl/architecture/+olh/+config/schema.m",
       "kind": "STOPPING CRITERION OPTIONS (default-off)",
-      "change": "relativeL2 (2026-10-08) and stagnation (2026-10-10); see history.",
-      "why": "Owner requests 2026-10-08 and 2026-10-10: selectable stopping rules common to the three methods.",
-      "trajectory_effect": "NONE unless stop.norm = 'relativeL2' or stop.rule = 'stagnation' is selected; see history.",
+      "change": "relativeL2 (2026-10-08), stagnation (2026-10-10) and stagnation_x (2026-10-14); see history.",
+      "why": "Owner requests 2026-10-08, 2026-10-10 and 2026-10-14: selectable stopping rules common to the three methods.",
+      "trajectory_effect": "NONE unless stop.norm = 'relativeL2' or stop.rule = 'stagnation' / 'stagnation_x' is selected; see history.",
       "upstream_sha256": "3fa03435a0fc54f2863c537b3e926d00023d2df7bbb6eb00001e0ce05eb6584b",
-      "promoted_sha256": "54f6321eb6caed2bd05221f0fae10fb761ebba0876c00e915ec5bbe7ba511ad4",
+      "promoted_sha256": "2bbbe652c1503dc1dc2eda2036ea7a623fff94c9961a973f32e0df210ac19d97",
       "history": [
         {
           "date": "2026-10-08",
@@ -106,17 +112,23 @@
           "change": "stop.rule domain gains 'stagnation'; rows stop.stagnation.window (10), .objectiveTolerance (1e-3), .graynessTolerance (5e-3). Three rows added: every configuration hash changes (see config_hash_transition_2026_10_10).",
           "why": "Owner request 2026-10-10: one stopping rule for all three methods, rule R1 of examples/Performance/stop_criterion_study (windowed stagnation of the method's objective and of the grey measure); implemented locally first, not yet in upstream.",
           "trajectory_effect": "NONE unless stop.rule = 'stagnation' is selected. Proved at 160x20 on the production preset with the default rule: rho, omega, log, status, aux and hist (isequaln, timing fields excluded) bitwise equal to HEAD 2b63e6f. Selected (defaults 10 / 1e-3 / 5e-3) the trajectory is the default one truncated at outer 67, one after the offline replay's k* = 66."
+        },
+        {
+          "date": "2026-10-14",
+          "change": "stop.rule domain gains 'stagnation_x'; row stop.stagnation.relativeChangeTolerance (1e-3, uncalibrated) added; window/graynessTolerance descriptions name both rules. One row added: every configuration hash changes (see config_hash_transition_2026_10_14).",
+          "why": "Owner request 2026-10-14: a stop strategy structurally identical to 'stagnation' whose first test acts on the physical density field instead of the objective; implemented locally first, not yet in upstream.",
+          "trajectory_effect": "NONE unless stop.rule = 'stagnation_x' is selected. Proved at 160x20 on the production preset (outer cap 120, fresh session, macOS arm64 R2025b) for the default l2_change rule, StopMaxChangeTolerance 0.03, StopRelativeChangeTolerance 1e-3 and StopStagnation (defaults): final rho, omega, outer-iteration count, every pre-existing out.stopping field and the solver log bitwise equal to HEAD f6b2e8b (tools/Matlab/tests/test_stop_strategies_unchanged; aux and hist were not compared). Selected (W = 10, relativeChangeTolerance 5e-3, graynessTolerance 1e-2) the run stops at outer 80, exactly where the rule recomputed from the replayed analysed designs first holds (tests/test_olhoff_stagnation_x)."
         }
       ]
     },
     {
       "file": "+impl/architecture/+olh/+config/validate.m",
       "kind": "STOPPING CRITERION OPTIONS (default-off)",
-      "change": "relativeL2 (2026-10-08) and stagnation (2026-10-10); see history.",
-      "why": "Owner requests 2026-10-08 and 2026-10-10: selectable stopping rules common to the three methods.",
-      "trajectory_effect": "NONE unless stop.norm = 'relativeL2' or stop.rule = 'stagnation' is selected; see history.",
+      "change": "relativeL2 (2026-10-08), stagnation (2026-10-10) and stagnation_x (2026-10-14); see history.",
+      "why": "Owner requests 2026-10-08, 2026-10-10 and 2026-10-14: selectable stopping rules common to the three methods.",
+      "trajectory_effect": "NONE unless stop.norm = 'relativeL2' or stop.rule = 'stagnation' / 'stagnation_x' is selected; see history.",
       "upstream_sha256": "10493fbe6717cfce186e93257e239e1acacb7d4826638b527c54a8d604373e22",
-      "promoted_sha256": "ac92334a2528234dcab15c5e38bbb9796d478b5922239068f007ba2aa214bfe9",
+      "promoted_sha256": "f80e5316465dc4a6cb955b73f307d9a7a8bd39264b7180f6660614760bb0a096",
       "history": [
         {
           "date": "2026-10-08",
@@ -129,17 +141,23 @@
           "change": "stagnation is refused with any stop.guards.* (they qualify the increment test it does not use) and with projection (continuation would consume a stale window).",
           "why": "Owner request 2026-10-10: one stopping rule for all three methods, rule R1 of examples/Performance/stop_criterion_study (windowed stagnation of the method's objective and of the grey measure); implemented locally first, not yet in upstream.",
           "trajectory_effect": "NONE unless stop.rule = 'stagnation' is selected. Proved at 160x20 on the production preset with the default rule: rho, omega, log, status, aux and hist (isequaln, timing fields excluded) bitwise equal to HEAD 2b63e6f. Selected (defaults 10 / 1e-3 / 5e-3) the trajectory is the default one truncated at outer 67, one after the offline replay's k* = 66."
+        },
+        {
+          "date": "2026-10-14",
+          "change": "the guard and projection refusals of 'stagnation' apply to 'stagnation_x' too (same error identifiers; the message names the selected rule).",
+          "why": "Owner request 2026-10-14: a stop strategy structurally identical to 'stagnation' whose first test acts on the physical density field instead of the objective; implemented locally first, not yet in upstream.",
+          "trajectory_effect": "NONE unless stop.rule = 'stagnation_x' is selected. Proved at 160x20 on the production preset (outer cap 120, fresh session, macOS arm64 R2025b) for the default l2_change rule, StopMaxChangeTolerance 0.03, StopRelativeChangeTolerance 1e-3 and StopStagnation (defaults): final rho, omega, outer-iteration count, every pre-existing out.stopping field and the solver log bitwise equal to HEAD f6b2e8b (tools/Matlab/tests/test_stop_strategies_unchanged; aux and hist were not compared). Selected (W = 10, relativeChangeTolerance 5e-3, graynessTolerance 1e-2) the run stops at outer 80, exactly where the rule recomputed from the replayed analysed designs first holds (tests/test_olhoff_stagnation_x)."
         }
       ]
     },
     {
       "file": "+impl/architecture/+olh/+config/describe.m",
       "kind": "STOPPING CRITERION OPTIONS (default-off)",
-      "change": "relativeL2 (2026-10-08) and stagnation (2026-10-10); see history.",
-      "why": "Owner requests 2026-10-08 and 2026-10-10: selectable stopping rules common to the three methods.",
-      "trajectory_effect": "NONE unless stop.norm = 'relativeL2' or stop.rule = 'stagnation' is selected; see history.",
+      "change": "relativeL2 (2026-10-08), stagnation (2026-10-10) and stagnation_x (2026-10-14); see history.",
+      "why": "Owner requests 2026-10-08, 2026-10-10 and 2026-10-14: selectable stopping rules common to the three methods.",
+      "trajectory_effect": "NONE unless stop.norm = 'relativeL2' or stop.rule = 'stagnation' / 'stagnation_x' is selected; see history.",
       "upstream_sha256": "ba09e574bde8d46d2d9504e7b59d187f797249771c00bdd2999f536825256185",
-      "promoted_sha256": "fa733da113f562ce196f6a9057a6e03557b81599f344b4c12cb623c9602046f9",
+      "promoted_sha256": "3a18530a9bf34b6da3e541022a629eeb0048e2572f83a5d1d87a82ba1a99c527",
       "history": [
         {
           "date": "2026-10-08",
@@ -152,17 +170,23 @@
           "change": "the STOPPING section names the stagnation rule and its thresholds.",
           "why": "Owner request 2026-10-10: one stopping rule for all three methods, rule R1 of examples/Performance/stop_criterion_study (windowed stagnation of the method's objective and of the grey measure); implemented locally first, not yet in upstream.",
           "trajectory_effect": "NONE unless stop.rule = 'stagnation' is selected. Proved at 160x20 on the production preset with the default rule: rho, omega, log, status, aux and hist (isequaln, timing fields excluded) bitwise equal to HEAD 2b63e6f. Selected (defaults 10 / 1e-3 / 5e-3) the trajectory is the default one truncated at outer 67, one after the offline replay's k* = 66."
+        },
+        {
+          "date": "2026-10-14",
+          "change": "the STOPPING section names the stagnation_x rule and its thresholds.",
+          "why": "Owner request 2026-10-14: a stop strategy structurally identical to 'stagnation' whose first test acts on the physical density field instead of the objective; implemented locally first, not yet in upstream.",
+          "trajectory_effect": "NONE unless stop.rule = 'stagnation_x' is selected. Proved at 160x20 on the production preset (outer cap 120, fresh session, macOS arm64 R2025b) for the default l2_change rule, StopMaxChangeTolerance 0.03, StopRelativeChangeTolerance 1e-3 and StopStagnation (defaults): final rho, omega, outer-iteration count, every pre-existing out.stopping field and the solver log bitwise equal to HEAD f6b2e8b (tools/Matlab/tests/test_stop_strategies_unchanged; aux and hist were not compared). Selected (W = 10, relativeChangeTolerance 5e-3, graynessTolerance 1e-2) the run stops at outer 80, exactly where the rule recomputed from the replayed analysed designs first holds (tests/test_olhoff_stagnation_x)."
         }
       ]
     },
     {
       "file": "+impl/architecture/docs/CONFIG_REFERENCE.md",
       "kind": "STOPPING CRITERION OPTIONS (default-off)",
-      "change": "relativeL2 (2026-10-08) and stagnation (2026-10-10); see history.",
-      "why": "Owner requests 2026-10-08 and 2026-10-10: selectable stopping rules common to the three methods.",
-      "trajectory_effect": "NONE unless stop.norm = 'relativeL2' or stop.rule = 'stagnation' is selected; see history.",
+      "change": "relativeL2 (2026-10-08), stagnation (2026-10-10) and stagnation_x (2026-10-14); see history.",
+      "why": "Owner requests 2026-10-08, 2026-10-10 and 2026-10-14: selectable stopping rules common to the three methods.",
+      "trajectory_effect": "NONE unless stop.norm = 'relativeL2' or stop.rule = 'stagnation' / 'stagnation_x' is selected; see history.",
       "upstream_sha256": "94a05f13413892aedd7237b47e423f4c06c389723f09dcdf19620883ebc3edca",
-      "promoted_sha256": "f6c185f2554c2d4be59f9644452469a75eb6b1360409965795229bc2a65d3268",
+      "promoted_sha256": "48389ad1ddce1c78302b76735f9b58c46e3592b68b4dfa6e4267298e3923f3e5",
       "history": [
         {
           "date": "2026-10-08",
@@ -175,11 +199,35 @@
           "change": "the stop.rule row and the three stop.stagnation.* rows.",
           "why": "Owner request 2026-10-10: one stopping rule for all three methods, rule R1 of examples/Performance/stop_criterion_study (windowed stagnation of the method's objective and of the grey measure); implemented locally first, not yet in upstream.",
           "trajectory_effect": "NONE unless stop.rule = 'stagnation' is selected. Proved at 160x20 on the production preset with the default rule: rho, omega, log, status, aux and hist (isequaln, timing fields excluded) bitwise equal to HEAD 2b63e6f. Selected (defaults 10 / 1e-3 / 5e-3) the trajectory is the default one truncated at outer 67, one after the offline replay's k* = 66."
+        },
+        {
+          "date": "2026-10-14",
+          "change": "the stop.rule row, the two shared stop.stagnation.* rows and the new relativeChangeTolerance row.",
+          "why": "Owner request 2026-10-14: a stop strategy structurally identical to 'stagnation' whose first test acts on the physical density field instead of the objective; implemented locally first, not yet in upstream.",
+          "trajectory_effect": "NONE unless stop.rule = 'stagnation_x' is selected. Proved at 160x20 on the production preset (outer cap 120, fresh session, macOS arm64 R2025b) for the default l2_change rule, StopMaxChangeTolerance 0.03, StopRelativeChangeTolerance 1e-3 and StopStagnation (defaults): final rho, omega, outer-iteration count, every pre-existing out.stopping field and the solver log bitwise equal to HEAD f6b2e8b (tools/Matlab/tests/test_stop_strategies_unchanged; aux and hist were not compared). Selected (W = 10, relativeChangeTolerance 5e-3, graynessTolerance 1e-2) the run stops at outer 80, exactly where the rule recomputed from the replayed analysed designs first holds (tests/test_olhoff_stagnation_x)."
         }
       ]
+    },
+    {
+      "file": "+impl/fem/assemble2D.m",
+      "kind": "ASSEMBLY EFFICIENCY (same matrices)",
+      "change": "K and M assembled from the lower triangle (mdl.iL/jL, mdl.K0L/M0L, 36 triplets per element) and mirrored with K + tril(K,-1)', replacing sparse(iK,jK, 64 triplets) followed by (K+K')/2.",
+      "why": "Fairness audit 2026-10-14 of the conference benchmark: the per-iteration global assembly of all three methods is now done the same way (lower triangle of each element matrix, 36 triplets, mirrored), as the Yuksel (top99neo) code already did; the full 64-triplet assembly followed by (K+K')/2 is several times slower once ndof >= 2^17 (MATLAB sparse()).",
+      "trajectory_effect": "NONE below 2^17 dofs: assembled K and M bitwise equal to the former full assembly + (K+K')/2 when the element matrices are exactly symmetric (checked at 160x20); the 160x20 reproduction and preset-equivalence tests and the stop-strategy regression digests are unchanged. At 720x90 and finer, where elemMats2D's K0 is symmetric only to round-off, K differs from the former matrix by <= 2.4e-16 relative.",
+      "upstream_sha256": "ebf543df22d774598053fc99d50dbbce33f7d679084e14202d2999cb09da264f",
+      "promoted_sha256": "efa97f6bf426d17cbf03d21d5d30c461d501c58a97e2ca5096d7533b5bdde0f6"
+    },
+    {
+      "file": "+impl/fem/model2D.m",
+      "kind": "ASSEMBLY EFFICIENCY (same matrices)",
+      "change": "mdl gains iL/jL (lower-triangle global indices) and K0L/M0L (lower-triangle entries of the symmetric parts of K0/M0); iK/jK/K0/M0 unchanged.",
+      "why": "Fairness audit 2026-10-14 of the conference benchmark: the per-iteration global assembly of all three methods is now done the same way (lower triangle of each element matrix, 36 triplets, mirrored), as the Yuksel (top99neo) code already did; the full 64-triplet assembly followed by (K+K')/2 is several times slower once ndof >= 2^17 (MATLAB sparse()).",
+      "trajectory_effect": "NONE below 2^17 dofs: assembled K and M bitwise equal to the former full assembly + (K+K')/2 when the element matrices are exactly symmetric (checked at 160x20); the 160x20 reproduction and preset-equivalence tests and the stop-strategy regression digests are unchanged. At 720x90 and finer, where elemMats2D's K0 is symmetric only to round-off, K differs from the former matrix by <= 2.4e-16 relative.",
+      "upstream_sha256": "3cc19e1c52023225a1350d1c3e7623a9df68b01f52a74c82ddd4aac377ac6560",
+      "promoted_sha256": "7b4d6b64ea674efa5a4bafb0567053de38c1d58d0caa1e0b149e975af41b963c"
     }
   ],
-  "adaptations_note": "hist.tOuter (the former single documented adaptation) and the stage-exhaustion controller (the former undocumented six-file local divergence plus exhaustion.m) are now supplied by upstream 253069 itself. Since 2026-10-08 +impl carries five locally adapted files (stop.norm = relativeL2; since 2026-10-10 also stop.rule = stagnation), recorded above with their upstream and promoted hashes; SOURCE_MANIFEST.json was re-recorded for them. They should be offered upstream and come back through a promotion.",
+  "adaptations_note": "hist.tOuter (the former single documented adaptation) and the stage-exhaustion controller (the former undocumented six-file local divergence plus exhaustion.m) are now supplied by upstream 253069 itself. Since 2026-10-08 +impl carries locally adapted files (five stop-option files, and since 2026-10-14 also fem/assemble2D.m and fem/model2D.m for lower-triangle assembly) (stop.norm = relativeL2; since 2026-10-10 also stop.rule = stagnation; since 2026-10-14 also stop.rule = stagnation_x), recorded above with their upstream and promoted hashes; SOURCE_MANIFEST.json was re-recorded for them. They should be offered upstream and come back through a promotion.",
   "presets": {
     "registry": "analysis/OlhoffCurrent/olhoffcurrent_presets.m",
     "selection_rule": "Every configuration resolution names its preset explicitly; there is no unnamed default. Compatibility aliases resolve only to the formulation they always named; historical audit codes are provenance aliases and are refused as names.",
@@ -434,5 +482,14 @@
     ],
     "explanation": "olhoffcurrent_config_hash iterates schema rows, so every configuration hash changes, although no scientific value changes for a configuration that does not select stop.rule = 'stagnation'. The 87 pre-change rows are frozen in tests/fixtures/schema_rows_pre_stagnation.json; hashing a current configuration over them reproduces a pre-change hash.",
     "example": "production preset at 160x20: b1a5744df798... (87 rows) -> a08a14f4ef7c... (90 rows)"
+  },
+  "config_hash_transition_2026_10_14": {
+    "schema_rows_before": 90,
+    "schema_rows_after": 91,
+    "added_rows": [
+      "stop.stagnation.relativeChangeTolerance"
+    ],
+    "explanation": "olhoffcurrent_config_hash iterates schema rows, so every configuration hash changes, although no scientific value changes for a configuration that does not select stop.rule = 'stagnation_x'. The 90 pre-change rows are frozen in tests/fixtures/schema_rows_pre_stagnation_x.json; hashing a current configuration over them reproduces a pre-change hash (checked in tests/test_preset_identity).",
+    "example": "production preset at 160x20: a08a14f4ef7c... (90 rows) -> 83da3ea02de8... (91 rows)"
   }
 }

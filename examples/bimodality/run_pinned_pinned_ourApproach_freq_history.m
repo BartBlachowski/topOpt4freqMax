@@ -38,7 +38,11 @@
 %   stag_window+1 analysed designs, the compliance objective has varied by
 %   < stag_obj_tol relative to its latest value AND the grayness
 %   4*mean(xPhys(1-xPhys)) by < stag_gray_tol; conv_tol and rel_tol are then
-%   ignored.
+%   ignored.  stop_criterion = 'stagnation_x' replaces the objective test by one
+%   on xPhys, the density field entering the FE model (= x under this
+%   sensitivity filter): each of the stag_window relative changes
+%   ||xPhys_j - xPhys_{j-1}||_2/||xPhys_{j-1}||_2 in the window must be
+%   < stag_rel_tol; the grayness test is kept.
 %
 %   Every save_every_it-th iterate (and the last one) is also rendered, so the
 %   topology can be compared with the frequency plateau of the history; the
@@ -48,17 +52,18 @@
 %     OurApproach_240x30_freq_iterations.fig / .png
 %     topologies/OurApproach_240x30_it<k>.png
 
-nelx = 800;
-nely = 100;
+nelx = 160;
+nely = 20;
 save_every_it = 25;   % topology snapshot every save_every_it iterations (+ last); 0 = none
 conv_tol = 0.01;      % stop when max|x - x_old| <= conv_tol; 0.01 = Table 1
 conv_tol = 0.04;	
 % stop_criterion = 'max_change';   % previous setting
-stop_criterion = 'stagnation';   % 'max_change' (Table 1 rule, conv_tol) | 'relative_l2_change' (rel_tol) | 'stagnation'
+stop_criterion = 'stagnation_x';   % 'max_change' (Table 1 rule, conv_tol) | 'relative_l2_change' (rel_tol) | 'stagnation' | 'stagnation_x'
 rel_tol = 1e-3;       % stop when ||x - x_old||_2/||x_old||_2 < rel_tol; no calibrated value
 stag_window = 10;     % ('stagnation') stag_window = 10 window W: the last W+1 analysed designs
 stag_obj_tol = 1e-2;  % ('stagnation') stag_obj_tol = 1e-3 range(objective)/objective over the window
 stag_gray_tol = 1e-2; % ('stagnation') stag_gray_tol = 5e-3 range(4*mean(xPhys(1-xPhys))) over the window
+stag_rel_tol = 1e-2;  % ('stagnation_x') max ||xPhys_j - xPhys_{j-1}||_2/||xPhys_{j-1}||_2 over the window; no calibrated value
 max_iter = [];        % iteration cap; [] = frozen profile value (2000)
 
 here = fileparts(mfilename('fullpath'));
@@ -84,9 +89,15 @@ switch stop_criterion
             'objective_tol', stag_obj_tol, 'grayness_tol', stag_gray_tol);
         stopDesc = sprintf('stagnation over %d+1 designs (objective %g, grayness %g)', ...
             stag_window, stag_obj_tol, stag_gray_tol);
+    case 'stagnation_x'
+        cfg.optimization.stop_criterion = stop_criterion;
+        cfg.optimization.stagnation = struct('window', stag_window, ...
+            'relative_change_tol', stag_rel_tol, 'grayness_tol', stag_gray_tol);
+        stopDesc = sprintf('stagnation_x over %d+1 designs (||dxPhys||/||xPhys|| %g, grayness %g)', ...
+            stag_window, stag_rel_tol, stag_gray_tol);
     otherwise
-        error(['stop_criterion must be ''max_change'', ''relative_l2_change'' or ' ...
-               '''stagnation'' (got ''%s'').'], stop_criterion);
+        error(['stop_criterion must be ''max_change'', ''relative_l2_change'', ' ...
+               '''stagnation'' or ''stagnation_x'' (got ''%s'').'], stop_criterion);
 end
 if ~isempty(max_iter)
     cfg.optimization.max_iters = max_iter;

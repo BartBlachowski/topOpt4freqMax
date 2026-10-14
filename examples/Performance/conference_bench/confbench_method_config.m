@@ -19,24 +19,37 @@ function [mcfg, profileId, profile] = confbench_method_config(methodKey, nelx, n
 %                           4*mean(x(1-x)) by < graynessTol (absolute); no
 %                           tolerance above is read.  Defaults 10, 1e-3, 5e-3
 %                           (stop_criterion_study, rule R1).
+%     'stagnation_x'        every method: 'stagnation' with the objective test
+%                           replaced by one on the physical density field
+%                           (xPhys for Proposed and Yuksel, rho for Olhoff, the
+%                           field entering the FE analysis): over the same
+%                           window, each of the window relative changes
+%                           ||xPhys_j - xPhys_{j-1}||_2/||xPhys_{j-1}||_2 must be
+%                           < relativeChangeTol; the grayness test is kept.
+%                           relativeChangeTol defaults to 1e-3 (uncalibrated).
 %   Fields:
 %     olhoff    .criterion 'l2_change' (default) | 'max_change' (max|drho| <=
-%                          tol) | 'relative_l2_change' | 'stagnation'; all but
-%                          the first use no mesh scaling and no guards
+%                          tol) | 'relative_l2_change' | 'stagnation' |
+%                          'stagnation_x'; all but the first use no mesh
+%                          scaling and no guards
 %               .c         c in ||drho||_2 < c*sqrt(NE/3200)   (l2_change)
 %               .tol       tolerance of max_change / relative_l2_change
 %               .maxOuter  outer-iteration safety budget
-%     proposed  .criterion 'max_change' (default) | 'relative_l2_change' | 'stagnation'
+%     proposed  .criterion 'max_change' (default) | 'relative_l2_change' |
+%                          'stagnation' | 'stagnation_x'
 %               .tol       tolerance of the first two criteria
 %               .maxIters  iteration safety budget
 %     yuksel    .criterion 'max_change' (default) | 'relative_l2_change' |
-%                          'stagnation', both stages unless .stage1Criterion
+%                          'stagnation' | 'stagnation_x', both stages unless
+%                          .stage1Criterion
 %               .stage1Criterion  stage 1's criterion when it differs
 %               .stage1Tol, .stage2Tol   per-stage tolerances of the first two
 %               .maxIters  per-stage safety budget, both stages (the driver
 %                          passes cfg.yukselMaxIters)
 %     all       .window, .objectiveTol, .graynessTol   the 'stagnation'
-%                          thresholds; empty = the defaults above
+%                          thresholds; .window, .relativeChangeTol,
+%                          .graynessTol the 'stagnation_x' ones; empty = the
+%                          defaults above
 %   The returned configuration is the effective one, so everything that
 %   prints or hashes it reports the rule that actually runs.
 %
@@ -93,7 +106,7 @@ switch methodKey
         % l2_change reads .c; the other two criteria read .tol, which has no
         % production value for them.  The field a criterion does not read is
         % ignored.
-        stopFactor = []; stopMaxTol = []; stopRelTol = []; stopStag = [];
+        stopFactor = []; stopMaxTol = []; stopRelTol = []; stopStag = []; stopStagX = [];
         criterion = char(valueOr(stop, 'criterion', 'l2_change'));
         switch criterion
             case 'l2_change'
@@ -108,6 +121,16 @@ switch methodKey
                     if isfield(s, 'objective_tol'); stopStag.objectiveTolerance = s.objective_tol; end
                     if isfield(s, 'grayness_tol');  stopStag.graynessTolerance = s.grayness_tol; end
                 end
+            case 'stagnation_x'
+                stopStagX = true;
+                s = stagnationOverrides(stop);
+                s = rmfieldIf(s, 'objective_tol');   % not read by stagnation_x
+                if ~isempty(fieldnames(s))
+                    stopStagX = struct();
+                    if isfield(s, 'window');              stopStagX.window = s.window; end
+                    if isfield(s, 'relative_change_tol'); stopStagX.relativeChangeTolerance = s.relative_change_tol; end
+                    if isfield(s, 'grayness_tol');        stopStagX.graynessTolerance = s.grayness_tol; end
+                end
             case {'max_change', 'relative_l2_change'}
                 if ~hasValue(stop, 'tol')
                     error('confbench_method_config:OlhoffTolRequired', ...
@@ -118,13 +141,14 @@ switch methodKey
             otherwise
                 error('confbench_method_config:UnknownCriterion', ...
                     ['stop.olhoff.criterion must be ''l2_change'', ''max_change'', ' ...
-                     '''relative_l2_change'' or ''stagnation'' (got ''%s'').'], criterion);
+                     '''relative_l2_change'', ''stagnation'' or ''stagnation_x'' (got ''%s'').'], criterion);
         end
         stopArgs = {};
         if ~isempty(stopFactor); stopArgs = [stopArgs, {'StopToleranceFactor', stopFactor}]; end
         if ~isempty(stopMaxTol); stopArgs = [stopArgs, {'StopMaxChangeTolerance', stopMaxTol}]; end
         if ~isempty(stopRelTol); stopArgs = [stopArgs, {'StopRelativeChangeTolerance', stopRelTol}]; end
         if ~isempty(stopStag);   stopArgs = [stopArgs, {'StopStagnation', stopStag}]; end
+        if ~isempty(stopStagX);  stopArgs = [stopArgs, {'StopStagnationX', stopStagX}]; end
         if hasValue(stop, 'maxOuter'); stopArgs = [stopArgs, {'MaxOuter', stop.maxOuter}]; end
         cfg = olhoffcurrent_config(nelx, nely, 'Preset', preset.name, stopArgs{:});
 
@@ -143,6 +167,7 @@ switch methodKey
         mcfg.olhoff_stop_max_change_tol = stopMaxTol;
         mcfg.olhoff_stop_relative_tol = stopRelTol;
         mcfg.olhoff_stop_stagnation = stopStag;
+        mcfg.olhoff_stop_stagnation_x = stopStagX;
         mcfg.olhoff_max_outer = valueOr(stop, 'maxOuter', []);
 
         profileId = preset.name;
@@ -193,12 +218,12 @@ switch methodKey
 end
 
 % ---- dispatched methods only, from here down ---------------------------
-known = {'max_change', 'relative_l2_change', 'stagnation'};
+known = {'max_change', 'relative_l2_change', 'stagnation', 'stagnation_x'};
 criterion = char(valueOr(stop, 'criterion', 'max_change'));
 if ~any(strcmp(criterion, known))
     error('confbench_method_config:UnknownCriterion', ...
-        ['stop.%s.criterion must be ''max_change'', ''relative_l2_change'' or ' ...
-         '''stagnation'' (got ''%s'').'], methodKey, criterion);
+        ['stop.%s.criterion must be ''max_change'', ''relative_l2_change'', ' ...
+         '''stagnation'' or ''stagnation_x'' (got ''%s'').'], methodKey, criterion);
 end
 isYuksel = isfield(mcfg.optimization, 'yuksel');
 stage1Criterion = criterion;
@@ -210,8 +235,8 @@ if hasValue(stop, 'stage1Criterion')
     stage1Criterion = char(stop.stage1Criterion);
     if ~any(strcmp(stage1Criterion, known))
         error('confbench_method_config:UnknownCriterion', ...
-            ['stop.yuksel.stage1Criterion must be ''max_change'', ''relative_l2_change'' ' ...
-             'or ''stagnation'' (got ''%s'').'], stage1Criterion);
+            ['stop.yuksel.stage1Criterion must be ''max_change'', ''relative_l2_change'', ' ...
+             '''stagnation'' or ''stagnation_x'' (got ''%s'').'], stage1Criterion);
     end
 end
 % The frozen tolerances are max|x - x_old| values; a relative criterion has
@@ -233,8 +258,10 @@ end
 if isYuksel && ~strcmp(stage1Criterion, criterion)
     mcfg.optimization.yuksel.stage1_stop_criterion = stage1Criterion;
 end
-if any(strcmp(rules(:,1), 'stagnation'))
+if any(strcmp(rules(:,1), 'stagnation')) || any(strcmp(rules(:,1), 'stagnation_x'))
     s = stagnationOverrides(stop);
+    if ~any(strcmp(rules(:,1), 'stagnation')); s = rmfieldIf(s, 'objective_tol'); end
+    if ~any(strcmp(rules(:,1), 'stagnation_x')); s = rmfieldIf(s, 'relative_change_tol'); end
     if ~isempty(fieldnames(s)); mcfg.optimization.stagnation = s; end
 end
 if hasValue(stop, 'tol'); mcfg.optimization.convergence_tol = stop.tol; end
@@ -267,10 +294,16 @@ function s = stagnationOverrides(stop)
 % The stagnation thresholds the driver set, in the JSON vocabulary
 % (optimization.stagnation.*); empty fields keep the solver defaults.
 s = struct();
-map = {'window', 'window'; 'objectiveTol', 'objective_tol'; 'graynessTol', 'grayness_tol'};
+map = {'window', 'window'; 'objectiveTol', 'objective_tol'; 'graynessTol', 'grayness_tol'; ...
+       'relativeChangeTol', 'relative_change_tol'};
 for k = 1:size(map, 1)
     if hasValue(stop, map{k,1}); s.(map{k,2}) = double(stop.(map{k,1})); end
 end
+end
+
+function s = rmfieldIf(s, name)
+% The threshold a selected rule does not read is not carried into its config.
+if isfield(s, name); s = rmfield(s, name); end
 end
 
 function tf = hasValue(s, name)

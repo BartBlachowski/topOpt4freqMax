@@ -18,13 +18,16 @@ if nargin < 4 || isempty(massInterp), massInterp = '4'; end
 
 rho = rho(:);
 gK  = olh.material.stiffnessInterpolation(rho, p);
-sK  = mdl.K0(:) * gK';
 gm  = massScale(rho, massInterp);
-sM  = mdl.M0(:) * gm';
 
-K = sparse(mdl.iK, mdl.jK, sK(:), mdl.ndof, mdl.ndof);
-M = sparse(mdl.iK, mdl.jK, sM(:), mdl.ndof, mdl.ndof);
-K = (K+K')/2;  M = (M+M')/2;
+% Lower triangle assembled, then mirrored: exactly symmetric, and half the
+% triplets of a full assembly (see model2D).  Same matrices as the former
+% full assembly followed by (K+K')/2, up to round-off.
+sK  = mdl.K0L * gK';
+sM  = mdl.M0L * gm';
+K = sparse(mdl.iL, mdl.jL, sK(:), mdl.ndof, mdl.ndof);
+M = sparse(mdl.iL, mdl.jL, sM(:), mdl.ndof, mdl.ndof);
+K = K + tril(K,-1)';  M = M + tril(M,-1)';
 
 f = mdl.free;
 K = K(f,f);  M = M(f,f);

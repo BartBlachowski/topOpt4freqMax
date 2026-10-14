@@ -1,9 +1,9 @@
 {
   "manifest_schema": "olhoff_current_source_manifest/1",
-  "generated": "2026-10-10T11:23:37+02:00",
+  "generated": "2026-10-14T12:56:40+02:00",
   "root": "analysis/Olhoff/+impl",
   "n_files": 79,
-  "tree_sha256": "a530dbfa8969772e2b83df5d7e121c3f1da2dc5d6530fed320b33d9a564601cd",
+  "tree_sha256": "c88915ffff201fefd750b412cbabe45fd310e7b86021079f73448ab94b3aed2f",
   "files": [
     {
       "path": "algo/compareHistory.m",
@@ -83,7 +83,7 @@
     },
     {
       "path": "architecture/+olh/+config/describe.m",
-      "sha256": "fa733da113f562ce196f6a9057a6e03557b81599f344b4c12cb623c9602046f9"
+      "sha256": "3a18530a9bf34b6da3e541022a629eeb0048e2572f83a5d1d87a82ba1a99c527"
     },
     {
       "path": "architecture/+olh/+config/epsilonForMesh.m",
@@ -107,7 +107,7 @@
     },
     {
       "path": "architecture/+olh/+config/schema.m",
-      "sha256": "54f6321eb6caed2bd05221f0fae10fb761ebba0876c00e915ec5bbe7ba511ad4"
+      "sha256": "2bbbe652c1503dc1dc2eda2036ea7a623fff94c9961a973f32e0df210ac19d97"
     },
     {
       "path": "architecture/+olh/+config/setPath.m",
@@ -119,7 +119,7 @@
     },
     {
       "path": "architecture/+olh/+config/validate.m",
-      "sha256": "ac92334a2528234dcab15c5e38bbb9796d478b5922239068f007ba2aa214bfe9"
+      "sha256": "f80e5316465dc4a6cb955b73f307d9a7a8bd39264b7180f6660614760bb0a096"
     },
     {
       "path": "architecture/+olh/+material/massInterpolation.m",
@@ -211,7 +211,7 @@
     },
     {
       "path": "architecture/docs/CONFIG_REFERENCE.md",
-      "sha256": "f6c185f2554c2d4be59f9644452469a75eb6b1360409965795229bc2a65d3268"
+      "sha256": "48389ad1ddce1c78302b76735f9b58c46e3592b68b4dfa6e4267298e3923f3e5"
     },
     {
       "path": "architecture/docs/FILE_CLASSIFICATION.md",
@@ -251,11 +251,11 @@
     },
     {
       "path": "architecture/olhoffSolve.m",
-      "sha256": "2250270be50fbef64902f44114e5f0547eba3da67995d54f2ebbe77486b8e218"
+      "sha256": "062a009f3c692023821c813ba62a2297e23209cce0b24984a78881e602105b32"
     },
     {
       "path": "fem/assemble2D.m",
-      "sha256": "ebf543df22d774598053fc99d50dbbce33f7d679084e14202d2999cb09da264f"
+      "sha256": "efa97f6bf426d17cbf03d21d5d30c461d501c58a97e2ca5096d7533b5bdde0f6"
     },
     {
       "path": "fem/classifyModes.m",
@@ -275,7 +275,7 @@
     },
     {
       "path": "fem/model2D.m",
-      "sha256": "3cc19e1c52023225a1350d1c3e7623a9df68b01f52a74c82ddd4aac377ac6560"
+      "sha256": "7b4d6b64ea674efa5a4bafb0567053de38c1d58d0caa1e0b149e975af41b963c"
     },
     {
       "path": "filter/applyFilter.m",

@@ -125,6 +125,52 @@ the evidence that recorded them. Details:
 
 ## 7. Adaptations
 
+**2026-10-14 — lower-triangle assembly (local; same matrices).**
+A fairness audit of the conference benchmark aligned the per-iteration global
+assembly of the three methods. `fem/assemble2D.m` now assembles the 36
+lower-triangle entries of each element matrix (indices `mdl.iL`/`mdl.jL` and
+values `mdl.K0L`/`mdl.M0L` from `fem/model2D.m`, taken from the symmetric parts
+of K0/M0) and mirrors the result with `K + tril(K,-1)'`. The former code passed
+all 64 entries to `sparse()` and then formed `(K+K')/2`, which costs twice the
+triplets and becomes several times slower once ndof ≥ 2^17 (720×90 and finer).
+Below 2^17 the assembled K and M are bitwise those of the former code (checked
+at 160×20), so the reproduction tests are unaffected; at 720×90 and finer, where
+K0 is symmetric only to round-off, K differs by at most 2.4e-16 relative.
+
+| file | change |
+|---|---|
+| `fem/assemble2D.m` | lower-triangle assembly + mirror |
+| `fem/model2D.m` | `mdl.iL`, `mdl.jL`, `mdl.K0L`, `mdl.M0L` |
+
+**2026-10-14 — density-field stagnation stop rule (local, default-off).**
+`stop.rule = 'stagnation_x'` is `stagnation` with the ω_n test replaced by a
+test on the density field ρ that `assemble2D` receives, which is the field that
+enters the stiffness and mass interpolation and the eigenanalysis. Under the
+sensitivity filter this is the design variable itself. Projection, where it
+would be the projected field, is refused with this rule, as it is for
+`stagnation`. Over the same window of W+1 analysed designs (never the initial
+design), each of the W relative changes ‖ρ_j − ρ_{j−1}‖₂/‖ρ_{j−1}‖₂ must be below
+`stop.stagnation.relativeChangeTolerance` (default 1e-3, no calibrated value),
+and the grey-measure test is unchanged. The largest change in the window is
+tested, not the last one. It is selected from outside through
+`olhoffcurrent_config(..., 'StopStagnationX', true | struct)`.
+
+| file | change |
+|---|---|
+| `architecture/olhoffSolve.m` | the change of ρ between consecutive analysed designs and the grey measure recorded per outer iteration when selected; `local_stagnation_x`; `aux.stagXRel` and `aux.stagMndRange`, created only when selected |
+| `architecture/+olh/+config/schema.m` | `stagnation_x` added to the `stop.rule` domain; one row `stop.stagnation.relativeChangeTolerance` |
+| `architecture/+olh/+config/validate.m` | the guard and projection refusals of `stagnation` cover `stagnation_x` |
+| `architecture/+olh/+config/describe.m` | the STOPPING section names the rule and its thresholds |
+| `architecture/docs/CONFIG_REFERENCE.md` | the `stop.rule` row and the stagnation rows |
+
+**Configuration hashes change** (90 → 91 rows). No scientific value changes.
+The 90-row list is frozen in `tests/fixtures/schema_rows_pre_stagnation_x.json`
+together with the production 160×20 hash `a08a14f4…`, which
+`tests/test_preset_identity` recomputes from a current configuration.
+
+Unselected, the option leaves the trajectory unchanged: see
+`trajectory_effect` in `PROVENANCE.json`. The change is not in upstream.
+
 **2026-10-10 — stagnation stop rule (local, default-off).**
 `stop.rule = 'stagnation'` replaces the sec. 3.5.1 design-increment test. The
 run stops when, over the W+1 most recent designs whose eigenvalues are known,

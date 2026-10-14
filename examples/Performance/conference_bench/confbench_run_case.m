@@ -125,6 +125,9 @@ end
 if ~isempty(getOpt(mcfg, 'olhoff_stop_stagnation', []))
     args = [args, {'StopStagnation', mcfg.olhoff_stop_stagnation}];
 end
+if ~isempty(getOpt(mcfg, 'olhoff_stop_stagnation_x', []))
+    args = [args, {'StopStagnationX', mcfg.olhoff_stop_stagnation_x}];
+end
 % max_outer_override (smoke tests) takes precedence over a changed budget.
 if isfield(opts, 'max_outer_override') && ~isempty(opts.max_outer_override)
     args = [args, {'MaxOuter', double(opts.max_outer_override)}];
@@ -226,6 +229,11 @@ mcfg.benchmark.measure_memory = false;
 % inside the timed call on coarse meshes; nobody sees this run's figure, and the
 % table reports omega from the common evaluator.  Off, explicitly.
 mcfg.postprocessing.structural_mode_check = false;
+% Fairness audit 2026-10-14: the runner's post-solve topology eigensolve feeds
+% only snapshots, mode plots and correlation (all off here) and duplicated the
+% solver's own final eigensolve inside the timed call; Du-Olhoff has no such
+% step.  0 = skip it.  The solver's final eigensolve, which gives omega, stays.
+mcfg.postprocessing.compute_modes = 0;
 
 tCall = tic;
 [x, omega, tIter, nIter, ~, nIterStage, tel] = run_topopt_from_json(mcfg); %#ok<ASGLU>
@@ -276,6 +284,10 @@ if isfield(opts, 'max_outer_override') && ~isempty(opts.max_outer_override)
 end
 mcfg.benchmark.measure_memory = false;
 mcfg.postprocessing.structural_mode_check = false;   % as in runProposed
+mcfg.postprocessing.compute_modes = 0;                % as in runProposed
+% Fairness audit 2026-10-14: omega_1 of the stage-1 design is a diagnostic
+% eigensolve between the stages that stage 2 does not use; skip it.
+mcfg.optimization.yuksel.report_stage1_omega = false;
 
 tCall = tic;
 [x, omega, tIter, nIter, ~, nIterStage, tel] = run_topopt_from_json(mcfg); %#ok<ASGLU>

@@ -67,10 +67,11 @@ olh.config.describe(cfg);               % the mathematics, in scientific terms,
 
 ## 3. Presets — one shared solver, named formulations
 
-The solver in `+impl/` is byte-identical to upstream Olhoff `253069` except for two
+The solver in `+impl/` is byte-identical to upstream Olhoff `253069` except for three
 local, default-off options: the relative-increment stop `stop.norm = 'relativeL2'`
-(2026-10-08) and the stagnation stop `stop.rule = 'stagnation'` (2026-10-10; both
-in `PROVENANCE.md` §7). Scientific
+(2026-10-08), the stagnation stop `stop.rule = 'stagnation'` (2026-10-10) and its
+density-field variant `stop.rule = 'stagnation_x'` (2026-10-14; all in
+`PROVENANCE.md` §7). Scientific
 behaviour is selected by an **explicitly named preset**
 ([`olhoffcurrent_presets.m`](olhoffcurrent_presets.m)); nothing is selected by
 editing the solver.
@@ -178,13 +179,14 @@ test_named_preset_reproduction('pedersen')         % 160x20 vs committed upstrea
 test_named_preset_reproduction('stageExhaustion')  % 160x20 vs pre-migration OlhoffCurrent
 test_cost_reporting()          % total and per-outer-iteration cost fields
 test_pedersen_adaptive_units() % adaptive move-box rule and Pedersen stiffness law (no solve)
+test_olhoff_stagnation_x()     % stop.rule = 'stagnation_x': config, validation, 160x20 window replay
 ```
 
 ## 8. What is here
 
 | Path | What |
 |---|---|
-| `+impl/` | the promoted implementation, 79 files, byte-identical to upstream `253069` except five files carrying the default-off `relativeL2` and `stagnation` stops (PROVENANCE.md §7) |
+| `+impl/` | the promoted implementation, 79 files, byte-identical to upstream `253069` except five files carrying the default-off `relativeL2`, `stagnation` and `stagnation_x` stops and two files carrying the lower-triangle assembly (PROVENANCE.md §7) |
 | `+impl/architecture/+olh/` | the canonical configuration package: schema, validation, presets |
 | `+impl/architecture/olhoffSolve.m` | the canonical solver — branches on no experiment identifier |
 | `+impl/architecture/docs/` | upstream's configuration reference, presets, terminology, field-level provenance |

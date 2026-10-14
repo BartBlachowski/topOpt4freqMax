@@ -71,10 +71,20 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
     % the design analysed at the top of an iteration, so the window trails the
     % update by one and the returned design is one update past its last member;
     % the initial design is never in the window.
+    % 'stagnation_x' is 'stagnation' with the objective test replaced by one on
+    % the physical density field xPhys, the field that enters the stiffness
+    % (Emin + xPhys.^penal*(Emax-Emin)) and mass (rho_min + xPhys.^pmass*(rho0-
+    % rho_min)) interpolation: over the same window, the W relative changes
+    % ||xPhys_j - xPhys_{j-1}||_2/||xPhys_{j-1}||_2 between its consecutive
+    % designs must all be below stagnation_relative_change_tol (strict), AND the
+    % grayness test is unchanged.  xPhys is x under the sensitivity filter
+    % (ft = 0) and the filtered field (Hf*x)./Hs under the density filter
+    % (ft = 1), passive elements fixed in both.
     stopCriterion = localParseStopCriterion(localOpt(runCfg, 'stop_criterion', 'max_change'));
     stagWindow = localOpt(runCfg, 'stagnation_window', 10);
     stagObjTol = localOpt(runCfg, 'stagnation_objective_tol', 1e-3);
     stagGrayTol = localOpt(runCfg, 'stagnation_grayness_tol', 5e-3);
+    stagRelTol = localOpt(runCfg, 'stagnation_relative_change_tol', 1e-3);
     maxIters = localOpt(runCfg, 'max_iters', 2000);
     supportType = upper(string(localOpt(runCfg, 'supportType', "SS")));
     approachName = localApproachName(runCfg, 'ourApproach');
@@ -206,6 +216,24 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
     % Index vectors for sparse assembly
     iK = reshape(kron(edofMat, ones(1,8))', [], 1);
     jK = reshape(kron(edofMat, ones(8,1))', [], 1);
+    % Lower-triangle index vectors for the per-iteration assembly: the 36
+    % entries of the lower triangle of each element matrix, oriented so that
+    % every global entry lies in the lower triangle.  The full matrix is then
+    % L + tril(L,-1)', exactly symmetric by construction.  This halves the
+    % work of sparse(), which is the dominant assembly cost and becomes
+    % several times slower once ndof >= 2^17 (720x90 and finer).  KE is
+    % symmetric only up to round-off (sum of B'*D*B terms; not bitwise at
+    % e.g. 720x90), so the loop uses the symmetric parts KEs/MEs -- the
+    % element-level equivalent of the former global (K + K')/2.
+    KEs = (KE + KE') / 2;
+    MEs = (ME + ME') / 2;
+    ltMask = tril(true(8));
+    [ltRow, ltCol] = find(ltMask);
+    iL = reshape(edofMat(:, ltRow)', [], 1);
+    jL = reshape(edofMat(:, ltCol)', [], 1);
+    ltSwap = iL < jL;
+    [iL(ltSwap), jL(ltSwap)] = deal(jL(ltSwap), iL(ltSwap));
+    clear ltSwap ltRow ltCol
 
     % Filter: build sparse filter matrix
     rminx = max(1, ceil(rmin/hx));
@@ -427,6 +455,11 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
     objectiveHistory = NaN(maxIters, 1);
     grayHistory = NaN(maxIters, 1);   % grayness of the design analysed at iteration k
     stagRange = [NaN NaN];            % [objective, grayness] window ranges
+    stagXRel = NaN;                   % 'stagnation_x': largest xPhys change in the window
+    if strcmp(stopCriterion, 'stagnation_x')
+        physRelChangeHistory = NaN(maxIters, 1);   % change from design k-1 to design k
+        xPhysAnalysedPrev = [];
+    end
     dv = ones(nelx*nely, 1);
     dc = ones(nelx*nely, 1);
     initialization_time = toc(solver_tic);
@@ -461,18 +494,22 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
 
         % Assemble M(x); needed for rho-dependent loads and (optional) mode solves.
         rhoPhys = rho_min + xPhys.^pmass * (rho0 - rho_min);
-        sM = reshape(ME(:) * rhoPhys', [], 1);
-        M  = sparse(iK, jK, sM, ndof, ndof);
-        M  = (M + M') / 2;
+        sM = reshape(MEs(ltMask) * rhoPhys', [], 1);
+        M  = sparse(iL, jL, sM, ndof, ndof);
+        M  = M + tril(M, -1)';
         clear sM;
 
-        % Assemble K(x) and solve FE for all load cases at once.
-        sK = reshape(KE(:) * (Emin + xPhys'.^penal * (Emax - Emin)), [], 1);
-        K  = sparse(iK, jK, sK, ndof, ndof);
-        K  = (K + K') / 2;
+        % Assemble K(x) and solve FE for all load cases at once.  K is kept as
+        % its lower triangle: the solve is a Cholesky factorization of the
+        % lower triangle of K(free,free), as in the Yuksel code, and the full
+        % Kf is formed only for the optional paths that need it (harmonic
+        % eigenpair updates, per-iteration frequencies, debug).
+        sK = reshape(KEs(ltMask) * (Emin + xPhys'.^penal * (Emax - Emin)), [], 1);
+        K  = sparse(iL, jL, sK, ndof, ndof);
         clear sK;
 
-        Kf = K(free, free);
+        KfLower = K(free, free);
+        Kf = [];
 
         % Determine which harmonic modes are due for eigenpair update this iteration.
         if usingConfiguredLoadCases && maxHarmonicMode > 0
@@ -508,6 +545,7 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
         % Update eigenpair cache for all due modes (single eigs call up to max needed).
         if ~isempty(dueModes)
             maxModeNeeded = max(dueModes);
+            Kf = KfLower + tril(KfLower, -1)';
             [newOmegas, newPhi] = localCurrentModesFromSubmatrices( ...
                 Kf, Mf, free, ndof, maxModeNeeded);
             for k = 1:maxModeNeeded
@@ -550,7 +588,7 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
             debugSemiThisIter);
 
         U(:) = 0;
-        U(free,:) = Kf \ F(free,:);
+        U(free,:) = decomposition(KfLower, 'chol', 'lower') \ F(free,:);
         if recordDesignHistory
             xHist{end+1} = xPhys(:); %#ok<AGROW>
         end
@@ -558,17 +596,19 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
             if isempty(Mf)
                 Mf = M(free, free);
             end
+            if isempty(Kf), Kf = KfLower + tril(KfLower, -1)'; end
             info.freq_iter_omega(loop,:) = localFirstNOmegasFromSubmatrices(Kf, Mf, 3);
         end
 
         if debugSemiThisIter
+            if isempty(Kf), Kf = KfLower + tril(KfLower, -1)'; end
             localDebugSemiHarmonicIteration( ...
                 loop, loadCases, semiDebugAssembly, ndof, free, Kf, M, ...
                 rhoSourceVec, rhoNodal, nelx, nely, nodalProjectionCache, ...
                 semiHarmonicBaselineInfo, semiHarmonicM0, semiHarmonicPhi0, semiHarmonicOmega0, ...
                 semiHarmonicBaseVec, act);
         end
-        clear Kf Mf;
+        clear Kf KfLower Mf;
 
         % Objective and sensitivities: sum contributions over load cases.
         obj = 0.0;
@@ -579,7 +619,8 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
 
         for icase = 1:nCases
             Ui = U(:, icase);
-            objCase = Ui' * (K * Ui);
+            % u'Ku = u'f on the free dofs (K u = f there, u = 0 on the fixed ones)
+            objCase = Ui(free)' * F(free, icase);
             objCases(icase) = objCase;
             obj = obj + objCase;
 
@@ -596,6 +637,13 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
         end
         clear K M;
         grayHistory(loop) = mean(4*xPhys.*(1-xPhys));   % xPhys is still pre-update here
+        if strcmp(stopCriterion, 'stagnation_x')
+            if ~isempty(xPhysAnalysedPrev)
+                physRelChangeHistory(loop) = norm(xPhys - xPhysAnalysedPrev) / ...
+                    max(norm(xPhysAnalysedPrev), realmin);
+            end
+            xPhysAnalysedPrev = xPhys;
+        end
 
         dv = ones(nEl, 1);
         % Passive elements are excluded from the volume constraint and OC update.
@@ -674,6 +722,11 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
         if strcmp(stopCriterion, 'stagnation')
             [converged, stagRange] = localStagnationMet(objectiveHistory, grayHistory, ...
                 loop, stagWindow, stagObjTol, stagGrayTol);
+        elseif strcmp(stopCriterion, 'stagnation_x')
+            [converged, rx] = stop_stagnation_x(physRelChangeHistory, grayHistory, ...
+                loop, stagWindow, stagRelTol, stagGrayTol);
+            stagXRel = rx(1);
+            stagRange = [NaN rx(2)];
         else
             converged = localStopMet(stopCriterion, change, relChange, convTol);
         end
@@ -831,14 +884,19 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
     end
     omegaStruct = [omegaStruct(:); NaN; NaN];
     info.final_structural_omega = omegaStruct(1:2);
-    plotTopology( ...
-        xPhys, nelx, nely, ...
-        formatTopologyTitle(approachName, volfrac, omegaStruct(1), omegaStruct(2)), ...
-        visualizeLive, visualizationQuality, true);
+    if visualizeLive
+        % On-screen only: the saved final image is rendered by the runner.
+        plotTopology( ...
+            xPhys, nelx, nely, ...
+            formatTopologyTitle(approachName, volfrac, omegaStruct(1), omegaStruct(2)), ...
+            visualizeLive, visualizationQuality, true);
+    end
     if converged && strcmp(stopCriterion, 'relative_l2_change')
         stopReason = 'relative_change_tolerance';
     elseif converged && strcmp(stopCriterion, 'stagnation')
         stopReason = 'stagnation_tolerance';
+    elseif converged && strcmp(stopCriterion, 'stagnation_x')
+        stopReason = 'stagnation_x_tolerance';
     elseif converged
         stopReason = 'density_change_tolerance';
     else
@@ -870,17 +928,19 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
         'stagnation_objective_tol', stagObjTol, ...
         'stagnation_grayness_tol', stagGrayTol, ...
         'final_stagnation_objective_range', stagRange(1), ...
-        'final_stagnation_grayness_range', stagRange(2));
+        'final_stagnation_grayness_range', stagRange(2), ...
+        'stagnation_relative_change_tol', stagRelTol, ...
+        'final_stagnation_relative_change', stagXRel);
 
     xOut = xPhys(:);
 end
 
 function c = localParseStopCriterion(v)
 c = lower(strtrim(char(string(v))));
-if ~any(strcmp(c, {'max_change', 'relative_l2_change', 'stagnation'}))
+if ~any(strcmp(c, {'max_change', 'relative_l2_change', 'stagnation', 'stagnation_x'}))
     error('topopt_freq:InvalidStopCriterion', ...
-        ['runCfg.stop_criterion must be "max_change", "relative_l2_change" or ' ...
-         '"stagnation" (got "%s").'], c);
+        ['runCfg.stop_criterion must be "max_change", "relative_l2_change", ' ...
+         '"stagnation" or "stagnation_x" (got "%s").'], c);
 end
 end
 

@@ -128,6 +128,24 @@ if ruleStagnation
     aux.stagObjRange = [];
     aux.stagMndRange = [];
 end
+% stop.rule == 'stagnation_x' is the same rule with the omega_n test replaced
+% by one on the density field rho that assemble2D receives, i.e. the field
+% entering the stiffness and mass interpolation and the eigenanalysis: over the
+% same window of W+1 analysed designs, each of its W relative changes
+% ||rho_j - rho_{j-1}||_2/||rho_{j-1}||_2 must be below relativeChangeTolerance,
+% AND the grey-measure test is unchanged.  Under the sensitivity filter rho is
+% the design variable itself; projection, where rho would be the projected
+% field, is refused with this rule by olh.config.validate, as for
+% 'stagnation'.  Class D.
+ruleStagnationX = strcmp(g('stop.rule'),'stagnation_x');
+stagRelTol = g('stop.stagnation.relativeChangeTolerance');
+stagRel    = [];   % ||rho_j - rho_{j-1}||_2/||rho_{j-1}||_2, j the outer of rho_j
+rhoAnalysedPrev = [];
+if ruleStagnationX
+    % Created only when selected, so an unselected run's aux is unchanged.
+    aux.stagXRel     = [];
+    aux.stagMndRange = [];
+end
 % ---- the stage-exhaustion controller, if selected ------------------------
 % Two INDEPENDENT switches, both defaulting to the historical behaviour, so a
 % configuration that names neither is bitwise the solver that existed before:
@@ -254,6 +272,14 @@ for outer = 1:maxOuter
     if ruleStagnation
         stagObj(outer) = w(n);                    %#ok<AGROW>
         stagMnd(outer) = 4*mean(rho.*(1-rho));    %#ok<AGROW>
+    end
+    if ruleStagnationX
+        stagMnd(outer) = 4*mean(rho.*(1-rho));    %#ok<AGROW>
+        stagRel(outer) = NaN;                     %#ok<AGROW>  the initial design has no predecessor
+        if ~isempty(rhoAnalysedPrev)
+            stagRel(outer) = norm(rho - rhoAnalysedPrev)/max(norm(rhoAnalysedPrev), realmin);
+        end
+        rhoAnalysedPrev = rho;
     end
 
     [N, multState] = olh.multi.detect(cfg, w, n, Jcalc, multState);
@@ -605,6 +631,11 @@ for outer = 1:maxOuter
                                               stagW, stagObjTol, stagMndTol);
         aux.stagObjRange(outer) = stagR(1);
         aux.stagMndRange(outer) = stagR(2);
+    elseif ruleStagnationX
+        [convOuter, stagR] = local_stagnation_x(stagRel, stagMnd, outer, ...
+                                                stagW, stagRelTol, stagMndTol);
+        aux.stagXRel(outer)     = stagR(1);
+        aux.stagMndRange(outer) = stagR(2);
     end
 
     % ---- projection continuation ----------------------------------------
@@ -649,6 +680,10 @@ for outer = 1:maxOuter
             log{end+1} = sprintf(['converged at outer iteration %d (stagnation over the designs ' ...
                 'analysed at outer %d-%d: range(omega_%d)/omega_%d = %.3e, range(Mnd) = %.3e)'], ...
                 outer, outer-stagW, outer, n, n, stagR(1), stagR(2)); %#ok<AGROW>
+        elseif ruleStagnationX
+            log{end+1} = sprintf(['converged at outer iteration %d (stagnation_x over the designs ' ...
+                'analysed at outer %d-%d: max ||drho||_2/||rho||_2 = %.3e, range(Mnd) = %.3e)'], ...
+                outer, outer-stagW, outer, stagR(1), stagR(2)); %#ok<AGROW>
         else
             log{end+1} = sprintf('converged at outer iteration %d (||drho||_2 = %.3e, max|drho| = %.3e)',outer,dxNorm2,dxOuter); %#ok<AGROW>
         end
@@ -718,6 +753,22 @@ if k - W < 2, return; end
 fw = f(k-W:k);  mw = m(k-W:k);
 r  = [(max(fw) - min(fw))/max(abs(fw(end)), realmin), max(mw) - min(mw)];
 met = r(1) < objTol && r(2) < mndTol;
+end
+
+function [met, r] = local_stagnation_x(d, m, k, W, relTol, mndTol)
+%LOCAL_STAGNATION_X  Windowed stagnation of the density field and the grey measure.
+%   d(j) = ||rho_j - rho_{j-1}||_2/||rho_{j-1}||_2 and m(j) belong to the
+%   design analysed at the top of outer j (d(1) = NaN).  The window is the
+%   W+1 designs j = k-W..k, which must not reach the initial design (j = 1);
+%   it spans the W changes d(k-W+1..k), and the LARGEST of them is tested.
+%   r = [max(d(k-W+1:k)), range(m(k-W:k))], NaN while the window is
+%   incomplete.  Identical to tools/Matlab/stop_stagnation_x.m, which this
+%   self-contained tree cannot call.
+met = false;  r = [NaN NaN];
+if k - W < 2, return; end
+dw = d(k-W+1:k);  mw = m(k-W:k);
+r  = [max(dw), max(mw) - min(mw)];
+met = r(1) < relTol && r(2) < mndTol;
 end
 
 function s = local_yesno(tf)

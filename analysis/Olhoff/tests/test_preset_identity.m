@@ -16,9 +16,11 @@ function nFail = test_preset_identity()
 %        diagnostic is not eligible
 %     6. distinct identity: Pedersen and beta-stall differ in material law and
 %        controller, and the formulation text says so
-%     7. schema has 90 rows; the 87-row hash recomputed from a current
+%     7. schema has 91 rows; the 87-row hash recomputed from a current
 %        configuration equals the hash recorded before the stop.stagnation.*
-%        rows were added (production 160x20 at HEAD 2b63e6f)
+%        rows were added (production 160x20 at HEAD 2b63e6f), and the 90-row
+%        hash the one recorded before stop.stagnation.relativeChangeTolerance
+%        (stop.rule = 'stagnation_x') was added (production 160x20, HEAD f6b2e8b)
 
 here = fileparts(mfilename('fullpath'));
 root = fileparts(here);
@@ -146,11 +148,18 @@ nFail = nFail + chk('caveats differ and the Pedersen caveat states the formulati
     contains(olhoffcurrent_caveat(PED), 'not a bug'));
 
 % ---- 7. schema ----------------------------------------------------------------
-nFail = nFail + chk('configuration schema has 90 rows', size(olh.config.schema(), 1) == 90);
+nFail = nFail + chk('configuration schema has 91 rows', size(olh.config.schema(), 1) == 91);
 F87 = jsondecode(fileread(fullfile(here, 'fixtures', 'schema_rows_pre_stagnation.json')));
 nFail = nFail + chk('87 pre-stagnation rows recorded', numel(F87.rows) == 87);
 nFail = nFail + chk('production 160x20: pre-stagnation hash b1a5744d... reproduced from the current config', ...
     strcmp(oldHash(cP, F87.rows), 'b1a5744df798ad624fcd0b8b4306888eb99816ee5ce60f51040e39e03e90d4f4'));
+F90 = jsondecode(fileread(fullfile(here, 'fixtures', 'schema_rows_pre_stagnation_x.json')));
+S91 = olh.config.schema();
+nFail = nFail + chk('90 pre-stagnation_x rows recorded = current rows minus relativeChangeTolerance', ...
+    numel(F90.rows) == 90 && ...
+    isequal(F90.rows(:), S91(~strcmp(S91(:,1), 'stop.stagnation.relativeChangeTolerance'), 1)));
+nFail = nFail + chk('production 160x20: pre-stagnation_x hash a08a14f4... reproduced from the current config', ...
+    strcmp(oldHash(cP, F90.rows), 'a08a14f4ef7cbb0a53109915cd02bf61354cc5820b770712bae0b4d9d43a0f8f'));
 
 fprintf('%s\n  failures: %d\n\n', repmat('-',1,72), nFail);
 end

@@ -100,9 +100,24 @@ end
 fixed = unique(fixed(:));
 free  = setdiff((1:ndof)', fixed);
 
+% ---- lower-triangle assembly data (used by assemble2D) --------------------
+% The 36 lower-triangle entries of each element matrix, oriented so that
+% every global entry lies in the lower triangle; assemble2D mirrors the
+% result.  This halves the triplets passed to sparse() compared with iK/jK,
+% which are kept for other users.  K0L/M0L come from the symmetric parts of
+% K0/M0, the element-level form of the former global (K+K')/2.
+ltMask = tril(true(8));
+[ltRow, ltCol] = find(ltMask);
+iL = reshape(edofMat(:,ltRow)',[],1);
+jL = reshape(edofMat(:,ltCol)',[],1);
+ltSwap = iL < jL;
+[iL(ltSwap), jL(ltSwap)] = deal(jL(ltSwap), iL(ltSwap));
+K0s = (K0+K0')/2;  M0s = (M0+M0')/2;
+
 mdl = struct('cfg',cfg,'nelx',nelx,'nely',nely,'dx',dx,'dy',dy, ...
              'nele',nele,'nnode',nnode,'ndof',ndof, ...
              'nodenrs',nodenrs,'edofMat',edofMat,'iK',iK,'jK',jK, ...
              'K0',K0,'M0',M0,'free',free,'fixed',fixed, ...
-             'cx',cx,'cy',cy,'Ve',dx*dy*cfg.t);
+             'cx',cx,'cy',cy,'Ve',dx*dy*cfg.t, ...
+             'iL',iL,'jL',jL,'K0L',K0s(ltMask),'M0L',M0s(ltMask));
 end

@@ -115,6 +115,16 @@ cfg.yukselMaxIters = 5000;
 %                         by < objectiveTol (relative to its latest value) AND the
 %                         grayness 4*mean(x(1-x)) by < graynessTol (absolute).
 %                         No tol/c is read.  Du-Olhoff's objective is omega_n.
+%   'stagnation_x'        every method: 'stagnation' with the objective test
+%                         replaced by one on the physical density field (the
+%                         field entering the FE analysis: xPhys for Proposed and
+%                         Yuksel, rho for Du-Olhoff): over the same window of
+%                         window+1 designs, each of the window relative changes
+%                         ||xPhys_j - xPhys_{j-1}||_2/||xPhys_{j-1}||_2 must be
+%                         < relativeChangeTol, AND the grayness test is kept.
+%                         Yuksel: per stage, never across the handoff.
+%                         relativeChangeTol has no calibrated value (solver
+%                         default 1e-3).
 cfg.stop = struct();
 
 % ---- ACTIVE: one stopping rule for all three methods (2026-10-10) ----------
@@ -127,14 +137,20 @@ cfg.stop = struct();
 % is known, which trails the update by one.
 % R1 = struct('window', 10, 'objectiveTol', 1e-3, 'graynessTol', 5e-3);   % calibrated R1 (campaign_windows_convergence_stagnation_r1)
 % 2026-10-13: loosened objective/grayness tolerances (same window), Windows campaign.
-R1 = struct('window', 10, 'objectiveTol', 1e-3, 'graynessTol', 5e-3);
+% 2026-10-14 (campaign_mac_convergence_stagnation_r1_v1/_v2): calibrated R1 again, criterion 'stagnation'.
+R1 = struct('window', 10, 'objectiveTol', 1e-2, 'graynessTol', 1e-2);
+% 2026-10-14: 'stagnation_x' for all three methods: the objective test of R1 is
+% replaced by max ||xPhys_j - xPhys_{j-1}||_2/||xPhys_{j-1}||_2 < relativeChangeTol
+% over the same window; graynessTol and window as above, objectiveTol not read.
+R1.relativeChangeTol = 1e-2;   % no calibrated value
 
 % Proposed
-cfg.stop.proposed.criterion   = 'stagnation';   % production: 'max_change'
+cfg.stop.proposed.criterion   = 'stagnation_x';   % production: 'max_change'
 cfg.stop.proposed.tol         = [];             % not read by 'stagnation'
 cfg.stop.proposed.window      = R1.window;
 cfg.stop.proposed.objectiveTol = R1.objectiveTol;
 cfg.stop.proposed.graynessTol = R1.graynessTol;
+cfg.stop.proposed.relativeChangeTol = R1.relativeChangeTol;   % 'stagnation_x' only
 cfg.stop.proposed.maxIters    = [];   % production: 2000  (safety budget)
 
 % Yuksel.  R1 ends BOTH stages (2026-10-13); the window restarts at the
@@ -142,7 +158,7 @@ cfg.stop.proposed.maxIters    = [];   % production: 2000  (safety budget)
 % stopped on the design-change noise floor (121 ... 1311 iterations on the
 % Windows campaign, growing with the mesh); R1 replayed on the recorded stage-1
 % histories stops it at 81-102 iterations from 240x30 on.
-cfg.stop.yuksel.criterion     = 'stagnation';   % production: 'max_change' (both stages)
+cfg.stop.yuksel.criterion     = 'stagnation_x';   % production: 'max_change' (both stages)
 % cfg.stop.yuksel.stage1Criterion = 'max_change'; % previous: stage 1 on the published rule
 % cfg.stop.yuksel.stage1Tol     = 0.01;           % previous (with stage1Criterion = 'max_change')
 cfg.stop.yuksel.stage1Tol     = [];             % not read by 'stagnation'
@@ -150,15 +166,25 @@ cfg.stop.yuksel.stage2Tol     = [];             % not read by 'stagnation'
 cfg.stop.yuksel.window        = R1.window;
 cfg.stop.yuksel.objectiveTol  = R1.objectiveTol;
 cfg.stop.yuksel.graynessTol   = R1.graynessTol;
+cfg.stop.yuksel.relativeChangeTol = R1.relativeChangeTol;     % 'stagnation_x' only (both stages)
 
 % Du-Olhoff
-cfg.stop.olhoff.criterion     = 'stagnation';   % production: 'l2_change'
+cfg.stop.olhoff.criterion     = 'stagnation_x';   % production: 'l2_change'
 cfg.stop.olhoff.c             = [];             % not read by 'stagnation'
 cfg.stop.olhoff.tol           = [];             % not read by 'stagnation'
 cfg.stop.olhoff.window        = R1.window;
 cfg.stop.olhoff.objectiveTol  = R1.objectiveTol;
 cfg.stop.olhoff.graynessTol   = R1.graynessTol;
+cfg.stop.olhoff.relativeChangeTol = R1.relativeChangeTol;     % 'stagnation_x' only
 cfg.stop.olhoff.maxOuter      = 1000;   % production: 400   (preset runtime default; safety budget)
+
+% ---- ALTERNATIVE: stagnation of the physical density field ('stagnation_x') -
+% Replace 'stagnation' by 'stagnation_x' in a method's ACTIVE block above and
+% give its relativeChangeTol; window and graynessTol keep their meaning.
+% e.g.  cfg.stop.proposed.criterion = 'stagnation_x';
+%       cfg.stop.proposed.relativeChangeTol = 1e-3;   % no calibrated value
+% (the same two fields for cfg.stop.yuksel and cfg.stop.olhoff; Yuksel's
+% stage 1 follows unless cfg.stop.yuksel.stage1Criterion says otherwise)
 
 % ---- PREVIOUS per-method settings (campaign_mac_convergence_relative_l2_change)
 % Kept for reference; uncomment one block per method (and drop the matching
@@ -230,8 +256,11 @@ cfg.outputDir = '';                  % auto: examples/Performance/conference_ben
 % cfg.runLabel  = 'campaign_mac_convergence_relative_l2_change';   % previous stop rules
 % cfg.runLabel  = 'campaign_mac_convergence_relative_l2_change_2'; % previous, Olhoff tol = 5e-4
 % cfg.runLabel  = 'campaign_windows_convergence_stagnation_r1';   % R1 10/1e-3/5e-3, Yuksel stage 1 on max_change
-% cfg.runLabel  = 'campaign_windows_stagnation_w10_obj1e-2_gray1e-2';   % same rules, Windows host
-cfg.runLabel  = 'campaign_mac_convergence_stagnation_r1_v1';
+% cfg.runLabel  = 'campaign_windows_stagnation_w10_obj1e-2_gray1e-2';   % 'stagnation' 10/1e-2/1e-2 (2026-10-13)
+% cfg.runLabel  = 'campaign_mac_convergence_stagnation_r1_v1';   % Mac, calibrated R1 10/1e-3/5e-3, 'stagnation' (v1, v2)
+% cfg.runLabel  = 'campaign_windows_stagnation_x_w10_rel1e-2_gray1e-2';   % cancelled 2026-10-14 (17/27 rows): pre-audit assembly
+% 2026-10-14: after the fairness audit (conference_bench/FAIRNESS_AUDIT_2026-10-14.md)
+cfg.runLabel  = 'campaign_windows_stagnation_x_w10_rel1e-2_gray1e-2_audited';
 
 % ---- Timing-accounting tolerances (predeclared, recorded in the artifacts) --
 cfg.timingTolAbs     = 1e-6;   % |T_total - (T1+T2+T_overhead)|, seconds
@@ -712,9 +741,9 @@ if isfield(stop.olhoff, 'useC')
     error('performance_comparison:UseCRetired', ['cfg.stop.olhoff.useC was replaced by ' ...
         'cfg.stop.olhoff.criterion (''l2_change'' = useC true, ''max_change'' = useC false).']);
 end
-crits = {'proposed', {'max_change','relative_l2_change','stagnation'}; ...
-         'yuksel',   {'max_change','relative_l2_change','stagnation'}; ...
-         'olhoff',   {'l2_change','max_change','relative_l2_change','stagnation'}};
+crits = {'proposed', {'max_change','relative_l2_change','stagnation','stagnation_x'}; ...
+         'yuksel',   {'max_change','relative_l2_change','stagnation','stagnation_x'}; ...
+         'olhoff',   {'l2_change','max_change','relative_l2_change','stagnation','stagnation_x'}};
 for k = 1:size(crits, 1)
     c = stop.(crits{k,1}).criterion;
     if ~isempty(c) && ~any(strcmp(char(c), crits{k,2}))
@@ -746,7 +775,7 @@ if (strcmp(char(s1), 'relative_l2_change') && isempty(stop.yuksel.stage1Tol)) ..
         '''relative_l2_change'' stage requires its stage1Tol / stage2Tol.']);
 end
 meths = {'proposed', 'yuksel', 'olhoff'};
-stagFields = {'window', 'objectiveTol', 'graynessTol'};
+stagFields = {'window', 'objectiveTol', 'graynessTol', 'relativeChangeTol'};
 for i = 1:numel(meths)
     for j = 1:numel(stagFields)
         v = fieldOr(stop.(meths{i}), stagFields{j}, []);
@@ -946,6 +975,11 @@ for m = 1:numel(methodKeys)
                     '< %g and range(Mnd) < %g, cap=%d\n'], gp('stop.stagnation.window'), ...
                     gp('stop.stagnation.objectiveTolerance'), ...
                     gp('stop.stagnation.graynessTolerance'), mc.maxOuter);
+            elseif strcmp(gp('stop.rule'), 'stagnation_x')
+                fprintf(['    outer stop: rule=stagnation_x over %d+1 designs, max ||drho||_2/||rho||_2 ' ...
+                    '< %g and range(Mnd) < %g, cap=%d\n'], gp('stop.stagnation.window'), ...
+                    gp('stop.stagnation.relativeChangeTolerance'), ...
+                    gp('stop.stagnation.graynessTolerance'), mc.maxOuter);
             else
                 if strcmp(mc.outerNorm, 'l2')
                     rmsNote = sprintf('  (per-element RMS %.6e)', mc.tolOuter/sqrt(mc.nelx*mc.nely));
@@ -970,7 +1004,8 @@ for m = 1:numel(methodKeys)
                     crit1, o.yuksel.stage1_tol, o.yuksel.stage1_max_iters, crit, o.yuksel.stage2_tol);
             end
             if isfield(o, 'stagnation')
-                fprintf('    stagnation: %s (unlisted = solver default 10 / 1e-3 / 5e-3)\n', ...
+                fprintf(['    stagnation: %s (unlisted = solver default window 10, objective_tol ' ...
+                    '1e-3, grayness_tol 5e-3, relative_change_tol 1e-3)\n'], ...
                     jsonencode(o.stagnation));
             end
             if isfield(o, 'semi_harmonic_baseline')

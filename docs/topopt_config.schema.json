@@ -421,9 +421,20 @@
         },
         "stop_criterion": {
           "type": "string",
-          "enum": ["max_change", "relative_l2_change"],
+          "enum": ["max_change", "relative_l2_change", "stagnation", "stagnation_x"],
           "default": "max_change",
-          "description": "Quantity compared with convergence_tol (and, for Yuksel, with stage1_tol/stage2_tol) on the design variable x: max_change = max |x − x_old| (the native rule); relative_l2_change = ‖x − x_old‖₂ / ‖x_old‖₂ < tol. Implemented by the MATLAB dispatcher for ourApproach and yuksel; the Python dispatcher and elastic2D accept only max_change."
+          "description": "Stopping criterion. max_change and relative_l2_change compare convergence_tol (and, for Yuksel, stage1_tol/stage2_tol) with the design-variable change: max_change = max |x − x_old| (the native rule); relative_l2_change = ‖x − x_old‖₂ / ‖x_old‖₂ < tol. stagnation and stagnation_x read optimization.stagnation instead: over the last window+1 analysed designs of the current stage, stagnation requires range(objective)/|objective| < objective_tol and stagnation_x requires every one of the window relative changes ‖xPhys_j − xPhys_{j−1}‖₂ / ‖xPhys_{j−1}‖₂ of the physical density field (the field entering the FE analysis) < relative_change_tol; both also require range(4·mean(xPhys(1−xPhys))) < grayness_tol. Implemented by the MATLAB dispatcher for ourApproach and yuksel; the Python dispatcher and elastic2D accept only max_change."
+        },
+        "stagnation": {
+          "type": "object",
+          "description": "Thresholds of stop_criterion stagnation / stagnation_x; each absent field keeps its default.",
+          "additionalProperties": false,
+          "properties": {
+            "window":              { "type": "integer", "minimum": 1, "default": 10, "description": "W: the test spans the last W+1 analysed designs (W design changes) of the current stage." },
+            "objective_tol":       { "type": "number", "exclusiveMinimum": 0, "default": 0.001, "description": "stagnation: relative range of the objective over the window." },
+            "grayness_tol":        { "type": "number", "exclusiveMinimum": 0, "default": 0.005, "description": "stagnation and stagnation_x: absolute range of the grayness over the window." },
+            "relative_change_tol": { "type": "number", "exclusiveMinimum": 0, "default": 0.001, "description": "stagnation_x: bound on the largest relative L2 change of the physical density field over the window (uncalibrated default)." }
+          }
         },
         "seed": {
           "type": ["integer", "null"],
@@ -457,8 +468,10 @@
             "stage1_max_iters":    { "type": "integer", "minimum": 1 },
             "stage1_tol":          { "type": "number",  "exclusiveMinimum": 0 },
             "stage2_tol":          { "type": "number",  "exclusiveMinimum": 0 },
+            "stage1_stop_criterion": { "type": "string", "enum": ["max_change", "relative_l2_change", "stagnation", "stagnation_x"], "description": "Stage 1's stopping criterion when it differs from optimization.stop_criterion." },
             "mode_history_modes":  { "type": "integer", "minimum": 1 },
-            "final_mode_count":    { "type": "integer", "minimum": 1 }
+            "final_mode_count":    { "type": "integer", "minimum": 1 },
+            "report_stage1_omega": { "type": "boolean", "default": true, "description": "Compute omega_1 of the stage-1 design (a diagnostic eigensolve between the stages)." }
           }
         }
       }
@@ -470,8 +483,8 @@
       "properties": {
 
         "compute_modes": {
-          "type": "integer", "minimum": 1, "default": 3,
-          "description": "Number of eigenpairs computed in the final modal analysis."
+          "type": "integer", "minimum": 0, "default": 3,
+          "description": "Number of eigenpairs computed in the runner's post-solve modal analysis of the final design. 0 skips it unless a snapshot, mode plot or correlation needs it; the solver's own final frequencies are unaffected."
         },
         "compute_modes_initial": {
           "type": "integer", "minimum": 0, "default": 0,

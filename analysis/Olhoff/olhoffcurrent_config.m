@@ -52,7 +52,17 @@ function [cfg, info] = olhoffcurrent_config(nelx, nely, varargin)
 %                 true takes the schema defaults W = 10, 1e-3, 5e-3; a struct may
 %                 set any of .window, .objectiveTolerance, .graynessTolerance.
 %                 A RUNTIME override, not a different preset.
-%     At most one of the four Stop* options may be given.
+%     'StopStagnationX' (default [] = off)  as 'StopStagnation' with the omega_n
+%                 test replaced by one on the density field rho entering the FE
+%                 model (stop.rule = 'stagnation_x', every stop.guards.* off):
+%                 stop once, over the last W+1 analysed designs, each of the W
+%                 relative changes ||rho_j - rho_{j-1}||_2/||rho_{j-1}||_2 is
+%                 below relativeChangeTolerance AND 4*mean(rho.*(1-rho)) has
+%                 varied by less than graynessTolerance.  true takes the schema
+%                 defaults W = 10, 1e-3 (uncalibrated), 5e-3; a struct may set
+%                 any of .window, .relativeChangeTolerance, .graynessTolerance.
+%                 A RUNTIME override, not a different preset.
+%     At most one of the five Stop* options may be given.
 %     'Diagnostics' (default false)  per-iteration recorder.  Purely additive
 %                 and proved bitwise inert, but it costs measurable time per
 %                 outer iteration, so benchmarks leave it off.
@@ -75,6 +85,8 @@ p.addParameter('StopMaxChangeTolerance', [], ...
 p.addParameter('StopRelativeChangeTolerance', [], ...
     @(v) isempty(v) || (isnumeric(v) && isscalar(v) && isfinite(v) && v > 0));
 p.addParameter('StopStagnation', [], ...
+    @(v) isempty(v) || (islogical(v) && isscalar(v)) || (isstruct(v) && isscalar(v)));
+p.addParameter('StopStagnationX', [], ...
     @(v) isempty(v) || (islogical(v) && isscalar(v)) || (isstruct(v) && isscalar(v)));
 p.addParameter('Diagnostics', false, @(v) islogical(v) && isscalar(v));
 p.addParameter('Name', '', @(v) ischar(v) || isstring(v));
@@ -108,11 +120,12 @@ if ~isempty(opt.MaxOuter); maxOuter = double(opt.MaxOuter); end
 % Applied after the preset's own overrides, so it wins over them.
 stopArgs = {};
 useStagnation = isstruct(opt.StopStagnation) || isequal(opt.StopStagnation, true);
+useStagnationX = isstruct(opt.StopStagnationX) || isequal(opt.StopStagnationX, true);
 if (~isempty(opt.StopToleranceFactor) + ~isempty(opt.StopMaxChangeTolerance) ...
-        + ~isempty(opt.StopRelativeChangeTolerance) + useStagnation) > 1
+        + ~isempty(opt.StopRelativeChangeTolerance) + useStagnation + useStagnationX) > 1
     error('olhoffcurrent_config:StopRuleConflict', ...
         ['Give at most one of ''StopToleranceFactor'', ''StopMaxChangeTolerance'', ' ...
-         '''StopRelativeChangeTolerance'' and ''StopStagnation''.']);
+         '''StopRelativeChangeTolerance'', ''StopStagnation'' and ''StopStagnationX''.']);
 end
 if ~isempty(opt.StopToleranceFactor)
     stopArgs = {'stop.toleranceRule', 'explicit', ...
@@ -163,6 +176,29 @@ if useStagnation
         for k = 1:numel(f)
             stopArgs = [stopArgs, {['stop.stagnation.' f{k}], ...
                 double(opt.StopStagnation.(f{k}))}]; %#ok<AGROW>
+        end
+    end
+end
+if useStagnationX
+    % olhoffSolve tests max ||drho||_2/||rho||_2 < relativeChangeTolerance and
+    % range(Mnd) < graynessTolerance over the window (both strict).
+    stopArgs = {'stop.rule',                      'stagnation_x', ...
+                'stop.guards.settledMove',        false, ...
+                'stop.guards.boxInactiveFraction', 0, ...
+                'stop.guards.ladderExhausted',    false, ...
+                'stop.guards.maxDesignChange',    false};
+    if isstruct(opt.StopStagnationX)
+        known = {'window', 'relativeChangeTolerance', 'graynessTolerance'};
+        f = fieldnames(opt.StopStagnationX);
+        bad = setdiff(f, known);
+        if ~isempty(bad)
+            error('olhoffcurrent_config:UnknownStagnationField', ...
+                'StopStagnationX has unknown field(s) %s; allowed: %s.', ...
+                strjoin(bad, ', '), strjoin(known, ', '));
+        end
+        for k = 1:numel(f)
+            stopArgs = [stopArgs, {['stop.stagnation.' f{k}], ...
+                double(opt.StopStagnationX.(f{k}))}]; %#ok<AGROW>
         end
     end
 end

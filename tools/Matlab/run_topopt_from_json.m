@@ -84,15 +84,21 @@ function [x, omega, tIter, nIter, mem_usage, nIterStage, telemetry] = run_topopt
     % optimization.stagnation.window + 1 analysed designs, the method's
     % objective has varied by less than objective_tol (relative) AND the
     % grayness 4*mean(x.*(1-x)) by less than grayness_tol (absolute); defaults
-    % 10, 1e-3, 5e-3.  optimization.yuksel.stage1_stop_criterion, when given,
-    % overrides the criterion for Yuksel's stage 1 only.
+    % 10, 1e-3, 5e-3.  "stagnation_x" is "stagnation" with the objective test
+    % replaced by one on the physical density field xPhys (the field entering
+    % the FE analysis): over the same window, every relative change
+    % ||xPhys_j - xPhys_{j-1}||_2/||xPhys_{j-1}||_2 between consecutive designs
+    % must be below optimization.stagnation.relative_change_tol (default 1e-3,
+    % uncalibrated); the grayness test is unchanged.
+    % optimization.yuksel.stage1_stop_criterion, when given, overrides the
+    % criterion for Yuksel's stage 1 only.
     stopCriterion = 'max_change';
     if hasFieldPath(cfg, {'optimization','stop_criterion'})
         stopCriterion = parseStopCriterion(reqStr(cfg, {'optimization','stop_criterion'}, ...
             'optimization.stop_criterion'), 'optimization.stop_criterion');
     end
     stagnationCfg = struct();
-    stagnationKeys = {'window', 'objective_tol', 'grayness_tol'};
+    stagnationKeys = {'window', 'objective_tol', 'grayness_tol', 'relative_change_tol'};
     for k = 1:numel(stagnationKeys)
         key = stagnationKeys{k};
         if hasFieldPath(cfg, {'optimization','stagnation',key})
@@ -395,6 +401,11 @@ function [x, omega, tIter, nIter, mem_usage, nIterStage, telemetry] = run_topopt
                     'optimization.yuksel.final_mode_count must be >= 1.');
             end
             runCfg.final_modes = finalModeCount;
+            if hasFieldPath(cfg, {'optimization','yuksel','report_stage1_omega'})
+                runCfg.report_stage1_omega = parseBool( ...
+                    getFieldPath(cfg, {'optimization','yuksel','report_stage1_omega'}), ...
+                    'optimization.yuksel.report_stage1_omega');
+            end
             if hasFieldPath(cfg, {'optimization','yuksel','stage1_tol'})
                 runCfg.stage1_tol = reqNum(cfg, {'optimization','yuksel','stage1_tol'}, ...
                     'optimization.yuksel.stage1_tol');
@@ -777,6 +788,8 @@ function [x, omega, tIter, nIter, mem_usage, nIterStage, telemetry] = run_topopt
             telemetryValue(solverStopping, 'convergence_tolerance', convTol), ...
         'stage1_stop_criterion', ...
             telemetryValue(solverStopping, 'stage1_stop_criterion', 'N/A'), ...
+        'stage1_stop_reason', ...
+            telemetryValue(solverStopping, 'stage1_stop_reason', 'N/A'), ...
         'stagnation_window', telemetryValue(solverStopping, 'stagnation_window', NaN), ...
         'stagnation_objective_tol', ...
             telemetryValue(solverStopping, 'stagnation_objective_tol', NaN), ...
@@ -786,6 +799,10 @@ function [x, omega, tIter, nIter, mem_usage, nIterStage, telemetry] = run_topopt
             telemetryValue(solverStopping, 'final_stagnation_objective_range', NaN), ...
         'final_stagnation_grayness_range', ...
             telemetryValue(solverStopping, 'final_stagnation_grayness_range', NaN), ...
+        'stagnation_relative_change_tol', ...
+            telemetryValue(solverStopping, 'stagnation_relative_change_tol', NaN), ...
+        'final_stagnation_relative_change', ...
+            telemetryValue(solverStopping, 'final_stagnation_relative_change', NaN), ...
         ... % Precedence-ordered status and the RAW native record it came from.
         ... % A solver that reports a failed subproblem must never reach a
         ... % results table as a converged run; carrying both here means the
@@ -1682,10 +1699,10 @@ end
 
 function c = parseStopCriterion(v, label)
     c = lower(strtrim(char(v)));
-    if ~any(strcmp(c, {'max_change', 'relative_l2_change', 'stagnation'}))
+    if ~any(strcmp(c, {'max_change', 'relative_l2_change', 'stagnation', 'stagnation_x'}))
         error('run_topopt_from_json:InvalidStopCriterion', ...
-            '%s must be "max_change", "relative_l2_change" or "stagnation" (got "%s").', ...
-            label, c);
+            ['%s must be "max_change", "relative_l2_change", "stagnation" or ' ...
+             '"stagnation_x" (got "%s").'], label, c);
     end
 end
 
@@ -1877,9 +1894,12 @@ function postproc = parsePostprocessingBlock(cfg)
     postproc = struct();
 
     if hasFieldPath(cfg, {'postprocessing','compute_modes'})
+        % 0 skips the post-solve topology eigensolve unless another consumer
+        % (snapshot, mode plots, correlation) needs it; the solver's own
+        % final frequencies are unaffected.
         postproc.computeModes = reqInt(cfg, {'postprocessing','compute_modes'}, 'postprocessing.compute_modes');
-        if postproc.computeModes < 1
-            error('run_topopt_from_json:InvalidComputeModes', 'postprocessing.compute_modes must be >= 1.');
+        if postproc.computeModes < 0
+            error('run_topopt_from_json:InvalidComputeModes', 'postprocessing.compute_modes must be >= 0.');
         end
     else
         postproc.computeModes = 3;
