@@ -127,7 +127,7 @@ cfg.stop = struct();
 % is known, which trails the update by one.
 % R1 = struct('window', 10, 'objectiveTol', 1e-3, 'graynessTol', 5e-3);   % calibrated R1 (campaign_windows_convergence_stagnation_r1)
 % 2026-10-13: loosened objective/grayness tolerances (same window), Windows campaign.
-R1 = struct('window', 10, 'objectiveTol', 1e-2, 'graynessTol', 1e-2);
+R1 = struct('window', 10, 'objectiveTol', 1e-3, 'graynessTol', 5e-3);
 
 % Proposed
 cfg.stop.proposed.criterion   = 'stagnation';   % production: 'max_change'
@@ -230,7 +230,8 @@ cfg.outputDir = '';                  % auto: examples/Performance/conference_ben
 % cfg.runLabel  = 'campaign_mac_convergence_relative_l2_change';   % previous stop rules
 % cfg.runLabel  = 'campaign_mac_convergence_relative_l2_change_2'; % previous, Olhoff tol = 5e-4
 % cfg.runLabel  = 'campaign_windows_convergence_stagnation_r1';   % R1 10/1e-3/5e-3, Yuksel stage 1 on max_change
-cfg.runLabel  = 'campaign_windows_stagnation_w10_obj1e-2_gray1e-2';
+% cfg.runLabel  = 'campaign_windows_stagnation_w10_obj1e-2_gray1e-2';   % same rules, Windows host
+cfg.runLabel  = 'campaign_mac_convergence_stagnation_r1_v1';
 
 % ---- Timing-accounting tolerances (predeclared, recorded in the artifacts) --
 cfg.timingTolAbs     = 1e-6;   % |T_total - (T1+T2+T_overhead)|, seconds
