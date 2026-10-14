@@ -114,3 +114,16 @@ codegen/
 
 # SAND heat-sink reproduction outputs (large npy/png per case; summaries are regenerable)
 examples/sand/results/
+
+# --- LaTeX build by-products (latexmk, SyncTeX, epstopdf) ---
+*.synctex.gz
+*.fls
+*.fdb_latexmk
+*-eps-converted-to.pdf
+
+# --- MDPI manuscript paper/mdpi_applsci: class support files its build needs,
+#     which the blanket *.pdf / *.eps / *.bst rules above would otherwise drop
+#     (the figures, *.png, are kept out of the repository on purpose) ---
+!paper/mdpi_applsci/Definitions/*.bst
+!paper/mdpi_applsci/Definitions/*.eps
+!paper/mdpi_applsci/Definitions/logo-orcid.pdf
