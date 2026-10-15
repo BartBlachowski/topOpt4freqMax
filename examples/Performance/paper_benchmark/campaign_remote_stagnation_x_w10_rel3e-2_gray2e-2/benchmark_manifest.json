@@ -1,0 +1,2608 @@
+{
+  "manifest_schema": "conference_performance_benchmark/1",
+  "generated_datetime": "2026-10-15T11:15:36+02:00",
+  "generated_by": "examples/Performance/performance_comparison.m",
+  "manifest_role": "OUTPUT. Generated from the runtime configuration. It is not a source of scientific settings and nothing reads it back.",
+  "configuration": {
+    "resolutions": [
+      [
+        160,
+        20
+      ],
+      [
+        240,
+        30
+      ],
+      [
+        320,
+        40
+      ],
+      [
+        400,
+        50
+      ],
+      [
+        480,
+        60
+      ],
+      [
+        560,
+        70
+      ],
+      [
+        640,
+        80
+      ],
+      [
+        720,
+        90
+      ],
+      [
+        800,
+        100
+      ]
+    ],
+    "confirmLongCampaign": true,
+    "maxOuterOverride": [],
+    "yukselMaxIters": 5000,
+    "stop": {
+      "proposed": {
+        "criterion": "stagnation_x",
+        "tol": [],
+        "window": 10,
+        "objectiveTol": 0.02,
+        "graynessTol": 0.02,
+        "relativeChangeTol": 0.03,
+        "maxIters": []
+      },
+      "yuksel": {
+        "criterion": "stagnation_x",
+        "stage1Tol": [],
+        "stage2Tol": [],
+        "window": 10,
+        "objectiveTol": 0.02,
+        "graynessTol": 0.02,
+        "relativeChangeTol": 0.03
+      },
+      "olhoff": {
+        "criterion": "stagnation_x",
+        "c": [],
+        "tol": [],
+        "window": 10,
+        "objectiveTol": 0.02,
+        "graynessTol": 0.02,
+        "relativeChangeTol": 0.03,
+        "maxOuter": 1000
+      }
+    },
+    "methods": {
+      "proposed": true,
+      "yuksel": true,
+      "olhoff": false
+    },
+    "singleThread": true,
+    "runWarmup": true,
+    "runEvaluator": true,
+    "fitScaling": true,
+    "writeCSV": true,
+    "writeJSON": true,
+    "writeLaTeX": true,
+    "outputDir": "C:\\Users\\ptauzow\\Programming\\wstudy\\tol_rel3e-2\\examples\\Performance\\paper_benchmark\\campaign_remote_stagnation_x_w10_rel3e-2_gray2e-2",
+    "runLabel": "campaign_remote_stagnation_x_w10_rel3e-2_gray2e-2",
+    "timingTolAbs": 1E-6,
+    "timingTolRel": 1E-9,
+    "crosscheckTolRel": 0.05,
+    "productionStopRules": false,
+    "scientificEvidence": true,
+    "performanceCampaign": true
+  },
+  "active_resolutions": [
+    [
+      160,
+      20
+    ],
+    [
+      240,
+      30
+    ],
+    [
+      320,
+      40
+    ],
+    [
+      400,
+      50
+    ],
+    [
+      480,
+      60
+    ],
+    [
+      560,
+      70
+    ],
+    [
+      640,
+      80
+    ],
+    [
+      720,
+      90
+    ],
+    [
+      800,
+      100
+    ]
+  ],
+  "active_resolutions_count": 9,
+  "active_methods": [
+    "proposed",
+    "yuksel"
+  ],
+  "element_counts": [
+    3200,
+    7200,
+    12800,
+    20000,
+    28800,
+    39200,
+    51200,
+    64800,
+    80000
+  ],
+  "method_configurations": [
+    {
+      "meta": {
+        "name": "three-method study proposed 160x20",
+        "profile_id": "proposed_practical_move02_tol001",
+        "frozen_by": "examples/Performance/benchmark_profile/profile_freeze_manifest.json",
+        "source_implementation": "analysis/ourApproach/Matlab/topopt_freq.m",
+        "threads_per_run": 1,
+        "output_dir": "C:\\Users\\ptauzow\\Programming\\wstudy\\tol_rel3e-2\\examples\\Performance\\paper_benchmark\\campaign_remote_stagnation_x_w10_rel3e-2_gray2e-2"
+      },
+      "benchmark": {
+        "enable_diagnostics": false,
+        "record_history": false,
+        "extend_beyond_native_stop": false
+      },
+      "domain": {
+        "shape": "rectangular",
+        "size": {
+          "length": 8,
+          "height": 1
+        },
+        "thickness": 1,
+        "mesh": {
+          "nelx": 160,
+          "nely": 20
+        },
+        "load_cases": {
+          "name": "proposed_mode1",
+          "factor": 1,
+          "loads": {
+            "type": "semi_harmonic",
+            "mode": 1,
+            "factor": 1
+          }
+        }
+      },
+      "material": {
+        "model": "plane_stress_isotropic",
+        "E": 1.0E+7,
+        "nu": 0.3,
+        "rho": 1
+      },
+      "bc": {
+        "supports": [
+          {
+            "type": "closest_point",
+            "location": [
+              0,
+              0.5
+            ],
+            "dofs": [
+              "ux",
+              "uy"
+            ]
+          },
+          {
+            "type": "closest_point",
+            "location": [
+              8,
+              0.5
+            ],
+            "dofs": [
+              "ux",
+              "uy"
+            ]
+          }
+        ]
+      },
+      "postprocessing": {
+        "visualize_live": false,
+        "visualize_quality": "regular",
+        "visualize_modes": {
+          "enabled": false,
+          "count": 3
+        },
+        "visualize_topology_modes": {
+          "enabled": false,
+          "count": 3
+        },
+        "write_correlation_table": false,
+        "save_snapshot_image": false,
+        "save_final_image": false,
+        "save_frequency_iterations": false
+      },
+      "void_material": {
+        "E_min_ratio": 1E-9,
+        "rho_min": 1E-9
+      },
+      "optimization": {
+        "approach": "ourApproach",
+        "optimizer": "OC",
+        "objective": "compliance",
+        "interpolation": "SIMP",
+        "volume_fraction": 0.5,
+        "penalization": 3,
+        "filter": {
+          "type": "sensitivity",
+          "heaviside": false,
+          "radius": 2,
+          "radius_units": "element",
+          "boundary_condition": "symmetric"
+        },
+        "move_limit": 0.2,
+        "max_iters": 2000,
+        "convergence_tol": 0.01,
+        "semi_harmonic_baseline": "solid",
+        "semi_harmonic_load_sensitivity": false,
+        "harmonic_normalize": false,
+        "stop_criterion": "stagnation_x",
+        "stagnation": {
+          "window": 10,
+          "grayness_tol": 0.02,
+          "relative_change_tol": 0.03
+        }
+      }
+    },
+    {
+      "meta": {
+        "name": "three-method study proposed 240x30",
+        "profile_id": "proposed_practical_move02_tol001",
+        "frozen_by": "examples/Performance/benchmark_profile/profile_freeze_manifest.json",
+        "source_implementation": "analysis/ourApproach/Matlab/topopt_freq.m",
+        "threads_per_run": 1,
+        "output_dir": "C:\\Users\\ptauzow\\Programming\\wstudy\\tol_rel3e-2\\examples\\Performance\\paper_benchmark\\campaign_remote_stagnation_x_w10_rel3e-2_gray2e-2"
+      },
+      "benchmark": {
+        "enable_diagnostics": false,
+        "record_history": false,
+        "extend_beyond_native_stop": false
+      },
+      "domain": {
+        "shape": "rectangular",
+        "size": {
+          "length": 8,
+          "height": 1
+        },
+        "thickness": 1,
+        "mesh": {
+          "nelx": 240,
+          "nely": 30
+        },
+        "load_cases": {
+          "name": "proposed_mode1",
+          "factor": 1,
+          "loads": {
+            "type": "semi_harmonic",
+            "mode": 1,
+            "factor": 1
+          }
+        }
+      },
+      "material": {
+        "model": "plane_stress_isotropic",
+        "E": 1.0E+7,
+        "nu": 0.3,
+        "rho": 1
+      },
+      "bc": {
+        "supports": [
+          {
+            "type": "closest_point",
+            "location": [
+              0,
+              0.5
+            ],
+            "dofs": [
+              "ux",
+              "uy"
+            ]
+          },
+          {
+            "type": "closest_point",
+            "location": [
+              8,
+              0.5
+            ],
+            "dofs": [
+              "ux",
+              "uy"
+            ]
+          }
+        ]
+      },
+      "postprocessing": {
+        "visualize_live": false,
+        "visualize_quality": "regular",
+        "visualize_modes": {
+          "enabled": false,
+          "count": 3
+        },
+        "visualize_topology_modes": {
+          "enabled": false,
+          "count": 3
+        },
+        "write_correlation_table": false,
+        "save_snapshot_image": false,
+        "save_final_image": false,
+        "save_frequency_iterations": false
+      },
+      "void_material": {
+        "E_min_ratio": 1E-9,
+        "rho_min": 1E-9
+      },
+      "optimization": {
+        "approach": "ourApproach",
+        "optimizer": "OC",
+        "objective": "compliance",
+        "interpolation": "SIMP",
+        "volume_fraction": 0.5,
+        "penalization": 3,
+        "filter": {
+          "type": "sensitivity",
+          "heaviside": false,
+          "radius": 2,
+          "radius_units": "element",
+          "boundary_condition": "symmetric"
+        },
+        "move_limit": 0.2,
+        "max_iters": 2000,
+        "convergence_tol": 0.01,
+        "semi_harmonic_baseline": "solid",
+        "semi_harmonic_load_sensitivity": false,
+        "harmonic_normalize": false,
+        "stop_criterion": "stagnation_x",
+        "stagnation": {
+          "window": 10,
+          "grayness_tol": 0.02,
+          "relative_change_tol": 0.03
+        }
+      }
+    },
+    {
+      "meta": {
+        "name": "three-method study proposed 320x40",
+        "profile_id": "proposed_practical_move02_tol001",
+        "frozen_by": "examples/Performance/benchmark_profile/profile_freeze_manifest.json",
+        "source_implementation": "analysis/ourApproach/Matlab/topopt_freq.m",
+        "threads_per_run": 1,
+        "output_dir": "C:\\Users\\ptauzow\\Programming\\wstudy\\tol_rel3e-2\\examples\\Performance\\paper_benchmark\\campaign_remote_stagnation_x_w10_rel3e-2_gray2e-2"
+      },
+      "benchmark": {
+        "enable_diagnostics": false,
+        "record_history": false,
+        "extend_beyond_native_stop": false
+      },
+      "domain": {
+        "shape": "rectangular",
+        "size": {
+          "length": 8,
+          "height": 1
+        },
+        "thickness": 1,
+        "mesh": {
+          "nelx": 320,
+          "nely": 40
+        },
+        "load_cases": {
+          "name": "proposed_mode1",
+          "factor": 1,
+          "loads": {
+            "type": "semi_harmonic",
+            "mode": 1,
+            "factor": 1
+          }
+        }
+      },
+      "material": {
+        "model": "plane_stress_isotropic",
+        "E": 1.0E+7,
+        "nu": 0.3,
+        "rho": 1
+      },
+      "bc": {
+        "supports": [
+          {
+            "type": "closest_point",
+            "location": [
+              0,
+              0.5
+            ],
+            "dofs": [
+              "ux",
+              "uy"
+            ]
+          },
+          {
+            "type": "closest_point",
+            "location": [
+              8,
+              0.5
+            ],
+            "dofs": [
+              "ux",
+              "uy"
+            ]
+          }
+        ]
+      },
+      "postprocessing": {
+        "visualize_live": false,
+        "visualize_quality": "regular",
+        "visualize_modes": {
+          "enabled": false,
+          "count": 3
+        },
+        "visualize_topology_modes": {
+          "enabled": false,
+          "count": 3
+        },
+        "write_correlation_table": false,
+        "save_snapshot_image": false,
+        "save_final_image": false,
+        "save_frequency_iterations": false
+      },
+      "void_material": {
+        "E_min_ratio": 1E-9,
+        "rho_min": 1E-9
+      },
+      "optimization": {
+        "approach": "ourApproach",
+        "optimizer": "OC",
+        "objective": "compliance",
+        "interpolation": "SIMP",
+        "volume_fraction": 0.5,
+        "penalization": 3,
+        "filter": {
+          "type": "sensitivity",
+          "heaviside": false,
+          "radius": 2,
+          "radius_units": "element",
+          "boundary_condition": "symmetric"
+        },
+        "move_limit": 0.2,
+        "max_iters": 2000,
+        "convergence_tol": 0.01,
+        "semi_harmonic_baseline": "solid",
+        "semi_harmonic_load_sensitivity": false,
+        "harmonic_normalize": false,
+        "stop_criterion": "stagnation_x",
+        "stagnation": {
+          "window": 10,
+          "grayness_tol": 0.02,
+          "relative_change_tol": 0.03
+        }
+      }
+    },
+    {
+      "meta": {
+        "name": "three-method study proposed 400x50",
+        "profile_id": "proposed_practical_move02_tol001",
+        "frozen_by": "examples/Performance/benchmark_profile/profile_freeze_manifest.json",
+        "source_implementation": "analysis/ourApproach/Matlab/topopt_freq.m",
+        "threads_per_run": 1,
+        "output_dir": "C:\\Users\\ptauzow\\Programming\\wstudy\\tol_rel3e-2\\examples\\Performance\\paper_benchmark\\campaign_remote_stagnation_x_w10_rel3e-2_gray2e-2"
+      },
+      "benchmark": {
+        "enable_diagnostics": false,
+        "record_history": false,
+        "extend_beyond_native_stop": false
+      },
+      "domain": {
+        "shape": "rectangular",
+        "size": {
+          "length": 8,
+          "height": 1
+        },
+        "thickness": 1,
+        "mesh": {
+          "nelx": 400,
+          "nely": 50
+        },
+        "load_cases": {
+          "name": "proposed_mode1",
+          "factor": 1,
+          "loads": {
+            "type": "semi_harmonic",
+            "mode": 1,
+            "factor": 1
+          }
+        }
+      },
+      "material": {
+        "model": "plane_stress_isotropic",
+        "E": 1.0E+7,
+        "nu": 0.3,
+        "rho": 1
+      },
+      "bc": {
+        "supports": [
+          {
+            "type": "closest_point",
+            "location": [
+              0,
+              0.5
+            ],
+            "dofs": [
+              "ux",
+              "uy"
+            ]
+          },
+          {
+            "type": "closest_point",
+            "location": [
+              8,
+              0.5
+            ],
+            "dofs": [
+              "ux",
+              "uy"
+            ]
+          }
+        ]
+      },
+      "postprocessing": {
+        "visualize_live": false,
+        "visualize_quality": "regular",
+        "visualize_modes": {
+          "enabled": false,
+          "count": 3
+        },
+        "visualize_topology_modes": {
+          "enabled": false,
+          "count": 3
+        },
+        "write_correlation_table": false,
+        "save_snapshot_image": false,
+        "save_final_image": false,
+        "save_frequency_iterations": false
+      },
+      "void_material": {
+        "E_min_ratio": 1E-9,
+        "rho_min": 1E-9
+      },
+      "optimization": {
+        "approach": "ourApproach",
+        "optimizer": "OC",
+        "objective": "compliance",
+        "interpolation": "SIMP",
+        "volume_fraction": 0.5,
+        "penalization": 3,
+        "filter": {
+          "type": "sensitivity",
+          "heaviside": false,
+          "radius": 2,
+          "radius_units": "element",
+          "boundary_condition": "symmetric"
+        },
+        "move_limit": 0.2,
+        "max_iters": 2000,
+        "convergence_tol": 0.01,
+        "semi_harmonic_baseline": "solid",
+        "semi_harmonic_load_sensitivity": false,
+        "harmonic_normalize": false,
+        "stop_criterion": "stagnation_x",
+        "stagnation": {
+          "window": 10,
+          "grayness_tol": 0.02,
+          "relative_change_tol": 0.03
+        }
+      }
+    },
+    {
+      "meta": {
+        "name": "three-method study proposed 480x60",
+        "profile_id": "proposed_practical_move02_tol001",
+        "frozen_by": "examples/Performance/benchmark_profile/profile_freeze_manifest.json",
+        "source_implementation": "analysis/ourApproach/Matlab/topopt_freq.m",
+        "threads_per_run": 1,
+        "output_dir": "C:\\Users\\ptauzow\\Programming\\wstudy\\tol_rel3e-2\\examples\\Performance\\paper_benchmark\\campaign_remote_stagnation_x_w10_rel3e-2_gray2e-2"
+      },
+      "benchmark": {
+        "enable_diagnostics": false,
+        "record_history": false,
+        "extend_beyond_native_stop": false
+      },
+      "domain": {
+        "shape": "rectangular",
+        "size": {
+          "length": 8,
+          "height": 1
+        },
+        "thickness": 1,
+        "mesh": {
+          "nelx": 480,
+          "nely": 60
+        },
+        "load_cases": {
+          "name": "proposed_mode1",
+          "factor": 1,
+          "loads": {
+            "type": "semi_harmonic",
+            "mode": 1,
+            "factor": 1
+          }
+        }
+      },
+      "material": {
+        "model": "plane_stress_isotropic",
+        "E": 1.0E+7,
+        "nu": 0.3,
+        "rho": 1
+      },
+      "bc": {
+        "supports": [
+          {
+            "type": "closest_point",
+            "location": [
+              0,
+              0.5
+            ],
+            "dofs": [
+              "ux",
+              "uy"
+            ]
+          },
+          {
+            "type": "closest_point",
+            "location": [
+              8,
+              0.5
+            ],
+            "dofs": [
+              "ux",
+              "uy"
+            ]
+          }
+        ]
+      },
+      "postprocessing": {
+        "visualize_live": false,
+        "visualize_quality": "regular",
+        "visualize_modes": {
+          "enabled": false,
+          "count": 3
+        },
+        "visualize_topology_modes": {
+          "enabled": false,
+          "count": 3
+        },
+        "write_correlation_table": false,
+        "save_snapshot_image": false,
+        "save_final_image": false,
+        "save_frequency_iterations": false
+      },
+      "void_material": {
+        "E_min_ratio": 1E-9,
+        "rho_min": 1E-9
+      },
+      "optimization": {
+        "approach": "ourApproach",
+        "optimizer": "OC",
+        "objective": "compliance",
+        "interpolation": "SIMP",
+        "volume_fraction": 0.5,
+        "penalization": 3,
+        "filter": {
+          "type": "sensitivity",
+          "heaviside": false,
+          "radius": 2,
+          "radius_units": "element",
+          "boundary_condition": "symmetric"
+        },
+        "move_limit": 0.2,
+        "max_iters": 2000,
+        "convergence_tol": 0.01,
+        "semi_harmonic_baseline": "solid",
+        "semi_harmonic_load_sensitivity": false,
+        "harmonic_normalize": false,
+        "stop_criterion": "stagnation_x",
+        "stagnation": {
+          "window": 10,
+          "grayness_tol": 0.02,
+          "relative_change_tol": 0.03
+        }
+      }
+    },
+    {
+      "meta": {
+        "name": "three-method study proposed 560x70",
+        "profile_id": "proposed_practical_move02_tol001",
+        "frozen_by": "examples/Performance/benchmark_profile/profile_freeze_manifest.json",
+        "source_implementation": "analysis/ourApproach/Matlab/topopt_freq.m",
+        "threads_per_run": 1,
+        "output_dir": "C:\\Users\\ptauzow\\Programming\\wstudy\\tol_rel3e-2\\examples\\Performance\\paper_benchmark\\campaign_remote_stagnation_x_w10_rel3e-2_gray2e-2"
+      },
+      "benchmark": {
+        "enable_diagnostics": false,
+        "record_history": false,
+        "extend_beyond_native_stop": false
+      },
+      "domain": {
+        "shape": "rectangular",
+        "size": {
+          "length": 8,
+          "height": 1
+        },
+        "thickness": 1,
+        "mesh": {
+          "nelx": 560,
+          "nely": 70
+        },
+        "load_cases": {
+          "name": "proposed_mode1",
+          "factor": 1,
+          "loads": {
+            "type": "semi_harmonic",
+            "mode": 1,
+            "factor": 1
+          }
+        }
+      },
+      "material": {
+        "model": "plane_stress_isotropic",
+        "E": 1.0E+7,
+        "nu": 0.3,
+        "rho": 1
+      },
+      "bc": {
+        "supports": [
+          {
+            "type": "closest_point",
+            "location": [
+              0,
+              0.5
+            ],
+            "dofs": [
+              "ux",
+              "uy"
+            ]
+          },
+          {
+            "type": "closest_point",
+            "location": [
+              8,
+              0.5
+            ],
+            "dofs": [
+              "ux",
+              "uy"
+            ]
+          }
+        ]
+      },
+      "postprocessing": {
+        "visualize_live": false,
+        "visualize_quality": "regular",
+        "visualize_modes": {
+          "enabled": false,
+          "count": 3
+        },
+        "visualize_topology_modes": {
+          "enabled": false,
+          "count": 3
+        },
+        "write_correlation_table": false,
+        "save_snapshot_image": false,
+        "save_final_image": false,
+        "save_frequency_iterations": false
+      },
+      "void_material": {
+        "E_min_ratio": 1E-9,
+        "rho_min": 1E-9
+      },
+      "optimization": {
+        "approach": "ourApproach",
+        "optimizer": "OC",
+        "objective": "compliance",
+        "interpolation": "SIMP",
+        "volume_fraction": 0.5,
+        "penalization": 3,
+        "filter": {
+          "type": "sensitivity",
+          "heaviside": false,
+          "radius": 2,
+          "radius_units": "element",
+          "boundary_condition": "symmetric"
+        },
+        "move_limit": 0.2,
+        "max_iters": 2000,
+        "convergence_tol": 0.01,
+        "semi_harmonic_baseline": "solid",
+        "semi_harmonic_load_sensitivity": false,
+        "harmonic_normalize": false,
+        "stop_criterion": "stagnation_x",
+        "stagnation": {
+          "window": 10,
+          "grayness_tol": 0.02,
+          "relative_change_tol": 0.03
+        }
+      }
+    },
+    {
+      "meta": {
+        "name": "three-method study proposed 640x80",
+        "profile_id": "proposed_practical_move02_tol001",
+        "frozen_by": "examples/Performance/benchmark_profile/profile_freeze_manifest.json",
+        "source_implementation": "analysis/ourApproach/Matlab/topopt_freq.m",
+        "threads_per_run": 1,
+        "output_dir": "C:\\Users\\ptauzow\\Programming\\wstudy\\tol_rel3e-2\\examples\\Performance\\paper_benchmark\\campaign_remote_stagnation_x_w10_rel3e-2_gray2e-2"
+      },
+      "benchmark": {
+        "enable_diagnostics": false,
+        "record_history": false,
+        "extend_beyond_native_stop": false
+      },
+      "domain": {
+        "shape": "rectangular",
+        "size": {
+          "length": 8,
+          "height": 1
+        },
+        "thickness": 1,
+        "mesh": {
+          "nelx": 640,
+          "nely": 80
+        },
+        "load_cases": {
+          "name": "proposed_mode1",
+          "factor": 1,
+          "loads": {
+            "type": "semi_harmonic",
+            "mode": 1,
+            "factor": 1
+          }
+        }
+      },
+      "material": {
+        "model": "plane_stress_isotropic",
+        "E": 1.0E+7,
+        "nu": 0.3,
+        "rho": 1
+      },
+      "bc": {
+        "supports": [
+          {
+            "type": "closest_point",
+            "location": [
+              0,
+              0.5
+            ],
+            "dofs": [
+              "ux",
+              "uy"
+            ]
+          },
+          {
+            "type": "closest_point",
+            "location": [
+              8,
+              0.5
+            ],
+            "dofs": [
+              "ux",
+              "uy"
+            ]
+          }
+        ]
+      },
+      "postprocessing": {
+        "visualize_live": false,
+        "visualize_quality": "regular",
+        "visualize_modes": {
+          "enabled": false,
+          "count": 3
+        },
+        "visualize_topology_modes": {
+          "enabled": false,
+          "count": 3
+        },
+        "write_correlation_table": false,
+        "save_snapshot_image": false,
+        "save_final_image": false,
+        "save_frequency_iterations": false
+      },
+      "void_material": {
+        "E_min_ratio": 1E-9,
+        "rho_min": 1E-9
+      },
+      "optimization": {
+        "approach": "ourApproach",
+        "optimizer": "OC",
+        "objective": "compliance",
+        "interpolation": "SIMP",
+        "volume_fraction": 0.5,
+        "penalization": 3,
+        "filter": {
+          "type": "sensitivity",
+          "heaviside": false,
+          "radius": 2,
+          "radius_units": "element",
+          "boundary_condition": "symmetric"
+        },
+        "move_limit": 0.2,
+        "max_iters": 2000,
+        "convergence_tol": 0.01,
+        "semi_harmonic_baseline": "solid",
+        "semi_harmonic_load_sensitivity": false,
+        "harmonic_normalize": false,
+        "stop_criterion": "stagnation_x",
+        "stagnation": {
+          "window": 10,
+          "grayness_tol": 0.02,
+          "relative_change_tol": 0.03
+        }
+      }
+    },
+    {
+      "meta": {
+        "name": "three-method study proposed 720x90",
+        "profile_id": "proposed_practical_move02_tol001",
+        "frozen_by": "examples/Performance/benchmark_profile/profile_freeze_manifest.json",
+        "source_implementation": "analysis/ourApproach/Matlab/topopt_freq.m",
+        "threads_per_run": 1,
+        "output_dir": "C:\\Users\\ptauzow\\Programming\\wstudy\\tol_rel3e-2\\examples\\Performance\\paper_benchmark\\campaign_remote_stagnation_x_w10_rel3e-2_gray2e-2"
+      },
+      "benchmark": {
+        "enable_diagnostics": false,
+        "record_history": false,
+        "extend_beyond_native_stop": false
+      },
+      "domain": {
+        "shape": "rectangular",
+        "size": {
+          "length": 8,
+          "height": 1
+        },
+        "thickness": 1,
+        "mesh": {
+          "nelx": 720,
+          "nely": 90
+        },
+        "load_cases": {
+          "name": "proposed_mode1",
+          "factor": 1,
+          "loads": {
+            "type": "semi_harmonic",
+            "mode": 1,
+            "factor": 1
+          }
+        }
+      },
+      "material": {
+        "model": "plane_stress_isotropic",
+        "E": 1.0E+7,
+        "nu": 0.3,
+        "rho": 1
+      },
+      "bc": {
+        "supports": [
+          {
+            "type": "closest_point",
+            "location": [
+              0,
+              0.5
+            ],
+            "dofs": [
+              "ux",
+              "uy"
+            ]
+          },
+          {
+            "type": "closest_point",
+            "location": [
+              8,
+              0.5
+            ],
+            "dofs": [
+              "ux",
+              "uy"
+            ]
+          }
+        ]
+      },
+      "postprocessing": {
+        "visualize_live": false,
+        "visualize_quality": "regular",
+        "visualize_modes": {
+          "enabled": false,
+          "count": 3
+        },
+        "visualize_topology_modes": {
+          "enabled": false,
+          "count": 3
+        },
+        "write_correlation_table": false,
+        "save_snapshot_image": false,
+        "save_final_image": false,
+        "save_frequency_iterations": false
+      },
+      "void_material": {
+        "E_min_ratio": 1E-9,
+        "rho_min": 1E-9
+      },
+      "optimization": {
+        "approach": "ourApproach",
+        "optimizer": "OC",
+        "objective": "compliance",
+        "interpolation": "SIMP",
+        "volume_fraction": 0.5,
+        "penalization": 3,
+        "filter": {
+          "type": "sensitivity",
+          "heaviside": false,
+          "radius": 2,
+          "radius_units": "element",
+          "boundary_condition": "symmetric"
+        },
+        "move_limit": 0.2,
+        "max_iters": 2000,
+        "convergence_tol": 0.01,
+        "semi_harmonic_baseline": "solid",
+        "semi_harmonic_load_sensitivity": false,
+        "harmonic_normalize": false,
+        "stop_criterion": "stagnation_x",
+        "stagnation": {
+          "window": 10,
+          "grayness_tol": 0.02,
+          "relative_change_tol": 0.03
+        }
+      }
+    },
+    {
+      "meta": {
+        "name": "three-method study proposed 800x100",
+        "profile_id": "proposed_practical_move02_tol001",
+        "frozen_by": "examples/Performance/benchmark_profile/profile_freeze_manifest.json",
+        "source_implementation": "analysis/ourApproach/Matlab/topopt_freq.m",
+        "threads_per_run": 1,
+        "output_dir": "C:\\Users\\ptauzow\\Programming\\wstudy\\tol_rel3e-2\\examples\\Performance\\paper_benchmark\\campaign_remote_stagnation_x_w10_rel3e-2_gray2e-2"
+      },
+      "benchmark": {
+        "enable_diagnostics": false,
+        "record_history": false,
+        "extend_beyond_native_stop": false
+      },
+      "domain": {
+        "shape": "rectangular",
+        "size": {
+          "length": 8,
+          "height": 1
+        },
+        "thickness": 1,
+        "mesh": {
+          "nelx": 800,
+          "nely": 100
+        },
+        "load_cases": {
+          "name": "proposed_mode1",
+          "factor": 1,
+          "loads": {
+            "type": "semi_harmonic",
+            "mode": 1,
+            "factor": 1
+          }
+        }
+      },
+      "material": {
+        "model": "plane_stress_isotropic",
+        "E": 1.0E+7,
+        "nu": 0.3,
+        "rho": 1
+      },
+      "bc": {
+        "supports": [
+          {
+            "type": "closest_point",
+            "location": [
+              0,
+              0.5
+            ],
+            "dofs": [
+              "ux",
+              "uy"
+            ]
+          },
+          {
+            "type": "closest_point",
+            "location": [
+              8,
+              0.5
+            ],
+            "dofs": [
+              "ux",
+              "uy"
+            ]
+          }
+        ]
+      },
+      "postprocessing": {
+        "visualize_live": false,
+        "visualize_quality": "regular",
+        "visualize_modes": {
+          "enabled": false,
+          "count": 3
+        },
+        "visualize_topology_modes": {
+          "enabled": false,
+          "count": 3
+        },
+        "write_correlation_table": false,
+        "save_snapshot_image": false,
+        "save_final_image": false,
+        "save_frequency_iterations": false
+      },
+      "void_material": {
+        "E_min_ratio": 1E-9,
+        "rho_min": 1E-9
+      },
+      "optimization": {
+        "approach": "ourApproach",
+        "optimizer": "OC",
+        "objective": "compliance",
+        "interpolation": "SIMP",
+        "volume_fraction": 0.5,
+        "penalization": 3,
+        "filter": {
+          "type": "sensitivity",
+          "heaviside": false,
+          "radius": 2,
+          "radius_units": "element",
+          "boundary_condition": "symmetric"
+        },
+        "move_limit": 0.2,
+        "max_iters": 2000,
+        "convergence_tol": 0.01,
+        "semi_harmonic_baseline": "solid",
+        "semi_harmonic_load_sensitivity": false,
+        "harmonic_normalize": false,
+        "stop_criterion": "stagnation_x",
+        "stagnation": {
+          "window": 10,
+          "grayness_tol": 0.02,
+          "relative_change_tol": 0.03
+        }
+      }
+    },
+    {
+      "meta": {
+        "name": "three-method study yuksel 160x20",
+        "profile_id": "yuksel_practical_move01_tol001",
+        "frozen_by": "examples/Performance/benchmark_profile/profile_freeze_manifest.json",
+        "source_implementation": "analysis/YukselApproach/Matlab/top99neo_inertial_freq.m",
+        "threads_per_run": 1,
+        "output_dir": "C:\\Users\\ptauzow\\Programming\\wstudy\\tol_rel3e-2\\examples\\Performance\\paper_benchmark\\campaign_remote_stagnation_x_w10_rel3e-2_gray2e-2"
+      },
+      "benchmark": {
+        "enable_diagnostics": false,
+        "record_history": false,
+        "extend_beyond_native_stop": false
+      },
+      "domain": {
+        "shape": "rectangular",
+        "size": {
+          "length": 8,
+          "height": 1
+        },
+        "thickness": 1,
+        "mesh": {
+          "nelx": 160,
+          "nely": 20
+        }
+      },
+      "material": {
+        "model": "plane_stress_isotropic",
+        "E": 1.0E+7,
+        "nu": 0.3,
+        "rho": 1
+      },
+      "bc": {
+        "supports": [
+          {
+            "type": "closest_point",
+            "location": [
+              0,
+              0.5
+            ],
+            "dofs": [
+              "ux",
+              "uy"
+            ]
+          },
+          {
+            "type": "closest_point",
+            "location": [
+              8,
+              0.5
+            ],
+            "dofs": [
+              "ux",
+              "uy"
+            ]
+          }
+        ]
+      },
+      "postprocessing": {
+        "visualize_live": false,
+        "visualize_quality": "regular",
+        "visualize_modes": {
+          "enabled": false,
+          "count": 3
+        },
+        "visualize_topology_modes": {
+          "enabled": false,
+          "count": 3
+        },
+        "write_correlation_table": false,
+        "save_snapshot_image": false,
+        "save_final_image": false,
+        "save_frequency_iterations": false
+      },
+      "void_material": {
+        "E_min_ratio": 1E-9,
+        "rho_min": 1E-9
+      },
+      "optimization": {
+        "approach": "Yuksel",
+        "optimizer": "OC",
+        "objective": "compliance",
+        "interpolation": "SIMP",
+        "volume_fraction": 0.5,
+        "penalization": 3,
+        "filter": {
+          "type": "sensitivity",
+          "heaviside": false,
+          "radius": 2.5,
+          "radius_units": "element",
+          "boundary_condition": "symmetric"
+        },
+        "move_limit": 0.1,
+        "max_iters": 5000,
+        "convergence_tol": 0.01,
+        "yuksel": {
+          "stage1_max_iters": 5000,
+          "stage1_tol": 0.01,
+          "stage2_tol": 0.01,
+          "stage1_budget_independent": false
+        },
+        "stop_criterion": "stagnation_x",
+        "stagnation": {
+          "window": 10,
+          "grayness_tol": 0.02,
+          "relative_change_tol": 0.03
+        }
+      }
+    },
+    {
+      "meta": {
+        "name": "three-method study yuksel 240x30",
+        "profile_id": "yuksel_practical_move01_tol001",
+        "frozen_by": "examples/Performance/benchmark_profile/profile_freeze_manifest.json",
+        "source_implementation": "analysis/YukselApproach/Matlab/top99neo_inertial_freq.m",
+        "threads_per_run": 1,
+        "output_dir": "C:\\Users\\ptauzow\\Programming\\wstudy\\tol_rel3e-2\\examples\\Performance\\paper_benchmark\\campaign_remote_stagnation_x_w10_rel3e-2_gray2e-2"
+      },
+      "benchmark": {
+        "enable_diagnostics": false,
+        "record_history": false,
+        "extend_beyond_native_stop": false
+      },
+      "domain": {
+        "shape": "rectangular",
+        "size": {
+          "length": 8,
+          "height": 1
+        },
+        "thickness": 1,
+        "mesh": {
+          "nelx": 240,
+          "nely": 30
+        }
+      },
+      "material": {
+        "model": "plane_stress_isotropic",
+        "E": 1.0E+7,
+        "nu": 0.3,
+        "rho": 1
+      },
+      "bc": {
+        "supports": [
+          {
+            "type": "closest_point",
+            "location": [
+              0,
+              0.5
+            ],
+            "dofs": [
+              "ux",
+              "uy"
+            ]
+          },
+          {
+            "type": "closest_point",
+            "location": [
+              8,
+              0.5
+            ],
+            "dofs": [
+              "ux",
+              "uy"
+            ]
+          }
+        ]
+      },
+      "postprocessing": {
+        "visualize_live": false,
+        "visualize_quality": "regular",
+        "visualize_modes": {
+          "enabled": false,
+          "count": 3
+        },
+        "visualize_topology_modes": {
+          "enabled": false,
+          "count": 3
+        },
+        "write_correlation_table": false,
+        "save_snapshot_image": false,
+        "save_final_image": false,
+        "save_frequency_iterations": false
+      },
+      "void_material": {
+        "E_min_ratio": 1E-9,
+        "rho_min": 1E-9
+      },
+      "optimization": {
+        "approach": "Yuksel",
+        "optimizer": "OC",
+        "objective": "compliance",
+        "interpolation": "SIMP",
+        "volume_fraction": 0.5,
+        "penalization": 3,
+        "filter": {
+          "type": "sensitivity",
+          "heaviside": false,
+          "radius": 2.5,
+          "radius_units": "element",
+          "boundary_condition": "symmetric"
+        },
+        "move_limit": 0.1,
+        "max_iters": 5000,
+        "convergence_tol": 0.01,
+        "yuksel": {
+          "stage1_max_iters": 5000,
+          "stage1_tol": 0.01,
+          "stage2_tol": 0.01,
+          "stage1_budget_independent": false
+        },
+        "stop_criterion": "stagnation_x",
+        "stagnation": {
+          "window": 10,
+          "grayness_tol": 0.02,
+          "relative_change_tol": 0.03
+        }
+      }
+    },
+    {
+      "meta": {
+        "name": "three-method study yuksel 320x40",
+        "profile_id": "yuksel_practical_move01_tol001",
+        "frozen_by": "examples/Performance/benchmark_profile/profile_freeze_manifest.json",
+        "source_implementation": "analysis/YukselApproach/Matlab/top99neo_inertial_freq.m",
+        "threads_per_run": 1,
+        "output_dir": "C:\\Users\\ptauzow\\Programming\\wstudy\\tol_rel3e-2\\examples\\Performance\\paper_benchmark\\campaign_remote_stagnation_x_w10_rel3e-2_gray2e-2"
+      },
+      "benchmark": {
+        "enable_diagnostics": false,
+        "record_history": false,
+        "extend_beyond_native_stop": false
+      },
+      "domain": {
+        "shape": "rectangular",
+        "size": {
+          "length": 8,
+          "height": 1
+        },
+        "thickness": 1,
+        "mesh": {
+          "nelx": 320,
+          "nely": 40
+        }
+      },
+      "material": {
+        "model": "plane_stress_isotropic",
+        "E": 1.0E+7,
+        "nu": 0.3,
+        "rho": 1
+      },
+      "bc": {
+        "supports": [
+          {
+            "type": "closest_point",
+            "location": [
+              0,
+              0.5
+            ],
+            "dofs": [
+              "ux",
+              "uy"
+            ]
+          },
+          {
+            "type": "closest_point",
+            "location": [
+              8,
+              0.5
+            ],
+            "dofs": [
+              "ux",
+              "uy"
+            ]
+          }
+        ]
+      },
+      "postprocessing": {
+        "visualize_live": false,
+        "visualize_quality": "regular",
+        "visualize_modes": {
+          "enabled": false,
+          "count": 3
+        },
+        "visualize_topology_modes": {
+          "enabled": false,
+          "count": 3
+        },
+        "write_correlation_table": false,
+        "save_snapshot_image": false,
+        "save_final_image": false,
+        "save_frequency_iterations": false
+      },
+      "void_material": {
+        "E_min_ratio": 1E-9,
+        "rho_min": 1E-9
+      },
+      "optimization": {
+        "approach": "Yuksel",
+        "optimizer": "OC",
+        "objective": "compliance",
+        "interpolation": "SIMP",
+        "volume_fraction": 0.5,
+        "penalization": 3,
+        "filter": {
+          "type": "sensitivity",
+          "heaviside": false,
+          "radius": 2.5,
+          "radius_units": "element",
+          "boundary_condition": "symmetric"
+        },
+        "move_limit": 0.1,
+        "max_iters": 5000,
+        "convergence_tol": 0.01,
+        "yuksel": {
+          "stage1_max_iters": 5000,
+          "stage1_tol": 0.01,
+          "stage2_tol": 0.01,
+          "stage1_budget_independent": false
+        },
+        "stop_criterion": "stagnation_x",
+        "stagnation": {
+          "window": 10,
+          "grayness_tol": 0.02,
+          "relative_change_tol": 0.03
+        }
+      }
+    },
+    {
+      "meta": {
+        "name": "three-method study yuksel 400x50",
+        "profile_id": "yuksel_practical_move01_tol001",
+        "frozen_by": "examples/Performance/benchmark_profile/profile_freeze_manifest.json",
+        "source_implementation": "analysis/YukselApproach/Matlab/top99neo_inertial_freq.m",
+        "threads_per_run": 1,
+        "output_dir": "C:\\Users\\ptauzow\\Programming\\wstudy\\tol_rel3e-2\\examples\\Performance\\paper_benchmark\\campaign_remote_stagnation_x_w10_rel3e-2_gray2e-2"
+      },
+      "benchmark": {
+        "enable_diagnostics": false,
+        "record_history": false,
+        "extend_beyond_native_stop": false
+      },
+      "domain": {
+        "shape": "rectangular",
+        "size": {
+          "length": 8,
+          "height": 1
+        },
+        "thickness": 1,
+        "mesh": {
+          "nelx": 400,
+          "nely": 50
+        }
+      },
+      "material": {
+        "model": "plane_stress_isotropic",
+        "E": 1.0E+7,
+        "nu": 0.3,
+        "rho": 1
+      },
+      "bc": {
+        "supports": [
+          {
+            "type": "closest_point",
+            "location": [
+              0,
+              0.5
+            ],
+            "dofs": [
+              "ux",
+              "uy"
+            ]
+          },
+          {
+            "type": "closest_point",
+            "location": [
+              8,
+              0.5
+            ],
+            "dofs": [
+              "ux",
+              "uy"
+            ]
+          }
+        ]
+      },
+      "postprocessing": {
+        "visualize_live": false,
+        "visualize_quality": "regular",
+        "visualize_modes": {
+          "enabled": false,
+          "count": 3
+        },
+        "visualize_topology_modes": {
+          "enabled": false,
+          "count": 3
+        },
+        "write_correlation_table": false,
+        "save_snapshot_image": false,
+        "save_final_image": false,
+        "save_frequency_iterations": false
+      },
+      "void_material": {
+        "E_min_ratio": 1E-9,
+        "rho_min": 1E-9
+      },
+      "optimization": {
+        "approach": "Yuksel",
+        "optimizer": "OC",
+        "objective": "compliance",
+        "interpolation": "SIMP",
+        "volume_fraction": 0.5,
+        "penalization": 3,
+        "filter": {
+          "type": "sensitivity",
+          "heaviside": false,
+          "radius": 2.5,
+          "radius_units": "element",
+          "boundary_condition": "symmetric"
+        },
+        "move_limit": 0.1,
+        "max_iters": 5000,
+        "convergence_tol": 0.01,
+        "yuksel": {
+          "stage1_max_iters": 5000,
+          "stage1_tol": 0.01,
+          "stage2_tol": 0.01,
+          "stage1_budget_independent": false
+        },
+        "stop_criterion": "stagnation_x",
+        "stagnation": {
+          "window": 10,
+          "grayness_tol": 0.02,
+          "relative_change_tol": 0.03
+        }
+      }
+    },
+    {
+      "meta": {
+        "name": "three-method study yuksel 480x60",
+        "profile_id": "yuksel_practical_move01_tol001",
+        "frozen_by": "examples/Performance/benchmark_profile/profile_freeze_manifest.json",
+        "source_implementation": "analysis/YukselApproach/Matlab/top99neo_inertial_freq.m",
+        "threads_per_run": 1,
+        "output_dir": "C:\\Users\\ptauzow\\Programming\\wstudy\\tol_rel3e-2\\examples\\Performance\\paper_benchmark\\campaign_remote_stagnation_x_w10_rel3e-2_gray2e-2"
+      },
+      "benchmark": {
+        "enable_diagnostics": false,
+        "record_history": false,
+        "extend_beyond_native_stop": false
+      },
+      "domain": {
+        "shape": "rectangular",
+        "size": {
+          "length": 8,
+          "height": 1
+        },
+        "thickness": 1,
+        "mesh": {
+          "nelx": 480,
+          "nely": 60
+        }
+      },
+      "material": {
+        "model": "plane_stress_isotropic",
+        "E": 1.0E+7,
+        "nu": 0.3,
+        "rho": 1
+      },
+      "bc": {
+        "supports": [
+          {
+            "type": "closest_point",
+            "location": [
+              0,
+              0.5
+            ],
+            "dofs": [
+              "ux",
+              "uy"
+            ]
+          },
+          {
+            "type": "closest_point",
+            "location": [
+              8,
+              0.5
+            ],
+            "dofs": [
+              "ux",
+              "uy"
+            ]
+          }
+        ]
+      },
+      "postprocessing": {
+        "visualize_live": false,
+        "visualize_quality": "regular",
+        "visualize_modes": {
+          "enabled": false,
+          "count": 3
+        },
+        "visualize_topology_modes": {
+          "enabled": false,
+          "count": 3
+        },
+        "write_correlation_table": false,
+        "save_snapshot_image": false,
+        "save_final_image": false,
+        "save_frequency_iterations": false
+      },
+      "void_material": {
+        "E_min_ratio": 1E-9,
+        "rho_min": 1E-9
+      },
+      "optimization": {
+        "approach": "Yuksel",
+        "optimizer": "OC",
+        "objective": "compliance",
+        "interpolation": "SIMP",
+        "volume_fraction": 0.5,
+        "penalization": 3,
+        "filter": {
+          "type": "sensitivity",
+          "heaviside": false,
+          "radius": 2.5,
+          "radius_units": "element",
+          "boundary_condition": "symmetric"
+        },
+        "move_limit": 0.1,
+        "max_iters": 5000,
+        "convergence_tol": 0.01,
+        "yuksel": {
+          "stage1_max_iters": 5000,
+          "stage1_tol": 0.01,
+          "stage2_tol": 0.01,
+          "stage1_budget_independent": false
+        },
+        "stop_criterion": "stagnation_x",
+        "stagnation": {
+          "window": 10,
+          "grayness_tol": 0.02,
+          "relative_change_tol": 0.03
+        }
+      }
+    },
+    {
+      "meta": {
+        "name": "three-method study yuksel 560x70",
+        "profile_id": "yuksel_practical_move01_tol001",
+        "frozen_by": "examples/Performance/benchmark_profile/profile_freeze_manifest.json",
+        "source_implementation": "analysis/YukselApproach/Matlab/top99neo_inertial_freq.m",
+        "threads_per_run": 1,
+        "output_dir": "C:\\Users\\ptauzow\\Programming\\wstudy\\tol_rel3e-2\\examples\\Performance\\paper_benchmark\\campaign_remote_stagnation_x_w10_rel3e-2_gray2e-2"
+      },
+      "benchmark": {
+        "enable_diagnostics": false,
+        "record_history": false,
+        "extend_beyond_native_stop": false
+      },
+      "domain": {
+        "shape": "rectangular",
+        "size": {
+          "length": 8,
+          "height": 1
+        },
+        "thickness": 1,
+        "mesh": {
+          "nelx": 560,
+          "nely": 70
+        }
+      },
+      "material": {
+        "model": "plane_stress_isotropic",
+        "E": 1.0E+7,
+        "nu": 0.3,
+        "rho": 1
+      },
+      "bc": {
+        "supports": [
+          {
+            "type": "closest_point",
+            "location": [
+              0,
+              0.5
+            ],
+            "dofs": [
+              "ux",
+              "uy"
+            ]
+          },
+          {
+            "type": "closest_point",
+            "location": [
+              8,
+              0.5
+            ],
+            "dofs": [
+              "ux",
+              "uy"
+            ]
+          }
+        ]
+      },
+      "postprocessing": {
+        "visualize_live": false,
+        "visualize_quality": "regular",
+        "visualize_modes": {
+          "enabled": false,
+          "count": 3
+        },
+        "visualize_topology_modes": {
+          "enabled": false,
+          "count": 3
+        },
+        "write_correlation_table": false,
+        "save_snapshot_image": false,
+        "save_final_image": false,
+        "save_frequency_iterations": false
+      },
+      "void_material": {
+        "E_min_ratio": 1E-9,
+        "rho_min": 1E-9
+      },
+      "optimization": {
+        "approach": "Yuksel",
+        "optimizer": "OC",
+        "objective": "compliance",
+        "interpolation": "SIMP",
+        "volume_fraction": 0.5,
+        "penalization": 3,
+        "filter": {
+          "type": "sensitivity",
+          "heaviside": false,
+          "radius": 2.5,
+          "radius_units": "element",
+          "boundary_condition": "symmetric"
+        },
+        "move_limit": 0.1,
+        "max_iters": 5000,
+        "convergence_tol": 0.01,
+        "yuksel": {
+          "stage1_max_iters": 5000,
+          "stage1_tol": 0.01,
+          "stage2_tol": 0.01,
+          "stage1_budget_independent": false
+        },
+        "stop_criterion": "stagnation_x",
+        "stagnation": {
+          "window": 10,
+          "grayness_tol": 0.02,
+          "relative_change_tol": 0.03
+        }
+      }
+    },
+    {
+      "meta": {
+        "name": "three-method study yuksel 640x80",
+        "profile_id": "yuksel_practical_move01_tol001",
+        "frozen_by": "examples/Performance/benchmark_profile/profile_freeze_manifest.json",
+        "source_implementation": "analysis/YukselApproach/Matlab/top99neo_inertial_freq.m",
+        "threads_per_run": 1,
+        "output_dir": "C:\\Users\\ptauzow\\Programming\\wstudy\\tol_rel3e-2\\examples\\Performance\\paper_benchmark\\campaign_remote_stagnation_x_w10_rel3e-2_gray2e-2"
+      },
+      "benchmark": {
+        "enable_diagnostics": false,
+        "record_history": false,
+        "extend_beyond_native_stop": false
+      },
+      "domain": {
+        "shape": "rectangular",
+        "size": {
+          "length": 8,
+          "height": 1
+        },
+        "thickness": 1,
+        "mesh": {
+          "nelx": 640,
+          "nely": 80
+        }
+      },
+      "material": {
+        "model": "plane_stress_isotropic",
+        "E": 1.0E+7,
+        "nu": 0.3,
+        "rho": 1
+      },
+      "bc": {
+        "supports": [
+          {
+            "type": "closest_point",
+            "location": [
+              0,
+              0.5
+            ],
+            "dofs": [
+              "ux",
+              "uy"
+            ]
+          },
+          {
+            "type": "closest_point",
+            "location": [
+              8,
+              0.5
+            ],
+            "dofs": [
+              "ux",
+              "uy"
+            ]
+          }
+        ]
+      },
+      "postprocessing": {
+        "visualize_live": false,
+        "visualize_quality": "regular",
+        "visualize_modes": {
+          "enabled": false,
+          "count": 3
+        },
+        "visualize_topology_modes": {
+          "enabled": false,
+          "count": 3
+        },
+        "write_correlation_table": false,
+        "save_snapshot_image": false,
+        "save_final_image": false,
+        "save_frequency_iterations": false
+      },
+      "void_material": {
+        "E_min_ratio": 1E-9,
+        "rho_min": 1E-9
+      },
+      "optimization": {
+        "approach": "Yuksel",
+        "optimizer": "OC",
+        "objective": "compliance",
+        "interpolation": "SIMP",
+        "volume_fraction": 0.5,
+        "penalization": 3,
+        "filter": {
+          "type": "sensitivity",
+          "heaviside": false,
+          "radius": 2.5,
+          "radius_units": "element",
+          "boundary_condition": "symmetric"
+        },
+        "move_limit": 0.1,
+        "max_iters": 5000,
+        "convergence_tol": 0.01,
+        "yuksel": {
+          "stage1_max_iters": 5000,
+          "stage1_tol": 0.01,
+          "stage2_tol": 0.01,
+          "stage1_budget_independent": false
+        },
+        "stop_criterion": "stagnation_x",
+        "stagnation": {
+          "window": 10,
+          "grayness_tol": 0.02,
+          "relative_change_tol": 0.03
+        }
+      }
+    },
+    {
+      "meta": {
+        "name": "three-method study yuksel 720x90",
+        "profile_id": "yuksel_practical_move01_tol001",
+        "frozen_by": "examples/Performance/benchmark_profile/profile_freeze_manifest.json",
+        "source_implementation": "analysis/YukselApproach/Matlab/top99neo_inertial_freq.m",
+        "threads_per_run": 1,
+        "output_dir": "C:\\Users\\ptauzow\\Programming\\wstudy\\tol_rel3e-2\\examples\\Performance\\paper_benchmark\\campaign_remote_stagnation_x_w10_rel3e-2_gray2e-2"
+      },
+      "benchmark": {
+        "enable_diagnostics": false,
+        "record_history": false,
+        "extend_beyond_native_stop": false
+      },
+      "domain": {
+        "shape": "rectangular",
+        "size": {
+          "length": 8,
+          "height": 1
+        },
+        "thickness": 1,
+        "mesh": {
+          "nelx": 720,
+          "nely": 90
+        }
+      },
+      "material": {
+        "model": "plane_stress_isotropic",
+        "E": 1.0E+7,
+        "nu": 0.3,
+        "rho": 1
+      },
+      "bc": {
+        "supports": [
+          {
+            "type": "closest_point",
+            "location": [
+              0,
+              0.5
+            ],
+            "dofs": [
+              "ux",
+              "uy"
+            ]
+          },
+          {
+            "type": "closest_point",
+            "location": [
+              8,
+              0.5
+            ],
+            "dofs": [
+              "ux",
+              "uy"
+            ]
+          }
+        ]
+      },
+      "postprocessing": {
+        "visualize_live": false,
+        "visualize_quality": "regular",
+        "visualize_modes": {
+          "enabled": false,
+          "count": 3
+        },
+        "visualize_topology_modes": {
+          "enabled": false,
+          "count": 3
+        },
+        "write_correlation_table": false,
+        "save_snapshot_image": false,
+        "save_final_image": false,
+        "save_frequency_iterations": false
+      },
+      "void_material": {
+        "E_min_ratio": 1E-9,
+        "rho_min": 1E-9
+      },
+      "optimization": {
+        "approach": "Yuksel",
+        "optimizer": "OC",
+        "objective": "compliance",
+        "interpolation": "SIMP",
+        "volume_fraction": 0.5,
+        "penalization": 3,
+        "filter": {
+          "type": "sensitivity",
+          "heaviside": false,
+          "radius": 2.5,
+          "radius_units": "element",
+          "boundary_condition": "symmetric"
+        },
+        "move_limit": 0.1,
+        "max_iters": 5000,
+        "convergence_tol": 0.01,
+        "yuksel": {
+          "stage1_max_iters": 5000,
+          "stage1_tol": 0.01,
+          "stage2_tol": 0.01,
+          "stage1_budget_independent": false
+        },
+        "stop_criterion": "stagnation_x",
+        "stagnation": {
+          "window": 10,
+          "grayness_tol": 0.02,
+          "relative_change_tol": 0.03
+        }
+      }
+    },
+    {
+      "meta": {
+        "name": "three-method study yuksel 800x100",
+        "profile_id": "yuksel_practical_move01_tol001",
+        "frozen_by": "examples/Performance/benchmark_profile/profile_freeze_manifest.json",
+        "source_implementation": "analysis/YukselApproach/Matlab/top99neo_inertial_freq.m",
+        "threads_per_run": 1,
+        "output_dir": "C:\\Users\\ptauzow\\Programming\\wstudy\\tol_rel3e-2\\examples\\Performance\\paper_benchmark\\campaign_remote_stagnation_x_w10_rel3e-2_gray2e-2"
+      },
+      "benchmark": {
+        "enable_diagnostics": false,
+        "record_history": false,
+        "extend_beyond_native_stop": false
+      },
+      "domain": {
+        "shape": "rectangular",
+        "size": {
+          "length": 8,
+          "height": 1
+        },
+        "thickness": 1,
+        "mesh": {
+          "nelx": 800,
+          "nely": 100
+        }
+      },
+      "material": {
+        "model": "plane_stress_isotropic",
+        "E": 1.0E+7,
+        "nu": 0.3,
+        "rho": 1
+      },
+      "bc": {
+        "supports": [
+          {
+            "type": "closest_point",
+            "location": [
+              0,
+              0.5
+            ],
+            "dofs": [
+              "ux",
+              "uy"
+            ]
+          },
+          {
+            "type": "closest_point",
+            "location": [
+              8,
+              0.5
+            ],
+            "dofs": [
+              "ux",
+              "uy"
+            ]
+          }
+        ]
+      },
+      "postprocessing": {
+        "visualize_live": false,
+        "visualize_quality": "regular",
+        "visualize_modes": {
+          "enabled": false,
+          "count": 3
+        },
+        "visualize_topology_modes": {
+          "enabled": false,
+          "count": 3
+        },
+        "write_correlation_table": false,
+        "save_snapshot_image": false,
+        "save_final_image": false,
+        "save_frequency_iterations": false
+      },
+      "void_material": {
+        "E_min_ratio": 1E-9,
+        "rho_min": 1E-9
+      },
+      "optimization": {
+        "approach": "Yuksel",
+        "optimizer": "OC",
+        "objective": "compliance",
+        "interpolation": "SIMP",
+        "volume_fraction": 0.5,
+        "penalization": 3,
+        "filter": {
+          "type": "sensitivity",
+          "heaviside": false,
+          "radius": 2.5,
+          "radius_units": "element",
+          "boundary_condition": "symmetric"
+        },
+        "move_limit": 0.1,
+        "max_iters": 5000,
+        "convergence_tol": 0.01,
+        "yuksel": {
+          "stage1_max_iters": 5000,
+          "stage1_tol": 0.01,
+          "stage2_tol": 0.01,
+          "stage1_budget_independent": false
+        },
+        "stop_criterion": "stagnation_x",
+        "stagnation": {
+          "window": 10,
+          "grayness_tol": 0.02,
+          "relative_change_tol": 0.03
+        }
+      }
+    }
+  ],
+  "resolved_implementations": {
+    "run_topopt_from_json": "C:\\Users\\ptauzow\\Programming\\wstudy\\tol_rel3e-2\\tools\\Matlab\\run_topopt_from_json.m",
+    "study_evaluate_design": "C:\\Users\\ptauzow\\Programming\\wstudy\\tol_rel3e-2\\examples\\Performance\\benchmark_profile\\study_evaluate_design.m",
+    "study_base_config": "C:\\Users\\ptauzow\\Programming\\wstudy\\tol_rel3e-2\\examples\\Performance\\benchmark_profile\\study_base_config.m"
+  },
+  "source_hashes": {
+    "examples_Performance_performance_comparison_m": {
+      "path": "examples/Performance/performance_comparison.m",
+      "sha256": "bf6c115c06f6a66590432e611a7acb14ec9661b79b710cbcfa99f71c97ba2f59"
+    },
+    "examples_Performance_conference_bench_confbench_method_config_m": {
+      "path": "examples/Performance/conference_bench/confbench_method_config.m",
+      "sha256": "d2fe692ea8f77fd37fbc2ed8b41560e200fb02431fc4ecf7a141cdca13dfefba"
+    },
+    "examples_Performance_conference_bench_confbench_run_case_m": {
+      "path": "examples/Performance/conference_bench/confbench_run_case.m",
+      "sha256": "6dc77531fd61b026772ceffaa65ab5b42a3f9d53649bf121a1b9e1a06d655eef"
+    },
+    "examples_Performance_conference_bench_confbench_preflight_m": {
+      "path": "examples/Performance/conference_bench/confbench_preflight.m",
+      "sha256": "92c90ef3e7cb477b8e42c5c57ed044272bc32b7d1fac1e388791cca0e7674047"
+    },
+    "examples_Performance_conference_bench_confbench_manifest_m": {
+      "path": "examples/Performance/conference_bench/confbench_manifest.m",
+      "sha256": "3772197fafa3c1577ea97a4bb2ca944eb62cda7c973eedcdac760b3fbc3243c3"
+    },
+    "examples_Performance_conference_bench_confbench_export_m": {
+      "path": "examples/Performance/conference_bench/confbench_export.m",
+      "sha256": "4c5d00d82e17b9ad1315d50d94434e512f41fa2e05be397adead788dec400da1"
+    },
+    "examples_Performance_conference_bench_confbench_timing_schema_m": {
+      "path": "examples/Performance/conference_bench/confbench_timing_schema.m",
+      "sha256": "dca34be04f2888d2d3f9f7581c51b01551b2dea19903846802ca2cbbcdd943f9"
+    },
+    "examples_Performance_conference_bench_confbench_caveats_m": {
+      "path": "examples/Performance/conference_bench/confbench_caveats.m",
+      "sha256": "a5b83093cbdefe271d7af6d7d72ac4f6b6b25f2c3a0a7e81650d1298cc88348e"
+    },
+    "examples_Performance_conference_bench_confbench_scaling_fit_m": {
+      "path": "examples/Performance/conference_bench/confbench_scaling_fit.m",
+      "sha256": "0741debf9c19cd314f3366fed724978e0d81b5ce66e762607f80b075735d9ff0"
+    },
+    "examples_Performance_conference_bench_confbench_olhoff_preset_m": {
+      "path": "examples/Performance/conference_bench/confbench_olhoff_preset.m",
+      "sha256": "f8a675a0712593a5f597a97d6764a5bf316cfd1fd1d8291ef274439acbb08254"
+    },
+    "analysis_Olhoff_olhoffcurrent_presets_m": {
+      "path": "analysis/Olhoff/olhoffcurrent_presets.m",
+      "sha256": "512420e5b9461eff22815538adfa61b7225036d1140e851765d82d18c2d5bc3d"
+    },
+    "analysis_Olhoff_olhoffcurrent_preset_m": {
+      "path": "analysis/Olhoff/olhoffcurrent_preset.m",
+      "sha256": "f742629e0020975f2e0c2efea19ff288b35775a8ebc31162c14781c48c6da54a"
+    },
+    "analysis_Olhoff_olhoffcurrent_production_preset_m": {
+      "path": "analysis/Olhoff/olhoffcurrent_production_preset.m",
+      "sha256": "59ffc208a0a028cf7e82df6024e0a239950987f37f4d79a841b2215f359acff6"
+    },
+    "analysis_Olhoff_olhoffcurrent_caveat_m": {
+      "path": "analysis/Olhoff/olhoffcurrent_caveat.m",
+      "sha256": "0e44ba9f3d7845087e05762502ee0a0cd27d5a9fad4c908cc4158b867f536408"
+    },
+    "analysis_Olhoff_olhoffcurrent_config_m": {
+      "path": "analysis/Olhoff/olhoffcurrent_config.m",
+      "sha256": "03e9cd44db6874d6265a271b8dc0655b2bb51e02e8862324c979aa43db709698"
+    },
+    "analysis_Olhoff_olhoffcurrent_run_m": {
+      "path": "analysis/Olhoff/olhoffcurrent_run.m",
+      "sha256": "4dd3b1b32f936b89cdc37182ba543da60de7a169626a9713afadf8435af8d828"
+    },
+    "analysis_Olhoff_olhoffcurrent_paths_m": {
+      "path": "analysis/Olhoff/olhoffcurrent_paths.m",
+      "sha256": "a8be7af6a5930d6ef90684483fcfad3ab9a90c082d2735e95afc2a48c9e254ac"
+    },
+    "analysis_Olhoff_olhoffcurrent_assert_dispatch_m": {
+      "path": "analysis/Olhoff/olhoffcurrent_assert_dispatch.m",
+      "sha256": "1641fabd124a26547c6dd9f1e1f076a9bbe9ce452e3763edcfbfbeeea10a246f"
+    },
+    "analysis_Olhoff_PROVENANCE_json": {
+      "path": "analysis/Olhoff/PROVENANCE.json",
+      "sha256": "ed4d4c591d50a4a87dcbb91275856c35819dff30219cbfbef334fb2e433e9bcc"
+    },
+    "analysis_Proposed_Matlab_topopt_freq_m": {
+      "path": "analysis/Proposed/Matlab/topopt_freq.m",
+      "sha256": "ffdb85c86b54bb349ee9be8527847340577d5aa87cf914198d3e9fbdc3d1aa98"
+    },
+    "analysis_Yuksel_Matlab_top99neo_inertial_freq_m": {
+      "path": "analysis/Yuksel/Matlab/top99neo_inertial_freq.m",
+      "sha256": "48a2828cbfe2b759566a13cb619a59a8ce49fe349ce86d99146b0d81f5ad2c8f"
+    },
+    "tools_Matlab_run_topopt_from_json_m": {
+      "path": "tools/Matlab/run_topopt_from_json.m",
+      "sha256": "555ca0a6ed65bb9c4f64e0ba7c0517fcf1219592feb21ae424e8027229dfa98c"
+    },
+    "examples_Performance_benchmark_profile_study_base_config_m": {
+      "path": "examples/Performance/benchmark_profile/study_base_config.m",
+      "sha256": "2b3903144e1f2cd69795a1d24e1e93105e3ea89768c8f5f3aa7553dddeda39ba"
+    },
+    "examples_Performance_benchmark_profile_study_evaluate_design_m": {
+      "path": "examples/Performance/benchmark_profile/study_evaluate_design.m",
+      "sha256": "e14a21efe0bb2d9b9d7f3187b4c3f671ec089f6ff96773074b8f3b56cacd79e9"
+    },
+    "examples_Performance_benchmark_profile_profile_freeze_manifest_": {
+      "path": "examples/Performance/benchmark_profile/profile_freeze_manifest.json",
+      "sha256": "b55e31d87d18e90e8c0b8d278bd4111d494610b62f253194ea16cfcf78252eca"
+    }
+  },
+  "olhoff_implementation": {
+    "implementation": "analysis/Olhoff",
+    "role": "PRODUCTION - the only Olhoff implementation production may execute",
+    "production_preset": "duOlhoffPedersenAdaptiveBoxSensitivityFiltered",
+    "production_preset_event_date": "2026-09-13",
+    "benchmark_olhoff_preset": "duOlhoffPedersenAdaptiveBoxSensitivityFiltered",
+    "registered_presets": [
+      "duOlhoffSimpEq4bBetaStallLadderSensitivityFiltered",
+      "duOlhoffSimpEq4bThreeRungStageExhaustionSensitivityFiltered",
+      "duOlhoffPedersenAdaptiveBoxSensitivityFiltered"
+    ],
+    "upstream_preset_alias": "duOlhoffAdaptivePedersen",
+    "promoted_from_parent_successful_science_commit": "6b0870850d7407a0f2fc31dbf0d0f318c2e5f2f7",
+    "promoted_from_repository": "/Users/piotrek/Programming/Matlab/Olhoff",
+    "promoted_from_branch": "migration/upstream-olhoffcurrent-capabilities",
+    "promoted_from_commit": "253069262407885a8b759a9e721c4f0a7d3a397d",
+    "promotion_date": "2026-09-13",
+    "source_tree_sha256": "c88915ffff201fefd750b412cbabe45fd310e7b86021079f73448ab94b3aed2f",
+    "source_n_files": 79,
+    "source_integrity_ok": true,
+    "currentness_state": "UPSTREAM_UNREACHABLE",
+    "main_repo_commit": "unknown",
+    "epistemic_status": "Du-Olhoff RECONSTRUCTION, Pedersen/adaptive-box formulation (class C controller and filter radius, class B/D material law): SIMP p = 3 with the Pedersen (2000) linearized low-density stiffness (rho*rho0^(p-1) below rho0 = 0.1) and LINEAR mass, eq. (2); a per-element ADAPTIVE move box (initial 0.10, floor 0.002, x1.2 on monotone / x0.7 on reversing outer steps); NATURAL termination by ||drho||_2 < 0.05*sqrt(NE/3200) with no guards and no persistence, a heuristic design-change stop and not a KKT certificate; Sigmund sensitivity filter on all f_sk at a FIXED PHYSICAL radius R = 0.06 (1.2 elements at 160x20, 6 at 800x100). This is a DISTINCT formulation from the historical SIMP + eq. (4b) OlhoffCurrent reconstruction (duOlhoffSimpEq4bBetaStallLadderSensitivityFiltered), not a bug fix of it; Pedersen stiffness is the alternative Du & Olhoff sec. 2.2 name, not their choice. Terminal bimodality is NOT expected beyond coarse meshes: in the committed R = 0.06 sweep the optimum is bimodal only at 160x20 (native gap12 0.7 %) and native gap12 is 11.8-24.5 % from 240x30 to 800x100. Native eigenfrequencies are those of the Pedersen/linear-mass model; any cross-method table must name its evaluator model. Must NOT be labelled \"Olhoff 2007\". Field-level provenance (A/B/C/D) is documented in analysis/Olhoff/+impl/architecture/docs/SCIENTIFIC_CONFIG_PROVENANCE.md and is printed per run by olh.config.describe.",
+    "implementation_map": "analysis/Olhoff/README.md"
+  },
+  "environment": {
+    "matlab_version": "24.1.0.2603908 (R2024a) Update 3",
+    "matlab_release": "2024a",
+    "computer": "PCWIN64",
+    "max_num_comp_threads": 1,
+    "single_thread_requested": true,
+    "blas_library": "Intel(R) oneAPI Math Kernel Library Version 2023.2-Product Build 20230613 for Intel(R) 64 architecture applications (CNR branch AVX512_E1)",
+    "hostname": "BIO-2_HELI"
+  },
+  "repository": {
+    "path": "C:\\Users\\ptauzow\\Programming\\wstudy\\tol_rel3e-2",
+    "git_available": false,
+    "head": "UNKNOWN",
+    "branch": "UNKNOWN",
+    "dirty": "UNKNOWN",
+    "dirty_files": []
+  },
+  "run_class": {
+    "run_label": "campaign_remote_stagnation_x_w10_rel3e-2_gray2e-2",
+    "scientific_evidence": true,
+    "performance_campaign": true,
+    "max_outer_override": [],
+    "yuksel_max_iters": 5000,
+    "yuksel_max_iters_frozen": 1000,
+    "proposed_max_iters_frozen": 2000,
+    "olhoff_max_outer_frozen": 400,
+    "production_stop_rules": false,
+    "stop_settings": {
+      "proposed": {
+        "criterion": "stagnation_x",
+        "tol": [],
+        "window": 10,
+        "objectiveTol": 0.02,
+        "graynessTol": 0.02,
+        "relativeChangeTol": 0.03,
+        "maxIters": []
+      },
+      "yuksel": {
+        "criterion": "stagnation_x",
+        "stage1Tol": [],
+        "stage2Tol": [],
+        "window": 10,
+        "objectiveTol": 0.02,
+        "graynessTol": 0.02,
+        "relativeChangeTol": 0.03
+      },
+      "olhoff": {
+        "criterion": "stagnation_x",
+        "c": [],
+        "tol": [],
+        "window": 10,
+        "objectiveTol": 0.02,
+        "graynessTol": 0.02,
+        "relativeChangeTol": 0.03,
+        "maxOuter": 1000
+      }
+    },
+    "warmup_performed": true
+  },
+  "caveats": {
+    "table_caption": "Count/time columns represent method-native computational stages and are not mathematically identical across methods. Total wall time is the common performance quantity.",
+    "olhoff": "Du-Olhoff RECONSTRUCTION, Pedersen/adaptive-box formulation (class C controller and filter radius, class B/D material law): SIMP p = 3 with the Pedersen (2000) linearized low-density stiffness (rho*rho0^(p-1) below rho0 = 0.1) and LINEAR mass, eq. (2); a per-element ADAPTIVE move box (initial 0.10, floor 0.002, x1.2 on monotone / x0.7 on reversing outer steps); NATURAL termination by ||drho||_2 < 0.05*sqrt(NE/3200) with no guards and no persistence, a heuristic design-change stop and not a KKT certificate; Sigmund sensitivity filter on all f_sk at a FIXED PHYSICAL radius R = 0.06 (1.2 elements at 160x20, 6 at 800x100). This is a DISTINCT formulation from the historical SIMP + eq. (4b) OlhoffCurrent reconstruction (duOlhoffSimpEq4bBetaStallLadderSensitivityFiltered), not a bug fix of it; Pedersen stiffness is the alternative Du & Olhoff sec. 2.2 name, not their choice. Terminal bimodality is NOT expected beyond coarse meshes: in the committed R = 0.06 sweep the optimum is bimodal only at 160x20 (native gap12 0.7 %) and native gap12 is 11.8-24.5 % from 240x30 to 800x100. Native eigenfrequencies are those of the Pedersen/linear-mass model; any cross-method table must name its evaluator model. Must NOT be labelled \"Olhoff 2007\". Field-level provenance (A/B/C/D) is documented in analysis/Olhoff/+impl/architecture/docs/SCIENTIFIC_CONFIG_PROVENANCE.md and is printed per run by olh.config.describe.",
+    "olhoff_label": "The Olhoff column is labelled \"Du-Olhoff reconstruction (Pedersen stiffness + linear mass, adaptive box)\" and must not be labelled \"Olhoff 2007\". It is produced by analysis/Olhoff at the named preset duOlhoffPedersenAdaptiveBoxSensitivityFiltered (upstream preset duOlhoffAdaptivePedersen @ 2530692). It is NOT the historical SIMP + eq. (4b) realization that earlier campaigns labelled \"Du-Olhoff reconstruction (M4)\" (preset duOlhoffSimpEq4bBetaStallLadderSensitivityFiltered): the two differ in the low-density material law and the outer controller.",
+    "other_column": "Stage time [s] = Time 1 + Time 2, computed before rounding. Other [s] is overhead_time_s: everything inside the timed solve but outside the two named stages, including setup, final modal analysis and result assembly. Other includes computations too. Total wall time [s] = Stage time + Other. Method-specific configuration dispatch is included only where it lies inside the recorded timer; Du-Olhoff configuration resolution precedes its timer.",
+    "omega1_native_flag_tol": 0.05,
+    "omega1_columns": "omega_1 native is the first eigenfrequency of the converged design under the solver's own material model, which differs per method (Proposed: SIMP p = 3, E_min = 1e-9 E_0, linear mass, rho_min = 1e-9, design floor 0; Yuksel: SIMP p = 3, E_min = 1e-9 E_0, mass linear above rho = 0.1 and proportional to the sixth power of rho below it; Du-Olhoff: Pedersen stiffness, linear mass). omega_1 E1 is the same design under the frozen common evaluator E1 (SIMP p = 3, E_min = 1e-6 E_0, linear mass), classifier-selected structural mode, computed outside every timer; it is the only omega_1 that is comparable across methods. A dagger marks a native value that deviates from E1 by more than 5%: the native model then returns a localized mode of near-void elements, not the structural frequency.",
+    "proposed_preparation": "Proposed Stage 1 preparation (initialization minus the reference eigenanalysis) is one-off setup and is reported in Other, never in Time 1. It is a fixed cost that does not scale with the mesh; the first measured row of a session also carries that session's first-call costs.",
+    "sparse_step": "Per-iteration cost of all three methods steps up between 640x80 and 720x90 while the Du-Olhoff inner MMA, which does no sparse assembly, does not. The step coincides with the number of DOFs crossing 2^17 = 131072 (103842 at 640x80, 131222 at 720x90). All three solvers assemble K and M with MATLAB sparse(i,j,v,n,n) every iteration, and in isolation that call measured about 4x slower for n >= 131072 (MATLAB R2025b, Apple silicon, 1 thread, 2026-09-14: 0.086 s at n = 131000, 0.382 s at n = 131072, 4e6 triplets), whereas backslash, decomposition and eigs scale smoothly across the same sizes. Exponents fitted across this boundary include the step: they describe the assembly primitive as much as the methods.",
+    "memory": "Reliable, method-independent peak-memory measurement was not available in the MATLAB environment; memory was omitted rather than reported with inconsistent semantics.",
+    "olhoff_iteration_counts": "The outer iteration count of the Du-Olhoff reconstruction is set by its per-element adaptive move box and its mesh-scaled design-change tolerance, neither of which the original publication specifies, and it is NOT monotone in the mesh (committed R = 0.06 sweep: 121, 111, 101, 93, 112, 130, 156, 204, 246 outer iterations from 160x20 to 800x100). Per-outer-iteration cost is therefore reported next to total wall time.",
+    "scaling": "Scaling exponents may be fitted only to complete campaign data and never to smoke or preflight runs. For the Du-Olhoff reconstruction the outer iteration count is a property of the reconstruction's controller and stop, not of the published method, and need not be monotone in the mesh; a total-time exponent mixes per-iteration cost with that count, so the per-outer-iteration cost fit is reported alongside it. Either exponent describes this reconstruction, not the published method."
+  },
+  "timing_schema": {
+    "schema_version": "conference_benchmark_timing/2",
+    "schema_history": {
+      "v1": "Proposed time1 = solver initialization INCLUDING the reference eigenanalysis (stage1_eigenanalysis_and_preparation_s).",
+      "v2": "2026-09-14: Proposed time1 = the reference eigenanalysis ALONE (stage1_reference_eigenanalysis_s); the preparation moved to overhead_time_s, where the Yuksel and Du-Olhoff records already place their setup, so that the Other column means the same thing on every row. Recorded v1 rows are brought to v2 by confbench_proposed_times from their recorded sub-interval timers (stage1_time_s, stage1_reference_eigen_time_s); nothing is re-timed."
+    },
+    "common": {
+      "stage_time_s": "time1 + time2, computed before rounding; printed as Stage time [s]. This is the sum of the named stages, not all computational work: overhead_time_s includes setup and final modal analysis.",
+      "total_wall_time_s": "Caller-side tic/toc around the solve and nothing else. CSV/JSON/MAT writing, plotting, table formatting, LaTeX generation, the common E1/E2/E3 evaluator and topology rendering are all outside it.",
+      "overhead_time_s": "Whatever the solve spends outside the two named stages: configuration dispatch, model build, filter preparation, the final modal analysis and result assembly. It exists so that no microsecond has to be forced into a named stage. Printed in the table as the \"Other [s]\" column, for every method alike.",
+      "identity": "stage_time_s = time1 + time2; total_wall_time_s = stage_time_s + overhead_time_s (before display rounding)",
+      "timing_accounting_residual_s": "total_wall_time_s minus (time1 + time2 + overhead_time_s).",
+      "timing_accounting_fail": "TIMING_ACCOUNTING_FAIL: set when the residual exceeds the predeclared tolerance recorded alongside it.",
+      "independent_crosscheck_residual_s": "A SECOND, independent measurement of the same interval: the caller-side total minus the solver's own self-reported wall time. Unlike the identity above it is not an algebraic tautology, so it detects a mis-nested timer.",
+      "threads": "All runs are single-threaded (maxNumCompThreads(1)).",
+      "memory": "NOT MEASURED and NOT REPORTED. Reliable, method-independent peak-memory measurement was not available in the MATLAB environment; memory was omitted rather than reported with inconsistent semantics."
+    },
+    "methods": {
+      "Proposed": {
+        "architecture": "one reference eigenanalysis, then a SIMP topology optimization",
+        "count1": {
+          "name": "eigenanalysis_solves",
+          "value": "always 1",
+          "meaning": "The number of reference eigenanalyses performed. This is a SOLVE count. It is NOT an optimization iteration and must not be read as one."
+        },
+        "count2": {
+          "name": "simp_iterations",
+          "meaning": "SIMP topology-optimization iterations."
+        },
+        "time1": {
+          "name": "stage1_reference_eigenanalysis_s",
+          "boundary": "the single reference eigenanalysis of the solid domain and NOTHING else: assembly of K0 and M0, the eigensolve, extraction of the frozen mode(s). Solver preparation (mesh, element matrices, connectivity, filter, boundary conditions) is NOT in it; it is in overhead_time_s. The detailed CSV keeps stage1_time_s (initialization including the eigenanalysis, the schema-1 Time 1) and stage1_preparation_time_s = stage1_time_s - time1."
+        },
+        "time2": {
+          "name": "stage2_simp_time_s",
+          "boundary": "the SIMP optimization loop only."
+        },
+        "assertions": [
+          "stage1_reference_eigen_solves == 1",
+          "time1 <= stage1_time_s (the eigenanalysis is a sub-interval of the initialization)",
+          "overhead_time_s = total_wall_time_s - time1 - time2 (preparation + final modal analysis + dispatch)"
+        ]
+      },
+      "Yuksel": {
+        "architecture": "two sequential optimization stages",
+        "count1": {
+          "name": "stage1_iterations",
+          "meaning": "Stage-1 optimization iterations."
+        },
+        "count2": {
+          "name": "stage2_iterations",
+          "meaning": "Stage-2 optimization iterations."
+        },
+        "time1": {
+          "name": "stage1_time_s",
+          "boundary": "the Stage-1 loop only."
+        },
+        "time2": {
+          "name": "stage2_time_s",
+          "boundary": "the Stage-2 loop only; disjoint from Stage 1."
+        },
+        "assertions": [
+          "N_total = N1 + N2",
+          "T1 + T2 = optimization_loop_time (non-overlapping timers)"
+        ]
+      },
+      "DuOlhoffReconstruction": {
+        "label": "Du-Olhoff reconstruction (Pedersen stiffness + linear mass, adaptive box)",
+        "preset": "duOlhoffPedersenAdaptiveBoxSensitivityFiltered",
+        "upstream_preset": "duOlhoffAdaptivePedersen",
+        "upstream_commit": "253069262407885a8b759a9e721c4f0a7d3a397d",
+        "architecture": "NESTED: an outer loop, each of whose iterations contains a complete MMA sub-optimization.",
+        "count1": {
+          "name": "outer_iterations",
+          "meaning": "Fig. 1 outer iterations."
+        },
+        "count2": {
+          "name": "inner_mma_iterations_total",
+          "meaning": "cumulative nested MMA sub-iterations over the whole run."
+        },
+        "time1": {
+          "name": "outer_time_excluding_inner_s",
+          "boundary": "every computational region of an outer iteration EXCEPT the nested MMA solve: FE assembly, the eigenproblem, modal processing, generalized-gradient sensitivities, sensitivity filtering, local subproblem construction, the step controller, the design update, bookkeeping and the convergence test. Measured as sum(t_outer) - sum(t_inner) from per-iteration timers, so the nested solve cannot be double-counted."
+        },
+        "time2": {
+          "name": "inner_mma_time_total_s",
+          "boundary": "the nested MMA loop, and only that."
+        },
+        "derived": [
+          "inner_iterations_per_outer_mean",
+          "inner_time_per_outer_mean_s",
+          "inner_time_per_inner_iteration_mean_s",
+          "inner_time_share_pct"
+        ],
+        "per_outer_iteration_cost": {
+          "why": "the outer iteration count need not be monotone in the mesh, so total wall time alone cannot be read as a per-iteration scaling law",
+          "fields": [
+            "outer_time_total_s = sum(t_outer)",
+            "outer_time_per_outer_mean_s = sum(t_outer)/N_outer",
+            "outer_time_per_outer_median_s = median(t_outer)",
+            "outer_time_excluding_inner_per_outer_mean_s = (sum(t_outer)-sum(t_inner))/N_outer",
+            "eigen_time_per_outer_mean_s = sum(t_eig)/N_outer (FE assembly + eigensolve)",
+            "gradient_time_per_outer_mean_s = sum(t_grad)/N_outer",
+            "total_wall_time_per_outer_s = total_wall_time_s/N_outer",
+            "inner_time_per_outer_mean_s, inner_time_per_inner_iteration_mean_s"
+          ]
+        },
+        "prohibited": "N_outer + N_inner must NEVER be reported as a generic iteration count: the two are different objects.",
+        "caveat": "Du-Olhoff RECONSTRUCTION, Pedersen/adaptive-box formulation (class C controller and filter radius, class B/D material law): SIMP p = 3 with the Pedersen (2000) linearized low-density stiffness (rho*rho0^(p-1) below rho0 = 0.1) and LINEAR mass, eq. (2); a per-element ADAPTIVE move box (initial 0.10, floor 0.002, x1.2 on monotone / x0.7 on reversing outer steps); NATURAL termination by ||drho||_2 < 0.05*sqrt(NE/3200) with no guards and no persistence, a heuristic design-change stop and not a KKT certificate; Sigmund sensitivity filter on all f_sk at a FIXED PHYSICAL radius R = 0.06 (1.2 elements at 160x20, 6 at 800x100). This is a DISTINCT formulation from the historical SIMP + eq. (4b) OlhoffCurrent reconstruction (duOlhoffSimpEq4bBetaStallLadderSensitivityFiltered), not a bug fix of it; Pedersen stiffness is the alternative Du & Olhoff sec. 2.2 name, not their choice. Terminal bimodality is NOT expected beyond coarse meshes: in the committed R = 0.06 sweep the optimum is bimodal only at 160x20 (native gap12 0.7 %) and native gap12 is 11.8-24.5 % from 240x30 to 800x100. Native eigenfrequencies are those of the Pedersen/linear-mass model; any cross-method table must name its evaluator model. Must NOT be labelled \"Olhoff 2007\". Field-level provenance (A/B/C/D) is documented in analysis/Olhoff/+impl/architecture/docs/SCIENTIFIC_CONFIG_PROVENANCE.md and is printed per run by olh.config.describe."
+      }
+    },
+    "cross_method_warning": "Count and time columns represent method-native computational stages and are not mathematically identical across methods. Total wall time is the common performance quantity."
+  },
+  "warmup": {
+    "ran": true,
+    "mesh": [
+      48,
+      6
+    ],
+    "notes": [
+      "Proposed: CAP_HIT in 0.65 s",
+      "Yuksel: CAP_HIT in 0.29 s"
+    ]
+  },
+  "preflight": {
+    "checks": [
+      {
+        "name": "cfg.resolutions is a non-empty N-by-2 integer matrix",
+        "pass": true,
+        "detail": "9 mesh(es): 160x20, 240x30, 320x40, 400x50, 480x60, 560x70, 640x80, 720x90, 800x100"
+      },
+      {
+        "name": "every nely is even (mid-height supports)",
+        "pass": true,
+        "detail": "odd nely at row(s): zeros(1,0)"
+      },
+      {
+        "name": "no duplicate resolutions",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "at least one method enabled",
+        "pass": true,
+        "detail": "proposed=1 yuksel=1 olhoff=0"
+      },
+      {
+        "name": "scientific_evidence derived from cfg, not declared",
+        "pass": true,
+        "detail": "scientific_evidence=1 (min NE = 3200, floor 3200 = 160x20; override=[]; budgets used/frozen: yuksel 5000/1000, proposed 2000/2000, olhoff 1000/400)"
+      },
+      {
+        "name": "a performance campaign is also scientific evidence",
+        "pass": true,
+        "detail": "performance_campaign=1"
+      },
+      {
+        "name": "meshes above 160x20 are explicitly acknowledged",
+        "pass": true,
+        "detail": "8 mesh(es) exceed 160x20. Set cfg.confirmLongCampaign = true in performance_comparison.m to run them."
+      },
+      {
+        "name": "single-threaded execution is in force",
+        "pass": true,
+        "detail": "maxNumCompThreads = 1, requested single thread = 1"
+      },
+      {
+        "name": "no non-production Olhoff directory is on the MATLAB path",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "no Olhoff-family name resolves OR SHADOWS into a non-production tree",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "run_topopt_from_json is the repository tool copy",
+        "pass": true,
+        "detail": "C:\\Users\\ptauzow\\Programming\\wstudy\\tol_rel3e-2\\tools\\Matlab\\run_topopt_from_json.m"
+      },
+      {
+        "name": "the common E1/E2/E3 evaluator is the frozen study copy",
+        "pass": true,
+        "detail": "C:\\Users\\ptauzow\\Programming\\wstudy\\tol_rel3e-2\\examples\\Performance\\benchmark_profile\\study_evaluate_design.m"
+      },
+      {
+        "name": "Proposed runs its frozen profile",
+        "pass": true,
+        "detail": "proposed_practical_move02_tol001"
+      },
+      {
+        "name": "Yuksel runs its frozen profile",
+        "pass": true,
+        "detail": "yuksel_practical_move01_tol001"
+      },
+      {
+        "name": "no memory instrumentation is requested",
+        "pass": true,
+        "detail": "memory is not measured and not reported. Reliable, method-independent peak-memory measurement was not available in the MATLAB environment; memory was omitted rather than reported with inconsistent semantics."
+      },
+      {
+        "name": "output directory does not overwrite earlier evidence",
+        "pass": true,
+        "detail": "outputDir = C:\\Users\\ptauzow\\Programming\\wstudy\\tol_rel3e-2\\examples\\Performance\\paper_benchmark\\campaign_remote_stagnation_x_w10_rel3e-2_gray2e-2"
+      },
+      {
+        "name": "timing schema is defined for every enabled method",
+        "pass": true,
+        "detail": "Count and time columns represent method-native computational stages and are not mathematically identical across methods. Total wall time is the common performance quantity."
+      },
+      {
+        "name": "the Du-Olhoff caveat is defined and non-empty",
+        "pass": true,
+        "detail": "Du-Olhoff RECONSTRUCTION, Pedersen/adaptive-box formulation (class C controller and filter radius, class B/D material law): SIMP p = 3 with the Pedersen (2000) linearized low-density stiffness (rho*rho0^(p-1) below rho0 = 0.1) and LINEAR mass, eq. (2); a per-element ADAPTIVE move box (initial 0.10, floor 0.002, x1.2 on monotone / x0.7 on reversing outer steps); NATURAL termination by ||drho||_2 < 0.05*sqrt(NE/3200) with no guards and no persistence, a heuristic design-change stop and not a KKT certificate; Sigmund sensitivity filter on all f_sk at a FIXED PHYSICAL radius R = 0.06 (1.2 elements at 160x20, 6 at 800x100). This is a DISTINCT formulation from the historical SIMP + eq. (4b) OlhoffCurrent reconstruction (duOlhoffSimpEq4bBetaStallLadderSensitivityFiltered), not a bug fix of it; Pedersen stiffness is the alternative Du & Olhoff sec. 2.2 name, not their choice. Terminal bimodality is NOT expected beyond coarse meshes: in the committed R = 0.06 sweep the optimum is bimodal only at 160x20 (native gap12 0.7 %) and native gap12 is 11.8-24.5 % from 240x30 to 800x100. Native eigenfrequencies are those of the Pedersen/linear-mass model; any cross-method table must name its evaluator model. Must NOT be labelled \"Olhoff 2007\". Field-level provenance (A/B/C/D) is documented in analysis/Olhoff/+impl/architecture/docs/SCIENTIFIC_CONFIG_PROVENANCE.md and is printed per run by olh.config.describe."
+      }
+    ],
+    "notes": [
+      "stopping tolerances differ from production (cfg.stop): a valid run, but NOT the regime of the Table 1 campaign; the Olhoff assertions below check the production preset, the changed rule is applied on top"
+    ],
+    "pass": true
+  },
+  "cap_summary": {
+    "any_cap_hit": false,
+    "n_cap_hit": 0,
+    "n_records": 18,
+    "cap_hit_rows": [],
+    "meaning": "CAP_HIT means a method reached a safety budget instead of its own stopping rule. Such rows are reported but are excluded from every scaling fit and must not be described as converged."
+  },
+  "path_scrub": {
+    "removed_entries": [],
+    "rationale": "Non-production Olhoff implementations inherited from this MATLAB session were removed from the path before preflight, so dispatch is a property of this driver rather than of whatever ran earlier in the session. The sole production implementation is analysis/Olhoff."
+  }
+}

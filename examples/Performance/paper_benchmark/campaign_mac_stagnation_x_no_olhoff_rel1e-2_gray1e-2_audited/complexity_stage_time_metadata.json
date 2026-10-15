@@ -1,0 +1,90 @@
+{
+  "quantity": "stage_time_s = time1 + time2",
+  "fit_allowed": false,
+  "refusal_reason": "this run is not a complete performance campaign; a scaling exponent must not be fitted to smoke or preflight data",
+  "generated_by": "confbench_complexity_plots.m",
+  "methods": [
+    "Yuksel",
+    "Proposed"
+  ],
+  "elements": [
+    3200,
+    7200,
+    12800,
+    20000
+  ],
+  "stage_time_s": [
+    [
+      1.062867625,
+      0.51180925
+    ],
+    [
+      1.824519375,
+      1.1363194166666668
+    ],
+    [
+      2.9916886666666667,
+      2.0462137916666667
+    ],
+    [
+      5.0788284583333336,
+      3.0214250416666668
+    ]
+  ],
+  "fit_mask": [
+    [
+      true,
+      true
+    ],
+    [
+      true,
+      true
+    ],
+    [
+      true,
+      true
+    ],
+    [
+      true,
+      true
+    ]
+  ],
+  "free": {
+    "C": [
+      null,
+      null
+    ],
+    "p": [
+      null,
+      null
+    ],
+    "R2": [
+      null,
+      null
+    ],
+    "n": [
+      4,
+      4
+    ],
+    "fit_space": "log(stage time)"
+  },
+  "fixed": {
+    "C": [
+      null,
+      null
+    ],
+    "p": [
+      null,
+      null
+    ],
+    "R2": [
+      null,
+      null
+    ],
+    "n": [
+      4,
+      4
+    ],
+    "fit_space": "stage time"
+  }
+}

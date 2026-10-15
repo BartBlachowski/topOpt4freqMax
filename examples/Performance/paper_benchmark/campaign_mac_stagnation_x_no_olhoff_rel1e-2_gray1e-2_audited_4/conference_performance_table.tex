@@ -1,0 +1,46 @@
+% Conference performance table -- generated, do not edit by hand.
+% Method provenance and caveats: conference_performance_table.csv, BENCHMARK_NOTES.md.
+% Columns: Stage time [s] = Time 1 + Time 2, summed before rounding. Other, total wall time and omega_1 (native and common evaluator E1) are in the CSV only.
+\begin{table}[t]
+\centering
+\begingroup
+\setlength{\tabcolsep}{3pt}
+\scriptsize
+\providecommand{\thinhline}{\noalign{\global\setlength{\arrayrulewidth}{0.2pt}}\hline\noalign{\global\setlength{\arrayrulewidth}{0.4pt}}}
+\begin{tabular}{llrrrrr}
+\hline
+Mesh & Method & Count 1 & Count 2 & Time 1 [s] & Time 2 [s] & Stage time [s] \\
+\hline
+$160\times20$ & Yuksel-Yilmaz & 64 & 28 & 0.56 & 0.32 & 0.88 \\
+ & Proposed & 1 & 39 & 0.03 & 0.47 & 0.50 \\
+\thinhline
+$240\times30$ & Yuksel-Yilmaz & 49 & 23 & 0.96 & 0.58 & 1.53 \\
+ & Proposed & 1 & 40 & 0.06 & 0.94 & 1.01 \\
+\thinhline
+$320\times40$ & Yuksel-Yilmaz & 42 & 20 & 1.50 & 0.93 & 2.43 \\
+ & Proposed & 1 & 41 & 0.11 & 1.79 & 1.90 \\
+\thinhline
+$400\times50$ & Yuksel-Yilmaz & 42 & 21 & 2.65 & 1.89 & 4.55 \\
+ & Proposed & 1 & 38 & 0.19 & 2.70 & 2.89 \\
+\thinhline
+$480\times60$ & Yuksel-Yilmaz & 43 & 21 & 3.70 & 2.28 & 5.98 \\
+ & Proposed & 1 & 41 & 0.29 & 4.84 & 5.12 \\
+\thinhline
+$560\times70$ & Yuksel-Yilmaz & 43 & 21 & 5.00 & 3.22 & 8.23 \\
+ & Proposed & 1 & 44 & 0.38 & 6.14 & 6.51 \\
+\thinhline
+$640\times80$ & Yuksel-Yilmaz & 45 & 21 & 7.18 & 4.28 & 11.46 \\
+ & Proposed & 1 & 40 & 0.50 & 7.89 & 8.38 \\
+\thinhline
+$720\times90$ & Yuksel-Yilmaz & 44 & 22 & 13.31 & 10.34 & 23.65 \\
+ & Proposed & 1 & 40 & 0.99 & 15.60 & 16.58 \\
+\thinhline
+$800\times100$ & Yuksel-Yilmaz & 44 & 23 & 15.99 & 12.25 & 28.23 \\
+ & Proposed & 1 & 44 & 1.75 & 22.29 & 24.03 \\
+\hline
+\end{tabular}
+\endgroup
+\label{tab:conference-performance}
+\end{table}
+
+% Scaling caveat: Per-iteration cost of all three methods steps up between 640x80 and 720x90 while the Du-Olhoff inner MMA, which does no sparse assembly, does not. The step coincides with the number of DOFs crossing 2^17 = 131072 (103842 at 640x80, 131222 at 720x90). All three solvers assemble K and M with MATLAB sparse(i,j,v,n,n) every iteration, and in isolation that call measured about 4x slower for n >= 131072 (MATLAB R2025b, Apple silicon, 1 thread, 2026-09-14: 0.086 s at n = 131000, 0.382 s at n = 131072, 4e6 triplets), whereas backslash, decomposition and eigs scale smoothly across the same sizes. Exponents fitted across this boundary include the step: they describe the assembly primitive as much as the methods.

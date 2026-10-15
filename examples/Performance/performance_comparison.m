@@ -40,7 +40,7 @@ cfg = struct();
 %     160   20
 % ];
 
-% The four-resolution partial campaign:
+% % The four-resolution partial campaign:
 % cfg.resolutions = [
 %     160   20
 %     240   30
@@ -145,8 +145,8 @@ R1 = struct('window', 10, 'objectiveTol', 1e-2, 'graynessTol', 1e-2);
 R1.relativeChangeTol = 1e-2;   % no calibrated value
 
 % Proposed
-cfg.stop.proposed.criterion   = 'stagnation_x';   % production: 'max_change'
-cfg.stop.proposed.tol         = [];             % not read by 'stagnation'
+cfg.stop.proposed.criterion   = 'relative_l2_change';   % production: 'max_change'
+cfg.stop.proposed.tol         = 1e-2;             % not read by 'stagnation'
 cfg.stop.proposed.window      = R1.window;
 cfg.stop.proposed.objectiveTol = R1.objectiveTol;
 cfg.stop.proposed.graynessTol = R1.graynessTol;
@@ -215,7 +215,7 @@ cfg.stop.olhoff.maxOuter      = 1000;   % production: 400   (preset runtime defa
 % cfg.stop.olhoff.maxOuter   = 1000;   % production: 400   (preset runtime default; safety budget)
 
 % ---- Which methods -------------------------------------------------------
-cfg.methods = struct('proposed', true, 'yuksel', true, 'olhoff', true);
+cfg.methods = struct('proposed', true, 'yuksel', true, 'olhoff', false);
 
 % ---- Execution -----------------------------------------------------------
 cfg.singleThread = true;    % pin maxNumCompThreads(1) for every measured run
@@ -260,7 +260,7 @@ cfg.outputDir = '';                  % auto: examples/Performance/conference_ben
 % cfg.runLabel  = 'campaign_mac_convergence_stagnation_r1_v1';   % Mac, calibrated R1 10/1e-3/5e-3, 'stagnation' (v1, v2)
 % cfg.runLabel  = 'campaign_windows_stagnation_x_w10_rel1e-2_gray1e-2';   % cancelled 2026-10-14 (17/27 rows): pre-audit assembly
 % 2026-10-14: after the fairness audit (conference_bench/FAIRNESS_AUDIT_2026-10-14.md)
-cfg.runLabel  = 'campaign_windows_stagnation_x_w10_rel1e-2_gray1e-2_audited';
+cfg.runLabel  = 'campaign_mac_relative_l2_change_no_olhoff_rel1e-2_gray1e-2';
 
 % ---- Timing-accounting tolerances (predeclared, recorded in the artifacts) --
 cfg.timingTolAbs     = 1e-6;   % |T_total - (T1+T2+T_overhead)|, seconds
