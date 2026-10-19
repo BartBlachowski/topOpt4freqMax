@@ -26,7 +26,7 @@
 % amsmath, amssymb, graphicx, xcolor, multirow, array, tabularx, booktabs,
 % subfig, tikz, natbib, hyperref, cleveref, enumitem, changepage.
 \usepackage[linesnumbered,ruled,vlined]{algorithm2e}
-
+\usepackage{verbatim}
 % Notation and keywords used by the algorithm2e blocks
 \newcommand{\Kmat}{\mathbf{K}}
 \newcommand{\Mmat}{\mathbf{M}}
@@ -61,7 +61,7 @@ Institute of Fundamental Technological Research, Polish Academy of Sciences, Paw
 \corres{Correspondence: bblach@ippt.pan.pl}
 
 % Abstract (single paragraph, about 200 words maximum; do not insert blank lines)
-\abstract{Topology optimization for maximizing natural frequencies is widely used to prevent structural resonance, but its practical application is often limited by the high computational cost of repeated eigenvalue analyses. This paper presents an efficient approach that approximates the topology maximizing a target vibration frequency by replacing the generalized eigenvalue problem with the solution of a linear system of equations. In contrast to the recent two-step static optimization framework of Yuksel and Yilmaz, the proposed method determines the approximate optimal topology through a single initial eigensolve followed by iterative static compliance minimization, rather than repeated dynamic eigenanalyses at every iteration. The method is validated on benchmark beam problems and a building-like structure with passive elements. Numerical results show that the proposed approach produces topologies comparable to existing methods while significantly reducing computational cost. With all three methods terminated by the same stopping criterion, the proposed algorithm is 77 to 151 times faster than the Olhoff formulation and 1.2 to 1.6 times faster than the Yuksel code on meshes from \texorpdfstring{$160 \times 20$}{160 x 20} to \texorpdfstring{$800 \times 100$}{800 x 100} elements. These results demonstrate that the proposed single-step static formulation provides a practical and computationally efficient tool for the rapid design of vibration-resistant structures.}
+\abstract{ Topology optimization for maximizing natural frequencies is widely used to prevent structural resonance, but the conventional method by Du and Olhoff incurs a high computational cost due to calculating the eigenvalue problem at each optimization step. To improve computational efficiency, the method by Yuksel and Yilmaz employs a two-step static optimization framework. In contrast, the proposed method determines the approximate optimal topology through a single initial eigensolve followed by iterative static compliance minimization. The method is validated on benchmark beam problems and a building-like structure with passive elements. Numerical results show that the proposed approach produces topologies comparable to existing methods while significantly reducing computational cost. With all three methods terminated by the same stopping criterion, the proposed algorithm is 77 to 151 times faster than the Du-Olhoff formulation and 1.2 to 1.6 times faster than the Yuksel-Yilmaz approach on meshes from \texorpdfstring{$160 \times 20$}{160 x 20} to \texorpdfstring{$800 \times 100$}{800 x 100} elements. These results demonstrate that the proposed single-step static formulation provides a practical and computationally efficient tool for the rapid design of vibration-resistant structures.}
 
 % Keywords (three to ten, separated by semicolons)
 \keyword{topology optimization; frequency maximization; quasi-static approximation; eigenvalue problem; modal analysis}
@@ -73,11 +73,11 @@ Institute of Fundamental Technological Research, Polish Academy of Sciences, Paw
 
 \begin{document}
 
+
 \section{Introduction}
 In many engineering fields, including aerospace and high-precision machinery, the optimal design of structures with respect to natural frequencies is critical for ensuring operational safety and longevity. Structural resonance occurs when the external excitation frequency matches a structural natural frequency, potentially leading to large deformations, fatigue failures, or catastrophic fractures. Consequently, maximizing the fundamental natural frequency—the lowest frequency mode—is a primary objective in dynamic topology optimization, as it broadens the safe operating range and effectively prevents resonance in lightweight structures.
 
 The foundational work in this field was significantly advanced by \citet{DU2007} and further expanded by \citet{OLHOFF2014}, who introduced a robust framework utilizing a nested iterative solution procedure (often referred to as a double-loop method) to maximize simple and multiple eigenfrequencies. Their approach employs a "bound formulation" to handle the inherent non-smoothness and lack of differentiability that occurs when eigenvalues coalesce or switch orders during the optimization process. In this scheme, the generalized eigenvalue problem is solved in the main loop, while an inner loop solves a sub-optimization problem for design variable increments, ensuring that the fundamental frequency is moved as far as possible from external excitation intervals.
-
 Beyond the traditional Solid Isotropic Material with Penalization (SIMP) method, several alternative frameworks have been developed to address frequency maximization. \citet{HUANG2010} developed the Bi-directional Evolutionary Structural Optimization (BESO) method, which utilizes discrete design variables and a modified interpolation scheme to effectively eliminate artificial localized modes in low-density regions. Another significant approach is the Level Set Method (LSM), as explored by \citet{XIA2011} and \citet{SHU2014}, which provides an explicit representation of structural boundaries and utilizes derivatives to handle multiple eigenvalues while maintaining the topological nature of the design. More recently, \citet{HUANG2025} provided a framework for Moving Morphable Component (MMC) based optimization, where structural layouts are optimized by updating the geometric parameters of morphable building blocks, offering crisp boundaries and a reduced number of design variables.
 
 To improve computational efficiency, \citet{YUKSEL2025} proposed a fast algorithm that avoids the high cost of eigenvalue calculations by transforming the dynamic problem into two sequential static optimization steps. The first step solves a compliance minimization problem under a static point load to obtain an initial estimate of the fundamental mode shape, while the second step refines this through an iterative process utilizing design-dependent inertial loads proportional to the structure's mass distribution. By leveraging Rayleigh’s principle, this method allows the fundamental frequency to be maximized using efficient static solvers, resulting in significant savings in run times compared to standard dynamic approaches.
@@ -87,6 +87,7 @@ Finally, researchers have addressed a diverse array of other complex dynamic pro
 In this paper, we present an efficient method for determining an approximate topology that maximizes a target natural frequency. In contrast to conventional approaches that require solving the generalized eigenvalue problem at every optimization step, such as \citet{DU2007}, the proposed method replaces repeated modal analysis with the solution of a linear system of equations. This approach is similar in principle to the work of \citet{YUKSEL2025}; however, our method distinguishes itself by determining an approximate solution through a single static problem rather than a two-step procedure, thereby further enhancing computational efficiency.
 
 The remainder of this paper is organized as follows. In Section 2, the theoretical framework for topology optimization for frequency maximization is established; specifically, Section 2.1 provides a review of existing approaches for fundamental frequency optimization, while Section 2.2 details the step-by-step procedure based on the approach proposed in this work. Section 3 presents three numerical examples: a simply supported beam used to validate the method against the Olhoff and Yuksel approaches, a clamped beam used to demonstrate multi-mode frequency control via a load-weighting parameter, and a building-like structure used to illustrate the method's applicability to problems with passive elements and complex geometry. In Section 4, a comprehensive discussion on various aspects of computational implementation is provided; Section 4.1 highlights the algorithmic differences between the implemented and original Olhoff formulations, while Section 4.2 evaluates the algorithm, efficiency, and practical merits of the proposed approach. Finally, Section 5 summarizes the findings and draws concluding remarks.
+
 
 \section{Topology Optimization for Frequency Maximization}
 
@@ -223,6 +224,171 @@ The first condition requires that the physical design has stopped changing, not 
 
 The criterion is applied to the iterations that update the physical design: the iterations of the proposed method, each of the two stages of the Yuksel--Yilmaz method separately (the window restarts at the beginning of Stage~2), and the outer iterations of the Du--Olhoff formulation, whose inner MMA loop keeps its own convergence test (Section~\ref{subsec:olhoffImpl}). Each method also has a safety cap that is never interpreted as convergence: $2000$ iterations for the proposed method, $5000$ iterations per stage for the Yuksel--Yilmaz method and $1000$ outer iterations for Du--Olhoff. No cap was reached in the results reported in Table~\ref{tab:performance}. Like the rules it replaces, \texttt{stagnation\_x} is a test of stagnation and not a certificate of optimality.
 
+
+\section{Comparison of the Numerical Implementation of Individual Methods}
+
+This section of the paper will discuss aspects related to the computer implementation of the discussed methods for maximizing vibration frequency. To provide a fair comparison of the computational results and to enable the reader to reproduce the results presented in the paper, all examples were calculated using the SIMP-based implementation developed by the authors. All the numerical codes discussed are publicly available as a GitHub repository (\href{https://github.com/BartBlachowski/topOpt4freqMax}{https://github.com/BartBlachowski/topOpt4freqMax}).
+
+This repository contains: a double-loop topological optimization method based on the work of Du and Olhoff (2007), a two-stage static method described by Yuksel and Yilmaz (2025), and the method proposed in this paper. All approaches discussed in this study were tested in MATLAB R2025b (The MathWorks, Inc., Natick, MA, USA).
+
+As is well known from the literature \citep{George1973,Davis2006}, the computational complexity of solving a system of linear equations depends on the algorithm and on the structure of the matrix. For a direct solver, for example Gaussian elimination, applied to a dense $n_\mathrm{dof} \times n_\mathrm{dof}$ matrix, where $n_\mathrm{dof}$ is the number of degrees of freedom, this complexity is $O(n_\mathrm{dof}^3)$. For large sparse systems, however, the cost of a single iteration of an iterative method is linear in the number of non-zero entries, so that the effective complexity is often much closer to linear. For a two-dimensional elasticity problem on a regular mesh, the solution cost is governed by the sparse factorization, whose approximate cost is $O(n_\mathrm{dof}^{3/2})$; hence, if the stiffness matrix represents a large two-dimensional plane-stress problem, the complexity is $O(n_\mathrm{dof}^{3/2})$ \citep{George1973,Davis2006}. A similar complexity is obtained when the first $J$ eigenpairs are determined using the shift-and-invert Lanczos method \citep{Saad2011}.
+
+To facilitate a better understanding of the topics discussed in this section, the numerical implementation of the individual methods is presented below in the form of pseudocode (Algorithms~\ref{alg:olhoff}--\ref{alg:proposed}).
+
+\subsection{Algorithmic Differences Between the Implemented and Original Olhoff Formulations}\label{subsec:olhoffImpl}
+
+The original formulation of \citet{OLHOFF2014} casts the fundamental-eigenfrequency maximization problem as a max-min bound problem in which the scalar bound variable $\beta \leq \lambda_j = \omega_j^2$, $j = n, n{+}1, \ldots, J$, plays simultaneously the role of objective and lower bound for the $J$ candidate eigenfrequencies. The computational procedure (Figure~1 of that reference) consists of a \emph{main outer loop} and an explicit \emph{inner loop}: at each outer iteration the generalized eigenvalue problem is solved, sensitivity vectors are assembled, and the inner loop then iteratively solves the bound sub-optimization problem~(19) for the \emph{increments} $\Delta x_e$ using MMA \citep{Svanberg1987} or linear programming until those increments converge, after which the design variables are updated as $x_e \mathrel{:=} x_e + \Delta x_e$. No density filter or projection is present in the original formulation.
+
+\begin{algorithm}[htbp]
+\DontPrintSemicolon
+\caption{Du--Olhoff bound formulation (nested outer/MMA loop).}
+\label{alg:olhoff}
+\KwIn{mesh and boundary conditions; $J \ge n$; $V_f$; window $W$; tolerances
+      $\varepsilon_x$, $\varepsilon_M$, $\varepsilon_{\mathrm{inner}}$}
+\KwOut{$\xvec^\ast$, $\omega_1(\xvec^\ast)$}
+\BlankLine
+$x_e \assign V_f$ for all $e = 1,\ldots,\Ne$; \quad
+$\beta \assign 0$; \quad $k \assign 0$; \quad $k_{\mathrm{in}} \assign 0$\;
+\BlankLine
+\While{test~(\ref{eqn:stagnationX}) on the last $W$ outer iterations is not satisfied}{
+  $k \assign k+1$\;
+  \textcolor{blue}{\textbf{Step 1 --- solution of eigenproblem and computation of gradients.}}\;
+  \quad solve $\Kmat(\xvec)\,\phivec_j = \lambda_j\,\Mmat(\xvec)\,\phivec_j$,
+        $\phivec_i^\top\Mmat\phivec_j = \delta_{ij}$, $i,j = 1,\ldots,J$\;
+  \quad detect the multiplicity $N$ of $\lambda_n$\;
+  \uIf{$N > 1$}{
+    generalized gradients
+    $\mathbf{g}_{ij} = \bigl\{\phivec_i^\top
+      (\partial\Kmat/\partial x_e - \lambda_n\,\partial\Mmat/\partial x_e)\phivec_j\bigr\}_{e=1}^{n_e}$,
+    $i,j = n,\ldots,n{+}N{-}1$\;
+  }
+  \Else{
+    $\partial\lambda_j/\partial x_e = \phivec_j^\top
+      (\partial\Kmat/\partial x_e - \lambda_j\,\partial\Mmat/\partial x_e)\phivec_j$,
+    $j = n,\ldots,J$\;
+  }
+  \quad filter the sensitivities (radius $r_{\min}$)\;
+  \BlankLine
+  \textcolor{blue}{\textbf{Step 2 --- optimal increment of the density vector (MMA).}}\;
+  \Repeat{}{
+    $k_{\mathrm{in}} \assign k_{\mathrm{in}}+1$\;
+    solve the MMA sub-problem for $\Delta x_e$ and update the optimal density increment;
+    \textbf{until} $\lVert \Delta\xvec\rVert < \varepsilon_{\mathrm{inner}}$\;
+  }
+  \BlankLine
+  $x_e \assign x_e + \Delta x_e$ for all $e$; \quad
+  $\beta \assign \min_{j = n,\ldots,J}\,\lambda_j(\xvec)$\;
+}
+\end{algorithm}
+
+
+The implementation used in this study (\texttt{analysis/Olhoff} in the repository) keeps this nested structure: one eigensolve per outer iteration, the bound sub-problem solved for the increments $\Delta x_e$ with the published MMA \citep{Svanberg1987}, and the bound variable $\beta$ treated as an additional variable of that sub-problem. As in the original, no density filter or projection is used, so the design variables are the physical densities. It departs from \citet{DU2007} in the following respects, most of which fill choices that the original leaves unspecified. First, artificial localized modes in low-density regions are suppressed not by the modified mass interpolation of \citet{DU2007} but by the alternative they mention: SIMP stiffness with $p = 3$, linearized below $x_e = 0.1$ following \citet{Pedersen2000}, together with a linear mass interpolation. Second, instead of detecting the multiplicity $N$ at every outer iteration, a fixed subspace $N = 2$ is used for the target mode $n = 1$, with $J = n + N = 3$; the generalized gradients $\mathbf{g}_{ij}$, including the off-diagonal terms and the diagonal offsets $\lambda_j - \lambda_n$, therefore always enter the sub-problem, which has $m = N + 2 = 4$ constraints (the $N$ bound constraints, the bound constraint for mode $J$, and the volume constraint). For the simple mode $J$ the standard sensitivity $\partial\lambda_J/\partial x_e = \boldsymbol{\phi}_J^{\mathrm{T}}(\partial\mathbf{K}/\partial x_e - \lambda_J\,\partial\mathbf{M}/\partial x_e)\boldsymbol{\phi}_J$ is used. Third, the sensitivity filter of \citet{Sigmund1997} is applied to all generalized gradients with a fixed physical radius $R = 0.06$~m (three elements at $400\times50$). Fourth, the increments are bounded by a per-element adaptive move limit that starts at $0.1$, is multiplied by $1.2$ when the last two outer steps of an element have the same sign and by $0.7$ when they reverse, and never falls below $0.002$. Finally, the inner MMA loop stops when the largest sub-iteration step falls below $5\%$ of the largest accumulated increment (with $5$ to $500$ sub-iterations), and the outer loop is terminated by the common \texttt{stagnation\_x} criterion of Section~\ref{subsec:stagnationX}.
+
+The eigenpairs are computed with the implicitly restarted Arnoldi method (\textsc{arpack} via \texttt{eigs}) in shift-and-invert mode, which requires one sparse Cholesky factorization of $\mathbf{K}$ per outer iteration to extract the $J = 3$ lowest eigenpairs. The inner MMA sub-iterations operate on the linearized sub-problem and require no further eigensolves.
+
+The cost structure of the implementation follows from Table~\ref{tab:performance}. At $400\times50$ the Du--Olhoff run takes $62$ outer iterations and $1413$ inner MMA iterations, about $23$ per outer iteration. The outer work (assembly, eigensolve, sensitivities, filtering and step control) takes $10.9$~s, or $0.18$~s per outer iteration, whereas the nested MMA solves take $317.8$~s, or $0.22$~s per inner iteration, i.e.\ $97\%$ of the stage time. Across all nine meshes the inner MMA solves account for $94$--$98\%$ of the Du--Olhoff stage time, so the cost of this method is dominated by the nested sub-optimization rather than by the eigensolve. The Yuksel--Yilmaz implementation (Algorithm~\ref{alg:yuksel}) requires one sparse factorization per iteration of either stage and no eigensolve inside the loop; at $400\times50$ it performs $55 + 26$ iterations in $5.2$~s ($0.06$~s per iteration). Under the common stopping criterion the iteration counts of both methods depend only weakly on the mesh: $76$--$110$ Stage-1 plus Stage-2 iterations for Yuksel--Yilmaz and $58$--$131$ outer iterations for Du--Olhoff. The ratio of their stage times, between $51\times$ and $102\times$ over the nine meshes, therefore mainly reflects the cost of an iteration, in particular the about $20$ nested MMA iterations within every Du--Olhoff outer iteration.
+
+\begin{algorithm}[htbp]
+\DontPrintSemicolon
+\caption{Yuksel--Yilmaz two-stage static method.}
+\label{alg:yuksel}
+\KwIn{mesh and boundary conditions; $V_f$; unit point load $\fvec_s$;
+      window $W$; tolerances $\varepsilon_x$, $\varepsilon_M$}
+\KwOut{$\xvec^\ast$, $\omega_1(\xvec^\ast)$}
+\BlankLine
+$x_e \assign V_f$ for all $e$; \quad $n_1 \assign 0$; \quad $n_2 \assign 0$\;
+\BlankLine
+\textcolor{blue}{\textbf{Stage 1 --- optimal topology by SIMP under the unit load.}}\;
+\Repeat{}{
+  $n_1 \assign n_1 + 1$\;
+  solve $\Kmat(\xvec)\,\uvec_s = \fvec_s$\;
+  $\dfrac{\partial c}{\partial x_e}
+    = -p\,x_e^{\,p-1}(E_0 - E_{\min})\,
+      \uvec_{s,e}^\top \mathbf{k}_e^0 \uvec_{s,e}$,\quad $e = 1,\ldots,\Ne$\;
+  filter the sensitivities; update $\xvec$ by OC bisection on
+    $\sum_e x_e V_e = V_f V_0$\;
+  \textbf{until} test~(\ref{eqn:stagnationX}) holds over the last $W$ Stage-1 iterations\;
+}
+\BlankLine
+$\uvec_d \assign \uvec_s$\;
+\BlankLine
+\textcolor{blue}{\textbf{Stage 2 --- design-dependent inertial load for SIMP.}}\;
+\Repeat{}{
+  $n_2 \assign n_2 + 1$\;
+  $\fvec_d \assign \Mmat(\xvec)\,\uvec_d$\;
+  solve $\Kmat(\xvec)\,\uvec_d = \fvec_d$\;
+  $\dfrac{\partial c}{\partial x_e}
+    = -p\,x_e^{\,p-1}(E_0 - E_{\min})\,
+      \uvec_{d,e}^\top \mathbf{k}_e^0 \uvec_{d,e}$\;
+  filter the sensitivities; update $\xvec$ by OC bisection on
+    $\sum_e x_e V_e = V_f V_0$\;
+  \textbf{until} test~(\ref{eqn:stagnationX}) holds over the last $W$ Stage-2 iterations (window restarted at Stage~2)\;
+}
+\BlankLine
+apply the Heaviside post-processing to obtain the solid--void design
+$\xvec^\ast$\;
+solve $\Kmat(\xvec^\ast)\phivec = \omega_1^2\,\Mmat(\xvec^\ast)\phivec$\;
+\end{algorithm}
+
+
+The factor of $80$--$825\times$ reported by \citet[Table~1]{YUKSEL2025} between their static method and their standard code is not directly comparable to the $51$--$102\times$ range observed here. Their reference is a standard dynamic topology optimization code that solves an eigenproblem at every iteration, whereas the reference here is the nested bound formulation, whose cost is dominated by the inner MMA solves; the two figures therefore measure different algorithmic contrasts.
+
+\subsection{The Proposed Approach: Algorithm, Efficiency, and Practical Merits}
+
+The proposed method replaces the dynamic eigenvalue optimization loop with a single initial eigensolve followed by an entirely static iteration. At initialization, the generalized eigenvalue problem $\mathbf{K}_0\boldsymbol{\phi}_1^{(0)} = (\omega_1^{(0)})^2\mathbf{M}_0\boldsymbol{\phi}_1^{(0)}$ is solved once on the solid reference domain ($x_e = 1$) to obtain the reference fundamental eigenpair $(\omega_1^{(0)},\boldsymbol{\phi}_1^{(0)})$. The mode shape and eigenvalue are then held \emph{fixed} for the duration of the optimization. At each subsequent iteration the density-dependent mass matrix $\mathbf{M}(\mathbf{x})$ is assembled under SIMP interpolation, and the equivalent static inertial load $\mathbf{f} = (\omega_1^{(0)})^2\,\mathbf{M}(\mathbf{x})\boldsymbol{\phi}_1^{(0)}$ is evaluated. The optimization sub-problem reduces to standard compliance minimization, $\min\,\mathbf{u}^\mathrm{T}\mathbf{K}\mathbf{u}$ subject to $\mathbf{K}\mathbf{u}=\mathbf{f}$ and the volume constraint, updated by the optimality criteria (OC) bisection rule. The load sensitivity term $\partial\mathbf{f}/\partial x_e$ is omitted, leaving a purely stiffness-based sensitivity $\partial c/\partial x_e = -p\,x_e^{p-1}(E_0 - E_\mathrm{min})\,\mathbf{u}_e^\mathrm{T}\mathbf{k}_e^0\mathbf{u}_e$, where $\mathbf{k}_e^0$ is the unit-density element stiffness matrix, that is inexpensive to compute and straightforward to filter. A single eigensolve is performed at termination to verify the achieved fundamental frequency.
+
+\begin{algorithm}[htbp]
+\DontPrintSemicolon
+\caption{Proposed quasi-static approximation (one reference eigenanalysis,
+         then SIMP).}
+\label{alg:proposed}
+\KwIn{mesh and boundary conditions; $V_f$; load cases
+      $\ell = 1,\ldots,n_c$ with reference modes $j(\ell)$; window $W$;
+      tolerances $\varepsilon_x$, $\varepsilon_M$}
+\KwOut{$\xvec^\ast$, $\omega_1(\xvec^\ast)$}
+\BlankLine
+\textcolor{blue}{\textbf{Step I --- initialization: eigenvalue problem on the design domain.}}\;
+assemble $\Kmat_0$ and $\Mmat_0$ on the solid reference domain\;
+solve $\Kmat_0\,\phivec_j^{(0)}
+       = (\omega_j^{(0)})^2\,\Mmat_0\,\phivec_j^{(0)}$,
+      $j = 1,\ldots,n_{\mathrm{modes}}$,
+      $n_{\mathrm{modes}} = \max_\ell j(\ell)$\;
+$n_{\mathrm{I}} \assign 1$\;
+\BlankLine
+$x_e \assign V_f$ for all $e$; \quad $n_{\mathrm{II}} \assign 0$\;
+\BlankLine
+\textcolor{blue}{\textbf{Step II --- optimal topology under the design-dependent inertial load.}}\;
+\Repeat{}{
+  $n_{\mathrm{II}} \assign n_{\mathrm{II}} + 1$\;
+  assemble $\Kmat(\xvec)$ and $\Mmat(\xvec)$\;
+  $c \assign 0$; \quad $\partial c/\partial x_e \assign 0$ for all $e$\;
+  \For{$\ell \assign 1$ \KwTo $n_c$}{
+    $\fvec_\ell \assign (\omega_{j(\ell)}^{(0)})^2\,
+       \Mmat(\xvec)\,\phivec_{j(\ell)}^{(0)}$\;
+    solve $\Kmat(\xvec)\,\uvec_\ell = \fvec_\ell$\;
+    $c \assign c + \uvec_\ell^\top \Kmat(\xvec)\,\uvec_\ell$\;
+    $\dfrac{\partial c}{\partial x_e} \mathrel{{-}{=}}
+       p\,x_e^{\,p-1}(E_0 - E_{\min})\,
+       \uvec_{\ell,e}^\top \mathbf{k}_e^0 \uvec_{\ell,e}$
+  }
+  apply the density-weighted sensitivity filter of radius $r_{\min}$\;
+  update $\xvec$ by OC bisection on $\sum_e x_e V_e = V_f V_0$\;
+  \textbf{until} test~(\ref{eqn:stagnationX}) holds over the last $W$ iterations\;
+}
+\end{algorithm}
+
+
+From a computational standpoint, each iteration requires one sparse factorization of $\mathbf{K}$ restricted to the free degrees of freedom (to solve the linear system $\mathbf{K}\mathbf{u} = \mathbf{f}$), one mass-matrix assembly, one sensitivity evaluation, and one OC bisection sweep — identical in structure and cost to a standard compliance minimization step. Because the Krylov iterations of \textsc{arpack} are absent, the per-iteration wall time of the proposed approach is modest (e.g.\ $0.044$~s/iter at $320{\times}40$, vs.\ $0.040$~s/iter for the Yuksel code). Moreover, the number of iterations is markedly lower: the fixed-mode gradient provides a stable and consistent descent direction from the first iteration, allowing convergence in $41$--$53$ iterations against $76$--$110$ Stage-1 plus Stage-2 iterations for the Yuksel code across the nine meshes. The net effect is a total runtime that is consistently the lowest of the three methods: at $320{\times}40$ the proposed approach completes in $2.5$~s against $3.3$~s for the Yuksel code and $275.6$~s for the Olhoff implementation, representing speedups of $1.3\times$ and $110\times$ respectively. At $400{\times}50$ the proposed approach completes in $3.7$~s, retaining speedups of $1.5\times$ over the Yuksel code and $88\times$ over the Olhoff implementation, and remains the fastest throughout.
+
+\begin{sloppypar}
+Despite the algorithmic simplification, the fundamental frequencies achieved by the proposed method are in close agreement with those produced by the Yuksel code, as confirmed by the final eigensolve performed after convergence. This is consistent with Rayleigh's principle: because the fundamental mode shape of the solid reference domain is a reasonable estimate of the optimal mode shape, fixing $\boldsymbol{\phi}_1^{(0)}$ is empirically observed to produce substantial gains in the targeted-mode frequency throughout the iteration. For the simply supported beam, MAC analysis confirms that the $\boldsymbol{\phi}_1^{(0)}$-shaped mode is preserved in the optimized topology with a correlation of $0.9998$, the cleanest tracking of all examples studied. For the clamped-beam and building examples the fixed-mode quasi-static load drives gains of $2.53\times$ and $4.61\times$ respectively in the tracked $\boldsymbol{\phi}_1^{(0)}$-type frequency at $\alpha=1$, even though mode-ordering shifts cause the targeted mode shape to appear at a higher position (topo-mode~3) in the final eigenvalue sequence. Across all examples and all $\alpha$ values, the MAC-tracked gain of each mode scales monotonically with the load weight assigned to the corresponding eigenform, confirming the robustness of the quasi-static approximation across structurally different problem classes.
+
+In engineering practice, this trade-off---a marginal reduction in the attained frequency in exchange for a substantially shorter computation---is frequently acceptable, particularly in preliminary design stages or when rapid exploration of multiple structural configurations, boundary conditions, or passive-element layouts is required.
+\end{sloppypar}
+
+Beyond numerical performance, the simplicity of the proposed method constitutes a practical advantage in its own right. The algorithm requires no bound variable, no multiple-eigenvalue sub-problem, no nested sub-optimization, and no MMA solver; it reduces to a verbatim extension of a standard compliance minimization code. Implementation effort is minimal, the parameter space is small (penalization exponent, filter radius, move limit, and convergence tolerance), and the code path is deterministic and easily debuggable. These properties lower the barrier to adoption in custom in-house finite-element environments where integrating a full MMA solver and a multiple-eigenvalue sub-problem would represent a significant development overhead.
+
+
 \section{Numerical Examples}
 
 Three benchmark structures are examined. The first is a simply supported beam, used to compare the proposed method against the Olhoff and Yuksel approaches. The second is a clamped beam, used to illustrate multi-mode frequency control via the load-weighting parameter $\alpha$ (see Equation~(\ref{eqn:multiload})). The third is a building-like structure, used to demonstrate the method's applicability to problems with passive elements and more complex geometry. For the clamped-beam and building examples, modal assurance criterion (MAC) correlation analysis is used to track how each initial solid-domain mode shape relates to the modes of the final topology, enabling a mode-shape-aware assessment of the frequency gains achieved by each $\alpha$ configuration.
@@ -307,9 +473,9 @@ The evolution of the three lowest eigenfrequencies over the optimization iterati
 
 \begin{figure}[H]
 \centering
-\subfloat[\centering\label{fig:freqHistOlhoff}]{\includegraphics[width=0.75\textwidth]{Olhoff_240x30_freq_iterations.png}}\\
-\subfloat[\centering\label{fig:freqHistOur}]{\includegraphics[width=0.75\textwidth]{OurApproach_240x30_freq_iterations.png}}
-\caption{Iteration histories of the three lowest sorted eigenfrequencies $\omega_1 \le \omega_2 \le \omega_3$ for the simply supported beam benchmark ($240\times30$, volume fraction $0.5$), computed with the method settings of Table~\ref{tab:performance} but with the earlier design-change stopping rules, which let both runs continue beyond the iterations at which \texttt{stagnation\_x} stops in Table~\ref{tab:performance}. (\textbf{a}) Olhoff approach ($111$ outer iterations, eigenfrequencies of the solver's own material model): $\omega_1$ and $\omega_2$ differ by less than $2\%$ from outer iteration $8$ to $29$ and then separate; the converged design is not bimodal ($\omega_1 = 167.3$~rad/s, $\omega_2 = 187.2$~rad/s, $\omega_3 = 312.5$~rad/s). (\textbf{b}) Proposed approach ($236$ iterations, lowest three structural eigenfrequencies of each iterate under the common evaluator described in the text): $\omega_1$ rises monotonically to $157.6$~rad/s while $\omega_2$ ($226.1$~rad/s) and $\omega_3$ ($339.9$~rad/s) remain well separated above it.\label{fig:freqHistory}}
+\subfloat[\centering\label{fig:freqHistOlhoff}]{\includegraphics[width=0.75\textwidth]{Olhoff_160x20_freq_iterations.png}}\\
+\subfloat[\centering\label{fig:freqHistOur}]{\includegraphics[width=0.75\textwidth]{OurApproach_160x20_freq_iterations.png}}
+\caption{Iteration histories of the three lowest sorted eigenfrequencies $\omega_1 \le \omega_2 \le \omega_3$ for the simply supported beam benchmark ($160\times20$, volume fraction $0.5$), computed with the method settings of Table~\ref{tab:performance} but with the earlier design-change stopping rules, which let both runs continue beyond the iterations at which \texttt{stagnation\_x} stops in Table~\ref{tab:performance}. (\textbf{a}) Olhoff approach ($111$ outer iterations, eigenfrequencies of the solver's own material model): $\omega_1$ and $\omega_2$ differ by less than $2\%$ from outer iteration $8$ to $29$ and then separate; the converged design is not bimodal ($\omega_1 = 167.3$~rad/s, $\omega_2 = 187.2$~rad/s, $\omega_3 = 312.5$~rad/s). (\textbf{b}) Proposed approach ($236$ iterations, lowest three structural eigenfrequencies of each iterate under the common evaluator described in the text): $\omega_1$ rises monotonically to $157.6$~rad/s while $\omega_2$ ($226.1$~rad/s) and $\omega_3$ ($339.9$~rad/s) remain well separated above it.\label{fig:freqHistory}}
 \end{figure}
 
 The two histories reveal a fundamental difference in how each method handles multiple eigenfrequencies. In the Olhoff bound formulation (Figure~\ref{fig:freqHistOlhoff}), $\omega_2$ descends from its initial value and meets the rising $\omega_1$ at outer iteration $8$; the two differ by less than $2\%$ until iteration $29$, while the bound sub-problem treats them as a double eigenvalue. Thereafter they separate, and the converged design is not bimodal: $\omega_1 = 167.3$~rad/s and $\omega_2 = 187.2$~rad/s, a gap of $11.8\%$. \citet{DU2007} report a bimodal optimum for this problem; in the present implementation, whose differences from the original formulation are listed in Section~\ref{subsec:olhoffImpl}, a bimodal optimum is obtained only at the coarsest mesh ($160\times20$), and from $240\times30$ upward the gap between $\omega_1$ and $\omega_2$ at convergence is $12$--$25\%$.
@@ -435,168 +601,6 @@ At $\alpha=1.0$ and $\alpha=0.75$, the same mode-ordering shift observed in the 
 \caption{Building example: design domain schematic and optimal topologies for five values of $\alpha$ (mesh $80\times 240$, volume fraction $0.3$). The domain is clamped at the base; passive (solid) elements form the side columns and floor plates. (\textbf{a}) Design domain: clamped at the base, solid side columns and floor plates (passive elements). (\textbf{b}) $\alpha=1.00$: $\omega_1=71.36$~rad/s, $\omega_2=74.27$~rad/s. (\textbf{c}) $\alpha=0.75$: $\omega_1=73.91$~rad/s, $\omega_2=76.93$~rad/s. (\textbf{d}) $\alpha=0.50$: $\omega_1=66.93$~rad/s, $\omega_2=78.62$~rad/s. (\textbf{e}) $\alpha=0.25$: $\omega_1=52.04$~rad/s, $\omega_2=63.54$~rad/s. (\textbf{f}) $\alpha=0.00$: $\omega_1=33.56$~rad/s, $\omega_2=50.82$~rad/s.\label{fig:building}}
 \end{figure}
 
-\section{Comparison of the Numerical Implementation of Individual Methods}
-
-This section of the paper will discuss aspects related to the computer implementation of the discussed methods for maximizing vibration frequency. To provide a fair comparison of the computational results and to enable the reader to reproduce the results presented in the paper, all examples were calculated using the SIMP-based implementation developed by the authors. All the numerical codes discussed are publicly available as a GitHub repository (\href{https://github.com/BartBlachowski/topOpt4freqMax}{https://github.com/BartBlachowski/topOpt4freqMax}).
-
-This repository contains: a double-loop topological optimization method based on the work of Du and Olhoff (2007), a two-stage static method described by Yuksel and Yilmaz (2025), and the method proposed in this paper. All approaches discussed in this study were tested in MATLAB R2025b (The MathWorks, Inc., Natick, MA, USA).
-
-As is well known from the literature \citep{George1973,Davis2006}, the computational complexity of solving a system of linear equations depends on the algorithm and on the structure of the matrix. For a direct solver, for example Gaussian elimination, applied to a dense $n_\mathrm{dof} \times n_\mathrm{dof}$ matrix, where $n_\mathrm{dof}$ is the number of degrees of freedom, this complexity is $O(n_\mathrm{dof}^3)$. For large sparse systems, however, the cost of a single iteration of an iterative method is linear in the number of non-zero entries, so that the effective complexity is often much closer to linear. For a two-dimensional elasticity problem on a regular mesh, the solution cost is governed by the sparse factorization, whose approximate cost is $O(n_\mathrm{dof}^{3/2})$; hence, if the stiffness matrix represents a large two-dimensional plane-stress problem, the complexity is $O(n_\mathrm{dof}^{3/2})$ \citep{George1973,Davis2006}. A similar complexity is obtained when the first $J$ eigenpairs are determined using the shift-and-invert Lanczos method \citep{Saad2011}.
-
-To facilitate a better understanding of the topics discussed in this section, the numerical implementation of the individual methods is presented below in the form of pseudocode (Algorithms~\ref{alg:olhoff}--\ref{alg:proposed}).
-
-\subsection{Algorithmic Differences Between the Implemented and Original Olhoff Formulations}\label{subsec:olhoffImpl}
-
-The original formulation of \citet{OLHOFF2014} casts the fundamental-eigenfrequency maximization problem as a max-min bound problem in which the scalar bound variable $\beta \leq \lambda_j = \omega_j^2$, $j = n, n{+}1, \ldots, J$, plays simultaneously the role of objective and lower bound for the $J$ candidate eigenfrequencies. The computational procedure (Figure~1 of that reference) consists of a \emph{main outer loop} and an explicit \emph{inner loop}: at each outer iteration the generalized eigenvalue problem is solved, sensitivity vectors are assembled, and the inner loop then iteratively solves the bound sub-optimization problem~(19) for the \emph{increments} $\Delta x_e$ using MMA \citep{Svanberg1987} or linear programming until those increments converge, after which the design variables are updated as $x_e \mathrel{:=} x_e + \Delta x_e$. No density filter or projection is present in the original formulation.
-
-\begin{algorithm}[htbp]
-\DontPrintSemicolon
-\caption{Du--Olhoff bound formulation (nested outer/MMA loop).}
-\label{alg:olhoff}
-\KwIn{mesh and boundary conditions; $J \ge n$; $V_f$; window $W$; tolerances
-      $\varepsilon_x$, $\varepsilon_M$, $\varepsilon_{\mathrm{inner}}$}
-\KwOut{$\xvec^\ast$, $\omega_1(\xvec^\ast)$}
-\BlankLine
-$x_e \assign V_f$ for all $e = 1,\ldots,\Ne$; \quad
-$\beta \assign 0$; \quad $k \assign 0$; \quad $k_{\mathrm{in}} \assign 0$\;
-\BlankLine
-\While{test~(\ref{eqn:stagnationX}) on the last $W$ outer iterations is not satisfied}{
-  $k \assign k+1$\;
-  \textcolor{blue}{\textbf{Step 1 --- solution of eigenproblem and computation of gradients.}}\;
-  \quad solve $\Kmat(\xvec)\,\phivec_j = \lambda_j\,\Mmat(\xvec)\,\phivec_j$,
-        $\phivec_i^\top\Mmat\phivec_j = \delta_{ij}$, $i,j = 1,\ldots,J$\;
-  \quad detect the multiplicity $N$ of $\lambda_n$\;
-  \uIf{$N > 1$}{
-    generalized gradients
-    $\mathbf{g}_{ij} = \bigl\{\phivec_i^\top
-      (\partial\Kmat/\partial x_e - \lambda_n\,\partial\Mmat/\partial x_e)\phivec_j\bigr\}_{e=1}^{n_e}$,
-    $i,j = n,\ldots,n{+}N{-}1$\;
-  }
-  \Else{
-    $\partial\lambda_j/\partial x_e = \phivec_j^\top
-      (\partial\Kmat/\partial x_e - \lambda_j\,\partial\Mmat/\partial x_e)\phivec_j$,
-    $j = n,\ldots,J$\;
-  }
-  \quad filter the sensitivities (radius $r_{\min}$)\;
-  \BlankLine
-  \textcolor{blue}{\textbf{Step 2 --- optimal increment of the density vector (MMA).}}\;
-  \Repeat{}{
-    $k_{\mathrm{in}} \assign k_{\mathrm{in}}+1$\;
-    solve the MMA sub-problem for $\Delta x_e$ and update the optimal density increment;
-    \textbf{until} $\lVert \Delta\xvec\rVert < \varepsilon_{\mathrm{inner}}$\;
-  }
-  \BlankLine
-  $x_e \assign x_e + \Delta x_e$ for all $e$; \quad
-  $\beta \assign \min_{j = n,\ldots,J}\,\lambda_j(\xvec)$\;
-}
-\end{algorithm}
-
-
-The implementation used in this study (\texttt{analysis/Olhoff} in the repository) keeps this nested structure: one eigensolve per outer iteration, the bound sub-problem solved for the increments $\Delta x_e$ with the published MMA \citep{Svanberg1987}, and the bound variable $\beta$ treated as an additional variable of that sub-problem. As in the original, no density filter or projection is used, so the design variables are the physical densities. It departs from \citet{DU2007} in the following respects, most of which fill choices that the original leaves unspecified. First, artificial localized modes in low-density regions are suppressed not by the modified mass interpolation of \citet{DU2007} but by the alternative they mention: SIMP stiffness with $p = 3$, linearized below $x_e = 0.1$ following \citet{Pedersen2000}, together with a linear mass interpolation. Second, instead of detecting the multiplicity $N$ at every outer iteration, a fixed subspace $N = 2$ is used for the target mode $n = 1$, with $J = n + N = 3$; the generalized gradients $\mathbf{g}_{ij}$, including the off-diagonal terms and the diagonal offsets $\lambda_j - \lambda_n$, therefore always enter the sub-problem, which has $m = N + 2 = 4$ constraints (the $N$ bound constraints, the bound constraint for mode $J$, and the volume constraint). For the simple mode $J$ the standard sensitivity $\partial\lambda_J/\partial x_e = \boldsymbol{\phi}_J^{\mathrm{T}}(\partial\mathbf{K}/\partial x_e - \lambda_J\,\partial\mathbf{M}/\partial x_e)\boldsymbol{\phi}_J$ is used. Third, the sensitivity filter of \citet{Sigmund1997} is applied to all generalized gradients with a fixed physical radius $R = 0.06$~m (three elements at $400\times50$). Fourth, the increments are bounded by a per-element adaptive move limit that starts at $0.1$, is multiplied by $1.2$ when the last two outer steps of an element have the same sign and by $0.7$ when they reverse, and never falls below $0.002$. Finally, the inner MMA loop stops when the largest sub-iteration step falls below $5\%$ of the largest accumulated increment (with $5$ to $500$ sub-iterations), and the outer loop is terminated by the common \texttt{stagnation\_x} criterion of Section~\ref{subsec:stagnationX} in place of the design-increment test $\lVert\Delta\mathbf{x}\rVert_2 < 0.05\sqrt{n_e/3200}$ of the original implementation, with a safety cap of $1000$ outer iterations; both are stagnation criteria rather than optimality tests.
-
-The eigenpairs are computed with the implicitly restarted Arnoldi method (\textsc{arpack} via \texttt{eigs}) in shift-and-invert mode, which requires one sparse Cholesky factorization of $\mathbf{K}$ per outer iteration to extract the $J = 3$ lowest eigenpairs. The inner MMA sub-iterations operate on the linearized sub-problem and require no further eigensolves.
-
-The cost structure of the implementation follows from Table~\ref{tab:performance}. At $400\times50$ the Du--Olhoff run takes $62$ outer iterations and $1413$ inner MMA iterations, about $23$ per outer iteration. The outer work (assembly, eigensolve, sensitivities, filtering and step control) takes $10.9$~s, or $0.18$~s per outer iteration, whereas the nested MMA solves take $317.8$~s, or $0.22$~s per inner iteration, i.e.\ $97\%$ of the stage time. Across all nine meshes the inner MMA solves account for $94$--$98\%$ of the Du--Olhoff stage time, so the cost of this method is dominated by the nested sub-optimization rather than by the eigensolve. The Yuksel--Yilmaz implementation (Algorithm~\ref{alg:yuksel}) requires one sparse factorization per iteration of either stage and no eigensolve inside the loop; at $400\times50$ it performs $55 + 26$ iterations in $5.2$~s ($0.06$~s per iteration). Under the common stopping criterion the iteration counts of both methods depend only weakly on the mesh: $76$--$110$ Stage-1 plus Stage-2 iterations for Yuksel--Yilmaz and $58$--$131$ outer iterations for Du--Olhoff. The ratio of their stage times, between $51\times$ and $102\times$ over the nine meshes, therefore mainly reflects the cost of an iteration, in particular the about $20$ nested MMA iterations within every Du--Olhoff outer iteration.
-
-\begin{algorithm}[htbp]
-\DontPrintSemicolon
-\caption{Yuksel--Yilmaz two-stage static method.}
-\label{alg:yuksel}
-\KwIn{mesh and boundary conditions; $V_f$; unit point load $\fvec_s$;
-      window $W$; tolerances $\varepsilon_x$, $\varepsilon_M$}
-\KwOut{$\xvec^\ast$, $\omega_1(\xvec^\ast)$}
-\BlankLine
-$x_e \assign V_f$ for all $e$; \quad $n_1 \assign 0$; \quad $n_2 \assign 0$\;
-\BlankLine
-\textcolor{blue}{\textbf{Stage 1 --- optimal topology by SIMP under the unit load.}}\;
-\Repeat{}{
-  $n_1 \assign n_1 + 1$\;
-  solve $\Kmat(\xvec)\,\uvec_s = \fvec_s$\;
-  $\dfrac{\partial c}{\partial x_e}
-    = -p\,x_e^{\,p-1}(E_0 - E_{\min})\,
-      \uvec_{s,e}^\top \mathbf{k}_e^0 \uvec_{s,e}$,\quad $e = 1,\ldots,\Ne$\;
-  filter the sensitivities; update $\xvec$ by OC bisection on
-    $\sum_e x_e V_e = V_f V_0$\;
-  \textbf{until} test~(\ref{eqn:stagnationX}) holds over the last $W$ Stage-1 iterations\;
-}
-\BlankLine
-$\uvec_d \assign \uvec_s$\;
-\BlankLine
-\textcolor{blue}{\textbf{Stage 2 --- design-dependent inertial load for SIMP.}}\;
-\Repeat{}{
-  $n_2 \assign n_2 + 1$\;
-  $\fvec_d \assign \Mmat(\xvec)\,\uvec_d$\;
-  solve $\Kmat(\xvec)\,\uvec_d = \fvec_d$\;
-  $\dfrac{\partial c}{\partial x_e}
-    = -p\,x_e^{\,p-1}(E_0 - E_{\min})\,
-      \uvec_{d,e}^\top \mathbf{k}_e^0 \uvec_{d,e}$\;
-  filter the sensitivities; update $\xvec$ by OC bisection on
-    $\sum_e x_e V_e = V_f V_0$\;
-  \textbf{until} test~(\ref{eqn:stagnationX}) holds over the last $W$ Stage-2 iterations (window restarted at Stage~2)\;
-}
-\BlankLine
-apply the Heaviside post-processing to obtain the solid--void design
-$\xvec^\ast$\;
-solve $\Kmat(\xvec^\ast)\phivec = \omega_1^2\,\Mmat(\xvec^\ast)\phivec$\;
-\end{algorithm}
-
-
-The factor of $80$--$825\times$ reported by \citet[Table~1]{YUKSEL2025} between their static method and their standard code is not directly comparable to the $51$--$102\times$ range observed here. Their reference is a standard dynamic topology optimization code that solves an eigenproblem at every iteration, whereas the reference here is the nested bound formulation, whose cost is dominated by the inner MMA solves; the two figures therefore measure different algorithmic contrasts.
-
-\subsection{The Proposed Approach: Algorithm, Efficiency, and Practical Merits}
-
-The proposed method replaces the dynamic eigenvalue optimization loop with a single initial eigensolve followed by an entirely static iteration. At initialization, the generalized eigenvalue problem $\mathbf{K}_0\boldsymbol{\phi}_1^{(0)} = (\omega_1^{(0)})^2\mathbf{M}_0\boldsymbol{\phi}_1^{(0)}$ is solved once on the solid reference domain ($x_e = 1$) to obtain the reference fundamental eigenpair $(\omega_1^{(0)},\boldsymbol{\phi}_1^{(0)})$. The mode shape and eigenvalue are then held \emph{fixed} for the duration of the optimization. At each subsequent iteration the density-dependent mass matrix $\mathbf{M}(\mathbf{x})$ is assembled under SIMP interpolation, and the equivalent static inertial load $\mathbf{f} = (\omega_1^{(0)})^2\,\mathbf{M}(\mathbf{x})\boldsymbol{\phi}_1^{(0)}$ is evaluated. The optimization sub-problem reduces to standard compliance minimization, $\min\,\mathbf{u}^\mathrm{T}\mathbf{K}\mathbf{u}$ subject to $\mathbf{K}\mathbf{u}=\mathbf{f}$ and the volume constraint, updated by the optimality criteria (OC) bisection rule. The load sensitivity term $\partial\mathbf{f}/\partial x_e$ is omitted, leaving a purely stiffness-based sensitivity $\partial c/\partial x_e = -p\,x_e^{p-1}(E_0 - E_\mathrm{min})\,\mathbf{u}_e^\mathrm{T}\mathbf{k}_e^0\mathbf{u}_e$, where $\mathbf{k}_e^0$ is the unit-density element stiffness matrix, that is inexpensive to compute and straightforward to filter. A single eigensolve is performed at termination to verify the achieved fundamental frequency.
-
-\begin{algorithm}[htbp]
-\DontPrintSemicolon
-\caption{Proposed quasi-static approximation (one reference eigenanalysis,
-         then SIMP).}
-\label{alg:proposed}
-\KwIn{mesh and boundary conditions; $V_f$; load cases
-      $\ell = 1,\ldots,n_c$ with reference modes $j(\ell)$; window $W$;
-      tolerances $\varepsilon_x$, $\varepsilon_M$}
-\KwOut{$\xvec^\ast$, $\omega_1(\xvec^\ast)$}
-\BlankLine
-\textcolor{blue}{\textbf{Step I --- initialization: eigenvalue problem on the design domain.}}\;
-assemble $\Kmat_0$ and $\Mmat_0$ on the solid reference domain\;
-solve $\Kmat_0\,\phivec_j^{(0)}
-       = (\omega_j^{(0)})^2\,\Mmat_0\,\phivec_j^{(0)}$,
-      $j = 1,\ldots,n_{\mathrm{modes}}$,
-      $n_{\mathrm{modes}} = \max_\ell j(\ell)$\;
-$n_{\mathrm{I}} \assign 1$\;
-\BlankLine
-$x_e \assign V_f$ for all $e$; \quad $n_{\mathrm{II}} \assign 0$\;
-\BlankLine
-\textcolor{blue}{\textbf{Step II --- optimal topology under the design-dependent inertial load.}}\;
-\Repeat{}{
-  $n_{\mathrm{II}} \assign n_{\mathrm{II}} + 1$\;
-  assemble $\Kmat(\xvec)$ and $\Mmat(\xvec)$\;
-  $c \assign 0$; \quad $\partial c/\partial x_e \assign 0$ for all $e$\;
-  \For{$\ell \assign 1$ \KwTo $n_c$}{
-    $\fvec_\ell \assign (\omega_{j(\ell)}^{(0)})^2\,
-       \Mmat(\xvec)\,\phivec_{j(\ell)}^{(0)}$\;
-    solve $\Kmat(\xvec)\,\uvec_\ell = \fvec_\ell$\;
-    $c \assign c + \uvec_\ell^\top \Kmat(\xvec)\,\uvec_\ell$\;
-    $\dfrac{\partial c}{\partial x_e} \mathrel{{-}{=}}
-       p\,x_e^{\,p-1}(E_0 - E_{\min})\,
-       \uvec_{\ell,e}^\top \mathbf{k}_e^0 \uvec_{\ell,e}$
-  }
-  apply the density-weighted sensitivity filter of radius $r_{\min}$\;
-  update $\xvec$ by OC bisection on $\sum_e x_e V_e = V_f V_0$\;
-  \textbf{until} test~(\ref{eqn:stagnationX}) holds over the last $W$ iterations\;
-}
-\end{algorithm}
-
-
-From a computational standpoint, each iteration requires one sparse factorization of $\mathbf{K}$ restricted to the free degrees of freedom (to solve the linear system $\mathbf{K}\mathbf{u} = \mathbf{f}$), one mass-matrix assembly, one sensitivity evaluation, and one OC bisection sweep — identical in structure and cost to a standard compliance minimization step. Because the Krylov iterations of \textsc{arpack} are absent, the per-iteration wall time of the proposed approach is modest (e.g.\ $0.044$~s/iter at $320{\times}40$, vs.\ $0.040$~s/iter for the Yuksel code). Moreover, the number of iterations is markedly lower: the fixed-mode gradient provides a stable and consistent descent direction from the first iteration, allowing convergence in $41$--$53$ iterations against $76$--$110$ Stage-1 plus Stage-2 iterations for the Yuksel code across the nine meshes. The net effect is a total runtime that is consistently the lowest of the three methods: at $320{\times}40$ the proposed approach completes in $2.5$~s against $3.3$~s for the Yuksel code and $275.6$~s for the Olhoff implementation, representing speedups of $1.3\times$ and $110\times$ respectively. At $400{\times}50$ the proposed approach completes in $3.7$~s, retaining speedups of $1.5\times$ over the Yuksel code and $88\times$ over the Olhoff implementation, and remains the fastest throughout.
-
-\begin{sloppypar}
-Despite the algorithmic simplification, the fundamental frequencies achieved by the proposed method are in close agreement with those produced by the Yuksel code, as confirmed by the final eigensolve performed after convergence. This is consistent with Rayleigh's principle: because the fundamental mode shape of the solid reference domain is a reasonable estimate of the optimal mode shape, fixing $\boldsymbol{\phi}_1^{(0)}$ is empirically observed to produce substantial gains in the targeted-mode frequency throughout the iteration. For the simply supported beam, MAC analysis confirms that the $\boldsymbol{\phi}_1^{(0)}$-shaped mode is preserved in the optimized topology with a correlation of $0.9998$, the cleanest tracking of all examples studied. For the clamped-beam and building examples the fixed-mode quasi-static load drives gains of $2.53\times$ and $4.61\times$ respectively in the tracked $\boldsymbol{\phi}_1^{(0)}$-type frequency at $\alpha=1$, even though mode-ordering shifts cause the targeted mode shape to appear at a higher position (topo-mode~3) in the final eigenvalue sequence. Across all examples and all $\alpha$ values, the MAC-tracked gain of each mode scales monotonically with the load weight assigned to the corresponding eigenform, confirming the robustness of the quasi-static approximation across structurally different problem classes.
-
-In engineering practice, this trade-off---a marginal reduction in the attained frequency in exchange for a substantially shorter computation---is frequently acceptable, particularly in preliminary design stages or when rapid exploration of multiple structural configurations, boundary conditions, or passive-element layouts is required.
-\end{sloppypar}
-
-Beyond numerical performance, the simplicity of the proposed method constitutes a practical advantage in its own right. The algorithm requires no bound variable, no multiple-eigenvalue sub-problem, no nested sub-optimization, and no MMA solver; it reduces to a verbatim extension of a standard compliance minimization code. Implementation effort is minimal, the parameter space is small (penalization exponent, filter radius, move limit, and convergence tolerance), and the code path is deterministic and easily debuggable. These properties lower the barrier to adoption in custom in-house finite-element environments where integrating a full MMA solver and a multiple-eigenvalue sub-problem would represent a significant development overhead.
 
 \section{Conclusions}
 
