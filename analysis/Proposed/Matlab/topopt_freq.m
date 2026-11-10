@@ -146,7 +146,26 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
     [loadCases, usingConfiguredLoadCases, maxHarmonicMode, modeUpdateAfter, maxSemiHarmonicMode] = ...
         localResolveLoadCases(runCfg, nodeX, nodeY, nodeIds);
     nCases = numel(loadCases);
-    fprintf('Load cases: %d\n', nCases);
+    % load_case_weighting: how loadCases(i).factor enters the objective.
+    %   'load'       (default, legacy) F_i = factor_i * f_i, so the objective is
+    %                sum_i factor_i^2 * c_i.
+    %   'compliance' F_i = f_i and the objective is sum_i factor_i * c_i
+    %                (weighted sum of compliances, Algorithm 3 with weights w_i).
+    loadCaseWeighting = lower(strtrim(char(string(localOpt(runCfg, 'load_case_weighting', 'load')))));
+    if ~any(strcmp(loadCaseWeighting, {'load', 'compliance'}))
+        error('topopt_freq:InvalidLoadCaseWeighting', ...
+            'runCfg.load_case_weighting must be "load" or "compliance" (got "%s").', loadCaseWeighting);
+    end
+    caseWeights = ones(nCases, 1);
+    if strcmp(loadCaseWeighting, 'compliance')
+        for ci = 1:nCases
+            caseWeights(ci) = double(loadCases(ci).factor);
+            loadCases(ci).factor = 1.0;
+        end
+    end
+    info.load_case_weighting = loadCaseWeighting;
+    info.load_case_weights = caseWeights;
+    fprintf('Load cases: %d (weighting: %s)\n', nCases, loadCaseWeighting);
     for ci = 1:nCases
         fprintf('  case[%d] \"%s\": factor=%g, nLoads=%d\n', ...
             ci, loadCases(ci).name, loadCases(ci).factor, numel(loadCases(ci).loads));
@@ -622,14 +641,15 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
             % u'Ku = u'f on the free dofs (K u = f there, u = 0 on the fixed ones)
             objCase = Ui(free)' * F(free, icase);
             objCases(icase) = objCase;
-            obj = obj + objCase;
+            wCase = caseWeights(icase);
+            obj = obj + wCase * objCase;
 
             ue = Ui(edofMat);  % nelx*nely x 8
             ce = sum((ue * KE) .* ue, 2);
-            dc = dc + stiffScale .* ce;
+            dc = dc + wCase * (stiffScale .* ce);
 
             if usingConfiguredLoadCases
-                dc = dc + localLoadSensitivityForCase( ...
+                dc = dc + wCase * localLoadSensitivityForCase( ...
                     Ui, ue, loadCases(icase), dMdxScale, ME, yDown, ...
                     harmonicPhi, harmonicOmegas, PhiLegacy, omegaLegacy, edofMat, ...
                     nodalProjectionCache, semiHarmonicBaseVec, semiHarmonicLoadSens);
