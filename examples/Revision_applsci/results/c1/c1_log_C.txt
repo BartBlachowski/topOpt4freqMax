@@ -1,0 +1,20 @@
+
+===== clamped 160x20: omega0 = 291.1384, 726.0987 rad/s (solid domain) =====
+[C] clamped  alpha=1.00  MMA g_K: it=102 c=2.421202e+04 om=342.245/395.455 vol=0.5000 (stagnation_x_tolerance) | MMA g_K+g_F: it=75 c=3.421581e+03 om=5761.799/7454.829 vol=0.4149 (stagnation_x_tolerance) | mean|dx|=0.380
+[C] clamped  alpha=0.50  MMA g_K: it=109 c=1.603747e+05 om=218.080/700.888 vol=0.5000 (stagnation_x_tolerance) | MMA g_K+g_F: it=77 c=6.714558e+04 om=237.803/543.374 vol=0.4574 (stagnation_x_tolerance) | mean|dx|=0.347
+[C] clamped  alpha=0.00  MMA g_K: it=85 c=1.618441e+05 om=103.757/431.602 vol=0.5000 (stagnation_x_tolerance) | MMA g_K+g_F: it=55 c=6.911000e+04 om=65.750/274.846 vol=0.4486 (stagnation_x_tolerance) | mean|dx|=0.194
+
+===== building 40x120: omega0 = 66.1466, 303.2091 rad/s (solid domain) =====
+[C] building alpha=1.00  MMA g_K: it=95 c=6.866988e+02 om=76.371/103.679 vol=0.3000 (stagnation_x_tolerance) | MMA g_K+g_F: it=95 c=4.019624e+02 om=74.311/89.375 vol=0.3000 (stagnation_x_tolerance) | mean|dx|=0.221
+[C] building alpha=0.50  MMA g_K: it=124 c=1.669143e+04 om=41.477/113.109 vol=0.3000 (stagnation_x_tolerance) | MMA g_K+g_F: it=90 c=1.207962e+04 om=40.165/105.338 vol=0.2999 (stagnation_x_tolerance) | mean|dx|=0.173
+[C] building alpha=0.00  MMA g_K: it=119 c=3.383253e+04 om=33.948/113.986 vol=0.2999 (stagnation_x_tolerance) | MMA g_K+g_F: it=109 c=2.223632e+04 om=16.002/104.372 vol=0.2995 (stagnation_x_tolerance) | mean|dx|=0.168
+        case        alpha    gK_iter       gK_c       gK_omega1    gK_omega2    gK_vol              gK_stop              full_iter    full_c    full_omega1    full_omega2    full_vol            full_stop             mean_abs_dx
+    ____________    _____    _______    __________    _________    _________    _______    __________________________    _________    ______    ___________    ___________    ________    __________________________    ___________
+
+    {'clamped' }       1       102           24212     342.25       395.46      0.49998    {'stagnation_x_tolerance'}        75       3421.6      5761.8         7454.8       0.41492     {'stagnation_x_tolerance'}      0.37988  
+    {'clamped' }     0.5       109      1.6037e+05     218.08       700.89      0.49997    {'stagnation_x_tolerance'}        77        67146       237.8         543.37       0.45744     {'stagnation_x_tolerance'}      0.34738  
+    {'clamped' }       0        85      1.6184e+05     103.76        431.6      0.49998    {'stagnation_x_tolerance'}        55        69110       65.75         274.85       0.44861     {'stagnation_x_tolerance'}      0.19397  
+    {'building'}       1        95           686.7     76.371       103.68      0.29998    {'stagnation_x_tolerance'}        95       401.96      74.311         89.375       0.29996     {'stagnation_x_tolerance'}      0.22075  
+    {'building'}     0.5       124           16691     41.477       113.11      0.29995    {'stagnation_x_tolerance'}        90        12080      40.165         105.34       0.29992     {'stagnation_x_tolerance'}      0.17269  
+    {'building'}       0       119           33833     33.948       113.99      0.29988    {'stagnation_x_tolerance'}       109        22236      16.002         104.37       0.29952     {'stagnation_x_tolerance'}      0.16812  
+

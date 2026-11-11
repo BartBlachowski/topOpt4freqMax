@@ -1,0 +1,110 @@
+
+===== clamped alpha=1.00 (400x50) =====
+[audit] 2 raw modes up to structural omega2; 0 rejected; structural omega1/2 = 368.2390 / 402.6920 (raw idx [1 2])
+[eval] emin_1e-9        omega1=368.2359 omega2=402.6499  raw omega1=361.7042  rejected below=1  MAC=1.0000/1.0000
+[eval] emin_1e-6_paper  omega1=368.2390 omega2=402.6920  raw omega1=368.2390  rejected below=0  MAC=1.0000/1.0000
+[eval] emin_1e-4        omega1=368.2745 omega2=406.3454  raw omega1=368.2745  rejected below=0  MAC=1.0000/1.0000
+[eval] emin_1e-3        omega1=368.5734 omega2=435.5898  raw omega1=368.5734  rejected below=0  MAC=1.0000/0.9963
+[eval] pedersen         omega1=368.9910 omega2=403.6729  raw omega1=368.9910  rejected below=0  MAC=1.0000/1.0000
+[eval] hardkill_0.1     omega1=369.2449 omega2=403.8561  raw omega1=369.2449  rejected below=0  MAC=0.9990/0.9988
+[eval] hardkill_0.3     omega1=372.2614 omega2=405.7483  raw omega1=372.2614  rejected below=0  MAC=0.9952/0.9951
+[eval] hardkill_0.5     omega1=376.7240 omega2=405.9689  raw omega1=376.7240  rejected below=0  MAC=0.9876/0.9871
+
+===== clamped alpha=0.75 (400x50) =====
+[audit] 2 raw modes up to structural omega2; 0 rejected; structural omega1/2 = 288.8272 / 768.6812 (raw idx [1 2])
+[eval] emin_1e-9        omega1=288.8245 omega2=768.9273  raw omega1=288.8245  rejected below=226  MAC=1.0000/0.7559
+[eval] emin_1e-6_paper  omega1=288.8272 omega2=768.6812  raw omega1=288.8272  rejected below=0  MAC=1.0000/1.0000
+[eval] emin_1e-4        omega1=288.9076 omega2=768.8562  raw omega1=288.9076  rejected below=0  MAC=1.0000/1.0000
+[eval] emin_1e-3        omega1=289.5782 omega2=770.0960  raw omega1=289.5782  rejected below=0  MAC=1.0000/1.0000
+[eval] pedersen         omega1=289.5808 omega2=770.5432  raw omega1=289.5808  rejected below=0  MAC=1.0000/1.0000
+[eval] hardkill_0.1     omega1=289.7580 omega2=770.8674  raw omega1=289.7580  rejected below=0  MAC=0.9990/0.9992
+[eval] hardkill_0.3     omega1=293.3027 omega2=781.4752  raw omega1=293.3027  rejected below=0  MAC=0.9939/0.9934
+[eval] hardkill_0.5     omega1=296.9058 omega2=781.1935  raw omega1=296.9058  rejected below=0  MAC=0.9828/0.0000
+
+===== clamped alpha=0.50 (400x50) =====
+[audit] 2 raw modes up to structural omega2; 0 rejected; structural omega1/2 = 259.5212 / 800.5251 (raw idx [1 2])
+[eval] emin_1e-9        omega1=259.5184 omega2=800.5061  raw omega1=259.5184  rejected below=286  MAC=1.0000/0.9949
+[eval] emin_1e-6_paper  omega1=259.5212 omega2=800.5251  raw omega1=259.5212  rejected below=0  MAC=1.0000/1.0000
+[eval] emin_1e-4        omega1=259.6582 omega2=800.7034  raw omega1=259.6582  rejected below=0  MAC=1.0000/1.0000
+[eval] emin_1e-3        omega1=260.7871 omega2=801.8507  raw omega1=260.7871  rejected below=0  MAC=1.0000/0.9999
+[eval] pedersen         omega1=260.1545 omega2=802.6507  raw omega1=260.1545  rejected below=0  MAC=1.0000/1.0000
+[eval] hardkill_0.1     omega1=260.2980 omega2=803.2194  raw omega1=260.2980  rejected below=0  MAC=0.9991/0.9990
+[eval] hardkill_0.3     omega1=262.9064 omega2=814.0053  raw omega1=262.9064  rejected below=0  MAC=0.9940/0.9930
+[eval] hardkill_0.5     omega1=263.9202 omega2=831.1550  raw omega1=263.9202  rejected below=0  MAC=0.9830/0.9801
+
+===== clamped alpha=0.25 (400x50) =====
+[audit] 2 raw modes up to structural omega2; 0 rejected; structural omega1/2 = 231.0614 / 832.0937 (raw idx [1 2])
+[eval] emin_1e-9        omega1=231.0571 omega2=832.0603  raw omega1=231.0571  rejected below=426  MAC=1.0000/0.9563
+[eval] emin_1e-6_paper  omega1=231.0614 omega2=832.0937  raw omega1=231.0614  rejected below=0  MAC=1.0000/1.0000
+[eval] emin_1e-4        omega1=231.3196 omega2=832.2144  raw omega1=231.3196  rejected below=0  MAC=1.0000/1.0000
+[eval] emin_1e-3        omega1=233.1985 omega2=833.0716  raw omega1=233.1985  rejected below=0  MAC=0.9999/1.0000
+[eval] pedersen         omega1=231.6024 omega2=834.3073  raw omega1=231.6024  rejected below=0  MAC=1.0000/1.0000
+[eval] hardkill_0.1     omega1=231.7270 omega2=834.9268  raw omega1=231.7270  rejected below=0  MAC=0.9991/0.9989
+[eval] hardkill_0.3     omega1=233.9922 omega2=843.3690  raw omega1=233.9922  rejected below=0  MAC=0.9938/0.9944
+[eval] hardkill_0.5     omega1=235.6571 omega2=857.7754  raw omega1=235.6571  rejected below=0  MAC=0.9843/0.9830
+
+===== clamped alpha=0.00 (400x50) =====
+[audit] 8 raw modes up to structural omega2; 6 rejected; structural omega1/2 = 115.8732 / 455.5731 (raw idx [1 8])
+[eval] emin_1e-9        omega1=115.8651 omega2=454.8490  raw omega1=115.8651  rejected below=108  MAC=1.0000/0.9751
+[eval] emin_1e-6_paper  omega1=115.8732 omega2=455.5731  raw omega1=115.8732  rejected below=6  MAC=1.0000/1.0000
+[eval] emin_1e-4        omega1=116.4515 omega2=473.0395  raw omega1=116.4515  rejected below=0  MAC=1.0000/0.9963
+[eval] emin_1e-3        omega1=121.1102 omega2=588.3394  raw omega1=121.1102  rejected below=0  MAC=1.0000/0.9913
+[eval] pedersen         omega1=116.1750 omega2=457.2207  raw omega1=116.1750  rejected below=0  MAC=1.0000/0.9957
+[eval] hardkill_0.1     omega1=116.2323 omega2=457.0655  raw omega1=0.0000  rejected below=4  MAC=0.9974/0.9925
+[eval] hardkill_0.3     omega1=116.8373 omega2=459.3408  raw omega1=116.8373  rejected below=0  MAC=0.9931/0.9867
+[eval] hardkill_0.5     omega1=116.7734 omega2=457.7032  raw omega1=116.7734  rejected below=0  MAC=0.9869/0.9813
+
+===== building alpha=1.00 (80x240) =====
+[audit] 2 raw modes up to structural omega2; 0 rejected; structural omega1/2 = 87.1090 / 91.9492 (raw idx [1 2])
+[eval] emin_1e-9        omega1=87.1061 omega2=91.6724  raw omega1=87.1061  rejected below=0  MAC=1.0000/1.0000
+[eval] emin_1e-6_paper  omega1=87.1090 omega2=91.9492  raw omega1=87.1090  rejected below=0  MAC=1.0000/1.0000
+[eval] emin_1e-4        omega1=87.2652 omega2=113.9651  raw omega1=87.2652  rejected below=0  MAC=0.9989/0.9851
+[eval] emin_1e-3        omega1=87.8500 omega2=165.6454  raw omega1=87.8500  rejected below=0  MAC=0.9955/0.0000
+[eval] pedersen         omega1=87.4246 omega2=91.9549  raw omega1=87.4246  rejected below=0  MAC=1.0000/1.0000
+[eval] hardkill_0.1     omega1=87.5371 omega2=91.6688  raw omega1=87.5371  rejected below=0  MAC=0.9985/1.0000
+[eval] hardkill_0.3     omega1=88.8186 omega2=91.3552  raw omega1=88.8186  rejected below=0  MAC=0.9909/0.9998
+[eval] hardkill_0.5     omega1=86.3620 omega2=87.0332  raw omega1=86.3620  rejected below=0  MAC=0.8495/0.9280
+
+===== building alpha=0.75 (80x240) =====
+[audit] 2 raw modes up to structural omega2; 0 rejected; structural omega1/2 = 55.9953 / 98.5548 (raw idx [1 2])
+[eval] emin_1e-9        omega1=55.9917 omega2=98.2448  raw omega1=55.9917  rejected below=4  MAC=1.0000/0.9999
+[eval] emin_1e-6_paper  omega1=55.9953 omega2=98.5548  raw omega1=55.9953  rejected below=0  MAC=1.0000/1.0000
+[eval] emin_1e-4        omega1=56.2642 omega2=124.2566  raw omega1=56.2642  rejected below=0  MAC=0.9998/0.9886
+[eval] emin_1e-3        omega1=57.6067 omega2=182.1850  raw omega1=57.6067  rejected below=0  MAC=0.9973/0.1094
+[eval] pedersen         omega1=56.1812 omega2=98.5574  raw omega1=56.1812  rejected below=0  MAC=1.0000/1.0000
+[eval] hardkill_0.1     omega1=56.2294 omega2=98.2405  raw omega1=56.2294  rejected below=0  MAC=0.9984/1.0000
+[eval] hardkill_0.3     omega1=56.4861 omega2=97.6227  raw omega1=0.0002  rejected below=8  MAC=0.9738/0.9938
+[eval] hardkill_0.5     omega1=53.1794 omega2=93.1283  raw omega1=0.0003  rejected below=2  MAC=0.9316/0.8508
+
+===== building alpha=0.50 (80x240) =====
+[audit] 2 raw modes up to structural omega2; 0 rejected; structural omega1/2 = 45.3723 / 98.1049 (raw idx [1 2])
+[eval] emin_1e-9        omega1=45.3635 omega2=97.7898  raw omega1=45.3635  rejected below=6  MAC=1.0000/1.0000
+[eval] emin_1e-6_paper  omega1=45.3723 omega2=98.1049  raw omega1=45.3723  rejected below=0  MAC=1.0000/1.0000
+[eval] emin_1e-4        omega1=46.1200 omega2=124.2492  raw omega1=46.1200  rejected below=0  MAC=0.9998/0.9959
+[eval] emin_1e-3        omega1=50.1093 omega2=191.6870  raw omega1=50.1093  rejected below=0  MAC=0.9940/0.0774
+[eval] pedersen         omega1=45.5256 omega2=98.1081  raw omega1=45.5256  rejected below=0  MAC=1.0000/1.0000
+[eval] hardkill_0.1     omega1=45.5526 omega2=97.7849  raw omega1=0.0000  rejected below=2  MAC=0.9984/1.0000
+[eval] hardkill_0.3     omega1=44.8335 omega2=96.8454  raw omega1=0.0000  rejected below=14  MAC=0.9768/0.9865
+[eval] hardkill_0.5     omega1=43.4098 omega2=91.9030  raw omega1=0.0000  rejected below=6  MAC=0.9550/0.8493
+
+===== building alpha=0.25 (80x240) =====
+[audit] 4 raw modes up to structural omega2; 2 rejected; structural omega1/2 = 35.2673 / 98.6038 (raw idx [1 4])
+[eval] emin_1e-9        omega1=35.2533 omega2=98.2752  raw omega1=35.2533  rejected below=8  MAC=1.0000/1.0000
+[eval] emin_1e-6_paper  omega1=35.2673 omega2=98.6038  raw omega1=35.2673  rejected below=2  MAC=1.0000/1.0000
+[eval] emin_1e-4        omega1=36.2384 omega2=125.8119  raw omega1=36.2384  rejected below=0  MAC=0.9998/0.9963
+[eval] emin_1e-3        omega1=41.5035 omega2=183.2122  raw omega1=41.5035  rejected below=0  MAC=0.9948/0.0000
+[eval] pedersen         omega1=35.3800 omega2=98.6059  raw omega1=35.3800  rejected below=1  MAC=1.0000/1.0000
+[eval] hardkill_0.1     omega1=35.3985 omega2=69.9383  raw omega1=35.3985  rejected below=0  MAC=0.9983/0.0000
+[eval] hardkill_0.3     omega1=35.0134 omega2=96.4666  raw omega1=0.0001  rejected below=6  MAC=0.9882/0.9546
+[eval] hardkill_0.5     omega1=35.2972 omega2=93.1159  raw omega1=35.2972  rejected below=0  MAC=0.9648/0.8647
+
+===== building alpha=0.00 (80x240) =====
+[audit] 4 raw modes up to structural omega2; 2 rejected; structural omega1/2 = 35.9545 / 98.8656 (raw idx [1 4])
+[eval] emin_1e-9        omega1=35.9355 omega2=98.5172  raw omega1=35.9355  rejected below=6  MAC=1.0000/1.0000
+[eval] emin_1e-6_paper  omega1=35.9545 omega2=98.8656  raw omega1=35.9545  rejected below=2  MAC=1.0000/1.0000
+[eval] emin_1e-4        omega1=37.3920 omega2=127.6067  raw omega1=37.3920  rejected below=0  MAC=0.9997/0.9968
+[eval] emin_1e-3        omega1=43.4618 omega2=176.9378  raw omega1=43.4618  rejected below=0  MAC=0.9911/0.0000
+[eval] pedersen         omega1=36.0898 omega2=98.8684  raw omega1=36.0898  rejected below=0  MAC=1.0000/1.0000
+[eval] hardkill_0.1     omega1=36.0943 omega2=98.4852  raw omega1=36.0943  rejected below=0  MAC=0.9970/1.0000
+[eval] hardkill_0.3     omega1=36.2791 omega2=98.2920  raw omega1=0.0000  rejected below=28  MAC=0.9909/0.9999
+[eval] hardkill_0.5     omega1=35.4025 omega2=94.4541  raw omega1=35.4025  rejected below=0  MAC=0.9665/0.8828
