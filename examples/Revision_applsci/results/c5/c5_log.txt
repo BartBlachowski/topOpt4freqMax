@@ -1,0 +1,24 @@
+[C5] clamped  sum_pp       it= 47 c=1.180338e+05 om=259.521/800.525 max|x-x(+,+)|=0.00e+00
+[C5] clamped  sum_mp       it= 47 c=1.180338e+05 om=259.521/800.525 max|x-x(+,+)|=0.00e+00
+[C5] clamped  sum_pm       it= 47 c=1.180338e+05 om=259.521/800.525 max|x-x(+,+)|=0.00e+00
+[C5] clamped  combined_pp  it=2000 c=1.126820e+05 om=109.790/592.797 max|x-x(+,+)|=0.00e+00
+[C5] clamped  combined_pm  it=2000 c=1.126828e+05 om=109.788/592.805 max|x-x(+,+)|=1.00e+00
+[C5] building sum_pp       it= 66 c=1.297086e+04 om=45.372/98.105 max|x-x(+,+)|=0.00e+00
+[C5] building sum_mp       it= 66 c=1.297086e+04 om=45.372/98.105 max|x-x(+,+)|=0.00e+00
+[C5] building sum_pm       it= 66 c=1.297086e+04 om=45.372/98.105 max|x-x(+,+)|=0.00e+00
+[C5] building combined_pp  it= 52 c=4.988171e+03 om=26.168/99.589 max|x-x(+,+)|=0.00e+00
+[C5] building combined_pm  it= 88 c=7.789236e+03 om=37.790/129.510 max|x-x(+,+)|=1.00e+00
+        case              run          sign_phi1    sign_phi2    iterations    compliance    omega1    omega2    max_dx_vs_pp
+    ____________    _______________    _________    _________    __________    __________    ______    ______    ____________
+
+    {'clamped' }    {'sum_pp'     }        1            1             47       1.1803e+05    259.52    800.53         0      
+    {'clamped' }    {'sum_mp'     }       -1            1             47       1.1803e+05    259.52    800.53         0      
+    {'clamped' }    {'sum_pm'     }        1           -1             47       1.1803e+05    259.52    800.53         0      
+    {'clamped' }    {'combined_pp'}        1            1           2000       1.1268e+05    109.79     592.8         0      
+    {'clamped' }    {'combined_pm'}        1           -1           2000       1.1268e+05    109.79     592.8         1      
+    {'building'}    {'sum_pp'     }        1            1             66            12971    45.372    98.105         0      
+    {'building'}    {'sum_mp'     }       -1            1             66            12971    45.372    98.105         0      
+    {'building'}    {'sum_pm'     }        1           -1             66            12971    45.372    98.105         0      
+    {'building'}    {'combined_pp'}        1            1             52           4988.2    26.168    99.589         0      
+    {'building'}    {'combined_pm'}        1           -1             88           7789.2     37.79    129.51         1      
+

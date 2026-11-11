@@ -1,0 +1,14 @@
+
+===== building 80x240: omega0 = 66.1319 rad/s, E_min/E0 = 1e-06 =====
+[C4] building a_omitted_OC   it=  87 (stagnation_x_tolerance) t=12.3s c=4.886298e+02 vol=0.3000 (err +0.0000) om=87.109/91.949 |gF|/|gK|=3.33
+[C4] building b_full_MMA     it= 105 (stagnation_x_tolerance) t=25.3s c=3.473052e+02 vol=0.3000 (err -0.0000) om=62.984/79.527 |gF|/|gK|=4.71
+[C4] building c_omitted_MMA  it= 125 (stagnation_x_tolerance) t=21.6s c=5.506789e+02 vol=0.3000 (err -0.0000) om=83.795/93.377 |gF|/|gK|=3.64
+[check] building (a) vs topopt_freq alpha sweep: max|dx| = 4.12e-07
+[check] building FD on 40 elements of (a): |gK+gF-FD|/|FD| = 1.05e-05, |gK-FD|/|FD| = 0.946
+        case             variant         iterations               stop               time_s    compliance    volume     volume_error    omega1    omega2    n_void_below    norm_gF_over_gK
+    ____________    _________________    __________    __________________________    ______    __________    _______    ____________    ______    ______    ____________    _______________
+
+    {'building'}    {'a_omitted_OC' }        87        {'stagnation_x_tolerance'}    12.327      488.63      0.30003     3.4616e-05     87.109    91.949         0              3.3295     
+    {'building'}    {'b_full_MMA'   }       105        {'stagnation_x_tolerance'}    25.334      347.31      0.29997    -3.4475e-05     62.984    79.527         2              4.7083     
+    {'building'}    {'c_omitted_MMA'}       125        {'stagnation_x_tolerance'}    21.553      550.68      0.29997    -2.7358e-05     83.795    93.377         4              3.6419     
+

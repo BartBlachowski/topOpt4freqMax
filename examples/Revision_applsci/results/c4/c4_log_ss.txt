@@ -1,0 +1,13 @@
+
+===== ss 400x50: omega0 = 136.4831 rad/s, E_min/E0 = 1e-09 =====
+[C4] ss       a_omitted_OC   it=  41 (stagnation_x_tolerance) t=5.7s c=7.235433e+03 vol=0.5001 (err +0.0001) om=160.000/222.081 |gF|/|gK|=1.12
+[C4] ss       b_full_MMA     it= 114 (stagnation_x_tolerance) t=26.4s c=3.622887e+03 vol=0.4393 (err -0.0607) om=100.206/162.644 |gF|/|gK|=2.01
+[C4] ss       c_omitted_MMA  it= 167 (stagnation_x_tolerance) t=28.4s c=7.160841e+03 vol=0.5000 (err -0.0000) om=159.684/227.099 |gF|/|gK|=0.97
+[check] ss FD on 40 elements of (a): |gK+gF-FD|/|FD| = 8.69e-05, |gK-FD|/|FD| = 1.092
+     case          variant         iterations               stop               time_s    compliance    volume     volume_error    omega1    omega2    n_void_below    norm_gF_over_gK
+    ______    _________________    __________    __________________________    ______    __________    _______    ____________    ______    ______    ____________    _______________
+
+    {'ss'}    {'a_omitted_OC' }        41        {'stagnation_x_tolerance'}    5.7021      7235.4      0.50005     5.3698e-05        160    222.08         0               1.1181    
+    {'ss'}    {'b_full_MMA'   }       114        {'stagnation_x_tolerance'}    26.392      3622.9      0.43934      -0.060657     100.21    162.64         0               2.0102    
+    {'ss'}    {'c_omitted_MMA'}       167        {'stagnation_x_tolerance'}    28.404      7160.8      0.49998    -2.4356e-05     159.68     227.1         4              0.96539    
+

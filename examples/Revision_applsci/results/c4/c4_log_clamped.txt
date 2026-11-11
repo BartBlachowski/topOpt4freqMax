@@ -1,0 +1,14 @@
+
+===== clamped 400x50: omega0 = 290.8872 rad/s, E_min/E0 = 1e-06 =====
+[C4] clamped  a_omitted_OC   it=  34 (stagnation_x_tolerance) t=4.6s c=2.089333e+04 vol=0.5000 (err -0.0000) om=368.239/402.692 |gF|/|gK|=1.29
+[C4] clamped  b_full_MMA     it=  78 (stagnation_x_tolerance) t=18.1s c=3.160480e+03 vol=0.4159 (err -0.0841) om=2984.872/4145.439 |gF|/|gK|=4.51
+[C4] clamped  c_omitted_MMA  it= 116 (stagnation_x_tolerance) t=12.4s c=1.952136e+04 vol=0.5000 (err -0.0000) om=368.428/377.696 |gF|/|gK|=1.54
+[check] clamped (a) vs topopt_freq alpha sweep: max|dx| = 1.60e-09
+[check] clamped FD on 40 elements of (a): |gK+gF-FD|/|FD| = 2.55e-05, |gK-FD|/|FD| = 1.039
+       case             variant         iterations               stop               time_s    compliance    volume     volume_error    omega1    omega2    n_void_below    norm_gF_over_gK
+    ___________    _________________    __________    __________________________    ______    __________    _______    ____________    ______    ______    ____________    _______________
+
+    {'clamped'}    {'a_omitted_OC' }        34        {'stagnation_x_tolerance'}    4.5909       20893      0.49998    -1.9078e-05     368.24    402.69           0            1.2879     
+    {'clamped'}    {'b_full_MMA'   }        78        {'stagnation_x_tolerance'}    18.077      3160.5      0.41591      -0.084089     2984.9    4145.4        2357            4.5112     
+    {'clamped'}    {'c_omitted_MMA'}       116        {'stagnation_x_tolerance'}    12.389       19521      0.49998    -2.1449e-05     368.43     377.7           9            1.5353     
+
