@@ -1,0 +1,11 @@
+C8/C9 2026-11-11 13:40:44 on Lap.local, MATLAB 25.2.0.3042426 (R2025b) Update 1
+
+===== C8 building_80x240_vf30: omega0(solid) = 66.132, initial uniform omega1 = 485.430 =====
+[C8] building_80x240_vf30 proposed: it=87 (stagnation_x_tolerance) 8.0 s vol=0.3000 grey=0.087 omega1/2 = 87.109 / 91.949
+[C8] building_80x240_vf30 Du-Olhoff: outer=105 inner=1734 (CONVERGED) 678.5 s vol=0.3000 grey=0.124 omega1/2 common = 88.649 / 131.658, native = 88.767 / 120.965
+     job          case           mesh       volfrac       method        reference    iterations    inner               stop               time_s    volume       grey      omega1    omega2    omega1_native    omega2_native    omega1_initial
+    ______    ____________    __________    _______    _____________    _________    __________    _____    __________________________    ______    _______    ________    ______    ______    _____________    _____________    ______________
+
+    {'C8'}    {'building'}    {'80x240'}      0.3      {'proposed' }    {'solid'}        87         NaN     {'stagnation_x_tolerance'}    8.0233    0.30003    0.086976    87.109    91.949          NaN              NaN            485.43    
+    {'C8'}    {'building'}    {'80x240'}      0.3      {'du-olhoff'}    {'-'    }       105        1734     {'CONVERGED'             }    678.53        0.3     0.12369    88.649    131.66       88.767           120.97            485.43    
+

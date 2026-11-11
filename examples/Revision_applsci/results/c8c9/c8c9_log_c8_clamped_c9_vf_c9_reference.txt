@@ -1,0 +1,43 @@
+C8/C9 2026-11-11 13:04:44 on Lap.local, MATLAB 25.2.0.3042426 (R2025b) Update 1
+
+===== C8 clamped_400x50_vf50: omega0(solid) = 290.887, initial uniform omega1 = 145.444 =====
+[C8] clamped_400x50_vf50 proposed: it=34 (stagnation_x_tolerance) 3.3 s vol=0.5000 grey=0.109 omega1/2 = 368.239 / 402.692
+[C8] clamped_400x50_vf50 Du-Olhoff: outer=60 inner=1621 (CONVERGED) 514.0 s vol=0.5000 grey=0.180 omega1/2 common = 412.792 / 413.562, native = 414.499 / 414.721
+
+===== C8 clamped_160x20_vf50: omega0(solid) = 291.138, initial uniform omega1 = 145.570 =====
+[C8] clamped_160x20_vf50 proposed: it=32 (stagnation_x_tolerance) 0.5 s vol=0.4999 grey=0.263 omega1/2 = 338.816 / 408.873
+[C8] clamped_160x20_vf50 Du-Olhoff: outer=53 inner=1138 (CONVERGED) 94.2 s vol=0.5000 grey=0.159 omega1/2 common = 410.281 / 414.114, native = 412.463 / 414.905
+
+===== C9 ss_400x50_vf30: omega0(solid) = 136.483, initial uniform omega1 = 40.946 =====
+[C9] ss_400x50_vf30 proposed: it=47 (stagnation_x_tolerance) 4.3 s vol=0.3000 grey=0.119 omega1/2 = 147.909 / 164.664
+[C9] ss_400x50_vf30 Du-Olhoff: outer=55 inner=1301 (CONVERGED) 333.5 s vol=0.3000 grey=0.218 omega1/2 common = 157.043 / 157.179, native = 157.176 / 157.659
+
+===== C9 ss_400x50_vf50: omega0(solid) = 136.483, initial uniform omega1 = 68.242 =====
+[C9] ss_400x50_vf50 proposed: it=41 (stagnation_x_tolerance) 3.4 s vol=0.5001 grey=0.099 omega1/2 = 160.000 / 222.081
+[C9] ss_400x50_vf50 Du-Olhoff: outer=62 inner=1413 (CONVERGED) 345.0 s vol=0.5000 grey=0.125 omega1/2 common = 166.800 / 194.505, native = 166.810 / 194.747
+
+===== C9 ss_400x50_vf70: omega0(solid) = 136.483, initial uniform omega1 = 95.538 =====
+[C9] ss_400x50_vf70 proposed: it=49 (stagnation_x_tolerance) 4.1 s vol=0.7000 grey=0.094 omega1/2 = 151.560 / 297.134
+[C9] ss_400x50_vf70 Du-Olhoff: outer=59 inner=941 (CONVERGED) 231.1 s vol=0.7000 grey=0.125 omega1/2 common = 162.370 / 219.281, native = 162.374 / 219.435
+[C9 ref] building solid: it=87 (stagnation_x_tolerance) 7.2 s vol=0.3000 grey=0.087 omega1/2 = 87.109 / 91.949
+graded reference: omega = 41.761 (solid 66.132), mean x = 0.3000, MAC with solid mode = 0.9875
+[C9 ref] building graded: it=99 (stagnation_x_tolerance) 8.2 s vol=0.3000 grey=0.113 omega1/2 = 85.799 / 93.090
+perturbed reference: ||delta||_M / ||phi0||_M = 0.10, MAC with solid mode = 0.9901
+[C9 ref] building perturb: it=82 (stagnation_x_tolerance) 6.9 s vol=0.2999 grey=0.093 omega1/2 = 87.164 / 91.382
+     job          case           mesh       volfrac       method         reference     iterations    inner               stop               time_s     volume       grey      omega1    omega2    omega1_native    omega2_native    omega1_initial
+    ______    ____________    __________    _______    _____________    ___________    __________    _____    __________________________    _______    _______    ________    ______    ______    _____________    _____________    ______________
+
+    {'C8'}    {'clamped' }    {'400x50'}      0.5      {'proposed' }    {'solid'  }        34         NaN     {'stagnation_x_tolerance'}     3.3383    0.49998     0.10936    368.24    402.69          NaN              NaN            145.44    
+    {'C8'}    {'clamped' }    {'400x50'}      0.5      {'du-olhoff'}    {'-'      }        60        1621     {'CONVERGED'             }     514.03    0.49997     0.18004    412.79    413.56        414.5           414.72            145.44    
+    {'C8'}    {'clamped' }    {'160x20'}      0.5      {'proposed' }    {'solid'  }        32         NaN     {'stagnation_x_tolerance'}    0.48922    0.49995      0.2628    338.82    408.87          NaN              NaN            145.57    
+    {'C8'}    {'clamped' }    {'160x20'}      0.5      {'du-olhoff'}    {'-'      }        53        1138     {'CONVERGED'             }     94.158    0.49998     0.15879    410.28    414.11       412.46            414.9            145.57    
+    {'C9'}    {'ss'      }    {'400x50'}      0.3      {'proposed' }    {'solid'  }        47         NaN     {'stagnation_x_tolerance'}      4.276    0.29998     0.11854    147.91    164.66          NaN              NaN            40.946    
+    {'C9'}    {'ss'      }    {'400x50'}      0.3      {'du-olhoff'}    {'-'      }        55        1301     {'CONVERGED'             }     333.55    0.29999     0.21764    157.04    157.18       157.18           157.66            40.946    
+    {'C9'}    {'ss'      }    {'400x50'}      0.5      {'proposed' }    {'solid'  }        41         NaN     {'stagnation_x_tolerance'}     3.4149    0.50005    0.098926       160    222.08          NaN              NaN            68.242    
+    {'C9'}    {'ss'      }    {'400x50'}      0.5      {'du-olhoff'}    {'-'      }        62        1413     {'CONVERGED'             }        345        0.5     0.12467     166.8    194.51       166.81           194.75            68.242    
+    {'C9'}    {'ss'      }    {'400x50'}      0.7      {'proposed' }    {'solid'  }        49         NaN     {'stagnation_x_tolerance'}     4.0811    0.69997    0.093885    151.56    297.13          NaN              NaN            95.538    
+    {'C9'}    {'ss'      }    {'400x50'}      0.7      {'du-olhoff'}    {'-'      }        59         941     {'CONVERGED'             }     231.13        0.7     0.12531    162.37    219.28       162.37           219.43            95.538    
+    {'C9'}    {'building'}    {'80x240'}      0.3      {'proposed' }    {'solid'  }        87         NaN     {'stagnation_x_tolerance'}      7.213    0.30003    0.086976    87.109    91.949          NaN              NaN            485.43    
+    {'C9'}    {'building'}    {'80x240'}      0.3      {'proposed' }    {'graded' }        99         NaN     {'stagnation_x_tolerance'}     8.2196    0.30002     0.11314    85.799     93.09          NaN              NaN            485.43    
+    {'C9'}    {'building'}    {'80x240'}      0.3      {'proposed' }    {'perturb'}        82         NaN     {'stagnation_x_tolerance'}     6.8919    0.29995    0.093175    87.164    91.382          NaN              NaN            485.43    
+

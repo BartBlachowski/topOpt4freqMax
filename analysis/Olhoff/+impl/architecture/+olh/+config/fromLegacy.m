@@ -48,7 +48,7 @@ put('domain.b',         take('b', 1));
 put('domain.thickness', take('t', 1));
 put('domain.mesh.nelx', take('nelx', 160));
 put('domain.mesh.nely', take('nely', 20));
-bcMap = struct('a','simplySupported','b','clampedSimple','c','clamped');
+bcMap = struct('a','simplySupported','b','clampedSimple','c','clamped','base','clampedBottom');
 bc = lower(take('bc','a'));
 if ~isfield(bcMap, bc), error('olh:config:legacyBc','unknown legacy bc ''%s''', bc); end
 put('domain.boundary.condition', bcMap.(bc));

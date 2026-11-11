@@ -1,0 +1,13 @@
+C8/C9 2026-11-11 13:13:49 on Lap.local, MATLAB 25.2.0.3042426 (R2025b) Update 1
+[C9 ref] building solid: it=87 (stagnation_x_tolerance) 8.0 s vol=0.3000 grey=0.087 omega1/2 = 87.109 / 91.949
+graded reference: omega = 41.761 (solid 66.132), mean x = 0.3000, MAC with solid mode = 0.9875
+[C9 ref] building graded: it=99 (stagnation_x_tolerance) 8.9 s vol=0.3000 grey=0.113 omega1/2 = 85.799 / 93.090
+perturbed reference: ||delta||_M / ||phi0||_M = 0.10, MAC with solid mode = 0.9901
+[C9 ref] building perturb: it=82 (stagnation_x_tolerance) 7.3 s vol=0.2999 grey=0.093 omega1/2 = 87.164 / 91.382
+     job          case           mesh       volfrac       method        reference     iterations    inner               stop               time_s    volume       grey      omega1    omega2    omega1_native    omega2_native    omega1_initial
+    ______    ____________    __________    _______    ____________    ___________    __________    _____    __________________________    ______    _______    ________    ______    ______    _____________    _____________    ______________
+
+    {'C9'}    {'building'}    {'80x240'}      0.3      {'proposed'}    {'solid'  }        87         NaN     {'stagnation_x_tolerance'}    8.0229    0.30003    0.086976    87.109    91.949         NaN              NaN             485.43    
+    {'C9'}    {'building'}    {'80x240'}      0.3      {'proposed'}    {'graded' }        99         NaN     {'stagnation_x_tolerance'}    8.8812    0.30002     0.11314    85.799     93.09         NaN              NaN             485.43    
+    {'C9'}    {'building'}    {'80x240'}      0.3      {'proposed'}    {'perturb'}        82         NaN     {'stagnation_x_tolerance'}    7.2681    0.29995    0.093175    87.164    91.382         NaN              NaN             485.43    
+

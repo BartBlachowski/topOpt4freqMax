@@ -1,0 +1,4 @@
+C8/C9 2026-11-11 15:17:00 on Lap.local, MATLAB 25.2.0.3042426 (R2025b) Update 1
+[hist] ss       42 iterates: m_v 0.5000 -> 0.5340 (+6.8%), sqrt(lambda_hat) 68.24 -> 160.02, omega1 68.24 -> 160.00; max |sqrt(lh)-omega1|/omega1 over iterates 0.10% (last 10: 0.02%); steps with opposite signs of d sqrt(lh) and d omega1: 0 of 41
+[hist] clamped  35 iterates: m_v 0.5000 -> 0.3965 (-20.7%), sqrt(lambda_hat) 145.44 -> 368.61, omega1 145.44 -> 368.24; max |sqrt(lh)-omega1|/omega1 over iterates 9.76% (last 10: 0.10%); steps with opposite signs of d sqrt(lh) and d omega1: 0 of 34
+[hist] building 88 iterates: m_v 0.3147 -> 0.1974 (-37.3%), sqrt(lambda_hat) 34.25 -> 87.90, omega1 485.43 -> 87.11; max |sqrt(lh)-omega1|/omega1 over iterates 92.95% (last 10: 0.92%); steps with opposite signs of d sqrt(lh) and d omega1: 8 of 87

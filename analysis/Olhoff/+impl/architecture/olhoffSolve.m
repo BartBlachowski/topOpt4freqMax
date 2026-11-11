@@ -58,6 +58,29 @@ volfrac = g('design.volumeFraction');
 pFixed  = g('material.stiffness.p');
 massTerminal = g('material.mass.model');
 
+% ---- passive solid elements (AppliSci revision, building example; class D) --
+% design.passiveSolid lists elements held at rho = 1.  They are counted in the
+% volume (25e) but are not design variables: their generalized gradients are
+% zeroed before filtering (as in the proposed method's code) and the inner
+% sub-problem is posed on the active elements only, with the volume bound
+% reduced by the passive volume.  The uniform start is placed on the active
+% elements so that the total volume equals volfrac*NE.  Empty = inert: no
+% statement below changes a run without passive elements.
+pasSolid   = g('design.passiveSolid');  pasSolid = unique(pasSolid(:));
+hasPassive = ~isempty(pasSolid);
+if hasPassive
+    if g('projection.enabled')
+        error('olh:passive:projection', 'design.passiveSolid is not implemented with projection.');
+    end
+    actEl      = setdiff((1:NE)', pasSolid);
+    volfracAct = (volfrac*NE - numel(pasSolid))/numel(actEl);
+    if volfracAct <= rhomin || volfracAct > 1
+        error('olh:passive:volume', 'volume fraction %.4g leaves no admissible active density (%.4g).', volfrac, volfracAct);
+    end
+    rho(actEl)    = volfracAct;
+    rho(pasSolid) = 1;
+end
+
 hist = struct('omega',[],'N',[],'beta',[],'nInner',[],'dxOuter',[], ...
               'vol',[],'tEig',[],'tGrad',[],'tInner',[],'degen',[],'multJ',[], ...
               'innerConv',[],'cumInner',[],'dxNorm2',[],'move',[],'gap12',[], ...
@@ -316,6 +339,9 @@ for outer = 1:maxOuter
     end
     FJ      = genGrad(mdl, rho, stiffNow, massNowCfg, Phi, lam(J), J);
     fJJ     = FJ(:,1,1);
+    if hasPassive                      % passive elements are not design variables
+        F(pasSolid,:,:) = 0;  fJJ(pasSolid) = 0;
+    end
 
     % ---- sensitivity treatment ------------------------------------------
     if useDensityFilter
@@ -409,6 +435,11 @@ for outer = 1:maxOuter
         ctx.rhomin = 0;
         ctx.volFun = @(dz) local_projVolume(flt.H, flt.Hs, z, dz, bProj, projEta, rhomin);
     end
+    if hasPassive                      % sub-problem on the active elements only
+        ctx.F = F(actEl,:,:);  ctx.fJJ = fJJ(actEl);  ctx.rho = rho(actEl);
+        ctx.volfrac = volfracAct;
+        if numel(mvNow) > 1, ctx.move = mvNow(actEl); end
+    end
     if innerLP
         [drho, st] = innerLoopLP(ctx);
         if ~st.conv
@@ -418,6 +449,9 @@ for outer = 1:maxOuter
         [drho, st, mmaState] = innerLoopRho(ctx, mmaState);
     else
         [drho, st] = innerLoop(ctx);
+    end
+    if hasPassive
+        dFull = zeros(NE,1);  dFull(actEl) = drho;  drho = dFull;
     end
     tInner = toc(ti);
 

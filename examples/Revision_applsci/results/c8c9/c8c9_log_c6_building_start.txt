@@ -1,0 +1,16 @@
+C8/C9 2026-11-11 13:56:45 on Lap.local, MATLAB 25.2.0.3042426 (R2025b) Update 1
+[start] start (frame solid, active uniform): mean x = 0.3000, active x = 0.2443
+   mode 1: omega = 33.8707 rad/s, MAC_M with phi1(0) = 0.976, with phi2(0) = 0.008
+   mode 2: omega = 109.2661 rad/s, MAC_M with phi1(0) = 0.019, with phi2(0) = 0.915
+   mode 3: omega = 144.8631 rad/s, MAC_M with phi1(0) = 0.000, with phi2(0) = 0.000
+   mode 4: omega = 209.0568 rad/s, MAC_M with phi1(0) = 0.000, with phi2(0) = 0.037
+   mode 5: omega = 297.8814 rad/s, MAC_M with phi1(0) = 0.002, with phi2(0) = 0.003
+   mode 6: omega = 317.3884 rad/s, MAC_M with phi1(0) = 0.000, with phi2(0) = 0.000
+[start] x = V_f everywhere: mean x = 0.3000, active x = 0.3000
+   mode 1: omega = 19.8399 rad/s, MAC_M with phi1(0) = 1.000, with phi2(0) = 0.000
+   mode 2: omega = 90.9349 rad/s, MAC_M with phi1(0) = 0.000, with phi2(0) = 1.000
+   mode 3: omega = 99.6654 rad/s, MAC_M with phi1(0) = 0.000, with phi2(0) = 0.000
+   mode 4: omega = 199.8681 rad/s, MAC_M with phi1(0) = 0.000, with phi2(0) = 0.000
+   mode 5: omega = 296.1827 rad/s, MAC_M with phi1(0) = 0.000, with phi2(0) = 0.000
+   mode 6: omega = 307.3425 rad/s, MAC_M with phi1(0) = 0.000, with phi2(0) = 0.000
+[start] solid domain: 66.1319 / 303.1113 rad/s

@@ -1,0 +1,499 @@
+C7 tolerance check 2026-11-11 14:49:00 on Lap.local, MATLAB 25.2.0.3042426 (R2025b) Update 1
+  BC[1] closest_point: 1 nodes, 2 dofs fixed
+  BC[2] closest_point: 1 nodes, 2 dofs fixed
+Compliance objective with load-case aggregation
+mesh: 48 x 6
+domain: L x H = 8 x 1
+volfrac: 0.5, rmin(phys): 0.333333, penal: 3
+Filter method: Sensitivity based
+element size: hx=0.166667, hy=0.166667
+Stiffness interpolation: simp
+Optimizer: OC
+Load cases: 1 (weighting: load)
+  case[1] "proposed_mode1": factor=1, nLoads=1
+[Load cases] authoritative semi_harmonic baseline=solid, load_sensitivity=omitted
+[Load cases] semi_harmonic baseline cached up to mode 1.
+it.:    1 , obj(sum_i u_i^T K u_i): 38095.938 Vol.: 0.500, ch.: 0.200
+it.:    2 , obj(sum_i u_i^T K u_i): 30432.097 Vol.: 0.500, ch.: 0.200
+it.:    3 , obj(sum_i u_i^T K u_i): 19558.089 Vol.: 0.500, ch.: 0.181
+it.:    4 , obj(sum_i u_i^T K u_i): 16325.667 Vol.: 0.500, ch.: 0.139
+it.:    5 , obj(sum_i u_i^T K u_i): 13433.687 Vol.: 0.500, ch.: 0.132
+[Final Eigen] lambda1=1.426914e+04, omega1=1.194535e+02 rad/s, f1=1.901161e+01 Hz
+warm-up proposed: CAP_HIT
+  BC[1] closest_point: 1 nodes, 2 dofs fixed
+  BC[2] closest_point: 1 nodes, 2 dofs fixed
+Compliance objective with load-case aggregation
+mesh: 400 x 50
+domain: L x H = 8 x 1
+volfrac: 0.5, rmin(phys): 0.04, penal: 3
+Filter method: Sensitivity based
+element size: hx=0.02, hy=0.02
+Stiffness interpolation: simp
+Optimizer: OC
+Load cases: 1 (weighting: load)
+  case[1] "proposed_mode1": factor=1, nLoads=1
+[Load cases] authoritative semi_harmonic baseline=solid, load_sensitivity=omitted
+[Load cases] semi_harmonic baseline cached up to mode 1.
+it.:    1 , obj(sum_i u_i^T K u_i): 37255.265 Vol.: 0.500, ch.: 0.200
+it.:    2 , obj(sum_i u_i^T K u_i): 24879.201 Vol.: 0.500, ch.: 0.200
+it.:    3 , obj(sum_i u_i^T K u_i): 15335.589 Vol.: 0.500, ch.: 0.200
+it.:    4 , obj(sum_i u_i^T K u_i): 11189.525 Vol.: 0.500, ch.: 0.200
+it.:    5 , obj(sum_i u_i^T K u_i): 8956.517 Vol.: 0.500, ch.: 0.200
+it.:    6 , obj(sum_i u_i^T K u_i): 8258.976 Vol.: 0.500, ch.: 0.200
+it.:    7 , obj(sum_i u_i^T K u_i): 7681.927 Vol.: 0.500, ch.: 0.200
+it.:    8 , obj(sum_i u_i^T K u_i): 7765.695 Vol.: 0.500, ch.: 0.200
+it.:    9 , obj(sum_i u_i^T K u_i): 7533.283 Vol.: 0.500, ch.: 0.198
+it.:   10 , obj(sum_i u_i^T K u_i): 7647.796 Vol.: 0.500, ch.: 0.200
+it.:   11 , obj(sum_i u_i^T K u_i): 7500.996 Vol.: 0.500, ch.: 0.178
+it.:   12 , obj(sum_i u_i^T K u_i): 7612.501 Vol.: 0.500, ch.: 0.200
+it.:   13 , obj(sum_i u_i^T K u_i): 7496.029 Vol.: 0.500, ch.: 0.200
+it.:   14 , obj(sum_i u_i^T K u_i): 7571.024 Vol.: 0.500, ch.: 0.200
+it.:   15 , obj(sum_i u_i^T K u_i): 7419.801 Vol.: 0.500, ch.: 0.200
+it.:   16 , obj(sum_i u_i^T K u_i): 7417.587 Vol.: 0.500, ch.: 0.200
+it.:   17 , obj(sum_i u_i^T K u_i): 7282.226 Vol.: 0.500, ch.: 0.200
+it.:   18 , obj(sum_i u_i^T K u_i): 7291.349 Vol.: 0.500, ch.: 0.200
+it.:   19 , obj(sum_i u_i^T K u_i): 7234.431 Vol.: 0.500, ch.: 0.200
+it.:   20 , obj(sum_i u_i^T K u_i): 7228.594 Vol.: 0.500, ch.: 0.200
+it.:   21 , obj(sum_i u_i^T K u_i): 7199.202 Vol.: 0.500, ch.: 0.169
+it.:   22 , obj(sum_i u_i^T K u_i): 7175.218 Vol.: 0.500, ch.: 0.183
+it.:   23 , obj(sum_i u_i^T K u_i): 7138.176 Vol.: 0.500, ch.: 0.180
+it.:   24 , obj(sum_i u_i^T K u_i): 7098.170 Vol.: 0.500, ch.: 0.174
+it.:   25 , obj(sum_i u_i^T K u_i): 7062.571 Vol.: 0.500, ch.: 0.150
+it.:   26 , obj(sum_i u_i^T K u_i): 7043.233 Vol.: 0.500, ch.: 0.146
+it.:   27 , obj(sum_i u_i^T K u_i): 7040.725 Vol.: 0.500, ch.: 0.108
+it.:   28 , obj(sum_i u_i^T K u_i): 7059.122 Vol.: 0.500, ch.: 0.082
+it.:   29 , obj(sum_i u_i^T K u_i): 7083.492 Vol.: 0.500, ch.: 0.063
+it.:   30 , obj(sum_i u_i^T K u_i): 7107.111 Vol.: 0.500, ch.: 0.049
+it.:   31 , obj(sum_i u_i^T K u_i): 7128.705 Vol.: 0.500, ch.: 0.043
+it.:   32 , obj(sum_i u_i^T K u_i): 7148.046 Vol.: 0.500, ch.: 0.038
+it.:   33 , obj(sum_i u_i^T K u_i): 7164.196 Vol.: 0.500, ch.: 0.034
+it.:   34 , obj(sum_i u_i^T K u_i): 7177.492 Vol.: 0.500, ch.: 0.031
+it.:   35 , obj(sum_i u_i^T K u_i): 7189.037 Vol.: 0.500, ch.: 0.028
+it.:   36 , obj(sum_i u_i^T K u_i): 7199.079 Vol.: 0.500, ch.: 0.026
+it.:   37 , obj(sum_i u_i^T K u_i): 7207.778 Vol.: 0.500, ch.: 0.023
+it.:   38 , obj(sum_i u_i^T K u_i): 7215.136 Vol.: 0.500, ch.: 0.021
+it.:   39 , obj(sum_i u_i^T K u_i): 7221.133 Vol.: 0.500, ch.: 0.021
+it.:   40 , obj(sum_i u_i^T K u_i): 7226.656 Vol.: 0.500, ch.: 0.021
+it.:   41 , obj(sum_i u_i^T K u_i): 7231.244 Vol.: 0.500, ch.: 0.020
+[Final Eigen] lambda1=1.740118e+04, omega1=1.319135e+02 rad/s, f1=2.099469e+01 Hz
+
+proposed tol=0.01: NATIVE_CONVERGED count1=1 count2=41 total=4.11 s vol=0.5001 grey=0.099 omega1/2 common = 160.00 / 222.08
+                           time1_name: 'stage1_reference_eigenanalysis_s'
+                                time1: 0.2196
+                           time2_name: 'stage2_simp_time_s'
+                                time2: 3.1086
+                        stage1_time_s: 0.3459
+        stage1_reference_eigen_time_s: 0.2196
+            stage1_preparation_time_s: 0.1263
+                        stage2_time_s: 3.1086
+                      overhead_time_s: 0.7795
+                    total_wall_time_s: 4.1076
+            solver_self_report_wall_s: 4.1065
+    independent_crosscheck_residual_s: 0.0011
+                         stage_time_s: 3.3282
+
+  BC[1] closest_point: 1 nodes, 2 dofs fixed
+  BC[2] closest_point: 1 nodes, 2 dofs fixed
+Compliance objective with load-case aggregation
+mesh: 400 x 50
+domain: L x H = 8 x 1
+volfrac: 0.5, rmin(phys): 0.04, penal: 3
+Filter method: Sensitivity based
+element size: hx=0.02, hy=0.02
+Stiffness interpolation: simp
+Optimizer: OC
+Load cases: 1 (weighting: load)
+  case[1] "proposed_mode1": factor=1, nLoads=1
+[Load cases] authoritative semi_harmonic baseline=solid, load_sensitivity=omitted
+[Load cases] semi_harmonic baseline cached up to mode 1.
+it.:    1 , obj(sum_i u_i^T K u_i): 37255.265 Vol.: 0.500, ch.: 0.200
+it.:    2 , obj(sum_i u_i^T K u_i): 24879.201 Vol.: 0.500, ch.: 0.200
+it.:    3 , obj(sum_i u_i^T K u_i): 15335.589 Vol.: 0.500, ch.: 0.200
+it.:    4 , obj(sum_i u_i^T K u_i): 11189.525 Vol.: 0.500, ch.: 0.200
+it.:    5 , obj(sum_i u_i^T K u_i): 8956.517 Vol.: 0.500, ch.: 0.200
+it.:    6 , obj(sum_i u_i^T K u_i): 8258.976 Vol.: 0.500, ch.: 0.200
+it.:    7 , obj(sum_i u_i^T K u_i): 7681.927 Vol.: 0.500, ch.: 0.200
+it.:    8 , obj(sum_i u_i^T K u_i): 7765.695 Vol.: 0.500, ch.: 0.200
+it.:    9 , obj(sum_i u_i^T K u_i): 7533.283 Vol.: 0.500, ch.: 0.198
+it.:   10 , obj(sum_i u_i^T K u_i): 7647.796 Vol.: 0.500, ch.: 0.200
+it.:   11 , obj(sum_i u_i^T K u_i): 7500.996 Vol.: 0.500, ch.: 0.178
+it.:   12 , obj(sum_i u_i^T K u_i): 7612.501 Vol.: 0.500, ch.: 0.200
+it.:   13 , obj(sum_i u_i^T K u_i): 7496.029 Vol.: 0.500, ch.: 0.200
+it.:   14 , obj(sum_i u_i^T K u_i): 7571.024 Vol.: 0.500, ch.: 0.200
+it.:   15 , obj(sum_i u_i^T K u_i): 7419.801 Vol.: 0.500, ch.: 0.200
+it.:   16 , obj(sum_i u_i^T K u_i): 7417.587 Vol.: 0.500, ch.: 0.200
+it.:   17 , obj(sum_i u_i^T K u_i): 7282.226 Vol.: 0.500, ch.: 0.200
+it.:   18 , obj(sum_i u_i^T K u_i): 7291.349 Vol.: 0.500, ch.: 0.200
+it.:   19 , obj(sum_i u_i^T K u_i): 7234.431 Vol.: 0.500, ch.: 0.200
+it.:   20 , obj(sum_i u_i^T K u_i): 7228.594 Vol.: 0.500, ch.: 0.200
+it.:   21 , obj(sum_i u_i^T K u_i): 7199.202 Vol.: 0.500, ch.: 0.169
+it.:   22 , obj(sum_i u_i^T K u_i): 7175.218 Vol.: 0.500, ch.: 0.183
+it.:   23 , obj(sum_i u_i^T K u_i): 7138.176 Vol.: 0.500, ch.: 0.180
+it.:   24 , obj(sum_i u_i^T K u_i): 7098.170 Vol.: 0.500, ch.: 0.174
+it.:   25 , obj(sum_i u_i^T K u_i): 7062.571 Vol.: 0.500, ch.: 0.150
+it.:   26 , obj(sum_i u_i^T K u_i): 7043.233 Vol.: 0.500, ch.: 0.146
+it.:   27 , obj(sum_i u_i^T K u_i): 7040.725 Vol.: 0.500, ch.: 0.108
+it.:   28 , obj(sum_i u_i^T K u_i): 7059.122 Vol.: 0.500, ch.: 0.082
+it.:   29 , obj(sum_i u_i^T K u_i): 7083.492 Vol.: 0.500, ch.: 0.063
+it.:   30 , obj(sum_i u_i^T K u_i): 7107.111 Vol.: 0.500, ch.: 0.049
+it.:   31 , obj(sum_i u_i^T K u_i): 7128.705 Vol.: 0.500, ch.: 0.043
+it.:   32 , obj(sum_i u_i^T K u_i): 7148.046 Vol.: 0.500, ch.: 0.038
+it.:   33 , obj(sum_i u_i^T K u_i): 7164.196 Vol.: 0.500, ch.: 0.034
+it.:   34 , obj(sum_i u_i^T K u_i): 7177.492 Vol.: 0.500, ch.: 0.031
+it.:   35 , obj(sum_i u_i^T K u_i): 7189.037 Vol.: 0.500, ch.: 0.028
+it.:   36 , obj(sum_i u_i^T K u_i): 7199.079 Vol.: 0.500, ch.: 0.026
+it.:   37 , obj(sum_i u_i^T K u_i): 7207.778 Vol.: 0.500, ch.: 0.023
+it.:   38 , obj(sum_i u_i^T K u_i): 7215.136 Vol.: 0.500, ch.: 0.021
+it.:   39 , obj(sum_i u_i^T K u_i): 7221.133 Vol.: 0.500, ch.: 0.021
+it.:   40 , obj(sum_i u_i^T K u_i): 7226.656 Vol.: 0.500, ch.: 0.021
+it.:   41 , obj(sum_i u_i^T K u_i): 7231.244 Vol.: 0.500, ch.: 0.020
+it.:   42 , obj(sum_i u_i^T K u_i): 7235.433 Vol.: 0.500, ch.: 0.020
+it.:   43 , obj(sum_i u_i^T K u_i): 7238.753 Vol.: 0.500, ch.: 0.019
+it.:   44 , obj(sum_i u_i^T K u_i): 7241.573 Vol.: 0.500, ch.: 0.019
+it.:   45 , obj(sum_i u_i^T K u_i): 7244.447 Vol.: 0.500, ch.: 0.020
+it.:   46 , obj(sum_i u_i^T K u_i): 7247.271 Vol.: 0.500, ch.: 0.020
+it.:   47 , obj(sum_i u_i^T K u_i): 7250.172 Vol.: 0.500, ch.: 0.021
+it.:   48 , obj(sum_i u_i^T K u_i): 7252.178 Vol.: 0.500, ch.: 0.021
+it.:   49 , obj(sum_i u_i^T K u_i): 7254.689 Vol.: 0.500, ch.: 0.021
+it.:   50 , obj(sum_i u_i^T K u_i): 7256.715 Vol.: 0.500, ch.: 0.021
+it.:   51 , obj(sum_i u_i^T K u_i): 7258.351 Vol.: 0.500, ch.: 0.021
+it.:   52 , obj(sum_i u_i^T K u_i): 7259.989 Vol.: 0.500, ch.: 0.020
+it.:   53 , obj(sum_i u_i^T K u_i): 7261.497 Vol.: 0.500, ch.: 0.021
+it.:   54 , obj(sum_i u_i^T K u_i): 7263.128 Vol.: 0.500, ch.: 0.020
+it.:   55 , obj(sum_i u_i^T K u_i): 7264.902 Vol.: 0.500, ch.: 0.020
+it.:   56 , obj(sum_i u_i^T K u_i): 7266.846 Vol.: 0.500, ch.: 0.018
+it.:   57 , obj(sum_i u_i^T K u_i): 7267.875 Vol.: 0.500, ch.: 0.020
+it.:   58 , obj(sum_i u_i^T K u_i): 7269.444 Vol.: 0.500, ch.: 0.018
+it.:   59 , obj(sum_i u_i^T K u_i): 7270.403 Vol.: 0.500, ch.: 0.020
+it.:   60 , obj(sum_i u_i^T K u_i): 7271.914 Vol.: 0.500, ch.: 0.019
+it.:   61 , obj(sum_i u_i^T K u_i): 7272.906 Vol.: 0.500, ch.: 0.019
+it.:   62 , obj(sum_i u_i^T K u_i): 7273.449 Vol.: 0.500, ch.: 0.021
+it.:   63 , obj(sum_i u_i^T K u_i): 7275.094 Vol.: 0.500, ch.: 0.020
+it.:   64 , obj(sum_i u_i^T K u_i): 7276.140 Vol.: 0.500, ch.: 0.020
+it.:   65 , obj(sum_i u_i^T K u_i): 7276.945 Vol.: 0.500, ch.: 0.019
+it.:   66 , obj(sum_i u_i^T K u_i): 7277.684 Vol.: 0.500, ch.: 0.020
+it.:   67 , obj(sum_i u_i^T K u_i): 7279.397 Vol.: 0.500, ch.: 0.017
+it.:   68 , obj(sum_i u_i^T K u_i): 7280.616 Vol.: 0.500, ch.: 0.017
+it.:   69 , obj(sum_i u_i^T K u_i): 7281.500 Vol.: 0.500, ch.: 0.017
+it.:   70 , obj(sum_i u_i^T K u_i): 7282.362 Vol.: 0.500, ch.: 0.017
+it.:   71 , obj(sum_i u_i^T K u_i): 7283.071 Vol.: 0.500, ch.: 0.018
+it.:   72 , obj(sum_i u_i^T K u_i): 7283.771 Vol.: 0.500, ch.: 0.019
+it.:   73 , obj(sum_i u_i^T K u_i): 7285.371 Vol.: 0.500, ch.: 0.019
+it.:   74 , obj(sum_i u_i^T K u_i): 7286.440 Vol.: 0.500, ch.: 0.019
+it.:   75 , obj(sum_i u_i^T K u_i): 7287.203 Vol.: 0.500, ch.: 0.019
+it.:   76 , obj(sum_i u_i^T K u_i): 7287.973 Vol.: 0.500, ch.: 0.020
+it.:   77 , obj(sum_i u_i^T K u_i): 7289.582 Vol.: 0.500, ch.: 0.019
+it.:   78 , obj(sum_i u_i^T K u_i): 7290.579 Vol.: 0.500, ch.: 0.018
+it.:   79 , obj(sum_i u_i^T K u_i): 7291.226 Vol.: 0.500, ch.: 0.017
+it.:   80 , obj(sum_i u_i^T K u_i): 7291.861 Vol.: 0.500, ch.: 0.018
+it.:   81 , obj(sum_i u_i^T K u_i): 7293.394 Vol.: 0.500, ch.: 0.016
+it.:   82 , obj(sum_i u_i^T K u_i): 7294.343 Vol.: 0.500, ch.: 0.016
+it.:   83 , obj(sum_i u_i^T K u_i): 7294.933 Vol.: 0.500, ch.: 0.017
+it.:   84 , obj(sum_i u_i^T K u_i): 7295.457 Vol.: 0.500, ch.: 0.017
+it.:   85 , obj(sum_i u_i^T K u_i): 7295.860 Vol.: 0.500, ch.: 0.019
+it.:   86 , obj(sum_i u_i^T K u_i): 7297.264 Vol.: 0.500, ch.: 0.018
+it.:   87 , obj(sum_i u_i^T K u_i): 7297.986 Vol.: 0.500, ch.: 0.018
+it.:   88 , obj(sum_i u_i^T K u_i): 7298.508 Vol.: 0.500, ch.: 0.018
+it.:   89 , obj(sum_i u_i^T K u_i): 7298.956 Vol.: 0.500, ch.: 0.019
+it.:   90 , obj(sum_i u_i^T K u_i): 7300.370 Vol.: 0.500, ch.: 0.017
+it.:   91 , obj(sum_i u_i^T K u_i): 7301.062 Vol.: 0.500, ch.: 0.016
+it.:   92 , obj(sum_i u_i^T K u_i): 7301.458 Vol.: 0.500, ch.: 0.016
+it.:   93 , obj(sum_i u_i^T K u_i): 7301.807 Vol.: 0.500, ch.: 0.015
+it.:   94 , obj(sum_i u_i^T K u_i): 7302.099 Vol.: 0.500, ch.: 0.017
+it.:   95 , obj(sum_i u_i^T K u_i): 7303.446 Vol.: 0.500, ch.: 0.014
+it.:   96 , obj(sum_i u_i^T K u_i): 7304.102 Vol.: 0.500, ch.: 0.015
+it.:   97 , obj(sum_i u_i^T K u_i): 7304.489 Vol.: 0.500, ch.: 0.015
+it.:   98 , obj(sum_i u_i^T K u_i): 7304.770 Vol.: 0.500, ch.: 0.015
+it.:   99 , obj(sum_i u_i^T K u_i): 7304.984 Vol.: 0.500, ch.: 0.017
+it.:  100 , obj(sum_i u_i^T K u_i): 7306.216 Vol.: 0.500, ch.: 0.016
+it.:  101 , obj(sum_i u_i^T K u_i): 7306.743 Vol.: 0.500, ch.: 0.016
+it.:  102 , obj(sum_i u_i^T K u_i): 7307.048 Vol.: 0.500, ch.: 0.016
+it.:  103 , obj(sum_i u_i^T K u_i): 7307.306 Vol.: 0.500, ch.: 0.018
+it.:  104 , obj(sum_i u_i^T K u_i): 7308.509 Vol.: 0.500, ch.: 0.016
+it.:  105 , obj(sum_i u_i^T K u_i): 7309.020 Vol.: 0.500, ch.: 0.015
+it.:  106 , obj(sum_i u_i^T K u_i): 7309.247 Vol.: 0.500, ch.: 0.014
+it.:  107 , obj(sum_i u_i^T K u_i): 7309.388 Vol.: 0.500, ch.: 0.015
+it.:  108 , obj(sum_i u_i^T K u_i): 7310.473 Vol.: 0.500, ch.: 0.014
+it.:  109 , obj(sum_i u_i^T K u_i): 7310.940 Vol.: 0.500, ch.: 0.013
+it.:  110 , obj(sum_i u_i^T K u_i): 7311.116 Vol.: 0.500, ch.: 0.013
+it.:  111 , obj(sum_i u_i^T K u_i): 7311.229 Vol.: 0.500, ch.: 0.015
+it.:  112 , obj(sum_i u_i^T K u_i): 7312.256 Vol.: 0.500, ch.: 0.014
+it.:  113 , obj(sum_i u_i^T K u_i): 7312.620 Vol.: 0.500, ch.: 0.014
+it.:  114 , obj(sum_i u_i^T K u_i): 7312.691 Vol.: 0.500, ch.: 0.016
+it.:  115 , obj(sum_i u_i^T K u_i): 7313.698 Vol.: 0.500, ch.: 0.015
+it.:  116 , obj(sum_i u_i^T K u_i): 7313.968 Vol.: 0.500, ch.: 0.015
+it.:  117 , obj(sum_i u_i^T K u_i): 7314.004 Vol.: 0.500, ch.: 0.016
+it.:  118 , obj(sum_i u_i^T K u_i): 7315.053 Vol.: 0.500, ch.: 0.016
+it.:  119 , obj(sum_i u_i^T K u_i): 7315.334 Vol.: 0.500, ch.: 0.015
+it.:  120 , obj(sum_i u_i^T K u_i): 7315.345 Vol.: 0.500, ch.: 0.016
+it.:  121 , obj(sum_i u_i^T K u_i): 7316.313 Vol.: 0.500, ch.: 0.023
+it.:  122 , obj(sum_i u_i^T K u_i): 7316.541 Vol.: 0.500, ch.: 0.023
+it.:  123 , obj(sum_i u_i^T K u_i): 7317.584 Vol.: 0.500, ch.: 0.023
+it.:  124 , obj(sum_i u_i^T K u_i): 7317.866 Vol.: 0.500, ch.: 0.026
+it.:  125 , obj(sum_i u_i^T K u_i): 7317.847 Vol.: 0.500, ch.: 0.022
+it.:  126 , obj(sum_i u_i^T K u_i): 7318.766 Vol.: 0.500, ch.: 0.015
+it.:  127 , obj(sum_i u_i^T K u_i): 7318.947 Vol.: 0.500, ch.: 0.013
+it.:  128 , obj(sum_i u_i^T K u_i): 7318.864 Vol.: 0.500, ch.: 0.014
+it.:  129 , obj(sum_i u_i^T K u_i): 7319.679 Vol.: 0.500, ch.: 0.013
+it.:  130 , obj(sum_i u_i^T K u_i): 7319.807 Vol.: 0.500, ch.: 0.014
+it.:  131 , obj(sum_i u_i^T K u_i): 7320.636 Vol.: 0.500, ch.: 0.014
+it.:  132 , obj(sum_i u_i^T K u_i): 7320.745 Vol.: 0.500, ch.: 0.014
+it.:  133 , obj(sum_i u_i^T K u_i): 7320.506 Vol.: 0.500, ch.: 0.015
+it.:  134 , obj(sum_i u_i^T K u_i): 7321.285 Vol.: 0.500, ch.: 0.015
+it.:  135 , obj(sum_i u_i^T K u_i): 7321.339 Vol.: 0.500, ch.: 0.015
+it.:  136 , obj(sum_i u_i^T K u_i): 7322.138 Vol.: 0.500, ch.: 0.014
+it.:  137 , obj(sum_i u_i^T K u_i): 7322.182 Vol.: 0.500, ch.: 0.014
+it.:  138 , obj(sum_i u_i^T K u_i): 7322.938 Vol.: 0.500, ch.: 0.013
+it.:  139 , obj(sum_i u_i^T K u_i): 7322.952 Vol.: 0.500, ch.: 0.013
+it.:  140 , obj(sum_i u_i^T K u_i): 7323.662 Vol.: 0.500, ch.: 0.013
+it.:  141 , obj(sum_i u_i^T K u_i): 7323.667 Vol.: 0.500, ch.: 0.012
+it.:  142 , obj(sum_i u_i^T K u_i): 7323.369 Vol.: 0.500, ch.: 0.013
+it.:  143 , obj(sum_i u_i^T K u_i): 7324.055 Vol.: 0.500, ch.: 0.012
+it.:  144 , obj(sum_i u_i^T K u_i): 7324.004 Vol.: 0.500, ch.: 0.013
+it.:  145 , obj(sum_i u_i^T K u_i): 7324.750 Vol.: 0.500, ch.: 0.014
+it.:  146 , obj(sum_i u_i^T K u_i): 7324.740 Vol.: 0.500, ch.: 0.034
+it.:  147 , obj(sum_i u_i^T K u_i): 7325.490 Vol.: 0.500, ch.: 0.041
+it.:  148 , obj(sum_i u_i^T K u_i): 7325.492 Vol.: 0.500, ch.: 0.034
+it.:  149 , obj(sum_i u_i^T K u_i): 7326.191 Vol.: 0.500, ch.: 0.024
+it.:  150 , obj(sum_i u_i^T K u_i): 7326.143 Vol.: 0.500, ch.: 0.017
+it.:  151 , obj(sum_i u_i^T K u_i): 7325.760 Vol.: 0.500, ch.: 0.014
+it.:  152 , obj(sum_i u_i^T K u_i): 7326.387 Vol.: 0.500, ch.: 0.014
+it.:  153 , obj(sum_i u_i^T K u_i): 7327.292 Vol.: 0.500, ch.: 0.013
+it.:  154 , obj(sum_i u_i^T K u_i): 7327.258 Vol.: 0.500, ch.: 0.014
+it.:  155 , obj(sum_i u_i^T K u_i): 7327.931 Vol.: 0.500, ch.: 0.012
+it.:  156 , obj(sum_i u_i^T K u_i): 7327.792 Vol.: 0.500, ch.: 0.012
+it.:  157 , obj(sum_i u_i^T K u_i): 7328.407 Vol.: 0.500, ch.: 0.012
+it.:  158 , obj(sum_i u_i^T K u_i): 7328.227 Vol.: 0.500, ch.: 0.011
+it.:  159 , obj(sum_i u_i^T K u_i): 7328.815 Vol.: 0.500, ch.: 0.030
+it.:  160 , obj(sum_i u_i^T K u_i): 7328.749 Vol.: 0.500, ch.: 0.050
+it.:  161 , obj(sum_i u_i^T K u_i): 7329.471 Vol.: 0.500, ch.: 0.053
+it.:  162 , obj(sum_i u_i^T K u_i): 7329.486 Vol.: 0.500, ch.: 0.044
+it.:  163 , obj(sum_i u_i^T K u_i): 7330.189 Vol.: 0.500, ch.: 0.031
+it.:  164 , obj(sum_i u_i^T K u_i): 7330.120 Vol.: 0.500, ch.: 0.021
+it.:  165 , obj(sum_i u_i^T K u_i): 7330.743 Vol.: 0.500, ch.: 0.015
+it.:  166 , obj(sum_i u_i^T K u_i): 7330.607 Vol.: 0.500, ch.: 0.012
+it.:  167 , obj(sum_i u_i^T K u_i): 7331.180 Vol.: 0.500, ch.: 0.012
+it.:  168 , obj(sum_i u_i^T K u_i): 7330.999 Vol.: 0.500, ch.: 0.017
+it.:  169 , obj(sum_i u_i^T K u_i): 7331.544 Vol.: 0.500, ch.: 0.020
+it.:  170 , obj(sum_i u_i^T K u_i): 7331.328 Vol.: 0.500, ch.: 0.016
+it.:  171 , obj(sum_i u_i^T K u_i): 7331.831 Vol.: 0.500, ch.: 0.013
+it.:  172 , obj(sum_i u_i^T K u_i): 7331.600 Vol.: 0.500, ch.: 0.013
+it.:  173 , obj(sum_i u_i^T K u_i): 7332.119 Vol.: 0.500, ch.: 0.013
+it.:  174 , obj(sum_i u_i^T K u_i): 7332.886 Vol.: 0.500, ch.: 0.012
+it.:  175 , obj(sum_i u_i^T K u_i): 7332.677 Vol.: 0.500, ch.: 0.012
+it.:  176 , obj(sum_i u_i^T K u_i): 7333.192 Vol.: 0.500, ch.: 0.012
+it.:  177 , obj(sum_i u_i^T K u_i): 7332.914 Vol.: 0.500, ch.: 0.011
+it.:  178 , obj(sum_i u_i^T K u_i): 7333.386 Vol.: 0.500, ch.: 0.011
+it.:  179 , obj(sum_i u_i^T K u_i): 7334.125 Vol.: 0.500, ch.: 0.010
+it.:  180 , obj(sum_i u_i^T K u_i): 7333.932 Vol.: 0.500, ch.: 0.010
+it.:  181 , obj(sum_i u_i^T K u_i): 7334.438 Vol.: 0.500, ch.: 0.010
+it.:  182 , obj(sum_i u_i^T K u_i): 7335.184 Vol.: 0.500, ch.: 0.010
+it.:  183 , obj(sum_i u_i^T K u_i): 7334.984 Vol.: 0.500, ch.: 0.010
+it.:  184 , obj(sum_i u_i^T K u_i): 7335.444 Vol.: 0.500, ch.: 0.010
+it.:  185 , obj(sum_i u_i^T K u_i): 7335.154 Vol.: 0.500, ch.: 0.011
+it.:  186 , obj(sum_i u_i^T K u_i): 7335.539 Vol.: 0.500, ch.: 0.014
+it.:  187 , obj(sum_i u_i^T K u_i): 7336.235 Vol.: 0.500, ch.: 0.039
+it.:  188 , obj(sum_i u_i^T K u_i): 7336.046 Vol.: 0.500, ch.: 0.063
+it.:  189 , obj(sum_i u_i^T K u_i): 7336.563 Vol.: 0.500, ch.: 0.060
+it.:  190 , obj(sum_i u_i^T K u_i): 7336.355 Vol.: 0.500, ch.: 0.067
+it.:  191 , obj(sum_i u_i^T K u_i): 7336.875 Vol.: 0.500, ch.: 0.061
+it.:  192 , obj(sum_i u_i^T K u_i): 7336.680 Vol.: 0.500, ch.: 0.069
+it.:  193 , obj(sum_i u_i^T K u_i): 7336.195 Vol.: 0.500, ch.: 0.058
+it.:  194 , obj(sum_i u_i^T K u_i): 7336.679 Vol.: 0.500, ch.: 0.040
+it.:  195 , obj(sum_i u_i^T K u_i): 7336.375 Vol.: 0.500, ch.: 0.026
+it.:  196 , obj(sum_i u_i^T K u_i): 7336.850 Vol.: 0.500, ch.: 0.017
+it.:  197 , obj(sum_i u_i^T K u_i): 7336.568 Vol.: 0.500, ch.: 0.012
+it.:  198 , obj(sum_i u_i^T K u_i): 7337.014 Vol.: 0.500, ch.: 0.010
+it.:  199 , obj(sum_i u_i^T K u_i): 7337.750 Vol.: 0.500, ch.: 0.010
+it.:  200 , obj(sum_i u_i^T K u_i): 7337.521 Vol.: 0.500, ch.: 0.010
+it.:  201 , obj(sum_i u_i^T K u_i): 7338.017 Vol.: 0.500, ch.: 0.009
+it.:  202 , obj(sum_i u_i^T K u_i): 7337.727 Vol.: 0.500, ch.: 0.009
+it.:  203 , obj(sum_i u_i^T K u_i): 7338.177 Vol.: 0.500, ch.: 0.009
+it.:  204 , obj(sum_i u_i^T K u_i): 7337.906 Vol.: 0.500, ch.: 0.009
+it.:  205 , obj(sum_i u_i^T K u_i): 7338.359 Vol.: 0.500, ch.: 0.009
+it.:  206 , obj(sum_i u_i^T K u_i): 7338.118 Vol.: 0.500, ch.: 0.010
+it.:  207 , obj(sum_i u_i^T K u_i): 7338.570 Vol.: 0.500, ch.: 0.009
+it.:  208 , obj(sum_i u_i^T K u_i): 7338.328 Vol.: 0.500, ch.: 0.010
+it.:  209 , obj(sum_i u_i^T K u_i): 7338.821 Vol.: 0.500, ch.: 0.010
+it.:  210 , obj(sum_i u_i^T K u_i): 7338.580 Vol.: 0.500, ch.: 0.010
+it.:  211 , obj(sum_i u_i^T K u_i): 7339.070 Vol.: 0.500, ch.: 0.010
+it.:  212 , obj(sum_i u_i^T K u_i): 7339.834 Vol.: 0.500, ch.: 0.010
+it.:  213 , obj(sum_i u_i^T K u_i): 7339.651 Vol.: 0.500, ch.: 0.010
+it.:  214 , obj(sum_i u_i^T K u_i): 7340.188 Vol.: 0.500, ch.: 0.011
+it.:  215 , obj(sum_i u_i^T K u_i): 7339.909 Vol.: 0.500, ch.: 0.011
+it.:  216 , obj(sum_i u_i^T K u_i): 7340.368 Vol.: 0.500, ch.: 0.011
+it.:  217 , obj(sum_i u_i^T K u_i): 7340.078 Vol.: 0.500, ch.: 0.011
+it.:  218 , obj(sum_i u_i^T K u_i): 7340.565 Vol.: 0.500, ch.: 0.011
+it.:  219 , obj(sum_i u_i^T K u_i): 7341.309 Vol.: 0.500, ch.: 0.010
+it.:  220 , obj(sum_i u_i^T K u_i): 7341.096 Vol.: 0.500, ch.: 0.010
+it.:  221 , obj(sum_i u_i^T K u_i): 7341.625 Vol.: 0.500, ch.: 0.010
+it.:  222 , obj(sum_i u_i^T K u_i): 7342.357 Vol.: 0.500, ch.: 0.009
+it.:  223 , obj(sum_i u_i^T K u_i): 7342.166 Vol.: 0.500, ch.: 0.009
+it.:  224 , obj(sum_i u_i^T K u_i): 7342.702 Vol.: 0.500, ch.: 0.009
+it.:  225 , obj(sum_i u_i^T K u_i): 7342.428 Vol.: 0.500, ch.: 0.008
+it.:  226 , obj(sum_i u_i^T K u_i): 7342.920 Vol.: 0.500, ch.: 0.008
+it.:  227 , obj(sum_i u_i^T K u_i): 7342.664 Vol.: 0.500, ch.: 0.008
+it.:  228 , obj(sum_i u_i^T K u_i): 7343.169 Vol.: 0.500, ch.: 0.008
+it.:  229 , obj(sum_i u_i^T K u_i): 7342.961 Vol.: 0.500, ch.: 0.008
+it.:  230 , obj(sum_i u_i^T K u_i): 7343.491 Vol.: 0.500, ch.: 0.008
+it.:  231 , obj(sum_i u_i^T K u_i): 7343.309 Vol.: 0.500, ch.: 0.008
+it.:  232 , obj(sum_i u_i^T K u_i): 7343.857 Vol.: 0.500, ch.: 0.008
+it.:  233 , obj(sum_i u_i^T K u_i): 7343.694 Vol.: 0.500, ch.: 0.008
+it.:  234 , obj(sum_i u_i^T K u_i): 7344.256 Vol.: 0.500, ch.: 0.008
+it.:  235 , obj(sum_i u_i^T K u_i): 7344.122 Vol.: 0.500, ch.: 0.012
+it.:  236 , obj(sum_i u_i^T K u_i): 7344.711 Vol.: 0.500, ch.: 0.016
+it.:  237 , obj(sum_i u_i^T K u_i): 7344.599 Vol.: 0.500, ch.: 0.013
+it.:  238 , obj(sum_i u_i^T K u_i): 7344.205 Vol.: 0.500, ch.: 0.009
+it.:  239 , obj(sum_i u_i^T K u_i): 7344.740 Vol.: 0.500, ch.: 0.008
+it.:  240 , obj(sum_i u_i^T K u_i): 7344.584 Vol.: 0.500, ch.: 0.009
+it.:  241 , obj(sum_i u_i^T K u_i): 7345.220 Vol.: 0.500, ch.: 0.008
+it.:  242 , obj(sum_i u_i^T K u_i): 7345.126 Vol.: 0.500, ch.: 0.009
+it.:  243 , obj(sum_i u_i^T K u_i): 7345.795 Vol.: 0.500, ch.: 0.011
+it.:  244 , obj(sum_i u_i^T K u_i): 7345.739 Vol.: 0.500, ch.: 0.019
+it.:  245 , obj(sum_i u_i^T K u_i): 7345.445 Vol.: 0.500, ch.: 0.019
+it.:  246 , obj(sum_i u_i^T K u_i): 7346.122 Vol.: 0.500, ch.: 0.014
+it.:  247 , obj(sum_i u_i^T K u_i): 7346.077 Vol.: 0.500, ch.: 0.009
+it.:  248 , obj(sum_i u_i^T K u_i): 7346.859 Vol.: 0.500, ch.: 0.008
+it.:  249 , obj(sum_i u_i^T K u_i): 7346.858 Vol.: 0.500, ch.: 0.007
+it.:  250 , obj(sum_i u_i^T K u_i): 7346.623 Vol.: 0.500, ch.: 0.008
+it.:  251 , obj(sum_i u_i^T K u_i): 7347.353 Vol.: 0.500, ch.: 0.007
+it.:  252 , obj(sum_i u_i^T K u_i): 7347.366 Vol.: 0.500, ch.: 0.011
+it.:  253 , obj(sum_i u_i^T K u_i): 7347.192 Vol.: 0.500, ch.: 0.015
+it.:  254 , obj(sum_i u_i^T K u_i): 7348.013 Vol.: 0.500, ch.: 0.013
+it.:  255 , obj(sum_i u_i^T K u_i): 7348.122 Vol.: 0.500, ch.: 0.009
+it.:  256 , obj(sum_i u_i^T K u_i): 7348.022 Vol.: 0.500, ch.: 0.006
+it.:  257 , obj(sum_i u_i^T K u_i): 7347.859 Vol.: 0.500, ch.: 0.005
+it.:  258 , obj(sum_i u_i^T K u_i): 7347.670 Vol.: 0.500, ch.: 0.005
+it.:  259 , obj(sum_i u_i^T K u_i): 7347.500 Vol.: 0.500, ch.: 0.004
+it.:  260 , obj(sum_i u_i^T K u_i): 7347.353 Vol.: 0.500, ch.: 0.004
+it.:  261 , obj(sum_i u_i^T K u_i): 7347.245 Vol.: 0.500, ch.: 0.004
+it.:  262 , obj(sum_i u_i^T K u_i): 7347.174 Vol.: 0.500, ch.: 0.004
+it.:  263 , obj(sum_i u_i^T K u_i): 7347.141 Vol.: 0.500, ch.: 0.004
+it.:  264 , obj(sum_i u_i^T K u_i): 7347.145 Vol.: 0.500, ch.: 0.004
+[Final Eigen] lambda1=2.543661e+04, omega1=1.594886e+02 rad/s, f1=2.538340e+01 Hz
+
+proposed tol=0.001: NATIVE_CONVERGED count1=1 count2=264 total=20.25 s vol=0.5000 grey=0.098 omega1/2 common = 159.49 / 225.94
+                           time1_name: 'stage1_reference_eigenanalysis_s'
+                                time1: 0.1965
+                           time2_name: 'stage2_simp_time_s'
+                                time2: 19.7304
+                        stage1_time_s: 0.3285
+        stage1_reference_eigen_time_s: 0.1965
+            stage1_preparation_time_s: 0.1320
+                        stage2_time_s: 19.7304
+                      overhead_time_s: 0.3257
+                    total_wall_time_s: 20.2526
+            solver_self_report_wall_s: 20.2514
+    independent_crosscheck_residual_s: 0.0011
+                         stage_time_s: 19.9269
+
+  BC[1] closest_point: 1 nodes, 2 dofs fixed
+  BC[2] closest_point: 1 nodes, 2 dofs fixed
+
+Final design: omega1 = 119.1578 rad/s
+warm-up yuksel: CAP_HIT
+  BC[1] closest_point: 1 nodes, 2 dofs fixed
+  BC[2] closest_point: 1 nodes, 2 dofs fixed
+
+Final design: omega1 = 159.4140 rad/s
+
+yuksel tol=0.01: NATIVE_CONVERGED count1=55 count2=26 total=5.82 s vol=0.5001 grey=0.043 omega1/2 common = 159.24 / 326.81
+                           time1_name: 'stage1_time_s'
+                                time1: 3.4910
+                           time2_name: 'stage2_time_s'
+                                time2: 2.0360
+                        stage1_time_s: 3.4910
+                        stage2_time_s: 2.0360
+                     stage1_share_pct: 67.9012
+                     stage2_share_pct: 32.0988
+                      overhead_time_s: 0.2979
+                    total_wall_time_s: 5.8248
+            solver_self_report_wall_s: 5.8237
+    independent_crosscheck_residual_s: 0.0011
+                         stage_time_s: 5.5270
+
+  BC[1] closest_point: 1 nodes, 2 dofs fixed
+  BC[2] closest_point: 1 nodes, 2 dofs fixed
+
+Final design: omega1 = 160.0279 rad/s
+
+yuksel tol=0.001: NATIVE_CONVERGED count1=259 count2=333 total=44.94 s vol=0.5002 grey=0.039 omega1/2 common = 159.94 / 321.69
+                           time1_name: 'stage1_time_s'
+                                time1: 16.9820
+                           time2_name: 'stage2_time_s'
+                                time2: 27.6602
+                        stage1_time_s: 16.9820
+                        stage2_time_s: 27.6602
+                     stage1_share_pct: 43.7500
+                     stage2_share_pct: 56.2500
+                      overhead_time_s: 0.3017
+                    total_wall_time_s: 44.9439
+            solver_self_report_wall_s: 44.9434
+    independent_crosscheck_residual_s: 4.5808e-04
+                         stage_time_s: 44.6422
+
+warm-up olhoff: CAP_HIT
+
+olhoff tol=0.01: NATIVE_CONVERGED count1=62 count2=1413 total=358.58 s vol=0.5000 grey=0.125 omega1/2 common = 166.80 / 194.51
+                                     time1_name: 'outer_time_excluding_inner_s'
+                                          time1: 12.1414
+                                     time2_name: 'inner_mma_time_total_s'
+                                          time2: 346.2268
+                   outer_time_excluding_inner_s: 12.1414
+                             inner_time_total_s: 346.2268
+                    inner_time_per_outer_mean_s: 5.5843
+          inner_time_per_inner_iteration_mean_s: 0.2450
+                           inner_time_share_pct: 96.5542
+                                   eigen_time_s: 11.2915
+                                gradient_time_s: 0.7209
+                       outer_bookkeeping_time_s: 0.1291
+                                overhead_time_s: 0.2146
+                              total_wall_time_s: 358.5828
+                             outer_time_total_s: 358.3682
+                    outer_time_per_outer_mean_s: 5.7801
+                  outer_time_per_outer_median_s: 5.6097
+    outer_time_excluding_inner_per_outer_mean_s: 0.1958
+                    eigen_time_per_outer_mean_s: 0.1821
+                 gradient_time_per_outer_mean_s: 0.0116
+                    total_wall_time_per_outer_s: 5.7836
+                      solver_self_report_wall_s: 358.5823
+              independent_crosscheck_residual_s: 4.6967e-04
+                                   stage_time_s: 358.3682
+
+
+olhoff tol=0.001: NATIVE_CONVERGED count1=105 count2=2199 total=702.40 s vol=0.5000 grey=0.122 omega1/2 common = 166.39 / 200.15
+                                     time1_name: 'outer_time_excluding_inner_s'
+                                          time1: 18.5493
+                                     time2_name: 'inner_mma_time_total_s'
+                                          time2: 683.6497
+                   outer_time_excluding_inner_s: 18.5493
+                             inner_time_total_s: 683.6497
+                    inner_time_per_outer_mean_s: 6.5109
+          inner_time_per_inner_iteration_mean_s: 0.3109
+                           inner_time_share_pct: 97.3309
+                                   eigen_time_s: 17.3398
+                                gradient_time_s: 1.1011
+                       outer_bookkeeping_time_s: 0.1084
+                                overhead_time_s: 0.1982
+                              total_wall_time_s: 702.3972
+                             outer_time_total_s: 702.1990
+                    outer_time_per_outer_mean_s: 6.6876
+                  outer_time_per_outer_median_s: 7.7275
+    outer_time_excluding_inner_per_outer_mean_s: 0.1767
+                    eigen_time_per_outer_mean_s: 0.1651
+                 gradient_time_per_outer_mean_s: 0.0105
+                    total_wall_time_per_outer_s: 6.6895
+                      solver_self_report_wall_s: 702.3968
+              independent_crosscheck_residual_s: 3.5617e-04
+                                   stage_time_s: 702.1990
+
+       method        tol            status           count1    count2    time1_s    time2_s    eigen_s    gradient_s    inner_mma_s    bookkeeping_s    overhead_s    total_s    volume       grey      omega1_common    omega2_common
+    ____________    _____    ____________________    ______    ______    _______    _______    _______    __________    ___________    _____________    __________    _______    _______    ________    _____________    _____________
+
+    {'proposed'}     0.01    {'NATIVE_CONVERGED'}       1         41      0.2196    3.1086        NaN          NaN           NaN              NaN        0.77946      4.1076     0.50005    0.098926          160           222.08    
+    {'proposed'}    0.001    {'NATIVE_CONVERGED'}       1        264     0.19651     19.73        NaN          NaN           NaN              NaN        0.32571      20.253     0.49997    0.097591       159.49           225.94    
+    {'yuksel'  }     0.01    {'NATIVE_CONVERGED'}      55         26       3.491     2.036        NaN          NaN           NaN              NaN        0.29788      5.8248     0.50013    0.042772       159.24           326.81    
+    {'yuksel'  }    0.001    {'NATIVE_CONVERGED'}     259        333      16.982     27.66        NaN          NaN           NaN              NaN        0.30168      44.944     0.50018    0.039327       159.94           321.69    
+    {'olhoff'  }     0.01    {'NATIVE_CONVERGED'}      62       1413      12.141    346.23     11.291      0.72086        346.23          0.12908        0.21459      358.58         0.5     0.12467        166.8           194.51    
+    {'olhoff'  }    0.001    {'NATIVE_CONVERGED'}     105       2199      18.549    683.65      17.34       1.1011        683.65          0.10844        0.19819       702.4         0.5     0.12184       166.39           200.15    
+

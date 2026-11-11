@@ -10,6 +10,7 @@ function mdl = model2D(cfg)
 %     bc        'a' simply supported ends
 %               'b' left end clamped, right end simply supported
 %               'c' clamped ends
+%               'base' every node of the bottom edge clamped (building)
 %     support   idealization of a SIMPLE support -- UNRESOLVED in the paper:
 %               'mid'    single node at mid-height of the end face
 %               'corner' single node at the bottom corner of the end face
@@ -93,6 +94,8 @@ switch lower(cfg.bc)
         end
     case 'c'                                  % both ends clamped
         fixed = [clampFace(leftCol); clampFace(rightCol)];
+    case 'base'                               % bottom edge clamped (building; AppliSci revision)
+        fixed = reshape([dofsOf(nodenrs(end,:),1); dofsOf(nodenrs(end,:),2)],[],1);
     otherwise
         error('model2D:bc','unknown bc %s',cfg.bc);
 end

@@ -1,0 +1,7 @@
+C8/C9 2026-11-11 13:36:14 on Lap.local, MATLAB 25.2.0.3042426 (R2025b) Update 1
+[test A] SS 160x20 regression: max|x - x_C3| = 0, omega1 169.210576 vs 169.210576
+[test B] dofs: model2D 39042 (fixed 162), proposed 39042 (fixed 162); passive 1416 = 1416 elements
+[test B] solid domain omega1/2: model2D 66.1319 / 303.1113, proposed model 66.1319 / 303.1113
+[test B] uniform start (SIMP, E_min 1e-06): model2D 33.8701 / 109.2635, proposed model 33.8707 / 109.2661
+[test C] 3 outer: min rho(passive) = 1, mean rho = 0.299950 (target 0.3), omega = [40.9984 67.3655], status CAP_HIT
+[test D] FD of lambda_1 (base clamp, 6 active elements): max rel. error 3.99e-04

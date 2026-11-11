@@ -34,7 +34,7 @@ S = {
 'domain.thickness',             'double', 1,      [0 Inf],  'A', 'out-of-plane thickness'
 'domain.mesh.nelx',             'int',    160,    [1 Inf],  'C', 'elements along the length; NE is never reported in the paper'
 'domain.mesh.nely',             'int',    20,     [1 Inf],  'C', 'elements through the height'
-'domain.boundary.condition',    'enum',   'simplySupported', {'simplySupported','clampedSimple','clamped'}, 'A', 'Fig. 2(a-c) support cases'
+'domain.boundary.condition',    'enum',   'simplySupported', {'simplySupported','clampedSimple','clamped','clampedBottom'}, 'A', 'Fig. 2(a-c) support cases; clampedBottom = every node of the bottom edge fixed (cantilever / building, class D, AppliSci revision)'
 'domain.boundary.support',      'enum',   'midHeight',       {'midHeight','corner','face'},                 'C', 'idealization of a SIMPLE support; the paper draws corner, its numbers fit midHeight'
 'domain.boundary.axialRestraint','enum',  'bothEnds',        {'oneEnd','bothEnds'},                          'C', 'which ends carry ux restraint'
 'domain.element.type',          'enum',   'Q4',   {'Q4','Q6'},                    'C', 'the paper says only "plane stress elements"'
@@ -62,6 +62,7 @@ S = {
 'design.initial',               'double', 0.5,    [0 1],    'A', 'uniform initial density'
 'design.minimum',               'double', 1e-3,   [0 1],    'A', 'rho_min of the box (7e)/(25f)'
 'design.volumeFraction',        'double', 0.5,    [0 1],    'A', 'alpha of the volume constraint (25e)'
+'design.passiveSolid',          'any',    [],     [],       'D', 'indices (model2D numbering) of passive SOLID elements: rho = 1, excluded from the sub-problem, counted in the volume (AppliSci revision, building example)'
 % ---- filtering ----------------------------------------------------------
 'filter.type',                  'enum',   'sensitivity', {'sensitivity','density','none'}, 'A', 'sec. 1: Sigmund (1997) filter "applied to the sensitivities"; density filtering is NOT published'
 'filter.radiusPhysical',        'any',    0.06,   [],       'C', 'filter radius in physical units; never stated in the paper. Overrides radiusElements when non-empty'

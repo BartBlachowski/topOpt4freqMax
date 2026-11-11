@@ -1,0 +1,7 @@
+C8/C9 2026-11-11 15:18:50 on Lap.local, MATLAB 25.2.0.3042426 (R2025b) Update 1
+[C4eq] ss       full_MMA_equality      it=  89 (stagnation_x_tolerance) 11.3 s c=4.097323e+03 vol=0.5000 grey=0.185 omega1/2 = 105.276 / 173.341
+[C4eq] ss       omitted_MMA_equality   it= 147 (stagnation_x_tolerance) 15.8 s c=7.087443e+03 vol=0.5000 grey=0.145 omega1/2 = 160.044 / 229.687
+[C4eq] clamped  full_MMA_equality      it=  69 (stagnation_x_tolerance) 9.2 s c=5.883932e+03 vol=0.5000 grey=0.206 omega1/2 = 129.529 / 213.809
+[C4eq] clamped  omitted_MMA_equality   it= 130 (stagnation_x_tolerance) 14.3 s c=2.026561e+04 vol=0.5000 grey=0.213 omega1/2 = 364.120 / 401.264
+[C4eq] building full_MMA_equality      it=  99 (stagnation_x_tolerance) 12.5 s c=3.329913e+02 vol=0.3000 grey=0.136 omega1/2 = 65.034 / 79.321
+[C4eq] building omitted_MMA_equality   it= 118 (stagnation_x_tolerance) 13.7 s c=5.590204e+02 vol=0.3000 grey=0.137 omega1/2 = 83.356 / 92.600

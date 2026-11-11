@@ -1,0 +1,11 @@
+ss: alpha = 1 design recomputed (41 iterations, stagnation_x_tolerance)
+ss       omega0 = 136.483  lambda_hat^(1/2) = 160.024  omega1 raw = 131.914 (w = 0.0000)  omega1 structural = 159.984 (mode 17, w1 = MAC_M = 0.9991)  bound 0.000 <= 131.914 <= 160.024  share of c in 100 modes = 1.0000  m_v = 0.5340
+clamped  omega0 = 290.887  lambda_hat^(1/2) = 368.606  omega1 raw = 368.239 (w = 0.9978)  omega1 structural = 368.239 (mode 1, w1 = MAC_M = 0.9978)  bound 368.204 <= 368.239 <= 368.606  share of c in 100 modes = 1.0000  m_v = 0.3965
+building omega0 = 66.132  lambda_hat^(1/2) = 87.904  omega1 raw = 87.109 (w = 0.9738)  omega1 structural = 87.109 (mode 1, w1 = MAC_M = 0.9738)  bound 86.746 <= 87.109 <= 87.904  share of c in 100 modes = 1.0000  m_v = 0.1974
+        case        omega0    omega_hat    omega1_raw      w_raw1      omega1_structural    structural_index    MAC_M_structural    share_c_100modes    modal_mass
+    ____________    ______    _________    __________    __________    _________________    ________________    ________________    ________________    __________
+
+    {'ss'      }    136.48     160.02        131.91      9.4443e-18         159.98                 17               0.99908             0.99999          0.53397  
+    {'clamped' }    290.89     368.61        368.24         0.99782         368.24                  1               0.99782                   1          0.39649  
+    {'building'}    66.132     87.904        87.109         0.97382         87.109                  1               0.97382                   1           0.1974  
+
