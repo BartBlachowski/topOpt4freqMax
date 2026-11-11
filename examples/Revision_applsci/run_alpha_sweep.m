@@ -16,7 +16,12 @@ function summary = run_alpha_sweep(which, outRoot)
 %     config.json            the exact configuration passed to the runner
 %     <case>_correlation.csv MAC matrix (rows: solid-domain modes, cols: topology modes)
 %     result.mat             x, omega, iterations, telemetry
-%   and outRoot/<case>/summary.csv with one row per alpha.
+%   and outRoot/<case>/summary.csv with one row per alpha, written by
+%   rebuild_summaries (which can also regenerate it later from the saved
+%   per-alpha files, without re-optimizing).  omega1/omega2 in summary.csv are
+%   the lowest two STRUCTURAL topology modes (correlation CSV header); the
+%   runner's raw omega(1:2), which can be void-localized modes, are kept as
+%   omega1_raw/omega2_raw.
 
 if nargin < 1 || isempty(which), which = 'both'; end
 here = fileparts(mfilename('fullpath'));
@@ -45,7 +50,6 @@ for ic = 1:numel(cases)
             base = jsondecode(fileread(fullfile(repoRoot, 'examples', 'Building', 'BuildingTopOptFreq.json')));
     end
     base = revisionSettings(base);
-    rows = {};
     for ia = 1:numel(alphas)
         a = alphas(ia);
         tag = strrep(sprintf('%.2f', a), '.', 'p');
@@ -61,20 +65,11 @@ for ic = 1:numel(cases)
 
         fprintf('\n===== %s, alpha = %.2f =====\n', name, a);
         prevDir = pwd; cd(runDir); cleanup = onCleanup(@() cd(prevDir));
-        [x, omega, tIter, nIter, ~, nIterStage, telemetry] = run_topopt_from_json(jsonPath); %#ok<ASGLU>
+        [x, omega, tIter, nIter, ~, nIterStage, telemetry] = run_topopt_from_json(jsonPath);
         clear cleanup;
         save(fullfile(runDir, 'result.mat'), 'x', 'omega', 'tIter', 'nIter', 'nIterStage', 'telemetry', 'cfg', 'a');
-
-        csvPath = fullfile(runDir, [name '_correlation.csv']);
-        best = readBest(csvPath);
-        rows(end+1, :) = {a, omega(1), omega(2), nIter, ...
-            best(1).mode, best(1).mac, best(1).omega, ...
-            best(2).mode, best(2).mac, best(2).omega}; %#ok<AGROW>
     end
-    T = cell2table(rows, 'VariableNames', {'alpha', 'omega1', 'omega2', 'iterations', ...
-        'phi1_best_mode', 'phi1_MAC', 'phi1_omega', 'phi2_best_mode', 'phi2_MAC', 'phi2_omega'});
-    writetable(T, fullfile(outRoot, name, 'summary.csv'));
-    disp(T);
+    T = rebuild_summaries(name, outRoot);
     summary.(name) = T;
 end
 end
@@ -111,23 +106,3 @@ p.save_frequency_iterations = false;
 cfg.postprocessing = p;
 end
 
-function best = readBest(csvPath)
-best = repmat(struct('mode', NaN, 'mac', NaN, 'omega', NaN), 2, 1);
-if exist(csvPath, 'file') ~= 2
-    warning('run_alpha_sweep:NoCsv', 'Correlation CSV not found: %s', csvPath);
-    return;
-end
-lines = splitlines(strtrim(fileread(csvPath)));
-hdr = strsplit(lines{1}, ',');
-w = nan(1, numel(hdr) - 2);
-for k = 3:numel(hdr)
-    tok = regexp(hdr{k}, '\(([\d.eE+-]+)_rad', 'tokens', 'once');
-    if ~isempty(tok), w(k-2) = str2double(tok{1}); end
-end
-for i = 1:2
-    v = str2double(strsplit(lines{i+1}, ','));
-    macs = v(3:end);
-    [m, j] = max(macs);
-    best(i).mode = j; best(i).mac = m; best(i).omega = w(j);
-end
-end
