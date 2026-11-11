@@ -57,6 +57,25 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
     rho_min = localOpt(runCfg, 'rho_min', 1e-6);
     rho0 = localOpt(runCfg, 'rho0', 1.0);
     pmass = localOpt(runCfg, 'pmass', 1.0);
+    % Stiffness interpolation g(x) in E = Emin + g(x)*(Emax-Emin).
+    %   'simp'      g = x^penal                      (default; the paper's method)
+    %   'pedersen'  g = x^penal for x >= x0, x*x0^(penal-1) below x0
+    %               (Pedersen 2000, eq. 5; the low-density law of the Du-Olhoff
+    %               comparator).  Added for the matched-settings benchmark (C7).
+    stiffModel = lower(char(string(localOpt(runCfg, 'stiffness_model', 'simp'))));
+    pedX0 = localOpt(runCfg, 'pedersen_threshold', 0.1);
+    switch stiffModel
+        case 'simp'
+            gStiff  = @(x) x.^penal;
+            dgStiff = @(x) penal * x.^(penal-1);
+        case 'pedersen'
+            gStiff  = @(x) (x >= pedX0).*x.^penal + (x < pedX0).*x*pedX0^(penal-1);
+            dgStiff = @(x) (x >= pedX0).*(penal*x.^(penal-1)) + (x < pedX0)*pedX0^(penal-1);
+        otherwise
+            error('topopt_freq:InvalidStiffnessModel', ...
+                'runCfg.stiffness_model must be "simp" or "pedersen" (got "%s").', stiffModel);
+    end
+    fprintf('Stiffness interpolation: %s\n', stiffModel);
     nu = localOpt(runCfg, 'nu', 0.3);
     move = localOpt(runCfg, 'move', 0.2);
     convTol = localOpt(runCfg, 'conv_tol', 0.01);
@@ -318,7 +337,7 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
         'passiveVoidCount', numel(pasV));
     if ~usingConfiguredLoadCases
         % Legacy fallback (no runCfg.load_cases): preserve previous behavior.
-        sK0 = reshape(KE(:) * (Emin + xPhys'.^penal * (Emax - Emin)), [], 1);
+        sK0 = reshape(KE(:) * (Emin + gStiff(xPhys)' * (Emax - Emin)), [], 1);
         K0  = sparse(iK, jK, sK0, ndof, ndof);
         K0  = (K0 + K0') / 2;
 
@@ -381,7 +400,7 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
             semiHarmonicBaselineInfo.xBaseMax = max(xBase);
 
             % Baseline matrices are intentionally built from xBase, not current xPhys.
-            sK0 = reshape(KE(:) * (Emin + xBase'.^penal * (Emax - Emin)), [], 1);
+            sK0 = reshape(KE(:) * (Emin + gStiff(xBase)' * (Emax - Emin)), [], 1);
             K0  = sparse(iK, jK, sK0, ndof, ndof);
             K0  = (K0 + K0') / 2;
 
@@ -436,7 +455,7 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
         xSolid = ones(nEl, 1);
         if ~isempty(pasV), xSolid(pasV) = 0; end
 
-        sKsol = reshape(KE(:) * (Emin + xSolid'.^penal * (Emax - Emin)), [], 1);
+        sKsol = reshape(KE(:) * (Emin + gStiff(xSolid)' * (Emax - Emin)), [], 1);
         Ksol  = sparse(iK, jK, sKsol, ndof, ndof);
         Ksol  = (Ksol + Ksol') / 2;
 
@@ -523,7 +542,7 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
         % lower triangle of K(free,free), as in the Yuksel code, and the full
         % Kf is formed only for the optional paths that need it (harmonic
         % eigenpair updates, per-iteration frequencies, debug).
-        sK = reshape(KEs(ltMask) * (Emin + xPhys'.^penal * (Emax - Emin)), [], 1);
+        sK = reshape(KEs(ltMask) * (Emin + gStiff(xPhys)' * (Emax - Emin)), [], 1);
         K  = sparse(iL, jL, sK, ndof, ndof);
         clear sK;
 
@@ -633,7 +652,7 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
         obj = 0.0;
         objCases(:) = 0.0;
         dc(:) = 0.0;
-        stiffScale = -penal * xPhys.^(penal-1) * (Emax - Emin);
+        stiffScale = -dgStiff(xPhys) * (Emax - Emin);
         dMdxScale = pmass * (xPhys.^(pmass-1)) * (rho0 - rho_min);
 
         for icase = 1:nCases
@@ -829,7 +848,7 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
     % ------------------------------------------------------------------
     % Post-analysis: first circular frequency for final topology
     % ------------------------------------------------------------------
-    sK_final = reshape(KE(:) * (Emin + xPhys'.^penal * (Emax - Emin)), [], 1);
+    sK_final = reshape(KE(:) * (Emin + gStiff(xPhys)' * (Emax - Emin)), [], 1);
     K_final  = sparse(iK, jK, sK_final, ndof, ndof);
     K_final  = (K_final + K_final') / 2;
 
@@ -882,7 +901,7 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
     omegaStruct = [];
     info.final_structural_omega_emin = NaN;
     if structuralCheck
-        Ee_final = Emin + xPhys.^penal * (Emax - Emin);
+        Ee_final = Emin + gStiff(xPhys) * (Emax - Emin);
         rho_final = rho_min + xPhys.^pmass * (rho0 - rho_min);
         keepFinal = structural_mode_mask(V_final(:, ixFinal), lam_all, Kf_final, Mf_final, ...
             free, ndof, edofMat, KE, ME, Ee_final, rho_final, xPhys);
@@ -890,7 +909,7 @@ function [xOut, fHz, tIter, nIter, info] = topopt_freq(nelx, nely, volfrac, pena
         info.final_structural_omega_emin = Emin;
         if numel(omegaStruct) < 2
             EminFig = max(Emin, 1e-6 * Emax);
-            Ee_fig = EminFig + xPhys.^penal * (Emax - EminFig);
+            Ee_fig = EminFig + gStiff(xPhys) * (Emax - EminFig);
             K_fig = sparse(iK, jK, reshape(KE(:) * Ee_fig', [], 1), ndof, ndof);
             K_fig = (K_fig + K_fig') / 2;
             omegaStruct = lowest_structural_modes(K_fig(free, free), Mf_final, ...

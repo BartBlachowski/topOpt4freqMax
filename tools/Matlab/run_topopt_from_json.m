@@ -325,6 +325,9 @@ function [x, omega, tIter, nIter, mem_usage, nIterStage, telemetry] = run_topopt
             runCfg.rho_min = rho_min;
             runCfg.beamL = L;
             runCfg.beamH = H;
+            if hasFieldPath(cfg, {'optimization','yuksel','mass_cut'})
+                runCfg.xMassCut = double(cfg.optimization.yuksel.mass_cut);   % 0 = linear mass (C7)
+            end
             runCfg.conv_tol = convTol;
             runCfg.stop_criterion = stopCriterion;
             runCfg = copyFields(runCfg, stagnationCfg);
@@ -342,6 +345,13 @@ function [x, omega, tIter, nIter, mem_usage, nIterStage, telemetry] = run_topopt
             runCfg.pasV = pasV;
             runCfg.record_history = recordHistory;
             runCfg.extend_beyond_native_stop = extendBeyondNativeStop;
+            % Matched-settings options (AppliSci revision C7); absent = unchanged.
+            if hasFieldPath(cfg, {'optimization','stiffness_model'})
+                runCfg.stiffness_model = char(string(cfg.optimization.stiffness_model));
+            end
+            if hasFieldPath(cfg, {'optimization','pedersen_threshold'})
+                runCfg.pedersen_threshold = double(cfg.optimization.pedersen_threshold);
+            end
 
             eta = 0.5;
             beta = 1.0;
@@ -515,6 +525,13 @@ function [x, omega, tIter, nIter, mem_usage, nIterStage, telemetry] = run_topopt
             runCfg.pasV = pasV;
             runCfg.record_history = recordHistory;
             runCfg.extend_beyond_native_stop = extendBeyondNativeStop;
+            % Matched-settings options (AppliSci revision C7); absent = unchanged.
+            if hasFieldPath(cfg, {'optimization','stiffness_model'})
+                runCfg.stiffness_model = char(string(cfg.optimization.stiffness_model));
+            end
+            if hasFieldPath(cfg, {'optimization','pedersen_threshold'})
+                runCfg.pedersen_threshold = double(cfg.optimization.pedersen_threshold);
+            end
             runCfg.record_design_history = postproc.recordDesignHistory;
             if hasFieldPath(cfg, {'optimization','harmonic_normalize'})
                 runCfg.harmonic_normalize = parseBool( ...

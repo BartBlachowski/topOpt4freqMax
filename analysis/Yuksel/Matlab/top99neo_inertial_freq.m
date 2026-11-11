@@ -112,6 +112,18 @@ rho0 = localOpt(runCfg, 'rho0', 1.0);
 rho_min = localOpt(runCfg, 'rho_min', 1e-9 * rho0);
 dMass = localOpt(runCfg, 'dMass', 6.0);
 xMassCut = localOpt(runCfg, 'xMassCut', 0.1);
+% Stiffness interpolation g(x) in E = Emin + g(x)*(E0-Emin): 'simp' (default,
+% g = x^penal) or 'pedersen' (Pedersen 2000, eq. 5: x^penal above
+% pedersen_threshold, linear x*x0^(penal-1) below).  Added for the matched-
+% settings benchmark (AppliSci revision C7); the default path is unchanged.
+stiffModel = lower(char(string(localOpt(runCfg, 'stiffness_model', 'simp'))));
+switch stiffModel
+    case 'simp',     localStiffX0(0);
+    case 'pedersen', localStiffX0(localOpt(runCfg, 'pedersen_threshold', 0.1));
+    otherwise
+        error('top99neo_inertial_freq:InvalidStiffnessModel', ...
+            'runCfg.stiffness_model must be "simp" or "pedersen" (got "%s").', stiffModel);
+end
 
 penalCnt = { 1,  1, 25, 0.25 };
 betaCnt  = { 1,  1, 25,    2 };
@@ -465,7 +477,7 @@ try
     xSolid = ones(nEl,1);
 
     % Fully solid stiffness
-    sK = (Emin + xSolid.^penal * (E0 - Emin));
+    sK = (Emin + localGStiff(xSolid, penal) * (E0 - Emin));
     sK = reshape(Ke(:) * sK', length(Ke) * nEl, 1);
     K = localAssemble(Iar(:,1), Iar(:,2), sK, [nDof, nDof]);
     K = K + K' - spdiags(diag(K), 0, nDof, nDof);
@@ -571,8 +583,8 @@ while loop < maxit
     if ~isempty(pasS), xPhys(pasS) = 1; end
     if ~isempty(pasV), xPhys(pasV) = 0; end
     % ---- FE solve
-    sK = ( Emin + xPhys.^penal * ( E0 - Emin ) );
-    dsK( act ) = -penal * ( E0 - Emin ) * xPhys( act ) .^ ( penal - 1 );
+    sK = ( Emin + localGStiff(xPhys, penal) * ( E0 - Emin ) );
+    dsK( act ) = localDsK(xPhys( act ), penal, E0, Emin);
     sK = reshape( Ke( : ) * sK', length( Ke ) * nEl, 1 );
     K = localAssemble( Iar( :, 1 ), Iar( :, 2 ), sK, [ nDof, nDof ] );
     U(:) = 0;
@@ -769,8 +781,8 @@ while loop < maxit
     if ~isempty(pasV), xPhys(pasV) = 0; end
 
     % ---- assemble stiffness
-    sK = ( Emin + xPhys.^penal * ( E0 - Emin ) );
-    dsK( act ) = -penal * ( E0 - Emin ) * xPhys( act ) .^ ( penal - 1 );
+    sK = ( Emin + localGStiff(xPhys, penal) * ( E0 - Emin ) );
+    dsK( act ) = localDsK(xPhys( act ), penal, E0, Emin);
     sK = reshape( Ke( : ) * sK', length( Ke ) * nEl, 1 );
     K = localAssemble( Iar( :, 1 ), Iar( :, 2 ), sK, [ nDof, nDof ] );
 
@@ -1108,7 +1120,7 @@ end
 
 try
     % Stiffness matrix
-    sK = (Emin + xPhys.^penal * (E0 - Emin));
+    sK = (Emin + localGStiff(xPhys, penal) * (E0 - Emin));
     sK = reshape(Ke(:) * sK', length(Ke) * nEl, 1);
     K = localAssemble(Iar(:,1), Iar(:,2), sK, [nDof, nDof]);
     K = K + K' - spdiags(diag(K), 0, nDof, nDof);
@@ -1270,5 +1282,34 @@ if isstruct(runCfg) && isfield(runCfg, 'approach_name') && ~isempty(runCfg.appro
     name = char(string(runCfg.approach_name));
 else
     name = defaultName;
+end
+end
+
+function x0 = localStiffX0(setX0)
+%LOCALSTIFFX0  Pedersen threshold of the current solve (0 = plain SIMP).
+%   Set once per solve from runCfg.stiffness_model; persistent only for that.
+persistent x0s
+if nargin == 1, x0s = setX0; end
+if isempty(x0s), x0s = 0; end
+x0 = x0s;
+end
+
+function g = localGStiff(x, penal)
+%LOCALGSTIFF  Stiffness interpolation g(x) in E = Emin + g(x)*(E0-Emin).
+x0 = localStiffX0();
+g = x.^penal;
+if x0 > 0
+    lo = x < x0;
+    g(lo) = x(lo) * x0^(penal-1);
+end
+end
+
+function d = localDsK(x, penal, E0, Emin)
+%LOCALDSK  -dE/dx.  The SIMP branch keeps the original expression verbatim,
+%   so the default path is bitwise unchanged.
+x0 = localStiffX0();
+d = -penal * ( E0 - Emin ) * x .^ ( penal - 1 );
+if x0 > 0
+    d(x < x0) = -( E0 - Emin ) * x0^(penal-1);
 end
 end
