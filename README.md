@@ -46,6 +46,7 @@ on its own, and most accept `true` for a quick check. Results are written to `re
 | Section 4.2: sign invariance of Eq. (14) | `checks/check_sign_invariance` | 1 min |
 | Sections 4.1–4.2: sensitivity of the mode selection | `checks/check_mode_selection` | 15 min |
 | Section 3.1: Du–Olhoff against the published benchmark | `checks/check_du_olhoff_reference` | 3 min |
+| Sections 2.4, 4.2–4.3: distribution of φ₂⁽⁰⁾ over the modes, Tables 6 and 8 | `checks/check_phi2_tracking` | 2 min |
 
 \*Single thread on an Apple-silicon laptop. Wall times depend on the machine; iteration
 counts and frequencies do not. Scripts that compare with a printed value report the
